@@ -1,40 +1,112 @@
 [
   {
+    "id": "analyse_financiere_soon",
+    "module": "Analyse Financière",
+    "title": "Concours Blanc — Analyse Financière",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
     "id": "audit_100",
     "module": "Audit",
-    "title": "Concours Blanc — Audit & CCA (100 Questions)",
+    "title": "Concours Blanc — Audit & Commissariat aux Comptes (100 Questions)",
     "file": "data/quiz/audit.json",
     "nb_questions": 100,
     "available": true
   },
   {
-    "id": "cca_soon",
-    "module": "CCA",
-    "title": "Concours Blanc — CCA",
+    "id": "comptabilite_analytique_soon",
+    "module": "Comptabilité Analytique",
+    "title": "Concours Blanc — Comptabilité Analytique",
     "file": null,
     "nb_questions": 0,
     "available": false
   },
   {
-    "id": "finance_soon",
-    "module": "Finance",
-    "title": "Concours Blanc — Finance",
+    "id": "comptabilite_approfondie_soon",
+    "module": "Comptabilité Approfondie",
+    "title": "Concours Blanc — Comptabilité Approfondie",
     "file": null,
     "nb_questions": 0,
     "available": false
   },
   {
-    "id": "fiscalite_soon",
-    "module": "Fiscalité",
-    "title": "Concours Blanc — Fiscalité",
+    "id": "comptabilite_generale_soon",
+    "module": "Comptabilité Générale",
+    "title": "Concours Blanc — Comptabilité Générale",
     "file": null,
     "nb_questions": 0,
     "available": false
   },
   {
-    "id": "gfcf_soon",
-    "module": "GFCF",
-    "title": "Concours Blanc — GFCF",
+    "id": "comptabilite_des_societes_soon",
+    "module": "Comptabilité des Sociétés",
+    "title": "Concours Blanc — Comptabilité des Sociétés",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "controle_de_gestion_soon",
+    "module": "Contrôle de Gestion",
+    "title": "Concours Blanc — Contrôle de Gestion",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "droit_des_societes_soon",
+    "module": "Droit des Sociétés",
+    "title": "Concours Blanc — Droit des Sociétés",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "fiscalite_des_entreprises_soon",
+    "module": "Fiscalité des Entreprises",
+    "title": "Concours Blanc — Fiscalité des Entreprises",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "gestion_de_tresorerie_soon",
+    "module": "Gestion de Trésorerie",
+    "title": "Concours Blanc — Gestion de Trésorerie",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "macroeconomie_soon",
+    "module": "Macroéconomie",
+    "title": "Concours Blanc — Macroéconomie",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "mathematiques_financieres_soon",
+    "module": "Mathématiques Financières",
+    "title": "Concours Blanc — Mathématiques Financières",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "microeconomie_soon",
+    "module": "Microéconomie",
+    "title": "Concours Blanc — Microéconomie",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "statistiques_et_probabilites_soon",
+    "module": "Statistiques et Probabilités",
+    "title": "Concours Blanc — Statistiques et Probabilités",
     "file": null,
     "nb_questions": 0,
     "available": false
