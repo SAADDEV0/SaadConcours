@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concours Masters Maroc — CCA · GFCF · Finance · Fiscalité · Audit</title>
+<meta name="description" content="Base de données de concours d'accès aux Masters spécialisés (CCA, GFCF, Finance, Fiscalité, Audit) dans les universités marocaines.">
+
+<!-- KaTeX for LaTeX rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<!-- Marked.js for Markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f1115; --bg-elev:#161922; --bg-card:#1b1f2a; --border:#2a2f3d;
+  --text:#e8eaf0; --text-dim:#9aa1b2; --text-faint:#6b7280;
+  --accent:#4f8cff; --accent-dim:#2d4a8a;
+  --green:#3ecf8e; --amber:#f0a83d; --red:#f0555f;
+  --radius:10px; --shadow:0 4px 20px rgba(0,0,0,.35);
+  --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
+    --text:#1a1d27; --text-dim:#5a6072; --text-faint:#8890a0;
+    --accent:#2f6fed; --accent-dim:#dce7ff;
+    --shadow:0 4px 20px rgba(20,20,40,.08);
+  }
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--font);
+  line-height:1.55; min-height:100vh;
+}
+a{color:var(--accent);}
+::selection{background:var(--accent-dim);}
+
+/* ---------- Header ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  background:var(--bg-elev); border-bottom:1px solid var(--border);
+  padding:14px 20px;
+}
+.header-inner{max-width:1400px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.05rem; white-space:nowrap;}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);}
+.search-box{flex:1; min-width:200px; position:relative;}
+.search-box input{
+  width:100%; padding:9px 14px 9px 36px; border-radius:999px; border:1px solid var(--border);
+  background:var(--bg); color:var(--text); font-size:.92rem; outline:none;
+}
+.search-box input:focus{border-color:var(--accent);}
+.search-box svg{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.5; width:16px; height:16px;}
+.stat-pill{
+  font-size:.78rem; color:var(--text-dim); background:var(--bg); border:1px solid var(--border);
+  padding:5px 11px; border-radius:999px; white-space:nowrap;
+}
+
+/* ---------- Layout ---------- */
+.layout{max-width:1400px; margin:0 auto; display:grid; grid-template-columns:260px 1fr; gap:22px; padding:22px 20px 60px;}
+
+/* ---------- Filters sidebar ---------- */
+.filters{
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px; align-self:start; position:sticky; top:78px; max-height:calc(100vh - 100px); overflow-y:auto;
+}
+@media (max-width: 900px){
+  .layout{grid-template-columns:1fr;}
+  .filters{position:static; max-height:none;}
+}
+.filters h3{margin:0 0 10px; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint);}
+.filter-group{margin-bottom:18px;}
+.filter-group select{
+  width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border);
+  background:var(--bg); color:var(--text); font-size:.88rem; outline:none;
+}
+.filter-group select:focus{border-color:var(--accent);}
+.chip-list{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+.chip{
+  font-size:.74rem; padding:4px 10px; border-radius:999px; border:1px solid var(--border);
+  background:var(--bg); color:var(--text-dim); cursor:pointer; transition:.15s;
+}
+.chip:hover{border-color:var(--accent); color:var(--text);}
+.chip.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+.reset-btn{
+  width:100%; margin-top:6px; padding:9px; border-radius:8px; border:1px solid var(--border);
+  background:transparent; color:var(--text-dim); cursor:pointer; font-size:.85rem;
+}
+.reset-btn:hover{border-color:var(--red); color:var(--red);}
+
+/* ---------- Results grid ---------- */
+.results-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;}
+.results-count{font-size:.85rem; color:var(--text-dim);}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px;}
+.card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px; cursor:pointer; transition:.15s; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;
+}
+.card:hover{border-color:var(--accent); transform:translateY(-2px);}
+.card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+.card-title{font-weight:600; font-size:.98rem;}
+.card-year{
+  font-size:.72rem; font-weight:700; color:var(--accent); background:var(--accent-dim);
+  padding:3px 9px; border-radius:999px; white-space:nowrap;
+}
+.card-meta{font-size:.82rem; color:var(--text-dim);}
+.card-modules{display:flex; flex-wrap:wrap; gap:5px; margin-top:2px;}
+.mod-tag{font-size:.68rem; padding:2px 8px; border-radius:6px; background:var(--bg); border:1px solid var(--border); color:var(--text-faint);}
+.card-bottom{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:6px;}
+.diff-badge{font-size:.72rem; color:var(--text-faint);}
+.img-badge{font-size:.72rem; color:var(--green); display:flex; align-items:center; gap:4px;}
+.empty-state{padding:60px 20px; text-align:center; color:var(--text-faint);}
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:100;
+  align-items:flex-start; justify-content:center; padding:30px 16px; overflow-y:auto;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:14px; max-width:920px; width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.5); animation:pop .15s ease;
+}
+@keyframes pop{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+.modal-header{
+  position:sticky; top:0; background:var(--bg-elev); border-bottom:1px solid var(--border);
+  padding:18px 22px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-radius:14px 14px 0 0;
+}
+.modal-header h2{margin:0 0 6px; font-size:1.2rem;}
+.modal-header .sub{font-size:.85rem; color:var(--text-dim);}
+.close-btn{
+  background:var(--bg); border:1px solid var(--border); color:var(--text-dim); border-radius:8px;
+  width:32px; height:32px; cursor:pointer; font-size:1.1rem; flex-shrink:0;
+}
+.close-btn:hover{color:var(--red); border-color:var(--red);}
+.modal-body{padding:22px;}
+.info-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+.info-tag{font-size:.76rem; padding:4px 10px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-dim);}
+.tab-bar{display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:18px;}
+.tab-btn{
+  padding:9px 16px; background:none; border:none; color:var(--text-faint); cursor:pointer;
+  font-size:.88rem; border-bottom:2px solid transparent; margin-bottom:-1px;
+}
+.tab-btn.active{color:var(--accent); border-bottom-color:var(--accent);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.enonce-content{font-size:.94rem;}
+.enonce-content table{border-collapse:collapse; width:100%; margin:14px 0; font-size:.85rem;}
+.enonce-content th,.enonce-content td{border:1px solid var(--border); padding:6px 10px; text-align:left;}
+.enonce-content th{background:var(--bg); font-weight:600;}
+.enonce-content pre{background:var(--bg); padding:12px; border-radius:8px; overflow-x:auto;}
+.enonce-content code{background:var(--bg); padding:1px 5px; border-radius:4px; font-size:.88em;}
+.enonce-content blockquote{border-left:3px solid var(--accent); margin:10px 0; padding:2px 14px; color:var(--text-dim);}
+.image-gallery{display:flex; flex-direction:column; gap:14px;}
+.image-gallery img{width:100%; border-radius:8px; border:1px solid var(--border); cursor:zoom-in;}
+.no-images{color:var(--text-faint); font-size:.88rem; font-style:italic;}
+.source-box{font-size:.85rem; color:var(--text-dim); word-break:break-all;}
+
+/* Lightbox */
+.lightbox{display:none; position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:200; align-items:center; justify-content:center; padding:20px;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:100%; max-height:100%; border-radius:6px;}
+
+footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:.8rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><span class="dot"></span> Concours Masters Maroc</div>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="Rechercher (établissement, ville, mot-clé de l'énoncé...)">
+    </div>
+    <div class="stat-pill" id="statPill">— concours</div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="filters">
+    <h3>Filtrer</h3>
+    <div class="filter-group">
+      <label style="font-size:.8rem;color:var(--text-dim);">Ville</label>
+      <select id="filterVille"><option value="">Toutes les villes</option></select>
+    </div>
+    <div class="filter-group">
+      <label style="font-size:.8rem;color:var(--text-dim);">Filière</label>
+      <select id="filterFiliere"><option value="">Toutes les filières</option></select>
+    </div>
+    <div class="filter-group">
+      <label style="font-size:.8rem;color:var(--text-dim);">Établissement</label>
+      <select id="filterEtab"><option value="">Tous les établissements</option></select>
+    </div>
+    <div class="filter-group">
+      <label style="font-size:.8rem;color:var(--text-dim);">Année</label>
+      <select id="filterAnnee"><option value="">Toutes les années</option></select>
+    </div>
+    <div class="filter-group">
+      <label style="font-size:.8rem;color:var(--text-dim);">Module requis</label>
+      <div class="chip-list" id="moduleChips"></div>
+    </div>
+    <button class="reset-btn" id="resetBtn">✕ Réinitialiser les filtres</button>
+  </aside>
+
+  <main>
+    <div class="results-header">
+      <div class="results-count" id="resultsCount"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2 id="modalTitle"></h2>
+        <div class="sub" id="modalSub"></div>
+      </div>
+      <button class="close-btn" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-row" id="modalInfoRow"></div>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="enonce">📝 Énoncé</button>
+        <button class="tab-btn" data-tab="images">🖼️ Extrait réel</button>
+        <button class="tab-btn" data-tab="source">🔗 Source</button>
+      </div>
+      <div class="tab-panel active" id="panel-enonce"><div class="enonce-content" id="enonceContent"></div></div>
+      <div class="tab-panel" id="panel-images"><div class="image-gallery" id="imageGallery"></div></div>
+      <div class="tab-panel" id="panel-source"><div class="source-box" id="sourceContent"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
+
+<script>
+let ALL = [];
+let filtered = [];
+let activeModule = "";
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+fetch('data/concours.json')
+  .then(r => r.json())
+  .then(data => {
+    ALL = data;
+    initFilters();
+    applyFilters();
+  })
+  .catch(err => {
+    $('#grid').innerHTML = `<div class="empty-state">Erreur de chargement des données : ${err}</div>`;
+  });
+
+function uniq(arr){ return [...new Set(arr)].filter(Boolean).sort(); }
+
+function initFilters(){
+  const villes = uniq(ALL.map(c => c.ville));
+  const filieres = uniq(ALL.map(c => c.filiere));
+  const etabs = uniq(ALL.map(c => c.etablissement));
+  const annees = uniq(ALL.map(c => c.annee)).sort((a,b)=> String(b).localeCompare(String(a)));
+  const modules = uniq(ALL.flatMap(c => c.modules || []));
+
+  fillSelect('#filterVille', villes);
+  fillSelect('#filterFiliere', filieres);
+  fillSelect('#filterEtab', etabs);
+  fillSelect('#filterAnnee', annees);
+
+  const chipWrap = $('#moduleChips');
+  modules.forEach(m => {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = m;
+    chip.addEventListener('click', () => {
+      activeModule = (activeModule === m) ? "" : m;
+      $$('.chip').forEach(c => c.classList.toggle('active', c.textContent === activeModule));
+      applyFilters();
+    });
+    chipWrap.appendChild(chip);
+  });
+
+  ['#filterVille','#filterFiliere','#filterEtab','#filterAnnee'].forEach(id => {
+    $(id).addEventListener('change', applyFilters);
+  });
+  $('#searchInput').addEventListener('input', applyFilters);
+  $('#resetBtn').addEventListener('click', () => {
+    ['#filterVille','#filterFiliere','#filterEtab','#filterAnnee'].forEach(id => $(id).value = "");
+    $('#searchInput').value = "";
+    activeModule = "";
+    $$('.chip').forEach(c => c.classList.remove('active'));
+    applyFilters();
+  });
+}
+
+function fillSelect(sel, values){
+  const el = $(sel);
+  values.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v; opt.textContent = v;
+    el.appendChild(opt);
+  });
+}
+
+function applyFilters(){
+  const ville = $('#filterVille').value;
+  const filiere = $('#filterFiliere').value;
+  const etab = $('#filterEtab').value;
+  const annee = $('#filterAnnee').value;
+  const q = $('#searchInput').value.trim().toLowerCase();
+
+  filtered = ALL.filter(c => {
+    if (ville && c.ville !== ville) return false;
+    if (filiere && c.filiere !== filiere) return false;
+    if (etab && c.etablissement !== etab) return false;
+    if (annee && String(c.annee) !== annee) return false;
+    if (activeModule && !(c.modules||[]).includes(activeModule)) return false;
+    if (q){
+      const hay = [c.ville,c.etablissement,c.filiere,c.annee,c.notions_cles,c.enonce_md,(c.modules||[]).join(' ')]
+        .join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  renderGrid();
+}
+
+function renderGrid(){
+  $('#statPill').textContent = `${ALL.length} concours`;
+  $('#resultsCount').textContent = `${filtered.length} résultat${filtered.length>1?'s':''}`;
+  const grid = $('#grid');
+  grid.innerHTML = '';
+  if (filtered.length === 0){
+    grid.innerHTML = `<div class="empty-state">Aucun concours ne correspond à ces filtres.</div>`;
+    return;
+  }
+  filtered.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const hasImg = (c.images||[]).length > 0;
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-title">${escapeHtml(c.etablissement)}</div>
+        <div class="card-year">${escapeHtml(String(c.annee))}</div>
+      </div>
+      <div class="card-meta">📍 ${escapeHtml(c.ville)} · ${escapeHtml(c.filiere)}</div>
+      <div class="card-modules">${(c.modules||[]).slice(0,4).map(m=>`<span class="mod-tag">${escapeHtml(m)}</span>`).join('')}${(c.modules||[]).length>4?`<span class="mod-tag">+${c.modules.length-4}</span>`:''}</div>
+      <div class="card-bottom">
+        <span class="diff-badge">Difficulté : ${escapeHtml(c.difficulte||'?')}</span>
+        ${hasImg ? '<span class="img-badge">🖼️ scan réel</span>' : ''}
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(c));
+    grid.appendChild(card);
+  });
+}
+
+function escapeHtml(s){
+  return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function openModal(c){
+  $('#modalTitle').textContent = `${c.etablissement} — ${c.annee}`;
+  $('#modalSub').textContent = `${c.filiere} · ${c.ville}`;
+  $('#modalInfoRow').innerHTML = `
+    <span class="info-tag">📍 ${escapeHtml(c.ville)}</span>
+    <span class="info-tag">🏫 ${escapeHtml(c.etablissement)}</span>
+    <span class="info-tag">🎓 ${escapeHtml(c.filiere)}</span>
+    <span class="info-tag">📅 ${escapeHtml(String(c.annee))}</span>
+    <span class="info-tag">⭐ ${escapeHtml(c.difficulte||'?')}</span>
+  `;
+
+  const enonceHtml = window.marked ? marked.parse(c.enonce_md || '*Énoncé non disponible.*') : (c.enonce_md||'');
+  $('#enonceContent').innerHTML = enonceHtml;
+
+  const gallery = $('#imageGallery');
+  gallery.innerHTML = '';
+  if ((c.images||[]).length){
+    c.images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.loading = 'lazy';
+      img.addEventListener('click', () => openLightbox(src));
+      gallery.appendChild(img);
+    });
+  } else {
+    gallery.innerHTML = '<div class="no-images">Image source non récupérable (lien d\'origine inaccessible).</div>';
+  }
+
+  $('#sourceContent').innerHTML = (window.marked ? marked.parse(c.source || '') : (c.source||''));
+
+  // reset tabs
+  $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'enonce'));
+  $$('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-enonce'));
+
+  $('#modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  if (window.renderMathInElement){
+    renderMathInElement($('#enonceContent'), {
+      delimiters: [
+        {left:'$$', right:'$$', display:true},
+        {left:'$', right:'$', display:false}
+      ],
+      throwOnError:false
+    });
+  }
+}
+
+function closeModal(){
+  $('#modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+$('#modalClose').addEventListener('click', closeModal);
+$('#modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ closeModal(); closeLightbox(); } });
+
+$$('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.tab-btn').forEach(b => b.classList.remove('active'));
+    $$('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    $('#panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+function openLightbox(src){
+  $('#lightboxImg').src = src;
+  $('#lightbox').classList.add('open');
+}
+function closeLightbox(){
+  $('#lightbox').classList.remove('open');
+}
+$('#lightbox').addEventListener('click', closeLightbox);
+</script>
+</body>
+</html>
