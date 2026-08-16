@@ -280,7 +280,8 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .eval-q-card.correct{border-color:var(--green);}
 .eval-q-card.incorrect{border-color:var(--red);}
 .eval-q-num{font-size:.72rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px;}
-.eval-q-text{font-weight:600; margin-bottom:10px; font-size:.96rem;}
+.eval-q-text{font-weight:600; margin-bottom:4px; font-size:.96rem;}
+.eval-hint{font-size:.74rem; color:var(--text-faint); font-style:italic; margin-bottom:8px;}
 .eval-opt{
   display:flex; align-items:flex-start; gap:9px; padding:7px 9px; border-radius:8px; cursor:pointer;
   font-size:.9rem; border:1px solid transparent;
@@ -393,7 +394,8 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
     <div id="evalQuestions"></div>
     <div class="eval-submit-bar">
       <button class="dl-btn" id="evalSubmitBtn">✅ Valider mes réponses</button>
-      <button class="reset-btn" id="evalRetryBtn" style="display:none;">↺ Recommencer</button>
+      <button class="reset-btn" id="evalRetryBtn" style="display:none;">🔄 Refaire l'évaluation à zéro</button>
+      <button class="reset-btn" id="evalPdfBtn" style="display:none;">⬇ Télécharger en PDF (avec réponses)</button>
     </div>
   </div>
 
@@ -981,20 +983,21 @@ function renderEvalQuestions(){
   $('#evalScoreBanner').innerHTML = '';
   $('#evalSubmitBtn').style.display = 'inline-flex';
   $('#evalRetryBtn').style.display = 'none';
+  $('#evalPdfBtn').style.display = 'none';
   const wrap = $('#evalQuestions');
   wrap.innerHTML = '';
   qs.forEach((q, idx) => {
     const card = document.createElement('div');
     card.className = 'eval-q-card';
     card.dataset.qid = q.id;
-    const isMulti = q.correct.length > 1;
     card.innerHTML = `
       <div class="eval-q-num">Q${idx+1} / ${qs.length} — ${escapeHtml(q.section || q.chapter)}</div>
       <div class="eval-q-text">${mdLiteInline(q.question)}</div>
+      <div class="eval-hint">Choisis une ou plusieurs réponses — une réponse en trop compte comme fausse.</div>
       <div class="eval-opts">
         ${q.options.map(o => `
           <label class="eval-opt" data-letter="${o.letter}">
-            <input type="${isMulti ? 'checkbox' : 'radio'}" name="q${q.id}" value="${o.letter}">
+            <input type="checkbox" name="q${q.id}" value="${o.letter}">
             <span><strong>${o.letter}.</strong> ${escapeHtml(o.text)}</span>
           </label>
         `).join('')}
@@ -1005,12 +1008,8 @@ function renderEvalQuestions(){
       inp.addEventListener('change', () => {
         if (evalSubmitted) return;
         if (!evalUserAnswers[q.id]) evalUserAnswers[q.id] = new Set();
-        if (isMulti){
-          if (inp.checked) evalUserAnswers[q.id].add(inp.value);
-          else evalUserAnswers[q.id].delete(inp.value);
-        } else {
-          evalUserAnswers[q.id] = new Set([inp.value]);
-        }
+        if (inp.checked) evalUserAnswers[q.id].add(inp.value);
+        else evalUserAnswers[q.id].delete(inp.value);
       });
     });
     wrap.appendChild(card);
@@ -1070,6 +1069,7 @@ function submitEval(){
   $('#evalScoreBanner').scrollIntoView({ behavior: 'smooth', block: 'start' });
   $('#evalSubmitBtn').style.display = 'none';
   $('#evalRetryBtn').style.display = 'inline-block';
+  $('#evalPdfBtn').style.display = 'inline-block';
 }
 
 $('#evalSubmitBtn').addEventListener('click', submitEval);
@@ -1079,6 +1079,59 @@ $('#evalRetryBtn').addEventListener('click', () => {
   renderEvalQuestions();
 });
 $('#evalBack').addEventListener('click', renderEvalModuleList);
+$('#evalPdfBtn').addEventListener('click', () => downloadEvalPDF());
+
+function downloadEvalPDF(){
+  const qs = currentEvalQuestions();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const marginX = 16;
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const maxWidth = pageW - marginX * 2;
+  const bottomLimit = pageH - 18;
+  let y = 20;
+
+  function ensureSpace(need){ if (y + need > bottomLimit){ doc.addPage(); y = 20; } }
+
+  function wrapText(text, size, bold, indent, color){
+    doc.setFont(undefined, bold ? 'bold' : 'normal');
+    doc.setFontSize(size);
+    doc.setTextColor(...color);
+    const wrapped = doc.splitTextToSize(text, maxWidth - indent);
+    for (const wl of wrapped){
+      ensureSpace(size * 0.42);
+      doc.text(wl, marginX + indent, y);
+      y += size * 0.42;
+    }
+  }
+
+  doc.setFont(undefined, 'bold'); doc.setFontSize(15); doc.setTextColor(20,20,25);
+  wrapText(evalCurrentQuiz.title, 15, true, 0, [20,20,25]);
+  y += 1;
+  doc.setDrawColor(200,200,210); doc.line(marginX, y, pageW - marginX, y); y += 6;
+  doc.setFontSize(9); doc.setTextColor(120,120,130);
+  wrapText(`Module : ${evalCurrentQuiz.module} — ${evalCurrentChapter}${evalCurrentChapter==='Tous' ? '' : ''} — ${qs.length} questions — Généré depuis SaadConcours`, 9, false, 0, [120,120,130]);
+  y += 6;
+
+  qs.forEach((q, idx) => {
+    ensureSpace(14);
+    wrapText(`Q${idx+1}. ${q.question}`, 11, true, 0, [20,20,25]);
+    y += 1.5;
+    q.options.forEach(o => {
+      const isCorrect = q.correct.includes(o.letter);
+      ensureSpace(9);
+      wrapText(`${o.letter}. ${o.text}`, 9.5, false, 5, isCorrect ? [30,140,90] : [70,70,80]);
+    });
+    y += 1;
+    ensureSpace(9);
+    const correctLetters = q.correct.join(', ').toUpperCase();
+    wrapText(`Réponse(s) correcte(s) : ${correctLetters}${q.justification ? ' — ' + q.justification : ''}`, 9, true, 0, [30,140,90]);
+    y += 5;
+  });
+
+  doc.save(`${evalCurrentQuiz.id}_${evalCurrentChapter.replace(/[^a-zA-Z0-9]+/g,'_').slice(0,30)}.pdf`);
+}
 </script>
 </body>
 </html>
