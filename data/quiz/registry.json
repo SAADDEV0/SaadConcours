@@ -80,12 +80,12 @@
     "available": false
   },
   {
-    "id": "macroeconomie_soon",
+    "id": "macro_100",
     "module": "Macroéconomie",
-    "title": "Concours Blanc — Macroéconomie",
-    "file": null,
-    "nb_questions": 0,
-    "available": false
+    "title": "Concours Blanc — Macroéconomie (100 Questions)",
+    "file": "data/quiz/macroeconomie.json",
+    "nb_questions": 100,
+    "available": true
   },
   {
     "id": "mathematiques_financieres_soon",
