@@ -158,6 +158,18 @@ header{
   width:32px; height:32px; cursor:pointer; font-size:1.1rem; flex-shrink:0;
 }
 .close-btn:hover{color:var(--red); border-color:var(--red);}
+.modal-actions{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.dl-btn{
+  display:flex; align-items:center; gap:6px; background:var(--accent); border:1px solid var(--accent);
+  color:#fff; border-radius:8px; padding:0 14px; height:32px; cursor:pointer; font-size:.82rem; font-weight:600;
+  white-space:nowrap;
+}
+.dl-btn:hover{ filter:brightness(1.08); }
+.card-dl{
+  background:var(--bg); border:1px solid var(--border); color:var(--text-dim); border-radius:7px;
+  width:28px; height:28px; cursor:pointer; font-size:.85rem; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+}
+.card-dl:hover{ color:var(--accent); border-color:var(--accent); }
 .modal-body{padding:22px;}
 .info-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
 .info-tag{font-size:.76rem; padding:4px 10px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-dim);}
@@ -246,7 +258,10 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
         <h2 id="modalTitle"></h2>
         <div class="sub" id="modalSub"></div>
       </div>
-      <button class="close-btn" id="modalClose">✕</button>
+      <div class="modal-actions">
+        <button class="dl-btn" id="modalDownload" title="Télécharger l'énoncé (texte)">⬇ Télécharger</button>
+        <button class="close-btn" id="modalClose">✕</button>
+      </div>
     </div>
     <div class="modal-body">
       <div class="info-row" id="modalInfoRow"></div>
@@ -292,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let ALL = [];
 let filtered = [];
 let activeModule = "";
+let currentModalConcours = null;
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -396,7 +412,10 @@ function renderGrid(){
     card.innerHTML = `
       <div class="card-top">
         <div class="card-title">${escapeHtml(c.etablissement)}</div>
-        <div class="card-year">${escapeHtml(String(c.annee))}</div>
+        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+          <div class="card-year">${escapeHtml(String(c.annee))}</div>
+          <button class="card-dl" title="Télécharger l'énoncé (texte)">⬇</button>
+        </div>
       </div>
       <div class="card-meta">📍 ${escapeHtml(c.ville)} · ${escapeHtml(c.filiere)}</div>
       <div class="card-modules">${(c.modules||[]).slice(0,4).map(m=>`<span class="mod-tag">${escapeHtml(m)}</span>`).join('')}${(c.modules||[]).length>4?`<span class="mod-tag">+${c.modules.length-4}</span>`:''}</div>
@@ -406,6 +425,10 @@ function renderGrid(){
       </div>
     `;
     card.addEventListener('click', () => openModal(c));
+    card.querySelector('.card-dl').addEventListener('click', (e) => {
+      e.stopPropagation();
+      downloadEnonce(c);
+    });
     grid.appendChild(card);
   });
 }
@@ -457,6 +480,7 @@ function escapeHtml(s){
 }
 
 function openModal(c){
+  currentModalConcours = c;
   $('#modalTitle').textContent = `${c.etablissement} — ${c.annee}`;
   $('#modalSub').textContent = `${c.filiere} · ${c.ville}`;
   $('#modalInfoRow').innerHTML = `
@@ -512,6 +536,32 @@ function closeModal(){
 
 $('#modalClose').addEventListener('click', closeModal);
 $('#modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
+$('#modalDownload').addEventListener('click', () => { if (currentModalConcours) downloadEnonce(currentModalConcours); });
+
+function downloadEnonce(c){
+  const lines = [];
+  lines.push(`${c.etablissement} — ${c.annee}`);
+  lines.push(`${c.filiere} · ${c.ville}`);
+  lines.push('');
+  lines.push('='.repeat(60));
+  lines.push('');
+  lines.push(c.enonce_md || 'Énoncé non disponible.');
+  lines.push('');
+  lines.push('='.repeat(60));
+  lines.push('');
+  lines.push('Source :');
+  lines.push(c.source || 'non précisée');
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${c.id}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ closeModal(); closeLightbox(); } });
 
 $$('.tab-btn').forEach(btn => {
