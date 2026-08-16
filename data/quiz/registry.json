@@ -1,0 +1,42 @@
+[
+  {
+    "id": "audit_100",
+    "module": "Audit",
+    "title": "Concours Blanc — Audit & CCA (100 Questions)",
+    "file": "data/quiz/audit.json",
+    "nb_questions": 100,
+    "available": true
+  },
+  {
+    "id": "cca_soon",
+    "module": "CCA",
+    "title": "Concours Blanc — CCA",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "finance_soon",
+    "module": "Finance",
+    "title": "Concours Blanc — Finance",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "fiscalite_soon",
+    "module": "Fiscalité",
+    "title": "Concours Blanc — Fiscalité",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  },
+  {
+    "id": "gfcf_soon",
+    "module": "GFCF",
+    "title": "Concours Blanc — GFCF",
+    "file": null,
+    "nb_questions": 0,
+    "available": false
+  }
+]

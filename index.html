@@ -248,6 +248,56 @@ header{
 .lightbox img{max-width:100%; max-height:100%; border-radius:6px;}
 
 footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:.8rem;}
+
+/* ---------- View nav ---------- */
+.view-nav{display:flex; gap:4px; background:var(--bg); border:1px solid var(--border); border-radius:999px; padding:3px; flex-shrink:0;}
+.view-nav-btn{border:none; background:none; color:var(--text-dim); padding:6px 14px; border-radius:999px; font-size:.85rem; cursor:pointer; white-space:nowrap;}
+.view-nav-btn.active{background:var(--accent); color:#fff;}
+
+/* ---------- Évaluation ---------- */
+.eval-view{max-width:1000px; margin:0 auto; padding:28px 20px 70px;}
+.eval-title{font-size:1.3rem; margin:0 0 6px;}
+.eval-sub{color:var(--text-dim); font-size:.92rem; margin:0 0 18px;}
+.eval-module-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:var(--shadow); cursor:pointer;
+  transition:transform .15s ease, border-color .15s ease;
+}
+.eval-module-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+.eval-module-card.disabled{opacity:.5; cursor:not-allowed;}
+.eval-module-card.disabled:hover{transform:none; border-color:var(--border);}
+.eval-module-name{font-weight:700; font-size:1.05rem;}
+.eval-module-desc{font-size:.85rem; color:var(--text-dim);}
+.eval-module-meta{font-size:.76rem; color:var(--accent); font-weight:600;}
+.eval-toolbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+.eval-toolbar .reset-btn{width:auto; margin:0; padding:8px 14px;}
+.eval-chapter-chips{display:flex; gap:6px; flex-wrap:wrap; flex:1;}
+.eval-progress{font-size:.8rem; color:var(--text-dim); white-space:nowrap;}
+.eval-q-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 18px; margin-bottom:12px;
+}
+.eval-q-card.correct{border-color:var(--green);}
+.eval-q-card.incorrect{border-color:var(--red);}
+.eval-q-num{font-size:.72rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px;}
+.eval-q-text{font-weight:600; margin-bottom:10px; font-size:.96rem;}
+.eval-opt{
+  display:flex; align-items:flex-start; gap:9px; padding:7px 9px; border-radius:8px; cursor:pointer;
+  font-size:.9rem; border:1px solid transparent;
+}
+.eval-opt:hover{background:var(--bg);}
+.eval-opt input{margin-top:3px; flex-shrink:0;}
+.eval-opt.opt-correct{background:rgba(62,207,142,.12); border-color:var(--green);}
+.eval-opt.opt-wrong{background:rgba(240,85,95,.12); border-color:var(--red);}
+.eval-justif{margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); font-size:.83rem; color:var(--text-dim);}
+.eval-submit-bar{position:sticky; bottom:14px; display:flex; gap:10px; justify-content:center; padding-top:10px;}
+.eval-score-banner{
+  border-radius:var(--radius); padding:18px 20px; margin-bottom:18px; text-align:center;
+  background:var(--bg-elev); border:1px solid var(--accent);
+}
+.eval-score-num{font-size:2.1rem; font-weight:800; color:var(--accent);}
+.eval-score-sub{color:var(--text-dim); font-size:.88rem; margin-top:4px;}
+.eval-score-chapters{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:12px; font-size:.82rem; color:var(--text-dim);}
 </style>
 </head>
 <body>
@@ -280,13 +330,17 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       <input type="text" id="searchInput" placeholder="Rechercher (établissement, ville, mot-clé de l'énoncé...)">
     </div>
+    <nav class="view-nav">
+      <button class="view-nav-btn active" id="navConcours">📚 Concours</button>
+      <button class="view-nav-btn" id="navEval">📝 Évaluation</button>
+    </nav>
     <div class="stat-pill" id="statPill">— concours</div>
     <div class="stat-pill" id="visitorPill" title="Nombre de visites">👁 —</div>
     <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
   </div>
 </header>
 
-<div class="layout">
+<div class="layout" id="viewConcours">
   <aside class="filters">
     <h3>Filtrer</h3>
     <div class="filter-group">
@@ -318,6 +372,31 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
     </div>
     <div class="grid" id="grid"></div>
   </main>
+</div>
+
+<div class="eval-view" id="viewEval" style="display:none;">
+
+  <div id="evalModuleList">
+    <h2 class="eval-title">📝 Évaluation par module</h2>
+    <p class="eval-sub">Choisis un module pour t'auto-évaluer en conditions QCM. Ton score s'affiche à la fin.</p>
+    <div class="grid" id="evalModuleGrid"></div>
+  </div>
+
+  <div id="evalQuizWrap" style="display:none;">
+    <div class="eval-toolbar">
+      <button class="reset-btn" id="evalBack">← Modules</button>
+      <div class="eval-chapter-chips" id="evalChapterChips"></div>
+      <div class="eval-progress" id="evalProgress"></div>
+    </div>
+    <h2 class="eval-title" id="evalQuizTitle"></h2>
+    <div id="evalScoreBanner"></div>
+    <div id="evalQuestions"></div>
+    <div class="eval-submit-bar">
+      <button class="dl-btn" id="evalSubmitBtn">✅ Valider mes réponses</button>
+      <button class="reset-btn" id="evalRetryBtn" style="display:none;">↺ Recommencer</button>
+    </div>
+  </div>
+
 </div>
 
 <footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
@@ -803,6 +882,203 @@ function closeLightbox(){
   $('#lightbox').classList.remove('open');
 }
 $('#lightbox').addEventListener('click', closeLightbox);
+
+/* ================= Évaluation (quiz) ================= */
+function mdLiteInline(s){
+  return escapeHtml(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+let evalRegistry = [];
+let evalCurrentQuiz = null;
+let evalCurrentChapter = 'Tous';
+let evalUserAnswers = {};
+let evalSubmitted = false;
+
+$('#navConcours').addEventListener('click', () => switchView('concours'));
+$('#navEval').addEventListener('click', () => switchView('eval'));
+
+function switchView(view){
+  const isEval = view === 'eval';
+  $('#viewConcours').style.display = isEval ? 'none' : 'grid';
+  $('#viewEval').style.display = isEval ? 'block' : 'none';
+  $('#navConcours').classList.toggle('active', !isEval);
+  $('#navEval').classList.toggle('active', isEval);
+  if (isEval && evalRegistry.length === 0) loadEvalRegistry();
+}
+
+function loadEvalRegistry(){
+  fetch('data/quiz/registry.json')
+    .then(r => r.json())
+    .then(data => { evalRegistry = data; renderEvalModuleList(); })
+    .catch(() => { $('#evalModuleGrid').innerHTML = `<div class="empty-state">Impossible de charger les modules d'évaluation.</div>`; });
+}
+
+function renderEvalModuleList(){
+  $('#evalQuizWrap').style.display = 'none';
+  $('#evalModuleList').style.display = 'block';
+  const grid = $('#evalModuleGrid');
+  grid.innerHTML = '';
+  evalRegistry.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'eval-module-card' + (m.available ? '' : ' disabled');
+    card.innerHTML = `
+      <div class="eval-module-name">${escapeHtml(m.module)}</div>
+      <div class="eval-module-desc">${escapeHtml(m.title)}</div>
+      <div class="eval-module-meta">${m.available ? `${m.nb_questions} questions` : 'Bientôt disponible'}</div>
+    `;
+    if (m.available){
+      card.addEventListener('click', () => loadEvalQuiz(m));
+    }
+    grid.appendChild(card);
+  });
+}
+
+function loadEvalQuiz(meta){
+  fetch(meta.file)
+    .then(r => r.json())
+    .then(data => {
+      evalCurrentQuiz = data;
+      evalCurrentChapter = 'Tous';
+      evalUserAnswers = {};
+      evalSubmitted = false;
+      $('#evalModuleList').style.display = 'none';
+      $('#evalQuizWrap').style.display = 'block';
+      $('#evalQuizTitle').textContent = data.title;
+      renderEvalChapterChips();
+      renderEvalQuestions();
+    });
+}
+
+function renderEvalChapterChips(){
+  const wrap = $('#evalChapterChips');
+  wrap.innerHTML = '';
+  const chips = ['Tous', ...evalCurrentQuiz.chapters];
+  chips.forEach(ch => {
+    const chip = document.createElement('span');
+    chip.className = 'chip' + (ch === evalCurrentChapter ? ' active' : '');
+    chip.textContent = ch === 'Tous' ? `Tous (${evalCurrentQuiz.questions.length})` : ch;
+    chip.addEventListener('click', () => {
+      evalCurrentChapter = ch;
+      evalUserAnswers = {};
+      evalSubmitted = false;
+      renderEvalChapterChips();
+      renderEvalQuestions();
+    });
+    wrap.appendChild(chip);
+  });
+}
+
+function currentEvalQuestions(){
+  if (evalCurrentChapter === 'Tous') return evalCurrentQuiz.questions;
+  return evalCurrentQuiz.questions.filter(q => q.chapter === evalCurrentChapter);
+}
+
+function renderEvalQuestions(){
+  const qs = currentEvalQuestions();
+  $('#evalProgress').textContent = `${qs.length} question${qs.length>1?'s':''}`;
+  $('#evalScoreBanner').innerHTML = '';
+  $('#evalSubmitBtn').style.display = 'inline-flex';
+  $('#evalRetryBtn').style.display = 'none';
+  const wrap = $('#evalQuestions');
+  wrap.innerHTML = '';
+  qs.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'eval-q-card';
+    card.dataset.qid = q.id;
+    const isMulti = q.correct.length > 1;
+    card.innerHTML = `
+      <div class="eval-q-num">Q${idx+1} / ${qs.length} — ${escapeHtml(q.section || q.chapter)}</div>
+      <div class="eval-q-text">${mdLiteInline(q.question)}</div>
+      <div class="eval-opts">
+        ${q.options.map(o => `
+          <label class="eval-opt" data-letter="${o.letter}">
+            <input type="${isMulti ? 'checkbox' : 'radio'}" name="q${q.id}" value="${o.letter}">
+            <span><strong>${o.letter}.</strong> ${escapeHtml(o.text)}</span>
+          </label>
+        `).join('')}
+      </div>
+      <div class="eval-justif" style="display:none;"></div>
+    `;
+    card.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        if (evalSubmitted) return;
+        if (!evalUserAnswers[q.id]) evalUserAnswers[q.id] = new Set();
+        if (isMulti){
+          if (inp.checked) evalUserAnswers[q.id].add(inp.value);
+          else evalUserAnswers[q.id].delete(inp.value);
+        } else {
+          evalUserAnswers[q.id] = new Set([inp.value]);
+        }
+      });
+    });
+    wrap.appendChild(card);
+  });
+}
+
+function setsEqual(a, b){
+  if (a.size !== b.size) return false;
+  for (const x of a) if (!b.has(x)) return false;
+  return true;
+}
+
+function submitEval(){
+  const qs = currentEvalQuestions();
+  evalSubmitted = true;
+  let correctCount = 0;
+  const chapterStats = {};
+
+  qs.forEach(q => {
+    const card = document.querySelector(`.eval-q-card[data-qid="${q.id}"]`);
+    if (!card) return;
+    const userSet = evalUserAnswers[q.id] || new Set();
+    const correctSet = new Set(q.correct);
+    const isCorrect = setsEqual(userSet, correctSet);
+    if (isCorrect) correctCount++;
+
+    if (!chapterStats[q.chapter]) chapterStats[q.chapter] = { correct: 0, total: 0 };
+    chapterStats[q.chapter].total++;
+    if (isCorrect) chapterStats[q.chapter].correct++;
+
+    card.classList.add(isCorrect ? 'correct' : 'incorrect');
+    card.querySelectorAll('.eval-opt').forEach(optEl => {
+      const letter = optEl.dataset.letter;
+      optEl.querySelector('input').disabled = true;
+      if (correctSet.has(letter)) optEl.classList.add('opt-correct');
+      else if (userSet.has(letter)) optEl.classList.add('opt-wrong');
+    });
+    if (q.justification){
+      const j = card.querySelector('.eval-justif');
+      j.style.display = 'block';
+      j.innerHTML = `💡 ${escapeHtml(q.justification)}`;
+    }
+  });
+
+  const pct = qs.length ? Math.round((correctCount / qs.length) * 100) : 0;
+  const chapterHtml = Object.entries(chapterStats).map(([ch, s]) =>
+    `<span>${escapeHtml(ch.split('—')[0].trim())} : ${s.correct}/${s.total}</span>`
+  ).join('');
+
+  $('#evalScoreBanner').innerHTML = `
+    <div class="eval-score-banner">
+      <div class="eval-score-num">${correctCount} / ${qs.length}</div>
+      <div class="eval-score-sub">Score : ${pct}%</div>
+      <div class="eval-score-chapters">${chapterHtml}</div>
+    </div>
+  `;
+  $('#evalScoreBanner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('#evalSubmitBtn').style.display = 'none';
+  $('#evalRetryBtn').style.display = 'inline-block';
+}
+
+$('#evalSubmitBtn').addEventListener('click', submitEval);
+$('#evalRetryBtn').addEventListener('click', () => {
+  evalUserAnswers = {};
+  evalSubmitted = false;
+  renderEvalQuestions();
+});
+$('#evalBack').addEventListener('click', renderEvalModuleList);
 </script>
 </body>
 </html>
