@@ -23,18 +23,32 @@
   --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 @media (prefers-color-scheme: light){
-  :root{
+  :root:not([data-theme="dark"]){
     --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
     --text:#1a1d27; --text-dim:#5a6072; --text-faint:#8890a0;
     --accent:#2f6fed; --accent-dim:#dce7ff;
     --shadow:0 4px 20px rgba(20,20,40,.08);
   }
 }
+:root[data-theme="light"]{
+  --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
+  --text:#1a1d27; --text-dim:#5a6072; --text-faint:#8890a0;
+  --accent:#2f6fed; --accent-dim:#dce7ff;
+  --shadow:0 4px 20px rgba(20,20,40,.08);
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --bg-elev:#161922; --bg-card:#1b1f2a; --border:#2a2f3d;
+  --text:#e8eaf0; --text-dim:#9aa1b2; --text-faint:#6b7280;
+  --accent:#4f8cff; --accent-dim:#2d4a8a;
+  --shadow:0 4px 20px rgba(0,0,0,.35);
+}
+*, *::before, *::after{ transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{
   background:var(--bg); color:var(--text); font-family:var(--font);
   line-height:1.55; min-height:100vh;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 }
 a{color:var(--accent);}
 ::selection{background:var(--accent-dim);}
@@ -59,6 +73,12 @@ header{
   font-size:.78rem; color:var(--text-dim); background:var(--bg); border:1px solid var(--border);
   padding:5px 11px; border-radius:999px; white-space:nowrap;
 }
+.theme-toggle{
+  width:34px; height:34px; border-radius:999px; border:1px solid var(--border); background:var(--bg);
+  color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; font-size:1rem;
+}
+.theme-toggle:hover{ border-color:var(--accent); color:var(--accent); }
 
 /* ---------- Layout ---------- */
 .layout{max-width:1400px; margin:0 auto; display:grid; grid-template-columns:260px 1fr; gap:22px; padding:22px 20px 60px;}
@@ -98,9 +118,10 @@ header{
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px;}
 .card{
   background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
-  padding:16px; cursor:pointer; transition:.15s; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;
+  padding:16px; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;
 }
-.card:hover{border-color:var(--accent); transform:translateY(-2px);}
+.card:hover{border-color:var(--accent); transform:translateY(-3px); box-shadow:0 10px 28px rgba(79,140,255,.18);}
 .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
 .card-title{font-weight:600; font-size:.98rem;}
 .card-year{
@@ -178,6 +199,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
       <input type="text" id="searchInput" placeholder="Rechercher (établissement, ville, mot-clé de l'énoncé...)">
     </div>
     <div class="stat-pill" id="statPill">— concours</div>
+    <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
   </div>
 </header>
 
@@ -243,6 +265,30 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 <div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
 
 <script>
+(function initTheme(){
+  const saved = localStorage.getItem('theme');
+  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const theme = saved || (prefersLight ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+
+function applyThemeButton(){
+  const theme = document.documentElement.getAttribute('data-theme');
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = theme === 'light' ? '☀️' : '🌙';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  applyThemeButton();
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    applyThemeButton();
+  });
+});
+
 let ALL = [];
 let filtered = [];
 let activeModule = "";
@@ -364,6 +410,48 @@ function renderGrid(){
   });
 }
 
+function formatQCM(md){
+  if (!md) return md;
+  const lines = md.split('\n');
+  const out = [];
+  const order = 'abcde';
+
+  for (let line of lines){
+    const markerRe = /\b([A-Ea-e])[.:]\s+/g;
+    const matches = [...line.matchAll(markerRe)];
+
+    if (matches.length >= 3){
+      const letters = matches.map(m => m[1].toLowerCase());
+      let pos = -1, seqOk = letters[0] === 'a';
+      for (const l of letters){
+        const idx = order.indexOf(l);
+        if (idx <= pos){ seqOk = false; break; }
+        pos = idx;
+      }
+      if (seqOk){
+        const stem = line.slice(0, matches[0].index).trim();
+        if (stem) out.push(stem);
+        for (let i = 0; i < matches.length; i++){
+          const start = matches[i].index + matches[i][0].length;
+          const end = (i + 1 < matches.length) ? matches[i + 1].index : line.length;
+          let txt = line.slice(start, end).trim().replace(/[;.]\s*$/, '').trim();
+          out.push(`- **${matches[i][1].toLowerCase()}.** ${txt}`);
+        }
+        continue;
+      }
+    }
+
+    const singleM = line.match(/^\s*([A-Ea-e])[.:]\s+(.+)$/);
+    if (singleM){
+      out.push(`- **${singleM[1].toLowerCase()}.** ${singleM[2].trim()}`);
+      continue;
+    }
+
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
 function escapeHtml(s){
   return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
@@ -379,7 +467,8 @@ function openModal(c){
     <span class="info-tag">⭐ ${escapeHtml(c.difficulte||'?')}</span>
   `;
 
-  const enonceHtml = window.marked ? marked.parse(c.enonce_md || '*Énoncé non disponible.*') : (c.enonce_md||'');
+  const formattedEnonce = formatQCM(c.enonce_md);
+  const enonceHtml = window.marked ? marked.parse(formattedEnonce || '*Énoncé non disponible.*') : (formattedEnonce||'');
   $('#enonceContent').innerHTML = enonceHtml;
 
   const gallery = $('#imageGallery');
