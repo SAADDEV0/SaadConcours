@@ -299,6 +299,39 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .eval-score-num{font-size:2.1rem; font-weight:800; color:var(--accent);}
 .eval-score-sub{color:var(--text-dim); font-size:.88rem; margin-top:4px;}
 .eval-score-chapters{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:12px; font-size:.82rem; color:var(--text-dim);}
+
+/* ---------- Cours ---------- */
+.cours-view{max-width:1200px; margin:0 auto; padding:28px 20px 70px;}
+.cours-reader{display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start;}
+@media (max-width: 800px){ .cours-reader{grid-template-columns:1fr;} }
+.cours-toc{
+  position:sticky; top:78px; max-height:calc(100vh - 100px); overflow-y:auto;
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:14px;
+  font-size:.82rem; display:flex; flex-direction:column; gap:2px;
+}
+@media (max-width: 800px){ .cours-toc{position:static; max-height:none;} }
+.cours-toc-title{font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); margin-bottom:6px;}
+.cours-toc a{
+  color:var(--text-dim); text-decoration:none; padding:5px 8px; border-radius:6px; display:block;
+  line-height:1.3;
+}
+.cours-toc a:hover{background:var(--bg); color:var(--text);}
+.cours-toc a.toc-h3{padding-left:18px; font-size:.78rem;}
+.cours-content{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px 28px; font-size:.95rem;
+}
+.cours-content h1{font-size:1.4rem; margin:0 0 14px;}
+.cours-content h2{font-size:1.15rem; margin:26px 0 10px; padding-top:10px; border-top:1px solid var(--border);}
+.cours-content h2:first-child{border-top:none; padding-top:0; margin-top:0;}
+.cours-content h3{font-size:1rem; margin:18px 0 8px;}
+.cours-content table{border-collapse:collapse; width:100%; margin:14px 0; font-size:.85rem;}
+.cours-content th,.cours-content td{border:1px solid var(--border); padding:6px 10px; text-align:left;}
+.cours-content th{background:var(--bg); font-weight:600;}
+.cours-content pre{background:var(--bg); padding:12px; border-radius:8px; overflow-x:auto;}
+.cours-content code{background:var(--bg); padding:1px 5px; border-radius:4px; font-size:.88em;}
+.cours-content pre code{background:none; padding:0;}
+.cours-content ul,.cours-content ol{padding-left:1.3em;}
 </style>
 </head>
 <body>
@@ -333,6 +366,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
     </div>
     <nav class="view-nav">
       <button class="view-nav-btn active" id="navConcours">📚 Concours</button>
+      <button class="view-nav-btn" id="navCours">📖 Cours</button>
       <button class="view-nav-btn" id="navEval">📝 Évaluation</button>
     </nav>
     <div class="stat-pill" id="statPill">— concours</div>
@@ -373,6 +407,28 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
     </div>
     <div class="grid" id="grid"></div>
   </main>
+</div>
+
+<div class="cours-view" id="viewCours" style="display:none;">
+
+  <div id="coursModuleList">
+    <h2 class="eval-title">📖 Cours par module</h2>
+    <p class="eval-sub">Fiches de cours synthétiques : définitions, formules et points clés à retenir, par module.</p>
+    <div class="grid" id="coursModuleGrid"></div>
+  </div>
+
+  <div id="coursReaderWrap" style="display:none;">
+    <div class="eval-toolbar">
+      <button class="reset-btn" id="coursBack">← Modules</button>
+      <div class="eval-progress" id="coursReaderMeta"></div>
+      <button class="dl-btn" id="coursPdfBtn">⬇ Télécharger en PDF</button>
+    </div>
+    <div class="cours-reader">
+      <aside class="cours-toc" id="coursToc"></aside>
+      <div class="cours-content" id="coursContent"></div>
+    </div>
+  </div>
+
 </div>
 
 <div class="eval-view" id="viewEval" style="display:none;">
@@ -904,15 +960,18 @@ let evalUserAnswers = {};
 let evalSubmitted = false;
 
 $('#navConcours').addEventListener('click', () => switchView('concours'));
+$('#navCours').addEventListener('click', () => switchView('cours'));
 $('#navEval').addEventListener('click', () => switchView('eval'));
 
 function switchView(view){
-  const isEval = view === 'eval';
-  $('#viewConcours').style.display = isEval ? 'none' : 'grid';
-  $('#viewEval').style.display = isEval ? 'block' : 'none';
-  $('#navConcours').classList.toggle('active', !isEval);
-  $('#navEval').classList.toggle('active', isEval);
-  if (isEval && evalRegistry.length === 0) loadEvalRegistry();
+  $('#viewConcours').style.display = view === 'concours' ? 'grid' : 'none';
+  $('#viewCours').style.display = view === 'cours' ? 'block' : 'none';
+  $('#viewEval').style.display = view === 'eval' ? 'block' : 'none';
+  $('#navConcours').classList.toggle('active', view === 'concours');
+  $('#navCours').classList.toggle('active', view === 'cours');
+  $('#navEval').classList.toggle('active', view === 'eval');
+  if (view === 'eval' && evalRegistry.length === 0) loadEvalRegistry();
+  if (view === 'cours' && coursRegistry.length === 0) loadCoursRegistry();
 }
 
 function loadEvalRegistry(){
@@ -1137,6 +1196,179 @@ function downloadEvalPDF(){
 
   doc.save(`${evalCurrentQuiz.id}_${evalCurrentChapter.replace(/[^a-zA-Z0-9]+/g,'_').slice(0,30)}.pdf`);
 }
+
+/* ================= Cours ================= */
+let coursRegistry = [];
+let coursCurrent = null;
+
+function loadCoursRegistry(){
+  fetch('data/cours/registry.json')
+    .then(r => r.json())
+    .then(data => { coursRegistry = data; renderCoursModuleList(); })
+    .catch(() => { $('#coursModuleGrid').innerHTML = `<div class="empty-state">Impossible de charger les cours.</div>`; });
+}
+
+function renderCoursModuleList(){
+  $('#coursReaderWrap').style.display = 'none';
+  $('#coursModuleList').style.display = 'block';
+  const grid = $('#coursModuleGrid');
+  grid.innerHTML = '';
+  coursRegistry.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'eval-module-card' + (m.available ? '' : ' disabled');
+    card.innerHTML = `
+      <div class="eval-module-name">${escapeHtml(m.module)}</div>
+      <div class="eval-module-desc">${escapeHtml(m.description || '')}</div>
+      <div class="eval-module-meta">${m.available ? 'Lire le cours' : 'Bientôt disponible'}</div>
+    `;
+    if (m.available){
+      card.addEventListener('click', () => loadCours(m));
+    }
+    grid.appendChild(card);
+  });
+}
+
+function loadCours(meta){
+  fetch(meta.file)
+    .then(r => r.text())
+    .then(md => {
+      coursCurrent = { meta, md };
+      $('#coursModuleList').style.display = 'none';
+      $('#coursReaderWrap').style.display = 'block';
+      $('#coursReaderMeta').textContent = meta.module;
+      renderCoursContent(md);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(() => {
+      $('#coursContent').innerHTML = `<div class="empty-state">Impossible de charger ce cours.</div>`;
+    });
+}
+
+function renderCoursContent(md){
+  const html = window.marked ? marked.parse(md) : md;
+  const content = $('#coursContent');
+  content.innerHTML = html;
+
+  const toc = $('#coursToc');
+  toc.innerHTML = '<div class="cours-toc-title">Sommaire</div>';
+  const headings = content.querySelectorAll('h2, h3');
+  headings.forEach((h, i) => {
+    const id = 'cours-h-' + i;
+    h.id = id;
+    const a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = h.textContent;
+    if (h.tagName === 'H3') a.className = 'toc-h3';
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    toc.appendChild(a);
+  });
+
+  if (window.renderMathInElement){
+    renderMathInElement(content, {
+      delimiters: [
+        {left:'$$', right:'$$', display:true},
+        {left:'$', right:'$', display:false}
+      ],
+      throwOnError:false
+    });
+  }
+}
+
+$('#coursBack').addEventListener('click', renderCoursModuleList);
+
+$('#coursPdfBtn').addEventListener('click', () => {
+  if (!coursCurrent) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const marginX = 18;
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const maxWidth = pageW - marginX * 2;
+  const bottomLimit = pageH - 18;
+  let y = 20;
+
+  function ensureSpace(need){ if (y + need > bottomLimit){ doc.addPage(); y = 20; } }
+
+  function addWrappedLine(text, opts={}){
+    const { bold=false, size=10.5, gapAfter=1.6, color=[20,20,25] } = opts;
+    doc.setFont(undefined, bold ? 'bold' : 'normal');
+    doc.setFontSize(size);
+    doc.setTextColor(...color);
+    const clean = stripInlineMd(text);
+    if (!clean){ y += 2; return; }
+    const wrapped = doc.splitTextToSize(clean, maxWidth);
+    for (const wl of wrapped){
+      ensureSpace(size * 0.42);
+      doc.text(wl, marginX, y);
+      y += size * 0.42;
+    }
+    y += gapAfter;
+  }
+
+  function addTable(rows){
+    const cleanRows = rows.map(r => r.map(cell => stripInlineMd(cell)));
+    ensureSpace(20);
+    doc.autoTable({
+      startY: y,
+      margin: { left: marginX, right: marginX },
+      head: [cleanRows[0]],
+      body: cleanRows.slice(1),
+      styles: { fontSize: 8.5, cellPadding: 2, overflow: 'linebreak' },
+      headStyles: { fillColor: [79, 140, 255], textColor: 255 },
+      theme: 'grid'
+    });
+    y = doc.lastAutoTable.finalY + 4;
+  }
+
+  const src = coursCurrent.md.split('\n');
+  let i = 0;
+  while (i < src.length){
+    const line = src[i];
+
+    if (/^\s*$/.test(line)){ y += 2; i++; continue; }
+
+    if (/^```/.test(line.trim())){
+      i++;
+      const codeLines = [];
+      while (i < src.length && !/^```/.test(src[i].trim())){ codeLines.push(src[i]); i++; }
+      i++;
+      codeLines.forEach(cl => addWrappedLine(cl, { size: 9, color: [80,80,90] }));
+      y += 1.5;
+      continue;
+    }
+
+    if (/^\|/.test(line.trim())){
+      const rows = [];
+      while (i < src.length && /^\|/.test(src[i].trim())){
+        const cells = src[i].trim().replace(/^\||\|$/g, '').split('|').map(s => s.trim());
+        if (!/^:?-+:?$/.test(cells.join(''))) rows.push(cells);
+        i++;
+      }
+      if (rows.length) addTable(rows);
+      continue;
+    }
+
+    const h1M = line.match(/^#\s+(.*)$/);
+    if (h1M){ ensureSpace(12); addWrappedLine(h1M[1], { bold: true, size: 15, gapAfter: 3 }); i++; continue; }
+
+    const h2M = line.match(/^##\s+(.*)$/);
+    if (h2M){ y += 2; ensureSpace(10); addWrappedLine(h2M[1], { bold: true, size: 13, gapAfter: 2.5 }); i++; continue; }
+
+    const h3M = line.match(/^###\s+(.*)$/);
+    if (h3M){ ensureSpace(9); addWrappedLine(h3M[1], { bold: true, size: 11.5, gapAfter: 2 }); i++; continue; }
+
+    const bulletM = line.match(/^\s*-\s+(.*)$/);
+    if (bulletM){ addWrappedLine('• ' + bulletM[1]); i++; continue; }
+
+    addWrappedLine(line);
+    i++;
+  }
+
+  doc.save(`${coursCurrent.meta.id}.pdf`);
+});
 </script>
 </body>
 </html>
