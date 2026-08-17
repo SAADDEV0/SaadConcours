@@ -1,11 +1,11 @@
 [
   {
-    "id": "analyse_financiere_soon",
+    "id": "analysefin_100",
     "module": "Analyse Financière",
-    "title": "Concours Blanc — Analyse Financière",
-    "file": null,
-    "nb_questions": 0,
-    "available": false
+    "title": "Concours Blanc — Analyse Financière (100 Questions)",
+    "file": "data/quiz/analyse_financiere.json",
+    "nb_questions": 100,
+    "available": true
   },
   {
     "id": "audit_100",
@@ -16,12 +16,12 @@
     "available": true
   },
   {
-    "id": "comptabilite_analytique_soon",
+    "id": "comptaana_100",
     "module": "Comptabilité Analytique",
-    "title": "Concours Blanc — Comptabilité Analytique",
-    "file": null,
-    "nb_questions": 0,
-    "available": false
+    "title": "Concours Blanc — Comptabilité Analytique (100 Questions)",
+    "file": "data/quiz/comptabilite_analytique.json",
+    "nb_questions": 100,
+    "available": true
   },
   {
     "id": "comptabilite_approfondie_soon",
@@ -88,12 +88,12 @@
     "available": true
   },
   {
-    "id": "mathematiques_financieres_soon",
+    "id": "mathfin_100",
     "module": "Mathématiques Financières",
-    "title": "Concours Blanc — Mathématiques Financières",
-    "file": null,
-    "nb_questions": 0,
-    "available": false
+    "title": "Concours Blanc — Mathématiques Financières (100 Questions)",
+    "file": "data/quiz/mathematiques_financieres.json",
+    "nb_questions": 100,
+    "available": true
   },
   {
     "id": "microeconomie_soon",
