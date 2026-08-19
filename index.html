@@ -332,6 +332,13 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .cours-content code{background:var(--bg); padding:1px 5px; border-radius:4px; font-size:.88em;}
 .cours-content pre code{background:none; padding:0;}
 .cours-content ul,.cours-content ol{padding-left:1.3em;}
+
+/* ---------- Concours ouverts (news) ---------- */
+.news-badge{font-size:.76rem; font-weight:600; color:var(--text-dim);}
+.news-badge.ok{color:var(--green);}
+.news-badge.soon{color:var(--amber);}
+.news-badge.urgent{color:var(--red);}
+.news-badge.closed{color:var(--text-faint); font-weight:400;}
 </style>
 </head>
 <body>
@@ -368,6 +375,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
       <button class="view-nav-btn active" id="navConcours">📚 Concours</button>
       <button class="view-nav-btn" id="navCours">📖 Cours</button>
       <button class="view-nav-btn" id="navEval">📝 Évaluation</button>
+      <button class="view-nav-btn" id="navNews">🆕 Concours ouverts</button>
     </nav>
     <div class="stat-pill" id="statPill">— concours</div>
     <div class="stat-pill" id="visitorPill" title="Nombre de visites">👁 —</div>
@@ -455,6 +463,16 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
     </div>
   </div>
 
+</div>
+
+<div class="eval-view" id="viewNews" style="display:none;">
+  <h2 class="eval-title">🆕 Concours ouverts</h2>
+  <p class="eval-sub">Masters et concours actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
+  <div class="grid" id="newsGrid"></div>
+  <div id="newsClosedWrap" style="display:none; margin-top:26px;">
+    <button class="reset-btn" id="newsShowClosedBtn" style="width:auto; padding:8px 14px;">Voir aussi les concours clôturés</button>
+    <div class="grid" id="newsClosedGrid" style="display:none; margin-top:14px;"></div>
+  </div>
 </div>
 
 <footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
@@ -962,16 +980,20 @@ let evalSubmitted = false;
 $('#navConcours').addEventListener('click', () => switchView('concours'));
 $('#navCours').addEventListener('click', () => switchView('cours'));
 $('#navEval').addEventListener('click', () => switchView('eval'));
+$('#navNews').addEventListener('click', () => switchView('news'));
 
 function switchView(view){
   $('#viewConcours').style.display = view === 'concours' ? 'grid' : 'none';
   $('#viewCours').style.display = view === 'cours' ? 'block' : 'none';
   $('#viewEval').style.display = view === 'eval' ? 'block' : 'none';
+  $('#viewNews').style.display = view === 'news' ? 'block' : 'none';
   $('#navConcours').classList.toggle('active', view === 'concours');
   $('#navCours').classList.toggle('active', view === 'cours');
   $('#navEval').classList.toggle('active', view === 'eval');
+  $('#navNews').classList.toggle('active', view === 'news');
   if (view === 'eval' && evalRegistry.length === 0) loadEvalRegistry();
   if (view === 'cours' && coursRegistry.length === 0) loadCoursRegistry();
+  if (view === 'news' && newsItems === null) loadNews();
 }
 
 function loadEvalRegistry(){
@@ -1368,6 +1390,83 @@ $('#coursPdfBtn').addEventListener('click', () => {
   }
 
   doc.save(`${coursCurrent.meta.id}.pdf`);
+});
+
+/* ================= Concours ouverts (almaster) ================= */
+let newsItems = null;
+
+function loadNews(){
+  fetch('data/news.json')
+    .then(r => r.json())
+    .then(data => { newsItems = data; renderNews(); })
+    .catch(() => {
+      newsItems = [];
+      $('#newsGrid').innerHTML = `<div class="empty-state">Impossible de charger les concours ouverts.</div>`;
+    });
+}
+
+function daysUntil(dateStr){
+  if (!dateStr) return null;
+  const diffMs = new Date(dateStr + 'T00:00:00') - new Date(new Date().toDateString());
+  return Math.round(diffMs / 86400000);
+}
+
+function newsBadge(item){
+  if (!item.date_limite) return `<span class="news-badge">📅 Date limite non précisée</span>`;
+  const d = daysUntil(item.date_limite);
+  const label = `📅 Date limite : ${escapeHtml(item.date_limite)}`;
+  if (d < 0) return `<span class="news-badge closed">${label} (clôturé)</span>`;
+  if (d <= 7) return `<span class="news-badge urgent">${label} — J-${d}</span>`;
+  if (d <= 21) return `<span class="news-badge soon">${label}</span>`;
+  return `<span class="news-badge ok">${label}</span>`;
+}
+
+function newsCard(item){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.cursor = 'default';
+  const meta = [item.ville, item.etablissement, item.filiere].filter(Boolean).join(' · ');
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="card-title">${escapeHtml(item.titre)}</div>
+    </div>
+    ${meta ? `<div class="card-meta">📍 ${escapeHtml(meta)}</div>` : ''}
+    <div class="card-bottom">${newsBadge(item)}</div>
+    <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+      <a class="dl-btn" style="text-decoration:none;" href="${escapeHtml(item.lien_inscription || item.source)}" target="_blank" rel="noopener">S'inscrire</a>
+      <a class="reset-btn" style="width:auto; text-decoration:none; display:inline-flex; align-items:center;" href="${escapeHtml(item.source)}" target="_blank" rel="noopener">🔗 Source</a>
+    </div>
+  `;
+  return card;
+}
+
+function renderNews(){
+  const grid = $('#newsGrid');
+  grid.innerHTML = '';
+  if (!newsItems.length){
+    grid.innerHTML = `<div class="empty-state">Aucun concours ouvert détecté pour le moment. Revenez plus tard — cette liste se met à jour automatiquement depuis almaster-maroc.com.</div>`;
+    $('#newsClosedWrap').style.display = 'none';
+    return;
+  }
+  const open = newsItems.filter(i => !i.cloture);
+  const closed = newsItems.filter(i => i.cloture);
+
+  if (!open.length){
+    grid.innerHTML = `<div class="empty-state">Aucun concours ouvert pour le moment.</div>`;
+  } else {
+    open.forEach(item => grid.appendChild(newsCard(item)));
+  }
+
+  $('#newsClosedWrap').style.display = closed.length ? 'block' : 'none';
+  $('#newsClosedGrid').innerHTML = '';
+  closed.forEach(item => $('#newsClosedGrid').appendChild(newsCard(item)));
+}
+
+$('#newsShowClosedBtn').addEventListener('click', () => {
+  const grid = $('#newsClosedGrid');
+  const showing = grid.style.display === 'grid';
+  grid.style.display = showing ? 'none' : 'grid';
+  $('#newsShowClosedBtn').textContent = showing ? 'Voir aussi les concours clôturés' : 'Masquer les concours clôturés';
 });
 </script>
 </body>
