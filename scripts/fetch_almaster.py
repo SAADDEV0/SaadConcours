@@ -37,7 +37,8 @@ VILLES = [
 
 ETABLISSEMENTS = [
     "FSJES", "ENCG", "FSEG", "ENSA", "FST", "ISCAE", "ENSAM", "ESITH",
-    "ENSET", "FSR", "FLSH", "Faculté des Sciences Juridiques",
+    "ENSET", "FSR", "FLSH", "FSA", "FP", "EST", "ENS",
+    "Faculté des Sciences Juridiques",
 ]
 
 FILIERES = [
@@ -88,10 +89,13 @@ def extract_date_limite(text):
 
 
 def extract_from_list(text, candidates):
+    """Cherche le candidat le plus long qui matche en mot entier (\\b), pour
+    qu'un sigle plus court (ex. ENSA) ne matche pas à tort à l'intérieur
+    d'un sigle plus long qui le contient (ex. ENSAM, ENSET)."""
     if not text:
         return None
-    for c in candidates:
-        if re.search(re.escape(c), text, re.IGNORECASE):
+    for c in sorted(candidates, key=len, reverse=True):
+        if re.search(r"\b" + re.escape(c) + r"\b", text, re.IGNORECASE):
             return c
     return None
 
@@ -113,14 +117,25 @@ def make_id(link):
     return hashlib.sha1(link.encode("utf-8")).hexdigest()[:16]
 
 
+def extract_focused(titre, texte_complet, candidates):
+    """Ne cherche que dans le titre (spécifique à l'article). Le corps de
+    page contient souvent un menu/pied de page communs à tout le site
+    (ex. toujours "FSJES" / "Casablanca") : y chercher produirait de faux
+    positifs confiants plutôt que de laisser le champ vide honnêtement."""
+    return extract_from_list(titre, candidates)
+
+
 def build_item(titre, lien_source, texte_complet, html_complet, date_publication):
+    # La date limite ne doit être extraite que du texte propre à l'article
+    # (le titre seul la contient rarement) — jamais du menu/pied de page,
+    # donc on la laisse à None plutôt que de risquer une fausse date.
     date_limite = extract_date_limite(texte_complet)
     return {
         "id": make_id(lien_source),
         "titre": titre.strip(),
-        "etablissement": extract_from_list(texte_complet, ETABLISSEMENTS),
-        "ville": extract_from_list(texte_complet, VILLES),
-        "filiere": extract_from_list(texte_complet, FILIERES),
+        "etablissement": extract_focused(titre, texte_complet, ETABLISSEMENTS),
+        "ville": extract_focused(titre, texte_complet, VILLES),
+        "filiere": extract_focused(titre, texte_complet, FILIERES),
         "date_limite": date_limite,
         "cloture": bool(date_limite and date_limite < date.today().isoformat()),
         "lien_inscription": extract_lien_inscription(html_complet, lien_source) if html_complet else None,
