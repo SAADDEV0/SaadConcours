@@ -36,10 +36,14 @@ VILLES = [
 ]
 
 ETABLISSEMENTS = [
-    "FSJES", "ENCG", "FSEG", "ENSA", "FST", "ISCAE", "ENSAM", "ESITH",
+    "FSJES", "ENCG", "FSEG", "FEG", "ENSA", "FST", "ISCAE", "ENSAM", "ESITH",
     "ENSET", "FSR", "FLSH", "FSA", "FP", "EST", "ENS",
     "Faculté des Sciences Juridiques",
 ]
+
+# SaadConcours est centré CCA/GFCF/Finance/Fiscalité/Audit : seuls ces
+# établissements d'économie-gestion sont retenus dans "Concours ouverts".
+ECO_GESTION = {"FSJES", "ENCG", "FSEG", "FEG"}
 
 FILIERES = [
     "CCA", "Comptabilité", "Contrôle de Gestion", "GFCF", "Finance",
@@ -260,11 +264,18 @@ def load_existing():
     return []
 
 
+def filter_eco_gestion(items):
+    """SaadConcours ne couvre que les masters économie-gestion : ça écarte du
+    même coup les pages "index" génériques du site source (elles n'ont
+    aucun sigle d'établissement dans leur titre, donc etablissement=None)."""
+    return [item for item in items if item.get("etablissement") in ECO_GESTION]
+
+
 def merge(existing, fresh):
     by_id = {item["id"]: item for item in existing}
     for item in fresh:
         by_id[item["id"]] = item
-    merged = list(by_id.values())
+    merged = filter_eco_gestion(by_id.values())
     merged.sort(key=lambda i: i.get("date_publication") or "", reverse=True)
     return merged[:MAX_ITEMS]
 
