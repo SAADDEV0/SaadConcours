@@ -1,1 +1,110 @@
-[]
+[
+  {
+    "id": "21b2bf299b1541a3",
+    "titre": "AlMaster-Maroc.Com | Master Maroc 2026/2027 الماسترات المفتوحة",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "87e326f8e7768478",
+    "titre": "Masters Ouverts au Maroc 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2024/04/Masters-Ouverts-au-Maroc.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "d0d2c60bc05b8cb6",
+    "titre": "Master ENSA Safi 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": "Audit",
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://ensas.uca.ma/Home/FormationContinue",
+    "source": "https://www.almaster-maroc.com/2026/08/master-ensa-safi-2026-2027.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "723246f5bda614cc",
+    "titre": "Master FLSH Mohammedia 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": "Gestion",
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://candidature.flshm.ma/register",
+    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-mohammedia-2026-2027.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "fb6e124a724e10d7",
+    "titre": "Master ENSA Béni Mellal 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://ensabm.usms.ac.ma/preinscription-master/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-ensa-beni-mellal-2026-2027.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "4d41bf5723d0ab98",
+    "titre": "Master FSA El Jadida 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsa-el-jadida-2026-2027.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "0ab5c7f14b39d6a0",
+    "titre": "Master Université Ibn Zohr Agadir 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2023/10/Master-Universite-Ibn-Zohr-Agadir.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "af51c565d7961b37",
+    "titre": "Master FS Agadir 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "http://preinscription.uiz.ac.ma/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fs-agadir-2026-2027.html",
+    "date_publication": "2026-08-19"
+  },
+  {
+    "id": "1559a06851e01704",
+    "titre": "Master FLSH Agadir 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "http://preinscription.uiz.ac.ma/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-agadir-2026-2027.html",
+    "date_publication": "2026-08-19"
+  }
+]
