@@ -41,9 +41,18 @@ ETABLISSEMENTS = [
     "Faculté des Sciences Juridiques",
 ]
 
-# SaadConcours est centré CCA/GFCF/Finance/Fiscalité/Audit : seuls ces
-# établissements d'économie-gestion sont retenus dans "Concours ouverts".
+# SaadConcours est centré CCA/GFCF/Finance/Fiscalité/Audit : seuls les
+# masters économie-gestion sont retenus dans "Concours ouverts".
 ECO_GESTION = {"FSJES", "ENCG", "FSEG", "FEG"}
+
+# Filet de sécurité pour les titres qui ne citent pas explicitement un des
+# sigles ci-dessus mais indiquent clairement un domaine économie-gestion
+# (ex. "Master Commerce International ...", "Master Management ...").
+ECO_GESTION_KEYWORDS = [
+    "économie", "économique", "économiques", "gestion", "commerce",
+    "management", "finance", "financier", "financière", "comptabilité",
+    "comptable", "audit", "fiscal", "fiscalité", "marketing", "banque",
+]
 
 FILIERES = [
     "CCA", "Comptabilité", "Contrôle de Gestion", "GFCF", "Finance",
@@ -264,11 +273,21 @@ def load_existing():
     return []
 
 
+def is_eco_gestion(item):
+    if item.get("etablissement") in ECO_GESTION:
+        return True
+    if item.get("filiere"):
+        return True
+    titre_low = (item.get("titre") or "").lower()
+    return any(kw in titre_low for kw in ECO_GESTION_KEYWORDS)
+
+
 def filter_eco_gestion(items):
     """SaadConcours ne couvre que les masters économie-gestion : ça écarte du
-    même coup les pages "index" génériques du site source (elles n'ont
-    aucun sigle d'établissement dans leur titre, donc etablissement=None)."""
-    return [item for item in items if item.get("etablissement") in ECO_GESTION]
+    même coup les pages "index" génériques du site source (elles n'ont ni
+    sigle d'établissement, ni filière, ni mot-clé économie-gestion dans
+    leur titre)."""
+    return [item for item in items if is_eco_gestion(item)]
 
 
 def merge(existing, fresh):
