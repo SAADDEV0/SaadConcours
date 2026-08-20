@@ -157,39 +157,58 @@ def build_item(titre, lien_source, texte_complet, html_complet, date_publication
     }
 
 
-def try_rss():
+def _parse_feed_entries(entries, max_items):
+    items = []
+    for entry in entries[:max_items]:
+        titre = entry.get("title", "")
+        lien = entry.get("link", "")
+        if not titre or not lien:
+            continue
+        texte = entry.get("summary", "") + " " + entry.get("title", "")
+        pub = entry.get("published_parsed") or entry.get("updated_parsed")
+        date_pub = datetime(*pub[:6]).date().isoformat() if pub else date.today().isoformat()
+        items.append(build_item(titre, lien, texte, entry.get("summary", ""), date_pub))
+    return items
+
+
+def _fetch_feed(url, max_items=MAX_ITEMS):
+    """Récupère et parse un flux RSS/Atom à une URL donnée. Retourne []
+    silencieusement si l'URL ne répond pas ou n'est pas un flux exploitable."""
     try:
         import feedparser
     except ImportError:
-        log("feedparser non installé, on saute la stratégie RSS")
+        log("feedparser non installé, on saute les stratégies RSS/Atom")
+        return []
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+        if r.status_code != 200:
+            return []
+        feed = feedparser.parse(r.content)
+        if not feed.entries:
+            return []
+        log(f"Flux trouvé : {url} ({len(feed.entries)} entrées)")
+        return _parse_feed_entries(feed.entries, max_items)
+    except requests.RequestException as e:
+        log(f"Flux {url} a échoué : {e}")
         return []
 
+
+def try_rss():
     for path in ("feed/", "feed/rss/", "feed/atom/", "rss/"):
-        url = urljoin(BASE_URL, path)
-        try:
-            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-            if r.status_code != 200 or "xml" not in r.headers.get("Content-Type", ""):
-                continue
-            feed = feedparser.parse(r.content)
-            if not feed.entries:
-                continue
-            log(f"RSS trouvé : {url} ({len(feed.entries)} entrées)")
-            items = []
-            for entry in feed.entries[:MAX_ITEMS]:
-                titre = entry.get("title", "")
-                lien = entry.get("link", "")
-                if not titre or not lien:
-                    continue
-                texte = entry.get("summary", "") + " " + entry.get("title", "")
-                pub = entry.get("published_parsed") or entry.get("updated_parsed")
-                date_pub = datetime(*pub[:6]).date().isoformat() if pub else date.today().isoformat()
-                items.append(build_item(titre, lien, texte, entry.get("summary", ""), date_pub))
-            if items:
-                return items
-        except requests.RequestException as e:
-            log(f"RSS {url} a échoué : {e}")
-            continue
+        items = _fetch_feed(urljoin(BASE_URL, path))
+        if items:
+            return items
     return []
+
+
+def try_blogger_feed():
+    """Les permaliens observés (ex. /2026/08/master-feg-el-jadida-2026-2027.html)
+    correspondent au format Blogger/Blogspot, qui expose son propre flux natif
+    à /feeds/posts/default — différent des chemins WordPress testés par
+    try_rss(). max-results plus large pour remonter un historique complet ;
+    filter_eco_gestion() fera le tri ensuite."""
+    url = urljoin(BASE_URL, "feeds/posts/default?alt=rss&max-results=150")
+    return _fetch_feed(url, max_items=150)
 
 
 def try_wp_api():
@@ -300,7 +319,7 @@ def merge(existing, fresh):
 
 
 def main():
-    fresh = try_rss() or try_wp_api() or try_html_scrape()
+    fresh = try_rss() or try_blogger_feed() or try_wp_api() or try_html_scrape()
 
     if not fresh:
         log("Aucune stratégie n'a produit de résultat exploitable — data/news.json inchangé.")
