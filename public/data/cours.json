@@ -1,0 +1,42 @@
+[
+  {
+    "id": "comptaana_cours",
+    "module": "Comptabilité Analytique",
+    "title": "Cours — Comptabilité Analytique",
+    "description": "Coûts complets, méthode ABC, seuil de rentabilité, imputation rationnelle.",
+    "content": "",
+    "available": true
+  },
+  {
+    "id": "analysefin_cours",
+    "module": "Analyse Financière",
+    "title": "Cours — Analyse Financière",
+    "description": "Bilan fonctionnel, SIG, ratios, FR/BFR/Trésorerie, capacité d'autofinancement.",
+    "content": "",
+    "available": true
+  },
+  {
+    "id": "mathfin_cours",
+    "module": "Mathématiques Financières",
+    "title": "Cours — Mathématiques Financières",
+    "description": "Intérêts simples/composés, actualisation, annuités, emprunts indivis.",
+    "content": "",
+    "available": true
+  },
+  {
+    "id": "macro_cours",
+    "module": "Macroéconomie",
+    "title": "Cours — Macroéconomie",
+    "description": "Agrégats (PIB, RNB), équilibre emplois-ressources, IS/LM, politique monétaire.",
+    "content": "",
+    "available": true
+  },
+  {
+    "id": "audit_cours",
+    "module": "Audit",
+    "title": "Cours — Audit & Commissariat aux Comptes",
+    "description": "Démarche d'audit, seuil de signification, procédures, rapport du CAC.",
+    "content": "",
+    "available": true
+  }
+]
