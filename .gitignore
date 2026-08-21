@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+
+# Next.js / Node
+node_modules/
+.next/
+.vercel/
+npm-debug.log*
