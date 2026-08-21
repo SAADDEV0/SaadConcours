@@ -1443,13 +1443,5 @@
     "filiere": "Test",
     "enonce_md": "test",
     "id": "9999_Test_Test"
-  },
-  {
-    "annee": "9999",
-    "ville": "Test2",
-    "etablissement": "Test2",
-    "filiere": "Test2",
-    "enonce_md": "test",
-    "id": "9999_Test2_Test2"
   }
 ]
