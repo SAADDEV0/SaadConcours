@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { chromeHtml, chromeScript } from "../_shared/chrome";
+import { addWatermark } from "../_shared/pdfWatermark";
 
 const MARKUP = `
 ${chromeHtml({ active: "cours", showSearch: false })}
@@ -257,6 +258,7 @@ export default function CoursPage() {
         i++;
       }
 
+      addWatermark(doc);
       doc.save(`${coursCurrent.meta.id}.pdf`);
     });
 

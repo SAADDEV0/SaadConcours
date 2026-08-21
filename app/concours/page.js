@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { chromeHtml, chromeScript, pub } from "../_shared/chrome";
+import { addWatermark } from "../_shared/pdfWatermark";
 
 const MARKUP = `
 ${chromeHtml({ active: "concours", showSearch: true })}
@@ -572,6 +573,7 @@ export default function ConcoursPage() {
         }
       }
 
+      addWatermark(doc);
       doc.save(`${c.id}.pdf`);
     }
 
