@@ -17,3 +17,18 @@ export function addWatermark(doc) {
     doc.restoreGraphicsState();
   }
 }
+
+const SITE_URL = "https://saad-concours.vercel.app";
+
+// Small clickable site name + link in the top-left corner of every page,
+// so a printed or forwarded PDF still says where it came from.
+export function addSiteHeader(doc) {
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFont(undefined, "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(120, 130, 150);
+    doc.textWithLink(`SaadConcours — ${SITE_URL}`, 18, 10, { url: SITE_URL });
+  }
+}

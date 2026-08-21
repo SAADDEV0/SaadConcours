@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { chromeHtml, chromeScript } from "../_shared/chrome";
-import { addWatermark } from "../_shared/pdfWatermark";
+import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
 
 const MARKUP = `
 ${chromeHtml({ active: "eval", showSearch: false })}
@@ -307,6 +307,7 @@ export default function EvaluationPage() {
       });
 
       addWatermark(doc);
+      addSiteHeader(doc);
       doc.save(`${evalCurrentQuiz.id}_${evalCurrentChapter.replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 30)}.pdf`);
     }
 
