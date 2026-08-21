@@ -164,6 +164,11 @@ header{
 .card-bottom{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:6px;}
 .diff-badge{font-size:.72rem; color:var(--text-faint);}
 .img-badge{font-size:.72rem; color:var(--green); display:flex; align-items:center; gap:4px;}
+.corrige-badge{font-size:.72rem; color:var(--accent); display:flex; align-items:center; gap:4px;}
+.corrige-disclaimer{
+  font-size:.8rem; color:var(--amber); background:rgba(240,168,61,.1); border:1px solid var(--amber);
+  border-radius:8px; padding:9px 12px; margin-bottom:14px;
+}
 .empty-state{padding:60px 20px; text-align:center; color:var(--text-faint);}
 
 /* ---------- Modal ---------- */

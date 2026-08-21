@@ -444,6 +444,11 @@ const CONCOURS_CONFIG = {
     { key: "modules", label: "Modules requis (séparés par des virgules)", type: "list" },
     { key: "notions_cles", label: "Notions clés" },
     { key: "enonce_md", label: "Énoncé (Markdown)", type: "textarea", required: true },
+    {
+      key: "corrige_md",
+      label: "Corrigé (Markdown, optionnel — indicatif, à vérifier avant publication)",
+      type: "textarea",
+    },
     { key: "source", label: "Source" },
     { key: "images", label: "Images (chemins séparés par des virgules)", type: "list" },
   ],
@@ -453,6 +458,7 @@ const CONCOURS_CONFIG = {
     { key: "ville", label: "Ville" },
     { key: "filiere", label: "Filière" },
     { key: "annee", label: "Année" },
+    { key: "corrige", label: "Corrigé", render: (i) => (i.corrige_md ? "✅" : "—") },
   ],
 };
 

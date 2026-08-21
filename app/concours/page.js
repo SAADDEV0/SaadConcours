@@ -58,10 +58,15 @@ ${chromeHtml({ active: "concours", showSearch: true })}
       <div class="info-row" id="modalInfoRow"></div>
       <div class="tab-bar">
         <button class="tab-btn active" data-tab="enonce">📝 Énoncé</button>
+        <button class="tab-btn" data-tab="corrige" id="tabBtnCorrige" style="display:none;">✅ Corrigé</button>
         <button class="tab-btn" data-tab="images">🖼️ Extrait réel</button>
         <button class="tab-btn" data-tab="source">🔗 Source</button>
       </div>
       <div class="tab-panel active" id="panel-enonce"><div class="enonce-content" id="enonceContent"></div></div>
+      <div class="tab-panel" id="panel-corrige">
+        <div class="corrige-disclaimer">⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier pour réviser.</div>
+        <div class="enonce-content" id="corrigeContent"></div>
+      </div>
       <div class="tab-panel" id="panel-images"><div class="image-gallery" id="imageGallery"></div></div>
       <div class="tab-panel" id="panel-source"><div class="source-box" id="sourceContent"></div></div>
     </div>
@@ -183,6 +188,7 @@ export default function ConcoursPage() {
         const card = document.createElement("div");
         card.className = "card";
         const hasImg = (c.images || []).length > 0;
+        const hasCorrige = Boolean(c.corrige_md);
         card.innerHTML = `
           <div class="card-top">
             <div class="card-title">${escapeHtml(c.etablissement)}</div>
@@ -198,7 +204,10 @@ export default function ConcoursPage() {
             .join("")}${(c.modules || []).length > 4 ? `<span class="mod-tag">+${c.modules.length - 4}</span>` : ""}</div>
           <div class="card-bottom">
             <span class="diff-badge">Difficulté : ${escapeHtml(c.difficulte || "?")}</span>
-            ${hasImg ? '<span class="img-badge">🖼️ scan réel</span>' : ""}
+            <span style="display:flex; gap:6px;">
+              ${hasCorrige ? '<span class="corrige-badge">✅ corrigé</span>' : ""}
+              ${hasImg ? '<span class="img-badge">🖼️ scan réel</span>' : ""}
+            </span>
           </div>
         `;
         card.addEventListener("click", () => openModal(c));
@@ -283,6 +292,14 @@ export default function ConcoursPage() {
       const formattedEnonce = formatQCM(c.enonce_md);
       const enonceHtml = window.marked ? marked.parse(formattedEnonce || "*Énoncé non disponible.*") : formattedEnonce || "";
       $("#enonceContent").innerHTML = enonceHtml;
+
+      const hasCorrige = Boolean(c.corrige_md);
+      $("#tabBtnCorrige").style.display = hasCorrige ? "" : "none";
+      $("#corrigeContent").innerHTML = hasCorrige
+        ? window.marked
+          ? marked.parse(c.corrige_md)
+          : c.corrige_md
+        : "";
 
       const gallery = $("#imageGallery");
       gallery.innerHTML = "";
