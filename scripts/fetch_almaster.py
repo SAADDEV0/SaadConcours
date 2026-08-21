@@ -23,7 +23,7 @@ from urllib.parse import urljoin
 import requests
 
 BASE_URL = "https://www.almaster-maroc.com/"
-DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "news.json"
+DATA_FILE = Path(__file__).resolve().parent.parent / "public" / "data" / "news.json"
 MAX_ITEMS = 60
 TIMEOUT = 20
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SaadConcoursBot/1.0; +https://saaddev0.github.io/SaadConcours/)"}
