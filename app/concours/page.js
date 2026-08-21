@@ -372,12 +372,12 @@ export default function ConcoursPage() {
       const pageH = doc.internal.pageSize.getHeight();
       const maxWidth = pageW - marginX * 2;
       const bottomLimit = pageH - 20;
-      let y = 20;
+      let y = 26;
 
       function ensureSpace(need) {
         if (y + need > bottomLimit) {
           doc.addPage();
-          y = 20;
+          y = 26;
         }
       }
 
@@ -535,7 +535,7 @@ export default function ConcoursPage() {
 
       if (c.corrige_md) {
         doc.addPage();
-        y = 20;
+        y = 26;
         doc.setFont(undefined, "bold");
         doc.setFontSize(14);
         doc.setTextColor(20, 20, 25);

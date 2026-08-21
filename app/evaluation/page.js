@@ -244,12 +244,12 @@ export default function EvaluationPage() {
       const pageH = doc.internal.pageSize.getHeight();
       const maxWidth = pageW - marginX * 2;
       const bottomLimit = pageH - 18;
-      let y = 20;
+      let y = 26;
 
       function ensureSpace(need) {
         if (y + need > bottomLimit) {
           doc.addPage();
-          y = 20;
+          y = 26;
         }
       }
 
