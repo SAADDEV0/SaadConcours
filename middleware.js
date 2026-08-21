@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 
+const PROTECTED_API_PREFIXES = ["/api/concours", "/api/cours", "/api/quiz", "/api/news"];
+
+function isProtectedApiWrite(pathname, method) {
+  return PROTECTED_API_PREFIXES.some((p) => pathname.startsWith(p)) && method !== "GET";
+}
+
 export function middleware(req) {
   try {
     const { pathname } = req.nextUrl;
@@ -13,7 +19,7 @@ export function middleware(req) {
       }
     }
 
-    if (pathname.startsWith("/api/concours") && req.method !== "GET") {
+    if (isProtectedApiWrite(pathname, req.method)) {
       if (!authorized) {
         return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
       }
@@ -28,7 +34,7 @@ export function middleware(req) {
     if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
-    if (pathname.startsWith("/api/concours") && req.method !== "GET") {
+    if (isProtectedApiWrite(pathname, req.method)) {
       return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
     }
     return NextResponse.next();
@@ -36,5 +42,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/concours/:path*"],
+  matcher: ["/admin/:path*", "/api/concours/:path*", "/api/cours/:path*", "/api/quiz/:path*", "/api/news/:path*"],
 };

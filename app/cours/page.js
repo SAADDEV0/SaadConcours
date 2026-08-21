@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, pub } from "../_shared/chrome";
+import { chromeHtml, chromeScript } from "../_shared/chrome";
 
 const MARKUP = `
 ${chromeHtml({ active: "cours", showSearch: false })}
@@ -54,7 +54,7 @@ export default function CoursPage() {
     let coursCurrent = null;
 
     function loadCoursRegistry() {
-      fetch(pub("data/cours/registry.json"))
+      fetch("/api/cours")
         .then((r) => r.json())
         .then((data) => {
           coursRegistry = data;
@@ -86,19 +86,13 @@ export default function CoursPage() {
     }
 
     function loadCours(meta) {
-      fetch(pub(meta.file))
-        .then((r) => r.text())
-        .then((md) => {
-          coursCurrent = { meta, md };
-          $("#coursModuleList").style.display = "none";
-          $("#coursReaderWrap").style.display = "block";
-          $("#coursReaderMeta").textContent = meta.module;
-          renderCoursContent(md);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        })
-        .catch(() => {
-          $("#coursContent").innerHTML = `<div class="empty-state">Impossible de charger ce cours.</div>`;
-        });
+      const md = meta.content || "";
+      coursCurrent = { meta, md };
+      $("#coursModuleList").style.display = "none";
+      $("#coursReaderWrap").style.display = "block";
+      $("#coursReaderMeta").textContent = meta.module;
+      renderCoursContent(md);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderCoursContent(md) {

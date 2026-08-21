@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, pub } from "../_shared/chrome";
+import { chromeHtml, chromeScript } from "../_shared/chrome";
 
 const MARKUP = `
 ${chromeHtml({ active: "eval", showSearch: false })}
@@ -64,10 +64,10 @@ export default function EvaluationPage() {
     let evalSubmitted = false;
 
     function loadEvalRegistry() {
-      fetch(pub("data/quiz/registry.json"))
+      fetch("/api/quiz")
         .then((r) => r.json())
         .then((data) => {
-          evalRegistry = data;
+          evalRegistry = data.map((m) => ({ ...m, nb_questions: (m.questions || []).length }));
           renderEvalModuleList();
         })
         .catch(() => {
@@ -96,19 +96,15 @@ export default function EvaluationPage() {
     }
 
     function loadEvalQuiz(meta) {
-      fetch(pub(meta.file))
-        .then((r) => r.json())
-        .then((data) => {
-          evalCurrentQuiz = data;
-          evalCurrentChapter = "Tous";
-          evalUserAnswers = {};
-          evalSubmitted = false;
-          $("#evalModuleList").style.display = "none";
-          $("#evalQuizWrap").style.display = "block";
-          $("#evalQuizTitle").textContent = data.title;
-          renderEvalChapterChips();
-          renderEvalQuestions();
-        });
+      evalCurrentQuiz = meta;
+      evalCurrentChapter = "Tous";
+      evalUserAnswers = {};
+      evalSubmitted = false;
+      $("#evalModuleList").style.display = "none";
+      $("#evalQuizWrap").style.display = "block";
+      $("#evalQuizTitle").textContent = meta.title;
+      renderEvalChapterChips();
+      renderEvalQuestions();
     }
 
     function renderEvalChapterChips() {

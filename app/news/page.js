@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, pub } from "../_shared/chrome";
+import { chromeHtml, chromeScript } from "../_shared/chrome";
 
 const MARKUP = `
 ${chromeHtml({ active: "news", showSearch: false })}
@@ -53,7 +53,7 @@ export default function NewsPage() {
     let newsItems = null;
 
     function loadNews() {
-      fetch(pub("data/news.json"))
+      fetch("/api/news")
         .then((r) => r.json())
         .then((data) => {
           newsItems = data;
