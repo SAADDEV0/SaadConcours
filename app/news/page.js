@@ -6,33 +6,31 @@ import { chromeHtml, chromeScript } from "../_shared/chrome";
 const MARKUP = `
 ${chromeHtml({ active: "news", showSearch: false })}
 
-<div class="eval-view" id="viewNews">
+<div class="nw-view">
   <h2 class="eval-title">🆕 Concours ouverts</h2>
   <p class="eval-sub">Masters économie-gestion (ENCG, FSJES, FEG/FSEG) actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
-  <div class="news-stats" id="newsStats"></div>
 
-  <div class="news-columns">
-    <div class="news-column">
-      <h3 class="news-col-title">🆕 Derniers masters ouverts</h3>
-      <div class="grid" id="newsRecentGrid"></div>
+  <div class="nw-toolbar">
+    <div class="nw-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="nwSearch" placeholder="Rechercher (établissement, ville, titre...)">
     </div>
-    <div class="news-column">
-      <h3 class="news-col-title">⏳ Bientôt fermés</h3>
-      <div class="grid" id="newsSoonGrid"></div>
-    </div>
+    <div class="nw-chip-row" id="nwEtabChips"></div>
+    <label class="nw-toggle">
+      <input type="checkbox" id="nwShowClosed">
+      Afficher les clôturés
+    </label>
   </div>
 
-  <div id="newsClosedWrap" style="display:none; margin-top:26px;">
-    <button class="reset-btn" id="newsShowClosedBtn" style="width:auto; padding:8px 14px;">Voir aussi les concours clôturés</button>
-    <div class="grid" id="newsClosedGrid" style="display:none; margin-top:14px;"></div>
-  </div>
+  <div class="nw-stats" id="nwStats"></div>
+
+  <div class="nw-grid" id="nwGrid"></div>
 </div>
 
 <footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
 `;
 
 const NEWS_SOON_DAYS = 21;
-const NEWS_MAX_RECENT = 10;
 
 export default function NewsPage() {
   const containerRef = useRef(null);
@@ -50,21 +48,9 @@ export default function NewsPage() {
       );
     }
 
-    let newsItems = null;
-
-    function loadNews() {
-      fetch("/api/news")
-        .then((r) => r.json())
-        .then((data) => {
-          newsItems = data;
-          renderNews();
-        })
-        .catch(() => {
-          newsItems = [];
-          $("#newsRecentGrid").innerHTML = `<div class="empty-state">Impossible de charger les concours ouverts.</div>`;
-          $("#newsSoonGrid").innerHTML = "";
-        });
-    }
+    let newsItems = [];
+    let etabFilter = "Tous";
+    let showClosed = false;
 
     function daysUntil(dateStr) {
       if (!dateStr) return null;
@@ -72,95 +58,133 @@ export default function NewsPage() {
       return Math.round(diffMs / 86400000);
     }
 
-    function newsBadge(item) {
-      if (!item.date_limite) return `<span class="news-badge">📅 Date limite non précisée</span>`;
+    function urgency(item) {
+      if (!item.date_limite) return "none";
       const d = daysUntil(item.date_limite);
-      const label = `📅 Date limite : ${escapeHtml(item.date_limite)}`;
-      if (d < 0) return `<span class="news-badge closed">${label} (clôturé)</span>`;
-      if (d <= 7) return `<span class="news-badge urgent">${label} — J-${d}</span>`;
-      if (d <= 21) return `<span class="news-badge soon">${label}</span>`;
-      return `<span class="news-badge ok">${label}</span>`;
+      if (d < 0) return "closed";
+      if (d <= 7) return "urgent";
+      if (d <= NEWS_SOON_DAYS) return "soon";
+      return "ok";
     }
 
-    function etabColor(etab) {
-      if (etab === "FSJES") return "blue";
-      if (etab === "ENCG") return "violet";
-      if (etab === "FEG" || etab === "FSEG") return "green";
+    function etabGroup(etab) {
+      if (etab === "FSJES") return "FSJES";
+      if (etab === "ENCG") return "ENCG";
+      if (etab === "FEG" || etab === "FSEG") return "FEG/FSEG";
+      return "Autre";
+    }
+
+    function etabColorClass(etab) {
+      const g = etabGroup(etab);
+      if (g === "FSJES") return "blue";
+      if (g === "ENCG") return "violet";
+      if (g === "FEG/FSEG") return "green";
       return "neutral";
+    }
+
+    function loadNews() {
+      fetch("/api/news")
+        .then((r) => r.json())
+        .then((data) => {
+          newsItems = data;
+          renderChips();
+          render();
+        })
+        .catch(() => {
+          $("#nwGrid").innerHTML = `<div class="empty-state">Impossible de charger les concours ouverts.</div>`;
+        });
+    }
+
+    function renderChips() {
+      const groups = ["Tous", "FSJES", "ENCG", "FEG/FSEG", "Autre"];
+      const wrap = $("#nwEtabChips");
+      wrap.innerHTML = "";
+      groups.forEach((g) => {
+        const chip = document.createElement("span");
+        chip.className = "chip" + (g === etabFilter ? " active" : "");
+        chip.textContent = g;
+        chip.addEventListener("click", () => {
+          etabFilter = g;
+          renderChips();
+          render();
+        });
+        wrap.appendChild(chip);
+      });
+    }
+
+    function urgencyLabel(item) {
+      const u = urgency(item);
+      if (u === "none") return `<span class="nw-badge">📅 Date limite non précisée</span>`;
+      const label = `📅 ${escapeHtml(item.date_limite)}`;
+      const d = daysUntil(item.date_limite);
+      if (u === "closed") return `<span class="nw-badge nw-closed">${label} (clôturé)</span>`;
+      if (u === "urgent") return `<span class="nw-badge nw-urgent">${label} — J-${d}</span>`;
+      if (u === "soon") return `<span class="nw-badge nw-soon">${label} — J-${d}</span>`;
+      return `<span class="nw-badge nw-ok">${label}</span>`;
     }
 
     function newsCard(item) {
       const card = document.createElement("div");
-      card.className = `card news-card etab-${etabColor(item.etablissement)}`;
-      card.style.cursor = "default";
+      card.className = `nw-card nw-u-${urgency(item)} etab-${etabColorClass(item.etablissement)}`;
       card.innerHTML = `
-        <div class="news-card-head">
+        <div class="nw-card-head">
           <span class="news-etab-chip">${escapeHtml(item.etablissement || "Autre")}</span>
           ${item.ville ? `<span class="news-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
           ${item.filiere ? `<span class="news-filiere-chip">${escapeHtml(item.filiere)}</span>` : ""}
         </div>
         <div class="news-card-title">${escapeHtml(item.titre)}</div>
-        <div class="card-bottom">${newsBadge(item)}</div>
-        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
-          <a class="dl-btn" style="text-decoration:none;" href="${escapeHtml(item.lien_inscription || item.source)}" target="_blank" rel="noopener">S'inscrire</a>
-          <a class="reset-btn" style="width:auto; text-decoration:none; display:inline-flex; align-items:center;" href="${escapeHtml(item.source)}" target="_blank" rel="noopener">🔗 Source</a>
+        <div class="nw-card-bottom">
+          ${urgencyLabel(item)}
+          <div class="nw-card-actions">
+            <a class="dl-btn" style="text-decoration:none;" href="${escapeHtml(item.lien_inscription || item.source)}" target="_blank" rel="noopener">S'inscrire</a>
+            <a class="reset-btn" style="width:auto; text-decoration:none; display:inline-flex; align-items:center;" href="${escapeHtml(item.source)}" target="_blank" rel="noopener">🔗 Source</a>
+          </div>
         </div>
       `;
       return card;
     }
 
-    function renderNews() {
-      const recentGrid = $("#newsRecentGrid");
-      const soonGrid = $("#newsSoonGrid");
-      const statsWrap = $("#newsStats");
-      recentGrid.innerHTML = "";
-      soonGrid.innerHTML = "";
-      statsWrap.innerHTML = "";
+    function render() {
+      const q = $("#nwSearch").value.trim().toLowerCase();
+      const grid = $("#nwGrid");
+      const statsWrap = $("#nwStats");
 
-      if (!newsItems.length) {
-        recentGrid.innerHTML = `<div class="empty-state">Aucun concours ouvert détecté pour le moment. Revenez plus tard — cette liste se met à jour automatiquement depuis almaster-maroc.com.</div>`;
-        $("#newsClosedWrap").style.display = "none";
-        return;
+      let items = newsItems.filter((i) => showClosed || !i.cloture);
+      if (etabFilter !== "Tous") items = items.filter((i) => etabGroup(i.etablissement) === etabFilter);
+      if (q) {
+        items = items.filter((i) =>
+          [i.titre, i.etablissement, i.ville, i.filiere].join(" ").toLowerCase().includes(q)
+        );
       }
+
+      const urgencyOrder = { urgent: 0, soon: 1, ok: 2, none: 3, closed: 4 };
+      items = [...items].sort((a, b) => {
+        const ua = urgencyOrder[urgency(a)];
+        const ub = urgencyOrder[urgency(b)];
+        if (ua !== ub) return ua - ub;
+        if (ua <= 1) return daysUntil(a.date_limite) - daysUntil(b.date_limite);
+        return (b.date_publication || "").localeCompare(a.date_publication || "");
+      });
 
       const open = newsItems.filter((i) => !i.cloture);
-      const closed = newsItems.filter((i) => i.cloture);
-
-      const recent = [...open]
-        .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
-        .slice(0, NEWS_MAX_RECENT);
-
-      const soon = open
-        .filter((i) => i.date_limite && daysUntil(i.date_limite) <= NEWS_SOON_DAYS)
-        .sort((a, b) => (a.date_limite || "").localeCompare(b.date_limite || ""));
-
+      const urgentCount = open.filter((i) => urgency(i) === "urgent").length;
       statsWrap.innerHTML = `
         <span class="stat-pill">${open.length} concours ouvert${open.length > 1 ? "s" : ""}</span>
-        <span class="stat-pill">${soon.length} bientôt fermé${soon.length > 1 ? "s" : ""}</span>
+        ${urgentCount ? `<span class="stat-pill nw-stat-urgent">🔥 ${urgentCount} clôture${urgentCount > 1 ? "nt" : ""} sous 7 jours</span>` : ""}
       `;
 
-      if (!recent.length) {
-        recentGrid.innerHTML = `<div class="empty-state">Aucun concours ouvert pour le moment.</div>`;
-      } else {
-        recent.forEach((item) => recentGrid.appendChild(newsCard(item)));
+      grid.innerHTML = "";
+      if (!items.length) {
+        grid.innerHTML = `<div class="empty-state">Aucun concours ne correspond à ces filtres.</div>`;
+        return;
       }
-
-      if (!soon.length) {
-        soonGrid.innerHTML = `<div class="news-empty-block"><span class="news-empty-icon">⏳</span>Aucun concours avec une date limite connue à moins de ${NEWS_SOON_DAYS} jours pour l'instant.</div>`;
-      } else {
-        soon.forEach((item) => soonGrid.appendChild(newsCard(item)));
-      }
-
-      $("#newsClosedWrap").style.display = closed.length ? "block" : "none";
-      $("#newsClosedGrid").innerHTML = "";
-      closed.forEach((item) => $("#newsClosedGrid").appendChild(newsCard(item)));
+      items.forEach((item) => grid.appendChild(newsCard(item)));
     }
 
-    $("#newsShowClosedBtn").addEventListener("click", () => {
-      const grid = $("#newsClosedGrid");
-      const showing = grid.style.display === "grid";
-      grid.style.display = showing ? "none" : "grid";
-      $("#newsShowClosedBtn").textContent = showing ? "Voir aussi les concours clôturés" : "Masquer les concours clôturés";
+    $("#nwSearch").addEventListener("input", render);
+    $("#nwShowClosed").addEventListener("change", (e) => {
+      showClosed = e.target.checked;
+      render();
     });
 
     loadNews();

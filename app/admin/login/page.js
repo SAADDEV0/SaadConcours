@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "../../_shared/ThemeToggle";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -33,6 +34,12 @@ export default function AdminLoginPage() {
 
   return (
     <div className="admin-login-wrap">
+      <div className="admin-login-topbar">
+        <a className="admin-login-brand" href="/">
+          <span className="brand-saad">Saad</span><span className="brand-concours">Concours</span>
+        </a>
+        <ThemeToggle />
+      </div>
       <div className="admin-card">
         <h2 style={{ marginTop: 0 }}>🔐 Espace admin</h2>
         <form onSubmit={onSubmit}>

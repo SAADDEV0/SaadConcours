@@ -37,7 +37,8 @@ export function chromeHtml({ active, showSearch }) {
         : `<div class="search-box" style="flex:1;"></div>`
     }
     <nav class="view-nav">
-      <a class="view-nav-btn${active === "concours" ? " active" : ""}" href="/">📚 Concours</a>
+      <a class="view-nav-btn${active === "home" ? " active" : ""}" href="/">🏠 Accueil</a>
+      <a class="view-nav-btn${active === "concours" ? " active" : ""}" href="/concours">📚 Concours</a>
       <a class="view-nav-btn${active === "cours" ? " active" : ""}" href="/cours">📖 Cours</a>
       <a class="view-nav-btn${active === "eval" ? " active" : ""}" href="/evaluation">📝 Évaluation</a>
       <a class="view-nav-btn${active === "news" ? " active" : ""}" href="/news">🆕 Concours ouverts</a>
