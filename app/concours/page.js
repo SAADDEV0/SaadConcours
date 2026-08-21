@@ -343,7 +343,27 @@ export default function ConcoursPage() {
       return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
     }
 
-    function downloadEnonce(c) {
+    async function loadImageAsDataURL(src) {
+      const res = await fetch(src);
+      const blob = await res.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function getImageDimensions(dataUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve({ width: img.width, height: img.height });
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+    }
+
+    async function downloadEnonce(c) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ unit: "mm", format: "a4" });
       const marginX = 18;
@@ -435,64 +455,74 @@ export default function ConcoursPage() {
       doc.line(marginX, y, pageW - marginX, y);
       y += 7;
 
-      const src = (c.enonce_md || "Énoncé non disponible.").split("\n");
-      let i = 0;
-      while (i < src.length) {
-        const line = src[i];
+      function renderMarkdown(md) {
+        const src = (md || "").split("\n");
+        let i = 0;
+        while (i < src.length) {
+          const line = src[i];
 
-        if (/^\s*$/.test(line)) {
-          y += 2.4;
-          i++;
-          continue;
-        }
-
-        if (/^\|/.test(line.trim())) {
-          const rows = [];
-          while (i < src.length && /^\|/.test(src[i].trim())) {
-            const cells = src[i]
-              .trim()
-              .replace(/^\||\|$/g, "")
-              .split("|")
-              .map((s) => s.trim());
-            if (!/^:?-+:?$/.test(cells.join(""))) rows.push(cells);
+          if (/^\s*$/.test(line) || /^\s*---+\s*$/.test(line)) {
+            y += 2.4;
             i++;
+            continue;
           }
-          if (rows.length) addTable(rows);
-          continue;
-        }
 
-        const headingM = line.match(/^(#{2,4})\s+(.*)$/);
-        if (headingM) {
-          y += 2;
-          addWrappedLine(headingM[2], { bold: true, size: 12, gapAfter: 2.5 });
-          i++;
-          continue;
-        }
+          if (/^>/.test(line.trim())) {
+            addWrappedLine(line.replace(/^>\s*/, ""), { size: 9.5, color: [150, 110, 30], gapAfter: 2.5 });
+            i++;
+            continue;
+          }
 
-        const bulletM = line.match(/^\s*-\s+\*\*([^*]+)\*\*\s*(.*)$/);
-        if (bulletM) {
-          addPrefixedLine(bulletM[1], bulletM[2], { indent: 4, bullet: true });
-          i++;
-          continue;
-        }
-        const bulletPlainM = line.match(/^\s*-\s+(.*)$/);
-        if (bulletPlainM) {
-          addPrefixedLine("•", bulletPlainM[1], { indent: 4 });
-          i++;
-          continue;
-        }
+          if (/^\|/.test(line.trim())) {
+            const rows = [];
+            while (i < src.length && /^\|/.test(src[i].trim())) {
+              const cells = src[i]
+                .trim()
+                .replace(/^\||\|$/g, "")
+                .split("|")
+                .map((s) => s.trim());
+              if (!/^:?-+:?$/.test(cells.join(""))) rows.push(cells);
+              i++;
+            }
+            if (rows.length) addTable(rows);
+            continue;
+          }
 
-        const stemM = line.match(/^\*\*([^*]+)\*\*\s*(.*)$/);
-        if (stemM) {
-          y += 1.5;
-          addPrefixedLine(stemM[1], stemM[2], { size: 10.5, gapAfter: 2 });
-          i++;
-          continue;
-        }
+          const headingM = line.match(/^(#{2,4})\s+(.*)$/);
+          if (headingM) {
+            y += 2;
+            addWrappedLine(headingM[2], { bold: true, size: 12, gapAfter: 2.5 });
+            i++;
+            continue;
+          }
 
-        addWrappedLine(line);
-        i++;
+          const bulletM = line.match(/^\s*-\s+\*\*([^*]+)\*\*\s*(.*)$/);
+          if (bulletM) {
+            addPrefixedLine(bulletM[1], bulletM[2], { indent: 4, bullet: true });
+            i++;
+            continue;
+          }
+          const bulletPlainM = line.match(/^\s*-\s+(.*)$/);
+          if (bulletPlainM) {
+            addPrefixedLine("•", bulletPlainM[1], { indent: 4 });
+            i++;
+            continue;
+          }
+
+          const stemM = line.match(/^\*\*([^*]+)\*\*\s*(.*)$/);
+          if (stemM) {
+            y += 1.5;
+            addPrefixedLine(stemM[1], stemM[2], { size: 10.5, gapAfter: 2 });
+            i++;
+            continue;
+          }
+
+          addWrappedLine(line);
+          i++;
+        }
       }
+
+      renderMarkdown(c.enonce_md || "Énoncé non disponible.");
 
       y += 4;
       ensureSpace(14);
@@ -501,6 +531,46 @@ export default function ConcoursPage() {
       y += 6;
       addWrappedLine("Source", { bold: true, size: 10 });
       addWrappedLine(c.source || "non précisée", { size: 9, color: [110, 110, 120] });
+
+      if (c.corrige_md) {
+        doc.addPage();
+        y = 20;
+        doc.setFont(undefined, "bold");
+        doc.setFontSize(14);
+        doc.setTextColor(20, 20, 25);
+        doc.text("Corrigé", marginX, y);
+        y += 6;
+        addWrappedLine(
+          "Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier.",
+          { size: 8.5, color: [180, 120, 20], gapAfter: 3 }
+        );
+        doc.setDrawColor(200, 200, 210);
+        doc.line(marginX, y, pageW - marginX, y);
+        y += 6;
+        renderMarkdown(c.corrige_md);
+      }
+
+      for (const imgPath of c.images || []) {
+        try {
+          const dataUrl = await loadImageAsDataURL(pub(imgPath));
+          const { width, height } = await getImageDimensions(dataUrl);
+          doc.addPage();
+          const availW = pageW - marginX * 2;
+          const availH = pageH - 32;
+          const scale = Math.min(availW / width, availH / height, 1);
+          const imgW = width * scale;
+          const imgH = height * scale;
+          const x = (pageW - imgW) / 2;
+          doc.setFont(undefined, "bold");
+          doc.setFontSize(10);
+          doc.setTextColor(90, 90, 100);
+          doc.text("Extrait scanné", marginX, 15);
+          const format = (dataUrl.match(/data:image\/(\w+);/) || [])[1]?.toUpperCase() || "JPEG";
+          doc.addImage(dataUrl, format === "JPG" ? "JPEG" : format, x, 20, imgW, imgH);
+        } catch (err) {
+          // Skip images that fail to load rather than aborting the whole PDF.
+        }
+      }
 
       doc.save(`${c.id}.pdf`);
     }
