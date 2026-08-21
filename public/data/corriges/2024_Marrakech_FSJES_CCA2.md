@@ -69,4 +69,3 @@ CA = 2 000 000 ; achats et charges externes = 1 200 000 ; charges de personnel =
 **3. Résultat fiscal après abattement** = 340 000 − 34 000 = **306 000 MAD**
 
 **4. Impôt sur les sociétés (IS) dû** = 306 000 × 31 % = **94 860 MAD**
-

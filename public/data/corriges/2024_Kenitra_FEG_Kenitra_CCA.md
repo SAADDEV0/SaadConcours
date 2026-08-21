@@ -167,4 +167,3 @@ Charges de la compta générale = Charges de la compta analytique − charges su
 
 Sur la partie reconstituée (hors centre Approvisionnement, indéterminé) :
 105 750 − 1 000 + 8 000 = **112 750 DH**, à majorer du coût du centre Approvisionnement (non déterminable sans le stock initial de matière M brute).
-
