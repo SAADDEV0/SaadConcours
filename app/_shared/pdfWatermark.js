@@ -1,7 +1,52 @@
-// Stamps a faint diagonal "SaadConcours" watermark across every page of a
-// jsPDF document. Called once, right before doc.save(), after all content
-// (and page breaks) has already been added — jsPDF only exposes the final
-// page count once the document is fully built.
+const SITE_URL = "https://saad-concours.vercel.app";
+const SITE_HOST = "saad-concours.vercel.app";
+
+// Fills a quad (4 points, in perimeter order) as two triangles — jsPDF has
+// no native polygon-fill primitive for straight-edged shapes.
+function fillQuad(doc, p1, p2, p3, p4) {
+  doc.triangle(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1], "F");
+  doc.triangle(p1[0], p1[1], p3[0], p3[1], p4[0], p4[1], "F");
+}
+
+// Graduation cap + open book mark, drawn with plain vector shapes (no image
+// file needed) — mirrors the real logo (app/_shared/chrome.js) point for
+// point, using the same 64x64 layout scaled down to `size`.
+function drawLogoMark(doc, x, y, size) {
+  const s = size / 64;
+  const p = (fx, fy) => [x + fx * s, y + fy * s];
+
+  doc.setFillColor(79, 70, 229); // #4f46e5
+  doc.roundedRect(x, y, size, size, 16 * s, 16 * s, "F");
+
+  // Cap: flattened diamond viewed from above.
+  doc.setFillColor(255, 255, 255);
+  fillQuad(doc, p(32, 13), p(49, 21), p(32, 29), p(15, 21));
+
+  // Tassel.
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(Math.max(0.35, size * 0.03));
+  const [tx1, ty1] = p(49, 21);
+  const [tx2, ty2] = p(51, 31);
+  doc.line(tx1, ty1, tx2, ty2);
+  doc.setFillColor(251, 191, 36); // #fbbf24
+  const [kx, ky] = p(51, 32.5);
+  doc.circle(kx, ky, Math.max(0.3, size * 0.03), "F");
+
+  // Open book: two pages meeting at a spine.
+  doc.setFillColor(255, 255, 255);
+  fillQuad(doc, p(32, 42), p(13, 37), p(13, 48), p(32, 54));
+  fillQuad(doc, p(32, 42), p(51, 37), p(51, 48), p(32, 54));
+  doc.setDrawColor(79, 70, 229);
+  doc.setLineWidth(Math.max(0.2, size * 0.017));
+  const [sx1, sy1] = p(32, 42);
+  const [sx2, sy2] = p(32, 54);
+  doc.line(sx1, sy1, sx2, sy2);
+}
+
+// Stamps a faint diagonal "SaadConcours" wordmark plus the logo mark across
+// every page of a jsPDF document. Called once, right before doc.save(),
+// after all content (and page breaks) has already been added — jsPDF only
+// exposes the final page count once the document is fully built.
 export function addWatermark(doc) {
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
@@ -10,36 +55,16 @@ export function addWatermark(doc) {
     const pageH = doc.internal.pageSize.getHeight();
     doc.saveGraphicsState();
     doc.setGState(new doc.GState({ opacity: 0.08 }));
+
+    const markSize = 46;
+    drawLogoMark(doc, pageW / 2 - markSize / 2, pageH / 2 - markSize / 2 - 26, markSize);
+
     doc.setFont(undefined, "bold");
     doc.setFontSize(46);
-    doc.setTextColor(79, 140, 255);
+    doc.setTextColor(79, 70, 229);
     doc.text("SaadConcours", pageW / 2, pageH / 2, { align: "center", angle: 35 });
     doc.restoreGraphicsState();
   }
-}
-
-const SITE_URL = "https://saad-concours.vercel.app";
-const SITE_HOST = "saad-concours.vercel.app";
-
-// Small graduation-cap mark drawn with plain vector shapes (no image file
-// needed) — a diamond "cap" over a rounded square, in the site's accent
-// blue, echoing the real logo (app/_shared/chrome.js) closely enough to be
-// recognizable at PDF-header size.
-function drawLogoMark(doc, x, y, size) {
-  doc.setFillColor(79, 140, 255);
-  doc.roundedRect(x, y, size, size, 1.4, 1.4, "F");
-  doc.setFillColor(255, 255, 255);
-  const cx = x + size / 2;
-  const cy = y + size / 2;
-  const capW = size * 0.62;
-  const capH = size * 0.28;
-  // Cap top: a flattened diamond.
-  doc.triangle(cx - capW / 2, cy, cx, cy - capH, cx + capW / 2, cy, "F");
-  doc.triangle(cx - capW / 2, cy, cx, cy + capH, cx + capW / 2, cy, "F");
-  // Tassel: a short vertical line off the right point.
-  doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.35);
-  doc.line(cx + capW / 2 - 0.3, cy, cx + capW / 2 - 0.3, cy + size * 0.32);
 }
 
 // Branded header on every page: logo mark + "SaadConcours" wordmark (two-
@@ -63,7 +88,7 @@ export function addSiteHeader(doc) {
     doc.setTextColor(25, 28, 35);
     doc.text("Saad", textX, iconY + iconSize * 0.65);
     const saadW = doc.getTextWidth("Saad");
-    doc.setTextColor(79, 140, 255);
+    doc.setTextColor(79, 70, 229);
     doc.text("Concours", textX + saadW, iconY + iconSize * 0.65);
 
     doc.setFont(undefined, "normal");

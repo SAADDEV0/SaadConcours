@@ -6,7 +6,7 @@ export const metadata = {
     "Base de données de concours d'accès aux Masters spécialisés (CCA, GFCF, Finance, Fiscalité, Audit) dans les universités marocaines.",
   icons: {
     icon:
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234f8cff'/%3E%3Cstop offset='1' stop-color='%238a5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 14 12 23l20 9 20-9-20-9Z' fill='white'/%3E%3Cpath d='M20 28v10c0 4 6 8 12 8s12-4 12-8V28' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E",
+      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234f46e5'/%3E%3Cstop offset='1' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpolygon points='32,13 49,21 32,29 15,21' fill='white'/%3E%3Cline x1='49' y1='21' x2='51' y2='31' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='51' cy='32.5' r='2' fill='%23fbbf24'/%3E%3Cpolygon points='32,42 13,37 13,48 32,54' fill='white'/%3E%3Cpolygon points='32,42 51,37 51,48 32,54' fill='white'/%3E%3Cline x1='32' y1='42' x2='32' y2='54' stroke='%234f46e5' stroke-width='1.2'/%3E%3C/svg%3E",
   },
 };
 
