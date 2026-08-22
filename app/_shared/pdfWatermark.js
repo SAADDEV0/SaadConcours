@@ -43,10 +43,39 @@ function drawLogoMark(doc, x, y, size) {
   doc.line(sx1, sy1, sx2, sy2);
 }
 
-// Stamps a faint diagonal "SaadConcours" wordmark plus the logo mark across
-// every page of a jsPDF document. Called once, right before doc.save(),
-// after all content (and page breaks) has already been added — jsPDF only
-// exposes the final page count once the document is fully built.
+// Single-color, background-free version of the logo mark for the watermark:
+// a solid badge would read as an opaque block sitting on top of the page
+// content, so this draws just the cap + book linework in the wordmark's own
+// color, sized to sit directly above it — one small, faint, upright unit
+// instead of a large rotated shape competing with the text underneath it.
+function drawWatermarkLogo(doc, x, y, size) {
+  const s = size / 64;
+  const p = (fx, fy) => [x + fx * s, y + fy * s];
+
+  doc.setFillColor(79, 70, 229);
+  fillQuad(doc, p(32, 13), p(49, 21), p(32, 29), p(15, 21));
+
+  doc.setDrawColor(79, 70, 229);
+  doc.setLineWidth(Math.max(0.4, size * 0.025));
+  const [tx1, ty1] = p(49, 21);
+  const [tx2, ty2] = p(51, 31);
+  doc.line(tx1, ty1, tx2, ty2);
+  const [kx, ky] = p(51, 32.5);
+  doc.circle(kx, ky, Math.max(0.5, size * 0.025), "F");
+
+  // Two pages with a visible gap at the spine, instead of a separate line,
+  // since there's no solid background left for a contrasting line to sit on.
+  fillQuad(doc, p(29, 42), p(12, 37), p(12, 48), p(29, 54));
+  fillQuad(doc, p(35, 42), p(52, 37), p(52, 48), p(35, 54));
+}
+
+// Faint, upright "SaadConcours" lockup — logo above wordmark, both centered
+// and unrotated — stamped once per page of a jsPDF document. Kept upright
+// (rather than diagonal) so the icon and text line up as one unit instead of
+// a rotated wordmark next to a mark that visually doesn't match its angle.
+// Called once, right before doc.save(), after all content (and page breaks)
+// has already been added — jsPDF only exposes the final page count once the
+// document is fully built.
 export function addWatermark(doc) {
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
@@ -54,15 +83,15 @@ export function addWatermark(doc) {
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
     doc.saveGraphicsState();
-    doc.setGState(new doc.GState({ opacity: 0.08 }));
+    doc.setGState(new doc.GState({ opacity: 0.05 }));
 
-    const markSize = 46;
-    drawLogoMark(doc, pageW / 2 - markSize / 2, pageH / 2 - markSize / 2 - 26, markSize);
+    const markSize = 26;
+    drawWatermarkLogo(doc, pageW / 2 - markSize / 2, pageH / 2 - 30, markSize);
 
     doc.setFont(undefined, "bold");
-    doc.setFontSize(46);
+    doc.setFontSize(30);
     doc.setTextColor(79, 70, 229);
-    doc.text("SaadConcours", pageW / 2, pageH / 2, { align: "center", angle: 35 });
+    doc.text("SaadConcours", pageW / 2, pageH / 2 + 6, { align: "center" });
     doc.restoreGraphicsState();
   }
 }
