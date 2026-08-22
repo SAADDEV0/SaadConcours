@@ -8,7 +8,7 @@ ${chromeHtml({ active: "news", showSearch: false })}
 
 <div class="nw-view">
   <h2 class="eval-title">🆕 Concours ouverts</h2>
-  <p class="eval-sub">Masters économie-gestion (ENCG, FSJES, FEG/FSEG) actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
+  <p class="eval-sub">Masters actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
 
   <div class="nw-toolbar">
     <div class="nw-search">
@@ -83,10 +83,19 @@ export default function NewsPage() {
     }
 
     function loadNews() {
-      fetch("/api/news")
-        .then((r) => r.json())
-        .then((data) => {
-          newsItems = data;
+      Promise.all([
+        fetch("/api/news").then((r) => r.json()),
+        fetch("/api/settings")
+          .then((r) => r.json())
+          .catch(() => null),
+      ])
+        .then(([data, settings]) => {
+          const visibles = settings?.newsEtablissementsVisibles || [];
+          // The scraper now pulls in everything from almaster-maroc.com —
+          // which établissements actually show here is an admin-side
+          // choice (Réglages → "Concours ouverts affichés"), not baked
+          // into the scrape itself. Empty selection means no restriction.
+          newsItems = visibles.length ? data.filter((i) => visibles.includes(i.etablissement)) : data;
           renderChips();
           render();
         })

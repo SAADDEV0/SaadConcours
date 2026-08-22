@@ -24,7 +24,7 @@ import requests
 
 BASE_URL = "https://www.almaster-maroc.com/"
 DATA_FILE = Path(__file__).resolve().parent.parent / "public" / "data" / "news.json"
-MAX_ITEMS = 60
+MAX_ITEMS = 120
 TIMEOUT = 20
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SaadConcoursBot/1.0; +https://saaddev0.github.io/SaadConcours/)"}
 
@@ -41,19 +41,6 @@ ETABLISSEMENTS = [
     "Faculté des Sciences Juridiques",
 ]
 
-# SaadConcours est centré CCA/GFCF/Finance/Fiscalité/Audit : seuls les
-# masters économie-gestion sont retenus dans "Concours ouverts".
-ECO_GESTION = {"FSJES", "ENCG", "FSEG", "FEG"}
-
-# Filet de sécurité pour les titres qui ne citent pas explicitement un des
-# sigles ci-dessus mais indiquent clairement un domaine économie-gestion
-# (ex. "Master Commerce International ...", "Master Management ...").
-ECO_GESTION_KEYWORDS = [
-    "économie", "économique", "économiques", "gestion", "commerce",
-    "management", "finance", "financier", "financière", "comptabilité",
-    "comptable", "audit", "fiscal", "fiscalité", "marketing", "banque",
-]
-
 FILIERES = [
     "CCA", "Comptabilité", "Contrôle de Gestion", "GFCF", "Finance",
     "Fiscalité", "Audit", "Banque", "Management", "Économie",
@@ -66,9 +53,24 @@ MONTHS_FR = {
     "octobre": 10, "novembre": 11, "décembre": 12, "decembre": 12,
 }
 
+DATE_TOKEN = r"(\d{1,2})[\/\-\s](\d{1,2}|[a-zéû]+)[\/\-\s](\d{4})"
+
+# Two shapes cover almost everything actually seen on these announcement
+# pages:
+#  1. An explicit "date limite" / "jusqu'au" / "avant le" phrase (the
+#     original, still-valid pattern) — DATE_LIMITE_RE.
+#  2. "Préinscription en ligne du 17/08/2026 au 15/09/2026" — a plain
+#     "du <date> au <date>" range with no "date limite" wording at all,
+#     which is in fact the *majority* phrasing on almaster-maroc.com.
+#     DATE_RANGE_RE requires the leading "du <date>" so a lone "au" (an
+#     extremely common word) can't match on its own — only the closing
+#     date of a real range is captured.
 DATE_LIMITE_RE = re.compile(
-    r"(?:date\s*limite|dernier\s*d[ée]lai|avant\s+le|jusqu'?au)\D{0,40}"
-    r"(\d{1,2})[\/\-\s](\d{1,2}|[a-zéû]+)[\/\-\s](\d{4})",
+    r"(?:date\s*limite|dernier\s*d[ée]lai|avant\s+le|jusqu'?au)\D{0,40}" + DATE_TOKEN,
+    re.IGNORECASE,
+)
+DATE_RANGE_RE = re.compile(
+    r"\bdu\s+\d{1,2}[\/\-\s](?:\d{1,2}|[a-zéû]+)[\/\-\s]\d{4}\s+au\s+" + DATE_TOKEN,
     re.IGNORECASE,
 )
 
@@ -95,7 +97,8 @@ def parse_french_date(day, month, year):
 
 
 def extract_date_limite(text):
-    m = DATE_LIMITE_RE.search(text or "")
+    text = text or ""
+    m = DATE_LIMITE_RE.search(text) or DATE_RANGE_RE.search(text)
     if not m:
         return None
     return parse_french_date(*m.groups())
@@ -157,6 +160,25 @@ def build_item(titre, lien_source, texte_complet, html_complet, date_publication
     }
 
 
+def _fetch_article_page(url):
+    """RSS/Atom summaries are truncated excerpts — the real date limite and
+    lien d'inscription almost always live further down the actual article,
+    past what the feed includes. Fetch the full page so build_item has real
+    content to search instead of ~2 sentences. Returns (texte, html), falling
+    back to (None, None) on any failure so the caller can use the feed
+    summary instead rather than dropping the item."""
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+        if r.status_code != 200:
+            return None, None
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(r.text, "html.parser")
+        return soup.get_text(" ", strip=True), r.text
+    except Exception as e:
+        log(f"Impossible de charger l'article {url} : {e}")
+        return None, None
+
+
 def _parse_feed_entries(entries, max_items):
     items = []
     for entry in entries[:max_items]:
@@ -164,10 +186,13 @@ def _parse_feed_entries(entries, max_items):
         lien = entry.get("link", "")
         if not titre or not lien:
             continue
-        texte = entry.get("summary", "") + " " + entry.get("title", "")
+        summary = entry.get("summary", "")
+        texte_page, html_page = _fetch_article_page(lien)
+        texte = (texte_page or summary) + " " + titre
+        html = html_page or summary
         pub = entry.get("published_parsed") or entry.get("updated_parsed")
         date_pub = datetime(*pub[:6]).date().isoformat() if pub else date.today().isoformat()
-        items.append(build_item(titre, lien, texte, entry.get("summary", ""), date_pub))
+        items.append(build_item(titre, lien, texte, html, date_pub))
     return items
 
 
@@ -292,28 +317,29 @@ def load_existing():
     return []
 
 
-def is_eco_gestion(item):
-    if item.get("etablissement") in ECO_GESTION:
-        return True
-    if item.get("filiere"):
+POSTING_KEYWORDS = re.compile(r"master|concours|licence|dut|examen|inscription|candidature", re.IGNORECASE)
+
+
+def is_real_posting(item):
+    """The scraper is deliberately global now — it no longer restricts
+    itself to économie-gestion, since which établissements to actually show
+    is now an admin-side display filter (see settings.json
+    newsEtablissementsVisibles, applied in app/news/page.js), not something
+    baked into what gets scraped. This still drops the site's generic
+    "index" pages that try_html_scrape's loose title matching can pick up —
+    those have no établissement, no ville, no filière, and no posting-like
+    keyword in the title at all."""
+    if item.get("etablissement") or item.get("ville") or item.get("filiere"):
         return True
     titre_low = (item.get("titre") or "").lower()
-    return any(kw in titre_low for kw in ECO_GESTION_KEYWORDS)
-
-
-def filter_eco_gestion(items):
-    """SaadConcours ne couvre que les masters économie-gestion : ça écarte du
-    même coup les pages "index" génériques du site source (elles n'ont ni
-    sigle d'établissement, ni filière, ni mot-clé économie-gestion dans
-    leur titre)."""
-    return [item for item in items if is_eco_gestion(item)]
+    return bool(POSTING_KEYWORDS.search(titre_low))
 
 
 def merge(existing, fresh):
     by_id = {item["id"]: item for item in existing}
     for item in fresh:
         by_id[item["id"]] = item
-    merged = filter_eco_gestion(by_id.values())
+    merged = [item for item in by_id.values() if is_real_posting(item)]
     merged.sort(key=lambda i: i.get("date_publication") or "", reverse=True)
     return merged[:MAX_ITEMS]
 

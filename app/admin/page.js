@@ -1031,6 +1031,15 @@ const SOCIAL_FIELDS = [
   { key: "email", label: "Email de contact", placeholder: "contact@saadconcours.space" },
 ];
 
+// Same établissement sigles the scraper (scripts/fetch_almaster.py) can
+// recognize — the scraper itself is deliberately global now (no more
+// baked-in économie-gestion filter), this is what decides what actually
+// shows on the public /news page.
+const NEWS_ETABLISSEMENTS = [
+  "FSJES", "ENCG", "FEG", "FSEG", "ENSA", "FST", "ISCAE", "ENSAM",
+  "ESITH", "ENSET", "FSR", "FLSH", "FSA", "FP", "EST", "ENS",
+];
+
 function SettingsPanel() {
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1061,21 +1070,29 @@ function SettingsPanel() {
         return;
       }
       setForm(data);
-      setMsg("Réglages enregistrés — visibles dans le pied de page du site.");
+      setMsg("Réglages enregistrés.");
     } finally {
       setSaving(false);
     }
   }
 
+  function toggleEtablissement(sigle) {
+    const current = form.newsEtablissementsVisibles || [];
+    const next = current.includes(sigle) ? current.filter((s) => s !== sigle) : [...current, sigle];
+    setForm({ ...form, newsEtablissementsVisibles: next });
+  }
+
   if (!form) return <div className="admin-card">Chargement...</div>;
 
+  const visibles = form.newsEtablissementsVisibles || [];
+
   return (
-    <div className="admin-card">
-      <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Réseaux sociaux</h2>
-      <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-        Laisse un champ vide pour ne pas afficher l'icône correspondante dans le pied de page du site.
-      </p>
-      <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
+      <div className="admin-card">
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Réseaux sociaux</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+          Laisse un champ vide pour ne pas afficher l'icône correspondante dans le pied de page du site.
+        </p>
         {SOCIAL_FIELDS.map((f) => (
           <div className="admin-field" key={f.key}>
             <label>{f.label}</label>
@@ -1086,13 +1103,42 @@ function SettingsPanel() {
             />
           </div>
         ))}
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Concours ouverts affichés (News)</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+          Le scraper récupère désormais toutes les publications almaster-maroc.com. Choisis ici quels
+          établissements apparaissent sur la page publique "Concours ouverts" — aucune case cochée = tout afficher.
+        </p>
+        <div className="settings-chip-grid">
+          {NEWS_ETABLISSEMENTS.map((sigle) => (
+            <label className="admin-checkbox-label" key={sigle} style={{ marginBottom: 0 }}>
+              <input type="checkbox" checked={visibles.includes(sigle)} onChange={() => toggleEtablissement(sigle)} />
+              {sigle}
+            </label>
+          ))}
+        </div>
+        {visibles.length > 0 && (
+          <button
+            type="button"
+            className="admin-md-toggle"
+            style={{ marginTop: 12 }}
+            onClick={() => setForm({ ...form, newsEtablissementsVisibles: [] })}
+          >
+            Tout afficher (retirer le filtre)
+          </button>
+        )}
+      </div>
+
+      <div style={{ marginTop: 18 }}>
         <button className="admin-btn" type="submit" disabled={saving}>
           {saving ? "Enregistrement..." : "Enregistrer"}
         </button>
         {error && <div className="admin-error">{error}</div>}
         {msg && <div className="admin-msg">{msg}</div>}
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
 
