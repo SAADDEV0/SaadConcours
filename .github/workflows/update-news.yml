@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  issues: write
 
 jobs:
   update-news:
@@ -38,35 +37,3 @@ jobs:
           git add public/data/news.json
           git commit -m "Mise à jour automatique des concours ouverts (almaster)"
           git push
-
-      # The script itself never throws on an unreachable/changed source (see
-      # its own docstring) — it just logs and leaves news.json untouched, so
-      # a genuine failure here means something actually broke (a Python
-      # error, a network/auth failure) worth a human looking at. Opens one
-      # issue and re-uses it across repeated failures instead of spamming a
-      # new one every 6 hours.
-      - name: Ouvrir une issue si le job a échoué
-        if: failure()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scraper-failure --state open --json number --jq '.[0].number')
-          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-          if [ -n "$existing" ]; then
-            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Nouvel échec : $run_url"
-          else
-            gh issue create --repo "$GITHUB_REPOSITORY" \
-              --title "Le scraper almaster a échoué" \
-              --label scraper-failure \
-              --body "Le workflow \"Mise à jour des concours ouverts (almaster)\" a échoué. Logs : $run_url"
-          fi
-
-      - name: Fermer l'issue de suivi si le job a réussi
-        if: success()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scraper-failure --state open --json number --jq '.[0].number')
-          if [ -n "$existing" ]; then
-            gh issue close "$existing" --repo "$GITHUB_REPOSITORY" --comment "Le scraper a de nouveau tourné avec succès."
-          fi
