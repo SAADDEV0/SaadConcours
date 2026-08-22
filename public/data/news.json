@@ -1,5 +1,17 @@
 [
   {
+    "id": "40a094518f5db26a",
+    "titre": "Master ENCG Settat 2026-2027",
+    "etablissement": "ENCG",
+    "ville": "Settat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/2",
+    "source": "https://www.almaster-maroc.com/2026/08/master-encg-settat-2026-2027.html",
+    "date_publication": "2026-08-21"
+  },
+  {
     "id": "4f77f1bd716a807e",
     "titre": "Master FEG El Jadida 2026-2027",
     "etablissement": "FEG",
