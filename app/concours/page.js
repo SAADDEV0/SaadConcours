@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { chromeHtml, chromeScript, pub, footerHtml, trackConcoursView } from "../_shared/chrome";
 import { downloadConcoursPdf } from "../_shared/concoursPdf";
+import { formatQCM } from "../_shared/concoursFormat";
 
 const MARKUP = `
 ${chromeHtml({ active: "concours", showSearch: true })}
@@ -195,6 +196,7 @@ export default function ConcoursPage() {
             <div class="card-title">${escapeHtml(c.etablissement)}</div>
             <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
               <div class="card-year">${escapeHtml(String(c.annee))}</div>
+              <a class="card-dl card-link" href="/concours/${encodeURIComponent(c.id)}" title="Ouvrir la page dédiée" onclick="event.stopPropagation()" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">🔗</a>
               <button class="card-dl" title="Télécharger l'énoncé (PDF)">⬇</button>
             </div>
           </div>
@@ -212,62 +214,12 @@ export default function ConcoursPage() {
           </div>
         `;
         card.addEventListener("click", () => openModal(c));
-        card.querySelector(".card-dl").addEventListener("click", (e) => {
+        card.querySelector("button.card-dl").addEventListener("click", (e) => {
           e.stopPropagation();
           downloadConcoursPdf(c);
         });
         grid.appendChild(card);
       });
-    }
-
-    function formatQCM(md) {
-      if (!md) return md;
-      const lines = md.split("\n");
-      const out = [];
-      const order = "abcde";
-
-      for (let line of lines) {
-        const markerRe = /\b([A-Ea-e])[.:]\s+/g;
-        const matches = [...line.matchAll(markerRe)];
-
-        if (matches.length >= 3) {
-          const letters = matches.map((m) => m[1].toLowerCase());
-          let pos = -1,
-            seqOk = letters[0] === "a";
-          for (const l of letters) {
-            const idx = order.indexOf(l);
-            if (idx <= pos) {
-              seqOk = false;
-              break;
-            }
-            pos = idx;
-          }
-          if (seqOk) {
-            const stem = line.slice(0, matches[0].index).trim();
-            if (stem) out.push(stem);
-            for (let i = 0; i < matches.length; i++) {
-              const start = matches[i].index + matches[i][0].length;
-              const end = i + 1 < matches.length ? matches[i + 1].index : line.length;
-              let txt = line
-                .slice(start, end)
-                .trim()
-                .replace(/[;.]\s*$/, "")
-                .trim();
-              out.push(`- **${matches[i][1].toLowerCase()}.** ${txt}`);
-            }
-            continue;
-          }
-        }
-
-        const singleM = line.match(/^\s*([A-Ea-e])[.:]\s+(.+)$/);
-        if (singleM) {
-          out.push(`- **${singleM[1].toLowerCase()}.** ${singleM[2].trim()}`);
-          continue;
-        }
-
-        out.push(line);
-      }
-      return out.join("\n");
     }
 
     function openLightbox(src) {

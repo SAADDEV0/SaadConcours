@@ -65,6 +65,7 @@ export const config = {
     "/api/admin/upload-image",
     "/api/admin/stats",
     "/api/admin/export",
+    "/api/admin/export-content",
     "/api/settings/:path*",
   ],
 };

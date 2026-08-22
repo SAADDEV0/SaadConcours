@@ -884,6 +884,9 @@ function StatsPanel({ onNavigate }) {
           <a className="admin-btn secondary" href="/api/admin/export?format=csv" style={{ textDecoration: "none" }}>
             ⬇ Export CSV
           </a>
+          <a className="admin-btn secondary" href="/api/admin/export-content" style={{ textDecoration: "none" }}>
+            ⬇ Export contenu (JSON)
+          </a>
         </div>
       </div>
 
