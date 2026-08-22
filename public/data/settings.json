@@ -6,5 +6,10 @@
   "youtube": "",
   "telegram": "",
   "email": "",
-  "newsEtablissementsVisibles": []
+  "newsEtablissementsVisibles": [
+    "FSJES",
+    "ENCG",
+    "FEG",
+    "ISCAE"
+  ]
 }
