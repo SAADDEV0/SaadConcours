@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const PROTECTED_API_PREFIXES = ["/api/concours", "/api/cours", "/api/quiz", "/api/news"];
+const PROTECTED_API_PREFIXES = ["/api/concours", "/api/cours", "/api/quiz", "/api/news", "/api/admin/upload-image"];
 
 function isProtectedApiWrite(pathname, method) {
   return PROTECTED_API_PREFIXES.some((p) => pathname.startsWith(p)) && method !== "GET";
@@ -42,5 +42,12 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/concours/:path*", "/api/cours/:path*", "/api/quiz/:path*", "/api/news/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/api/concours/:path*",
+    "/api/cours/:path*",
+    "/api/quiz/:path*",
+    "/api/news/:path*",
+    "/api/admin/upload-image",
+  ],
 };

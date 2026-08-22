@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "../_shared/ThemeToggle";
+import { pub } from "../_shared/chrome";
 
 /* -------------------------------------------------------------------
  * Field-driven CRUD panel. Each resource (concours/cours/quiz/news) is
@@ -18,6 +19,7 @@ function emptyFormFor(fields) {
   fields.forEach((f) => {
     if (f.type === "checkbox") form[f.key] = false;
     else if (f.type === "quiz-questions") form[f.key] = [];
+    else if (f.type === "image-list") form[f.key] = [];
     else form[f.key] = "";
   });
   return form;
@@ -30,6 +32,7 @@ function toFormValues(item, fields) {
     if (f.type === "list") form[f.key] = (v || []).join(", ");
     else if (f.type === "checkbox") form[f.key] = Boolean(v);
     else if (f.type === "quiz-questions") form[f.key] = v || [];
+    else if (f.type === "image-list") form[f.key] = v || [];
     else form[f.key] = v ?? "";
   });
   return form;
@@ -42,6 +45,7 @@ function toPayload(form, fields) {
     if (f.type === "list") payload[f.key] = raw.split(",").map((s) => s.trim()).filter(Boolean);
     else if (f.type === "checkbox") payload[f.key] = Boolean(raw);
     else if (f.type === "quiz-questions") payload[f.key] = raw;
+    else if (f.type === "image-list") payload[f.key] = raw;
     else payload[f.key] = raw;
   }
   return payload;
@@ -236,6 +240,95 @@ function QuestionsEditor({ value, onChange }) {
   );
 }
 
+/* ----------------------------- Image list editor ----------------------------- *
+ * Uploads go straight to GitHub via /api/admin/upload-image, under
+ * images/<ville>/<concoursId>/<filename> — same convention as the
+ * pre-existing scanned images in the repo. Needs a saved concoursId and a
+ * ville to build that path, so uploading is disabled until the entry has
+ * been created (matches how enonce_md/corrige_md mirrors only sync after
+ * the concours itself exists).
+ */
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function ImageListEditor({ value, onChange, concoursId, ville }) {
+  const images = value || [];
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const canUpload = Boolean(concoursId) && Boolean((ville || "").trim());
+
+  async function handleFiles(fileList) {
+    setError("");
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    setUploading(true);
+    try {
+      const added = [];
+      for (const file of files) {
+        const dataBase64 = await fileToBase64(file);
+        const res = await fetch("/api/admin/upload-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ville, concoursId, filename: file.name, dataBase64 }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Échec de l'envoi de ${file.name}`);
+        added.push(data.path);
+      }
+      onChange([...images, ...added]);
+    } catch (e) {
+      setError(e.message || "Échec de l'envoi.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function removeAt(idx) {
+    onChange(images.filter((_, i) => i !== idx));
+  }
+
+  return (
+    <div>
+      {images.length > 0 && (
+        <div className="admin-images">
+          {images.map((path, idx) => (
+            <div className="admin-image-chip" key={path + idx}>
+              <img src={pub(path)} alt="" loading="lazy" />
+              <button type="button" className="admin-image-remove" onClick={() => removeAt(idx)} title="Retirer">
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      {canUpload ? (
+        <>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            multiple
+            disabled={uploading}
+            onChange={(e) => handleFiles(e.target.files)}
+          />
+          {uploading && <div className="admin-image-hint">Envoi en cours...</div>}
+          {error && <div className="admin-error">{error}</div>}
+        </>
+      ) : (
+        <div className="admin-image-hint">
+          Enregistrez d'abord le concours (avec une ville renseignée) pour pouvoir ajouter des images.
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ------------------------------ Resource panel ------------------------------ */
 
 function ResourcePanel({ config }) {
@@ -248,6 +341,10 @@ function ResourcePanel({ config }) {
   const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState(() => new Set());
+  const [previewOpen, setPreviewOpen] = useState(() => new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -261,6 +358,84 @@ function ResourcePanel({ config }) {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const filteredList = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return list;
+    return list.filter((item) =>
+      columns.some((c) => {
+        const raw = c.render ? c.render(item) : item[c.key];
+        return String(raw ?? "").toLowerCase().includes(q);
+      })
+    );
+  }, [list, search, columns]);
+
+  const checkboxFields = fields.filter((f) => f.type === "checkbox");
+
+  function toggleSelected(id) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAllVisible() {
+    setSelected((prev) => {
+      const visibleIds = filteredList.map((i) => i.id);
+      const allSelected = visibleIds.length > 0 && visibleIds.every((id) => prev.has(id));
+      if (allSelected) return new Set([...prev].filter((id) => !visibleIds.includes(id)));
+      return new Set([...prev, ...visibleIds]);
+    });
+  }
+
+  function togglePreview(key) {
+    setPreviewOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
+  function findDuplicate() {
+    if (!config.duplicateKeys || editingId) return null;
+    return list.find((item) => config.duplicateKeys.every((k) => String(item[k] || "").trim().toLowerCase() === String(form[k] || "").trim().toLowerCase()));
+  }
+
+  async function onBulkDelete() {
+    if (!selected.size) return;
+    if (!confirm(`Supprimer définitivement ${selected.size} élément(s) ?`)) return;
+    setBulkBusy(true);
+    try {
+      for (const id of selected) {
+        await fetch(`${apiBase}/${encodeURIComponent(id)}`, { method: "DELETE" });
+      }
+      setSelected(new Set());
+      await load();
+    } finally {
+      setBulkBusy(false);
+    }
+  }
+
+  async function onBulkSetCheckbox(key, value) {
+    if (!selected.size) return;
+    setBulkBusy(true);
+    try {
+      for (const id of selected) {
+        await fetch(`${apiBase}/${encodeURIComponent(id)}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ [key]: value }),
+        });
+      }
+      setSelected(new Set());
+      await load();
+    } finally {
+      setBulkBusy(false);
+    }
+  }
 
   function startEdit(item) {
     setEditingId(item.id);
@@ -282,6 +457,10 @@ function ResourcePanel({ config }) {
     e.preventDefault();
     setError("");
     setMsg("");
+    const dup = findDuplicate();
+    if (dup && !confirm(`Un ${resourceLabel.toLowerCase()} similaire existe déjà (${dup.id}). Ajouter quand même ?`)) {
+      return;
+    }
     setSaving(true);
     try {
       const payload = toPayload(form, fields);
@@ -351,6 +530,43 @@ function ResourcePanel({ config }) {
                   <label>{f.label}</label>
                   <QuestionsEditor value={form[f.key]} onChange={(v) => setForm({ ...form, [f.key]: v })} />
                 </div>
+              ) : f.type === "image-list" ? (
+                <>
+                  <label>{f.label}</label>
+                  <ImageListEditor
+                    value={form[f.key]}
+                    onChange={(v) => setForm({ ...form, [f.key]: v })}
+                    concoursId={editingId}
+                    ville={form.ville}
+                  />
+                </>
+              ) : f.markdown ? (
+                <>
+                  <div className="admin-md-field-head">
+                    <label style={{ margin: 0 }}>{f.label}</label>
+                    <button type="button" className="admin-md-toggle" onClick={() => togglePreview(f.key)}>
+                      {previewOpen.has(f.key) ? "✏️ Éditer" : "👁 Aperçu"}
+                    </button>
+                  </div>
+                  {previewOpen.has(f.key) ? (
+                    <div
+                      className="admin-md-preview"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          typeof window !== "undefined" && window.marked
+                            ? window.marked.parse(form[f.key] || "")
+                            : String(form[f.key] || ""),
+                      }}
+                    />
+                  ) : (
+                    <textarea
+                      required={f.required}
+                      placeholder={f.placeholder}
+                      value={form[f.key] || ""}
+                      onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                    />
+                  )}
+                </>
               ) : (
                 <>
                   <label>{f.label}</label>
@@ -388,11 +604,50 @@ function ResourcePanel({ config }) {
         </form>
       </div>
 
-      <h2 style={{ fontSize: "1.05rem" }}>{loading ? "Chargement..." : `${list.length} ${resourceLabel.toLowerCase()}(s)`}</h2>
+      <h2 style={{ fontSize: "1.05rem" }}>{loading ? "Chargement..." : `${filteredList.length} / ${list.length} ${resourceLabel.toLowerCase()}(s)`}</h2>
+
+      <div className="admin-toolbar">
+        <input
+          className="admin-search-input"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={`Rechercher parmi les ${resourceLabel.toLowerCase()}s...`}
+        />
+      </div>
+
+      {selected.size > 0 && (
+        <div className="admin-bulkbar">
+          <strong>{selected.size} sélectionné(s)</strong>
+          {checkboxFields.map((f) => (
+            <span key={f.key} style={{ display: "flex", gap: 6 }}>
+              <button className="admin-btn secondary" disabled={bulkBusy} onClick={() => onBulkSetCheckbox(f.key, true)}>
+                Marquer "{f.label}" ✓
+              </button>
+              <button className="admin-btn secondary" disabled={bulkBusy} onClick={() => onBulkSetCheckbox(f.key, false)}>
+                Marquer "{f.label}" ✗
+              </button>
+            </span>
+          ))}
+          <button className="admin-btn danger" disabled={bulkBusy} onClick={onBulkDelete}>
+            Supprimer la sélection
+          </button>
+          <button className="admin-btn secondary" disabled={bulkBusy} onClick={() => setSelected(new Set())}>
+            Annuler la sélection
+          </button>
+        </div>
+      )}
+
       <div className="admin-table-wrap">
         <table className="admin-table">
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={filteredList.length > 0 && filteredList.every((i) => selected.has(i.id))}
+                  onChange={toggleSelectAllVisible}
+                />
+              </th>
               {columns.map((c) => (
                 <th key={c.key}>{c.label}</th>
               ))}
@@ -400,8 +655,11 @@ function ResourcePanel({ config }) {
             </tr>
           </thead>
           <tbody>
-            {list.map((item) => (
+            {filteredList.map((item) => (
               <tr key={item.id}>
+                <td>
+                  <input type="checkbox" checked={selected.has(item.id)} onChange={() => toggleSelected(item.id)} />
+                </td>
                 {columns.map((c) => (
                   <td key={c.key} style={c.mono ? { fontFamily: "monospace", fontSize: ".78rem" } : undefined}>
                     {c.render ? c.render(item) : String(item[c.key] ?? "")}
@@ -443,14 +701,15 @@ const CONCOURS_CONFIG = {
     { key: "difficulte", label: "Difficulté", placeholder: "ex: 3/5" },
     { key: "modules", label: "Modules requis (séparés par des virgules)", type: "list" },
     { key: "notions_cles", label: "Notions clés" },
-    { key: "enonce_md", label: "Énoncé (Markdown)", type: "textarea", required: true },
+    { key: "enonce_md", label: "Énoncé (Markdown)", type: "textarea", required: true, markdown: true },
     {
       key: "corrige_md",
       label: "Corrigé (Markdown, optionnel — indicatif, à vérifier avant publication)",
       type: "textarea",
+      markdown: true,
     },
     { key: "source", label: "Source" },
-    { key: "images", label: "Images (chemins séparés par des virgules)", type: "list" },
+    { key: "images", label: "Images", type: "image-list" },
   ],
   columns: [
     { key: "id", label: "ID", mono: true },
@@ -460,6 +719,7 @@ const CONCOURS_CONFIG = {
     { key: "annee", label: "Année" },
     { key: "corrige", label: "Corrigé", render: (i) => (i.corrige_md ? "✅" : "—") },
   ],
+  duplicateKeys: ["annee", "ville", "etablissement", "filiere"],
 };
 
 const COURS_CONFIG = {
@@ -469,7 +729,7 @@ const COURS_CONFIG = {
     { key: "module", label: "Module", required: true, placeholder: "ex: Analyse Financière" },
     { key: "title", label: "Titre", required: true, placeholder: "ex: Cours — Analyse Financière" },
     { key: "description", label: "Description" },
-    { key: "content", label: "Contenu (Markdown)", type: "textarea", required: true },
+    { key: "content", label: "Contenu (Markdown)", type: "textarea", required: true, markdown: true },
     { key: "available", label: "Disponible", type: "checkbox" },
   ],
   columns: [

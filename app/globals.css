@@ -447,6 +447,40 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .admin-tab-btn.active{background:var(--accent); color:#fff;}
 .admin-tab-btn:hover:not(.active){color:var(--text);}
 
+.admin-toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:18px 0 10px;}
+.admin-search-input{
+  flex:1; min-width:200px; padding:8px 12px; border-radius:8px; border:1px solid var(--border);
+  background:var(--bg-elev); color:var(--text); font-size:.86rem; outline:none;
+}
+.admin-search-input:focus{border-color:var(--accent);}
+.admin-bulkbar{
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:var(--accent-dim);
+  border:1px solid var(--accent); border-radius:8px; padding:8px 12px; margin-bottom:10px; font-size:.85rem;
+}
+.admin-bulkbar strong{color:var(--accent);}
+
+.admin-md-field-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;}
+.admin-md-toggle{background:none; border:none; color:var(--accent); font-size:.78rem; font-weight:600; cursor:pointer; padding:0;}
+.admin-md-preview{
+  border:1px solid var(--border); border-radius:8px; padding:12px 14px; background:var(--bg);
+  max-height:340px; overflow:auto; font-size:.85rem; line-height:1.6;
+}
+.admin-md-preview :is(h1,h2,h3){margin-top:0;}
+.admin-md-preview table{border-collapse:collapse; width:100%;}
+.admin-md-preview td, .admin-md-preview th{border:1px solid var(--border); padding:4px 8px;}
+
+.admin-images{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;}
+.admin-image-chip{
+  position:relative; width:88px; height:88px; border-radius:8px; overflow:hidden; border:1px solid var(--border);
+  background:var(--bg);
+}
+.admin-image-chip img{width:100%; height:100%; object-fit:cover; display:block;}
+.admin-image-remove{
+  position:absolute; top:2px; right:2px; width:20px; height:20px; border-radius:50%; border:none;
+  background:rgba(0,0,0,.65); color:#fff; font-size:.75rem; line-height:1; cursor:pointer;
+}
+.admin-image-hint{font-size:.78rem; color:var(--text-faint); margin-top:4px;}
+
 /* ---------- QCM editor (admin) ---------- */
 .qz-editor{border:1px solid var(--border); border-radius:var(--radius); padding:14px; background:var(--bg);}
 .qz-toolbar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;}
