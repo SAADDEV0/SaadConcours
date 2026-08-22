@@ -10,7 +10,7 @@ ${chromeHtml({ active: "cours", showSearch: false })}
 <div class="cours-view" id="viewCours">
 
   <div id="coursModuleList">
-    <h2 class="eval-title">📖 Cours par module</h2>
+    <h1 class="eval-title">📖 Cours par module</h1>
     <p class="eval-sub">Fiches de cours synthétiques : définitions, formules et points clés à retenir, par module.</p>
     <div class="grid" id="coursModuleGrid"></div>
   </div>

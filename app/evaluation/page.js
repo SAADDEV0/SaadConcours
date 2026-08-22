@@ -10,7 +10,7 @@ ${chromeHtml({ active: "eval", showSearch: false })}
 <div class="eval-view" id="viewEval">
 
   <div id="evalModuleList">
-    <h2 class="eval-title">📝 Évaluation par module</h2>
+    <h1 class="eval-title">📝 Évaluation par module</h1>
     <p class="eval-sub">Choisis un module pour t'auto-évaluer en conditions QCM. Ton score s'affiche à la fin.</p>
     <div class="grid" id="evalModuleGrid"></div>
   </div>

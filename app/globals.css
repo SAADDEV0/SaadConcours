@@ -159,6 +159,7 @@ header{
 .reset-btn:hover{border-color:var(--red); color:var(--red);}
 
 /* ---------- Results grid ---------- */
+.concours-h1{font-size:1.05rem; font-weight:700; margin:0 0 12px;}
 .results-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;}
 .results-count{font-size:.85rem; color:var(--text-dim);}
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)); gap:14px;}

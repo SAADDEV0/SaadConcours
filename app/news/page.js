@@ -7,7 +7,7 @@ const MARKUP = `
 ${chromeHtml({ active: "news", showSearch: false })}
 
 <div class="nw-view">
-  <h2 class="eval-title">🆕 Concours ouverts</h2>
+  <h1 class="eval-title">🆕 Concours ouverts</h1>
   <p class="eval-sub">Masters actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
 
   <div class="nw-toolbar">

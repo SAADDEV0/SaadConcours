@@ -35,6 +35,7 @@ ${chromeHtml({ active: "concours", showSearch: true })}
   </aside>
 
   <main>
+    <h1 class="concours-h1">Concours d'accès aux Masters — sujets réels</h1>
     <div class="results-header">
       <div class="results-count" id="resultsCount"></div>
     </div>
@@ -261,6 +262,7 @@ export default function ConcoursPage() {
         c.images.forEach((src) => {
           const img = document.createElement("img");
           img.src = pub(src);
+          img.alt = `Extrait scanné — ${c.etablissement} ${c.ville} ${c.annee}`;
           img.loading = "lazy";
           img.addEventListener("click", () => openLightbox(pub(src)));
           gallery.appendChild(img);
