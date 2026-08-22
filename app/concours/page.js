@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, pub } from "../_shared/chrome";
+import { chromeHtml, chromeScript, pub, trackPdfDownload, trackConcoursView } from "../_shared/chrome";
 import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
 
 const MARKUP = `
@@ -280,6 +280,7 @@ export default function ConcoursPage() {
 
     function openModal(c) {
       currentModalConcours = c;
+      trackConcoursView(c.id);
       $("#modalTitle").textContent = `${c.etablissement} — ${c.annee}`;
       $("#modalSub").textContent = `${c.filiere} · ${c.ville}`;
       $("#modalInfoRow").innerHTML = `
@@ -576,6 +577,7 @@ export default function ConcoursPage() {
       addWatermark(doc);
       addSiteHeader(doc);
       doc.save(`${c.id}.pdf`);
+      trackPdfDownload("concours", c.id);
     }
 
     $("#modalClose").addEventListener("click", closeModal);

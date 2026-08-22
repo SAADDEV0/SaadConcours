@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript } from "../_shared/chrome";
+import { chromeHtml, chromeScript, trackPdfDownload } from "../_shared/chrome";
 import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
 
 const MARKUP = `
@@ -261,6 +261,7 @@ export default function CoursPage() {
       addWatermark(doc);
       addSiteHeader(doc);
       doc.save(`${coursCurrent.meta.id}.pdf`);
+      trackPdfDownload("cours", coursCurrent.meta.id);
     });
 
     loadCoursRegistry();

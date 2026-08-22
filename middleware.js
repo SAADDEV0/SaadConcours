@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 
 const PROTECTED_API_PREFIXES = ["/api/concours", "/api/cours", "/api/quiz", "/api/news", "/api/admin/upload-image"];
+// Unlike the resources above (public reads, admin-only writes), these expose
+// data that shouldn't be public at all — auth is required on every method.
+const PROTECTED_API_ALWAYS = ["/api/admin/stats"];
 
 function isProtectedApiWrite(pathname, method) {
   return PROTECTED_API_PREFIXES.some((p) => pathname.startsWith(p)) && method !== "GET";
+}
+
+function isProtectedApiAlways(pathname) {
+  return PROTECTED_API_ALWAYS.some((p) => pathname.startsWith(p));
 }
 
 export function middleware(req) {
@@ -19,7 +26,7 @@ export function middleware(req) {
       }
     }
 
-    if (isProtectedApiWrite(pathname, req.method)) {
+    if (isProtectedApiWrite(pathname, req.method) || isProtectedApiAlways(pathname)) {
       if (!authorized) {
         return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
       }
@@ -34,7 +41,7 @@ export function middleware(req) {
     if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
-    if (isProtectedApiWrite(pathname, req.method)) {
+    if (isProtectedApiWrite(pathname, req.method) || isProtectedApiAlways(pathname)) {
       return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
     }
     return NextResponse.next();
@@ -49,5 +56,6 @@ export const config = {
     "/api/quiz/:path*",
     "/api/news/:path*",
     "/api/admin/upload-image",
+    "/api/admin/stats",
   ],
 };

@@ -359,16 +359,26 @@ function ResourcePanel({ config }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Searches visible columns AND the full text fields (enonce_md,
+  // corrige_md, cours content...) even though those aren't shown in the
+  // table — otherwise finding "which concours mentions le seuil de
+  // signification" means opening every single one by hand.
   const filteredList = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return list;
-    return list.filter((item) =>
-      columns.some((c) => {
-        const raw = c.render ? c.render(item) : item[c.key];
-        return String(raw ?? "").toLowerCase().includes(q);
-      })
+    return list.filter(
+      (item) =>
+        columns.some((c) => {
+          const raw = c.render ? c.render(item) : item[c.key];
+          return String(raw ?? "").toLowerCase().includes(q);
+        }) ||
+        fields.some((f) => {
+          if (f.type === "checkbox" || f.type === "quiz-questions" || f.type === "image-list") return false;
+          const raw = item[f.key];
+          return typeof raw === "string" && raw.toLowerCase().includes(q);
+        })
     );
-  }, [list, search, columns]);
+  }, [list, search, columns, fields]);
 
   const checkboxFields = fields.filter((f) => f.type === "checkbox");
 
@@ -783,16 +793,123 @@ const NEWS_CONFIG = {
   ],
 };
 
+/* -------------------------------- Dashboard -------------------------------- */
+
+function StatCard({ label, value, sub }) {
+  return (
+    <div className="stat-card">
+      <div className="stat-card-value">{value}</div>
+      <div className="stat-card-label">{label}</div>
+      {sub && <div className="stat-card-sub">{sub}</div>}
+    </div>
+  );
+}
+
+function StatsPanel() {
+  const [stats, setStats] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/admin/stats")
+      .then((res) => {
+        if (!res.ok) throw new Error("Erreur lors du chargement des statistiques.");
+        return res.json();
+      })
+      .then(setStats)
+      .catch((e) => setError(e.message));
+  }, []);
+
+  if (error) {
+    return (
+      <div className="admin-card">
+        <div className="admin-error">{error}</div>
+      </div>
+    );
+  }
+  if (!stats) {
+    return <div className="admin-card">Chargement des statistiques...</div>;
+  }
+
+  const maxDay = Math.max(1, ...stats.pdfLast7Days.map(([, n]) => n));
+  const pdfThisWeek = stats.pdfLast7Days.reduce((sum, [, n]) => sum + n, 0);
+
+  return (
+    <>
+      <div className="stat-grid">
+        <StatCard label="PDF téléchargés aujourd'hui" value={stats.pdfToday} />
+        <StatCard label="PDF cette semaine" value={pdfThisWeek} />
+        <StatCard label="PDF au total" value={stats.pdfTotal} />
+        <StatCard label="Visiteurs (total)" value={stats.totalVisits ?? "—"} />
+        <StatCard
+          label="Concours"
+          value={stats.counts.concours}
+          sub={`${stats.counts.concoursAvecCorrige} avec corrigé`}
+        />
+        <StatCard label="Fiches de cours" value={stats.counts.cours} />
+        <StatCard label="Évaluations" value={stats.counts.quiz} />
+        <StatCard
+          label="Concours ouverts (news)"
+          value={stats.counts.newsOuvertes}
+          sub={`${stats.counts.news} au total`}
+        />
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>PDF téléchargés — 7 derniers jours</h2>
+        <div className="stat-bars">
+          {stats.pdfLast7Days.map(([day, n]) => (
+            <div className="stat-bar-col" key={day}>
+              <div className="stat-bar-track">
+                <div className="stat-bar" style={{ height: `${Math.max(4, (n / maxDay) * 100)}%` }} title={`${n} le ${day}`} />
+              </div>
+              <div className="stat-bar-value">{n}</div>
+              <div className="stat-bar-label">{day.slice(5)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Concours les plus consultés</h2>
+        {stats.topConcours.length ? (
+          <ol className="stat-rank-list">
+            {stats.topConcours.map((c) => (
+              <li key={c.id}>
+                <span>{c.label}</span>
+                <strong>
+                  {c.views} vue{c.views > 1 ? "s" : ""}
+                </strong>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div className="empty-state">Pas encore de données — reviens après quelques visites sur le site.</div>
+        )}
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>PDF par type</h2>
+        <div className="admin-row-actions">
+          <span className="admin-image-hint">Concours : {stats.pdfByKind.concours || 0}</span>
+          <span className="admin-image-hint">Cours : {stats.pdfByKind.cours || 0}</span>
+          <span className="admin-image-hint">Évaluation : {stats.pdfByKind.evaluation || 0}</span>
+        </div>
+      </div>
+    </>
+  );
+}
+
 const TABS = [
-  { key: "concours", label: "📚 Concours", config: CONCOURS_CONFIG },
-  { key: "cours", label: "📖 Cours", config: COURS_CONFIG },
-  { key: "quiz", label: "📝 Évaluation", config: QUIZ_CONFIG },
-  { key: "news", label: "🆕 News", config: NEWS_CONFIG },
+  { key: "dashboard", label: "Tableau de bord", icon: "📊" },
+  { key: "concours", label: "Concours", icon: "📚", config: CONCOURS_CONFIG },
+  { key: "cours", label: "Cours", icon: "📖", config: COURS_CONFIG },
+  { key: "quiz", label: "Évaluation", icon: "📝", config: QUIZ_CONFIG },
+  { key: "news", label: "News", icon: "🆕", config: NEWS_CONFIG },
 ];
 
 export default function AdminPage() {
   const router = useRouter();
-  const [tab, setTab] = useState("concours");
+  const [tab, setTab] = useState("dashboard");
 
   async function onLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -803,38 +920,46 @@ export default function AdminPage() {
   const active = TABS.find((t) => t.key === tab);
 
   return (
-    <div className="admin-wrap">
-      <div className="admin-topbar">
+    <div className="admin-shell">
+      <aside className="admin-sidebar">
         <a className="admin-brand" href="/">
-          <span className="brand-saad">Saad</span><span className="brand-concours">Concours</span>
+          <span className="brand-saad">Saad</span>
+          <span className="brand-concours">Concours</span>
           <span className="admin-brand-tag">Admin</span>
         </a>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <nav className="admin-nav">
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              className={"admin-nav-btn" + (t.key === tab ? " active" : "")}
+              onClick={() => setTab(t.key)}
+              type="button"
+            >
+              <span className="admin-nav-icon">{t.icon}</span>
+              {t.label}
+            </button>
+          ))}
+        </nav>
+        <div className="admin-sidebar-footer">
           <ThemeToggle />
-          <a className="admin-btn secondary" href="/" style={{ textDecoration: "none" }}>
+          <a className="admin-btn secondary" href="/" style={{ textDecoration: "none", textAlign: "center" }}>
             ← Voir le site
           </a>
           <button className="admin-btn secondary" onClick={onLogout}>
             Déconnexion
           </button>
         </div>
-      </div>
+      </aside>
 
-      <div className="admin-tabs">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            className={"admin-tab-btn" + (t.key === tab ? " active" : "")}
-            onClick={() => setTab(t.key)}
-            type="button"
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
-      <ResourcePanel key={tab} config={active.config} />
+      <main className="admin-main">
+        <div className="admin-content">
+          <h1 className="admin-page-title">
+            {active.icon} {active.label}
+          </h1>
+          {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
+          {tab === "dashboard" ? <StatsPanel key="dashboard" /> : <ResourcePanel key={tab} config={active.config} />}
+        </div>
+      </main>
     </div>
   );
 }

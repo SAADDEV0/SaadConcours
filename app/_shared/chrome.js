@@ -131,3 +131,28 @@ export function pub(path) {
   if (!path) return path;
   return path.startsWith("/") ? path : "/" + path;
 }
+
+// Fire-and-forget usage counters feeding the admin stats dashboard. Never
+// awaited by callers and never allowed to throw — a tracking hiccup must
+// not get in the way of someone's PDF download or a page loading.
+export function trackPdfDownload(kind, id) {
+  try {
+    fetch("/api/track/pdf-download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind, id }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+}
+
+export function trackConcoursView(id) {
+  try {
+    fetch("/api/track/concours-view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+}
