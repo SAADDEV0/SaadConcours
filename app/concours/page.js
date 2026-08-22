@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, pub, trackPdfDownload, trackConcoursView } from "../_shared/chrome";
+import { chromeHtml, chromeScript, pub, footerHtml, trackPdfDownload, trackConcoursView } from "../_shared/chrome";
 import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
 
 const MARKUP = `
@@ -41,7 +41,7 @@ ${chromeHtml({ active: "concours", showSearch: true })}
   </main>
 </div>
 
-<footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
+${footerHtml()}
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">

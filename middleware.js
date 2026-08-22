@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 
-const PROTECTED_API_PREFIXES = ["/api/concours", "/api/cours", "/api/quiz", "/api/news", "/api/admin/upload-image"];
+const PROTECTED_API_PREFIXES = [
+  "/api/concours",
+  "/api/cours",
+  "/api/quiz",
+  "/api/news",
+  "/api/admin/upload-image",
+  "/api/settings",
+];
 // Unlike the resources above (public reads, admin-only writes), these expose
 // data that shouldn't be public at all — auth is required on every method.
-const PROTECTED_API_ALWAYS = ["/api/admin/stats"];
+const PROTECTED_API_ALWAYS = ["/api/admin/stats", "/api/admin/export"];
 
 function isProtectedApiWrite(pathname, method) {
   return PROTECTED_API_PREFIXES.some((p) => pathname.startsWith(p)) && method !== "GET";
@@ -57,5 +64,7 @@ export const config = {
     "/api/news/:path*",
     "/api/admin/upload-image",
     "/api/admin/stats",
+    "/api/admin/export",
+    "/api/settings/:path*",
   ],
 };

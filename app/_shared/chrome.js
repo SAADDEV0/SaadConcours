@@ -54,7 +54,77 @@ export function chromeHtml({ active, showSearch }) {
 `;
 }
 
+// Shared footer with a social-links row — icons are hidden by default and
+// only shown once initSocialLinks() (below) confirms a URL is actually set
+// for that network, so an unconfigured link never flashes then disappears.
+export function footerHtml() {
+  return `
+<footer>
+  <div class="footer-text">Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</div>
+  <div class="footer-social" id="footerSocial"></div>
+</footer>
+`;
+}
+
+const SOCIAL_NETWORKS = [
+  {
+    key: "facebook",
+    label: "Facebook",
+    icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.06 5.66 21.2 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.2 22 17.06 22 12.06Z"/></svg>`,
+  },
+  {
+    key: "instagram",
+    label: "Instagram",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>`,
+  },
+  {
+    key: "whatsapp",
+    label: "WhatsApp",
+    icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.6.7 1.9.8 2 .1.2.1.4 0 .6-.1.2-.2.4-.3.5-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.3.7-.2.3.1 1.8.8 2.1.9.3.2.5.2.6.4.1.2.1.9-.1 1.5Z"/></svg>`,
+  },
+  {
+    key: "tiktok",
+    label: "TikTok",
+    icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.8c-.9-.9-1.4-2.1-1.4-3.4h-3.3v13.3c0 1.5-1.2 2.7-2.7 2.7a2.7 2.7 0 0 1 0-5.4c.3 0 .5 0 .8.1v-3.4a6.1 6.1 0 0 0-.8-.1 6.1 6.1 0 1 0 6.1 6.1V9.4a7.4 7.4 0 0 0 4.4 1.4V7.5c-1.2 0-2.3-.6-3.1-1.7Z"/></svg>`,
+  },
+  {
+    key: "youtube",
+    label: "YouTube",
+    icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2s-.2-1.5-.8-2.1c-.8-.8-1.7-.8-2.1-.9C15.9 4 12 4 12 4s-3.9 0-6.7.2c-.4 0-1.3.1-2.1.9-.6.6-.8 2.1-.8 2.1S2.2 9 2.2 10.7v1.9c0 1.7.2 3.5.2 3.5s.2 1.5.8 2.1c.8.8 1.9.8 2.3.9 1.7.2 7 .2 7 .2s3.9 0 6.7-.2c.4 0 1.3-.1 2.1-.9.6-.6.8-2.1.8-2.1s.2-1.7.2-3.5v-1.9c0-1.7-.2-3.5-.2-3.5ZM9.9 14.6V8.8l5.4 2.9-5.4 2.9Z"/></svg>`,
+  },
+  {
+    key: "telegram",
+    label: "Telegram",
+    icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="m21.9 4.5-3.2 15.3c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.3-8.4c.4-.4-.1-.6-.6-.2L6.2 13 1.3 11.5c-1.1-.3-1.1-1.1.2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.5Z"/></svg>`,
+  },
+  {
+    key: "email",
+    label: "Email",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>`,
+    hrefPrefix: "mailto:",
+  },
+];
+
 export const chromeScript = function initChrome() {
+  (function initSocialLinks() {
+    const el = document.getElementById("footerSocial");
+    if (!el) return;
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((settings) => {
+        const links = SOCIAL_NETWORKS.filter((n) => settings && settings[n.key]);
+        if (!links.length) return;
+        el.innerHTML = links
+          .map((n) => {
+            const raw = settings[n.key];
+            const href = n.hrefPrefix ? n.hrefPrefix + raw : raw;
+            return `<a class="footer-social-link" href="${href}" target="_blank" rel="noopener noreferrer" title="${n.label}" aria-label="${n.label}">${n.icon}</a>`;
+          })
+          .join("");
+      })
+      .catch(() => {});
+  })();
+
   // First-party visit tracking, replacing the old public visitor-counter
   // widget — no longer shown on the site, but every unique browser still
   // pings once (localStorage-gated, same "first hit only" semantics the

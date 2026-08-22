@@ -878,6 +878,12 @@ function StatsPanel({ onNavigate }) {
           <button className="admin-btn secondary" type="button" onClick={() => onNavigate("news")}>
             + News
           </button>
+          <a className="admin-btn secondary" href="/api/admin/export?format=json" style={{ textDecoration: "none" }}>
+            ⬇ Export JSON
+          </a>
+          <a className="admin-btn secondary" href="/api/admin/export?format=csv" style={{ textDecoration: "none" }}>
+            ⬇ Export CSV
+          </a>
         </div>
       </div>
 
@@ -1013,12 +1019,90 @@ function StatsPanel({ onNavigate }) {
   );
 }
 
+/* -------------------------------- Settings -------------------------------- */
+
+const SOCIAL_FIELDS = [
+  { key: "facebook", label: "Facebook", placeholder: "https://facebook.com/tapage" },
+  { key: "instagram", label: "Instagram", placeholder: "https://instagram.com/toncompte" },
+  { key: "whatsapp", label: "WhatsApp", placeholder: "https://wa.me/2126..." },
+  { key: "tiktok", label: "TikTok", placeholder: "https://tiktok.com/@toncompte" },
+  { key: "youtube", label: "YouTube", placeholder: "https://youtube.com/@tachaine" },
+  { key: "telegram", label: "Telegram", placeholder: "https://t.me/toncanal" },
+  { key: "email", label: "Email de contact", placeholder: "contact@saadconcours.space" },
+];
+
+function SettingsPanel() {
+  const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then(setForm)
+      .catch(() => setError("Erreur lors du chargement des réglages."));
+  }, []);
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    setSaving(true);
+    setMsg("");
+    setError("");
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Erreur lors de l'enregistrement.");
+        return;
+      }
+      setForm(data);
+      setMsg("Réglages enregistrés — visibles dans le pied de page du site.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!form) return <div className="admin-card">Chargement...</div>;
+
+  return (
+    <div className="admin-card">
+      <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Réseaux sociaux</h2>
+      <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+        Laisse un champ vide pour ne pas afficher l'icône correspondante dans le pied de page du site.
+      </p>
+      <form onSubmit={onSubmit}>
+        {SOCIAL_FIELDS.map((f) => (
+          <div className="admin-field" key={f.key}>
+            <label>{f.label}</label>
+            <input
+              value={form[f.key] || ""}
+              placeholder={f.placeholder}
+              onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+            />
+          </div>
+        ))}
+        <button className="admin-btn" type="submit" disabled={saving}>
+          {saving ? "Enregistrement..." : "Enregistrer"}
+        </button>
+        {error && <div className="admin-error">{error}</div>}
+        {msg && <div className="admin-msg">{msg}</div>}
+      </form>
+    </div>
+  );
+}
+
 const TABS = [
   { key: "dashboard", label: "Tableau de bord", icon: "📊" },
   { key: "concours", label: "Concours", icon: "📚", config: CONCOURS_CONFIG },
   { key: "cours", label: "Cours", icon: "📖", config: COURS_CONFIG },
   { key: "quiz", label: "Évaluation", icon: "📝", config: QUIZ_CONFIG },
   { key: "news", label: "News", icon: "🆕", config: NEWS_CONFIG },
+  { key: "settings", label: "Réglages", icon: "⚙️" },
 ];
 
 export default function AdminPage() {
@@ -1073,6 +1157,8 @@ export default function AdminPage() {
           {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
           {tab === "dashboard" ? (
             <StatsPanel key="dashboard" onNavigate={setTab} />
+          ) : tab === "settings" ? (
+            <SettingsPanel key="settings" />
           ) : (
             <ResourcePanel key={tab} config={active.config} />
           )}

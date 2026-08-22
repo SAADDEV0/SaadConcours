@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript } from "./_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml } from "./_shared/chrome";
 
 const ACTIONS = [
   {
@@ -60,7 +60,7 @@ ${chromeHtml({ active: "home", showSearch: false })}
   </section>
 </div>
 
-<footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
+${footerHtml()}
 `;
 
 export default function HomePage() {

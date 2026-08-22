@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, trackPdfDownload } from "../_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml, trackPdfDownload } from "../_shared/chrome";
 import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
 
 const MARKUP = `
@@ -33,7 +33,7 @@ ${chromeHtml({ active: "eval", showSearch: false })}
 
 </div>
 
-<footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
+${footerHtml()}
 `;
 
 export default function EvaluationPage() {

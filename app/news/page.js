@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript } from "../_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml } from "../_shared/chrome";
 
 const MARKUP = `
 ${chromeHtml({ active: "news", showSearch: false })}
@@ -27,7 +27,7 @@ ${chromeHtml({ active: "news", showSearch: false })}
   <div class="nw-grid" id="nwGrid"></div>
 </div>
 
-<footer>Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</footer>
+${footerHtml()}
 `;
 
 const NEWS_SOON_DAYS = 21;
