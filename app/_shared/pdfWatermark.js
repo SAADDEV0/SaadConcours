@@ -1,5 +1,5 @@
-const SITE_URL = "https://saad-concours.vercel.app";
-const SITE_HOST = "saad-concours.vercel.app";
+const SITE_URL = "https://www.saadconcours.space";
+const SITE_HOST = "saadconcours.space";
 
 // Fills a quad (4 points, in perimeter order) as two triangles — jsPDF has
 // no native polygon-fill primitive for straight-edged shapes.
