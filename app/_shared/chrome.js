@@ -41,11 +41,11 @@ export function chromeHtml({ active, showSearch }) {
         : `<div class="search-box" style="flex:1;"></div>`
     }
     <nav class="view-nav">
-      <a class="view-nav-btn${active === "home" ? " active" : ""}" href="/">🏠 Accueil</a>
-      <a class="view-nav-btn${active === "concours" ? " active" : ""}" href="/concours">📚 Concours</a>
-      <a class="view-nav-btn${active === "cours" ? " active" : ""}" href="/cours">📖 Cours</a>
-      <a class="view-nav-btn${active === "eval" ? " active" : ""}" href="/evaluation">📝 Évaluation</a>
-      <a class="view-nav-btn${active === "news" ? " active" : ""}" href="/news">🆕 Concours ouverts</a>
+      <a class="view-nav-btn${active === "home" ? " active" : ""}" href="/">🏠<span class="view-nav-label"> Accueil</span></a>
+      <a class="view-nav-btn${active === "concours" ? " active" : ""}" href="/concours">📚<span class="view-nav-label"> Concours</span></a>
+      <a class="view-nav-btn${active === "cours" ? " active" : ""}" href="/cours">📖<span class="view-nav-label"> Cours</span></a>
+      <a class="view-nav-btn${active === "eval" ? " active" : ""}" href="/evaluation">📝<span class="view-nav-label"> Évaluation</span></a>
+      <a class="view-nav-btn${active === "news" ? " active" : ""}" href="/news">🆕<span class="view-nav-label"> Concours ouverts</span></a>
     </nav>
     ${active === "concours" ? `<div class="stat-pill" id="statPill">— concours</div>` : ""}
     <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
