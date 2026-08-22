@@ -2,66 +2,65 @@ name: Mise à jour des concours ouverts (almaster)
 
 on:
   schedule:
-      - cron: "0 */6 * * *"
-        workflow_dispatch: {}
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
 
-        permissions:
-          contents: write
-            issues: write
+permissions:
+  contents: write
+  issues: write
 
-            jobs:
-              update-news:
-                  runs-on: ubuntu-latest
-                      steps:
-                            - name: Checkout
-                                    uses: actions/checkout@v4
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-                                          - name: Setup Python
-                                                  uses: actions/setup-python@v5
-                                                          with:
-                                                                    python-version: "3.12"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-                                                                          - name: Installer les dépendances
-                                                                                  run: pip install -r scripts/requirements.txt
+      - name: Installer les dépendances
+        run: pip install -r scripts/requirements.txt
 
-                                                                                        - name: Récupérer les nouveautés almaster
-                                                                                                run: python3 scripts/fetch_almaster.py
+      - name: Récupérer les nouveautés almaster
+        run: python3 scripts/fetch_almaster.py
 
-                                                                                                      - name: Committer si public/data/news.json a changé
-                                                                                                              run: |
-                                                                                                                        if git diff --quiet -- public/data/news.json; then
-                                                                                                                                    echo "Aucun changement, rien à committer."
-                                                                                                                                                exit 0
-                                                                                                                                                          fi
-                                                                                                                                                                    git config user.name "github-actions[bot]"
-                                                                                                                                                                              git config user.email "github-actions[bot]@users.noreply.github.com"
-                                                                                                                                                                                        git add public/data/news.json
-                                                                                                                                                                                                  git commit -m "Mise à jour automatique des concours ouverts (almaster)"
-                                                                                                                                                                                                            git push
-                                                                                                                                                                                                            
-                                                                                                                                                                                                                  - name: Ouvrir une issue si le job a échoué
-                                                                                                                                                                                                                          if: failure()
-                                                                                                                                                                                                                                  env:
-                                                                                                                                                                                                                                            GH_TOKEN: ${{ github.token }}
-                                                                                                                                                                                                                                                    run: |
-                                                                                                                                                                                                                                                              existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scraper-failure --state open --json number --jq '.[0].number')
-                                                                                                                                                                                                                                                                        run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-                                                                                                                                                                                                                                                                                  if [ -n "$existing" ]; then
-                                                                                                                                                                                                                                                                                              gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Nouvel échec : $run_url"
-                                                                                                                                                                                                                                                                                                        else
-                                                                                                                                                                                                                                                                                                                    gh issue create --repo "$GITHUB_REPOSITORY" \
-                                                                                                                                                                                                                                                                                                                                  --title "Le scraper almaster a échoué" \
-                                                                                                                                                                                                                                                                                                                                                --label scraper-failure \
-                                                                                                                                                                                                                                                                                                                                                              --body "Le workflow \"Mise à jour des concours ouverts (almaster)\" a échoué. Logs : $run_url"
-                                                                                                                                                                                                                                                                                                                                                                        fi
-                                                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                                                              - name: Fermer l'issue de suivi si le job a réussi
-                                                                                                                                                                                                                                                                                                                                                                                      if: success()
-                                                                                                                                                                                                                                                                                                                                                                                              env:
-                                                                                                                                                                                                                                                                                                                                                                                                        GH_TOKEN: ${{ github.token }}
-                                                                                                                                                                                                                                                                                                                                                                                                                run: |
-                                                                                                                                                                                                                                                                                                                                                                                                                          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scraper-failure --state open --json number --jq '.[0].number')
-                                                                                                                                                                                                                                                                                                                                                                                                                                    if [ -n "$existing" ]; then
-                                                                                                                                                                                                                                                                                                                                                                                                                                                gh issue close "$existing" --repo "$GITHUB_REPOSITORY" --comment "Le scraper a de nouveau tourné avec succès."
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          fi
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      - name: Committer si public/data/news.json a changé
+        run: |
+          if git diff --quiet -- public/data/news.json; then
+            echo "Aucun changement, rien à committer."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/news.json
+          git commit -m "Mise à jour automatique des concours ouverts (almaster)"
+          git push
+
+      - name: Ouvrir une issue si le job a échoué
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scraper-failure --state open --json number --jq '.[0].number')
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Nouvel échec : $run_url"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "Le scraper almaster a échoué" \
+              --label scraper-failure \
+              --body "Le workflow \"Mise à jour des concours ouverts (almaster)\" a échoué. Logs : $run_url"
+          fi
+
+      - name: Fermer l'issue de suivi si le job a réussi
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scraper-failure --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue close "$existing" --repo "$GITHUB_REPOSITORY" --comment "Le scraper a de nouveau tourné avec succès."
+          fi
