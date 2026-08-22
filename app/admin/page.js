@@ -795,17 +795,32 @@ const NEWS_CONFIG = {
 
 /* -------------------------------- Dashboard -------------------------------- */
 
-function StatCard({ label, value, sub }) {
+function StatCard({ icon, tone, label, value, sub }) {
   return (
-    <div className="stat-card">
-      <div className="stat-card-value">{value}</div>
-      <div className="stat-card-label">{label}</div>
-      {sub && <div className="stat-card-sub">{sub}</div>}
+    <div className={"stat-card tone-" + (tone || "default")}>
+      <div className="stat-card-icon">{icon}</div>
+      <div>
+        <div className="stat-card-value">{value}</div>
+        <div className="stat-card-label">{label}</div>
+        {sub && <div className="stat-card-sub">{sub}</div>}
+      </div>
     </div>
   );
 }
 
-function StatsPanel() {
+function DashboardCard({ title, action, children }) {
+  return (
+    <div className="admin-card dash-card">
+      <div className="dash-card-head">
+        <h2>{title}</h2>
+        {action}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function StatsPanel({ onNavigate }) {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
 
@@ -817,6 +832,13 @@ function StatsPanel() {
       })
       .then(setStats)
       .catch((e) => setError(e.message));
+  }, []);
+
+  const greeting = useMemo(() => {
+    const h = new Date().getHours();
+    if (h < 12) return "Bonjour";
+    if (h < 18) return "Bon après-midi";
+    return "Bonsoir";
   }, []);
 
   if (error) {
@@ -832,69 +854,161 @@ function StatsPanel() {
 
   const maxDay = Math.max(1, ...stats.pdfLast7Days.map(([, n]) => n));
   const pdfThisWeek = stats.pdfLast7Days.reduce((sum, [, n]) => sum + n, 0);
+  const dayLabel = (d) =>
+    new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short" }).replace(".", "");
 
   return (
     <>
+      <div className="dash-hero">
+        <div>
+          <div className="dash-hero-greeting">
+            {greeting} 👋 — voici l'état du site {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}.
+          </div>
+        </div>
+        <div className="dash-quick-actions">
+          <button className="admin-btn" type="button" onClick={() => onNavigate("concours")}>
+            + Concours
+          </button>
+          <button className="admin-btn secondary" type="button" onClick={() => onNavigate("cours")}>
+            + Cours
+          </button>
+          <button className="admin-btn secondary" type="button" onClick={() => onNavigate("quiz")}>
+            + Évaluation
+          </button>
+          <button className="admin-btn secondary" type="button" onClick={() => onNavigate("news")}>
+            + News
+          </button>
+        </div>
+      </div>
+
       <div className="stat-grid">
-        <StatCard label="PDF téléchargés aujourd'hui" value={stats.pdfToday} />
-        <StatCard label="PDF cette semaine" value={pdfThisWeek} />
-        <StatCard label="PDF au total" value={stats.pdfTotal} />
-        <StatCard label="Visiteurs (total)" value={stats.totalVisits ?? "—"} />
+        <StatCard icon="📄" tone="indigo" label="PDF téléchargés aujourd'hui" value={stats.pdfToday} />
+        <StatCard icon="📈" tone="violet" label="PDF cette semaine" value={pdfThisWeek} />
+        <StatCard icon="🗂️" tone="indigo" label="PDF au total" value={stats.pdfTotal} />
+        <StatCard icon="👁️" tone="amber" label="Visiteurs aujourd'hui" value={stats.visitsToday ?? 0} />
+        <StatCard icon="🌍" tone="amber" label="Visiteurs (total)" value={stats.totalVisits ?? "—"} />
         <StatCard
+          icon="📚"
+          tone="green"
           label="Concours"
           value={stats.counts.concours}
           sub={`${stats.counts.concoursAvecCorrige} avec corrigé`}
         />
-        <StatCard label="Fiches de cours" value={stats.counts.cours} />
-        <StatCard label="Évaluations" value={stats.counts.quiz} />
+        <StatCard icon="📖" tone="green" label="Fiches de cours" value={stats.counts.cours} />
+        <StatCard icon="📝" tone="green" label="Évaluations" value={stats.counts.quiz} />
         <StatCard
+          icon="🆕"
+          tone="amber"
           label="Concours ouverts (news)"
           value={stats.counts.newsOuvertes}
           sub={`${stats.counts.news} au total`}
         />
       </div>
 
-      <div className="admin-card" style={{ marginTop: 18 }}>
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>PDF téléchargés — 7 derniers jours</h2>
-        <div className="stat-bars">
-          {stats.pdfLast7Days.map(([day, n]) => (
-            <div className="stat-bar-col" key={day}>
-              <div className="stat-bar-track">
-                <div className="stat-bar" style={{ height: `${Math.max(4, (n / maxDay) * 100)}%` }} title={`${n} le ${day}`} />
+      <div className="dash-grid-2">
+        <DashboardCard title="PDF téléchargés — 7 derniers jours">
+          <div className="stat-bars">
+            {stats.pdfLast7Days.map(([day, n]) => (
+              <div className="stat-bar-col" key={day}>
+                <div className="stat-bar-track">
+                  <div
+                    className="stat-bar"
+                    style={{ height: `${Math.max(4, (n / maxDay) * 100)}%` }}
+                    title={`${n} le ${day}`}
+                  />
+                </div>
+                <div className="stat-bar-value">{n}</div>
+                <div className="stat-bar-label">{dayLabel(day)}</div>
               </div>
-              <div className="stat-bar-value">{n}</div>
-              <div className="stat-bar-label">{day.slice(5)}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="admin-row-actions" style={{ marginTop: 14 }}>
+            <span className="admin-image-hint">Concours : {stats.pdfByKind.concours || 0}</span>
+            <span className="admin-image-hint">Cours : {stats.pdfByKind.cours || 0}</span>
+            <span className="admin-image-hint">Évaluation : {stats.pdfByKind.evaluation || 0}</span>
+          </div>
+        </DashboardCard>
+
+        <DashboardCard title="Concours les plus consultés">
+          {stats.topConcours.length ? (
+            <ol className="stat-rank-list">
+              {stats.topConcours.map((c) => (
+                <li key={c.id}>
+                  <span>{c.label}</span>
+                  <strong>
+                    {c.views} vue{c.views > 1 ? "s" : ""}
+                  </strong>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="empty-state">Pas encore de données — reviens après quelques visites sur le site.</div>
+          )}
+        </DashboardCard>
       </div>
 
-      <div className="admin-card" style={{ marginTop: 18 }}>
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Concours les plus consultés</h2>
-        {stats.topConcours.length ? (
-          <ol className="stat-rank-list">
-            {stats.topConcours.map((c) => (
+      <div className="dash-grid-2">
+        <DashboardCard
+          title="⚠️ Concours sans corrigé"
+          action={
+            <button className="admin-md-toggle" type="button" onClick={() => onNavigate("concours")}>
+              Voir tout →
+            </button>
+          }
+        >
+          {stats.concoursSansCorrige.length ? (
+            <ul className="dash-list">
+              {stats.concoursSansCorrige.map((c) => (
+                <li key={c.id}>{c.label}</li>
+              ))}
+            </ul>
+          ) : (
+            <div className="empty-state">Tous les concours ont un corrigé. 🎉</div>
+          )}
+        </DashboardCard>
+
+        <DashboardCard
+          title="⏰ Concours ouverts qui ferment bientôt"
+          action={
+            <button className="admin-md-toggle" type="button" onClick={() => onNavigate("news")}>
+              Voir tout →
+            </button>
+          }
+        >
+          {stats.newsExpiringSoon.length ? (
+            <ul className="dash-list">
+              {stats.newsExpiringSoon.map((n) => (
+                <li key={n.id}>
+                  {n.titre} {n.ville ? `— ${n.ville}` : ""} <span className="dash-list-date">({n.date_limite})</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="empty-state">Rien ne ferme dans les 14 prochains jours.</div>
+          )}
+        </DashboardCard>
+      </div>
+
+      <DashboardCard
+        title="🕓 Derniers concours ajoutés"
+        action={
+          <button className="admin-md-toggle" type="button" onClick={() => onNavigate("concours")}>
+            Voir tout →
+          </button>
+        }
+      >
+        {stats.recentConcours.length ? (
+          <ul className="dash-list">
+            {stats.recentConcours.map((c) => (
               <li key={c.id}>
-                <span>{c.label}</span>
-                <strong>
-                  {c.views} vue{c.views > 1 ? "s" : ""}
-                </strong>
+                {c.label} {c.hasCorrige ? "✅" : ""}
               </li>
             ))}
-          </ol>
+          </ul>
         ) : (
-          <div className="empty-state">Pas encore de données — reviens après quelques visites sur le site.</div>
+          <div className="empty-state">Aucun concours pour l'instant.</div>
         )}
-      </div>
-
-      <div className="admin-card" style={{ marginTop: 18 }}>
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>PDF par type</h2>
-        <div className="admin-row-actions">
-          <span className="admin-image-hint">Concours : {stats.pdfByKind.concours || 0}</span>
-          <span className="admin-image-hint">Cours : {stats.pdfByKind.cours || 0}</span>
-          <span className="admin-image-hint">Évaluation : {stats.pdfByKind.evaluation || 0}</span>
-        </div>
-      </div>
+      </DashboardCard>
     </>
   );
 }
@@ -957,7 +1071,11 @@ export default function AdminPage() {
             {active.icon} {active.label}
           </h1>
           {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
-          {tab === "dashboard" ? <StatsPanel key="dashboard" /> : <ResourcePanel key={tab} config={active.config} />}
+          {tab === "dashboard" ? (
+            <StatsPanel key="dashboard" onNavigate={setTab} />
+          ) : (
+            <ResourcePanel key={tab} config={active.config} />
+          )}
         </div>
       </main>
     </div>

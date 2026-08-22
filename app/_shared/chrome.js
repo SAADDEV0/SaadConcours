@@ -48,7 +48,6 @@ export function chromeHtml({ active, showSearch }) {
       <a class="view-nav-btn${active === "news" ? " active" : ""}" href="/news">🆕 Concours ouverts</a>
     </nav>
     ${active === "concours" ? `<div class="stat-pill" id="statPill">— concours</div>` : ""}
-    <div class="stat-pill" id="visitorPill" title="Nombre de visites">👁 —</div>
     <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
   </div>
 </header>
@@ -56,22 +55,14 @@ export function chromeHtml({ active, showSearch }) {
 }
 
 export const chromeScript = function initChrome() {
-  (function initVisitorCounter() {
-    const alreadyCounted = localStorage.getItem("sc_visited") === "1";
-    const endpoint = alreadyCounted
-      ? "https://abacus.jasoncameron.dev/get/saadconcours-maroc/visits"
-      : "https://abacus.jasoncameron.dev/hit/saadconcours-maroc/visits";
-    fetch(endpoint)
-      .then((r) => r.json())
-      .then((d) => {
-        if (!alreadyCounted) localStorage.setItem("sc_visited", "1");
-        const el = document.getElementById("visitorPill");
-        if (el && typeof d.value === "number") el.textContent = `👁 ${d.value.toLocaleString("fr-FR")} visites`;
-      })
-      .catch(() => {
-        const el = document.getElementById("visitorPill");
-        if (el) el.style.display = "none";
-      });
+  // First-party visit tracking, replacing the old public visitor-counter
+  // widget — no longer shown on the site, but every unique browser still
+  // pings once (localStorage-gated, same "first hit only" semantics the
+  // old counter used) so the real number stays visible in /admin.
+  (function initVisitorTracking() {
+    if (localStorage.getItem("sc_visited") === "1") return;
+    localStorage.setItem("sc_visited", "1");
+    fetch("/api/track/pageview", { method: "POST", keepalive: true }).catch(() => {});
   })();
 
   (function initDua() {
