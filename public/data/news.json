@@ -1,5 +1,17 @@
 [
   {
+    "id": "1bd24067474c3e03",
+    "titre": "Master FLSH Ain Chock Casablanca 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-ain-chock-casablanca-2026.html",
+    "date_publication": "2026-08-24"
+  },
+  {
     "id": "104898bac8b5058a",
     "titre": "Master ENSIASD Taroudant 2026-2027",
     "etablissement": null,
@@ -1425,18 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://candidature.enset-media.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/06/master-enset-mohammedia-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "713901730f0d11d8",
-    "titre": "Master ESI Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://esi.ac.ma/wp-content/uploads/2026/06/Fiche.Candidature_MMI_2026-2027_formation_initiale.docx",
-    "source": "https://www.almaster-maroc.com/2026/07/master-esi-rabat-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
