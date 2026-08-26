@@ -1,5 +1,113 @@
 [
   {
+    "id": "f10400051b5216c8",
+    "titre": "Master FSJP Settat 2026-2027",
+    "etablissement": null,
+    "ville": "Settat",
+    "filiere": null,
+    "date_limite": "2026-09-02",
+    "cloture": false,
+    "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "723246f5bda614cc",
+    "titre": "Master FLSH Mohammedia 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Mohammedia",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://flshm.ma/licmas26/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-mohammedia-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "443e7f36b70745bd",
+    "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": "2026-08-31",
+    "cloture": false,
+    "lien_inscription": "https://fdainscriptions.univh2c.ma/Insc/Master/Start/index2.php",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-sebaa-casablanca-2026.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "e1f817d48ef8f17b",
+    "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": "2026-09-15",
+    "cloture": false,
+    "lien_inscription": "https://preins-fsjesac.univh2c.ma/preins/public/inscription",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-chock-casablanca-2026.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "24f571e739698040",
+    "titre": "Master FEG Béni Mellal 2026-2027",
+    "etablissement": "FEG",
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/08/master-feg-beni-mellal-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "32abd5531715a10c",
+    "titre": "Master FLSH El Jadida 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "El Jadida",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
+    "source": "https://www.almaster-maroc.com/2026/07/master-flsh-el-jadida-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "ee7330069b66efe8",
+    "titre": "Master FS El Jadida 2026-2027",
+    "etablissement": null,
+    "ville": "El Jadida",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fs-el-jadida-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "6d95f5135f660559",
+    "titre": "Master FS Kénitra 2026-2027",
+    "etablissement": null,
+    "ville": "Kénitra",
+    "filiere": null,
+    "date_limite": "2026-09-06",
+    "cloture": false,
+    "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fs-kenitra-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
+    "id": "7be5ab195374c88f",
+    "titre": "Master FEG Settat 2026-2027",
+    "etablissement": "FEG",
+    "ville": "Settat",
+    "filiere": null,
+    "date_limite": "2026-09-11",
+    "cloture": false,
+    "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/9",
+    "source": "https://www.almaster-maroc.com/2026/08/master-feg-settat-2026-2027.html",
+    "date_publication": "2026-08-26"
+  },
+  {
     "id": "1bd24067474c3e03",
     "titre": "Master FLSH Ain Chock Casablanca 2026-2027",
     "etablissement": "FLSH",
@@ -48,18 +156,6 @@
     "date_publication": "2026-08-21"
   },
   {
-    "id": "f10400051b5216c8",
-    "titre": "Master FSJP Settat 2026-2027",
-    "etablissement": null,
-    "ville": "Settat",
-    "filiere": null,
-    "date_limite": "2026-09-02",
-    "cloture": false,
-    "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
-    "date_publication": "2026-08-21"
-  },
-  {
     "id": "fa5c242f44eb7bd4",
     "titre": "Master FSJP El Jadida 2026-2027",
     "etablissement": null,
@@ -82,18 +178,6 @@
     "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-feg-el-jadida-2026-2027.html",
     "date_publication": "2026-08-19"
-  },
-  {
-    "id": "723246f5bda614cc",
-    "titre": "Master FLSH Mohammedia 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Mohammedia",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://flshm.ma/licmas26/",
-    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-mohammedia-2026-2027.html",
-    "date_publication": "2026-08-15"
   },
   {
     "id": "fb6e124a724e10d7",
@@ -237,18 +321,6 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/08/master-encg-fes-2026-2027.html",
-    "date_publication": "2026-08-11"
-  },
-  {
-    "id": "443e7f36b70745bd",
-    "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": false,
-    "lien_inscription": "https://fdainscriptions.univh2c.ma/Insc/Master/Start/index2.php",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-sebaa-casablanca-2026.html",
     "date_publication": "2026-08-11"
   },
   {
@@ -456,18 +528,6 @@
     "date_publication": "2026-08-10"
   },
   {
-    "id": "e1f817d48ef8f17b",
-    "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": "2026-09-15",
-    "cloture": false,
-    "lien_inscription": "https://preins-fsjesac.univh2c.ma/preins/public/inscription",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-chock-casablanca-2026.html",
-    "date_publication": "2026-08-10"
-  },
-  {
     "id": "a5c1460887cd66e3",
     "titre": "Master Université Mohammed Premier Oujda 2026-2027",
     "etablissement": null,
@@ -588,18 +648,6 @@
     "date_publication": "2026-08-10"
   },
   {
-    "id": "24f571e739698040",
-    "titre": "Master FEG Béni Mellal 2026-2027",
-    "etablissement": "FEG",
-    "ville": "Béni Mellal",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/08/master-feg-beni-mellal-2026-2027.html",
-    "date_publication": "2026-08-09"
-  },
-  {
     "id": "447e7d92f9a1a01a",
     "titre": "Master FLASH Settat 2026-2027",
     "etablissement": null,
@@ -684,18 +732,6 @@
     "date_publication": "2026-08-07"
   },
   {
-    "id": "32abd5531715a10c",
-    "titre": "Master FLSH El Jadida 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "El Jadida",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
-    "source": "https://www.almaster-maroc.com/2026/07/master-flsh-el-jadida-2026-2027.html",
-    "date_publication": "2026-08-07"
-  },
-  {
     "id": "68f5974581dd1458",
     "titre": "Master FST Mohammedia 2026-2027",
     "etablissement": "FST",
@@ -717,18 +753,6 @@
     "cloture": false,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-feg-kenitra-2026-2027.html",
-    "date_publication": "2026-08-06"
-  },
-  {
-    "id": "ee7330069b66efe8",
-    "titre": "Master FS El Jadida 2026-2027",
-    "etablissement": null,
-    "ville": "El Jadida",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fs-el-jadida-2026-2027.html",
     "date_publication": "2026-08-06"
   },
   {
@@ -789,18 +813,6 @@
     "cloture": false,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-fshs-kenitra-2026-2027.html",
-    "date_publication": "2026-08-06"
-  },
-  {
-    "id": "6d95f5135f660559",
-    "titre": "Master FS Kénitra 2026-2027",
-    "etablissement": null,
-    "ville": "Kénitra",
-    "filiere": null,
-    "date_limite": "2026-09-06",
-    "cloture": false,
-    "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fs-kenitra-2026-2027.html",
     "date_publication": "2026-08-06"
   },
   {
@@ -933,18 +945,6 @@
     "cloture": false,
     "lien_inscription": "https://e-candidature.uca.ma/master.fegk/form/index.php",
     "source": "https://www.almaster-maroc.com/2026/08/master-feg-kelaa-sraghna-2026-2027.html",
-    "date_publication": "2026-08-04"
-  },
-  {
-    "id": "7be5ab195374c88f",
-    "titre": "Master FEG Settat 2026-2027",
-    "etablissement": "FEG",
-    "ville": "Settat",
-    "filiere": null,
-    "date_limite": "2026-09-11",
-    "cloture": false,
-    "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/9",
-    "source": "https://www.almaster-maroc.com/2026/08/master-feg-settat-2026-2027.html",
     "date_publication": "2026-08-04"
   },
   {
