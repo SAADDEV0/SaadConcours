@@ -9,7 +9,7 @@
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
-    "date_publication": "2026-08-26"
+    "date_publication": "2026-08-27"
   },
   {
     "id": "723246f5bda614cc",
@@ -653,7 +653,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": "2026-09-02",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/8",
     "source": "https://www.almaster-maroc.com/2026/08/master-flash-settat-2026-2027.html",
@@ -965,7 +965,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-08-31",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
@@ -1265,7 +1265,7 @@
     "etablissement": "ENS",
     "ville": "Casablanca",
     "filiere": null,
-    "date_limite": "2026-09-04",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://enscasa.ac.ma/preinscription-masters/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ens-casablanca-2026-2027.html",
