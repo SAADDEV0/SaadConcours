@@ -340,6 +340,7 @@ function ResourcePanel({ config }) {
   const [customId, setCustomId] = useState("");
   const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
+  const [info, setInfo] = useState("");
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(() => new Set());
@@ -447,12 +448,30 @@ function ResourcePanel({ config }) {
     }
   }
 
-  function startEdit(item) {
+  async function startEdit(item) {
     setEditingId(item.id);
     setForm(toFormValues(item, fields));
     setMsg("");
     setError("");
+    setInfo("");
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // corrige_from_github (set by GET /api/concours) means a corrigé already
+    // exists in the repo's data/corriges/ folder but was never copied into
+    // corrige_md — pull it in here instead of leaving the admin looking at
+    // an empty field for a corrigé that already exists.
+    if (item.corrige_from_github) {
+      try {
+        const res = await fetch(`${apiBase}/${encodeURIComponent(item.id)}/corrige`);
+        if (res.ok) {
+          const data = await res.json();
+          setForm((prev) => ({ ...prev, corrige_md: data.corrige_md }));
+          setInfo("Corrigé chargé depuis GitHub — vérifie le contenu avant d'enregistrer.");
+        }
+      } catch {
+        // best-effort: leave the field empty if the fetch fails
+      }
+    }
   }
 
   function startNew() {
@@ -461,12 +480,14 @@ function ResourcePanel({ config }) {
     setCustomId("");
     setMsg("");
     setError("");
+    setInfo("");
   }
 
   async function onSubmit(e) {
     e.preventDefault();
     setError("");
     setMsg("");
+    setInfo("");
     const dup = findDuplicate();
     if (dup && !confirm(`Un ${resourceLabel.toLowerCase()} similaire existe déjà (${dup.id}). Ajouter quand même ?`)) {
       return;
@@ -518,14 +539,19 @@ function ResourcePanel({ config }) {
           {editingId ? `Modifier : ${editingId}` : `Ajouter — ${resourceLabel}`}
         </h2>
         <form onSubmit={onSubmit}>
+          <div className="admin-form-grid">
           {!editingId && showIdField && (
-            <div className="admin-field">
+            <div className="admin-field admin-form-wide">
               <label>Identifiant (optionnel, généré automatiquement sinon)</label>
               <input value={customId} onChange={(e) => setCustomId(e.target.value)} placeholder={idPlaceholder} />
             </div>
           )}
-          {fields.map((f) => (
-            <div className={f.type === "quiz-questions" ? "" : "admin-field"} key={f.key}>
+          {fields.map((f) => {
+            const isWide =
+              f.type === "textarea" || f.markdown || f.type === "image-list" || f.type === "quiz-questions" || f.type === "list";
+            const fieldClass = f.type === "quiz-questions" ? "admin-form-wide" : "admin-field" + (isWide ? " admin-form-wide" : "");
+            return (
+            <div className={fieldClass} key={f.key}>
               {f.type === "checkbox" ? (
                 <label className="admin-checkbox-label">
                   <input
@@ -598,8 +624,10 @@ function ResourcePanel({ config }) {
                 </>
               )}
             </div>
-          ))}
-          <div style={{ display: "flex", gap: 8 }}>
+            );
+          })}
+          </div>
+          <div className="admin-form-actions">
             <button className="admin-btn" type="submit" disabled={saving}>
               {saving ? "Enregistrement..." : editingId ? "Enregistrer les modifications" : "Ajouter"}
             </button>
@@ -610,6 +638,7 @@ function ResourcePanel({ config }) {
             )}
           </div>
           {error && <div className="admin-error">{error}</div>}
+          {info && <div className="admin-info">{info}</div>}
           {msg && <div className="admin-msg">{msg}</div>}
         </form>
       </div>
@@ -727,7 +756,11 @@ const CONCOURS_CONFIG = {
     { key: "ville", label: "Ville" },
     { key: "filiere", label: "Filière" },
     { key: "annee", label: "Année" },
-    { key: "corrige", label: "Corrigé", render: (i) => (i.corrige_md ? "✅" : "—") },
+    {
+      key: "corrige",
+      label: "Corrigé",
+      render: (i) => (i.corrige_md ? "✅" : i.corrige_from_github ? "📄 GitHub (à valider)" : "—"),
+    },
   ],
   duplicateKeys: ["annee", "ville", "etablissement", "filiere"],
 };

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStats } from "@/lib/analytics";
-import { getAllConcours, getAllCours, getAllQuiz, getAllNews } from "@/lib/store";
+import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getCorrigeIds } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +20,13 @@ function toCsv(rows) {
 export async function GET(req) {
   const format = req.nextUrl.searchParams.get("format") === "csv" ? "csv" : "json";
 
-  const [stats, concours, cours, quiz, news] = await Promise.all([
+  const [stats, concours, cours, quiz, news, corrigeIds] = await Promise.all([
     getStats(),
     getAllConcours(),
     getAllCours(),
     getAllQuiz(),
     getAllNews(),
+    getCorrigeIds(),
   ]);
 
   const concoursById = Object.fromEntries(concours.map((c) => [c.id, c]));
@@ -56,7 +57,7 @@ export async function GET(req) {
       cours: cours.length,
       quiz: quiz.length,
       news: news.length,
-      concoursAvecCorrige: concours.filter((c) => c.corrige_md).length,
+      concoursAvecCorrige: concours.filter((c) => c.corrige_md || corrigeIds.has(c.id)).length,
       newsOuvertes: news.filter((n) => !n.cloture).length,
     },
   };

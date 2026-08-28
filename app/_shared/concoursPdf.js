@@ -201,7 +201,20 @@ export async function downloadConcoursPdf(c) {
   addWrappedLine("Source", { bold: true, size: 10 });
   addWrappedLine(c.source || "non précisée", { size: 9, color: [110, 110, 120] });
 
-  if (c.corrige_md) {
+  // c.corrige_md is empty when the corrigé exists only as a raw file in the
+  // repo's data/corriges/ folder (see lib/store.js getCorrigeFile) — fetch
+  // it on demand rather than silently leaving it out of the PDF.
+  let corrigeMd = c.corrige_md;
+  if (!corrigeMd && c.id) {
+    try {
+      const res = await fetch(`/api/concours/${encodeURIComponent(c.id)}/corrige`);
+      if (res.ok) corrigeMd = (await res.json()).corrige_md;
+    } catch {
+      // best-effort: PDF is still useful without the corrigé
+    }
+  }
+
+  if (corrigeMd) {
     doc.addPage();
     y = 26;
     doc.setFont(undefined, "bold");
@@ -217,7 +230,7 @@ export async function downloadConcoursPdf(c) {
     doc.setDrawColor(200, 200, 210);
     doc.line(marginX, y, pageW - marginX, y);
     y += 6;
-    renderMarkdown(c.corrige_md);
+    renderMarkdown(corrigeMd);
   }
 
   for (const imgPath of c.images || []) {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStats } from "@/lib/analytics";
-import { getAllConcours, getAllCours, getAllQuiz, getAllNews } from "@/lib/store";
+import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getCorrigeIds } from "@/lib/store";
 
 // Nothing in this route's own code touches request-specific data (no
 // cookies/headers read, no uncached fetch) now that the abacus call is
@@ -12,13 +12,20 @@ export const dynamic = "force-dynamic";
 // only reads, but still sits behind the admin cookie (see middleware.js)
 // since it exposes usage numbers not meant to be public.
 export async function GET() {
-  const [stats, concours, cours, quiz, news] = await Promise.all([
+  const [stats, concours, cours, quiz, news, corrigeIds] = await Promise.all([
     getStats(),
     getAllConcours(),
     getAllCours(),
     getAllQuiz(),
     getAllNews(),
+    getCorrigeIds(),
   ]);
+
+  // A concours counts as "having a corrigé" whether it's the reviewed
+  // corrige_md field or a file already committed to data/corriges/ that
+  // was never copied into it — otherwise this dashboard flags concours as
+  // missing a corrigé that already exist in the repo.
+  const hasCorrige = (c) => Boolean(c.corrige_md) || corrigeIds.has(c.id);
 
   const concoursById = Object.fromEntries(concours.map((c) => [c.id, c]));
   const topConcours = stats.topConcours.map(({ member, score }) => ({
@@ -35,10 +42,10 @@ export async function GET() {
   const recentConcours = concours
     .slice(-6)
     .reverse()
-    .map((c) => ({ id: c.id, label: `${c.etablissement} — ${c.ville} (${c.annee})`, hasCorrige: Boolean(c.corrige_md) }));
+    .map((c) => ({ id: c.id, label: `${c.etablissement} — ${c.ville} (${c.annee})`, hasCorrige: hasCorrige(c) }));
 
   const concoursSansCorrige = concours
-    .filter((c) => !c.corrige_md)
+    .filter((c) => !hasCorrige(c))
     .slice(-8)
     .reverse()
     .map((c) => ({ id: c.id, label: `${c.etablissement} — ${c.ville} (${c.annee})` }));
@@ -62,7 +69,7 @@ export async function GET() {
       cours: cours.length,
       quiz: quiz.length,
       news: news.length,
-      concoursAvecCorrige: concours.filter((c) => c.corrige_md).length,
+      concoursAvecCorrige: concours.filter(hasCorrige).length,
       newsOuvertes: news.filter((n) => !n.cloture).length,
     },
   });

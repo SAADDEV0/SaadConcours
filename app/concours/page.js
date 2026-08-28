@@ -191,7 +191,7 @@ export default function ConcoursPage() {
         const card = document.createElement("div");
         card.className = "card";
         const hasImg = (c.images || []).length > 0;
-        const hasCorrige = Boolean(c.corrige_md);
+        const hasCorrige = Boolean(c.corrige_md || c.corrige_from_github);
         card.innerHTML = `
           <div class="card-top">
             <div class="card-title">${escapeHtml(c.etablissement)}</div>
@@ -231,6 +231,28 @@ export default function ConcoursPage() {
       $("#lightbox").classList.remove("open");
     }
 
+    // corrige_md is empty when the corrigé exists only as a raw file in the
+    // repo's data/corriges/ folder (corrige_from_github, set by GET
+    // /api/concours) — render immediately if we already have it, otherwise
+    // fetch it lazily so the list load itself doesn't pay for every
+    // concours' corrigé content up front.
+    function applyCorrige(corrigeMd, c) {
+      const render = (md) => {
+        const hasCorrige = Boolean(md);
+        $("#tabBtnCorrige").style.display = hasCorrige ? "" : "none";
+        $("#corrigeContent").innerHTML = hasCorrige ? (window.marked ? marked.parse(md) : md) : "";
+      };
+      render(corrigeMd);
+      if (!corrigeMd && c.corrige_from_github) {
+        fetch(`/api/concours/${encodeURIComponent(c.id)}/corrige`)
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (data && data.corrige_md && currentModalConcours === c) render(data.corrige_md);
+          })
+          .catch(() => {});
+      }
+    }
+
     function openModal(c) {
       currentModalConcours = c;
       trackConcoursView(c.id);
@@ -248,13 +270,7 @@ export default function ConcoursPage() {
       const enonceHtml = window.marked ? marked.parse(formattedEnonce || "*Énoncé non disponible.*") : formattedEnonce || "";
       $("#enonceContent").innerHTML = enonceHtml;
 
-      const hasCorrige = Boolean(c.corrige_md);
-      $("#tabBtnCorrige").style.display = hasCorrige ? "" : "none";
-      $("#corrigeContent").innerHTML = hasCorrige
-        ? window.marked
-          ? marked.parse(c.corrige_md)
-          : c.corrige_md
-        : "";
+      applyCorrige(c.corrige_md, c);
 
       const gallery = $("#imageGallery");
       gallery.innerHTML = "";

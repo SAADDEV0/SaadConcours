@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllConcours } from "@/lib/store";
+import { getAllConcours, getCorrigeFile } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { formatQCM } from "../../_shared/concoursFormat";
 import ConcoursDetailClient from "./ConcoursDetailClient";
@@ -12,14 +12,24 @@ async function findConcours(id) {
   return list.find((c) => c.id === id) || null;
 }
 
+// corrige_md on the concours entry is the reviewed/published version, but a
+// corrigé can also exist as a raw file in public/data/corriges/<id>.md
+// (bulk import, manual commit) without ever having been copied there —
+// fall back to it so the site doesn't silently hide a corrigé that's
+// already sitting in the repo.
+async function resolveCorrigeMd(c) {
+  return c.corrige_md || (await getCorrigeFile(c.id));
+}
+
 export async function generateMetadata({ params }) {
   const c = await findConcours(params.id);
   if (!c) return {};
 
+  const corrigeMd = await resolveCorrigeMd(c);
   const title = `Concours ${c.etablissement} ${c.ville} ${c.annee}${c.filiere ? " — " + c.filiere : ""}`;
   const description = `Sujet de concours réel — ${c.etablissement}, ${c.ville}, session ${c.annee}${
     c.filiere ? `, filière ${c.filiere}` : ""
-  }.${c.corrige_md ? " Corrigé indicatif disponible." : ""} Énoncé complet et téléchargement PDF gratuit sur SaadConcours.`;
+  }.${corrigeMd ? " Corrigé indicatif disponible." : ""} Énoncé complet et téléchargement PDF gratuit sur SaadConcours.`;
   const url = `${SITE_URL}/concours/${c.id}`;
 
   return {
@@ -45,7 +55,8 @@ export default async function ConcoursDetailPage({ params }) {
   if (!c) notFound();
 
   const enonceHtml = marked.parse(formatQCM(c.enonce_md) || "*Énoncé non disponible.*");
-  const corrigeHtml = c.corrige_md ? marked.parse(formatQCM(c.corrige_md)) : null;
+  const corrigeMd = await resolveCorrigeMd(c);
+  const corrigeHtml = corrigeMd ? marked.parse(formatQCM(corrigeMd)) : null;
   const url = `${SITE_URL}/concours/${c.id}`;
 
   // c.source is free text ("- Lien / origine du sujet : https://...") in
@@ -87,7 +98,7 @@ export default async function ConcoursDetailPage({ params }) {
             <span className="info-tag">📍 {c.ville}</span>
             <span className="info-tag">📅 {c.annee}</span>
             {c.difficulte && <span className="info-tag">⭐ {c.difficulte}</span>}
-            {c.corrige_md && <span className="corrige-badge">✅ corrigé disponible</span>}
+            {corrigeMd && <span className="corrige-badge">✅ corrigé disponible</span>}
           </div>
         </div>
 
@@ -123,7 +134,7 @@ export default async function ConcoursDetailPage({ params }) {
           </p>
         )}
 
-        <ConcoursDetailClient concours={c} />
+        <ConcoursDetailClient concours={corrigeMd ? { ...c, corrige_md: corrigeMd } : c} />
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
