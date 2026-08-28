@@ -1,0 +1,78 @@
+## Corrigé indicatif
+
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée pour cette session. Relecture humaine recommandée, notamment sur la décomposition des écarts (méthode des 3 écarts).
+
+### Sujet d'ordre général — Transformation digitale et performance des entreprises marocaines
+
+Trame de réponse : automatisation des processus et réduction des coûts (I) ; ouverture de nouveaux marchés et amélioration de la gestion des risques/de la conformité (II) ; limites — coût de l'investissement, fracture numérique PME/grandes entreprises, nécessité d'accompagner le changement (III). Conclusion : effet positif conditionné à une intégration stratégique globale (organisation, compétences, gouvernance des données), pas à un simple projet informatique isolé.
+
+### Partie 1 — Audit externe et gouvernance : quels impacts sur la performance des entreprises marocaines ?
+
+Trame de réponse :
+
+**I. L'audit externe, garant de la fiabilité de l'information financière**
+- Certification des comptes : renforce la confiance des actionnaires, créanciers et investisseurs, réduit l'asymétrie d'information (théorie de l'agence).
+- Effet sur le coût du capital : une information financière certifiée fiable facilite l'accès au financement bancaire et de marché, à des conditions plus favorables.
+
+**II. L'audit externe, levier d'amélioration de la gouvernance**
+- Recommandations sur le contrôle interne formulées à l'occasion de la mission (lettre de recommandations), qui contribuent à corriger les faiblesses organisationnelles.
+- Contribution à la responsabilisation des dirigeants (reddition des comptes) et à la protection des actionnaires minoritaires.
+- Rôle du commissaire aux comptes marocain dans la détection des irrégularités et la révélation des faits délictueux (obligation légale de révélation au procureur du Roi).
+
+**III. Limites et conditions d'efficacité**
+- L'auditeur a une obligation de moyens, non de résultats : il ne garantit pas l'absence totale de fraude.
+- L'impact positif sur la performance suppose l'indépendance effective de l'auditeur (rotation, incompatibilités) et une culture de gouvernance réceptive aux recommandations, faute de quoi l'audit reste formel sans effet réel sur la performance.
+
+**Conclusion attendue :** l'audit externe améliore la performance des entreprises marocaines essentiellement de façon indirecte — via la confiance des parties prenantes et l'amélioration du contrôle interne — mais son efficacité dépend fortement de l'indépendance réelle de l'auditeur et de l'appropriation des recommandations par la gouvernance de l'entreprise.
+
+### Partie 2 — Exercice : analyse des écarts (société ALPHA SA, modèle X)
+
+**Fiche de coût standard unitaire (série de 2 500 unités) :**
+
+| Élément | Calcul | Coût standard unitaire |
+|---|---|---|
+| Tissu | 1,21 m × 10,20 dh | 12,342 dh |
+| Fournitures | — | 1,83 dh |
+| Centre de coupe | 3,6 min × 0,4 dh | 1,44 dh |
+| Centre montage usine | 5,1 min × 0,48 dh | 2,448 dh |
+| **Total** | | **18,06 dh** |
+
+Budget standard pour la série de 2 500 unités : coupe = 2 500 × 1,44 = **3 600 dh** (coût quasi fixe, indépendant du volume coupé, comme le précise l'énoncé) ; montage = 2 500 × 2,448 = **6 120 dh**, dont 2/3 fixe (**4 080 dh**) et 1/3 variable (**2 040 dh**, soit un taux variable de 2 040 / 12 750 min = 0,16 dh/min, et donc un taux fixe de 4 080/12 750 = 0,32 dh/min — on retrouve bien 0,32 + 0,16 = 0,48 dh/min).
+
+**1. Tableau de comparaison — coût préétabli / coût réel pour 2 320 articles**
+
+| Élément | Coût préétabli (2 320 × coût standard) | Coût réel constaté | Écart (Réel − Préétabli) |
+|---|---|---|---|
+| Tissu | 2 320 × 12,342 = **28 633,44** | 3 050 m × 10,24 = **31 232,00** | **+2 598,56** (D) |
+| Fournitures | 2 320 × 1,83 = **4 245,60** | **4 445,60** | **+200,00** (D) |
+| Coupe | 2 320 × 1,44 = **3 340,80** | **3 576,00** | **+235,20** (D) |
+| Montage usine | 2 320 × 2,448 = **5 679,36** | **5 940,00** | **+260,64** (D) |
+| **Total** | **41 899,20** | **45 193,60** | **+3 294,40 (D)** |
+
+Le coût réel des 2 320 articles dépasse le coût préétabli de 3 294,40 dh (écart global défavorable), à décomposer ci-dessous.
+
+**2. Écarts sur charges directes**
+
+*Tissu :*
+- Écart sur prix = (Prix réel − Prix standard) × Quantité réelle = (10,24 − 10,20) × 3 050 = **+122,00 (D)**
+- Écart sur quantité = (Quantité réelle − Quantité standard pour la production réelle) × Prix standard = (3 050 − 2 320×1,21) × 10,20 = (3 050 − 2 807,20) × 10,20 = **+2 476,56 (D)**
+- Vérification : 122,00 + 2 476,56 = 2 598,56 ✓
+
+*Fournitures :* le standard est donné en valeur directe (1,83 dh/unité), sans détail prix/quantité séparé — seul l'écart global est calculable : **+200,00 (D)**.
+
+**3. Écarts sur charges indirectes (méthode des 3 écarts)**
+
+*Centre Coupe* (taux d'imputation standard = 3 600 / 9 000 min = 0,4 dh/min ; activité réelle = 149 h = 8 940 min ; activité standard allouée à la production réelle = 2 320 × 3,6 = 8 352 min) :
+- Écart sur budget = Coût réel − Budget (fixe, indépendant du volume) = 3 576 − 3 600 = **−24 (F)**
+- Écart sur activité = Budget − (taux standard × activité réelle) = 3 600 − (0,4 × 8 940) = 3 600 − 3 576 = **+24 (D)**
+- Écart sur rendement = (taux standard × activité réelle) − (taux standard × activité standard allouée) = 3 576 − (0,4 × 8 352) = 3 576 − 3 340,80 = **+235,20 (D)**
+- Vérification : −24 + 24 + 235,20 = 235,20 ✓
+
+*Centre Montage usine* (activité réelle = 198 h = 11 880 min ; activité standard allouée = 2 320 × 5,1 = 11 832 min ; activité normale = 12 750 min) :
+- Budget flexible pour l'activité réelle = 4 080 (fixe) + (11 880 × 0,16) = 4 080 + 1 900,80 = **5 980,80**
+- Écart sur budget = Coût réel − Budget flexible = 5 940 − 5 980,80 = **−40,80 (F)**
+- Écart sur activité = Budget flexible − (taux standard plein × activité réelle) = 5 980,80 − (0,48 × 11 880) = 5 980,80 − 5 702,40 = **+278,40 (D)** — traduit la sous-activité du centre (11 880 min réelles < 12 750 min d'activité normale), qui alourdit le coût fixe unitaire imputé.
+- Écart sur rendement = (taux standard × activité réelle) − (taux standard × activité standard allouée) = 5 702,40 − (0,48 × 11 832) = 5 702,40 − 5 679,36 = **+23,04 (D)**
+- Vérification : −40,80 + 278,40 + 23,04 = 260,64 ✓
+
+**Synthèse :** l'essentiel du dérapage provient du tissu (consommation excessive de matière, +2 476,56 dh) et de la sous-activité du centre montage (+278,40 dh) ; les écarts sur prix/taux restent marginaux, ce qui oriente les actions correctives vers le rendement matière et le taux d'utilisation du centre montage plutôt que vers les achats.
