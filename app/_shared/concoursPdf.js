@@ -118,7 +118,7 @@ export async function downloadConcoursPdf(c) {
   doc.setFont(undefined, "normal");
   doc.setFontSize(10.5);
   doc.setTextColor(90, 90, 100);
-  doc.text(`${c.filiere} · ${c.ville}${c.difficulte ? " · Difficulté : " + c.difficulte : ""}`, marginX, y);
+  doc.text(`${c.master_reel || c.filiere} · ${c.ville}${c.difficulte ? " · Difficulté : " + c.difficulte : ""}`, marginX, y);
   y += 5;
   doc.setDrawColor(200, 200, 210);
   doc.line(marginX, y, pageW - marginX, y);

@@ -167,7 +167,7 @@ export default function ConcoursPage() {
         if (annee && String(c.annee) !== annee) return false;
         if (activeModule && !(c.modules || []).includes(activeModule)) return false;
         if (q) {
-          const hay = [c.ville, c.etablissement, c.filiere, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")]
+          const hay = [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")]
             .join(" ")
             .toLowerCase();
           if (!hay.includes(q)) return false;
@@ -201,7 +201,7 @@ export default function ConcoursPage() {
               <button class="card-dl" title="Télécharger l'énoncé (PDF)">⬇</button>
             </div>
           </div>
-          <div class="card-meta">📍 ${escapeHtml(c.ville)} · ${escapeHtml(c.filiere)}</div>
+          <div class="card-meta">📍 ${escapeHtml(c.ville)} · ${escapeHtml(c.master_reel || c.filiere)}</div>
           <div class="card-modules">${(c.modules || [])
             .slice(0, 4)
             .map((m) => `<span class="mod-tag">${escapeHtml(m)}</span>`)
@@ -257,11 +257,11 @@ export default function ConcoursPage() {
       currentModalConcours = c;
       trackConcoursView(c.id);
       $("#modalTitle").textContent = `${c.etablissement} — ${c.annee}`;
-      $("#modalSub").textContent = `${c.filiere} · ${c.ville}`;
+      $("#modalSub").textContent = `${c.master_reel || c.filiere} · ${c.ville}`;
       $("#modalInfoRow").innerHTML = `
         <span class="info-tag">📍 ${escapeHtml(c.ville)}</span>
         <span class="info-tag">🏫 ${escapeHtml(c.etablissement)}</span>
-        <span class="info-tag">🎓 ${escapeHtml(c.filiere)}</span>
+        <span class="info-tag">🎓 ${escapeHtml(c.master_reel || c.filiere)}</span>
         <span class="info-tag">📅 ${escapeHtml(String(c.annee))}</span>
         <span class="info-tag">⭐ ${escapeHtml(c.difficulte || "?")}</span>
       `;

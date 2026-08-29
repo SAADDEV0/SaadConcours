@@ -5,6 +5,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Fiscalité des Entreprises",
       "Droit des Sociétés",
@@ -25,6 +26,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Finance",
+    "master_reel": "Economie et Management Internationaux / Economie et Stratégies des Institutions Financières / Finance, Audit et Contrôle de Gestion (épreuve commune)",
     "modules": [
       "Contrôle de Gestion"
     ],
@@ -42,6 +44,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Comptabilité Approfondie",
       "Analyse Financière",
@@ -62,6 +65,7 @@
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
     "filiere": "Master Audit",
+    "master_reel": "Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité des Sociétés",
       "Comptabilité Approfondie",
@@ -83,6 +87,7 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Master Finance",
+    "master_reel": "Ingénierie Financière Publique (IFP)",
     "modules": [
       "Macroéconomie"
     ],
@@ -100,6 +105,7 @@
     "ville": "El Jadida",
     "etablissement": "Faculté Polydisciplinaire El Jadida (Université Chouaïb Doukkali)",
     "filiere": "Master Finance",
+    "master_reel": "Banque et Finance",
     "modules": [
       "Analyse Financière",
       "Gestion de Trésorerie",
@@ -120,6 +126,7 @@
     "ville": "Kénitra",
     "etablissement": "FSJES Kénitra",
     "filiere": "Master CCA",
+    "master_reel": "Finance/Comptabilité & Management Audit Contrôle",
     "modules": [
       "Contrôle de Gestion",
       "Fiscalité des Entreprises",
@@ -142,6 +149,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Finance",
+    "master_reel": "Economie et Management Internationaux / Economie et Stratégies des Institutions Financières / Economie Spatiale et Gouvernance Territoriale / Finance, Audit et Contrôle de Gestion (épreuve commune)",
     "modules": [
       "Contrôle de Gestion",
       "Analyse Financière"
@@ -160,6 +168,7 @@
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
     "filiere": "Master CCA",
+    "master_reel": "Ingénierie Comptable Financière et Fiscale (ICFF)",
     "modules": [
       "Contrôle de Gestion",
       "Fiscalité des Entreprises",
@@ -181,6 +190,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
     "filiere": "Master GFCF",
+    "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Contrôle de Gestion",
       "Comptabilité Générale",
@@ -222,6 +232,7 @@
     "ville": "Tanger",
     "etablissement": "FSJES Tanger",
     "filiere": "Master Finance",
+    "master_reel": "Finance-Banque et Marchés",
     "modules": [
       "Macroéconomie",
       "Analyse Financière"
@@ -240,6 +251,7 @@
     "ville": "Béni Mellal",
     "etablissement": "Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Audit",
       "Fiscalité des Entreprises",
@@ -265,6 +277,7 @@
     "ville": "Tétouan",
     "etablissement": "Faculté Polydisciplinaire de Tétouan",
     "filiere": "Master Audit",
+    "master_reel": "Finance, Audit et Contrôle de Gestion (FACG)",
     "modules": [
       "Comptabilité Approfondie",
       "Contrôle de Gestion",
@@ -285,6 +298,7 @@
     "ville": "Tétouan",
     "etablissement": "Faculté Polydisciplinaire de Tétouan",
     "filiere": "Master Audit",
+    "master_reel": "Finance, Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité Approfondie",
       "Analyse Financière",
@@ -305,6 +319,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Analyse Financière",
       "Contrôle de Gestion",
@@ -333,6 +348,7 @@
     "ville": "Béni Mellal",
     "etablissement": "Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane)",
     "filiere": "Master CCA",
+    "master_reel": "Contrôle Comptabilité Audit (CCA)",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité des Sociétés",
@@ -362,6 +378,7 @@
     "ville": "Fès",
     "etablissement": "ENCG Fès",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
       "Comptabilité Générale",
@@ -381,6 +398,7 @@
     "ville": "Fès",
     "etablissement": "FSJES Dhar El Mahraz",
     "filiere": "Master Audit",
+    "master_reel": "Management, Audit et Contrôle",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité des Sociétés",
@@ -403,6 +421,7 @@
     "ville": "Settat",
     "etablissement": "ENCG Settat",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
       "Comptabilité Analytique"
@@ -430,6 +449,7 @@
     "ville": "Tétouan",
     "etablissement": "FSJES Tétouan",
     "filiere": "Master Audit",
+    "master_reel": "Finance, Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité Approfondie",
       "Contrôle de Gestion",
@@ -473,6 +493,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
     "filiere": "Master Audit",
+    "master_reel": "Comptabilité, Contrôle de Gestion et Audit (Master Spécialisé)",
     "modules": [
       "Analyse Financière",
       "Comptabilité Générale",
@@ -497,6 +518,7 @@
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (Promotion 1)",
     "modules": [
       "Contrôle de Gestion",
       "Comptabilité Approfondie",
@@ -517,6 +539,7 @@
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (Promotion 1)",
     "modules": [
       "Contrôle de Gestion",
       "Comptabilité Approfondie",
@@ -537,6 +560,7 @@
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
     "filiere": "Master Finance",
+    "master_reel": "Finance et Banque",
     "modules": [
       "Mathématiques Financières",
       "Analyse Financière"
@@ -555,6 +579,7 @@
     "ville": "Tétouan",
     "etablissement": "FSJES Tétouan",
     "filiere": "Master Audit",
+    "master_reel": "Finance, Audit et Contrôle de Gestion (6ème promotion)",
     "modules": [
       "Contrôle de Gestion",
       "Analyse Financière",
@@ -578,6 +603,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA) — Formation Continue",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité des Sociétés",
@@ -598,6 +624,7 @@
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
     "filiere": "Master Finance",
+    "master_reel": "Financement Banques et Investissement (FBI)",
     "modules": [
       "Macroéconomie",
       "Analyse Financière"
@@ -616,6 +643,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Analyse Financière",
       "Fiscalité des Entreprises",
@@ -648,6 +676,7 @@
     "ville": "Kénitra",
     "etablissement": "FEG Kénitra (FSJES)",
     "filiere": "Master Finance",
+    "master_reel": "Banque Assurance (BA)",
     "modules": [
       "Analyse Financière",
       "Comptabilité Générale",
@@ -669,6 +698,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle de Gestion et Audit (Master Spécialisé)",
     "modules": [
       "Contrôle de Gestion",
       "Audit",
@@ -692,6 +722,7 @@
     "ville": "Béni Mellal",
     "etablissement": "Faculté d'Économie et de Gestion Béni Mellal (Sultan Moulay Slimane)",
     "filiere": "Master CCA",
+    "master_reel": "Contrôle Comptabilité Audit (CCA)",
     "modules": [
       "Audit",
       "Contrôle de Gestion",
@@ -716,6 +747,7 @@
     "ville": "Casablanca",
     "etablissement": "ENCG Casablanca",
     "filiere": "Master Finance",
+    "master_reel": "Actuariat et Finance",
     "modules": [
       "Mathématiques Financières",
       "Statistiques et Probabilités"
@@ -737,6 +769,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
     "filiere": "Master Audit",
+    "master_reel": "MS ACGSI",
     "modules": [
       "Comptabilité Approfondie",
       "Fiscalité des Entreprises",
@@ -768,6 +801,7 @@
     "ville": "Fès",
     "etablissement": "FSJES Dhar El Mahraz",
     "filiere": "Master Audit",
+    "master_reel": "Management, Audit et Contrôle",
     "modules": [
       "Analyse Financière",
       "Comptabilité des Sociétés",
@@ -790,6 +824,7 @@
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Gestion de Trésorerie",
       "Analyse Financière"
@@ -811,6 +846,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Audit",
+    "master_reel": "Finance, Audit et Contrôle de Gestion (Master recherche)",
     "modules": [
       "Comptabilité Approfondie",
       "Contrôle de Gestion",
@@ -831,6 +867,7 @@
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
     "filiere": "Master Audit",
+    "master_reel": "Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité des Sociétés",
       "Contrôle de Gestion",
@@ -852,6 +889,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
     "filiere": "Master GFCF",
+    "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité des Sociétés",
@@ -881,6 +919,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle et Audit (CCA) — Master Spécialisé",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité des Sociétés",
@@ -904,6 +943,7 @@
     "ville": "Settat",
     "etablissement": "FSJES Settat",
     "filiere": "Master Audit",
+    "master_reel": "Audit et Contrôle de Gestion",
     "modules": [
       "Audit",
       "Contrôle de Gestion",
@@ -924,6 +964,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle de Gestion et Audit (CCA) — Master Spécialisé",
     "modules": [
       "Contrôle de Gestion",
       "Audit",
@@ -950,6 +991,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Audit",
       "Comptabilité Approfondie",
@@ -978,6 +1020,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
     "filiere": "Master Audit",
+    "master_reel": "MS ACGSI",
     "modules": [
       "Comptabilité Générale",
       "Fiscalité des Entreprises",
@@ -1002,6 +1045,7 @@
     "ville": "Guelmim",
     "etablissement": "FEG Guelmim",
     "filiere": "Master Finance",
+    "master_reel": "Finance, Banque et Assurance (FBA)",
     "modules": [
       "Macroéconomie",
       "Analyse Financière"
@@ -1020,6 +1064,7 @@
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
       "Comptabilité Approfondie",
@@ -1040,6 +1085,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Audit",
+    "master_reel": "Finance, Audit et Contrôle de Gestion (FACG)",
     "modules": [
       "Contrôle de Gestion",
       "Audit",
@@ -1061,6 +1107,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master CCA",
+    "master_reel": "Economie et Management Internationaux / Finance, Audit et Contrôle de Gestion / Finance, Banque et Assurance / Méthodes Informatiques à la Gestion des Entreprises / Actuariat et Gestion des Risques / Evaluation des Politiques Publiques / Finance et Fiscalité / Marketing et Stratégies Commerciales (épreuve commune)",
     "modules": [
       "Contrôle de Gestion",
       "Audit",
@@ -1082,6 +1129,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Finance",
+    "master_reel": "Finance, Banque et Assurance (Master spécialisé)",
     "modules": [
       "Analyse Financière",
       "Mathématiques Financières"
@@ -1101,6 +1149,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Fiscalité",
+    "master_reel": "Finance et Fiscalité",
     "modules": [
       "Fiscalité des Entreprises",
       "Mathématiques Financières",
@@ -1122,6 +1171,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
     "filiere": "Master GFCF",
+    "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité Analytique",
@@ -1149,6 +1199,7 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Master Finance",
+    "master_reel": "Ingénierie Économique et Financière Publique (IEFP)",
     "modules": [
       "Culture Générale",
       "Analyse Économique"
@@ -1167,6 +1218,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité Approfondie",
@@ -1193,6 +1245,7 @@
     "ville": "Agadir",
     "etablissement": "FSJES Agadir",
     "filiere": "Master Finance",
+    "master_reel": "Finance et Contrôle de Gestion (FCG)",
     "modules": [
       "Microéconomie",
       "Comptabilité Générale",
@@ -1221,6 +1274,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Sebaâ",
     "filiere": "Master GFCF",
+    "master_reel": "Gestion Financière et Comptable (GFC)",
     "modules": [
       "Fiscalité des Entreprises",
       "Comptabilité Générale",
@@ -1247,6 +1301,7 @@
     "ville": "Fès",
     "etablissement": "FSJES Dhar El Mahraz",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Comptabilité Approfondie",
       "Fiscalité des Entreprises",
@@ -1265,6 +1320,7 @@
     "ville": "Kénitra",
     "etablissement": "FEG Kénitra (FSJES)",
     "filiere": "Master CCA",
+    "master_reel": "CCA – IFF – MAC – MFA – BA (épreuve commune multi-filières)",
     "modules": [
       "Mathématiques Financières",
       "Comptabilité des Sociétés",
@@ -1287,6 +1343,7 @@
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Analyse Financière",
       "Comptabilité Analytique",
@@ -1309,6 +1366,7 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Master Fiscalité",
+    "master_reel": "Ingénierie Comptable, Fiscale et Financière (Master d'Excellence)",
     "modules": [
       "Comptabilité des Sociétés",
       "Fiscalité des Entreprises",
@@ -1331,6 +1389,7 @@
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Comptabilité Générale",
       "Comptabilité Analytique"
@@ -1351,6 +1410,7 @@
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
     "filiere": "Master GFCF",
+    "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Analyse Financière",
       "Mathématiques Financières",
@@ -1384,6 +1444,7 @@
     "ville": "Taza",
     "etablissement": "FP Taza",
     "filiere": "Master CCA",
+    "master_reel": "Comptabilité, Contrôle, Audit (CCA)",
     "modules": [
       "Comptabilité Analytique",
       "Contrôle de Gestion",
@@ -1407,6 +1468,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Casablanca (Université Hassan II)",
     "filiere": "Master Finance",
+    "master_reel": "Finance",
     "modules": [
       "Analyse Financière",
       "Fiscalité des Entreprises",

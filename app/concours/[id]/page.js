@@ -26,9 +26,10 @@ export async function generateMetadata({ params }) {
   if (!c) return {};
 
   const corrigeMd = await resolveCorrigeMd(c);
-  const title = `Concours ${c.etablissement} ${c.ville} ${c.annee}${c.filiere ? " — " + c.filiere : ""}`;
+  const masterLabel = c.master_reel || c.filiere;
+  const title = `Concours ${c.etablissement} ${c.ville} ${c.annee}${masterLabel ? " — " + masterLabel : ""}`;
   const description = `Sujet de concours réel — ${c.etablissement}, ${c.ville}, session ${c.annee}${
-    c.filiere ? `, filière ${c.filiere}` : ""
+    masterLabel ? `, filière ${masterLabel}` : ""
   }.${corrigeMd ? " Corrigé indicatif disponible." : ""} Énoncé complet et téléchargement PDF gratuit sur SaadConcours.`;
   const url = `${SITE_URL}/concours/${c.id}`;
 
@@ -69,7 +70,7 @@ export default async function ConcoursDetailPage({ params }) {
     "@context": "https://schema.org",
     "@type": "LearningResource",
     name: `Concours ${c.etablissement} ${c.ville} ${c.annee}`,
-    description: `Sujet de concours ${c.filiere || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
+    description: `Sujet de concours ${c.master_reel || c.filiere || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
     url,
     educationalLevel: "Master",
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
@@ -94,7 +95,7 @@ export default async function ConcoursDetailPage({ params }) {
         <div className="cd-head">
           <h1>{c.etablissement} — {c.ville} — {c.annee}</h1>
           <div className="cd-tags">
-            {c.filiere && <span className="info-tag">🎓 {c.filiere}</span>}
+            {(c.master_reel || c.filiere) && <span className="info-tag">🎓 {c.master_reel || c.filiere}</span>}
             <span className="info-tag">📍 {c.ville}</span>
             <span className="info-tag">📅 {c.annee}</span>
             {c.difficulte && <span className="info-tag">⭐ {c.difficulte}</span>}

@@ -711,7 +711,12 @@ const CONCOURS_CONFIG = {
     { key: "annee", label: "Année", required: true },
     { key: "ville", label: "Ville", required: true },
     { key: "etablissement", label: "Établissement", required: true },
-    { key: "filiere", label: "Filière", required: true },
+    { key: "filiere", label: "Filière (catégorie utilisée pour le filtre du site)", required: true },
+    {
+      key: "master_reel",
+      label: "Nom réel du master (intitulé officiel écrit sur le sujet, ex: « Finance, Audit et Contrôle de Gestion »)",
+      placeholder: "Laisser vide si l'intitulé n'apparaît pas sur le sujet",
+    },
     { key: "difficulte", label: "Difficulté", placeholder: "ex: 3/5" },
     { key: "modules", label: "Modules requis (séparés par des virgules)", type: "list" },
     { key: "notions_cles", label: "Notions clés" },
@@ -730,6 +735,7 @@ const CONCOURS_CONFIG = {
     { key: "etablissement", label: "Établissement" },
     { key: "ville", label: "Ville" },
     { key: "filiere", label: "Filière" },
+    { key: "master_reel", label: "Nom réel du master", render: (i) => i.master_reel || "—" },
     { key: "annee", label: "Année" },
     {
       key: "corrige",
