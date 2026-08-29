@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "../_shared/ThemeToggle";
 import { pub } from "../_shared/chrome";
+import MarkdownEditor from "./MarkdownEditor";
 
 /* -------------------------------------------------------------------
  * Field-driven CRUD panel. Each resource (concours/cours/quiz/news) is
@@ -344,7 +345,6 @@ function ResourcePanel({ config }) {
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(() => new Set());
-  const [previewOpen, setPreviewOpen] = useState(() => new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
 
   async function load() {
@@ -398,15 +398,6 @@ function ResourcePanel({ config }) {
       const allSelected = visibleIds.length > 0 && visibleIds.every((id) => prev.has(id));
       if (allSelected) return new Set([...prev].filter((id) => !visibleIds.includes(id)));
       return new Set([...prev, ...visibleIds]);
-    });
-  }
-
-  function togglePreview(key) {
-    setPreviewOpen((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
     });
   }
 
@@ -578,30 +569,13 @@ function ResourcePanel({ config }) {
                 </>
               ) : f.markdown ? (
                 <>
-                  <div className="admin-md-field-head">
-                    <label style={{ margin: 0 }}>{f.label}</label>
-                    <button type="button" className="admin-md-toggle" onClick={() => togglePreview(f.key)}>
-                      {previewOpen.has(f.key) ? "✏️ Éditer" : "👁 Aperçu"}
-                    </button>
-                  </div>
-                  {previewOpen.has(f.key) ? (
-                    <div
-                      className="admin-md-preview"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          typeof window !== "undefined" && window.marked
-                            ? window.marked.parse(form[f.key] || "")
-                            : String(form[f.key] || ""),
-                      }}
-                    />
-                  ) : (
-                    <textarea
-                      required={f.required}
-                      placeholder={f.placeholder}
-                      value={form[f.key] || ""}
-                      onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                    />
-                  )}
+                  <label>{f.label}</label>
+                  <MarkdownEditor
+                    value={form[f.key]}
+                    onChange={(v) => setForm({ ...form, [f.key]: v })}
+                    placeholder={f.placeholder}
+                    required={f.required}
+                  />
                 </>
               ) : (
                 <>
@@ -770,7 +744,7 @@ const COURS_CONFIG = {
   resourceLabel: "Cours",
   fields: [
     { key: "module", label: "Module", required: true, placeholder: "ex: Analyse Financière" },
-    { key: "title", label: "Titre", required: true, placeholder: "ex: Cours — Analyse Financière" },
+    { key: "title", label: "Titre de la fiche", required: true, placeholder: "ex: Bilan fonctionnel, SIG et ratios" },
     { key: "description", label: "Description" },
     { key: "content", label: "Contenu (Markdown)", type: "textarea", required: true, markdown: true },
     { key: "available", label: "Disponible", type: "checkbox" },

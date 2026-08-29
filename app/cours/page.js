@@ -19,9 +19,13 @@ ${chromeHtml({ active: "cours", showSearch: false })}
     <div class="eval-toolbar">
       <button class="reset-btn" id="coursBack">← Modules</button>
       <div class="eval-progress" id="coursReaderMeta"></div>
+      <div class="cours-theme-picker" id="coursThemePicker">
+        <button class="cours-theme-btn" id="coursThemeBtn" type="button">🎨 Thème de lecture</button>
+        <div class="cours-theme-panel" id="coursThemePanel" style="display:none;"></div>
+      </div>
       <button class="dl-btn" id="coursPdfBtn">⬇ Télécharger en PDF</button>
     </div>
-    <div class="cours-reader">
+    <div class="cours-reader" id="coursReader">
       <aside class="cours-toc" id="coursToc"></aside>
       <div class="cours-content" id="coursContent"></div>
     </div>
@@ -49,6 +53,68 @@ export default function CoursPage() {
     }
     function stripInlineMd(s) {
       return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
+    }
+
+    /* -------------------- Reading theme picker (Obsidian-style) --------------------
+     * Only .cours-content is restyled (see globals.css) - the picker just toggles a
+     * data-md-theme attribute on .cours-reader and remembers the choice.
+     */
+    const COURS_THEMES = [
+      { id: "default", label: "Thème du site", swatch: "linear-gradient(135deg,#1b1f2a,#4f8cff)" },
+      { id: "sepia", label: "Sépia · Papier", swatch: "linear-gradient(135deg,#f4ecd8,#a8763e)" },
+      { id: "nord", label: "Nord", swatch: "linear-gradient(135deg,#2e3440,#88c0d0)" },
+      { id: "obsidian", label: "Obsidian", swatch: "linear-gradient(135deg,#1e1e2e,#c9a7ff)" },
+      { id: "contrast", label: "Contraste élevé", swatch: "linear-gradient(135deg,#000000,#f5c518)" },
+      { id: "night", label: "Nuit douce", swatch: "linear-gradient(135deg,#120e0c,#e0955c)" },
+    ];
+    const COURS_THEME_KEY = "cours_md_theme";
+
+    function renderThemePanel(active) {
+      const panel = $("#coursThemePanel");
+      panel.innerHTML = COURS_THEMES.map(
+        (t) => `
+          <button type="button" class="cours-theme-opt${t.id === active ? " active" : ""}" data-theme-id="${t.id}">
+            <span class="cours-theme-swatch" style="background:${t.swatch}"></span>
+            ${escapeHtml(t.label)}
+          </button>
+        `
+      ).join("");
+      panel.querySelectorAll(".cours-theme-opt").forEach((btn) => {
+        btn.addEventListener("click", () => applyCoursTheme(btn.dataset.themeId));
+      });
+    }
+
+    function applyCoursTheme(id) {
+      $("#coursReader").dataset.mdTheme = id;
+      localStorage.setItem(COURS_THEME_KEY, id);
+      renderThemePanel(id);
+      $("#coursThemePanel").style.display = "none";
+    }
+
+    function initThemePicker() {
+      const saved = localStorage.getItem(COURS_THEME_KEY) || "default";
+      $("#coursReader").dataset.mdTheme = saved;
+      renderThemePanel(saved);
+
+      const btn = $("#coursThemeBtn");
+      // Dev-mode React StrictMode re-runs this effect (mount/cleanup/mount),
+      // and this file has no effect cleanup for any of its listeners - a
+      // second addEventListener on a toggle handler would double-fire and
+      // make the button appear to do nothing. Guard just this one since it's
+      // the only new toggle-style handler in the file.
+      if (btn.dataset.wired === "1") return;
+      btn.dataset.wired = "1";
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const panel = $("#coursThemePanel");
+        panel.style.display = panel.style.display === "none" ? "grid" : "none";
+      });
+      document.addEventListener("click", (e) => {
+        if (!$("#coursThemePicker").contains(e.target)) {
+          $("#coursThemePanel").style.display = "none";
+        }
+      });
     }
 
     let coursRegistry = [];
@@ -130,6 +196,7 @@ export default function CoursPage() {
     }
 
     $("#coursBack").addEventListener("click", renderCoursModuleList);
+    initThemePicker();
 
     $("#coursPdfBtn").addEventListener("click", () => {
       if (!coursCurrent) return;
