@@ -10,7 +10,7 @@ const PROTECTED_API_PREFIXES = [
 ];
 // Unlike the resources above (public reads, admin-only writes), these expose
 // data that shouldn't be public at all — auth is required on every method.
-const PROTECTED_API_ALWAYS = ["/api/admin/stats", "/api/admin/export"];
+const PROTECTED_API_ALWAYS = ["/api/admin/stats", "/api/admin/export", "/api/admin/subscribers"];
 
 function isProtectedApiWrite(pathname, method) {
   return PROTECTED_API_PREFIXES.some((p) => pathname.startsWith(p)) && method !== "GET";
@@ -66,6 +66,7 @@ export const config = {
     "/api/admin/stats",
     "/api/admin/export",
     "/api/admin/export-content",
+    "/api/admin/subscribers",
     "/api/settings/:path*",
   ],
 };

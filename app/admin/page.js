@@ -1057,6 +1057,66 @@ const NEWS_ETABLISSEMENTS = [
   "ESITH", "ENSET", "FSR", "FLSH", "FSA", "FP", "EST", "ENS",
 ];
 
+function SubscribersManager() {
+  const [emails, setEmails] = useState(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(null);
+
+  function load() {
+    fetch("/api/admin/subscribers")
+      .then((r) => r.json())
+      .then((data) => setEmails(data.emails || []))
+      .catch(() => setError("Erreur lors du chargement des abonnés."));
+  }
+
+  useEffect(load, []);
+
+  async function onDelete(email) {
+    setBusy(email);
+    try {
+      await fetch("/api/admin/subscribers", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setEmails((prev) => prev.filter((e) => e !== email));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  if (error) return <div className="admin-error">{error}</div>;
+  if (emails === null) return <div className="admin-image-hint">Chargement des abonnés...</div>;
+
+  return (
+    <div>
+      <div className="admin-image-hint" style={{ marginBottom: 10 }}>
+        {emails.length} abonné{emails.length > 1 ? "s" : ""} à l'alerte "concours qui ferme bientôt"
+      </div>
+      {emails.length ? (
+        <div className="subscriber-list">
+          {emails.map((email) => (
+            <div className="subscriber-row" key={email}>
+              <span>{email}</span>
+              <button
+                type="button"
+                className="admin-icon-btn danger"
+                title="Retirer cet abonné"
+                disabled={busy === email}
+                onClick={() => onDelete(email)}
+              >
+                🗑️
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">Aucun abonné pour l'instant.</div>
+      )}
+    </div>
+  );
+}
+
 function SettingsPanel() {
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1146,6 +1206,28 @@ function SettingsPanel() {
             Tout afficher (retirer le filtre)
           </button>
         )}
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>🔔 Alertes automatiques</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+          Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours.
+          Nécessite une clé Resend configurée côté serveur (RESEND_API_KEY) — sans elle, l'envoi ne fait rien.
+        </p>
+        <label className="admin-checkbox-label">
+          <input
+            type="checkbox"
+            checked={Boolean(form.newsAlertsEnabled)}
+            onChange={(e) => setForm({ ...form, newsAlertsEnabled: e.target.checked })}
+          />
+          <span className="toggle-thumb" aria-hidden="true" />
+          Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)
+        </label>
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>📧 Abonnés aux alertes</h2>
+        <SubscribersManager />
       </div>
 
       <div style={{ marginTop: 18 }}>

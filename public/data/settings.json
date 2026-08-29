@@ -11,5 +11,6 @@
     "ENCG",
     "FEG",
     "ISCAE"
-  ]
+  ],
+  "newsAlertsEnabled": false
 }

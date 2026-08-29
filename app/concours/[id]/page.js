@@ -9,7 +9,28 @@ const SITE_URL = "https://www.saadconcours.space";
 
 async function findConcours(id) {
   const list = await getAllConcours();
-  return list.find((c) => c.id === id) || null;
+  return { c: list.find((x) => x.id === id) || null, list };
+}
+
+// Same real master name first (most specific match a student would care
+// about), then same établissement, for internal linking + a reason to keep
+// browsing instead of bouncing after one PDF - also gives Google more
+// crawl paths into pages that have no other inbound links.
+function getRelatedConcours(list, current, limit = 4) {
+  const others = list.filter((x) => x.id !== current.id);
+  const sameMaster = current.master_reel
+    ? others.filter((x) => x.master_reel === current.master_reel)
+    : [];
+  const sameEtab = others.filter((x) => x.etablissement === current.etablissement);
+  const seen = new Set();
+  const related = [];
+  for (const x of [...sameMaster, ...sameEtab]) {
+    if (seen.has(x.id)) continue;
+    seen.add(x.id);
+    related.push(x);
+    if (related.length >= limit) break;
+  }
+  return related;
 }
 
 // corrige_md on the concours entry is the reviewed/published version, but a
@@ -22,7 +43,7 @@ async function resolveCorrigeMd(c) {
 }
 
 export async function generateMetadata({ params }) {
-  const c = await findConcours(params.id);
+  const { c } = await findConcours(params.id);
   if (!c) return {};
 
   const corrigeMd = await resolveCorrigeMd(c);
@@ -52,13 +73,15 @@ export async function generateStaticParams() {
 }
 
 export default async function ConcoursDetailPage({ params }) {
-  const c = await findConcours(params.id);
+  const { c, list } = await findConcours(params.id);
   if (!c) notFound();
 
   const enonceHtml = marked.parse(formatQCM(c.enonce_md) || "*Énoncé non disponible.*");
   const corrigeMd = await resolveCorrigeMd(c);
   const corrigeHtml = corrigeMd ? marked.parse(formatQCM(corrigeMd)) : null;
   const url = `${SITE_URL}/concours/${c.id}`;
+  const masterLabel = c.master_reel || c.filiere;
+  const related = getRelatedConcours(list, c);
 
   // c.source is free text ("- Lien / origine du sujet : https://...") in
   // some entries, not always a bare URL — schema.org's isBasedOn expects a
@@ -70,11 +93,21 @@ export default async function ConcoursDetailPage({ params }) {
     "@context": "https://schema.org",
     "@type": "LearningResource",
     name: `Concours ${c.etablissement} ${c.ville} ${c.annee}`,
-    description: `Sujet de concours ${c.master_reel || c.filiere || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
+    description: `Sujet de concours ${masterLabel || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
     url,
     educationalLevel: "Master",
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
     ...(sourceUrlMatch ? { isBasedOn: sourceUrlMatch[0] } : {}),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Concours", item: `${SITE_URL}/concours` },
+      { "@type": "ListItem", position: 3, name: `${c.etablissement} ${c.annee}`, item: url },
+    ],
   };
 
   return (
@@ -83,6 +116,11 @@ export default async function ConcoursDetailPage({ params }) {
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false }) }} />
 
@@ -136,6 +174,20 @@ export default async function ConcoursDetailPage({ params }) {
         )}
 
         <ConcoursDetailClient concours={corrigeMd ? { ...c, corrige_md: corrigeMd } : c} />
+
+        {related.length > 0 && (
+          <div className="cd-card cd-related">
+            <h2>Concours similaires</h2>
+            <div className="cd-related-grid">
+              {related.map((r) => (
+                <a key={r.id} className="cd-related-item" href={`/concours/${r.id}`}>
+                  <div className="cd-related-title">{r.etablissement} — {r.ville} — {r.annee}</div>
+                  <div className="cd-related-sub">{r.master_reel || r.filiere}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

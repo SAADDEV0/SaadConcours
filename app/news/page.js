@@ -10,6 +10,18 @@ ${chromeHtml({ active: "news", showSearch: false })}
   <h1 class="eval-title">🆕 Concours ouverts</h1>
   <p class="eval-sub">Masters actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
 
+  <section class="urgent-alert" id="urgentAlert" style="display:none;">
+    <div class="urgent-alert-head">
+      <span class="urgent-alert-title">⏰ <strong id="urgentCount"></strong> concours ferment bientôt</span>
+    </div>
+    <div class="urgent-alert-list" id="urgentAlertList"></div>
+    <form class="alert-subscribe-form" id="alertForm">
+      <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required>
+      <button type="submit">🔔 M'alerter</button>
+    </form>
+    <div class="alert-form-msg" id="alertFormMsg"></div>
+  </section>
+
   <div class="nw-toolbar">
     <div class="nw-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -98,10 +110,31 @@ export default function NewsPage() {
           newsItems = visibles.length ? data.filter((i) => visibles.includes(i.etablissement)) : data;
           renderChips();
           render();
+          renderUrgentBanner();
         })
         .catch(() => {
           $("#nwGrid").innerHTML = `<div class="empty-state">Impossible de charger les concours ouverts.</div>`;
         });
+    }
+
+    function renderUrgentBanner() {
+      const urgent = newsItems
+        .filter((i) => !i.cloture && urgency(i) === "urgent")
+        .sort((a, b) => daysUntil(a.date_limite) - daysUntil(b.date_limite));
+      if (!urgent.length) return;
+      $("#urgentCount").textContent = urgent.length;
+      const list = $("#urgentAlertList");
+      list.innerHTML = "";
+      urgent.slice(0, 5).forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "urgent-alert-item";
+        row.innerHTML = `
+          <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
+          <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
+        `;
+        list.appendChild(row);
+      });
+      $("#urgentAlert").style.display = "block";
     }
 
     function renderChips() {
@@ -195,6 +228,42 @@ export default function NewsPage() {
       showClosed = e.target.checked;
       render();
     });
+
+    const alertForm = $("#alertForm");
+    // Guard against React StrictMode's dev-only double effect invoke
+    // double-registering this listener - a submit would fire the subscribe
+    // request twice otherwise (same fix as the cours reading-theme picker).
+    if (alertForm && alertForm.dataset.wired !== "1") {
+      alertForm.dataset.wired = "1";
+      alertForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = $("#alertEmail").value.trim();
+        const msg = $("#alertFormMsg");
+        fetch("/api/alerts/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        })
+          .then((r) => r.json().then((data) => ({ ok: r.ok, data })))
+          .then(({ ok, data }) => {
+            msg.textContent = ok ? "✅ Inscrit ! Tu recevras un email avant la clôture." : data.error || "Erreur.";
+            msg.className = "alert-form-msg" + (ok ? " ok" : " error");
+            if (ok) alertForm.reset();
+          })
+          .catch(() => {
+            msg.textContent = "Erreur réseau, réessaie.";
+            msg.className = "alert-form-msg error";
+          });
+      });
+    }
+
+    if (new URLSearchParams(window.location.search).get("desabonne") === "1") {
+      const msg = $("#alertFormMsg");
+      if (msg) {
+        msg.textContent = "Tu as bien été désabonné des alertes.";
+        msg.className = "alert-form-msg ok";
+      }
+    }
 
     loadNews();
   }, []);

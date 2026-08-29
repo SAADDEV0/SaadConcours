@@ -46,6 +46,19 @@ ${chromeHtml({ active: "home", showSearch: false })}
     </p>
   </section>
 
+  <section class="urgent-alert" id="urgentAlert" style="display:none;">
+    <div class="urgent-alert-head">
+      <span class="urgent-alert-title">⏰ <strong id="urgentCount"></strong> concours ferment bientôt</span>
+      <a class="home-alert-link" href="/news">Voir tout →</a>
+    </div>
+    <div class="urgent-alert-list" id="urgentAlertList"></div>
+    <form class="alert-subscribe-form" id="alertForm">
+      <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required>
+      <button type="submit">🔔 M'alerter</button>
+    </form>
+    <div class="alert-form-msg" id="alertFormMsg"></div>
+  </section>
+
   <section class="home-alert" id="homeAlert" style="display:none;">
     <div class="home-alert-head">
       <span class="home-alert-title">🔔 Concours récemment ouverts</span>
@@ -93,10 +106,45 @@ export default function HomePage() {
       grid.appendChild(card);
     });
 
-    fetch("/api/news")
-      .then((r) => r.json())
-      .then((data) => {
+    function daysUntil(dateStr) {
+      if (!dateStr) return null;
+      const diffMs = new Date(dateStr + "T00:00:00") - new Date(new Date().toDateString());
+      return Math.round(diffMs / 86400000);
+    }
+
+    Promise.all([
+      fetch("/api/news").then((r) => r.json()),
+      fetch("/api/settings")
+        .then((r) => r.json())
+        .catch(() => null),
+    ])
+      .then(([rawData, settings]) => {
+        // Same établissement visibility filter as /news, so the "closing
+        // soon" count here always matches what students actually see when
+        // they click through - showing 11 here and 3 there would look broken.
+        const visibles = settings?.newsEtablissementsVisibles || [];
+        const data = visibles.length ? rawData.filter((i) => visibles.includes(i.etablissement)) : rawData;
         const open = data.filter((i) => !i.cloture);
+
+        const urgent = open
+          .filter((i) => i.date_limite && daysUntil(i.date_limite) >= 0 && daysUntil(i.date_limite) <= 7)
+          .sort((a, b) => daysUntil(a.date_limite) - daysUntil(b.date_limite));
+        if (urgent.length) {
+          $("#urgentCount").textContent = urgent.length;
+          const uList = $("#urgentAlertList");
+          uList.innerHTML = "";
+          urgent.slice(0, 5).forEach((item) => {
+            const row = document.createElement("div");
+            row.className = "urgent-alert-item";
+            row.innerHTML = `
+              <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
+              <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
+            `;
+            uList.appendChild(row);
+          });
+          $("#urgentAlert").style.display = "block";
+        }
+
         const recent = [...open]
           .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
           .slice(0, 3);
@@ -120,6 +168,35 @@ export default function HomePage() {
         $("#homeAlert").style.display = "block";
       })
       .catch(() => {});
+
+    const alertForm = $("#alertForm");
+    // Guard against React StrictMode's dev-only double effect invoke
+    // double-registering this submit listener (same fix as the cours
+    // reading-theme picker) - a toggle would silently break, and a submit
+    // listener firing twice would submit the subscribe request twice.
+    if (alertForm && alertForm.dataset.wired !== "1") {
+      alertForm.dataset.wired = "1";
+      alertForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = $("#alertEmail").value.trim();
+        const msg = $("#alertFormMsg");
+        fetch("/api/alerts/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        })
+          .then((r) => r.json().then((data) => ({ ok: r.ok, data })))
+          .then(({ ok, data }) => {
+            msg.textContent = ok ? "✅ Inscrit ! Tu recevras un email avant la clôture." : data.error || "Erreur.";
+            msg.className = "alert-form-msg" + (ok ? " ok" : " error");
+            if (ok) alertForm.reset();
+          })
+          .catch(() => {
+            msg.textContent = "Erreur réseau, réessaie.";
+            msg.className = "alert-form-msg error";
+          });
+      });
+    }
   }, []);
 
   return <div ref={containerRef} dangerouslySetInnerHTML={{ __html: MARKUP }} />;
