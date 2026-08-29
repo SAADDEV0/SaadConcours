@@ -1223,6 +1223,51 @@ function SettingsPanel() {
           <span className="toggle-thumb" aria-hidden="true" />
           Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)
         </label>
+
+        <div className="admin-field" style={{ marginTop: 16 }}>
+          <label>Objet de l'email</label>
+          <input
+            value={form.newsAlertsSubject || ""}
+            placeholder="ex: ⏰ Ces concours ferment cette semaine — vérifie vite"
+            onChange={(e) => setForm({ ...form, newsAlertsSubject: e.target.value })}
+          />
+          <div className="admin-image-hint" style={{ marginTop: 4 }}>
+            Vide = objet automatique (« ⏰ X concours ferment bientôt »).
+          </div>
+        </div>
+
+        <div className="admin-field">
+          <label>Message personnalisé (affiché en haut de l'email, avant la liste)</label>
+          <textarea
+            style={{ minHeight: 90 }}
+            value={form.newsAlertsMessage || ""}
+            placeholder="ex: Salam ! Voici les concours qui ferment bientôt — inscris-toi vite avant la clôture 👇"
+            onChange={(e) => setForm({ ...form, newsAlertsMessage: e.target.value })}
+          />
+        </div>
+
+        <div className="admin-form-grid">
+          <div className="admin-field">
+            <label>Nom de l'expéditeur</label>
+            <input
+              value={form.newsAlertsFromName || ""}
+              placeholder="SaadConcours"
+              onChange={(e) => setForm({ ...form, newsAlertsFromName: e.target.value })}
+            />
+          </div>
+          <div className="admin-field">
+            <label>Email de l'expéditeur</label>
+            <input
+              value={form.newsAlertsFromEmail || ""}
+              placeholder="alerts@saadconcours.space"
+              onChange={(e) => setForm({ ...form, newsAlertsFromEmail: e.target.value })}
+            />
+          </div>
+        </div>
+        <div className="admin-image-hint">
+          ⚠️ L'email d'expéditeur doit appartenir à un domaine vérifié sur Resend, sinon l'envoi échouera. Sans
+          domaine vérifié, laisse la valeur par défaut.
+        </div>
       </div>
 
       <div className="admin-card" style={{ marginTop: 18 }}>

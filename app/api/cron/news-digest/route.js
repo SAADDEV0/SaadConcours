@@ -20,7 +20,7 @@ function escapeHtml(s) {
   );
 }
 
-function buildEmailHtml(items, email) {
+function buildEmailHtml(items, email, customMessage) {
   const rows = items
     .map(
       (i) => `
@@ -38,10 +38,17 @@ function buildEmailHtml(items, email) {
     )
     .join("");
   const unsubUrl = `${SITE_URL}/api/alerts/unsubscribe?email=${encodeURIComponent(email)}`;
+  // customMessage is admin-authored free text (Réglages → Alertes automatiques),
+  // not derived from a trusted schema-checked field like the rest of this
+  // template, so it still goes through escapeHtml like everything else here -
+  // trusting-the-admin-panel is not the same as skipping output encoding.
+  const introHtml = customMessage
+    ? `<p style="color:#333;white-space:pre-line;">${escapeHtml(customMessage)}</p>`
+    : `<p style="color:#555;margin-top:0;">Date limite dans les ${URGENT_DAYS} prochains jours.</p>`;
   return `
     <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#111;">
       <h2 style="margin-bottom:4px;">⏰ Ces concours ferment bientôt</h2>
-      <p style="color:#555;margin-top:0;">Date limite dans les ${URGENT_DAYS} prochains jours.</p>
+      ${introHtml}
       <table style="width:100%;border-collapse:collapse;">${rows}</table>
       <p style="margin-top:20px;"><a href="${SITE_URL}/news" style="color:#4f46e5;">Voir tous les concours ouverts →</a></p>
       <p style="font-size:12px;color:#999;margin-top:28px;border-top:1px solid #eee;padding-top:14px;">
@@ -89,6 +96,15 @@ export async function POST(req) {
     return NextResponse.json({ sent: 0, reason: "Aucun abonné." });
   }
 
+  // All admin-editable (Réglages → Alertes automatiques), each with a
+  // sensible fallback so an empty field never breaks the send.
+  const fromName = settings.newsAlertsFromName || "SaadConcours";
+  const fromEmail = settings.newsAlertsFromEmail || process.env.RESEND_FROM_EMAIL || "alerts@saadconcours.space";
+  const fromHeader = `${fromName} <${fromEmail}>`;
+  const subject =
+    settings.newsAlertsSubject ||
+    `⏰ ${urgent.length} concours ferme${urgent.length > 1 ? "nt" : ""} bientôt`;
+
   let sent = 0;
   for (const email of subscribers) {
     try {
@@ -96,10 +112,10 @@ export async function POST(req) {
         method: "POST",
         headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: process.env.RESEND_FROM || "SaadConcours <alerts@saadconcours.space>",
+          from: fromHeader,
           to: [email],
-          subject: `⏰ ${urgent.length} concours ferme${urgent.length > 1 ? "nt" : ""} bientôt`,
-          html: buildEmailHtml(urgent, email),
+          subject,
+          html: buildEmailHtml(urgent, email, settings.newsAlertsMessage),
         }),
       });
       if (res.ok) sent++;

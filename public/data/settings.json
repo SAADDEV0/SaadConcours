@@ -12,5 +12,9 @@
     "FEG",
     "ISCAE"
   ],
-  "newsAlertsEnabled": true
+  "newsAlertsEnabled": true,
+  "newsAlertsMessage": "",
+  "newsAlertsSubject": "",
+  "newsAlertsFromName": "SaadConcours",
+  "newsAlertsFromEmail": "alerts@saadconcours.space"
 }
