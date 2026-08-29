@@ -1,5 +1,29 @@
 [
   {
+    "id": "e49607e6538beb35",
+    "titre": "Master FLSH Béni Mellal 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": "2026-09-15",
+    "cloture": false,
+    "lien_inscription": "https://insc.flshbm.ma/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-beni-mellal-2026-2027.html",
+    "date_publication": "2026-08-28"
+  },
+  {
+    "id": "c793c217f87e4b06",
+    "titre": "Master ISMAC Rabat 2026-2027",
+    "etablissement": null,
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": "2026-09-02",
+    "cloture": false,
+    "lien_inscription": "https://ismac-inscription.ma/register/master",
+    "source": "https://www.almaster-maroc.com/2026/08/master-ismac-rabat-2026-2027.html",
+    "date_publication": "2026-08-28"
+  },
+  {
     "id": "f10400051b5216c8",
     "titre": "Master FSJP Settat 2026-2027",
     "etablissement": null,
@@ -377,7 +401,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-28",
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
@@ -653,7 +677,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-02",
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/8",
     "source": "https://www.almaster-maroc.com/2026/08/master-flash-settat-2026-2027.html",
@@ -1062,7 +1086,7 @@
     "ville": "Khouribga",
     "filiere": null,
     "date_limite": "2026-08-28",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "http://ensak.usms.ac.ma/PreinscriptionMaster/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensa-khouribga-2026-2027.html",
     "date_publication": "2026-08-01"
@@ -1413,30 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://e-candidature.uca.ma/master.fla/form/index.php",
     "source": "https://www.almaster-maroc.com/2026/06/master-fla-marrakech-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "58ab85f6a0df74fb",
-    "titre": "Master FS Marrakech 2026-2027",
-    "etablissement": null,
-    "ville": "Marrakech",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fssm/inscription.php",
-    "source": "https://www.almaster-maroc.com/2026/06/master-fs-semlalia-marrakech-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "89dcb805dee8e481",
-    "titre": "Master ENSET Mohammedia 2026-2027",
-    "etablissement": "ENSET",
-    "ville": "Mohammedia",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://candidature.enset-media.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/06/master-enset-mohammedia-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
