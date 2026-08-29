@@ -1,0 +1,21 @@
+name: Alerte email — concours qui ferment bientôt
+
+on:
+  schedule:
+    - cron: "0 8 * * *" # 08:00 UTC chaque jour
+  workflow_dispatch: {}
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appeler la route de digest
+        run: |
+          curl -sf -X POST "${SITE_URL}/api/cron/news-digest" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -o response.json -w "\nHTTP %{http_code}\n"
+          cat response.json
+        env:
+          SITE_URL: https://www.saadconcours.space
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
