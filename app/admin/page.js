@@ -809,15 +809,26 @@ const NEWS_CONFIG = {
 
 /* -------------------------------- Dashboard -------------------------------- */
 
-function StatCard({ icon, tone, label, value, sub }) {
+// spark is optional and only ever real data (e.g. the same 7-day PDF
+// counts as the chart below) - cards with no genuine daily series just
+// don't get one, rather than faking a trend.
+function StatCard({ icon, tone, label, value, sub, spark }) {
+  const sparkMax = spark ? Math.max(1, ...spark) : 0;
   return (
     <div className={"stat-card tone-" + (tone || "default")}>
       <div className="stat-card-icon">{icon}</div>
-      <div>
+      <div className="stat-card-body">
         <div className="stat-card-value">{value}</div>
         <div className="stat-card-label">{label}</div>
         {sub && <div className="stat-card-sub">{sub}</div>}
       </div>
+      {spark && (
+        <div className="stat-card-spark" title="7 derniers jours">
+          {spark.map((n, i) => (
+            <span key={i} style={{ height: `${Math.max(12, (n / sparkMax) * 100)}%` }} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -905,8 +916,20 @@ function StatsPanel({ onNavigate }) {
       </div>
 
       <div className="stat-grid">
-        <StatCard icon="📄" tone="indigo" label="PDF téléchargés aujourd'hui" value={stats.pdfToday} />
-        <StatCard icon="📈" tone="violet" label="PDF cette semaine" value={pdfThisWeek} />
+        <StatCard
+          icon="📄"
+          tone="indigo"
+          label="PDF téléchargés aujourd'hui"
+          value={stats.pdfToday}
+          spark={stats.pdfLast7Days.map(([, n]) => n)}
+        />
+        <StatCard
+          icon="📈"
+          tone="violet"
+          label="PDF cette semaine"
+          value={pdfThisWeek}
+          spark={stats.pdfLast7Days.map(([, n]) => n)}
+        />
         <StatCard icon="🗂️" tone="indigo" label="PDF au total" value={stats.pdfTotal} />
         <StatCard icon="👁️" tone="amber" label="Visiteurs aujourd'hui" value={stats.visitsToday ?? 0} />
         <StatCard icon="🌍" tone="amber" label="Visiteurs (total)" value={stats.totalVisits ?? "—"} />

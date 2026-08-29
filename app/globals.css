@@ -31,6 +31,12 @@
   --green-dim:#1e4536; --violet-dim:#3d2f6b;
   --shadow:0 4px 20px rgba(0,0,0,.35);
 }
+/* Admin-only: a touch of lavender instead of flat grey behind the sidebar
+ * shell in light mode - doesn't touch the public site's --bg at all. */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .admin-shell{ --bg:#eef1fb; --border:#e1e3f5; }
+}
+:root[data-theme="light"] .admin-shell{ --bg:#eef1fb; --border:#e1e3f5; }
 *, *::before, *::after{ transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -766,8 +772,8 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
   font-size:1rem; border-radius:8px; background:var(--bg); transition:background-color .12s ease;
 }
 .admin-nav-btn:hover:not(.active){background:var(--bg); color:var(--text);}
-.admin-nav-btn.active{background:var(--brand-grad); color:#fff; box-shadow:0 4px 14px -2px color-mix(in srgb, var(--accent) 50%, transparent);}
-.admin-nav-btn.active .admin-nav-icon{background:rgba(255,255,255,.18);}
+.admin-nav-btn.active{background:color-mix(in srgb, var(--accent) 13%, transparent); color:var(--accent);}
+.admin-nav-btn.active .admin-nav-icon{background:color-mix(in srgb, var(--accent) 20%, transparent);}
 .admin-sidebar-footer{display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid var(--border);}
 .admin-main{flex:1; min-width:0; padding:30px 26px 70px;}
 .admin-content{max-width:1100px; margin:0 auto;}
@@ -785,19 +791,27 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 }
 
 /* ---------- Admin: dashboard ---------- */
+/* The hero is the one place that gets the full brand gradient at full
+ * strength - everything else (nav, stat icons) uses soft single-hue tints
+ * instead, so the gradient still reads as a deliberate accent instead of
+ * wallpaper repeated on every element. */
 .dash-hero{
   position:relative; overflow:hidden;
   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
-  background:var(--bg-elev); border:1px solid var(--border);
-  border-radius:var(--radius-lg); padding:22px 24px; margin-bottom:20px;
+  background:var(--brand-grad); border:none; color:#fff;
+  border-radius:var(--radius-lg); padding:24px 26px; margin-bottom:20px;
+  box-shadow:0 12px 32px -14px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 .dash-hero::before{
-  content:''; position:absolute; inset:0; opacity:.16; pointer-events:none;
-  background:radial-gradient(480px circle at 88% -10%, #a855f7, transparent 60%),
-             radial-gradient(420px circle at 6% 120%, #4f46e5, transparent 60%);
+  content:''; position:absolute; inset:0; opacity:.5; pointer-events:none;
+  background:radial-gradient(480px circle at 92% -20%, rgba(255,255,255,.25), transparent 60%),
+             radial-gradient(420px circle at 4% 130%, rgba(255,255,255,.12), transparent 60%);
 }
-.dash-hero-greeting{position:relative; font-size:1.12rem; font-weight:700; color:var(--text); letter-spacing:-.01em;}
+.dash-hero-greeting{position:relative; font-size:1.14rem; font-weight:700; color:#fff; letter-spacing:-.01em;}
 .dash-quick-actions{position:relative; display:flex; gap:8px; flex-wrap:wrap;}
+.dash-hero .admin-btn{background:#fff; color:var(--accent); box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.dash-hero .admin-btn.secondary{background:rgba(255,255,255,.16); color:#fff; border-color:rgba(255,255,255,.4);}
+.dash-hero .admin-btn.secondary:hover{background:rgba(255,255,255,.26); color:#fff;}
 
 .stat-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(200px,100%), 1fr)); gap:14px;}
 .stat-card{
@@ -805,16 +819,24 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
   display:flex; gap:13px; align-items:flex-start; transition:transform .15s ease, border-color .15s ease;
 }
 .stat-card:hover{transform:translateY(-2px); border-color:color-mix(in srgb, var(--accent) 40%, var(--border));}
+.stat-card-body{flex:1; min-width:0;}
 .stat-card-icon{
   width:40px; height:40px; flex-shrink:0; border-radius:12px; display:flex; align-items:center; justify-content:center;
-  font-size:1.1rem; background:var(--brand-grad); box-shadow:0 3px 10px -2px color-mix(in srgb, var(--accent) 55%, transparent);
+  font-size:1.1rem; background:color-mix(in srgb, var(--accent) 14%, transparent);
 }
-.stat-card.tone-violet .stat-card-icon{background:linear-gradient(135deg,#8a5cf6,#c084fc);}
-.stat-card.tone-amber .stat-card-icon{background:linear-gradient(135deg,#f0a83d,#fbbf24); box-shadow:0 3px 10px -2px rgba(240,168,61,.5);}
-.stat-card.tone-green .stat-card-icon{background:linear-gradient(135deg,#3ecf8e,#22d3a8); box-shadow:0 3px 10px -2px rgba(62,207,142,.5);}
+.stat-card.tone-violet .stat-card-icon{background:color-mix(in srgb, var(--violet) 16%, transparent);}
+.stat-card.tone-amber .stat-card-icon{background:color-mix(in srgb, var(--amber) 18%, transparent);}
+.stat-card.tone-green .stat-card-icon{background:color-mix(in srgb, var(--green) 16%, transparent);}
 .stat-card-value{font-size:1.55rem; font-weight:800; color:var(--text); line-height:1.15; letter-spacing:-.01em;}
 .stat-card-label{font-size:.78rem; color:var(--text-dim); margin-top:2px;}
 .stat-card-sub{font-size:.7rem; color:var(--text-faint); margin-top:4px;}
+.stat-card-spark{
+  flex-shrink:0; align-self:stretch; display:flex; align-items:flex-end; gap:2px; width:34px; padding-top:4px;
+}
+.stat-card-spark span{
+  flex:1; min-height:12px; border-radius:2px 2px 0 0; background:color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.stat-card.tone-violet .stat-card-spark span{background:color-mix(in srgb, var(--violet) 40%, transparent);}
 
 .dash-grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px;}
 @media (max-width: 760px){ .dash-grid-2{grid-template-columns:1fr;} }
