@@ -1,0 +1,3 @@
+# Local extraction cache and interpreter/session sidecars - machine-specific
+cache/
+.graphify_*
