@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "../../_shared/ThemeToggle";
+import BrandLogo from "../../_shared/BrandLogo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -36,6 +37,7 @@ export default function AdminLoginPage() {
     <div className="admin-login-wrap">
       <div className="admin-login-topbar">
         <a className="admin-login-brand" href="/">
+          <BrandLogo className="admin-login-logo" gradientId="adminLoginLogoGrad" />
           <span className="brand-saad">Saad</span><span className="brand-concours">Concours</span>
         </a>
         <ThemeToggle />

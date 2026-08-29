@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "../_shared/ThemeToggle";
 import { pub } from "../_shared/chrome";
+import BrandLogo from "../_shared/BrandLogo";
 import MarkdownEditor from "./MarkdownEditor";
 
 /* -------------------------------------------------------------------
@@ -550,6 +551,7 @@ function ResourcePanel({ config }) {
                     checked={Boolean(form[f.key])}
                     onChange={(e) => setForm({ ...form, [f.key]: e.target.checked })}
                   />
+                  <span className="toggle-thumb" aria-hidden="true" />
                   {f.label}
                 </label>
               ) : f.type === "quiz-questions" ? (
@@ -673,20 +675,19 @@ function ResourcePanel({ config }) {
                 <td>
                   <input type="checkbox" checked={selected.has(item.id)} onChange={() => toggleSelected(item.id)} />
                 </td>
-                {columns.map((c) => (
-                  <td key={c.key} style={c.mono ? { fontFamily: "monospace", fontSize: ".78rem" } : undefined}>
-                    {c.render ? c.render(item) : String(item[c.key] ?? "")}
-                  </td>
-                ))}
+                {columns.map((c) => {
+                  const val = c.render ? c.render(item) : String(item[c.key] ?? "");
+                  return <td key={c.key}>{c.mono ? <span className="admin-id-chip">{val}</span> : val}</td>;
+                })}
                 <td>
                   <div className="admin-row-actions">
                     {allowEdit && (
-                      <button className="admin-btn secondary" onClick={() => startEdit(item)}>
-                        Modifier
+                      <button className="admin-icon-btn" title="Modifier" onClick={() => startEdit(item)}>
+                        ✏️
                       </button>
                     )}
-                    <button className="admin-btn danger" onClick={() => onDelete(item.id)}>
-                      Supprimer
+                    <button className="admin-icon-btn danger" title="Supprimer" onClick={() => onDelete(item.id)}>
+                      🗑️
                     </button>
                   </div>
                 </td>
@@ -967,7 +968,7 @@ function StatsPanel({ onNavigate }) {
         <DashboardCard
           title="⚠️ Concours sans corrigé"
           action={
-            <button className="admin-md-toggle" type="button" onClick={() => onNavigate("concours")}>
+            <button className="admin-link-btn" type="button" onClick={() => onNavigate("concours")}>
               Voir tout →
             </button>
           }
@@ -986,7 +987,7 @@ function StatsPanel({ onNavigate }) {
         <DashboardCard
           title="⏰ Concours ouverts qui ferment bientôt"
           action={
-            <button className="admin-md-toggle" type="button" onClick={() => onNavigate("news")}>
+            <button className="admin-link-btn" type="button" onClick={() => onNavigate("news")}>
               Voir tout →
             </button>
           }
@@ -1008,7 +1009,7 @@ function StatsPanel({ onNavigate }) {
       <DashboardCard
         title="🕓 Derniers concours ajoutés"
         action={
-          <button className="admin-md-toggle" type="button" onClick={() => onNavigate("concours")}>
+          <button className="admin-link-btn" type="button" onClick={() => onNavigate("concours")}>
             Voir tout →
           </button>
         }
@@ -1123,7 +1124,7 @@ function SettingsPanel() {
         </p>
         <div className="settings-chip-grid">
           {NEWS_ETABLISSEMENTS.map((sigle) => (
-            <label className="admin-checkbox-label" key={sigle} style={{ marginBottom: 0 }}>
+            <label className="settings-chip" key={sigle}>
               <input type="checkbox" checked={visibles.includes(sigle)} onChange={() => toggleEtablissement(sigle)} />
               {sigle}
             </label>
@@ -1132,7 +1133,7 @@ function SettingsPanel() {
         {visibles.length > 0 && (
           <button
             type="button"
-            className="admin-md-toggle"
+            className="admin-link-btn"
             style={{ marginTop: 12 }}
             onClick={() => setForm({ ...form, newsEtablissementsVisibles: [] })}
           >
@@ -1177,10 +1178,14 @@ export default function AdminPage() {
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <a className="admin-brand" href="/">
-          <span className="brand-saad">Saad</span>
-          <span className="brand-concours">Concours</span>
+          <BrandLogo className="admin-brand-logo" gradientId="adminSidebarLogoGrad" />
+          <span>
+            <span className="brand-saad">Saad</span>
+            <span className="brand-concours">Concours</span>
+          </span>
           <span className="admin-brand-tag">Admin</span>
         </a>
+        <div className="admin-nav-section-label">Menu</div>
         <nav className="admin-nav">
           {TABS.map((t) => (
             <button
@@ -1207,9 +1212,20 @@ export default function AdminPage() {
 
       <main className="admin-main">
         <div className="admin-content">
-          <h1 className="admin-page-title">
-            {active.icon} {active.label}
-          </h1>
+          <div className="admin-page-head">
+            <div>
+              <h1 className="admin-page-title">
+                {active.icon} {active.label}
+              </h1>
+              {active.config && (
+                <div className="admin-page-subtitle">
+                  {/* "Concours"/"Cours" are already invariant plurals in French - only pluralize labels that aren't */}
+                  Gère les {active.config.resourceLabel.toLowerCase()}
+                  {active.config.resourceLabel.toLowerCase().endsWith("s") ? "" : "s"} publiés sur le site.
+                </div>
+              )}
+            </div>
+          </div>
           {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
           {tab === "dashboard" ? (
             <StatsPanel key="dashboard" onNavigate={setTab} />
