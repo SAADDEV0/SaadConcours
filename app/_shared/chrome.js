@@ -77,7 +77,7 @@ export function chromeHtml({ active, showSearch }) {
 export function footerHtml() {
   return `
 <footer>
-  <div class="footer-text">Base de données collaborative de sujets de concours réels — sans corrigés. Sources citées dans chaque fiche.</div>
+  <div class="footer-text">Base de données de sujets de concours réels — corrigés indicatifs quand disponibles, sources publiques citées sur chaque fiche.</div>
   <div class="footer-social" id="footerSocial"></div>
   <div class="footer-legal"><a href="/confidentialite">Confidentialité</a></div>
 </footer>
