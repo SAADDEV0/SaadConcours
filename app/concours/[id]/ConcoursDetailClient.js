@@ -8,7 +8,9 @@ import { downloadConcoursPdf } from "../../_shared/concoursPdf";
 // don't implement it, so they fall back to a small panel with direct
 // share links - WhatsApp first since that's where these PDFs actually
 // circulate among Moroccan students.
-function ShareButton({ concours }) {
+// Exported separately so page.js can place it at the top of the page
+// (next to the title) instead of only in the bottom action bar.
+export function ShareButton({ concours }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
 
@@ -119,7 +121,6 @@ export default function ConcoursDetailClient({ concours }) {
       <button className="dl-btn" onClick={() => downloadConcoursPdf(concours)}>
         ⬇ Télécharger en PDF
       </button>
-      <ShareButton concours={concours} />
       <a className="reset-btn" style={{ width: "auto", textDecoration: "none", display: "inline-flex", alignItems: "center" }} href="/concours">
         ← Retour à tous les concours
       </a>

@@ -3,7 +3,7 @@ import { marked } from "marked";
 import { getAllConcours, getCorrigeFile } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { formatQCM } from "../../_shared/concoursFormat";
-import ConcoursDetailClient from "./ConcoursDetailClient";
+import ConcoursDetailClient, { ShareButton } from "./ConcoursDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -131,7 +131,10 @@ export default async function ConcoursDetailPage({ params }) {
         </nav>
 
         <div className="cd-head">
-          <h1>{c.etablissement} — {c.ville} — {c.annee}</h1>
+          <div className="cd-head-row">
+            <h1>{c.etablissement} — {c.ville} — {c.annee}</h1>
+            <ShareButton concours={c} />
+          </div>
           <div className="cd-tags">
             {(c.master_reel || c.filiere) && <span className="info-tag">🎓 {c.master_reel || c.filiere}</span>}
             <span className="info-tag">📍 {c.ville}</span>

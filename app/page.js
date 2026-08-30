@@ -53,6 +53,14 @@ ${chromeHtml({ active: "home", showSearch: false })}
     </p>
   </section>
 
+  <section class="home-recent" id="homeRecent" style="display:none;">
+    <div class="home-alert-head">
+      <span class="home-alert-title">🆕 Derniers concours ajoutés</span>
+      <a class="home-alert-link" href="/concours">Voir tout →</a>
+    </div>
+    <div class="cd-related-grid" id="homeRecentGrid"></div>
+  </section>
+
   <section class="urgent-alert" id="urgentAlert" style="display:none;">
     <div class="urgent-alert-head">
       <span class="urgent-alert-title">⏰ <strong id="urgentCount"></strong> concours ferment bientôt</span>
@@ -118,6 +126,30 @@ export default function HomePage() {
       const diffMs = new Date(dateStr + "T00:00:00") - new Date(new Date().toDateString());
       return Math.round(diffMs / 86400000);
     }
+
+    fetch("/api/concours")
+      .then((r) => r.json())
+      .then((concours) => {
+        // Storage appends new entries to the end of the array (see
+        // lib/store.js addItem) - same "tail = most recent" logic as the
+        // admin dashboard's "Derniers concours ajoutés" widget.
+        const recentConcours = concours.slice(-2).reverse();
+        if (!recentConcours.length) return;
+        const grid = $("#homeRecentGrid");
+        grid.innerHTML = "";
+        recentConcours.forEach((c) => {
+          const a = document.createElement("a");
+          a.className = "cd-related-item";
+          a.href = `/concours/${encodeURIComponent(c.id)}`;
+          a.innerHTML = `
+            <div class="cd-related-title">${escapeHtml(c.etablissement)} — ${escapeHtml(c.ville)} — ${escapeHtml(String(c.annee))}</div>
+            <div class="cd-related-sub">${escapeHtml(c.master_reel || c.filiere || "")}</div>
+          `;
+          grid.appendChild(a);
+        });
+        $("#homeRecent").style.display = "block";
+      })
+      .catch(() => {});
 
     Promise.all([
       fetch("/api/news").then((r) => r.json()),
