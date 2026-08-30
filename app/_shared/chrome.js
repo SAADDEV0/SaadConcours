@@ -3,12 +3,12 @@
 // instead of one single-page app.
 
 const NAV_ITEMS = [
-  { key: "home", href: "/", icon: "🏠", label: "Accueil" },
-  { key: "concours", href: "/concours", icon: "📚", label: "Concours" },
-  { key: "cours", href: "/cours", icon: "📖", label: "Cours" },
-  { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
-  { key: "news", href: "/news", icon: "🆕", label: "Concours ouverts" },
-  { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
+  { key: "home", href: "/", label: "Accueil" },
+  { key: "concours", href: "/concours", label: "Concours" },
+  { key: "cours", href: "/cours", label: "Cours" },
+  { key: "eval", href: "/evaluation", label: "Évaluation" },
+  { key: "news", href: "/news", label: "Concours ouverts" },
+  { key: "blog", href: "/blog", label: "Blog" },
 ];
 
 export function chromeHtml({ active, showSearch }) {
@@ -52,7 +52,7 @@ export function chromeHtml({ active, showSearch }) {
     <nav class="view-nav">
       ${NAV_ITEMS.map(
         (item) =>
-          `<a class="view-nav-btn${active === item.key ? " active" : ""}" href="${item.href}"><span class="view-nav-icon">${item.icon}</span><span class="view-nav-label">${item.label}</span></a>`
+          `<a class="view-nav-btn${active === item.key ? " active" : ""}" href="${item.href}"><span class="view-nav-label">${item.label}</span></a>`
       ).join("")}
     </nav>
     ${active === "concours" ? `<div class="stat-pill" id="statPill">— concours</div>` : ""}
@@ -64,7 +64,7 @@ export function chromeHtml({ active, showSearch }) {
   <div class="mobile-nav-panel" id="mobileNavPanel">
     ${NAV_ITEMS.map(
       (item) =>
-        `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}"><span class="view-nav-icon">${item.icon}</span>${item.label}</a>`
+        `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}">${item.label}</a>`
     ).join("")}
   </div>
 </header>
