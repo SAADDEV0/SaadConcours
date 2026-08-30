@@ -1640,17 +1640,36 @@ export default function AdminPage() {
           ))}
         </nav>
         <div className="admin-sidebar-footer">
-          <ThemeToggle />
-          <a className="admin-btn secondary" href="/" style={{ textDecoration: "none", textAlign: "center" }}>
-            ← Voir le site
+          <a className="admin-profile-card" href="/">
+            <span className="admin-avatar">A</span>
+            <span className="admin-profile-text">
+              <strong>Admin</strong>
+              <span>Voir le site ↗</span>
+            </span>
           </a>
-          <button className="admin-btn secondary" onClick={onLogout}>
-            Déconnexion
-          </button>
+          <div className="admin-footer-actions">
+            <ThemeToggle />
+            <button className="admin-icon-btn danger" onClick={onLogout} title="Déconnexion">
+              ⏻
+            </button>
+          </div>
         </div>
       </aside>
 
       <main className="admin-main">
+        <div className="admin-topbar">
+          <span className="admin-topbar-date">
+            {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+          </span>
+          <div className="admin-topbar-right">
+            <a className="admin-icon-btn" href="/" title="Voir le site">
+              ↗
+            </a>
+            <button className="admin-icon-btn danger" onClick={onLogout} title="Déconnexion">
+              ⏻
+            </button>
+          </div>
+        </div>
         <div className="admin-content">
           <div className="admin-page-head">
             <div>
