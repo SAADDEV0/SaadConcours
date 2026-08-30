@@ -70,6 +70,14 @@ export default function EvaluationPage() {
         .then((data) => {
           evalRegistry = data.map((m) => ({ ...m, nb_questions: (m.questions || []).length }));
           renderEvalModuleList();
+
+          // Deep-link from the SEO landing page /evaluation/[id] ("Commencer
+          // l'évaluation" button) straight into the matching quiz.
+          const openId = new URLSearchParams(window.location.search).get("open");
+          if (openId) {
+            const target = evalRegistry.find((m) => m.id === openId && m.available);
+            if (target) loadEvalQuiz(target);
+          }
         })
         .catch(() => {
           $("#evalModuleGrid").innerHTML = `<div class="empty-state">Impossible de charger les modules d'évaluation.</div>`;
@@ -85,7 +93,10 @@ export default function EvaluationPage() {
         const card = document.createElement("div");
         card.className = "eval-module-card" + (m.available ? "" : " disabled");
         card.innerHTML = `
-          <div class="eval-module-name">${escapeHtml(m.module)}</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div class="eval-module-name">${escapeHtml(m.module)}</div>
+            ${m.available ? `<a class="card-dl" href="/evaluation/${encodeURIComponent(m.id)}" title="Ouvrir la page dédiée" onclick="event.stopPropagation()" style="text-decoration:none;">🔗</a>` : ""}
+          </div>
           <div class="eval-module-desc">${escapeHtml(m.title)}</div>
           <div class="eval-module-meta">${m.available ? `${m.nb_questions} questions` : "Bientôt disponible"}</div>
         `;

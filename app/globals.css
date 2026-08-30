@@ -560,6 +560,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .home-action-card.color-violet{border-top-color:var(--violet);}
 .home-action-card.color-green{border-top-color:var(--green);}
 .home-action-card.color-amber{border-top-color:var(--amber);}
+.home-action-card.color-red{border-top-color:var(--red);}
 .home-action-icon{font-size:1.8rem;}
 .home-action-title{font-weight:700; font-size:1.05rem;}
 .home-action-desc{color:var(--text-dim); font-size:.85rem; line-height:1.5; flex:1;}
@@ -958,7 +959,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .donut-legend b{margin-left:auto; color:var(--text); font-weight:700;}
 .donut-dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
 
-.dash-list{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column;}
+.dash-list{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column; max-height:320px; overflow-y:auto;}
 .dash-list li{padding:10px 2px; border-bottom:1px solid var(--border); font-size:.85rem; color:var(--text);}
 .dash-list li:last-child{border-bottom:none;}
 .dash-list-date{color:var(--text-faint); font-size:.78rem;}

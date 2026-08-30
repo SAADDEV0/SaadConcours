@@ -5,6 +5,7 @@ const PROTECTED_API_PREFIXES = [
   "/api/cours",
   "/api/quiz",
   "/api/news",
+  "/api/blog",
   "/api/admin/upload-image",
   "/api/settings",
 ];
@@ -68,6 +69,7 @@ export const config = {
     "/api/cours/:path*",
     "/api/quiz/:path*",
     "/api/news/:path*",
+    "/api/blog/:path*",
     "/api/admin/upload-image",
     "/api/admin/stats",
     "/api/admin/export",

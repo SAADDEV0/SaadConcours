@@ -32,6 +32,13 @@ const ACTIONS = [
     desc: "Masters économie-gestion actuellement ouverts, mis à jour automatiquement.",
     color: "amber",
   },
+  {
+    href: "/blog",
+    icon: "📰",
+    title: "Blog",
+    desc: "Méthode, matières à préparer et conseils pour réussir ton concours d'accès au Master.",
+    color: "red",
+  },
 ];
 
 const MARKUP = `

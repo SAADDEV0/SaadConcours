@@ -46,6 +46,7 @@ export function chromeHtml({ active, showSearch }) {
       <a class="view-nav-btn${active === "cours" ? " active" : ""}" href="/cours">📖<span class="view-nav-label"> Cours</span></a>
       <a class="view-nav-btn${active === "eval" ? " active" : ""}" href="/evaluation">📝<span class="view-nav-label"> Évaluation</span></a>
       <a class="view-nav-btn${active === "news" ? " active" : ""}" href="/news">🆕<span class="view-nav-label"> Concours ouverts</span></a>
+      <a class="view-nav-btn${active === "blog" ? " active" : ""}" href="/blog">📰<span class="view-nav-label"> Blog</span></a>
     </nav>
     ${active === "concours" ? `<div class="stat-pill" id="statPill">— concours</div>` : ""}
     <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>

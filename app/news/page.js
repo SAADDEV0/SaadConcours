@@ -174,7 +174,7 @@ export default function NewsPage() {
           ${item.ville ? `<span class="news-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
           ${item.filiere ? `<span class="news-filiere-chip">${escapeHtml(item.filiere)}</span>` : ""}
         </div>
-        <div class="news-card-title">${escapeHtml(item.titre)}</div>
+        <div class="news-card-title">${escapeHtml(item.titre)} <a class="card-dl" href="/news/${encodeURIComponent(item.id)}" title="Ouvrir la page dédiée" style="text-decoration:none; display:inline-flex; vertical-align:middle;">🔗</a></div>
         <div class="nw-card-bottom">
           ${urgencyLabel(item)}
           <div class="nw-card-actions">

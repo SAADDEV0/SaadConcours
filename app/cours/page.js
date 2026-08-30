@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml, trackPdfDownload } from "../_shared/chrome";
-import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
+import { chromeHtml, chromeScript, footerHtml } from "../_shared/chrome";
+import { downloadCoursPdf } from "../_shared/coursPdf";
 
 const MARKUP = `
 ${chromeHtml({ active: "cours", showSearch: false })}
@@ -50,9 +50,6 @@ export default function CoursPage() {
         /[&<>"']/g,
         (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
       );
-    }
-    function stripInlineMd(s) {
-      return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
     }
 
     /* -------------------- Reading theme picker (Obsidian-style) --------------------
@@ -141,7 +138,10 @@ export default function CoursPage() {
         const card = document.createElement("div");
         card.className = "eval-module-card" + (m.available ? "" : " disabled");
         card.innerHTML = `
-          <div class="eval-module-name">${escapeHtml(m.module)}</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div class="eval-module-name">${escapeHtml(m.module)}</div>
+            ${m.available ? `<a class="card-dl" href="/cours/${encodeURIComponent(m.id)}" title="Ouvrir la page dédiée" onclick="event.stopPropagation()" style="text-decoration:none;">🔗</a>` : ""}
+          </div>
           <div class="eval-module-desc">${escapeHtml(m.description || "")}</div>
           <div class="eval-module-meta">${m.available ? "Lire le cours" : "Bientôt disponible"}</div>
         `;
@@ -200,135 +200,7 @@ export default function CoursPage() {
 
     $("#coursPdfBtn").addEventListener("click", () => {
       if (!coursCurrent) return;
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: "mm", format: "a4" });
-      const marginX = 18;
-      const pageW = doc.internal.pageSize.getWidth();
-      const pageH = doc.internal.pageSize.getHeight();
-      const maxWidth = pageW - marginX * 2;
-      const bottomLimit = pageH - 18;
-      let y = 26;
-
-      function ensureSpace(need) {
-        if (y + need > bottomLimit) {
-          doc.addPage();
-          y = 26;
-        }
-      }
-
-      function addWrappedLine(text, opts = {}) {
-        const { bold = false, size = 10.5, gapAfter = 1.6, color = [20, 20, 25] } = opts;
-        doc.setFont(undefined, bold ? "bold" : "normal");
-        doc.setFontSize(size);
-        doc.setTextColor(...color);
-        const clean = stripInlineMd(text);
-        if (!clean) {
-          y += 2;
-          return;
-        }
-        const wrapped = doc.splitTextToSize(clean, maxWidth);
-        for (const wl of wrapped) {
-          ensureSpace(size * 0.42);
-          doc.text(wl, marginX, y);
-          y += size * 0.42;
-        }
-        y += gapAfter;
-      }
-
-      function addTable(rows) {
-        const cleanRows = rows.map((r) => r.map((cell) => stripInlineMd(cell)));
-        ensureSpace(20);
-        doc.autoTable({
-          startY: y,
-          margin: { left: marginX, right: marginX },
-          head: [cleanRows[0]],
-          body: cleanRows.slice(1),
-          styles: { fontSize: 8.5, cellPadding: 2, overflow: "linebreak" },
-          headStyles: { fillColor: [79, 140, 255], textColor: 255 },
-          theme: "grid",
-        });
-        y = doc.lastAutoTable.finalY + 4;
-      }
-
-      const src = coursCurrent.md.split("\n");
-      let i = 0;
-      while (i < src.length) {
-        const line = src[i];
-
-        if (/^\s*$/.test(line)) {
-          y += 2;
-          i++;
-          continue;
-        }
-
-        if (/^```/.test(line.trim())) {
-          i++;
-          const codeLines = [];
-          while (i < src.length && !/^```/.test(src[i].trim())) {
-            codeLines.push(src[i]);
-            i++;
-          }
-          i++;
-          codeLines.forEach((cl) => addWrappedLine(cl, { size: 9, color: [80, 80, 90] }));
-          y += 1.5;
-          continue;
-        }
-
-        if (/^\|/.test(line.trim())) {
-          const rows = [];
-          while (i < src.length && /^\|/.test(src[i].trim())) {
-            const cells = src[i]
-              .trim()
-              .replace(/^\||\|$/g, "")
-              .split("|")
-              .map((s) => s.trim());
-            if (!/^:?-+:?$/.test(cells.join(""))) rows.push(cells);
-            i++;
-          }
-          if (rows.length) addTable(rows);
-          continue;
-        }
-
-        const h1M = line.match(/^#\s+(.*)$/);
-        if (h1M) {
-          ensureSpace(12);
-          addWrappedLine(h1M[1], { bold: true, size: 15, gapAfter: 3 });
-          i++;
-          continue;
-        }
-
-        const h2M = line.match(/^##\s+(.*)$/);
-        if (h2M) {
-          y += 2;
-          ensureSpace(10);
-          addWrappedLine(h2M[1], { bold: true, size: 13, gapAfter: 2.5 });
-          i++;
-          continue;
-        }
-
-        const h3M = line.match(/^###\s+(.*)$/);
-        if (h3M) {
-          ensureSpace(9);
-          addWrappedLine(h3M[1], { bold: true, size: 11.5, gapAfter: 2 });
-          i++;
-          continue;
-        }
-
-        const bulletM = line.match(/^\s*-\s+(.*)$/);
-        if (bulletM) {
-          addWrappedLine("• " + bulletM[1]);
-          i++;
-          continue;
-        }
-
-        addWrappedLine(line);
-        i++;
-      }
-
-      addWatermark(doc);
-      addSiteHeader(doc);
-      doc.save(`${coursCurrent.meta.id}.pdf`);
-      trackPdfDownload("cours", coursCurrent.meta.id);
+      downloadCoursPdf({ id: coursCurrent.meta.id, content: coursCurrent.md });
     });
 
     loadCoursRegistry();

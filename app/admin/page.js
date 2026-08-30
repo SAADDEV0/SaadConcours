@@ -807,6 +807,33 @@ const NEWS_CONFIG = {
   ],
 };
 
+const BLOG_CONFIG = {
+  apiBase: "/api/blog",
+  resourceLabel: "Article",
+  showIdField: true,
+  idPlaceholder: "ex: matieres-a-preparer-master-fsjes (généré depuis le titre sinon)",
+  fields: [
+    { key: "title", label: "Titre", required: true, placeholder: "ex: Les matières à préparer pour les masters FSJES" },
+    {
+      key: "excerpt",
+      label: "Résumé (utilisé comme description SEO et sur la liste des articles)",
+      type: "textarea",
+      required: true,
+      placeholder: "1-2 phrases qui résument l'article.",
+    },
+    { key: "content", label: "Contenu (Markdown)", type: "textarea", required: true, markdown: true },
+    { key: "publishedAt", label: "Date de publication (AAAA-MM-JJ, auto si vide)", placeholder: "2026-08-30" },
+    { key: "available", label: "Publié", type: "checkbox" },
+  ],
+  columns: [
+    { key: "id", label: "Slug", mono: true },
+    { key: "title", label: "Titre" },
+    { key: "publishedAt", label: "Publié le" },
+    { key: "available", label: "Publié", render: (i) => (i.available ? "✅" : "🕓 Brouillon") },
+  ],
+  duplicateKeys: ["title"],
+};
+
 /* -------------------------------- Dashboard -------------------------------- */
 
 // trend is computed from the real 7-day series (today vs the average of the
@@ -1702,12 +1729,13 @@ const TABS = [
   { key: "cours", label: "Cours", icon: "📖", config: COURS_CONFIG },
   { key: "quiz", label: "Évaluation", icon: "📝", config: QUIZ_CONFIG },
   { key: "news", label: "News", icon: "🆕", config: NEWS_CONFIG },
+  { key: "blog", label: "Blog", icon: "📰", config: BLOG_CONFIG },
   { key: "settings", label: "Réglages", icon: "⚙️" },
 ];
 
 const NAV_GROUPS = [
   { label: "Aperçu", keys: ["dashboard"] },
-  { label: "Contenu", keys: ["concours", "cours", "quiz", "news"] },
+  { label: "Contenu", keys: ["concours", "cours", "quiz", "news", "blog"] },
   { label: "Système", keys: ["settings"] },
 ];
 
@@ -1720,20 +1748,21 @@ function GlobalSearch({ onNavigate }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [data, setData] = useState({ concours: [], cours: [], quiz: [], news: [] });
+  const [data, setData] = useState({ concours: [], cours: [], quiz: [], news: [], blog: [] });
   const boxRef = useRef(null);
 
   async function ensureLoaded() {
     if (loaded) return;
     setLoaded(true);
     try {
-      const [c, co, q, n] = await Promise.all([
+      const [c, co, q, n, b] = await Promise.all([
         fetch("/api/concours").then((r) => r.json()),
         fetch("/api/cours").then((r) => r.json()),
         fetch("/api/quiz").then((r) => r.json()),
         fetch("/api/news").then((r) => r.json()),
+        fetch("/api/blog").then((r) => r.json()),
       ]);
-      setData({ concours: c || [], cours: co || [], quiz: q || [], news: n || [] });
+      setData({ concours: c || [], cours: co || [], quiz: q || [], news: n || [], blog: b || [] });
     } catch {
       setLoaded(false);
     }
@@ -1767,6 +1796,10 @@ function GlobalSearch({ onNavigate }) {
             .filter((i) => `${i.titre} ${i.etablissement} ${i.ville}`.toLowerCase().includes(q))
             .slice(0, 4)
             .map((i) => ({ tab: "news", icon: "🆕", title: i.titre, sub: [i.etablissement, i.ville].filter(Boolean).join(" · ") })),
+          ...data.blog
+            .filter((i) => `${i.title}`.toLowerCase().includes(q))
+            .slice(0, 4)
+            .map((i) => ({ tab: "blog", icon: "📰", title: i.title, sub: i.available ? "Publié" : "Brouillon" })),
         ].slice(0, 10)
       : [];
 
