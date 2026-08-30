@@ -124,6 +124,18 @@ const SOCIAL_NETWORKS = [
 ];
 
 export const chromeScript = function initChrome() {
+  // Loaded here instead of a blocking <link> in app/layout.js's <head> — see
+  // that file for why. Idempotent so re-running chromeScript() on client-side
+  // navigation between pages never injects it twice.
+  (function initKatexCss() {
+    if (document.getElementById("katex-css")) return;
+    const link = document.createElement("link");
+    link.id = "katex-css";
+    link.rel = "stylesheet";
+    link.href = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css";
+    document.head.appendChild(link);
+  })();
+
   (function initSocialLinks() {
     const el = document.getElementById("footerSocial");
     if (!el) return;

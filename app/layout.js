@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -34,6 +35,7 @@ export const metadata = {
     description: SITE_DESCRIPTION,
   },
   robots: { index: true, follow: true },
+  verification: { google: "psUjgmpZoBIvwFbyh0gIAS6cYM0MzeOU9Apw_swXJ7g" },
 };
 
 const ORG_JSON_LD = {
@@ -45,6 +47,21 @@ const ORG_JSON_LD = {
   areaServed: { "@type": "Country", name: "Maroc" },
 };
 
+// Lets Google show a search box directly in the SERP for site: queries
+// ("sitelinks search box") — target actually works, see the ?q= handling
+// added to app/concours/page.js.
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/concours?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
@@ -54,19 +71,30 @@ export default function RootLayout({ children }) {
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }}
         />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
+        />
+        {/* katex.min.css is injected client-side by chromeScript() instead of
+           linked here — a render-blocking stylesheet on every single page
+           (most of which show no math at all) was hurting LCP site-wide. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
-        <script defer src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
       </head>
       <body>
         {children}
         <Analytics />
+        {/* afterInteractive (Next's managed equivalent of `defer`) instead of
+           raw <script defer> tags in <head> — same load timing, but Next
+           dedupes/schedules them instead of the browser blindly fetching
+           4 external bundles on every route regardless of whether it uses them. */}
+        <Script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" strategy="afterInteractive" />
+        <Script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" strategy="afterInteractive" />
+        <Script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" strategy="afterInteractive" />
+        <Script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" strategy="afterInteractive" />
+        <Script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js" strategy="afterInteractive" />
       </body>
     </html>
   );

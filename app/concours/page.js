@@ -342,6 +342,11 @@ export default function ConcoursPage() {
       .then((data) => {
         ALL = data;
         initFilters();
+        // Prefills from ?q= so a direct link (e.g. Google's sitelinks search
+        // box, powered by the WebSite/SearchAction JSON-LD in app/layout.js)
+        // actually lands on filtered results instead of the full list.
+        const q = new URLSearchParams(window.location.search).get("q");
+        if (q) $("#searchInput").value = q;
         applyFilters();
       })
       .catch((err) => {
