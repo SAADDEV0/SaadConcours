@@ -3,7 +3,7 @@ import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getAllBlog } from 
 const SITE_URL = "https://www.saadconcours.space";
 
 export default async function sitemap() {
-  const staticRoutes = ["", "/concours", "/cours", "/evaluation", "/news", "/blog"].map((path) => ({
+  const staticRoutes = ["", "/concours", "/cours", "/evaluation", "/news", "/blog", "/faq"].map((path) => ({
     url: `${SITE_URL}${path}`,
     changeFrequency: path === "" ? "daily" : "weekly",
     priority: path === "" ? 1 : 0.8,

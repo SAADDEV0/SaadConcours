@@ -334,6 +334,14 @@ header{
 .cd-tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px;}
 .cd-card{background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:18px; box-shadow:var(--shadow);}
 .cd-card h2{margin-top:0; font-size:1.05rem;}
+
+.faq-item{border-bottom:1px solid var(--border); padding:14px 0;}
+.faq-item:last-child{border-bottom:none;}
+.faq-item summary{font-weight:600; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.faq-item summary::-webkit-details-marker{display:none;}
+.faq-item summary::after{content:"+"; color:var(--text-faint); font-size:1.2rem; flex-shrink:0;}
+.faq-item[open] summary::after{content:"−";}
+.faq-item p{color:var(--text-dim); margin:10px 0 0; line-height:1.6;}
 .cd-images{display:flex; flex-direction:column; gap:14px;}
 .cd-images img{width:100%; border-radius:8px; border:1px solid var(--border);}
 .cd-source{font-size:.85rem; color:var(--text-dim); word-break:break-all; margin-bottom:24px;}

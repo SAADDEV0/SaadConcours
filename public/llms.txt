@@ -1,0 +1,25 @@
+# SaadConcours
+
+> Base de données gratuite de sujets de concours réels d'accès aux Masters spécialisés (CCA, GFCF, Finance, Fiscalité, Audit) dans les universités marocaines — énoncés, corrigés indicatifs, fiches de cours et QCM d'entraînement.
+
+SaadConcours est un site indépendant, gratuit et sans publicité, à destination des étudiants marocains qui préparent le concours écrit d'accès aux masters spécialisés en économie-gestion (Comptabilité Contrôle Audit, Gestion Financière et Comptable des Entreprises, Finance, Fiscalité, Audit). Le contenu est géré par un administrateur unique (pas de soumission publique/collaborative) et régulièrement mis à jour.
+
+## Contenu du site
+
+- [Concours](https://www.saadconcours.space/concours): plus de 65 sujets réels de concours d'accès au master, avec énoncé complet, scans originaux quand disponibles, et corrigé indicatif (généré, à vérifier) pour la majorité d'entre eux. Filtrable par ville, établissement, filière et année.
+- [Cours](https://www.saadconcours.space/cours): fiches de cours synthétiques par module (comptabilité analytique, analyse financière, mathématiques financières, macroéconomie, audit...).
+- [Évaluation](https://www.saadconcours.space/evaluation): QCM d'auto-évaluation par module, en conditions concours, avec correction et export PDF.
+- [Concours ouverts](https://www.saadconcours.space/news): veille automatique (mise à jour ~toutes les 6h) des masters actuellement ouverts aux inscriptions dans les universités marocaines, avec dates limites.
+- [Blog](https://www.saadconcours.space/blog): articles d'analyse méthodologique basés sur les données réelles du site (ex: fréquence des matières qui reviennent au concours, par filière).
+
+## Faits clés
+
+- Gratuit, sans compte utilisateur, sans publicité.
+- Couvre les masters économie-gestion : CCA (Comptabilité Contrôle Audit), GFCF (Gestion Financière et Comptable des Entreprises), Finance, Fiscalité, Audit.
+- Les corrigés sont indicatifs (relecture humaine non garantie) — à vérifier avant de s'en servir pour réviser.
+- Chaque concours cite sa source publique d'origine quand elle est connue.
+
+## Pages utiles
+
+- [Confidentialité](https://www.saadconcours.space/confidentialite): ce qui est mesuré (visites, téléchargements) et pourquoi.
+- [Sitemap](https://www.saadconcours.space/sitemap.xml): liste complète des URLs indexables.
