@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllNews } from "@/lib/store";
 import { isValidEmail, normalizeEmail } from "@/lib/subscribers";
-import { buildFromHeader, defaultSubject, sendDigestEmail } from "@/lib/emailDigest";
+import { buildFromHeader, defaultSubject, emailConfigured, sendDigestEmail } from "@/lib/emailDigest";
 
 // Manual/test send from the admin composer - distinct from
 // /api/cron/news-digest (unattended, always-full-list). Lets the admin pick
@@ -15,9 +15,11 @@ export const dynamic = "force-dynamic";
 const MAX_RECIPIENTS = 500;
 
 export async function POST(req) {
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) {
-    return NextResponse.json({ error: "RESEND_API_KEY non configuré côté serveur." }, { status: 400 });
+  if (!emailConfigured()) {
+    return NextResponse.json(
+      { error: "GMAIL_USER / GMAIL_APP_PASSWORD non configurés côté serveur." },
+      { status: 400 }
+    );
   }
 
   const body = await req.json().catch(() => null);
@@ -51,14 +53,13 @@ export async function POST(req) {
     }
   }
 
-  const fromHeader = buildFromHeader(body.fromName, body.fromEmail);
+  const fromHeader = buildFromHeader(body.fromName);
   const subject = body.subject || defaultSubject(items.length);
 
   let sent = 0;
   const failed = [];
   for (const email of emails) {
     const result = await sendDigestEmail({
-      resendKey,
       fromHeader,
       to: email,
       subject,

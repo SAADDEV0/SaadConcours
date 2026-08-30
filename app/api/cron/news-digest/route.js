@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllNews, getSettings } from "@/lib/store";
 import { getSubscribers } from "@/lib/subscribers";
-import { computeUrgentNews, defaultSubject, buildFromHeader, sendDigestEmail } from "@/lib/emailDigest";
+import { computeUrgentNews, defaultSubject, buildFromHeader, emailConfigured, sendDigestEmail } from "@/lib/emailDigest";
 
 export const dynamic = "force-dynamic";
 
@@ -30,9 +30,8 @@ export async function POST(req) {
     return NextResponse.json({ sent: 0, reason: "Alertes désactivées dans les réglages admin." });
   }
 
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) {
-    return NextResponse.json({ sent: 0, reason: "RESEND_API_KEY non configuré." });
+  if (!emailConfigured()) {
+    return NextResponse.json({ sent: 0, reason: "GMAIL_USER / GMAIL_APP_PASSWORD non configurés." });
   }
 
   const news = await getAllNews();
@@ -46,13 +45,12 @@ export async function POST(req) {
     return NextResponse.json({ sent: 0, reason: "Aucun abonné." });
   }
 
-  const fromHeader = buildFromHeader(settings.newsAlertsFromName, settings.newsAlertsFromEmail);
+  const fromHeader = buildFromHeader(settings.newsAlertsFromName);
   const subject = settings.newsAlertsSubject || defaultSubject(urgent.length);
 
   let sent = 0;
   for (const email of subscribers) {
     const result = await sendDigestEmail({
-      resendKey,
       fromHeader,
       to: email,
       subject,

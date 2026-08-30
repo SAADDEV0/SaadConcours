@@ -1163,7 +1163,6 @@ function DigestComposer({ settings }) {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [fromName, setFromName] = useState("");
-  const [fromEmail, setFromEmail] = useState("");
   const [testEmail, setTestEmail] = useState("");
   const [preview, setPreview] = useState(null);
   const [previewLoading, setPreviewLoading] = useState(false);
@@ -1195,7 +1194,6 @@ function DigestComposer({ settings }) {
     setSubject(settings.newsAlertsSubject || "");
     setMessage(settings.newsAlertsMessage || "");
     setFromName(settings.newsAlertsFromName || "SaadConcours");
-    setFromEmail(settings.newsAlertsFromEmail || "alerts@saadconcours.space");
     setTestEmail(settings.email || "");
   }, [settings]);
 
@@ -1261,7 +1259,7 @@ function DigestComposer({ settings }) {
     }
     setSending(true);
     try {
-      const body = { newsIds: [...selectedNews], subject, message, fromName, fromEmail };
+      const body = { newsIds: [...selectedNews], subject, message, fromName };
       if (testOnly) body.testEmail = testEmail;
       else body.emails = cappedEmails;
       const res = await fetch("/api/admin/send-digest", {
@@ -1380,18 +1378,13 @@ function DigestComposer({ settings }) {
         <label>Message pour cet envoi</label>
         <textarea style={{ minHeight: 80 }} value={message} onChange={(e) => setMessage(e.target.value)} />
       </div>
-      <div className="admin-form-grid">
-        <div className="admin-field">
-          <label>Nom de l'expéditeur</label>
-          <input value={fromName} onChange={(e) => setFromName(e.target.value)} />
-        </div>
-        <div className="admin-field">
-          <label>Email de l'expéditeur</label>
-          <input value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
-        </div>
+      <div className="admin-field">
+        <label>Nom de l'expéditeur</label>
+        <input value={fromName} onChange={(e) => setFromName(e.target.value)} />
       </div>
       <div className="admin-image-hint" style={{ marginBottom: 16 }}>
-        Ces trois champs ne modifient que cet envoi — pas les réglages permanents de l'alerte automatique.
+        Objet, message et nom ne modifient que cet envoi — pas les réglages permanents de l'alerte automatique.
+        L'adresse d'envoi reste toujours le compte Gmail configuré côté serveur.
       </div>
 
       <div className="admin-row-actions" style={{ marginBottom: 12, flexWrap: "wrap" }}>
@@ -1530,8 +1523,8 @@ function SettingsPanel() {
       <div className="admin-card" style={{ marginTop: 18 }}>
         <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>🔔 Alertes automatiques</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-          Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours.
-          Nécessite une clé Resend configurée côté serveur (RESEND_API_KEY) — sans elle, l'envoi ne fait rien.
+          Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours, via le
+          compte Gmail configuré côté serveur (GMAIL_USER / GMAIL_APP_PASSWORD) — sans ça, l'envoi ne fait rien.
         </p>
         <label className="admin-checkbox-label">
           <input
@@ -1565,27 +1558,17 @@ function SettingsPanel() {
           />
         </div>
 
-        <div className="admin-form-grid">
-          <div className="admin-field">
-            <label>Nom de l'expéditeur</label>
-            <input
-              value={form.newsAlertsFromName || ""}
-              placeholder="SaadConcours"
-              onChange={(e) => setForm({ ...form, newsAlertsFromName: e.target.value })}
-            />
+        <div className="admin-field">
+          <label>Nom de l'expéditeur</label>
+          <input
+            value={form.newsAlertsFromName || ""}
+            placeholder="SaadConcours"
+            onChange={(e) => setForm({ ...form, newsAlertsFromName: e.target.value })}
+          />
+          <div className="admin-image-hint" style={{ marginTop: 4 }}>
+            L'adresse d'envoi elle-même est toujours celle du compte Gmail configuré côté serveur (Gmail
+            n'autorise pas d'envoyer sous une autre adresse) — seul ce nom affiché est personnalisable.
           </div>
-          <div className="admin-field">
-            <label>Email de l'expéditeur</label>
-            <input
-              value={form.newsAlertsFromEmail || ""}
-              placeholder="alerts@saadconcours.space"
-              onChange={(e) => setForm({ ...form, newsAlertsFromEmail: e.target.value })}
-            />
-          </div>
-        </div>
-        <div className="admin-image-hint">
-          ⚠️ L'email d'expéditeur doit appartenir à un domaine vérifié sur Resend, sinon l'envoi échouera. Sans
-          domaine vérifié, laisse la valeur par défaut.
         </div>
       </div>
 
