@@ -329,6 +329,7 @@ header{
 .cd-breadcrumb a{color:var(--text-dim); text-decoration:none;}
 .cd-breadcrumb a:hover{color:var(--accent);}
 .cd-head-row{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.cd-head-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap; flex-shrink:0;}
 .cd-head h1{font-size:1.4rem; margin:0 0 10px;}
 .cd-tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px;}
 .cd-card{background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:18px; box-shadow:var(--shadow);}

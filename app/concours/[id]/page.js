@@ -3,7 +3,7 @@ import { marked } from "marked";
 import { getAllConcours, getCorrigeFile } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { formatQCM } from "../../_shared/concoursFormat";
-import ConcoursDetailClient, { ShareButton } from "./ConcoursDetailClient";
+import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -84,6 +84,9 @@ export default async function ConcoursDetailPage({ params }) {
   const related = getRelatedConcours(list, c);
   const hasImages = Boolean(c.images && c.images.length > 0);
   const hasSource = Boolean(c.source);
+  // corrige_md merged in so the PDF (top button + bottom actions) includes
+  // the corrigé even when it only exists as a raw file, not on c itself.
+  const fullConcours = corrigeMd ? { ...c, corrige_md: corrigeMd } : c;
 
   // c.source is free text ("- Lien / origine du sujet : https://...") in
   // some entries, not always a bare URL — schema.org's isBasedOn expects a
@@ -135,7 +138,10 @@ export default async function ConcoursDetailPage({ params }) {
         <div className="cd-head">
           <div className="cd-head-row">
             <h1>{c.etablissement} — {c.ville} — {c.annee}</h1>
-            <ShareButton concours={c} />
+            <div className="cd-head-actions">
+              <DownloadPdfButton concours={fullConcours} />
+              <ShareButton concours={c} />
+            </div>
           </div>
           <div className="cd-tags">
             {(c.master_reel || c.filiere) && <span className="info-tag">🎓 {c.master_reel || c.filiere}</span>}
@@ -188,7 +194,7 @@ export default async function ConcoursDetailPage({ params }) {
           </div>
         )}
 
-        <ConcoursDetailClient concours={corrigeMd ? { ...c, corrige_md: corrigeMd } : c} />
+        <ConcoursDetailClient concours={fullConcours} />
 
         {related.length > 0 && (
           <div className="cd-card cd-related">
