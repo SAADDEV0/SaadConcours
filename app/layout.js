@@ -35,6 +35,18 @@ export const metadata = {
   },
   robots: { index: true, follow: true },
   verification: { google: "psUjgmpZoBIvwFbyh0gIAS6cYM0MzeOU9Apw_swXJ7g" },
+  // iOS Safari ignores the web manifest for "Add to Home Screen" and reads
+  // these specific meta tags instead — apple-touch-icon itself already
+  // comes from app/apple-icon.js.
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport = {
+  themeColor: "#4f46e5",
 };
 
 const ORG_JSON_LD = {
