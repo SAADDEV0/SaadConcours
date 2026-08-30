@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { chromeScript, trackConcoursView } from "../../_shared/chrome";
 import { downloadConcoursPdf } from "../../_shared/concoursPdf";
 
-// Native share sheet on mobile (navigator.share); desktop browsers mostly
-// don't implement it, so they fall back to a small panel with direct
-// share links - WhatsApp first since that's where these PDFs actually
-// circulate among Moroccan students.
+// Always opens our own WhatsApp/Facebook/Telegram panel instead of the
+// native OS share sheet (navigator.share) - the native sheet hides which
+// apps are offered behind the OS, and WhatsApp (where these PDFs actually
+// circulate among Moroccan students) isn't guaranteed to be the first option.
 // Exported separately so page.js can place it at the top of the page
 // (next to the title) instead of only in the bottom action bar.
 export function ShareButton({ concours }) {
@@ -21,15 +21,7 @@ export function ShareButton({ concours }) {
     } — sujet de concours réel avec corrigé sur SaadConcours`;
   }
 
-  async function handleClick() {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: shareText(), url: window.location.href });
-      } catch {
-        // user cancelled the native share sheet - nothing to do
-      }
-      return;
-    }
+  function handleClick() {
     setOpen((o) => !o);
   }
 

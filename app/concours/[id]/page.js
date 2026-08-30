@@ -82,6 +82,8 @@ export default async function ConcoursDetailPage({ params }) {
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
+  const hasImages = Boolean(c.images && c.images.length > 0);
+  const hasSource = Boolean(c.source);
 
   // c.source is free text ("- Lien / origine du sujet : https://...") in
   // some entries, not always a bare URL — schema.org's isBasedOn expects a
@@ -144,13 +146,30 @@ export default async function ConcoursDetailPage({ params }) {
           </div>
         </div>
 
-        <div className="cd-card">
+        <nav className="tab-bar cd-tabs">
+          <a className="tab-btn" href="#section-enonce">📝 Énoncé</a>
+          {corrigeHtml && <a className="tab-btn" href="#section-corrige">✅ Corrigé</a>}
+          {hasImages && <a className="tab-btn" href="#section-images">🖼️ Extraits</a>}
+          {hasSource && <a className="tab-btn" href="#section-source">🔗 Source</a>}
+        </nav>
+
+        <div className="cd-card" id="section-enonce">
           <h2>Énoncé</h2>
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: enonceHtml }} />
         </div>
 
-        {c.images && c.images.length > 0 && (
-          <div className="cd-card">
+        {corrigeHtml && (
+          <div className="cd-card" id="section-corrige">
+            <h2>Corrigé</h2>
+            <div className="corrige-disclaimer">
+              ⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier pour réviser.
+            </div>
+            <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
+          </div>
+        )}
+
+        {hasImages && (
+          <div className="cd-card" id="section-images">
             <h2>Extraits scannés</h2>
             <div className="cd-images">
               {c.images.map((img) => (
@@ -160,20 +179,13 @@ export default async function ConcoursDetailPage({ params }) {
           </div>
         )}
 
-        {corrigeHtml && (
-          <div className="cd-card">
-            <h2>Corrigé</h2>
-            <div className="corrige-disclaimer">
-              ⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier pour réviser.
-            </div>
-            <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
+        {hasSource && (
+          <div className="cd-card" id="section-source">
+            <h2>Source</h2>
+            <p className="cd-source">
+              <a href={c.source} target="_blank" rel="noopener noreferrer">{c.source}</a>
+            </p>
           </div>
-        )}
-
-        {c.source && (
-          <p className="cd-source">
-            Source : <a href={c.source} target="_blank" rel="noopener noreferrer">{c.source}</a>
-          </p>
         )}
 
         <ConcoursDetailClient concours={corrigeMd ? { ...c, corrige_md: corrigeMd } : c} />
