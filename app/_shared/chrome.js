@@ -2,6 +2,15 @@
 // reused verbatim across every page since they're separate routes now
 // instead of one single-page app.
 
+const NAV_ITEMS = [
+  { key: "home", href: "/", icon: "🏠", label: "Accueil" },
+  { key: "concours", href: "/concours", icon: "📚", label: "Concours" },
+  { key: "cours", href: "/cours", icon: "📖", label: "Cours" },
+  { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
+  { key: "news", href: "/news", icon: "🆕", label: "Concours ouverts" },
+  { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
+];
+
 export function chromeHtml({ active, showSearch }) {
   return `
 <div class="dua-banner">
@@ -41,15 +50,22 @@ export function chromeHtml({ active, showSearch }) {
         : `<div class="search-box" style="flex:1;"></div>`
     }
     <nav class="view-nav">
-      <a class="view-nav-btn${active === "home" ? " active" : ""}" href="/">🏠<span class="view-nav-label"> Accueil</span></a>
-      <a class="view-nav-btn${active === "concours" ? " active" : ""}" href="/concours">📚<span class="view-nav-label"> Concours</span></a>
-      <a class="view-nav-btn${active === "cours" ? " active" : ""}" href="/cours">📖<span class="view-nav-label"> Cours</span></a>
-      <a class="view-nav-btn${active === "eval" ? " active" : ""}" href="/evaluation">📝<span class="view-nav-label"> Évaluation</span></a>
-      <a class="view-nav-btn${active === "news" ? " active" : ""}" href="/news">🆕<span class="view-nav-label"> Concours ouverts</span></a>
-      <a class="view-nav-btn${active === "blog" ? " active" : ""}" href="/blog">📰<span class="view-nav-label"> Blog</span></a>
+      ${NAV_ITEMS.map(
+        (item) =>
+          `<a class="view-nav-btn${active === item.key ? " active" : ""}" href="${item.href}"><span class="view-nav-icon">${item.icon}</span><span class="view-nav-label">${item.label}</span></a>`
+      ).join("")}
     </nav>
     ${active === "concours" ? `<div class="stat-pill" id="statPill">— concours</div>` : ""}
     <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
+    <button class="nav-toggle-btn" id="navToggleBtn" title="Menu" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+    </button>
+  </div>
+  <div class="mobile-nav-panel" id="mobileNavPanel">
+    ${NAV_ITEMS.map(
+      (item) =>
+        `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}"><span class="view-nav-icon">${item.icon}</span>${item.label}</a>`
+    ).join("")}
   </div>
 </header>
 `;
@@ -186,6 +202,37 @@ export const chromeScript = function initChrome() {
       applyThemeButton();
     });
   }
+
+  (function initMobileNav() {
+    const toggleBtn = document.getElementById("navToggleBtn");
+    const panel = document.getElementById("mobileNavPanel");
+    if (!toggleBtn || !panel || toggleBtn.dataset.wired === "1") return;
+    toggleBtn.dataset.wired = "1";
+
+    function close() {
+      panel.classList.remove("open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+    }
+    function toggle() {
+      const willOpen = !panel.classList.contains("open");
+      panel.classList.toggle("open", willOpen);
+      toggleBtn.setAttribute("aria-expanded", String(willOpen));
+    }
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+    panel.addEventListener("click", (e) => {
+      if (e.target.closest("a")) close();
+    });
+    document.addEventListener("click", (e) => {
+      if (!panel.contains(e.target) && e.target !== toggleBtn) close();
+    });
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 860) close();
+    });
+  })();
 };
 
 // A public asset path stored in JSON as "data/foo.json" or "images/x.png"
