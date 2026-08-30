@@ -133,7 +133,7 @@ export default function HomePage() {
         // Storage appends new entries to the end of the array (see
         // lib/store.js addItem) - same "tail = most recent" logic as the
         // admin dashboard's "Derniers concours ajoutés" widget.
-        const recentConcours = concours.slice(-2).reverse();
+        const recentConcours = concours.slice(-4).reverse();
         if (!recentConcours.length) return;
         const grid = $("#homeRecentGrid");
         grid.innerHTML = "";
