@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "../_shared/ThemeToggle";
 import { pub } from "../_shared/chrome";
@@ -809,38 +809,146 @@ const NEWS_CONFIG = {
 
 /* -------------------------------- Dashboard -------------------------------- */
 
-// spark is optional and only ever real data (e.g. the same 7-day PDF
-// counts as the chart below) - cards with no genuine daily series just
-// don't get one, rather than faking a trend.
-function StatCard({ icon, tone, label, value, sub, spark }) {
-  const sparkMax = spark ? Math.max(1, ...spark) : 0;
+// trend is computed from the real 7-day series (today vs the average of the
+// previous 6 days) - never fabricated. null when there isn't enough signal
+// (e.g. the previous days are all zero) so we don't show a misleading "+inf%".
+function trendFromSeries(values) {
+  if (!values || values.length < 2) return null;
+  const today = values[values.length - 1];
+  const prev = values.slice(0, -1);
+  const avgPrev = prev.reduce((s, n) => s + n, 0) / prev.length;
+  if (avgPrev <= 0) return null;
+  const pct = ((today - avgPrev) / avgPrev) * 100;
+  return Math.round(pct);
+}
+
+function StatCard({ icon, tone, label, value, sub, spark, trend }) {
   return (
     <div className={"stat-card tone-" + (tone || "default")}>
-      <div className="stat-card-icon">{icon}</div>
-      <div className="stat-card-body">
-        <div className="stat-card-value">{value}</div>
-        <div className="stat-card-label">{label}</div>
-        {sub && <div className="stat-card-sub">{sub}</div>}
+      <div className="stat-card-top">
+        <div className="stat-card-icon">{icon}</div>
+        {typeof trend === "number" && (
+          <span className={"stat-card-trend " + (trend >= 0 ? "up" : "down")}>
+            {trend >= 0 ? "↗" : "↘"} {Math.abs(trend)}%
+          </span>
+        )}
       </div>
+      <div className="stat-card-value">{value}</div>
+      <div className="stat-card-label">{label}</div>
+      {sub && <div className="stat-card-sub">{sub}</div>}
       {spark && (
-        <div className="stat-card-spark" title="7 derniers jours">
-          {spark.map((n, i) => (
-            <span key={i} style={{ height: `${Math.max(12, (n / sparkMax) * 100)}%` }} />
-          ))}
-        </div>
+        <svg className="stat-card-spark" viewBox="0 0 100 28" preserveAspectRatio="none">
+          <polyline
+            points={spark
+              .map((n, i, arr) => {
+                const max = Math.max(1, ...arr);
+                const x = (i / (arr.length - 1 || 1)) * 100;
+                const y = 26 - (n / max) * 24;
+                return `${x},${y}`;
+              })
+              .join(" ")}
+          />
+        </svg>
       )}
     </div>
   );
 }
 
-function DashboardCard({ title, action, children }) {
+function DashboardCard({ title, sub, action, children }) {
   return (
     <div className="admin-card dash-card">
       <div className="dash-card-head">
-        <h2>{title}</h2>
+        <div>
+          <h2>{title}</h2>
+          {sub && <div className="dash-card-sub">{sub}</div>}
+        </div>
         {action}
       </div>
       {children}
+    </div>
+  );
+}
+
+// Smooth-ish area/line chart over a real daily series - no chart library,
+// just an SVG path built from the points so it has zero extra dependencies.
+function AreaChart({ points, formatValue }) {
+  const width = 600;
+  const height = 190;
+  const padX = 6;
+  const padTop = 14;
+  const padBottom = 28;
+  const max = Math.max(1, ...points.map((p) => p.value));
+  const stepX = points.length > 1 ? (width - padX * 2) / (points.length - 1) : 0;
+  const coords = points.map((p, i) => {
+    const x = padX + i * stepX;
+    const y = height - padBottom - (p.value / max) * (height - padTop - padBottom);
+    return [x, y];
+  });
+  const linePath = coords.map(([x, y], i) => (i === 0 ? `M${x},${y}` : `L${x},${y}`)).join(" ");
+  const areaPath =
+    coords.length > 0
+      ? `${linePath} L${coords[coords.length - 1][0]},${height - padBottom} L${coords[0][0]},${height - padBottom} Z`
+      : "";
+
+  return (
+    <div className="area-chart-wrap">
+      <svg viewBox={`0 0 ${width} ${height}`} className="area-chart" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="adminAreaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.32" />
+            <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {areaPath && <path d={areaPath} fill="url(#adminAreaGrad)" />}
+        {linePath && <path d={linePath} fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
+        {coords.map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="3.2" className="area-chart-dot">
+            <title>{`${points[i].label} — ${formatValue ? formatValue(points[i].value) : points[i].value}`}</title>
+          </circle>
+        ))}
+      </svg>
+      <div className="area-chart-labels">
+        {points.map((p) => (
+          <span key={p.label}>{p.label}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// CSS conic-gradient donut - segments are real proportions of `total`, no
+// synthetic data. Renders a neutral empty ring when total is 0.
+function DonutChart({ segments, centerLabel }) {
+  const total = segments.reduce((s, seg) => s + seg.value, 0);
+  let cumulative = 0;
+  const stops = total
+    ? segments
+        .map((seg) => {
+          const from = (cumulative / total) * 100;
+          cumulative += seg.value;
+          const to = (cumulative / total) * 100;
+          return `${seg.color} ${from}% ${to}%`;
+        })
+        .join(", ")
+    : "var(--border) 0% 100%";
+
+  return (
+    <div className="donut-wrap">
+      <div className="donut-chart" style={{ background: `conic-gradient(${stops})` }}>
+        <div className="donut-hole">
+          <strong>{total}</strong>
+          <span>{centerLabel}</span>
+        </div>
+      </div>
+      <ul className="donut-legend">
+        {segments.map((seg) => (
+          <li key={seg.label}>
+            <span className="donut-dot" style={{ background: seg.color }} />
+            {seg.label}
+            <b>{total ? Math.round((seg.value / total) * 100) : 0}%</b>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -877,10 +985,16 @@ function StatsPanel({ onNavigate }) {
     return <div className="admin-card">Chargement des statistiques...</div>;
   }
 
-  const maxDay = Math.max(1, ...stats.pdfLast7Days.map(([, n]) => n));
   const pdfThisWeek = stats.pdfLast7Days.reduce((sum, [, n]) => sum + n, 0);
   const dayLabel = (d) =>
     new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short" }).replace(".", "");
+  const pdfSeries = stats.pdfLast7Days.map(([, n]) => n);
+  const pdfChartPoints = stats.pdfLast7Days.map(([day, n]) => ({ label: dayLabel(day), value: n }));
+  const pdfKindSegments = [
+    { label: "Concours", value: stats.pdfByKind.concours || 0, color: "var(--accent)" },
+    { label: "Cours", value: stats.pdfByKind.cours || 0, color: "var(--green)" },
+    { label: "Évaluation", value: stats.pdfByKind.evaluation || 0, color: "var(--amber)" },
+  ];
 
   return (
     <>
@@ -921,14 +1035,15 @@ function StatsPanel({ onNavigate }) {
           tone="indigo"
           label="PDF téléchargés aujourd'hui"
           value={stats.pdfToday}
-          spark={stats.pdfLast7Days.map(([, n]) => n)}
+          spark={pdfSeries}
+          trend={trendFromSeries(pdfSeries)}
         />
         <StatCard
           icon="📈"
           tone="violet"
           label="PDF cette semaine"
           value={pdfThisWeek}
-          spark={stats.pdfLast7Days.map(([, n]) => n)}
+          spark={pdfSeries}
         />
         <StatCard icon="🗂️" tone="indigo" label="PDF au total" value={stats.pdfTotal} />
         <StatCard icon="👁️" tone="amber" label="Visiteurs aujourd'hui" value={stats.visitsToday ?? 0} />
@@ -952,29 +1067,16 @@ function StatsPanel({ onNavigate }) {
       </div>
 
       <div className="dash-grid-2">
-        <DashboardCard title="PDF téléchargés — 7 derniers jours">
-          <div className="stat-bars">
-            {stats.pdfLast7Days.map(([day, n]) => (
-              <div className="stat-bar-col" key={day}>
-                <div className="stat-bar-track">
-                  <div
-                    className="stat-bar"
-                    style={{ height: `${Math.max(4, (n / maxDay) * 100)}%` }}
-                    title={`${n} le ${day}`}
-                  />
-                </div>
-                <div className="stat-bar-value">{n}</div>
-                <div className="stat-bar-label">{dayLabel(day)}</div>
-              </div>
-            ))}
-          </div>
-          <div className="admin-row-actions" style={{ marginTop: 14 }}>
-            <span className="admin-image-hint">Concours : {stats.pdfByKind.concours || 0}</span>
-            <span className="admin-image-hint">Cours : {stats.pdfByKind.cours || 0}</span>
-            <span className="admin-image-hint">Évaluation : {stats.pdfByKind.evaluation || 0}</span>
-          </div>
+        <DashboardCard title="Téléchargements" sub="Nombre de PDF téléchargés, 7 derniers jours">
+          <AreaChart points={pdfChartPoints} formatValue={(v) => `${v} PDF`} />
         </DashboardCard>
 
+        <DashboardCard title="Répartition des téléchargements" sub="Par type de contenu">
+          <DonutChart segments={pdfKindSegments} centerLabel="PDF" />
+        </DashboardCard>
+      </div>
+
+      <div className="dash-grid-2">
         <DashboardCard title="Concours les plus consultés">
           {stats.topConcours.length ? (
             <ol className="stat-rank-list">
@@ -991,9 +1093,7 @@ function StatsPanel({ onNavigate }) {
             <div className="empty-state">Pas encore de données — reviens après quelques visites sur le site.</div>
           )}
         </DashboardCard>
-      </div>
 
-      <div className="dash-grid-2">
         <DashboardCard
           title="⚠️ Concours sans corrigé"
           action={
@@ -1013,6 +1113,9 @@ function StatsPanel({ onNavigate }) {
           )}
         </DashboardCard>
 
+      </div>
+
+      <div className="dash-grid-2">
         <DashboardCard
           title="⏰ Concours ouverts qui ferment bientôt"
           action={
@@ -1033,28 +1136,28 @@ function StatsPanel({ onNavigate }) {
             <div className="empty-state">Rien ne ferme dans les 14 prochains jours.</div>
           )}
         </DashboardCard>
-      </div>
 
-      <DashboardCard
-        title="🕓 Derniers concours ajoutés"
-        action={
-          <button className="admin-link-btn" type="button" onClick={() => onNavigate("concours")}>
-            Voir tout →
-          </button>
-        }
-      >
-        {stats.recentConcours.length ? (
-          <ul className="dash-list">
-            {stats.recentConcours.map((c) => (
-              <li key={c.id}>
-                {c.label} {c.hasCorrige ? "✅" : ""}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="empty-state">Aucun concours pour l'instant.</div>
-        )}
-      </DashboardCard>
+        <DashboardCard
+          title="🕓 Derniers concours ajoutés"
+          action={
+            <button className="admin-link-btn" type="button" onClick={() => onNavigate("concours")}>
+              Voir tout →
+            </button>
+          }
+        >
+          {stats.recentConcours.length ? (
+            <ul className="dash-list">
+              {stats.recentConcours.map((c) => (
+                <li key={c.id}>
+                  {c.label} {c.hasCorrige ? "✅" : ""}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="empty-state">Aucun concours pour l'instant.</div>
+          )}
+        </DashboardCard>
+      </div>
     </>
   );
 }
@@ -1602,6 +1705,171 @@ const TABS = [
   { key: "settings", label: "Réglages", icon: "⚙️" },
 ];
 
+const NAV_GROUPS = [
+  { label: "Aperçu", keys: ["dashboard"] },
+  { label: "Contenu", keys: ["concours", "cours", "quiz", "news"] },
+  { label: "Système", keys: ["settings"] },
+];
+
+/* ------------------------------- Topbar bits ------------------------------- */
+
+// Lazy: the four resource lists only load on first focus, then every
+// keystroke just re-filters what's already in memory - no per-keystroke
+// network calls, and no results until there's real data to match against.
+function GlobalSearch({ onNavigate }) {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [data, setData] = useState({ concours: [], cours: [], quiz: [], news: [] });
+  const boxRef = useRef(null);
+
+  async function ensureLoaded() {
+    if (loaded) return;
+    setLoaded(true);
+    try {
+      const [c, co, q, n] = await Promise.all([
+        fetch("/api/concours").then((r) => r.json()),
+        fetch("/api/cours").then((r) => r.json()),
+        fetch("/api/quiz").then((r) => r.json()),
+        fetch("/api/news").then((r) => r.json()),
+      ]);
+      setData({ concours: c || [], cours: co || [], quiz: q || [], news: n || [] });
+    } catch {
+      setLoaded(false);
+    }
+  }
+
+  useEffect(() => {
+    function onDocClick(e) {
+      if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const q = query.trim().toLowerCase();
+  const results =
+    q.length >= 2
+      ? [
+          ...data.concours
+            .filter((i) => `${i.etablissement} ${i.ville} ${i.filiere}`.toLowerCase().includes(q))
+            .slice(0, 4)
+            .map((i) => ({ tab: "concours", icon: "📚", title: i.etablissement, sub: `${i.ville} · ${i.annee}` })),
+          ...data.cours
+            .filter((i) => `${i.title} ${i.module}`.toLowerCase().includes(q))
+            .slice(0, 4)
+            .map((i) => ({ tab: "cours", icon: "📖", title: i.title, sub: i.module })),
+          ...data.quiz
+            .filter((i) => `${i.title} ${i.module}`.toLowerCase().includes(q))
+            .slice(0, 4)
+            .map((i) => ({ tab: "quiz", icon: "📝", title: i.title, sub: i.module })),
+          ...data.news
+            .filter((i) => `${i.titre} ${i.etablissement} ${i.ville}`.toLowerCase().includes(q))
+            .slice(0, 4)
+            .map((i) => ({ tab: "news", icon: "🆕", title: i.titre, sub: [i.etablissement, i.ville].filter(Boolean).join(" · ") })),
+        ].slice(0, 10)
+      : [];
+
+  return (
+    <div className="admin-search" ref={boxRef}>
+      <span className="admin-search-icon">🔍</span>
+      <input
+        value={query}
+        onFocus={() => {
+          ensureLoaded();
+          setOpen(true);
+        }}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+        }}
+        placeholder="Rechercher un concours, un cours, une news..."
+      />
+      {open && q.length >= 2 && (
+        <div className="admin-search-dropdown">
+          {results.length ? (
+            results.map((r, i) => (
+              <button
+                key={i}
+                type="button"
+                className="admin-search-result"
+                onClick={() => {
+                  onNavigate(r.tab);
+                  setOpen(false);
+                  setQuery("");
+                }}
+              >
+                <span className="admin-search-result-icon">{r.icon}</span>
+                <span className="admin-search-result-text">
+                  <span className="admin-search-result-title">{r.title}</span>
+                  <span className="admin-search-result-sub">{r.sub}</span>
+                </span>
+              </button>
+            ))
+          ) : (
+            <div className="admin-search-empty">Aucun résultat pour « {query} ».</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NotificationBell({ onNavigate }) {
+  const [count, setCount] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/news")
+      .then((r) => r.json())
+      .then((data) => setCount((data || []).filter(isUrgentNews).length))
+      .catch(() => setCount(0));
+  }, []);
+
+  return (
+    <button
+      className="admin-icon-btn admin-bell"
+      type="button"
+      onClick={() => onNavigate("news")}
+      title="Concours qui ferment dans les 7 jours"
+    >
+      🔔
+      {Boolean(count) && <span className="admin-bell-dot">{count > 9 ? "9+" : count}</span>}
+    </button>
+  );
+}
+
+function AdminAvatarMenu({ onLogout }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    function onDocClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  return (
+    <div className="admin-avatar-menu" ref={ref}>
+      <button type="button" className="admin-avatar-trigger" onClick={() => setOpen((o) => !o)}>
+        <span className="admin-avatar">A</span>
+        <span className="admin-avatar-chevron">▾</span>
+      </button>
+      {open && (
+        <div className="admin-avatar-dropdown">
+          <a className="admin-avatar-dropdown-item" href="/">
+            ↗ Voir le site
+          </a>
+          <button type="button" className="admin-avatar-dropdown-item danger" onClick={onLogout}>
+            ⏻ Déconnexion
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const router = useRouter();
   const [tab, setTab] = useState("dashboard");
@@ -1625,20 +1893,29 @@ export default function AdminPage() {
           </span>
           <span className="admin-brand-tag">Admin</span>
         </a>
-        <div className="admin-nav-section-label">Menu</div>
-        <nav className="admin-nav">
-          {TABS.map((t) => (
-            <button
-              key={t.key}
-              className={"admin-nav-btn" + (t.key === tab ? " active" : "")}
-              onClick={() => setTab(t.key)}
-              type="button"
-            >
-              <span className="admin-nav-icon">{t.icon}</span>
-              {t.label}
-            </button>
+        <div className="admin-nav-groups">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label} className="admin-nav-group">
+              <div className="admin-nav-section-label">{group.label}</div>
+              <nav className="admin-nav">
+                {group.keys.map((key) => {
+                  const t = TABS.find((x) => x.key === key);
+                  return (
+                    <button
+                      key={t.key}
+                      className={"admin-nav-btn" + (t.key === tab ? " active" : "")}
+                      onClick={() => setTab(t.key)}
+                      type="button"
+                    >
+                      <span className="admin-nav-icon">{t.icon}</span>
+                      {t.label}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
           ))}
-        </nav>
+        </div>
         <div className="admin-sidebar-footer">
           <a className="admin-profile-card" href="/">
             <span className="admin-avatar">A</span>
@@ -1647,27 +1924,19 @@ export default function AdminPage() {
               <span>Voir le site ↗</span>
             </span>
           </a>
-          <div className="admin-footer-actions">
-            <ThemeToggle />
-            <button className="admin-icon-btn danger" onClick={onLogout} title="Déconnexion">
-              ⏻
-            </button>
-          </div>
         </div>
       </aside>
 
       <main className="admin-main">
         <div className="admin-topbar">
-          <span className="admin-topbar-date">
-            {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
-          </span>
+          <GlobalSearch onNavigate={setTab} />
           <div className="admin-topbar-right">
-            <a className="admin-icon-btn" href="/" title="Voir le site">
-              ↗
-            </a>
-            <button className="admin-icon-btn danger" onClick={onLogout} title="Déconnexion">
-              ⏻
-            </button>
+            <span className="admin-topbar-date">
+              {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+            </span>
+            <NotificationBell onNavigate={setTab} />
+            <ThemeToggle />
+            <AdminAvatarMenu onLogout={onLogout} />
           </div>
         </div>
         <div className="admin-content">
