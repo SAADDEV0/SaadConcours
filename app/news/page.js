@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml } from "../_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "../_shared/chrome";
 
 const MARKUP = `
 ${chromeHtml({ active: "news", showSearch: false })}
@@ -36,7 +36,7 @@ ${chromeHtml({ active: "news", showSearch: false })}
 
   <div class="nw-stats" id="nwStats"></div>
 
-  <div class="nw-grid" id="nwGrid"></div>
+  <div class="nw-grid" id="nwGrid">${spinnerHtml("Chargement des concours ouverts...")}</div>
 </div>
 
 ${footerHtml()}

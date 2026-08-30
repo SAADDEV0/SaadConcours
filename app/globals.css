@@ -1,3 +1,4 @@
+html{scroll-behavior:smooth;}
 :root{
   --bg:#0f1115; --bg-elev:#161922; --bg-card:#1b1f2a; --border:#2a2f3d;
   --text:#e8eaf0; --text-dim:#9aa1b2; --text-faint:#6b7280;
@@ -240,6 +241,24 @@ header{
 }
 .empty-state{padding:60px 20px; text-align:center; color:var(--text-faint);}
 
+/* ---------- Loading ---------- */
+#topProgressBar{
+  position:fixed; top:0; left:0; height:3px; width:0; z-index:999;
+  background:var(--brand-grad, linear-gradient(135deg,#4f46e5,#a855f7));
+  opacity:0; transition:width .4s ease, opacity .2s ease;
+}
+#topProgressBar.loading{opacity:1; width:80%;}
+.content-spinner-wrap{
+  grid-column:1 / -1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; padding:70px 20px; color:var(--text-faint);
+}
+.content-spinner{
+  width:34px; height:34px; border-radius:50%; border:3px solid var(--border);
+  border-top-color:var(--accent); animation:spin .7s linear infinite;
+}
+.content-spinner-label{font-size:.85rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
 /* ---------- Modal ---------- */
 .modal-overlay{
   display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:100;
@@ -281,10 +300,17 @@ header{
 .tab-btn{
   padding:9px 16px; background:none; border:none; color:var(--text-faint); cursor:pointer;
   font-size:.88rem; border-bottom:2px solid transparent; margin-bottom:-1px;
+  text-decoration:none; display:inline-flex; align-items:center; white-space:nowrap;
 }
 .tab-btn.active{color:var(--accent); border-bottom-color:var(--accent);}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
+
+/* Jump-nav on the real /concours/[id] page (server-rendered content, tabs
+ * are just anchor links + a sticky bar - not JS show/hide like the old
+ * list-page modal, so everything stays crawlable/works without JS). */
+.cd-tabs{position:sticky; top:78px; z-index:20; background:var(--bg); margin:0 0 18px; overflow-x:auto;}
+#section-enonce, #section-corrige, #section-images, #section-source{scroll-margin-top:140px;}
 .enonce-content{font-size:.94rem; max-width:100%; overflow-x:auto;}
 .enonce-content table{border-collapse:collapse; width:100%; min-width:420px; margin:14px 0; font-size:.85rem; display:block; overflow-x:auto;}
 .enonce-content th,.enonce-content td{border:1px solid var(--border); padding:6px 10px; text-align:left;}
@@ -320,6 +346,7 @@ header{
 .cd-related-item:hover{border-color:var(--accent); transform:translateY(-2px);}
 .cd-related-title{font-weight:600; font-size:.88rem; margin-bottom:3px;}
 .cd-related-sub{font-size:.78rem; color:var(--text-dim);}
+.cd-related-date{font-size:.72rem; color:var(--text-faint); margin-top:3px;}
 .cd-actions{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
 .share-wrap{position:relative; flex-shrink:0;}
 .share-btn{width:auto; margin:0; padding:9px 16px; white-space:nowrap;}
@@ -726,6 +753,9 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .admin-error{color:var(--red); font-size:.85rem; margin-top:8px;}
 .admin-msg{color:var(--green); font-size:.85rem; margin-top:8px;}
 .admin-info{color:var(--accent); font-size:.85rem; margin-top:8px; background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 30%, transparent); border-radius:8px; padding:8px 12px;}
+.admin-checklist{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:6px; font-size:.85rem; color:var(--text-dim);}
+.admin-checklist li::marker{color:var(--green);}
+.admin-checklist code{background:var(--bg-card); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-size:.8em;}
 
 .admin-brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.05rem; text-decoration:none;}
 .admin-brand-logo{width:32px; height:32px; border-radius:9px; flex-shrink:0; box-shadow:0 3px 10px rgba(79,70,229,.4);}

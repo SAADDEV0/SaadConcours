@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml, trackPdfDownload } from "../_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml, trackPdfDownload, spinnerHtml } from "../_shared/chrome";
 import { addWatermark, addSiteHeader } from "../_shared/pdfWatermark";
 
 const MARKUP = `
@@ -12,7 +12,7 @@ ${chromeHtml({ active: "eval", showSearch: false })}
   <div id="evalModuleList">
     <h1 class="eval-title">📝 Évaluation par module</h1>
     <p class="eval-sub">Choisis un module pour t'auto-évaluer en conditions QCM. Ton score s'affiche à la fin.</p>
-    <div class="grid" id="evalModuleGrid"></div>
+    <div class="grid" id="evalModuleGrid">${spinnerHtml("Chargement des évaluations...")}</div>
   </div>
 
   <div id="evalQuizWrap" style="display:none;">

@@ -11,8 +11,13 @@ const NAV_ITEMS = [
   { key: "blog", href: "/blog", label: "Blog" },
 ];
 
+// Fires on every internal link click (nav, cards, "voir tout"...) - since
+// most navigation here is a plain <a href> full page load (not Next <Link>
+// client transitions), this is the only loading feedback we can actually
+// show before the browser tears the page down to fetch the next one.
 export function chromeHtml({ active, showSearch }) {
   return `
+<div id="topProgressBar"></div>
 <div class="dua-banner">
   <div class="dua-inner">
     <span class="dua-deco">✦</span>
@@ -68,6 +73,18 @@ export function chromeHtml({ active, showSearch }) {
     ).join("")}
   </div>
 </header>
+`;
+}
+
+// Drop-in replacement for an empty grid while its first fetch() is in
+// flight (concours/cours/évaluation/news list pages) - swap the grid's
+// innerHTML to this, then overwrite it once the real cards are ready.
+export function spinnerHtml(label) {
+  return `
+<div class="content-spinner-wrap">
+  <div class="content-spinner"></div>
+  ${label ? `<div class="content-spinner-label">${label}</div>` : ""}
+</div>
 `;
 }
 
@@ -134,6 +151,28 @@ export const chromeScript = function initChrome() {
     link.rel = "stylesheet";
     link.href = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css";
     document.head.appendChild(link);
+  })();
+
+  (function initTopProgressBar() {
+    const bar = document.getElementById("topProgressBar");
+    if (!bar || document.__scTopProgressWired) return;
+    document.__scTopProgressWired = true;
+
+    document.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = e.target.closest("a[href]");
+      if (!link || link.target === "_blank") return;
+      const href = link.getAttribute("href") || "";
+      // Only same-origin, actual-navigation hrefs - not "#anchor", not
+      // mailto:/tel:, not the current page (nothing to show a bar for).
+      if (!href.startsWith("/") || href === window.location.pathname) return;
+      bar.classList.add("loading");
+    });
+
+    // Bar never gets to finish/hide on a real navigation (the page unloads
+    // first) - this only covers the back/forward cache restoring a page
+    // that still had the class from before it was left.
+    window.addEventListener("pageshow", () => bar.classList.remove("loading"));
   })();
 
   (function initSocialLinks() {

@@ -144,6 +144,7 @@ export default function HomePage() {
           a.innerHTML = `
             <div class="cd-related-title">${escapeHtml(c.etablissement)} — ${escapeHtml(c.ville)} — ${escapeHtml(String(c.annee))}</div>
             <div class="cd-related-sub">${escapeHtml(c.master_reel || c.filiere || "")}</div>
+            ${c.date_ajout ? `<div class="cd-related-date">🗓️ Ajouté le ${escapeHtml(c.date_ajout)}</div>` : ""}
           `;
           grid.appendChild(a);
         });

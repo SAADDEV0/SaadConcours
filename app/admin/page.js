@@ -742,6 +742,7 @@ const CONCOURS_CONFIG = {
       label: "Corrigé",
       render: (i) => (i.corrige_md ? "✅" : i.corrige_from_github ? "📄 GitHub (à valider)" : "—"),
     },
+    { key: "date_ajout", label: "Ajouté le", render: (i) => i.date_ajout || "—" },
   ],
   duplicateKeys: ["annee", "ville", "etablissement", "filiere"],
 };
@@ -1650,55 +1651,153 @@ function SettingsPanel() {
         )}
       </div>
 
+      <div style={{ marginTop: 18 }}>
+        <button className="admin-btn" type="submit" disabled={saving}>
+          {saving ? "Enregistrement..." : "Enregistrer"}
+        </button>
+        {error && <div className="admin-error">{error}</div>}
+        {msg && <div className="admin-msg">{msg}</div>}
+      </div>
+    </form>
+  );
+}
+
+/* --------------------------------- Email --------------------------------- */
+// Split out from Réglages into its own section - email delivery config,
+// composing/sending, and the subscriber list are a distinct concern from
+// site-wide settings (social links, news filters), and were getting lost
+// in one long page together.
+function EmailPanel() {
+  const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [error, setError] = useState("");
+  const [emailConfigured, setEmailConfigured] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then(setForm)
+      .catch(() => setError("Erreur lors du chargement des réglages email."));
+    fetch("/api/admin/email-status")
+      .then((r) => r.json())
+      .then((data) => setEmailConfigured(data.configured))
+      .catch(() => setEmailConfigured(null));
+  }, []);
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    setSaving(true);
+    setMsg("");
+    setError("");
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Erreur lors de l'enregistrement.");
+        return;
+      }
+      setForm(data);
+      setMsg("Réglages email enregistrés.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!form) return <div className="admin-card">Chargement...</div>;
+
+  return (
+    <>
+      {emailConfigured === false && (
+        <div className="admin-card" style={{ marginBottom: 18, borderColor: "var(--red)" }}>
+          <div className="admin-error" style={{ marginTop: 0 }}>
+            ⚠️ GMAIL_USER / GMAIL_APP_PASSWORD ne sont pas configurés côté serveur — aucun email ne peut partir
+            (alertes automatiques, envoi manuel, test) tant que ces variables d'environnement ne sont pas définies.
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={onSubmit}>
+        <div className="admin-card">
+          <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>🔔 Alertes automatiques</h2>
+          <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+            Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours, via le
+            compte Gmail configuré côté serveur (GMAIL_USER / GMAIL_APP_PASSWORD) — sans ça, l'envoi ne fait rien.
+          </p>
+          <label className="admin-checkbox-label">
+            <input
+              type="checkbox"
+              checked={Boolean(form.newsAlertsEnabled)}
+              onChange={(e) => setForm({ ...form, newsAlertsEnabled: e.target.checked })}
+            />
+            <span className="toggle-thumb" aria-hidden="true" />
+            Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)
+          </label>
+
+          <div className="admin-field" style={{ marginTop: 16 }}>
+            <label>Objet de l'email</label>
+            <input
+              value={form.newsAlertsSubject || ""}
+              placeholder="ex: ⏰ Ces concours ferment cette semaine — vérifie vite"
+              onChange={(e) => setForm({ ...form, newsAlertsSubject: e.target.value })}
+            />
+            <div className="admin-image-hint" style={{ marginTop: 4 }}>
+              Vide = objet automatique (« ⏰ X concours ferment bientôt »).
+            </div>
+          </div>
+
+          <div className="admin-field">
+            <label>Message personnalisé (affiché en haut de l'email, avant la liste)</label>
+            <textarea
+              style={{ minHeight: 90 }}
+              value={form.newsAlertsMessage || ""}
+              placeholder="ex: Salam ! Voici les concours qui ferment bientôt — inscris-toi vite avant la clôture 👇"
+              onChange={(e) => setForm({ ...form, newsAlertsMessage: e.target.value })}
+            />
+          </div>
+
+          <div className="admin-field">
+            <label>Nom de l'expéditeur</label>
+            <input
+              value={form.newsAlertsFromName || ""}
+              placeholder="SaadConcours"
+              onChange={(e) => setForm({ ...form, newsAlertsFromName: e.target.value })}
+            />
+            <div className="admin-image-hint" style={{ marginTop: 4 }}>
+              L'adresse d'envoi elle-même est toujours celle du compte Gmail configuré côté serveur (Gmail
+              n'autorise pas d'envoyer sous une autre adresse) — seul ce nom affiché est personnalisable.
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 18 }}>
+          <button className="admin-btn" type="submit" disabled={saving}>
+            {saving ? "Enregistrement..." : "Enregistrer"}
+          </button>
+          {error && <div className="admin-error">{error}</div>}
+          {msg && <div className="admin-msg">{msg}</div>}
+        </div>
+      </form>
+
       <div className="admin-card" style={{ marginTop: 18 }}>
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>🔔 Alertes automatiques</h2>
-        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-          Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours, via le
-          compte Gmail configuré côté serveur (GMAIL_USER / GMAIL_APP_PASSWORD) — sans ça, l'envoi ne fait rien.
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>✅ Bonnes pratiques d'envoi</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 10 }}>
+          Ce que fait déjà chaque email envoyé par le site, pour la délivrabilité et la conformité :
         </p>
-        <label className="admin-checkbox-label">
-          <input
-            type="checkbox"
-            checked={Boolean(form.newsAlertsEnabled)}
-            onChange={(e) => setForm({ ...form, newsAlertsEnabled: e.target.checked })}
-          />
-          <span className="toggle-thumb" aria-hidden="true" />
-          Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)
-        </label>
-
-        <div className="admin-field" style={{ marginTop: 16 }}>
-          <label>Objet de l'email</label>
-          <input
-            value={form.newsAlertsSubject || ""}
-            placeholder="ex: ⏰ Ces concours ferment cette semaine — vérifie vite"
-            onChange={(e) => setForm({ ...form, newsAlertsSubject: e.target.value })}
-          />
-          <div className="admin-image-hint" style={{ marginTop: 4 }}>
-            Vide = objet automatique (« ⏰ X concours ferment bientôt »).
-          </div>
-        </div>
-
-        <div className="admin-field">
-          <label>Message personnalisé (affiché en haut de l'email, avant la liste)</label>
-          <textarea
-            style={{ minHeight: 90 }}
-            value={form.newsAlertsMessage || ""}
-            placeholder="ex: Salam ! Voici les concours qui ferment bientôt — inscris-toi vite avant la clôture 👇"
-            onChange={(e) => setForm({ ...form, newsAlertsMessage: e.target.value })}
-          />
-        </div>
-
-        <div className="admin-field">
-          <label>Nom de l'expéditeur</label>
-          <input
-            value={form.newsAlertsFromName || ""}
-            placeholder="SaadConcours"
-            onChange={(e) => setForm({ ...form, newsAlertsFromName: e.target.value })}
-          />
-          <div className="admin-image-hint" style={{ marginTop: 4 }}>
-            L'adresse d'envoi elle-même est toujours celle du compte Gmail configuré côté serveur (Gmail
-            n'autorise pas d'envoyer sous une autre adresse) — seul ce nom affiché est personnalisable.
-          </div>
+        <ul className="admin-checklist">
+          <li>Version texte brut en plus du HTML (les filtres anti-spam pénalisent le "HTML only")</li>
+          <li>En-tête <code>List-Unsubscribe</code> (RFC 8058) — bouton de désabonnement natif dans Gmail/Outlook</li>
+          <li>Lien de désabonnement en un clic, aussi présent dans le corps de l'email</li>
+          <li>Un envoi individuel par destinataire (jamais d'adresses partagées en copie)</li>
+          <li>Limite de tentatives sur l'inscription (5 / heure / IP) contre les abus</li>
+          <li>Validation de l'adresse email avant tout ajout à la liste</li>
+        </ul>
+        <div className="admin-image-hint" style={{ marginTop: 10 }}>
+          Pas encore fait : double opt-in (email de confirmation avant l'inscription définitive).
         </div>
       </div>
 
@@ -1711,15 +1810,7 @@ function SettingsPanel() {
         <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>📧 Abonnés aux alertes</h2>
         <SubscribersManager />
       </div>
-
-      <div style={{ marginTop: 18 }}>
-        <button className="admin-btn" type="submit" disabled={saving}>
-          {saving ? "Enregistrement..." : "Enregistrer"}
-        </button>
-        {error && <div className="admin-error">{error}</div>}
-        {msg && <div className="admin-msg">{msg}</div>}
-      </div>
-    </form>
+    </>
   );
 }
 
@@ -1730,13 +1821,14 @@ const TABS = [
   { key: "quiz", label: "Évaluation", icon: "📝", config: QUIZ_CONFIG },
   { key: "news", label: "News", icon: "🆕", config: NEWS_CONFIG },
   { key: "blog", label: "Blog", icon: "📰", config: BLOG_CONFIG },
+  { key: "email", label: "Email", icon: "📧" },
   { key: "settings", label: "Réglages", icon: "⚙️" },
 ];
 
 const NAV_GROUPS = [
   { label: "Aperçu", keys: ["dashboard"] },
   { label: "Contenu", keys: ["concours", "cours", "quiz", "news", "blog"] },
-  { label: "Système", keys: ["settings"] },
+  { label: "Système", keys: ["email", "settings"] },
 ];
 
 /* ------------------------------- Topbar bits ------------------------------- */
@@ -1990,6 +2082,8 @@ export default function AdminPage() {
           {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
           {tab === "dashboard" ? (
             <StatsPanel key="dashboard" onNavigate={setTab} />
+          ) : tab === "email" ? (
+            <EmailPanel key="email" />
           ) : tab === "settings" ? (
             <SettingsPanel key="settings" />
           ) : (

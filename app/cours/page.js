@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml } from "../_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "../_shared/chrome";
 import { downloadCoursPdf } from "../_shared/coursPdf";
 
 const MARKUP = `
@@ -12,7 +12,7 @@ ${chromeHtml({ active: "cours", showSearch: false })}
   <div id="coursModuleList">
     <h1 class="eval-title">📖 Cours par module</h1>
     <p class="eval-sub">Fiches de cours synthétiques : définitions, formules et points clés à retenir, par module.</p>
-    <div class="grid" id="coursModuleGrid"></div>
+    <div class="grid" id="coursModuleGrid">${spinnerHtml("Chargement des cours...")}</div>
   </div>
 
   <div id="coursReaderWrap" style="display:none;">

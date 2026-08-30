@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, pub, footerHtml, trackConcoursView } from "../_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "../_shared/chrome";
 import { downloadConcoursPdf } from "../_shared/concoursPdf";
-import { formatQCM } from "../_shared/concoursFormat";
 
 const MARKUP = `
 ${chromeHtml({ active: "concours", showSearch: true })}
@@ -39,44 +38,11 @@ ${chromeHtml({ active: "concours", showSearch: true })}
     <div class="results-header">
       <div class="results-count" id="resultsCount"></div>
     </div>
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="grid">${spinnerHtml("Chargement des concours...")}</div>
   </main>
 </div>
 
 ${footerHtml()}
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <h2 id="modalTitle"></h2>
-        <div class="sub" id="modalSub"></div>
-      </div>
-      <div class="modal-actions">
-        <button class="dl-btn" id="modalDownload" title="Télécharger l'énoncé (PDF)">⬇ Télécharger</button>
-        <button class="close-btn" id="modalClose">✕</button>
-      </div>
-    </div>
-    <div class="modal-body">
-      <div class="info-row" id="modalInfoRow"></div>
-      <div class="tab-bar">
-        <button class="tab-btn active" data-tab="enonce">📝 Énoncé</button>
-        <button class="tab-btn" data-tab="corrige" id="tabBtnCorrige" style="display:none;">✅ Corrigé</button>
-        <button class="tab-btn" data-tab="images">🖼️ Extrait réel</button>
-        <button class="tab-btn" data-tab="source">🔗 Source</button>
-      </div>
-      <div class="tab-panel active" id="panel-enonce"><div class="enonce-content" id="enonceContent"></div></div>
-      <div class="tab-panel" id="panel-corrige">
-        <div class="corrige-disclaimer">⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier pour réviser.</div>
-        <div class="enonce-content" id="corrigeContent"></div>
-      </div>
-      <div class="tab-panel" id="panel-images"><div class="image-gallery" id="imageGallery"></div></div>
-      <div class="tab-panel" id="panel-source"><div class="source-box" id="sourceContent"></div></div>
-    </div>
-  </div>
-</div>
-
-<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
 `;
 
 export default function ConcoursPage() {
@@ -88,7 +54,6 @@ export default function ConcoursPage() {
     let ALL = [];
     let filtered = [];
     let activeModule = "";
-    let currentModalConcours = null;
 
     const root = containerRef.current;
     const $ = (sel) => root.querySelector(sel);
@@ -178,6 +143,15 @@ export default function ConcoursPage() {
       renderGrid();
     }
 
+    // Cards navigate straight to the dedicated /concours/[id] page (full
+    // énoncé/corrigé/extraits, share, PDF) instead of opening an in-page
+    // preview modal — one place to browse a concours, not two.
+    function goToConcours(id) {
+      const bar = document.getElementById("topProgressBar");
+      if (bar) bar.classList.add("loading");
+      window.location.href = `/concours/${encodeURIComponent(id)}`;
+    }
+
     function renderGrid() {
       $("#statPill").textContent = `${ALL.length} concours`;
       $("#resultsCount").textContent = `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
@@ -197,7 +171,6 @@ export default function ConcoursPage() {
             <div class="card-title">${escapeHtml(c.etablissement)}</div>
             <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
               <div class="card-year">${escapeHtml(String(c.annee))}</div>
-              <a class="card-dl card-link" href="/concours/${encodeURIComponent(c.id)}" title="Ouvrir la page dédiée" onclick="event.stopPropagation()" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">🔗</a>
               <button class="card-dl" title="Télécharger l'énoncé (PDF)">⬇</button>
             </div>
           </div>
@@ -214,7 +187,7 @@ export default function ConcoursPage() {
             </span>
           </div>
         `;
-        card.addEventListener("click", () => openModal(c));
+        card.addEventListener("click", () => goToConcours(c.id));
         card.querySelector("button.card-dl").addEventListener("click", (e) => {
           e.stopPropagation();
           downloadConcoursPdf(c);
@@ -222,120 +195,6 @@ export default function ConcoursPage() {
         grid.appendChild(card);
       });
     }
-
-    function openLightbox(src) {
-      $("#lightboxImg").src = src;
-      $("#lightbox").classList.add("open");
-    }
-    function closeLightbox() {
-      $("#lightbox").classList.remove("open");
-    }
-
-    // corrige_md is empty when the corrigé exists only as a raw file in the
-    // repo's data/corriges/ folder (corrige_from_github, set by GET
-    // /api/concours) — render immediately if we already have it, otherwise
-    // fetch it lazily so the list load itself doesn't pay for every
-    // concours' corrigé content up front.
-    function applyCorrige(corrigeMd, c) {
-      const render = (md) => {
-        const hasCorrige = Boolean(md);
-        $("#tabBtnCorrige").style.display = hasCorrige ? "" : "none";
-        $("#corrigeContent").innerHTML = hasCorrige ? (window.marked ? marked.parse(md) : md) : "";
-      };
-      render(corrigeMd);
-      if (!corrigeMd && c.corrige_from_github) {
-        fetch(`/api/concours/${encodeURIComponent(c.id)}/corrige`)
-          .then((res) => (res.ok ? res.json() : null))
-          .then((data) => {
-            if (data && data.corrige_md && currentModalConcours === c) render(data.corrige_md);
-          })
-          .catch(() => {});
-      }
-    }
-
-    function openModal(c) {
-      currentModalConcours = c;
-      trackConcoursView(c.id);
-      $("#modalTitle").textContent = `${c.etablissement} — ${c.annee}`;
-      $("#modalSub").textContent = `${c.master_reel || c.filiere} · ${c.ville}`;
-      $("#modalInfoRow").innerHTML = `
-        <span class="info-tag">📍 ${escapeHtml(c.ville)}</span>
-        <span class="info-tag">🏫 ${escapeHtml(c.etablissement)}</span>
-        <span class="info-tag">🎓 ${escapeHtml(c.master_reel || c.filiere)}</span>
-        <span class="info-tag">📅 ${escapeHtml(String(c.annee))}</span>
-        <span class="info-tag">⭐ ${escapeHtml(c.difficulte || "?")}</span>
-      `;
-
-      const formattedEnonce = formatQCM(c.enonce_md);
-      const enonceHtml = window.marked ? marked.parse(formattedEnonce || "*Énoncé non disponible.*") : formattedEnonce || "";
-      $("#enonceContent").innerHTML = enonceHtml;
-
-      applyCorrige(c.corrige_md, c);
-
-      const gallery = $("#imageGallery");
-      gallery.innerHTML = "";
-      if ((c.images || []).length) {
-        c.images.forEach((src) => {
-          const img = document.createElement("img");
-          img.src = pub(src);
-          img.alt = `Extrait scanné — ${c.etablissement} ${c.ville} ${c.annee}`;
-          img.loading = "lazy";
-          img.addEventListener("click", () => openLightbox(pub(src)));
-          gallery.appendChild(img);
-        });
-      } else {
-        gallery.innerHTML = "<div class=\"no-images\">Image source non récupérable (lien d'origine inaccessible).</div>";
-      }
-
-      $("#sourceContent").innerHTML = window.marked ? marked.parse(c.source || "") : c.source || "";
-
-      $$(".tab-btn").forEach((b) => b.classList.toggle("active", b.dataset.tab === "enonce"));
-      $$(".tab-panel").forEach((p) => p.classList.toggle("active", p.id === "panel-enonce"));
-
-      $("#modalOverlay").classList.add("open");
-      document.body.style.overflow = "hidden";
-
-      if (window.renderMathInElement) {
-        renderMathInElement($("#enonceContent"), {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          throwOnError: false,
-        });
-      }
-    }
-
-    function closeModal() {
-      $("#modalOverlay").classList.remove("open");
-      document.body.style.overflow = "";
-    }
-
-
-    $("#modalClose").addEventListener("click", closeModal);
-    $("#modalOverlay").addEventListener("click", (e) => {
-      if (e.target.id === "modalOverlay") closeModal();
-    });
-    $("#modalDownload").addEventListener("click", () => {
-      if (currentModalConcours) downloadConcoursPdf(currentModalConcours);
-    });
-    $$(".tab-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        $$(".tab-btn").forEach((b) => b.classList.remove("active"));
-        $$(".tab-panel").forEach((p) => p.classList.remove("active"));
-        btn.classList.add("active");
-        $("#panel-" + btn.dataset.tab).classList.add("active");
-      });
-    });
-    $("#lightbox").addEventListener("click", closeLightbox);
-
-    function onKeydown(e) {
-      if (e.key === "Escape") {
-        closeModal();
-        closeLightbox();
-      }
-    }
-    document.addEventListener("keydown", onKeydown);
 
     fetch("/api/concours")
       .then((r) => r.json())
@@ -352,10 +211,6 @@ export default function ConcoursPage() {
       .catch((err) => {
         $("#grid").innerHTML = `<div class="empty-state">Erreur de chargement des données : ${err}</div>`;
       });
-
-    return () => {
-      document.removeEventListener("keydown", onKeydown);
-    };
   }, []);
 
   return <div ref={containerRef} dangerouslySetInnerHTML={{ __html: MARKUP }} />;
