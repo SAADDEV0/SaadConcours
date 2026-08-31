@@ -1,5 +1,65 @@
 [
   {
+    "id": "443e7f36b70745bd",
+    "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fdainscriptions.univh2c.ma/Insc/Master/Start/index2.php",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-sebaa-casablanca-2026.html",
+    "date_publication": "2026-08-31"
+  },
+  {
+    "id": "e1f817d48ef8f17b",
+    "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": "2026-09-15",
+    "cloture": false,
+    "lien_inscription": "https://preins-fsjesac.univh2c.ma/preins/public/inscription",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-chock-casablanca-2026.html",
+    "date_publication": "2026-08-31"
+  },
+  {
+    "id": "1bd24067474c3e03",
+    "titre": "Master FLSH Ain Chock Casablanca 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-ain-chock-casablanca-2026.html",
+    "date_publication": "2026-08-31"
+  },
+  {
+    "id": "9fc7e9bdd0628922",
+    "titre": "Master ENSAM Casablanca 2026-2027",
+    "etablissement": "ENSAM",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": "2026-08-31",
+    "cloture": false,
+    "lien_inscription": "https://www.ensam-casa.ma/pre-condidature/cycles/inscrire?id=2",
+    "source": "https://www.almaster-maroc.com/2026/08/master-ensam-casablanca-2026-2027.html",
+    "date_publication": "2026-08-31"
+  },
+  {
+    "id": "b52874bba28b9c7a",
+    "titre": "Master ENSA El Jadida 2026-2027",
+    "etablissement": "ENSA",
+    "ville": "El Jadida",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://e-candidature.ucd.ac.ma/Master/register",
+    "source": "https://www.almaster-maroc.com/2026/08/master-ensa-el-jadida-2026.html",
+    "date_publication": "2026-08-31"
+  },
+  {
     "id": "e49607e6538beb35",
     "titre": "Master FLSH Béni Mellal 2026-2027",
     "etablissement": "FLSH",
@@ -45,30 +105,6 @@
     "cloture": false,
     "lien_inscription": "https://flshm.ma/licmas26/",
     "source": "https://www.almaster-maroc.com/2026/08/master-flsh-mohammedia-2026-2027.html",
-    "date_publication": "2026-08-26"
-  },
-  {
-    "id": "443e7f36b70745bd",
-    "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": false,
-    "lien_inscription": "https://fdainscriptions.univh2c.ma/Insc/Master/Start/index2.php",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-sebaa-casablanca-2026.html",
-    "date_publication": "2026-08-26"
-  },
-  {
-    "id": "e1f817d48ef8f17b",
-    "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": "2026-09-15",
-    "cloture": false,
-    "lien_inscription": "https://preins-fsjesac.univh2c.ma/preins/public/inscription",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-chock-casablanca-2026.html",
     "date_publication": "2026-08-26"
   },
   {
@@ -130,18 +166,6 @@
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/9",
     "source": "https://www.almaster-maroc.com/2026/08/master-feg-settat-2026-2027.html",
     "date_publication": "2026-08-26"
-  },
-  {
-    "id": "1bd24067474c3e03",
-    "titre": "Master FLSH Ain Chock Casablanca 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/08/master-flsh-ain-chock-casablanca-2026.html",
-    "date_publication": "2026-08-24"
   },
   {
     "id": "104898bac8b5058a",
@@ -864,18 +888,6 @@
     "date_publication": "2026-08-06"
   },
   {
-    "id": "9fc7e9bdd0628922",
-    "titre": "Master ENSAM Casablanca 2026-2027",
-    "etablissement": "ENSAM",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": false,
-    "lien_inscription": "https://www.ensam-casa.ma/pre-condidature/cycles/inscrire?id=2",
-    "source": "https://www.almaster-maroc.com/2026/08/master-ensam-casablanca-2026-2027.html",
-    "date_publication": "2026-08-06"
-  },
-  {
     "id": "49c0a4324b521d71",
     "titre": "Master FSJES Meknès 2026-2027",
     "etablissement": "FSJES",
@@ -1425,18 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://e-candidature.uca.ma/master.fst/inscription.php",
     "source": "https://www.almaster-maroc.com/2026/07/master-fst-marrakech-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "208b6a6da2d23f4b",
-    "titre": "Master FLA Marrakech 2026-2027",
-    "etablissement": null,
-    "ville": "Marrakech",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fla/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/06/master-fla-marrakech-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
