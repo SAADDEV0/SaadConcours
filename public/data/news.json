@@ -1134,7 +1134,7 @@
     "ville": "Casablanca",
     "filiere": null,
     "date_limite": "2026-08-30",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://fsac.univh2c.ma/front/tabs.html?page=espace_etu",
     "source": "https://www.almaster-maroc.com/2026/07/master-fs-ain-chock-casablanca-2026-2027.html",
     "date_publication": "2026-07-31"
