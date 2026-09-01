@@ -42,7 +42,7 @@
     "ville": "Casablanca",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://www.ensam-casa.ma/pre-condidature/cycles/inscrire?id=2",
     "source": "https://www.almaster-maroc.com/2026/08/master-ensam-casablanca-2026-2027.html",
     "date_publication": "2026-08-31"
@@ -89,7 +89,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-11",
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
@@ -558,7 +558,7 @@
     "ville": "Rabat",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preins.um5.ac.ma/index.php",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensias-rabat-2026-2027.html",
     "date_publication": "2026-08-11"
@@ -738,7 +738,7 @@
     "ville": "Rabat",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preins.um5.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/06/master-fsjes-agdal-rabat-2026-2027.html",
     "date_publication": "2026-08-08"
@@ -786,7 +786,7 @@
     "ville": "Mohammedia",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://e-candidature.fstm.ac.ma/meta/index.php",
     "source": "https://www.almaster-maroc.com/2026/07/master-fst-mohammedia-2026-2027.html",
     "date_publication": "2026-08-07"
@@ -1002,7 +1002,7 @@
     "ville": "Fès",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
@@ -1206,7 +1206,7 @@
     "ville": null,
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://www-ensab.uh1.ac.ma/master-inscription",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensa-berrechid-2026-2027.html",
     "date_publication": "2026-07-30"
@@ -1218,7 +1218,7 @@
     "ville": "Settat",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/3",
     "source": "https://www.almaster-maroc.com/2026/07/master-fst-settat-2026-2027.html",
     "date_publication": "2026-07-30"
@@ -1278,7 +1278,7 @@
     "ville": "Rabat",
     "filiere": null,
     "date_limite": "2026-08-31",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscription.isic.ma/master/",
     "source": "https://www.almaster-maroc.com/2026/07/master-isic-rabat-2026-2027.html",
     "date_publication": "2026-07-29"
