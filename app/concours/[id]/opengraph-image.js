@@ -13,7 +13,7 @@ export default async function Image({ params }) {
   }
   return buildOgImage({
     eyebrow: `${c.ville} · ${c.annee}`,
-    title: c.etablissement,
-    subtitle: c.master_reel || c.filiere,
+    title: c.master_reel || c.filiere || c.etablissement,
+    subtitle: c.etablissement,
   });
 }

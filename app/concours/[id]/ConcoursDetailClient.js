@@ -17,9 +17,8 @@ export function ShareButton({ concours }) {
 
   function shareText() {
     const master = concours.master_reel || concours.filiere;
-    return `${concours.etablissement} — ${concours.ville} — ${concours.annee}${
-      master ? " · " + master : ""
-    } — sujet de concours réel avec corrigé sur SaadConcours`;
+    const location = `${concours.etablissement} — ${concours.ville} — ${concours.annee}`;
+    return `${master ? master + " · " : ""}${location} — sujet de concours réel avec corrigé sur SaadConcours`;
   }
 
   function handleClick() {

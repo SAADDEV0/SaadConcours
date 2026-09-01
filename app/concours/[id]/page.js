@@ -43,13 +43,27 @@ async function resolveCorrigeMd(c) {
   return c.corrige_md || (await getCorrigeFile(c.id));
 }
 
+// SEO-facing title (browser tab, <title>, OpenGraph/Twitter, JSON-LD name)
+// leads with the real master name — the keyword a prospective student
+// actually searches for — but keeps établissement/ville/année so pages
+// stay distinguishable in search results even when several concours share
+// the same master_reel (e.g. "Comptabilité, Contrôle et Audit (CCA)" alone
+// is on 8 different concours). The on-page H1 drops the étab/ville/année
+// suffix entirely — see ConcoursDetailPage below — since cd-tags right
+// underneath already shows those details individually.
+function seoTitle(c) {
+  const masterLabel = c.master_reel || c.filiere;
+  const location = `${c.etablissement}, ${c.ville} ${c.annee}`;
+  return masterLabel ? `${masterLabel} — Concours ${location}` : `Concours ${location}`;
+}
+
 export async function generateMetadata({ params }) {
   const { c } = await findConcours(params.id);
   if (!c) return {};
 
   const corrigeMd = await resolveCorrigeMd(c);
   const masterLabel = c.master_reel || c.filiere;
-  const title = `Concours ${c.etablissement} ${c.ville} ${c.annee}${masterLabel ? " — " + masterLabel : ""}`;
+  const title = seoTitle(c);
   const description = `Sujet de concours réel — ${c.etablissement}, ${c.ville}, session ${c.annee}${
     masterLabel ? `, filière ${masterLabel}` : ""
   }.${corrigeMd ? " Corrigé indicatif disponible." : ""} Énoncé complet et téléchargement PDF gratuit sur SaadConcours.`;
@@ -98,7 +112,7 @@ export default async function ConcoursDetailPage({ params }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    name: `Concours ${c.etablissement} ${c.ville} ${c.annee}`,
+    name: seoTitle(c),
     description: `Sujet de concours ${masterLabel || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
     url,
     educationalLevel: "Master",
@@ -138,14 +152,15 @@ export default async function ConcoursDetailPage({ params }) {
 
         <div className="cd-head">
           <div className="cd-head-row">
-            <h1>{c.etablissement} — {c.ville} — {c.annee}</h1>
+            <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
             <div className="cd-head-actions">
               <DownloadPdfButton concours={fullConcours} />
               <ShareButton concours={c} />
             </div>
           </div>
           <div className="cd-tags">
-            {(c.master_reel || c.filiere) && <span className="info-tag">🎓 {c.master_reel || c.filiere}</span>}
+            <span className="info-tag">🏫 {c.etablissement}</span>
+            {masterLabel && <span className="info-tag">🎓 {masterLabel}</span>}
             <span className="info-tag">📍 {c.ville}</span>
             <span className="info-tag">📅 {c.annee}</span>
             {c.difficulte && <span className="info-tag">⭐ {c.difficulte}</span>}
@@ -203,8 +218,10 @@ export default async function ConcoursDetailPage({ params }) {
             <div className="cd-related-grid">
               {related.map((r) => (
                 <a key={r.id} className="cd-related-item" href={`/concours/${r.id}`}>
-                  <div className="cd-related-title">{r.etablissement} — {r.ville} — {r.annee}</div>
-                  <div className="cd-related-sub">{r.master_reel || r.filiere}</div>
+                  <div className="cd-related-title">
+                    {r.master_reel || r.filiere || `${r.etablissement} — ${r.ville} — ${r.annee}`}
+                  </div>
+                  <div className="cd-related-sub">{r.etablissement} — {r.ville} — {r.annee}</div>
                 </a>
               ))}
             </div>
