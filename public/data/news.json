@@ -1,17 +1,5 @@
 [
   {
-    "id": "443e7f36b70745bd",
-    "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fdainscriptions.univh2c.ma/Insc/Master/Start/index2.php",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-sebaa-casablanca-2026.html",
-    "date_publication": "2026-08-31"
-  },
-  {
     "id": "e1f817d48ef8f17b",
     "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
     "etablissement": "FSJES",
@@ -21,7 +9,7 @@
     "cloture": false,
     "lien_inscription": "https://preins-fsjesac.univh2c.ma/preins/public/inscription",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-chock-casablanca-2026.html",
-    "date_publication": "2026-08-31"
+    "date_publication": "2026-09-01"
   },
   {
     "id": "1bd24067474c3e03",
@@ -31,8 +19,32 @@
     "filiere": null,
     "date_limite": null,
     "cloture": false,
-    "lien_inscription": null,
+    "lien_inscription": "https://www.flshac-candidature-master.com/login",
     "source": "https://www.almaster-maroc.com/2026/08/master-flsh-ain-chock-casablanca-2026.html",
+    "date_publication": "2026-09-01"
+  },
+  {
+    "id": "c793c217f87e4b06",
+    "titre": "Master ISMAC Rabat 2026-2027",
+    "etablissement": null,
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": "2026-09-09",
+    "cloture": false,
+    "lien_inscription": "https://ismac-inscription.ma/register/master",
+    "source": "https://www.almaster-maroc.com/2026/08/master-ismac-rabat-2026-2027.html",
+    "date_publication": "2026-09-01"
+  },
+  {
+    "id": "443e7f36b70745bd",
+    "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fdainscriptions.univh2c.ma/Insc/Master/Start/index2.php",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjes-ain-sebaa-casablanca-2026.html",
     "date_publication": "2026-08-31"
   },
   {
@@ -69,18 +81,6 @@
     "cloture": false,
     "lien_inscription": "https://insc.flshbm.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-flsh-beni-mellal-2026-2027.html",
-    "date_publication": "2026-08-28"
-  },
-  {
-    "id": "c793c217f87e4b06",
-    "titre": "Master ISMAC Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": "2026-09-02",
-    "cloture": false,
-    "lien_inscription": "https://ismac-inscription.ma/register/master",
-    "source": "https://www.almaster-maroc.com/2026/08/master-ismac-rabat-2026-2027.html",
     "date_publication": "2026-08-28"
   },
   {
@@ -425,7 +425,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-09-28",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
@@ -701,7 +701,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": "2026-09-02",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/8",
     "source": "https://www.almaster-maroc.com/2026/08/master-flash-settat-2026-2027.html",
@@ -1001,8 +1001,8 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": true,
+    "date_limite": null,
+    "cloture": false,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
