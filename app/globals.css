@@ -14,7 +14,10 @@ html{scroll-behavior:smooth;}
     --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
     --text:#1a1d27; --text-dim:#5a6072; --text-faint:#8890a0;
     --accent:#2f6fed; --accent-dim:#dce7ff;
-    --green-dim:#d9f5e8; --violet-dim:#ece3ff;
+    /* Dark-mode amber/red/green read fine on near-black but drop under 2:1
+       contrast as text on a white card — darkened here so badges, the
+       corrigé disclaimer and markdown call-outs stay legible in light mode. */
+    --green:#178a55; --green-dim:#d9f5e8; --amber:#a3690a; --red:#d33a44; --violet-dim:#ece3ff;
     --shadow:0 4px 20px rgba(20,20,40,.08);
   }
 }
@@ -22,7 +25,7 @@ html{scroll-behavior:smooth;}
   --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
   --text:#1a1d27; --text-dim:#5a6072; --text-faint:#8890a0;
   --accent:#2f6fed; --accent-dim:#dce7ff;
-  --green-dim:#d9f5e8; --violet-dim:#ece3ff;
+  --green:#178a55; --green-dim:#d9f5e8; --amber:#a3690a; --red:#d33a44; --violet-dim:#ece3ff;
   --shadow:0 4px 20px rgba(20,20,40,.08);
 }
 :root[data-theme="dark"]{
@@ -236,7 +239,7 @@ header{
 .img-badge{font-size:.72rem; color:var(--green); display:flex; align-items:center; gap:4px;}
 .corrige-badge{font-size:.72rem; color:var(--accent); display:flex; align-items:center; gap:4px;}
 .corrige-disclaimer{
-  font-size:.8rem; color:var(--amber); background:rgba(240,168,61,.1); border:1px solid var(--amber);
+  font-size:.8rem; color:var(--amber); background:color-mix(in srgb, var(--amber) 12%, transparent); border:1px solid var(--amber);
   border-radius:8px; padding:9px 12px; margin-bottom:14px;
 }
 .empty-state{padding:60px 20px; text-align:center; color:var(--text-faint);}
@@ -314,9 +317,12 @@ header{
 .enonce-content{font-size:.94rem; max-width:100%; overflow-x:auto;}
 .enonce-content table{border-collapse:collapse; width:100%; min-width:420px; margin:14px 0; font-size:.85rem; display:block; overflow-x:auto;}
 .enonce-content th,.enonce-content td{border:1px solid var(--border); padding:6px 10px; text-align:left;}
-.enonce-content th{background:var(--bg); font-weight:600;}
-.enonce-content pre{background:var(--bg); padding:12px; border-radius:8px; overflow-x:auto;}
-.enonce-content code{background:var(--bg); padding:1px 5px; border-radius:4px; font-size:.88em;}
+/* var(--bg) sits a hair off var(--bg-elev) in light mode (near-invisible
+   panel), so these mix toward --text instead — reliably readable "inset"
+   surface in both themes rather than relying on the bg/bg-elev gap. */
+.enonce-content th{background:color-mix(in srgb, var(--text) 8%, var(--bg-elev)); font-weight:600;}
+.enonce-content pre{background:color-mix(in srgb, var(--text) 10%, var(--bg-elev)); border:1px solid var(--border); padding:12px; border-radius:8px; overflow-x:auto;}
+.enonce-content code{background:color-mix(in srgb, var(--text) 12%, var(--bg-elev)); padding:1px 5px; border-radius:4px; font-size:.88em;}
 .enonce-content blockquote{border-left:3px solid var(--accent); margin:10px 0; padding:2px 14px; color:var(--text-dim);}
 .image-gallery{display:flex; flex-direction:column; gap:14px;}
 .image-gallery img{width:100%; border-radius:8px; border:1px solid var(--border); cursor:zoom-in;}
