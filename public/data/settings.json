@@ -21,6 +21,6 @@
   "pdfLogoPosition": "left",
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
-  "pdfWatermarkOpacity": 0.05,
+  "pdfWatermarkOpacity": 0.09,
   "pdfShowSocialFooter": true
 }
