@@ -361,6 +361,79 @@ function roundedRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+// Même tracé que le logo du site (toque de diplômé + livre ouvert, voir
+// app/_shared/appIcon.js) redessiné en vecteur plutôt que chargé comme
+// image — pas de chargement asynchrone à attendre avant de dessiner le
+// canvas, et un rendu net à n'importe quelle résolution.
+function drawLogoMark(ctx, cx, cy, size, color, accentColor) {
+  const s = size / 64;
+  const ox = cx - size / 2;
+  const oy = cy - size / 2;
+  const pt = (x, y) => [ox + x * s, oy + y * s];
+  const poly = (points) => {
+    ctx.beginPath();
+    points.forEach(([x, y], i) => {
+      const [px, py] = pt(x, y);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.closePath();
+    ctx.fill();
+  };
+
+  ctx.save();
+  ctx.fillStyle = color;
+
+  // Toque de diplômé
+  poly([
+    [32, 13],
+    [49, 21],
+    [32, 29],
+    [15, 21],
+  ]);
+
+  // Pompon
+  ctx.strokeStyle = color;
+  ctx.lineWidth = Math.max(1, 2 * s);
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  const [tx0, ty0] = pt(49, 21);
+  const [tx1, ty1] = pt(51, 31);
+  ctx.moveTo(tx0, ty0);
+  ctx.lineTo(tx1, ty1);
+  ctx.stroke();
+  ctx.fillStyle = accentColor;
+  const [bx, by] = pt(51, 32.5);
+  ctx.beginPath();
+  ctx.arc(bx, by, Math.max(1, 2 * s), 0, Math.PI * 2);
+  ctx.fill();
+
+  // Livre ouvert
+  ctx.fillStyle = color;
+  poly([
+    [32, 42],
+    [13, 37],
+    [13, 48],
+    [32, 54],
+  ]);
+  poly([
+    [32, 42],
+    [51, 37],
+    [51, 48],
+    [32, 54],
+  ]);
+  ctx.strokeStyle = accentColor;
+  ctx.lineWidth = Math.max(1, 1.2 * s);
+  ctx.beginPath();
+  const [sx0, sy0] = pt(32, 42);
+  const [sx1, sy1] = pt(32, 54);
+  ctx.moveTo(sx0, sy0);
+  ctx.lineTo(sx1, sy1);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 /* --------------------------------- Image ---------------------------------
  * Chaque position/taille est une fraction de `unit` (le plus petit côté du
  * canvas) donc le même code de dessin produit un bon résultat en 1080x1080,
@@ -417,19 +490,16 @@ function drawCard(canvas, kind, item) {
   ctx.fillRect(0, H * 0.8, W, H * 0.2);
 
   // Sceau de marque, coin haut-droit — repère visuel constant même quand le
-  // titre est long et pousse tout le reste vers le bas.
-  const sealR = unit * 0.05;
+  // titre est long et pousse tout le reste vers le bas. Même logo que le
+  // favicon/l'icône PWA du site (toque + livre), pas une simple lettre.
+  const sealR = unit * 0.055;
   const sealCx = W - pad - sealR;
   const sealCy = pad + sealR + safeTop;
   ctx.fillStyle = "rgba(255,255,255,0.16)";
   ctx.beginPath();
   ctx.arc(sealCx, sealCy, sealR, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = "#fff";
-  ctx.font = `800 ${Math.round(sealR * 1.15)}px system-ui, sans-serif`;
-  ctx.textAlign = "center";
-  ctx.fillText("S", sealCx, sealCy + sealR * 0.35);
-  ctx.textAlign = "left";
+  drawLogoMark(ctx, sealCx, sealCy, sealR * 1.85, "#fff", "#fbbf24");
 
   const days = kind === "news" ? daysUntil(item.date_limite) : null;
   const urgent = days !== null && days >= 0 && days <= 7;
@@ -672,6 +742,8 @@ export default function SocialGeneratorPanel() {
   const [format, setFormat] = useState(FORMATS[0]);
   const [imgSrc, setImgSrc] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [publishResult, setPublishResult] = useState(null); // { ok, url, error }
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -706,6 +778,7 @@ export default function SocialGeneratorPanel() {
     canvas.height = format.height;
     drawCard(canvas, tab, selected);
     setImgSrc(canvas.toDataURL("image/png"));
+    setPublishResult(null);
   }, [selected, tab, format]);
 
   function switchTab(key) {
@@ -713,11 +786,13 @@ export default function SocialGeneratorPanel() {
     setSelected(null);
     setQuery("");
     setCopied(false);
+    setPublishResult(null);
   }
 
   function pick(item) {
     setSelected(item);
     setCopied(false);
+    setPublishResult(null);
   }
 
   async function copyText() {
@@ -737,6 +812,35 @@ export default function SocialGeneratorPanel() {
     link.download = `saadconcours-${tab}-${format.key}-${selected?.id || "post"}.png`;
     link.href = canvasRef.current.toDataURL("image/png");
     link.click();
+  }
+
+  // Publie directement sur la Page Facebook (API Graph côté serveur — voir
+  // app/api/admin/publish-facebook/route.js). Action publique et
+  // irréversible une fois envoyée, donc confirmation explicite avant l'appel
+  // réseau plutôt qu'un simple clic.
+  async function publishToFacebook() {
+    if (!imgSrc || !text || publishing) return;
+    const ok = window.confirm("Publier ce post maintenant sur la Page Facebook de SaadConcours ?");
+    if (!ok) return;
+    setPublishing(true);
+    setPublishResult(null);
+    try {
+      const res = await fetch("/api/admin/publish-facebook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageBase64: imgSrc, caption: text }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) {
+        setPublishResult({ ok: false, error: data.error || "Échec de la publication." });
+      } else {
+        setPublishResult({ ok: true, url: data.url });
+      }
+    } catch {
+      setPublishResult({ ok: false, error: "Impossible de joindre le serveur." });
+    } finally {
+      setPublishing(false);
+    }
   }
 
   return (
@@ -837,7 +941,26 @@ export default function SocialGeneratorPanel() {
                 <button type="button" className="admin-btn" onClick={downloadImage}>
                   ⬇ Télécharger l'image
                 </button>
+                <button type="button" className="admin-btn fb-publish-btn" onClick={publishToFacebook} disabled={publishing}>
+                  {publishing ? "Publication..." : "📘 Publier sur Facebook"}
+                </button>
               </div>
+              {publishResult && (
+                <p className={"fb-publish-result" + (publishResult.ok ? " ok" : " error")}>
+                  {publishResult.ok ? (
+                    <>
+                      ✅ Publié sur la Page Facebook.{" "}
+                      {publishResult.url && (
+                        <a href={publishResult.url} target="_blank" rel="noopener noreferrer">
+                          Voir le post ↗
+                        </a>
+                      )}
+                    </>
+                  ) : (
+                    <>⚠️ {publishResult.error}</>
+                  )}
+                </p>
+              )}
             </div>
           </div>
 

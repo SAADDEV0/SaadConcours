@@ -1136,6 +1136,14 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
   .pipeline-board{grid-template-columns:1fr;}
 }
 
+/* Facebook direct-publish button + result message */
+.fb-publish-btn{background:#1877f2 !important; color:#fff !important;}
+.fb-publish-btn:hover{filter:brightness(1.1);}
+.fb-publish-result{margin:10px 0 0; font-size:.82rem; padding:8px 10px; border-radius:8px;}
+.fb-publish-result.ok{background:var(--green-dim); color:var(--green);}
+.fb-publish-result.error{background:color-mix(in srgb, var(--red) 14%, transparent); color:var(--red);}
+.fb-publish-result a{color:inherit; font-weight:700; text-decoration:underline;}
+
 /* SEO / format quality checks under the generated text */
 .seo-checks{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
 .seo-check-chip{

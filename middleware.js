@@ -20,6 +20,7 @@ const PROTECTED_API_ALWAYS = [
   "/api/admin/email-status",
   "/api/admin/import-concours",
   "/api/admin/taxonomy",
+  "/api/admin/publish-facebook",
 ];
 
 function isProtectedApiWrite(pathname, method) {
@@ -83,6 +84,7 @@ export const config = {
     "/api/admin/email-status",
     "/api/admin/import-concours",
     "/api/admin/taxonomy",
+    "/api/admin/publish-facebook",
     "/api/settings/:path*",
   ],
 };
