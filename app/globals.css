@@ -1125,7 +1125,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 
 /* Social post generator */
 .social-gen-result{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px;}
-.social-gen-canvas{width:100%; height:auto; aspect-ratio:1/1; border-radius:14px; border:1px solid var(--border); display:block;}
+.social-gen-canvas{width:100%; height:auto; max-height:520px; object-fit:contain; border-radius:14px; border:1px solid var(--border); display:block; background:var(--bg-card);}
 @media (max-width: 900px){
   .social-gen-result{grid-template-columns:1fr;}
   .pipeline-board{grid-template-columns:1fr 1fr;}
@@ -1133,3 +1133,50 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 @media (max-width: 560px){
   .pipeline-board{grid-template-columns:1fr;}
 }
+
+/* Format picker (post/story/landscape presets) */
+.format-picker{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:8px; margin-bottom:14px;}
+.format-picker-btn{
+  display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;
+  padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); cursor:pointer;
+}
+.format-picker-btn:hover{border-color:var(--accent);}
+.format-picker-btn.active{border-color:var(--accent); background:var(--accent-dim);}
+.format-picker-btn strong{font-size:.85rem; color:var(--text);}
+.format-picker-btn span{font-size:.7rem; color:var(--text-faint);}
+
+/* Platform preview mockups — intentionally hardcode each platform's own
+   look (not the admin's light/dark theme) since these represent external
+   apps, not this site. */
+.social-preview-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:16px;}
+.social-preview-col{display:flex; flex-direction:column; gap:8px;}
+.social-preview-label{font-size:.76rem; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:.03em;}
+
+.pf-mock{border-radius:12px; overflow:hidden; font-family:system-ui,-apple-system,sans-serif; font-size:.8rem; box-shadow:0 8px 22px -10px rgba(0,0,0,.4);}
+.pf-mock-head{display:flex; align-items:center; gap:8px; padding:10px 12px;}
+.pf-mock-avatar{
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,#4338ca,#c026d3); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.85rem;
+}
+.pf-mock-name{font-weight:700;}
+.pf-mock-time{font-size:.7rem; opacity:.65;}
+.pf-mock-image{width:100%; display:block; object-fit:cover; max-height:260px;}
+.pf-mock-image.square{aspect-ratio:1/1; object-fit:cover; max-height:none;}
+
+.pf-mock-fb{background:#fff; color:#050505;}
+.pf-mock-fb .pf-mock-caption{padding:0 12px 10px; line-height:1.4;}
+.pf-mock-fb .pf-mock-actions{display:flex; justify-content:space-around; padding:8px 4px; border-top:1px solid #eee; font-size:.74rem; color:#65676b; font-weight:600;}
+
+.pf-mock-ig{background:#fff; color:#000;}
+.pf-mock-ig .pf-mock-head{border-bottom:1px solid #efefef;}
+.pf-mock-ig .pf-mock-more{margin-left:auto; font-weight:800; letter-spacing:1px;}
+.pf-mock-ig .pf-mock-icons{display:flex; gap:14px; padding:10px 12px 4px; font-size:1.1rem;}
+.pf-mock-ig .pf-mock-icons-save{margin-left:auto;}
+.pf-mock-ig .pf-mock-caption{padding:2px 12px 12px; line-height:1.4;}
+
+.pf-mock-wa{background:#e5ddd5; padding:14px; display:flex; justify-content:flex-end;}
+.pf-mock-wa-bubble{background:#dcf8c6; border-radius:10px; padding:6px; max-width:100%; box-shadow:0 1px 1px rgba(0,0,0,.1);}
+.pf-mock-wa-bubble .pf-mock-image{border-radius:6px; max-height:220px;}
+.pf-mock-wa-caption{padding:6px 4px 2px; color:#111; line-height:1.35;}
+.pf-mock-wa-meta{text-align:right; font-size:.68rem; color:#667781; padding:0 4px 2px;}
