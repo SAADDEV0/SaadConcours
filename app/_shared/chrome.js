@@ -140,18 +140,21 @@ const SOCIAL_NETWORKS = [
   },
 ];
 
+// Loaded here instead of a blocking <link> in app/layout.js's <head> — see
+// that file for why. Idempotent, safe to call from anywhere that renders
+// KaTeX output (chromeScript() below, or the admin's MarkdownEditor preview,
+// which doesn't otherwise pull in the chrome/nav script).
+export function ensureKatexCss() {
+  if (document.getElementById("katex-css")) return;
+  const link = document.createElement("link");
+  link.id = "katex-css";
+  link.rel = "stylesheet";
+  link.href = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css";
+  document.head.appendChild(link);
+}
+
 export const chromeScript = function initChrome() {
-  // Loaded here instead of a blocking <link> in app/layout.js's <head> — see
-  // that file for why. Idempotent so re-running chromeScript() on client-side
-  // navigation between pages never injects it twice.
-  (function initKatexCss() {
-    if (document.getElementById("katex-css")) return;
-    const link = document.createElement("link");
-    link.id = "katex-css";
-    link.rel = "stylesheet";
-    link.href = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css";
-    document.head.appendChild(link);
-  })();
+  ensureKatexCss();
 
   (function initTopProgressBar() {
     const bar = document.getElementById("topProgressBar");

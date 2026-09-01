@@ -6,13 +6,13 @@
 // this out instead of two copies drifting apart — mirrors _shared/concoursPdf.js.
 
 import { trackPdfDownload } from "./chrome";
-import { addWatermark, addSiteHeader } from "./pdfWatermark";
+import { addWatermark, addSiteHeader, addFooterSocial, resolvePdfBranding } from "./pdfWatermark";
 
 function stripInlineMd(s) {
   return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
 }
 
-export function downloadCoursPdf(cours) {
+export async function downloadCoursPdf(cours) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const marginX = 18;
@@ -138,8 +138,17 @@ export function downloadCoursPdf(cours) {
     i++;
   }
 
-  addWatermark(doc);
-  addSiteHeader(doc);
+  let branding = {};
+  try {
+    const settings = await (await fetch("/api/settings")).json();
+    branding = await resolvePdfBranding(settings);
+  } catch {
+    // best-effort: fall back to the default vector logo/watermark, no socials
+  }
+
+  addWatermark(doc, branding);
+  addSiteHeader(doc, branding);
+  addFooterSocial(doc, branding);
   doc.save(`${cours.id}.pdf`);
   trackPdfDownload("cours", cours.id);
 }

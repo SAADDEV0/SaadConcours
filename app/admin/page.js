@@ -1796,18 +1796,47 @@ function DigestComposer({ settings }) {
   );
 }
 
+const MAX_LOGO_BYTES = 400 * 1024;
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function SettingsPanel() {
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
+  const [logoError, setLogoError] = useState("");
+  const [newsItems, setNewsItems] = useState(null);
 
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
       .then(setForm)
       .catch(() => setError("Erreur lors du chargement des réglages."));
+    // Loaded separately, just to compute the per-établissement counts below
+    // the checkboxes — a failure here shouldn't block the settings form.
+    fetch("/api/news")
+      .then((r) => r.json())
+      .then((data) => setNewsItems(Array.isArray(data) ? data : []))
+      .catch(() => setNewsItems([]));
   }, []);
+
+  const newsCounts = useMemo(() => {
+    const byEtab = {};
+    let sansEtablissement = 0;
+    for (const item of newsItems || []) {
+      if (item.etablissement) byEtab[item.etablissement] = (byEtab[item.etablissement] || 0) + 1;
+      else sansEtablissement++;
+    }
+    return { byEtab, sansEtablissement, total: (newsItems || []).length };
+  }, [newsItems]);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -1838,6 +1867,21 @@ function SettingsPanel() {
     setForm({ ...form, newsEtablissementsVisibles: next });
   }
 
+  async function handleLogoUpload(file) {
+    setLogoError("");
+    if (!file) return;
+    if (file.size > MAX_LOGO_BYTES) {
+      setLogoError(`Image trop lourde (${Math.round(file.size / 1024)} Ko) — 400 Ko max, le logo est stocké tel quel dans les réglages.`);
+      return;
+    }
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      setForm({ ...form, pdfLogoDataUrl: dataUrl });
+    } catch {
+      setLogoError("Échec de la lecture du fichier.");
+    }
+  }
+
   if (!form) return <div className="admin-card">Chargement...</div>;
 
   const visibles = form.newsEtablissementsVisibles || [];
@@ -1859,6 +1903,101 @@ function SettingsPanel() {
             />
           </div>
         ))}
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Personnalisation des PDF</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+          Contrôle l'apparence des fiches de cours et énoncés/corrigés téléchargés en PDF depuis le site : logo
+          d'en-tête, filigrane, et lien vers tes réseaux sociaux en pied de page.
+        </p>
+
+        <div className="admin-field">
+          <label>Logo d'en-tête</label>
+          {form.pdfLogoDataUrl ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <img
+                src={form.pdfLogoDataUrl}
+                alt="Logo PDF actuel"
+                style={{ height: 32, maxWidth: 160, objectFit: "contain", background: "#fff", borderRadius: 6, padding: 4 }}
+              />
+              <button type="button" className="admin-link-btn" onClick={() => setForm({ ...form, pdfLogoDataUrl: "" })}>
+                Retirer (revenir au logo par défaut)
+              </button>
+            </div>
+          ) : (
+            <div className="admin-image-hint" style={{ marginBottom: 8 }}>
+              Aucun logo personnalisé — le logo vectoriel SaadConcours par défaut est utilisé.
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={(e) => handleLogoUpload(e.target.files && e.target.files[0])}
+          />
+          <p className="admin-image-hint">PNG/JPEG/WebP, 400 Ko max. Un fond transparent (PNG) rend mieux dans l'en-tête.</p>
+          {logoError && <div className="admin-error">{logoError}</div>}
+        </div>
+
+        <div className="admin-field">
+          <label>Position du logo</label>
+          <select
+            value={form.pdfLogoPosition || "left"}
+            onChange={(e) => setForm({ ...form, pdfLogoPosition: e.target.value })}
+          >
+            <option value="left">Gauche</option>
+            <option value="center">Centre</option>
+            <option value="right">Droite</option>
+          </select>
+        </div>
+
+        <div className="admin-field">
+          <label>
+            <input
+              type="checkbox"
+              checked={form.pdfWatermarkEnabled !== false}
+              onChange={(e) => setForm({ ...form, pdfWatermarkEnabled: e.target.checked })}
+              style={{ marginRight: 8 }}
+            />
+            Afficher un filigrane sur les pages
+          </label>
+        </div>
+
+        {form.pdfWatermarkEnabled !== false && (
+          <>
+            <div className="admin-field">
+              <label>Texte du filigrane</label>
+              <input
+                value={form.pdfWatermarkText || ""}
+                placeholder="SaadConcours"
+                onChange={(e) => setForm({ ...form, pdfWatermarkText: e.target.value })}
+              />
+            </div>
+            <div className="admin-field">
+              <label>Opacité du filigrane ({Math.round((form.pdfWatermarkOpacity ?? 0.05) * 100)}%)</label>
+              <input
+                type="range"
+                min="0.02"
+                max="0.3"
+                step="0.01"
+                value={form.pdfWatermarkOpacity ?? 0.05}
+                onChange={(e) => setForm({ ...form, pdfWatermarkOpacity: Number(e.target.value) })}
+              />
+            </div>
+          </>
+        )}
+
+        <div className="admin-field">
+          <label>
+            <input
+              type="checkbox"
+              checked={form.pdfShowSocialFooter !== false}
+              onChange={(e) => setForm({ ...form, pdfShowSocialFooter: e.target.checked })}
+              style={{ marginRight: 8 }}
+            />
+            Afficher le site et les réseaux sociaux configurés ci-dessus en pied de page des PDF
+          </label>
+        </div>
       </div>
 
       <div className="admin-card" style={{ marginTop: 18 }}>

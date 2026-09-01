@@ -16,5 +16,11 @@
   "newsAlertsMessage": "",
   "newsAlertsSubject": "",
   "newsAlertsFromName": "SaadConcours",
-  "newsAlertsFromEmail": "alerts@saadconcours.space"
+  "newsAlertsFromEmail": "alerts@saadconcours.space",
+  "pdfLogoDataUrl": "",
+  "pdfLogoPosition": "left",
+  "pdfWatermarkEnabled": true,
+  "pdfWatermarkText": "SaadConcours",
+  "pdfWatermarkOpacity": 0.05,
+  "pdfShowSocialFooter": true
 }

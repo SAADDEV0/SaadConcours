@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "../_shared/chrome";
 import { downloadCoursPdf } from "../_shared/coursPdf";
+import { protectMath, renderMathWhenReady } from "../_shared/mathMarkdown";
 
 const MARKUP = `
 ${chromeHtml({ active: "cours", showSearch: false })}
@@ -163,7 +164,11 @@ export default function CoursPage() {
     }
 
     function renderCoursContent(md) {
-      const html = window.marked ? marked.parse(md) : md;
+      let html = md;
+      if (window.marked) {
+        const { text, restore } = protectMath(md);
+        html = restore(marked.parse(text));
+      }
       const content = $("#coursContent");
       content.innerHTML = html;
 
@@ -184,15 +189,7 @@ export default function CoursPage() {
         toc.appendChild(a);
       });
 
-      if (window.renderMathInElement) {
-        renderMathInElement(content, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          throwOnError: false,
-        });
-      }
+      renderMathWhenReady(content);
     }
 
     $("#coursBack").addEventListener("click", renderCoursModuleList);

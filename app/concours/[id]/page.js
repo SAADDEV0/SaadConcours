@@ -3,6 +3,7 @@ import { marked } from "marked";
 import { getAllConcours, getCorrigeFile } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { formatQCM } from "../../_shared/concoursFormat";
+import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -76,9 +77,9 @@ export default async function ConcoursDetailPage({ params }) {
   const { c, list } = await findConcours(params.id);
   if (!c) notFound();
 
-  const enonceHtml = marked.parse(formatQCM(c.enonce_md) || "*Énoncé non disponible.*");
+  const enonceHtml = renderMarkdownWithMath(marked, formatQCM(c.enonce_md) || "*Énoncé non disponible.*");
   const corrigeMd = await resolveCorrigeMd(c);
-  const corrigeHtml = corrigeMd ? marked.parse(formatQCM(corrigeMd)) : null;
+  const corrigeHtml = corrigeMd ? renderMarkdownWithMath(marked, formatQCM(corrigeMd)) : null;
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);

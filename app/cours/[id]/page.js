@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
+import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import CoursDetailClient from "./CoursDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -50,7 +51,7 @@ export default async function CoursDetailPage({ params }) {
   const { c, list } = await findCours(params.id);
   if (!c || !c.available) notFound();
 
-  const contentHtml = marked.parse(c.content || "*Contenu non disponible.*");
+  const contentHtml = renderMarkdownWithMath(marked, c.content || "*Contenu non disponible.*");
   const url = `${SITE_URL}/cours/${c.id}`;
   const related = getRelatedCours(list, c);
 

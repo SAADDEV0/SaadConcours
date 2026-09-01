@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { protectMath, renderMathWhenReady } from "../_shared/mathMarkdown";
+import { ensureKatexCss } from "../_shared/chrome";
 
 /* -------------------------------------------------------------------
  * Rich-ish Markdown editor for admin content fields (cours, énoncés,
@@ -193,6 +195,7 @@ const TOOLBAR = [
 export default function MarkdownEditor({ value, onChange, placeholder, required, minHeight = 260 }) {
   const [mode, setMode] = useState("split"); // "write" | "split" | "preview"
   const taRef = useRef(null);
+  const previewRef = useRef(null);
 
   function setValueWithCursor(newValue, cursorPos) {
     onChange(newValue);
@@ -308,8 +311,19 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
     }
   }
 
-  const previewHtml =
-    typeof window !== "undefined" && window.marked ? window.marked.parse(value || "") : String(value || "");
+  const previewHtml = (() => {
+    if (typeof window === "undefined" || !window.marked) return String(value || "");
+    const { text, restore } = protectMath(value || "");
+    return restore(window.marked.parse(text));
+  })();
+
+  // KaTeX runs on rendered DOM text, so it needs its own pass after every
+  // preview re-render — mirrors the pattern in CoursDetailClient etc.
+  useEffect(() => {
+    if (mode === "write") return;
+    ensureKatexCss();
+    renderMathWhenReady(previewRef.current);
+  }, [previewHtml, mode]);
 
   return (
     <div className="md-editor">
@@ -359,7 +373,7 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
           />
         )}
         {mode !== "write" && (
-          <div className="md-editor-preview" dangerouslySetInnerHTML={{ __html: previewHtml }} />
+          <div ref={previewRef} className="md-editor-preview" dangerouslySetInnerHTML={{ __html: previewHtml }} />
         )}
       </div>
     </div>

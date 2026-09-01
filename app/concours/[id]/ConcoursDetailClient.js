@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { chromeScript, trackConcoursView } from "../../_shared/chrome";
 import { downloadConcoursPdf } from "../../_shared/concoursPdf";
+import { renderMathWhenReady } from "../../_shared/mathMarkdown";
 
 // Always opens our own WhatsApp/Facebook/Telegram panel instead of the
 // native OS share sheet (navigator.share) - the native sheet hides which
@@ -104,18 +105,7 @@ export default function ConcoursDetailClient({ concours }) {
   useEffect(() => {
     chromeScript();
     trackConcoursView(concours.id);
-
-    if (window.renderMathInElement) {
-      document.querySelectorAll(".enonce-content").forEach((el) => {
-        window.renderMathInElement(el, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          throwOnError: false,
-        });
-      });
-    }
+    document.querySelectorAll(".enonce-content").forEach(renderMathWhenReady);
   }, [concours.id]);
 
   return (

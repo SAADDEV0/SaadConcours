@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { chromeScript } from "../../_shared/chrome";
 import { downloadCoursPdf } from "../../_shared/coursPdf";
+import { renderMathWhenReady } from "../../_shared/mathMarkdown";
 
 // This page is server-rendered for SEO (see page.js), but the header's
 // theme toggle / social links and the KaTeX math render are client-only
@@ -11,18 +12,7 @@ import { downloadCoursPdf } from "../../_shared/coursPdf";
 export default function CoursDetailClient({ cours }) {
   useEffect(() => {
     chromeScript();
-
-    if (window.renderMathInElement) {
-      document.querySelectorAll(".enonce-content").forEach((el) => {
-        window.renderMathInElement(el, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          throwOnError: false,
-        });
-      });
-    }
+    document.querySelectorAll(".enonce-content").forEach(renderMathWhenReady);
   }, [cours.id]);
 
   return (

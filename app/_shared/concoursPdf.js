@@ -6,7 +6,7 @@
 // that knows how to lay this out instead of two copies drifting apart.
 
 import { pub, trackPdfDownload } from "./chrome";
-import { addWatermark, addSiteHeader } from "./pdfWatermark";
+import { addWatermark, addSiteHeader, addFooterSocial, resolvePdfBranding } from "./pdfWatermark";
 
 function stripInlineMd(s) {
   return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
@@ -255,8 +255,17 @@ export async function downloadConcoursPdf(c) {
     }
   }
 
-  addWatermark(doc);
-  addSiteHeader(doc);
+  let branding = {};
+  try {
+    const settings = await (await fetch("/api/settings")).json();
+    branding = await resolvePdfBranding(settings);
+  } catch {
+    // best-effort: fall back to the default vector logo/watermark, no socials
+  }
+
+  addWatermark(doc, branding);
+  addSiteHeader(doc, branding);
+  addFooterSocial(doc, branding);
   doc.save(`${c.id}.pdf`);
   trackPdfDownload("concours", c.id);
 }

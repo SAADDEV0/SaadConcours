@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
+import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import BlogDetailClient from "./BlogDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -43,7 +44,7 @@ export default async function BlogDetailPage({ params }) {
   const { p, list } = await findPost(params.id);
   if (!p || !p.available) notFound();
 
-  const contentHtml = marked.parse(p.content || "");
+  const contentHtml = renderMarkdownWithMath(marked, p.content || "");
   const url = `${SITE_URL}/blog/${p.id}`;
   const related = getRelatedPosts(list, p);
 
