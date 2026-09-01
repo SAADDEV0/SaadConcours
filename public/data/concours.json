@@ -224,7 +224,8 @@
     "source": "- Lien / origine du sujet : https://www.economie-gestion.com/wp-content/uploads/2019/06/Master-Sciences-de-Gestion-201314-FSJES-RABAT.pdf (page listant les annales : https://www.economie-gestion.com/concours-masters-fsjes-maroc/)",
     "images": [
       "images/Rabat/2014_Rabat_FSJES_Agdal_SciencesGestion/2014_Rabat_FSJES_Agdal_SciencesGestion.png"
-    ]
+    ],
+    "master_reel": "Sciences de Gestion"
   },
   {
     "id": "2014_Tanger_FSJES-Tanger_Master-Finance",
@@ -485,7 +486,8 @@
       "images/Agadir/2019_Agadir_FSJES_CCA/2019_Agadir_FSJES_CCA_p1.jpg",
       "images/Agadir/2019_Agadir_FSJES_CCA/2019_Agadir_FSJES_CCA_p2.jpg",
       "images/Agadir/2019_Agadir_FSJES_CCA/2019_Agadir_FSJES_CCA_p3.jpg"
-    ]
+    ],
+    "master_reel": "Comptabilité Contrôle Audit (CCA)"
   },
   {
     "id": "2019_AitMelloul_FSJES_CCA",
@@ -769,7 +771,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
     "filiere": "Master Audit",
-    "master_reel": "MS ACGSI",
+    "master_reel": "Audit, Contrôle de Gestion et Systèmes d'Information (ACGSI)",
     "modules": [
       "Comptabilité Approfondie",
       "Fiscalité des Entreprises",
@@ -1020,7 +1022,7 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
     "filiere": "Master Audit",
-    "master_reel": "MS ACGSI",
+    "master_reel": "Audit, Contrôle de Gestion et Systèmes d'Information (ACGSI)",
     "modules": [
       "Comptabilité Générale",
       "Fiscalité des Entreprises",
@@ -1502,7 +1504,8 @@
     "images": [
       "images/Settat/SD_Settat_ENCG_Settat_Finance/SD_Settat_ENCG_Settat_Finance.png",
       "images/Settat/SD_Settat_ENCG_Settat_Finance/SD_Settat_ENCG_Settat_Finance_p2.png"
-    ]
+    ],
+    "master_reel": "Finance"
   },
   {
     "id": "2025_Kenitra_FEG_Kenitra_Audit",
