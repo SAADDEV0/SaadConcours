@@ -36,6 +36,18 @@
     "date_publication": "2026-09-01"
   },
   {
+    "id": "27a446737a550b64",
+    "titre": "Master ISADAC Rabat 2026-2027",
+    "etablissement": null,
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://isadac.com/candidat/inscription_candidat",
+    "source": "https://www.almaster-maroc.com/2026/08/master-isadac-rabat-2026-2027.html",
+    "date_publication": "2026-09-01"
+  },
+  {
     "id": "443e7f36b70745bd",
     "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
     "etablissement": "FSJES",
@@ -425,7 +437,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-28",
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
@@ -701,7 +713,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-02",
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/8",
     "source": "https://www.almaster-maroc.com/2026/08/master-flash-settat-2026-2027.html",
@@ -1001,8 +1013,8 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
-    "cloture": false,
+    "date_limite": "2026-08-31",
+    "cloture": true,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
@@ -1101,18 +1113,6 @@
     "cloture": true,
     "lien_inscription": "http://ensak.usms.ac.ma/PreinscriptionMaster/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensa-khouribga-2026-2027.html",
-    "date_publication": "2026-08-01"
-  },
-  {
-    "id": "27a446737a550b64",
-    "titre": "Master ISADAC Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/08/master-isadac-rabat-2026-2027.html",
     "date_publication": "2026-08-01"
   },
   {
