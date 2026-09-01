@@ -1,3 +1,5 @@
+**Université Abdelmalek Essaâdi — Faculté des Sciences Juridiques, Économiques et Sociales - Tanger**
+
 **Concours d'accès au Master : Finance-Banque et Marchés**
 **Examen écrit — Octobre 2014 — Durée : 2h**
 

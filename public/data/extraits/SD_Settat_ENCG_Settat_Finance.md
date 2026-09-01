@@ -1,3 +1,5 @@
+**Université Hassan 1er — École Nationale de Commerce et de Gestion - Settat**
+
 **Durée : 1heure30**
 
 *Traiter l'ensemble des questions suivantes :*

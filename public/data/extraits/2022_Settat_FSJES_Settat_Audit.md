@@ -1,3 +1,5 @@
+**Université Hassan 1er — Faculté des Sciences Juridiques, Économiques et Sociales - Settat**
+
 **Concours Master Audit et Contrôle de Gestion — FSJES Settat**
 
 *Répondez aux questions suivantes en cochant la ou les réponses exactes :*

@@ -1,3 +1,5 @@
+**Université Ibn Zohr — Faculté des Sciences Juridiques, Économiques et Sociales - Agadir**
+
 **Concours d'accès aux cycles masters et masters spécialisés**
 Année universitaire : 2019-2020
 Durée : 1H30 — Aucun document n'est autorisé

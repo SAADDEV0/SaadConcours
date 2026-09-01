@@ -1,3 +1,5 @@
+**Université Moulay Ismail — Faculté des Sciences Juridiques, Économiques et Sociales - Meknès**
+
 **CYCLE : MASTER D'EXCELLENCE — ANNÉE UNIVERSITAIRE 2024/2025**
 **FILIÈRE : INGÉNIERIE COMPTABLE, FISCALE ET FINANCIÈRE (Durée : 1h30min)**
 

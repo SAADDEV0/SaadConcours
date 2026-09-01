@@ -1,3 +1,5 @@
+**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales - Ain Chock**
+
 **Concours d'accès au Master CCA (FSJES Casablanca Ain Chock : FC : 2020/2021)**
 **Durée : 2 h**
 

@@ -1,3 +1,5 @@
+**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales - Souissi**
+
 **Concours Master Comptabilité Contrôle Audit (CCA) — QCM (49 questions, plusieurs réponses possibles par question)**
 
 1. L'investissement est qualifié de destructeur de la valeur, lorsque : ses encaissements nets sont négatifs / ses encaissements nets sont inférieurs à sa dépense initiale / sa VAN est inférieure à sa dépense initiale / sa VAN est inférieure à zéro / son indice de profitabilité est inférieur à 0

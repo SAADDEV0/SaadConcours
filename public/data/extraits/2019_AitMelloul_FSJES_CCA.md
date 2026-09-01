@@ -1,3 +1,5 @@
+**Université Ibn Zohr — Faculté des Sciences Juridiques, Économiques et Sociales - Ait Melloul**
+
 **Épreuve du concours écrit d'accès au Master Spécialisé : Comptabilité, Contrôle de Gestion et Audit**
 Année universitaire : 2019/2020 — Durée : 2 H 00 — Aucun document n'est autorisé
 

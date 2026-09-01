@@ -1,3 +1,5 @@
+**Université Ibn Tofail — Faculté des Sciences Juridiques, Économiques et Sociales - Kénitra**
+
 **Concours d'accès au Master — Options : Finance/Comptabilité & Management Audit Contrôle — Année universitaire 2012/2013 — Durée : 3 heures**
 
 Documents et calculateurs programmables non autorisés. Les résultats doivent être justifiés.

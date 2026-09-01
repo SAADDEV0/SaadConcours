@@ -1,3 +1,5 @@
+**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales - Agdal**
+
 **Master Gestion Financière Comptable et Fiscale (G.F.C.F) — Test écrit : Comptabilité et Finance**
 
 ### DOSSIER I : COMPTABILITÉ DE GESTION (6 points)

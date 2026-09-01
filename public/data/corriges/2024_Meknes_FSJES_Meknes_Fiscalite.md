@@ -1,3 +1,5 @@
+**Université Moulay Ismail — Faculté des Sciences Juridiques, Économiques et Sociales - Meknès**
+
 > Ce sujet est un QCM. Le scan source (`public/images/Meknès/2024_Meknes_FSJES_Meknes_Fiscalite/`) porte les bonnes réponses cochées en rose par la source — c'est la base de ce corrigé, avec justification et calcul de vérification quand la question l'exige.
 
 **1.** C'est le propriétaire d'une partie du capital de la société.

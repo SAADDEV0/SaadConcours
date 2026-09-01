@@ -1,3 +1,5 @@
+**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales - Souissi**
+
 **Master Comptabilité, Contrôle et Audit — Concours d'entrée — Épreuve écrite — Durée : 2H**
 
 NB :

@@ -1,3 +1,5 @@
+**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales - Salé**
+
 **Test écrit pour l'accès au Master Ingénierie Financière Publique (IFP) — Épreuve d'économie générale — Année universitaire 2011-2012**
 
 Durée : trois heures ;

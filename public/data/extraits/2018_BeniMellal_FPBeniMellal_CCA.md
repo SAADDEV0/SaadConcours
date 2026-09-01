@@ -1,3 +1,5 @@
+**Université Sultan Moulay Slimane — Faculté Polydisciplinaire - Béni Mellal**
+
 **Master Contrôle Comptabilité Audit (CCA) — Concours d'accès — Année universitaire 2018-2019**
 **Variante B**
 

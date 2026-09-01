@@ -1,3 +1,5 @@
+**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales - Agdal**
+
 **Épreuve de comptabilité**
 
 Tous les calculs justificatifs doivent figurer sur la copie. Seul l'usage du plan comptable est autorisé.

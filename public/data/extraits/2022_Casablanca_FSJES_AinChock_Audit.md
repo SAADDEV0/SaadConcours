@@ -1,3 +1,5 @@
+**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales - Ain Chock**
+
 ### Épreuve 1 — Techniques comptables
 
 1. Parmi les charges accessoires à ne pas inclure au coût d'acquisition d'une immobilisation : A. Transport B. Droits de douane C. Frais généraux D. Frais d'acquisition d'immobilisations (droits de mutation, honoraires et commission, frais d'actes) E. Frais de réception des marchandises, matières ou fournitures (déchargement, manutention…) F. Frais d'essais et de mise au point G. Assurances transport H. TVA non récupérable I. Pertes d'exploitation initiales

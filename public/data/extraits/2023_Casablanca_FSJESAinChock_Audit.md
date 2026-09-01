@@ -1,3 +1,5 @@
+**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales - Ain Chock**
+
 **Concours d'accès au MS ACGSI — Épreuve de techniques comptables — Durée : 45 Min**
 **Questionnaire E**
 *Barème : Réponse juste : 1pt, Réponse fausse : (-)1pt, Non réponse : 0pt*
