@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
-import { getFiliereCounts, renameFiliere } from "@/lib/store";
+import { getFiliereCounts, getTaxonomyCoverage, renameFiliere } from "@/lib/store";
 
-// Filière taxonomy management — concours.filiere is free text (the public
-// /concours filter derives its options straight from the data, see
-// app/concours/page.js), so this is the safety net against "Marketing" and
-// "marketing" silently coexisting as the admin adds more filières. Gated by
-// middleware.js (PROTECTED_API_ALWAYS) regardless of method.
+// Filière taxonomy management. `coverage` is the fixed 5-catégorie ×
+// sous-filière grid (lib/taxonomy.js) with real concours counts, including
+// 0 — how far the site's expansion past FCA/MRH has gotten. `counts` is a
+// legacy safety net: any filiere value that doesn't match that fixed
+// vocabulary (a stray free-text leftover, a raw API write) so it can still
+// be merged into a canonical sous-filière. Gated by middleware.js
+// (PROTECTED_API_ALWAYS) regardless of method.
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const counts = await getFiliereCounts();
-  return NextResponse.json({ counts });
+  const [counts, coverage] = await Promise.all([getFiliereCounts(), getTaxonomyCoverage()]);
+  return NextResponse.json({ counts, coverage });
 }
 
 export async function POST(req) {

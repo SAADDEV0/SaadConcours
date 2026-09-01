@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "../_shared/chrome";
 import { downloadConcoursPdf } from "../_shared/concoursPdf";
+import { FILIERE_CATEGORIES, categoryOptions, subFiliereOptions } from "../../lib/taxonomy";
 
 const MARKUP = `
 ${chromeHtml({ active: "concours", showSearch: true })}
@@ -13,6 +14,10 @@ ${chromeHtml({ active: "concours", showSearch: true })}
     <div class="filter-group">
       <label style="font-size:.8rem;color:var(--text-dim);">Ville</label>
       <select id="filterVille"><option value="">Toutes les villes</option></select>
+    </div>
+    <div class="filter-group">
+      <label style="font-size:.8rem;color:var(--text-dim);">Catégorie</label>
+      <select id="filterCategorie"><option value="">Toutes les catégories</option></select>
     </div>
     <div class="filter-group">
       <label style="font-size:.8rem;color:var(--text-dim);">Filière</label>
@@ -80,15 +85,51 @@ export default function ConcoursPage() {
       });
     }
 
+    // Filière options depend on the chosen catégorie — narrowed to that
+    // catégorie's 4 sous-filières once one is picked, or every sous-filière
+    // grouped by catégorie (via <optgroup>) when browsing "Toutes les
+    // catégories", so the full taxonomy is visible even for catégories with
+    // no concours yet (MCL/EAPP/EDMQ, added ahead of their content).
+    function fillFiliereSelect(categorieCode) {
+      const el = $("#filterFiliere");
+      el.innerHTML = '<option value="">Toutes les filières</option>';
+      if (categorieCode) {
+        subFiliereOptions(categorieCode).forEach((o) => {
+          const opt = document.createElement("option");
+          opt.value = o.value;
+          opt.textContent = o.label;
+          el.appendChild(opt);
+        });
+        return;
+      }
+      FILIERE_CATEGORIES.forEach((cat) => {
+        const group = document.createElement("optgroup");
+        group.label = cat.label;
+        cat.sousFilieres.forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s;
+          opt.textContent = s;
+          group.appendChild(opt);
+        });
+        el.appendChild(group);
+      });
+    }
+
     function initFilters() {
       const villes = uniq(ALL.map((c) => c.ville));
-      const filieres = uniq(ALL.map((c) => c.filiere));
       const etabs = uniq(ALL.map((c) => c.etablissement));
       const annees = uniq(ALL.map((c) => c.annee)).sort((a, b) => String(b).localeCompare(String(a)));
       const modules = uniq(ALL.flatMap((c) => c.modules || []));
 
       fillSelect("#filterVille", villes);
-      fillSelect("#filterFiliere", filieres);
+      const catEl = $("#filterCategorie");
+      categoryOptions().forEach((o) => {
+        const opt = document.createElement("option");
+        opt.value = o.value;
+        opt.textContent = o.label;
+        catEl.appendChild(opt);
+      });
+      fillFiliereSelect("");
       fillSelect("#filterEtab", etabs);
       fillSelect("#filterAnnee", annees);
 
@@ -105,12 +146,17 @@ export default function ConcoursPage() {
         chipWrap.appendChild(chip);
       });
 
+      $("#filterCategorie").addEventListener("change", () => {
+        fillFiliereSelect($("#filterCategorie").value);
+        applyFilters();
+      });
       ["#filterVille", "#filterFiliere", "#filterEtab", "#filterAnnee"].forEach((id) => {
         $(id).addEventListener("change", applyFilters);
       });
       $("#searchInput").addEventListener("input", applyFilters);
       $("#resetBtn").addEventListener("click", () => {
-        ["#filterVille", "#filterFiliere", "#filterEtab", "#filterAnnee"].forEach((id) => ($(id).value = ""));
+        ["#filterVille", "#filterCategorie", "#filterEtab", "#filterAnnee"].forEach((id) => ($(id).value = ""));
+        fillFiliereSelect("");
         $("#searchInput").value = "";
         activeModule = "";
         $$(".chip").forEach((c) => c.classList.remove("active"));
@@ -120,6 +166,7 @@ export default function ConcoursPage() {
 
     function applyFilters() {
       const ville = $("#filterVille").value;
+      const categorie = $("#filterCategorie").value;
       const filiere = $("#filterFiliere").value;
       const etab = $("#filterEtab").value;
       const annee = $("#filterAnnee").value;
@@ -127,6 +174,7 @@ export default function ConcoursPage() {
 
       filtered = ALL.filter((c) => {
         if (ville && c.ville !== ville) return false;
+        if (categorie && c.categorie !== categorie) return false;
         if (filiere && c.filiere !== filiere) return false;
         if (etab && c.etablissement !== etab) return false;
         if (annee && String(c.annee) !== annee) return false;

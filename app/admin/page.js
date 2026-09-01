@@ -9,6 +9,7 @@ import MarkdownEditor from "./MarkdownEditor";
 import BulkImportPanel from "./BulkImportPanel";
 import TaxonomyPanel from "./TaxonomyPanel";
 import SocialGeneratorPanel from "./SocialGeneratorPanel";
+import { categoryOptions, subFiliereOptions, categoryLabel } from "../../lib/taxonomy";
 
 /* -------------------------------------------------------------------
  * Field-driven CRUD panel. Each resource (concours/cours/quiz/news) is
@@ -30,6 +31,10 @@ function emptyFormFor(fields) {
     if (f.type === "checkbox") form[f.key] = false;
     else if (f.type === "quiz-questions") form[f.key] = [];
     else if (f.type === "image-list") form[f.key] = [];
+    // dependsOn fields (cascading select) compute their options from a
+    // sibling field's value — that sibling must appear earlier in `fields`
+    // so form[f.dependsOn] is already set by the time we get here.
+    else if (f.type === "select" && f.dependsOn) form[f.key] = f.optionsFor(form[f.dependsOn])?.[0]?.value ?? "";
     else if (f.type === "select") form[f.key] = f.options?.[0]?.value ?? "";
     else form[f.key] = "";
   });
@@ -601,8 +606,23 @@ function ResourcePanel({ config }) {
               ) : f.type === "select" ? (
                 <>
                   <label>{f.label}</label>
-                  <select value={form[f.key] || ""} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}>
-                    {f.options.map((o) => (
+                  <select
+                    value={form[f.key] || ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Changing a parent field (e.g. catégorie) resets any
+                      // dependent select to that new parent's first option,
+                      // so the pair can never end up mismatched (a filière
+                      // from a different catégorie than the one shown).
+                      const dependent = fields.find((other) => other.dependsOn === f.key);
+                      if (dependent) {
+                        setForm({ ...form, [f.key]: value, [dependent.key]: dependent.optionsFor(value)?.[0]?.value ?? "" });
+                      } else {
+                        setForm({ ...form, [f.key]: value });
+                      }
+                    }}
+                  >
+                    {(f.dependsOn ? f.optionsFor(form[f.dependsOn]) : f.options).map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label}
                       </option>
@@ -862,7 +882,14 @@ const CONCOURS_CONFIG = {
     { key: "annee", label: "Année", required: true },
     { key: "ville", label: "Ville", required: true },
     { key: "etablissement", label: "Établissement", required: true },
-    { key: "filiere", label: "Filière (catégorie utilisée pour le filtre du site)", required: true },
+    { key: "categorie", label: "Catégorie", type: "select", options: categoryOptions() },
+    {
+      key: "filiere",
+      label: "Filière (sous-catégorie utilisée pour le filtre du site)",
+      type: "select",
+      dependsOn: "categorie",
+      optionsFor: subFiliereOptions,
+    },
     { key: "statut", label: "Statut (pipeline de contenu)", type: "select", options: STATUT_OPTIONS },
     {
       key: "master_reel",
@@ -886,6 +913,7 @@ const CONCOURS_CONFIG = {
     { key: "id", label: "ID", mono: true },
     { key: "etablissement", label: "Établissement" },
     { key: "ville", label: "Ville" },
+    { key: "categorie", label: "Catégorie", render: (i) => categoryLabel(i.categorie) || "—" },
     { key: "filiere", label: "Filière" },
     { key: "master_reel", label: "Nom réel du master", render: (i) => i.master_reel || "—" },
     { key: "annee", label: "Année" },
@@ -2010,7 +2038,7 @@ function SettingsPanel() {
           {NEWS_ETABLISSEMENTS.map((sigle) => (
             <label className="settings-chip" key={sigle}>
               <input type="checkbox" checked={visibles.includes(sigle)} onChange={() => toggleEtablissement(sigle)} />
-              {sigle}
+              {sigle} {newsItems && <span className="admin-image-hint">({newsCounts.byEtab[sigle] || 0})</span>}
             </label>
           ))}
         </div>
@@ -2023,6 +2051,25 @@ function SettingsPanel() {
           >
             Tout afficher (retirer le filtre)
           </button>
+        )}
+        {newsItems && (
+          <p className="admin-image-hint" style={{ marginTop: 12 }}>
+            Avec cette sélection :{" "}
+            <strong>
+              {visibles.length
+                ? visibles.reduce((sum, sigle) => sum + (newsCounts.byEtab[sigle] || 0), 0)
+                : newsCounts.total}{" "}
+              / {newsCounts.total}
+            </strong>{" "}
+            concours affichés sur la page publique.
+            {newsCounts.sansEtablissement > 0 && (
+              <>
+                {" "}
+                {newsCounts.sansEtablissement} concours supplémentaires n'ont aucun établissement reconnu par le
+                scraper — ils restent masqués quelle que soit la sélection ci-dessus.
+              </>
+            )}
+          </p>
         )}
       </div>
 

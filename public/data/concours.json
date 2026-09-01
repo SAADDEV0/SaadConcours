@@ -4,7 +4,7 @@
     "annee": "2010",
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Fiscalité des Entreprises",
@@ -18,14 +18,15 @@
     "images": [
       "images/Rabat/2010_Rabat_FSJES_Souissi_CCA/2010_Rabat_FSJES_Souissi_CCA_p1.png",
       "images/Rabat/2010_Rabat_FSJES_Souissi_CCA/2010_Rabat_FSJES_Souissi_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2011_Meknes_FSJES_Meknes_Finance",
     "annee": "2011",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Economie et Management Internationaux / Economie et Stratégies des Institutions Financières / Finance, Audit et Contrôle de Gestion (épreuve commune)",
     "modules": [
       "Contrôle de Gestion"
@@ -36,14 +37,15 @@
     "source": "- fsjesmaster.com — Exemple Concours Master FACG et ESIF et EMI 2011-2012 - fsjes Meknès : https://www.fsjesmaster.com/2017/06/concours-master-facg-et-emi-et-esif.html",
     "images": [
       "images/Meknès/2011_Meknes_FSJES_Meknes_Finance/2011_Meknes_FSJES_Meknes_Finance.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2011_Rabat_FSJES_Souissi_CCA",
     "annee": "2011",
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Comptabilité Approfondie",
@@ -57,14 +59,15 @@
     "images": [
       "images/Rabat/2011_Rabat_FSJES_Souissi_CCA/2011_Rabat_FSJES_Souissi_CCA_p1.png",
       "images/Rabat/2011_Rabat_FSJES_Souissi_CCA/2011_Rabat_FSJES_Souissi_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2012_Mohammedia_FSJES_Mohammedia_Audit",
     "annee": "2012",
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité des Sociétés",
@@ -79,14 +82,15 @@
     "images": [
       "images/Mohammedia/2012_Mohammedia_FSJES_Mohammedia_Audit/2012_Mohammedia_FSJES_Mohammedia_Audit.png",
       "images/Mohammedia/2012_Mohammedia_FSJES_Mohammedia_Audit/2012_Mohammedia_FSJES_Mohammedia_Audit_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2012_Sale_FSJES_Sale_Finance",
     "annee": "2012",
     "ville": "Salé",
     "etablissement": "FSJES Salé",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Ingénierie Financière Publique (IFP)",
     "modules": [
       "Macroéconomie"
@@ -97,14 +101,15 @@
     "source": "- Lien / origine du sujet : https://www.economie-gestion.com/wp-content/uploads/2019/06/Soussi-IFP-2012-converti.pdf (page listant les annales : https://www.economie-gestion.com/concours-masters-fsjes-maroc/)",
     "images": [
       "images/Salé/2012_Sale_FSJES_Sale_Finance/2012_Sale_FSJES_Sale_Finance.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2013_ElJadida_FPElJadida_Finance",
     "annee": "2013",
     "ville": "El Jadida",
     "etablissement": "Faculté Polydisciplinaire El Jadida (Université Chouaïb Doukkali)",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Banque et Finance",
     "modules": [
       "Analyse Financière",
@@ -118,14 +123,15 @@
     "images": [
       "images/El Jadida/2013_ElJadida_FPElJadida_Finance/2013_ElJadida_FPElJadida_Finance.png",
       "images/El Jadida/2013_ElJadida_FPElJadida_Finance/2013_ElJadida_FPElJadida_Finance_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2013_Kenitra_FSJES_Kenitra_FinanceComptabilite",
     "annee": "2013",
     "ville": "Kénitra",
     "etablissement": "FSJES Kénitra",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance/Comptabilité & Management Audit Contrôle",
     "modules": [
       "Contrôle de Gestion",
@@ -141,14 +147,15 @@
       "images/Kénitra/2013_Kenitra_FSJES_Kenitra_FinanceComptabilite/2013_Kenitra_FSJES_Kenitra_FinanceComptabilite_p1.png",
       "images/Kénitra/2013_Kenitra_FSJES_Kenitra_FinanceComptabilite/2013_Kenitra_FSJES_Kenitra_FinanceComptabilite_p2.png",
       "images/Kénitra/2013_Kenitra_FSJES_Kenitra_FinanceComptabilite/2013_Kenitra_FSJES_Kenitra_FinanceComptabilite_p3.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2014_Meknes_FSJES_Meknes_Finance",
     "annee": "2014",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Economie et Management Internationaux / Economie et Stratégies des Institutions Financières / Economie Spatiale et Gouvernance Territoriale / Finance, Audit et Contrôle de Gestion (épreuve commune)",
     "modules": [
       "Contrôle de Gestion",
@@ -160,14 +167,15 @@
     "source": "- fsjesmaster.com — Exemple Concours Master FACG et ESIF et EMI et ESGT 2014 - fsjes Meknès : https://www.fsjesmaster.com/2017/06/master-facg-esif-emi-esgt.html",
     "images": [
       "images/Meknès/2014_Meknes_FSJES_Meknes_Finance/2014_Meknes_FSJES_Meknes_Finance.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2014_Mohammedia_FSJES_Mohammedia_CCA",
     "annee": "2014",
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Ingénierie Comptable Financière et Fiscale (ICFF)",
     "modules": [
       "Contrôle de Gestion",
@@ -182,14 +190,15 @@
     "images": [
       "images/Mohammedia/2014_Mohammedia_FSJES_Mohammedia_CCA/2014_Mohammedia_FSJES_Mohammedia_CCA.png",
       "images/Mohammedia/2014_Mohammedia_FSJES_Mohammedia_CCA/2014_Mohammedia_FSJES_Mohammedia_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2014_Rabat_FSJES_Agdal_GFCF",
     "annee": "2014",
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
-    "filiere": "Master GFCF",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Contrôle de Gestion",
@@ -206,14 +215,15 @@
       "images/Rabat/2014_Rabat_FSJES_Agdal_GFCF/2014_Rabat_FSJES_Agdal_GFCF_p3.png",
       "images/Rabat/2014_Rabat_FSJES_Agdal_GFCF/2014_Rabat_FSJES_Agdal_GFCF_p4.png",
       "images/Rabat/2014_Rabat_FSJES_Agdal_GFCF/2014_Rabat_FSJES_Agdal_GFCF_p5.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2014_Rabat_FSJES_Agdal_SciencesGestion",
     "annee": "2014",
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
-    "filiere": "Master Sciences de Gestion",
+    "filiere": "Management Stratégique & Gestion des Organisations",
     "modules": [
       "Comptabilité des Sociétés",
       "Droit des Sociétés"
@@ -225,14 +235,15 @@
     "images": [
       "images/Rabat/2014_Rabat_FSJES_Agdal_SciencesGestion/2014_Rabat_FSJES_Agdal_SciencesGestion.png"
     ],
-    "master_reel": "Sciences de Gestion"
+    "master_reel": "Sciences de Gestion",
+    "categorie": "MRH"
   },
   {
     "id": "2014_Tanger_FSJES-Tanger_Master-Finance",
     "annee": "2014",
     "ville": "Tanger",
     "etablissement": "FSJES Tanger",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Finance-Banque et Marchés",
     "modules": [
       "Macroéconomie",
@@ -244,14 +255,15 @@
     "source": "- Lien / origine du sujet : https://www.fsjesmaster.com/2017/06/concours-master-finance-banque-et.html",
     "images": [
       "images/Tanger/2014_Tanger_FSJES-Tanger_Master-Finance/2014_Tanger_FSJES-Tanger_Master-Finance.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2015_BeniMellal_FP_CCA",
     "annee": "2015",
     "ville": "Béni Mellal",
     "etablissement": "Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Audit",
@@ -270,14 +282,15 @@
       "images/Béni Mellal/2015_BeniMellal_FP_CCA/2015_BeniMellal_FP_CCA_p3.jpg",
       "images/Béni Mellal/2015_BeniMellal_FP_CCA/2015_BeniMellal_FP_CCA_p4.jpg",
       "images/Béni Mellal/2015_BeniMellal_FP_CCA/2015_BeniMellal_FP_CCA_p5.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2017_Tetouan_FP-Tetouan_Master-Audit_MEGADECO",
     "annee": "2017",
     "ville": "Tétouan",
     "etablissement": "Faculté Polydisciplinaire de Tétouan",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance, Audit et Contrôle de Gestion (FACG)",
     "modules": [
       "Comptabilité Approfondie",
@@ -291,14 +304,15 @@
     "images": [
       "images/Tétouan/2017_Tetouan_FP-Tetouan_Master-Audit_MEGADECO/2017_Tetouan_FP-Tetouan_Master-Audit_MEGADECO_p1.jpg",
       "images/Tétouan/2017_Tetouan_FP-Tetouan_Master-Audit_MEGADECO/2017_Tetouan_FP-Tetouan_Master-Audit_MEGADECO_p2.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2017_Tetouan_FP-Tetouan_Master-Audit_MODA",
     "annee": "2017",
     "ville": "Tétouan",
     "etablissement": "Faculté Polydisciplinaire de Tétouan",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance, Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité Approfondie",
@@ -312,14 +326,15 @@
     "images": [
       "images/Tétouan/2017_Tetouan_FP-Tetouan_Master-Audit_MODA/2017_Tetouan_FP-Tetouan_Master-Audit_MODA_p1.jpg",
       "images/Tétouan/2017_Tetouan_FP-Tetouan_Master-Audit_MODA/2017_Tetouan_FP-Tetouan_Master-Audit_MODA_p2.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2018_Agadir_FSJES_CCA",
     "annee": "2018",
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Analyse Financière",
@@ -341,14 +356,15 @@
       "images/Agadir/2018_Agadir_FSJES_CCA/2018_Agadir_FSJES_CCA_p6.png",
       "images/Agadir/2018_Agadir_FSJES_CCA/2018_Agadir_FSJES_CCA_p7.png",
       "images/Agadir/2018_Agadir_FSJES_CCA/2018_Agadir_FSJES_CCA_p8.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2018_BeniMellal_FPBeniMellal_CCA",
     "annee": "2018",
     "ville": "Béni Mellal",
     "etablissement": "Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Contrôle Comptabilité Audit (CCA)",
     "modules": [
       "Comptabilité Générale",
@@ -371,14 +387,15 @@
       "images/Béni Mellal/2018_BeniMellal_FPBeniMellal_CCA/2018_BeniMellal_FPBeniMellal_CCA_p3.jpg",
       "images/Béni Mellal/2018_BeniMellal_FPBeniMellal_CCA/2018_BeniMellal_FPBeniMellal_CCA_p4.jpg",
       "images/Béni Mellal/2018_BeniMellal_FPBeniMellal_CCA/2018_BeniMellal_FPBeniMellal_CCA_p5.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2018_Fes_ENCG_Fes_CCA",
     "annee": "2018",
     "ville": "Fès",
     "etablissement": "ENCG Fès",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
@@ -391,14 +408,15 @@
     "notions_cles": "coûts complets de produits joints, amortissement dégressif, écarts de conversion (actif/passif), impôt sur le revenu salarial (barème IR, frais professionnels, déductions pour charges de famille), choix d'investissement par l'approche incrémentale (VAN, TRI, IP), rédaction professionnelle en anglais",
     "enonce_md": "**ROYAUME DU MAROC — UNIVERSITÉ SIDI MOHAMED BEN ABDELLAH — ENCG FÈS**\n**Épreuve d'accès au Master Comptabilité, Contrôle et Audit (CCA) — 2018-2019**\n**Durée : 2h — Plan comptable et calculatrice à 4 fonctions autorisés**\n\n### Mini-cas RAFIN-SA\n\n### Énoncé 1 — Comptabilité analytique : coûts complets de produits joints\n\nÀ partir d'une matière première dérivée du raffinage du pétrole, la société RAFIN-SA obtient trois produits bruts X, Y et Z (produits joints : on ne peut supprimer la fabrication d'un seul, ni en produire aucun ; la marge de manœuvre sur les volumes est négligeable).\n\n**Éléments communs :**\n- Matières premières : 1 000 tonnes à 4,50 DH/t (imputées au prorata des quantités produites)\n- Production terminée : 300 tonnes de X, 380 tonnes de Y et 280 tonnes de Z\n- Coût de cette fabrication : 20 000 DH, réparti entre X, Y et Z proportionnellement aux quantités produites\n\n**Traitement spécifique de chaque produit :**\n- X subit un 2e traitement : 250 tonnes de produits finis vendues à 200 DH/t, coût du traitement 35 000 DH\n- Y subit un 2e traitement à 50 DH/t, permettant d'obtenir 360 tonnes de produits finis vendues à 70 DH/t\n- Z reçoit un 2e traitement de 20 000 DH : 250 tonnes vendues à 130 DH/t\n\nLes charges de distribution, réparties au prorata des chiffres d'affaires, s'élèvent à 10 770 DH.\n\n**Informations complémentaires :** il serait possible de commercialiser X, Y et Z à l'état brut :\n- X : CA 25 000 DH, sans coût particulier\n- Y : CA 20 000 DH, avec conditionnement de 15 000 DH\n- Z : CA 25 000 DH, avec frais de 2 500 DH\n\n**T.A.F :**\n1. Calculer, dans la configuration de ventes et de production actuelle, les coûts complets et le résultat par produit ainsi que le résultat global (tous les calculs sur un même tableau).\n2. En supposant que les charges de distribution ne sont pas dépendantes de l'état du produit lors de sa commercialisation, que pourriez-vous recommander à la RAFIN-SA ?\n\n### Énoncé 2 — Comptabilité : amortissement dégressif et écart de conversion (2 pts)\n\nUn matériel et outillage acquis par RAFIN en début d'exercice pour 600 000 DH a été cédé au cours de sa cinquième année d'utilisation, le 1er juillet, pour 360 000 DH. L'entreprise a réalisé une plus-value de 30 000 DH ; lors de la cession, le comptable a débité « Banque » et crédité « Matériel et outillage ».\n\n**T.A.F :**\n1. Déterminer le taux d'amortissement pratiqué.\n2. L'entreprise voulait avoir une idée sur les écarts de conversion aussi bien défavorables que favorables : faire une combinaison des réponses (augmentation/diminution des dettes/créances) pour qu'elle soit explicative d'un écart favorable, et une autre pour un écart défavorable.\n\n### Énoncé 3 — Fiscalité : impôt sur le revenu (Brahim, 5 pts)\n\nBrahim est recruté par la société RAFIN comme agent technicien. Il est marié et a 6 enfants âgés de moins de 25 ans (les deux plus grands sont salariés et touchent respectivement 1 500 et 2 600 DH/mois ; les quatre autres sont étudiants, dont une fille âgée de 20 ans, étudiante en médecine et mariée). Brahim est locataire d'un logement dont la valeur locative contractuelle est de 1 500 DH, prise en charge par la société.\n\n**Éléments du salaire de Brahim (juin 2016) :**\n- Traitement de base : 3 000 DH\n- Prime d'ancienneté : 500 DH\n- Prime de fonction : 1 000 DH\n- Frais de déplacement justifiés : 1 800 DH\n- Cotisation retraite complémentaire : 240 DH\n- Cotisation sociale : 345,95 DH\n- Cotisation assurance groupe : 160 DH\n\nBrahim a contracté un emprunt sur 25 ans pour l'acquisition d'un logement de 80 m² (taux préférentiel de 2,55%, dont 1/3 du crédit est à 0%) ; premier prélèvement mensuel fin juin 2016 : amortissement de l'emprunt 1 000 DH (sa femme, salariée, paie les intérêts).\n\n**Barème de l'IR (tranche de revenu mensuel / taux / forfait à déduire) :**\n\n| Tranche mensuelle (DH) | Taux | Forfait à déduire |\n|---|---|---|\n| Jusqu'à 2 500 | 0% | 0 |\n| 2 501 à 4 166,67 | 10% | 250 |\n| 4 167 à 5 000 | 20% | 666,67 |\n| 5 001 à 6 666,67 | 30% | 1 166,67 |\n| 6 667 à 15 000 | 34% | 1 433,33 |\n| Plus de 15 000 | 38% | 2 033,33 |\n\n**T.A.F : Calculer l'IR à payer par Brahim (taux des frais professionnels 25%), selon le processus en 5 étapes : salaire brut (SB), salaire brut imposable (SBI), salaire net imposable (SNI), IR calculé, IR à payer.**\n\n### Énoncé 4 — Choix d'investissement : approche incrémentale (4 pts)\n\nLe service financier de la RAFIN a fait confiance en vous en tant que stagiaire pour aider M. SAOUD (DAF) à faire un choix entre deux projets mutuellement exclusifs A et B (taux d'actualisation 10%).\n\n**Flux de trésorerie (années 0 à 5) :**\n\n| Année | 0 | 1 | 2 | 3 | 4 | 5 |\n|---|---|---|---|---|---|---|\n| Projet A | −1 500 | 350 | 350 | 350 | 350 | 1 060 |\n| Projet B | −4 000 | 933 | 933 | 933 | 933 | 2 829,5 |\n\n**T.A.F : Quel projet retenir rationnellement entre A et B (projets mutuellement exclusifs, taux d'actualisation 10%) ? Utiliser l'approche incrémentale (VAN de l'investissement additionnel).**\n\n### Test en anglais (4 pts)\n\n*Unfortunately, as a trainee, you could not make a rational choice because you have completely forgotten this incremental approach. Write an email to your internship tutor explaining your desolation.*",
     "source": "- mesconcours.ma — Concours Master 2018-2019 (ENCG Fès, Master CCA) : https://mesconcours.ma/concours/master-encg/2018-2019-encg-fes-master-cca/",
-    "images": []
+    "images": [],
+    "categorie": "FCA"
   },
   {
     "id": "2018_Fes_FSJES_Dhar_El_Mahraz_Audit",
     "annee": "2018",
     "ville": "Fès",
     "etablissement": "FSJES Dhar El Mahraz",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Management, Audit et Contrôle",
     "modules": [
       "Comptabilité Générale",
@@ -414,14 +432,15 @@
     "source": "- fsjesmaster.com — Exemple Concours Master Management Audit et Contrôle (MAC) 2018-2019 - Fsjes Fès : https://www.fsjesmaster.com/2022/10/concours-mac-2018-fsjes.html",
     "images": [
       "images/Fès/2018_Fes_FSJES_Dhar_El_Mahraz_Audit/2018_Fes_FSJES_Dhar_El_Mahraz_Audit.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2018_Settat_ENCG_Settat_CCA",
     "annee": "2018",
     "ville": "Settat",
     "etablissement": "ENCG Settat",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
@@ -442,14 +461,15 @@
       "images/Settat/2018_Settat_ENCG_Settat_CCA/2018_Settat_ENCG_Settat_CCA_p8.png",
       "images/Settat/2018_Settat_ENCG_Settat_CCA/2018_Settat_ENCG_Settat_CCA_p9.png",
       "images/Settat/2018_Settat_ENCG_Settat_CCA/2018_Settat_ENCG_Settat_CCA_p10.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2018_Tetouan_FSJES-Tetouan_Master-Audit",
     "annee": "2018",
     "ville": "Tétouan",
     "etablissement": "FSJES Tétouan",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance, Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité Approfondie",
@@ -464,14 +484,15 @@
       "images/Tétouan/2018_Tetouan_FSJES-Tetouan_Master-Audit/2018_Tetouan_FSJES-Tetouan_Master-Audit_p1.jpg",
       "images/Tétouan/2018_Tetouan_FSJES-Tetouan_Master-Audit/2018_Tetouan_FSJES-Tetouan_Master-Audit_p2.jpg",
       "images/Tétouan/2018_Tetouan_FSJES-Tetouan_Master-Audit/2018_Tetouan_FSJES-Tetouan_Master-Audit_p3.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2019_Agadir_FSJES_CCA",
     "annee": "2019",
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
       "Audit",
@@ -487,14 +508,15 @@
       "images/Agadir/2019_Agadir_FSJES_CCA/2019_Agadir_FSJES_CCA_p2.jpg",
       "images/Agadir/2019_Agadir_FSJES_CCA/2019_Agadir_FSJES_CCA_p3.jpg"
     ],
-    "master_reel": "Comptabilité Contrôle Audit (CCA)"
+    "master_reel": "Comptabilité Contrôle Audit (CCA)",
+    "categorie": "FCA"
   },
   {
     "id": "2019_AitMelloul_FSJES_CCA",
     "annee": "2019",
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle de Gestion et Audit (Master Spécialisé)",
     "modules": [
       "Analyse Financière",
@@ -512,14 +534,15 @@
       "images/Agadir/2019_AitMelloul_FSJES_CCA/2019_AitMelloul_FSJES_CCA_p2.jpg",
       "images/Agadir/2019_AitMelloul_FSJES_CCA/2019_AitMelloul_FSJES_CCA_p3.jpg",
       "images/Agadir/2019_AitMelloul_FSJES_CCA/2019_AitMelloul_FSJES_CCA_p4.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2019_Marrakech_FSJES_CCA",
     "annee": "2019",
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (Promotion 1)",
     "modules": [
       "Contrôle de Gestion",
@@ -533,14 +556,15 @@
     "images": [
       "images/Marrakech/2019_Marrakech_FSJES_CCA/2019_Marrakech_FSJES_CCA_p1.png",
       "images/Marrakech/2019_Marrakech_FSJES_CCA/2019_Marrakech_FSJES_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2019_Marrakech_FSJES_CCA_ControleGestion",
     "annee": "2019",
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (Promotion 1)",
     "modules": [
       "Contrôle de Gestion",
@@ -554,14 +578,15 @@
     "images": [
       "images/Marrakech/2019_Marrakech_FSJES_CCA_ControleGestion/2019_Marrakech_FSJES_CCA_ControleGestion_p1.png",
       "images/Marrakech/2019_Marrakech_FSJES_CCA_ControleGestion/2019_Marrakech_FSJES_CCA_ControleGestion_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2019_Marrakech_FSJES_FinanceBanque",
     "annee": "2019",
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Finance et Banque",
     "modules": [
       "Mathématiques Financières",
@@ -573,14 +598,15 @@
     "source": "- Lien / origine du sujet : https://www.fsjesmaster.com/2020/10/concours-master-finance-et-banque-2019-fsjes-marrakech.html",
     "images": [
       "images/Marrakech/2019_Marrakech_FSJES_FinanceBanque/2019_Marrakech_FSJES_FinanceBanque.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2019_Tetouan_FSJES-Tetouan_Master-Audit",
     "annee": "2019",
     "ville": "Tétouan",
     "etablissement": "FSJES Tétouan",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance, Audit et Contrôle de Gestion (6ème promotion)",
     "modules": [
       "Contrôle de Gestion",
@@ -597,14 +623,15 @@
       "images/Tétouan/2019_Tetouan_FSJES-Tetouan_Master-Audit/2019_Tetouan_FSJES-Tetouan_Master-Audit_p1.jpg",
       "images/Tétouan/2019_Tetouan_FSJES-Tetouan_Master-Audit/2019_Tetouan_FSJES-Tetouan_Master-Audit_p2.jpg",
       "images/Tétouan/2019_Tetouan_FSJES-Tetouan_Master-Audit/2019_Tetouan_FSJES-Tetouan_Master-Audit_p3.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2020_Casablanca_FSJES_AinChock_CCA",
     "annee": "2020",
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA) — Formation Continue",
     "modules": [
       "Comptabilité Générale",
@@ -618,14 +645,15 @@
     "images": [
       "images/Casablanca/2020_Casablanca_FSJES_AinChock_CCA/2020_Casablanca_FSJES_AinChock_CCA.png",
       "images/Casablanca/2020_Casablanca_FSJES_AinChock_CCA/2020_Casablanca_FSJES_AinChock_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2020_Oujda_FSJES-Oujda_Master-Finance",
     "annee": "2020",
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Financement Banques et Investissement (FBI)",
     "modules": [
       "Macroéconomie",
@@ -637,14 +665,15 @@
     "source": "- Lien / origine du sujet : https://www.fsjesmaster.com/2021/11/master-fbi-2020-fsjes-oujda.html",
     "images": [
       "images/Oujda/2020_Oujda_FSJES-Oujda_Master-Finance/2020_Oujda_FSJES-Oujda_Master-Finance.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2020_Rabat_FSJES_Souissi_CCA",
     "annee": "2020",
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Analyse Financière",
@@ -670,14 +699,15 @@
       "images/Rabat/2020_Rabat_FSJES_Souissi_CCA/2020_Rabat_FSJES_Souissi_CCA_p9.jpg",
       "images/Rabat/2020_Rabat_FSJES_Souissi_CCA/2020_Rabat_FSJES_Souissi_CCA_p10.jpg",
       "images/Rabat/2020_Rabat_FSJES_Souissi_CCA/2020_Rabat_FSJES_Souissi_CCA_p11.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2021_Kenitra_FEG_Kenitra_Finance",
     "annee": "2021",
     "ville": "Kénitra",
     "etablissement": "FEG Kénitra (FSJES)",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Banque Assurance (BA)",
     "modules": [
       "Analyse Financière",
@@ -692,14 +722,15 @@
     "images": [
       "images/Kénitra/2021_Kenitra_FEG_Kenitra_Finance/2021_Kenitra_FEG_Kenitra_Finance_p1.png",
       "images/Kénitra/2021_Kenitra_FEG_Kenitra_Finance/2021_Kenitra_FEG_Kenitra_Finance_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Agadir_FSJESAitMelloul_CCA",
     "annee": "2022",
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle de Gestion et Audit (Master Spécialisé)",
     "modules": [
       "Contrôle de Gestion",
@@ -716,14 +747,15 @@
     "images": [
       "images/Agadir/2022_Agadir_FSJESAitMelloul_CCA/2022_Agadir_FSJESAitMelloul_CCA_p1.png",
       "images/Agadir/2022_Agadir_FSJESAitMelloul_CCA/2022_Agadir_FSJESAitMelloul_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_BeniMellal_FEG_CCA",
     "annee": "2022",
     "ville": "Béni Mellal",
     "etablissement": "Faculté d'Économie et de Gestion Béni Mellal (Sultan Moulay Slimane)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Contrôle Comptabilité Audit (CCA)",
     "modules": [
       "Audit",
@@ -741,14 +773,15 @@
       "images/Béni Mellal/2022_BeniMellal_FEG_CCA/2022_BeniMellal_FEG_CCA_p2.jpg",
       "images/Béni Mellal/2022_BeniMellal_FEG_CCA/2022_BeniMellal_FEG_CCA_p3.jpg",
       "images/Béni Mellal/2022_BeniMellal_FEG_CCA/2022_BeniMellal_FEG_CCA_p4.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Casablanca_ENCGCasablanca_Finance",
     "annee": "2022",
     "ville": "Casablanca",
     "etablissement": "ENCG Casablanca",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Actuariat et Finance",
     "modules": [
       "Mathématiques Financières",
@@ -763,14 +796,15 @@
       "images/Casablanca/2022_Casablanca_ENCGCasablanca_Finance/2022_Casablanca_ENCGCasablanca_Finance_p2.png",
       "images/Casablanca/2022_Casablanca_ENCGCasablanca_Finance/2022_Casablanca_ENCGCasablanca_Finance_p3.png",
       "images/Casablanca/2022_Casablanca_ENCGCasablanca_Finance/2022_Casablanca_ENCGCasablanca_Finance_p4.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Casablanca_FSJES_AinChock_Audit",
     "annee": "2022",
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Audit, Contrôle de Gestion et Systèmes d'Information (ACGSI)",
     "modules": [
       "Comptabilité Approfondie",
@@ -795,14 +829,15 @@
       "images/Casablanca/2022_Casablanca_FSJES_AinChock_Audit/2022_Casablanca_FSJES_AinChock_Audit_p5.webp",
       "images/Casablanca/2022_Casablanca_FSJES_AinChock_Audit/2022_Casablanca_FSJES_AinChock_Audit_p6.png",
       "images/Casablanca/2022_Casablanca_FSJES_AinChock_Audit/2022_Casablanca_FSJES_AinChock_Audit_p6.webp"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Fes_FSJES_Dhar_El_Mahraz_Audit",
     "annee": "2022",
     "ville": "Fès",
     "etablissement": "FSJES Dhar El Mahraz",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Management, Audit et Contrôle",
     "modules": [
       "Analyse Financière",
@@ -818,14 +853,15 @@
     "images": [
       "images/Fès/2022_Fes_FSJES_Dhar_El_Mahraz_Audit/2022_Fes_FSJES_Dhar_El_Mahraz_Audit_p1.png",
       "images/Fès/2022_Fes_FSJES_Dhar_El_Mahraz_Audit/2022_Fes_FSJES_Dhar_El_Mahraz_Audit_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Marrakech_FSJES_CCA",
     "annee": "2022",
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Gestion de Trésorerie",
@@ -840,14 +876,15 @@
       "images/Marrakech/2022_Marrakech_FSJES_CCA/2022_Marrakech_FSJES_CCA_p2.jpg",
       "images/Marrakech/2022_Marrakech_FSJES_CCA/2022_Marrakech_FSJES_CCA_p3.jpg",
       "images/Marrakech/2022_Marrakech_FSJES_CCA/2022_Marrakech_FSJES_CCA_p4.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Meknes_FSJES_Meknes_Audit",
     "annee": "2022",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance, Audit et Contrôle de Gestion (Master recherche)",
     "modules": [
       "Comptabilité Approfondie",
@@ -861,14 +898,15 @@
     "source": "- mesconcours.ma — Concours Master 2022-2023 (FSJES Meknès, Master Finance Audit et Contrôle de Gestion) : https://mesconcours.ma/concours/master-fsjes-eco/2022-2023-fsjes-meknes-master-finance-audit-et-controle-de-gestion/",
     "images": [
       "images/Meknès/2022_Meknes_FSJES_Meknes_Audit/2022_Meknes_FSJES_Meknes_Audit.gif"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Mohammedia_FSJES_Mohammedia_Audit",
     "annee": "2022",
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Audit et Contrôle de Gestion",
     "modules": [
       "Comptabilité des Sociétés",
@@ -883,14 +921,15 @@
     "images": [
       "images/Mohammedia/2022_Mohammedia_FSJES_Mohammedia_Audit/2022_Mohammedia_FSJES_Mohammedia_Audit_p1.png",
       "images/Mohammedia/2022_Mohammedia_FSJES_Mohammedia_Audit/2022_Mohammedia_FSJES_Mohammedia_Audit_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Rabat_FSJESAgdal_GFCF",
     "annee": "2022",
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
-    "filiere": "Master GFCF",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Comptabilité Générale",
@@ -913,14 +952,15 @@
       "images/Rabat/2022_Rabat_FSJESAgdal_GFCF/2022_Rabat_FSJESAgdal_GFCF_p5.png",
       "images/Rabat/2022_Rabat_FSJESAgdal_GFCF/2022_Rabat_FSJESAgdal_GFCF_p6.png",
       "images/Rabat/2022_Rabat_FSJESAgdal_GFCF/2022_Rabat_FSJESAgdal_GFCF_p7.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Rabat_FSJESSouissi_CCA",
     "annee": "2022",
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle et Audit (CCA) — Master Spécialisé",
     "modules": [
       "Comptabilité Générale",
@@ -937,14 +977,15 @@
       "images/Rabat/2022_Rabat_FSJESSouissi_CCA/2022_Rabat_FSJESSouissi_CCA_p1.png",
       "images/Rabat/2022_Rabat_FSJESSouissi_CCA/2022_Rabat_FSJESSouissi_CCA_p2.png",
       "images/Rabat/2022_Rabat_FSJESSouissi_CCA/2022_Rabat_FSJESSouissi_CCA_p3.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2022_Settat_FSJES_Settat_Audit",
     "annee": "2022",
     "ville": "Settat",
     "etablissement": "FSJES Settat",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Audit et Contrôle de Gestion",
     "modules": [
       "Audit",
@@ -958,14 +999,15 @@
     "images": [
       "images/Settat/2022_Settat_FSJES_Settat_Audit/2022_Settat_FSJES_Settat_Audit.png",
       "images/Settat/2022_Settat_FSJES_Settat_Audit/2022_Settat_FSJES_Settat_Audit_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Agadir_FSJESAitMelloul_CCA",
     "annee": "2023",
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle de Gestion et Audit (CCA) — Master Spécialisé",
     "modules": [
       "Contrôle de Gestion",
@@ -985,14 +1027,15 @@
       "images/Agadir/2023_Agadir_FSJESAitMelloul_CCA/2023_Agadir_FSJESAitMelloul_CCA_p2.jpg",
       "images/Agadir/2023_Agadir_FSJESAitMelloul_CCA/2023_Agadir_FSJESAitMelloul_CCA_p3.jpg",
       "images/Agadir/2023_Agadir_FSJESAitMelloul_CCA/2023_Agadir_FSJESAitMelloul_CCA_p4.jpg"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Agadir_FSJES_CCA",
     "annee": "2023",
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Audit",
@@ -1014,14 +1057,15 @@
       "images/Agadir/2023_Agadir_FSJES_CCA/2023_Agadir_FSJES_CCA_p4.png",
       "images/Agadir/2023_Agadir_FSJES_CCA/2023_Agadir_FSJES_CCA_p5.png",
       "images/Agadir/2023_Agadir_FSJES_CCA/2023_Agadir_FSJES_CCA_p6.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Casablanca_FSJESAinChock_Audit",
     "annee": "2023",
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Audit, Contrôle de Gestion et Systèmes d'Information (ACGSI)",
     "modules": [
       "Comptabilité Générale",
@@ -1039,14 +1083,15 @@
       "images/Casablanca/2023_Casablanca_FSJESAinChock_Audit/2023_Casablanca_FSJESAinChock_Audit_p3.png",
       "images/Casablanca/2023_Casablanca_FSJESAinChock_Audit/2023_Casablanca_FSJESAinChock_Audit_p4.png",
       "images/Casablanca/2023_Casablanca_FSJESAinChock_Audit/2023_Casablanca_FSJESAinChock_Audit_p5.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Guelmim_FEGGuelmim_Finance",
     "annee": "2023",
     "ville": "Guelmim",
     "etablissement": "FEG Guelmim",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Finance, Banque et Assurance (FBA)",
     "modules": [
       "Macroéconomie",
@@ -1058,14 +1103,15 @@
     "source": "- Lien / origine du sujet : https://www.fsjesmaster.com/2023/09/master-finance-banque-et-assurance-2023-feg-guelmim.html",
     "images": [
       "images/Guelmim/2023_Guelmim_FEGGuelmim_Finance/2023_Guelmim_FEGGuelmim_Finance_p1.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Marrakech_FSJES_CCA",
     "annee": "2023",
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech (Cadi Ayyad)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Contrôle de Gestion",
@@ -1079,14 +1125,15 @@
     "images": [
       "images/Marrakech/2023_Marrakech_FSJES_CCA/2023_Marrakech_FSJES_CCA_p1.png",
       "images/Marrakech/2023_Marrakech_FSJES_CCA/2023_Marrakech_FSJES_CCA_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Meknes_FSJES_Meknes_Audit",
     "annee": "2023",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Finance, Audit et Contrôle de Gestion (FACG)",
     "modules": [
       "Contrôle de Gestion",
@@ -1101,14 +1148,15 @@
       "images/Meknès/2023_Meknes_FSJES_Meknes_Audit/2023_Meknes_FSJES_Meknes_Audit_p1.png",
       "images/Meknès/2023_Meknes_FSJES_Meknes_Audit/2023_Meknes_FSJES_Meknes_Audit_p2.png",
       "images/Meknès/2023_Meknes_FSJES_Meknes_Audit/2023_Meknes_FSJES_Meknes_Audit_p3.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Meknes_FSJES_Meknes_CCA",
     "annee": "2023",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Economie et Management Internationaux / Finance, Audit et Contrôle de Gestion / Finance, Banque et Assurance / Méthodes Informatiques à la Gestion des Entreprises / Actuariat et Gestion des Risques / Evaluation des Politiques Publiques / Finance et Fiscalité / Marketing et Stratégies Commerciales (épreuve commune)",
     "modules": [
       "Contrôle de Gestion",
@@ -1123,14 +1171,15 @@
       "images/Meknès/2023_Meknes_FSJES_Meknes_CCA/2023_Meknes_FSJES_Meknes_CCA_p1.png",
       "images/Meknès/2023_Meknes_FSJES_Meknes_CCA/2023_Meknes_FSJES_Meknes_CCA_p2.png",
       "images/Meknès/2023_Meknes_FSJES_Meknes_CCA/2023_Meknes_FSJES_Meknes_CCA_p3.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Meknes_FSJES_Meknes_Finance",
     "annee": "2023",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Finance, Banque et Assurance (Master spécialisé)",
     "modules": [
       "Analyse Financière",
@@ -1143,14 +1192,15 @@
     "images": [
       "images/Meknès/2023_Meknes_FSJES_Meknes_Finance/2023_Meknes_FSJES_Meknes_Finance_p1.png",
       "images/Meknès/2023_Meknes_FSJES_Meknes_Finance/2023_Meknes_FSJES_Meknes_Finance_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Meknes_FSJES_Meknes_Fiscalite2",
     "annee": "2023",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Fiscalité",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Finance et Fiscalité",
     "modules": [
       "Fiscalité des Entreprises",
@@ -1165,14 +1215,15 @@
     "images": [
       "images/Meknès/2023_Meknes_FSJES_Meknes_Fiscalite2/2023_Meknes_FSJES_Meknes_Fiscalite2_p1.png",
       "images/Meknès/2023_Meknes_FSJES_Meknes_Fiscalite2/2023_Meknes_FSJES_Meknes_Fiscalite2_p2.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Rabat_FSJESAgdal_GFCF",
     "annee": "2023",
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
-    "filiere": "Master GFCF",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Comptabilité Générale",
@@ -1193,14 +1244,15 @@
       "images/Rabat/2023_Rabat_FSJESAgdal_GFCF/2023_Rabat_FSJESAgdal_GFCF_p4.png",
       "images/Rabat/2023_Rabat_FSJESAgdal_GFCF/2023_Rabat_FSJESAgdal_GFCF_p5.png",
       "images/Rabat/2023_Rabat_FSJESAgdal_GFCF/2023_Rabat_FSJESAgdal_GFCF_p6.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2023_Sale_FSJES_Sale_Finance",
     "annee": "2023",
     "ville": "Salé",
     "etablissement": "FSJES Salé",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Ingénierie Économique et Financière Publique (IEFP)",
     "modules": [
       "Culture Générale",
@@ -1212,14 +1264,15 @@
     "source": "- fsjesmaster.com — Exemple Concours Master Ingénierie Économique Financière Publique (IEFP) 2023-2024 - Fsjes Salé : https://www.fsjesmaster.com/2023/09/concours-master-IEFP-fsjes-sale-2023.html",
     "images": [
       "images/Salé/2023_Sale_FSJES_Sale_Finance/2023_Sale_FSJES_Sale_Finance_p1.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "2024_Agadir_FSJES_CCA",
     "annee": "2024",
     "ville": "Agadir",
     "etablissement": "FSJES Agadir (Ibn Zohr)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Comptabilité Générale",
@@ -1239,14 +1292,15 @@
       "images/Agadir/2024_Agadir_FSJES_CCA/2024_Agadir_FSJES_CCA_p4.jpg",
       "images/Agadir/2024_Agadir_FSJES_CCA/2024_Agadir_FSJES_CCA_p5.jpg"
     ],
-    "corrige_md": "> QCM de 60 questions. Le scan source (`public/images/Agadir/2024_Agadir_FSJES_CCA/`) porte des réponses cochées (trait avant la lettre) pour une partie des questions — utilisées comme base ici, complétées par le raisonnement théorique/calcul pour les questions non cochées sur le scan disponible. Certaines coches semblent en désaccord avec la théorie standard (ex. Q22, Q34, Q41, Q47, Q53) : je donne la réponse cochée **et** signale l'alternative théorique quand il y a doute — vérifie ces cas précis avec ton cours.\n\n## Section 1 — Comptabilité générale\n\n1. **a)** Une plus-value de cession comptabilisée dans les produits exceptionnels.\n2. **b)** L'amortissement diminue chaque année en fonction du taux appliqué à la valeur nette comptable (définition du dégressif).\n3. Non cochée sur le scan — réponse théorique : **a)** La provision étalée sur plusieurs exercices (limite l'impact immédiat tout en respectant la prudence).\n4. **a)** Le coût moyen pondéré est recalculé à chaque entrée de stock.\n5. **b)** Une augmentation des coûts de production ou d'achat (cause la plus probable d'une baisse de marge brute à CA constant).\n6. **b)** Chaque transaction affecte au moins deux comptes différents (principe de la partie double).\n7. **b)** Passer une provision pour dépréciation dans le compte de résultat.\n\n## Section 2 — Comptabilité approfondie\n\n8. **a)** Augmentation des passifs et augmentation des charges d'exploitation.\n9. Capitaux propres = capital (1 000 000) + réserves (200 000) + résultat net (150 000) = **d) 1 350 000 MAD** *(calcul vérifié).*\n10. Non cochée — réponse théorique : **b)** Comme un actif circulant à court terme (TVA déductible = créance sur l'État).\n11. **c)** Dans les charges exceptionnelles (perte sur cession d'immobilisation = non courant).\n12. Non cochée — réponse théorique : **b)** Provisionnée pour dépréciation.\n13. Marge sur coût variable = 2 000 000 − 1 200 000 = **a) 800 000 MAD** *(calcul vérifié).*\n14. **b)** En provision pour dépréciation (perte latente, non réalisée, sur titres de participation).\n\n## Section 3 — Audit financier et comptable\n\n15. **b)** Vérifier la conformité des états financiers avec les normes applicables et certifier l'image fidèle.\n16. **b)** L'audit interne est réalisé par des employés de l'entreprise, l'audit externe par un commissaire aux comptes indépendant.\n17. **c)** Rapport d'audit avec une opinion favorable (cas où les états financiers sont conformes, sans réserve).\n18. **b), c), d)** — Vérifier la correspondance bons de livraison/factures, effectuer des tests de circularisation clients, contrôler les journaux comptables (question à réponses multiples, cf. consigne générale du sujet).\n19. Non cochée — réponse théorique : **b)** Non-enregistrement des dettes non facturées (risque principal sur les passifs = exhaustivité/sous-évaluation, pas surévaluation).\n20. **a)** Décrire les objectifs et la portée de la mission d'audit.\n21. **c)** Informer les organes de gouvernance de l'entreprise et ajuster les tests d'audit.\n22. **d)** Réévaluer les actifs dans les états financiers *(réponse cochée sur le scan — mais la pratique standard CGNC face à une valeur comptable nette largement supérieure à la valeur de marché est plutôt **a)** constater une provision pour dépréciation ; à vérifier selon la convention retenue dans ton cours).*\n23. Non cochée — réponse théorique : **b)** Garantir l'élimination correcte des opérations intra-groupe.\n24. **a)** Réaliser des tests de circularisation auprès des clients.\n25. Non cochée — réponse théorique : **a)** Demander un inventaire physique immédiat.\n26. Non cochée — réponse théorique : **b)** Alerter immédiatement la direction et recommander une correction.\n27. Non cochée — réponse théorique : **b)** Recalculer les amortissements à partir des données de durée de vie utile et de la valeur résiduelle des actifs.\n28. **d)** Lorsqu'il y a un désaccord mineur sur une méthode comptable qui n'affecte pas l'image fidèle des comptes *(réponse cochée — à nuancer : une opinion avec réserve est plus classiquement associée à une limitation de portée (option c) ou un désaccord significatif).*\n29. **c)** Prise de connaissance de l'entreprise et évaluation des risques d'audit.\n30. **b)** Investiguer les causes potentielles en réalisant des tests supplémentaires.\n\n## Section 4 — Contrôle de gestion\n\n31. **b)** Le niveau de ventes pour lequel le résultat est nul (définition du seuil de rentabilité).\n32. **b)** Planifier, piloter et analyser les performances de l'entreprise pour aider à la décision.\n33. **c)** Aider les gestionnaires à prendre des décisions en surveillant les indicateurs clés de performance.\n34. **c)** Le prix de vente d'un produit après imputation de la marge bénéficiaire *(réponse cochée — la définition académique standard du « coût de revient » est plutôt **a)** le coût total d'un produit, incluant coûts directs et indirects ; à vérifier).*\n35. Non cochée — réponse théorique : **d)** Comparer les résultats réels avec les prévisions et ajuster les écarts.\n36. Non cochée, formulation ambiguë sur le scan — la définition standard de l'« écart sur volume » (imputation des charges fixes) est la plus proche de **d)**.\n37. Seuil de rentabilité = 500 000 / 40 % = **b) 1 250 000 MAD** *(calcul vérifié).*\n38. Non cochée — réponse théorique : **b)** Le taux de rentabilité économique.\n39. Coût de revient unitaire à 15 000 unités = 200 + 400 000/15 000 ≈ **c) 227 MAD** *(calcul vérifié).*\n40. **b)** Comparer les performances réelles aux performances prévues.\n41. **b) 200 000 MAD** *(réponse cochée — notre propre calcul, résultat réel 200 000 − résultat prévu 100 000, donne plutôt un écart de 100 000 MAD (option a) ; à repasser avec la méthode vue en cours).*\n42. **b)** (Quantité réelle − Quantité standard) × Coût unitaire standard *(formule standard de l'écart sur quantité).*\n43. Résultat = (5 000 000 × 30 %) − 1 200 000 = **a) 300 000 MAD** *(calcul vérifié).*\n44. **c)** Un écart défavorable (coûts réels supérieurs aux coûts standard).\n45. **d)** Le coût des ventes diminue.\n46. MOD = (100 × 2 × 100) + (50 × 3 × 100) = 20 000 + 15 000 = **a) 35 000 MAD** *(calcul vérifié).*\n\n## Section 5 — Management\n\n47. **c)** La méthode des coûts complets *(réponse cochée — mais la définition donnée dans l'énoncé, « coûts en fonction des activités réellement consommées », correspond littéralement à la méthode **d) ABC**, qui est l'objet même de la question ; probable erreur de correction sur le scan source).*\n48. Non cochée — réponse théorique : **c)** Comme des individus paresseux et évitant les responsabilités (théorie X de McGregor).\n49. Non cochée — réponse théorique : **a)** Créer des conditions favorables pour que les employés s'épanouissent (théorie Y).\n50. **b)** Fixer des objectifs clairs et mesurables pour chaque employé (MPO/MBO de Peter Drucker).\n51. Non cochée — réponse théorique : **d)** Impliquer les employés dans la définition de leurs propres objectifs.\n52. Non cochée — réponse théorique : **c)** Besoins sociaux (d'appartenance) — étape suivante après les besoins de sécurité dans la pyramide de Maslow.\n53. **c)** Henri Fayol, avec une approche basée sur la planification et l'organisation *(réponse cochée — mais l'OST est historiquement attribuée à **a) Frederick Taylor** ; Fayol est associé au management administratif, pas à l'OST — probable erreur de correction sur le scan source).*\n54. **c)** Elle déshumanise les employés en les traitant comme des machines (critique classique de l'OST).\n55. Non cochée — réponse théorique : **a)** Elle guide les décisions de contrôle ou d'autonomie accordée aux employés selon la perception de leur motivation.\n56. Non cochée — réponse théorique : **b)** Influence sur les employés pour atteindre des objectifs communs (leadership transformationnel).\n57. **c)** Le management stratégique concerne l'ensemble de l'organisation, l'opérationnel des départements spécifiques.\n58. **c)** Toute modification des processus, structures ou cultures d'entreprise.\n59. **d)** Toutes les réponses ci-dessus (rôle de la communication en gestion d'équipe).\n60. **c)** Identifier les forces, faiblesses, opportunités et menaces d'une organisation (définition du SWOT).\n"
+    "corrige_md": "> QCM de 60 questions. Le scan source (`public/images/Agadir/2024_Agadir_FSJES_CCA/`) porte des réponses cochées (trait avant la lettre) pour une partie des questions — utilisées comme base ici, complétées par le raisonnement théorique/calcul pour les questions non cochées sur le scan disponible. Certaines coches semblent en désaccord avec la théorie standard (ex. Q22, Q34, Q41, Q47, Q53) : je donne la réponse cochée **et** signale l'alternative théorique quand il y a doute — vérifie ces cas précis avec ton cours.\n\n## Section 1 — Comptabilité générale\n\n1. **a)** Une plus-value de cession comptabilisée dans les produits exceptionnels.\n2. **b)** L'amortissement diminue chaque année en fonction du taux appliqué à la valeur nette comptable (définition du dégressif).\n3. Non cochée sur le scan — réponse théorique : **a)** La provision étalée sur plusieurs exercices (limite l'impact immédiat tout en respectant la prudence).\n4. **a)** Le coût moyen pondéré est recalculé à chaque entrée de stock.\n5. **b)** Une augmentation des coûts de production ou d'achat (cause la plus probable d'une baisse de marge brute à CA constant).\n6. **b)** Chaque transaction affecte au moins deux comptes différents (principe de la partie double).\n7. **b)** Passer une provision pour dépréciation dans le compte de résultat.\n\n## Section 2 — Comptabilité approfondie\n\n8. **a)** Augmentation des passifs et augmentation des charges d'exploitation.\n9. Capitaux propres = capital (1 000 000) + réserves (200 000) + résultat net (150 000) = **d) 1 350 000 MAD** *(calcul vérifié).*\n10. Non cochée — réponse théorique : **b)** Comme un actif circulant à court terme (TVA déductible = créance sur l'État).\n11. **c)** Dans les charges exceptionnelles (perte sur cession d'immobilisation = non courant).\n12. Non cochée — réponse théorique : **b)** Provisionnée pour dépréciation.\n13. Marge sur coût variable = 2 000 000 − 1 200 000 = **a) 800 000 MAD** *(calcul vérifié).*\n14. **b)** En provision pour dépréciation (perte latente, non réalisée, sur titres de participation).\n\n## Section 3 — Audit financier et comptable\n\n15. **b)** Vérifier la conformité des états financiers avec les normes applicables et certifier l'image fidèle.\n16. **b)** L'audit interne est réalisé par des employés de l'entreprise, l'audit externe par un commissaire aux comptes indépendant.\n17. **c)** Rapport d'audit avec une opinion favorable (cas où les états financiers sont conformes, sans réserve).\n18. **b), c), d)** — Vérifier la correspondance bons de livraison/factures, effectuer des tests de circularisation clients, contrôler les journaux comptables (question à réponses multiples, cf. consigne générale du sujet).\n19. Non cochée — réponse théorique : **b)** Non-enregistrement des dettes non facturées (risque principal sur les passifs = exhaustivité/sous-évaluation, pas surévaluation).\n20. **a)** Décrire les objectifs et la portée de la mission d'audit.\n21. **c)** Informer les organes de gouvernance de l'entreprise et ajuster les tests d'audit.\n22. **d)** Réévaluer les actifs dans les états financiers *(réponse cochée sur le scan — mais la pratique standard CGNC face à une valeur comptable nette largement supérieure à la valeur de marché est plutôt **a)** constater une provision pour dépréciation ; à vérifier selon la convention retenue dans ton cours).*\n23. Non cochée — réponse théorique : **b)** Garantir l'élimination correcte des opérations intra-groupe.\n24. **a)** Réaliser des tests de circularisation auprès des clients.\n25. Non cochée — réponse théorique : **a)** Demander un inventaire physique immédiat.\n26. Non cochée — réponse théorique : **b)** Alerter immédiatement la direction et recommander une correction.\n27. Non cochée — réponse théorique : **b)** Recalculer les amortissements à partir des données de durée de vie utile et de la valeur résiduelle des actifs.\n28. **d)** Lorsqu'il y a un désaccord mineur sur une méthode comptable qui n'affecte pas l'image fidèle des comptes *(réponse cochée — à nuancer : une opinion avec réserve est plus classiquement associée à une limitation de portée (option c) ou un désaccord significatif).*\n29. **c)** Prise de connaissance de l'entreprise et évaluation des risques d'audit.\n30. **b)** Investiguer les causes potentielles en réalisant des tests supplémentaires.\n\n## Section 4 — Contrôle de gestion\n\n31. **b)** Le niveau de ventes pour lequel le résultat est nul (définition du seuil de rentabilité).\n32. **b)** Planifier, piloter et analyser les performances de l'entreprise pour aider à la décision.\n33. **c)** Aider les gestionnaires à prendre des décisions en surveillant les indicateurs clés de performance.\n34. **c)** Le prix de vente d'un produit après imputation de la marge bénéficiaire *(réponse cochée — la définition académique standard du « coût de revient » est plutôt **a)** le coût total d'un produit, incluant coûts directs et indirects ; à vérifier).*\n35. Non cochée — réponse théorique : **d)** Comparer les résultats réels avec les prévisions et ajuster les écarts.\n36. Non cochée, formulation ambiguë sur le scan — la définition standard de l'« écart sur volume » (imputation des charges fixes) est la plus proche de **d)**.\n37. Seuil de rentabilité = 500 000 / 40 % = **b) 1 250 000 MAD** *(calcul vérifié).*\n38. Non cochée — réponse théorique : **b)** Le taux de rentabilité économique.\n39. Coût de revient unitaire à 15 000 unités = 200 + 400 000/15 000 ≈ **c) 227 MAD** *(calcul vérifié).*\n40. **b)** Comparer les performances réelles aux performances prévues.\n41. **b) 200 000 MAD** *(réponse cochée — notre propre calcul, résultat réel 200 000 − résultat prévu 100 000, donne plutôt un écart de 100 000 MAD (option a) ; à repasser avec la méthode vue en cours).*\n42. **b)** (Quantité réelle − Quantité standard) × Coût unitaire standard *(formule standard de l'écart sur quantité).*\n43. Résultat = (5 000 000 × 30 %) − 1 200 000 = **a) 300 000 MAD** *(calcul vérifié).*\n44. **c)** Un écart défavorable (coûts réels supérieurs aux coûts standard).\n45. **d)** Le coût des ventes diminue.\n46. MOD = (100 × 2 × 100) + (50 × 3 × 100) = 20 000 + 15 000 = **a) 35 000 MAD** *(calcul vérifié).*\n\n## Section 5 — Management\n\n47. **c)** La méthode des coûts complets *(réponse cochée — mais la définition donnée dans l'énoncé, « coûts en fonction des activités réellement consommées », correspond littéralement à la méthode **d) ABC**, qui est l'objet même de la question ; probable erreur de correction sur le scan source).*\n48. Non cochée — réponse théorique : **c)** Comme des individus paresseux et évitant les responsabilités (théorie X de McGregor).\n49. Non cochée — réponse théorique : **a)** Créer des conditions favorables pour que les employés s'épanouissent (théorie Y).\n50. **b)** Fixer des objectifs clairs et mesurables pour chaque employé (MPO/MBO de Peter Drucker).\n51. Non cochée — réponse théorique : **d)** Impliquer les employés dans la définition de leurs propres objectifs.\n52. Non cochée — réponse théorique : **c)** Besoins sociaux (d'appartenance) — étape suivante après les besoins de sécurité dans la pyramide de Maslow.\n53. **c)** Henri Fayol, avec une approche basée sur la planification et l'organisation *(réponse cochée — mais l'OST est historiquement attribuée à **a) Frederick Taylor** ; Fayol est associé au management administratif, pas à l'OST — probable erreur de correction sur le scan source).*\n54. **c)** Elle déshumanise les employés en les traitant comme des machines (critique classique de l'OST).\n55. Non cochée — réponse théorique : **a)** Elle guide les décisions de contrôle ou d'autonomie accordée aux employés selon la perception de leur motivation.\n56. Non cochée — réponse théorique : **b)** Influence sur les employés pour atteindre des objectifs communs (leadership transformationnel).\n57. **c)** Le management stratégique concerne l'ensemble de l'organisation, l'opérationnel des départements spécifiques.\n58. **c)** Toute modification des processus, structures ou cultures d'entreprise.\n59. **d)** Toutes les réponses ci-dessus (rôle de la communication en gestion d'équipe).\n60. **c)** Identifier les forces, faiblesses, opportunités et menaces d'une organisation (définition du SWOT).\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Agadir_FSJES_FCG",
     "annee": "2024",
     "ville": "Agadir",
     "etablissement": "FSJES Agadir",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Finance et Contrôle de Gestion (FCG)",
     "modules": [
       "Microéconomie",
@@ -1268,14 +1322,15 @@
       "images/Agadir/2024_Agadir_FSJES_FCG/2024_Agadir_FSJES_FCG_p3.png",
       "images/Agadir/2024_Agadir_FSJES_FCG/2024_Agadir_FSJES_FCG_p4.png"
     ],
-    "corrige_md": "> QCM à réponses multiples possibles (l'énoncé le précise : « cochez la ou les bonne(s) réponse(s) »). **Aucune réponse n'est cochée sur le scan source** — contrairement à d'autres corrigés de ce site, tout ce qui suit est un raisonnement (économie, gestion financière, comptabilité, fiscalité) sans clé externe à vérifier. Justifications volontairement courtes vu le volume ; les calculs sont détaillés quand la question en comporte.\n\n1. **C.** TMS décroissant de gauche à droite (convexité des courbes d'indifférence).\n2. **D.** Cobb-Douglas = exposants positifs (souvent fractionnaires) ; les autres options ont des exposants négatifs ou un coefficient négatif.\n3. **A.** La droite de budget se déplace quand revenu/prix varient.\n4. **C.** Loi de Gossen (1er sens) = utilité marginale décroissante.\n5. **A.** Rendements marginaux décroissants ⇒ production totale augmente, mais à un rythme décroissant.\n6. **A, D.** CGNC autorise FIFO et CMP ; le LIFO n'est pas admis en normes marocaines.\n7. **A.** Principe de prudence = on anticipe les pertes, pas les profits.\n8. **A, B, C.** Brevets, marques, fonds commercial = incorporelles ; les stocks sont de l'actif circulant.\n9. *Question partiellement illisible sur le scan (texte des options A et C recouvert par un filigrane publicitaire)* — réponse la plus probable : **B.** Les bénéfices non distribués (composante classique des capitaux propres).\n10. **A, B, C.** Autofinancement, endettement, émission d'actions = financement ; la location-gérance n'en est pas un.\n11. **A, B, D.** Vente d'immobilisations, subventions d'équilibre, reprises sur provisions = produits non courants ; les intérêts perçus sont financiers.\n12. **C.** Provisions pour risques et charges = estimations de charges futures probables.\n13. *(Options non visibles sur l'extrait disponible.)*\n14. **A, B, C, D.** Une erreur comptable peut affecter tous ces états, dérivés des mêmes enregistrements.\n15. **C.** Impôt différé = conséquence de différences temporelles résultat fiscal/comptable.\n16. **A.** La comptabilité analytique s'appuie sur l'existence d'une comptabilité générale.\n17. **B.** Coûts de revient variables → détermine les coûts de production variables.\n18. **D.** Méthode de l'IRCF = ajuster les charges fixes en fonction du volume d'activité réel.\n19. **A.** Seuil de rentabilité renseigne sur le volume d'activité nécessaire pour atteindre l'équilibre.\n20. **C.** Méthode du coût spécifique = prolongement de la méthode du coût variable (charges fixes spécifiques incluses, charges fixes communes exclues).\n21. **C.** Les produits résiduels (déchets valorisables) peuvent diminuer le coût de production du produit principal.\n22. **D.** Répartir les charges indirectes entre centres de responsabilité = méthode des coûts complets (centres d'analyse).\n23. **B.** Coûts complets = coût total (direct + indirect) d'un produit.\n24. **C.** Prix de vente en baisse, coûts variables inchangés ⇒ marge sur coût variable unitaire diminue.\n25. **A.** Le flux exceptionnel de revente d'une immobilisation intègre l'impact fiscal (plus/moins-value, IS).\n26. Réserve légale 2022 = 5 % du bénéfice net (640 000) = 32 000, mais plafonnée à 10 % du capital (1 800 000 × 10 % = 180 000). Réserve légale existante 157 000 + 32 000 = 189 000 > 180 000 → dotation limitée à 180 000 − 157 000 = **C. 23 000 Dh** *(calcul vérifié — piège classique du plafond de la réserve légale).*\n27. **A, B, C.** Les trois affirmations sont des constats standards du contrôle de gestion (option D illisible, recouverte par un filigrane).\n28. **C.** Un budget comporte des prévisions opérationnelles et financières (définition la plus complète).\n29. **B, C.** Divergence possible TIR/VAN pour projets mutuellement exclusifs ; VAN différentielle utile pour comparer des projets de tailles différentes.\n30. **B.** Le TIR global (modifié) utilise un taux de réinvestissement exogène — c'est sa différence avec le TIR classique.\n31. **B, D.** Convention des 30 jours/mois - 360 jours/an, et activité supposée uniformément répartie = hypothèses classiques du BFRE normatif.\n32. **B.** Le coefficient de structure convertit le BFRE monétaire en jours de CA HT.\n33. **C.** Le BFRE normatif permet de connaître le besoin de financement à couvrir.\n34. **A.** Solvabilité = aptitude à régler l'ensemble des dettes en réalisant les actifs.\n35. **A, B.** Liquidité croissante de l'actif + exigibilité croissante du passif = critères de classement du bilan financier.\n36. **B, C.** Le bilan fonctionnel est une photographie des cycles d'opérations, évaluée aux valeurs d'origine (brutes).\n37. **A.** FRNG = excédent des ressources durables sur les emplois stables.\n38. **A, B, C.** (D est fausse : elle décrit la marge commerciale, pas la valeur ajoutée.)\n39. **A, B, C, D.** Les quatre propriétés de l'EBE citées sont exactes.\n40. **A, B, C.** Effet de levier favorable si Re > i, défavorable si Re < i.\n41. **A, B.** Le TFR/SIG sert à apprécier l'activité et à analyser l'évolution des grandeurs significatives.\n42. **B.** Ratio d'autonomie financière = degré d'indépendance financière.\n43. **D.** Rentabilité des capitaux propres = Marge × Rotation × Levier d'endettement (décomposition à la Du Pont).\n44. **A, B.** Le levier d'exploitation décrit la sensibilité du résultat à l'activité, mesurée par l'élasticité (C et D sont inversées : un levier élevé accroît le risque, ne le réduit pas).\n45. **A.** Le tableau de financement aide à comprendre l'évolution de la structure et de la liquidité (B, C, D sont des affirmations inversées/fausses).\n46. **A, B.** La VAN mesure l'enrichissement réel et suppose un réinvestissement au taux d'actualisation (C décrit le TIR, D décrit le délai de récupération).\n47. **A, B.** Provisions pour impôts à payer et tantièmes ordinaires sont classiquement à réintégrer (non déductibles) ; les agios bancaires restent déductibles.\n48. Net commercial = 210 000 × 96 % = 201 600 ; + transport 3 200 + installation 4 000 + emballages perdus 800 = 209 600 ; + intérêts pour paiement à terme 9 100 = 218 700 (la reprise de l'ancienne machine, 42 000, n'entre pas dans la base TVA de cette facture). TVA = 218 700 × 20 % = **B. 43 740 DH** *(calcul vérifié).*\n49. **A, B.** Bénéfices des professions commerciales/industrielles et revenus des professions libérales = revenus professionnels classiques (la location meublée relève des revenus fonciers, pas professionnels, sauf exploitation habituelle).\n50. Prorata = (CA taxable 800 000 + export 700 000 + suspension 100 000) / (numérateur + exonéré sans DD 400 000 + hors champ [location nue] 160 000) ≈ **74 %**, ce qui ne correspond exactement à aucune des options proposées (76,2 % / 75,2 % / 77,4 %). *Écart probablement dû à une convention de calcul (TTC vs HT, ou traitement différent de la location nue) propre à ton cours — à revérifier avec la méthode exacte enseignée.*\n51. **A, C.** Ventes en l'état par grossistes et par commerçants importateurs = obligatoirement imposables (contrairement aux détaillants, soumis à un seuil).\n52. **B, D.** Établissements publics à activité lucrative et sociétés de capitaux = obligatoirement passibles de l'IS.\n53. **A, B, C, D.** (Réponse donnée explicitement dans l'énoncé de la question.)\n\n### Cas ALPHA (questions 54 à 60)\n\n54. **D.** Le CA 2023 (220 000) est en baisse par rapport à 2022 (225 000), à surveiller compte tenu de la hausse simultanée des achats.\n55. **A.** Les provisions pour dépréciation des créances restent identiques (2 400) en 2023 et 2022, alors que les créances clients ont presque doublé (24 840 contre 12 800) — incohérence à investiguer.\n56. **B.** L'évolution des créances clients (+94 %) et celle des provisions pour dépréciation (0 %) ne sont clairement pas proportionnelles.\n57. **B.** Les amortissements cumulés au bilan restent à 207 000 en 2023 comme en 2022, alors qu'une dotation aux amortissements de 41 400 est comptabilisée en 2023 — le cumul aurait dû augmenter d'autant : incohérence manifeste.\n58. **A.** Une évaluation forfaitaire (arbitraire, non justifiée techniquement) des amortissements et provisions constitue une erreur au regard du principe d'évaluation correcte.\n59. **A.** Une hausse du prix des matières premières sans répercussion sur les prix de vente entraîne mécaniquement une baisse de la rentabilité.\n60. **B.** Corriger le montant des amortissements 2023 (cohérent avec l'anomalie identifiée en question 57).\n"
+    "corrige_md": "> QCM à réponses multiples possibles (l'énoncé le précise : « cochez la ou les bonne(s) réponse(s) »). **Aucune réponse n'est cochée sur le scan source** — contrairement à d'autres corrigés de ce site, tout ce qui suit est un raisonnement (économie, gestion financière, comptabilité, fiscalité) sans clé externe à vérifier. Justifications volontairement courtes vu le volume ; les calculs sont détaillés quand la question en comporte.\n\n1. **C.** TMS décroissant de gauche à droite (convexité des courbes d'indifférence).\n2. **D.** Cobb-Douglas = exposants positifs (souvent fractionnaires) ; les autres options ont des exposants négatifs ou un coefficient négatif.\n3. **A.** La droite de budget se déplace quand revenu/prix varient.\n4. **C.** Loi de Gossen (1er sens) = utilité marginale décroissante.\n5. **A.** Rendements marginaux décroissants ⇒ production totale augmente, mais à un rythme décroissant.\n6. **A, D.** CGNC autorise FIFO et CMP ; le LIFO n'est pas admis en normes marocaines.\n7. **A.** Principe de prudence = on anticipe les pertes, pas les profits.\n8. **A, B, C.** Brevets, marques, fonds commercial = incorporelles ; les stocks sont de l'actif circulant.\n9. *Question partiellement illisible sur le scan (texte des options A et C recouvert par un filigrane publicitaire)* — réponse la plus probable : **B.** Les bénéfices non distribués (composante classique des capitaux propres).\n10. **A, B, C.** Autofinancement, endettement, émission d'actions = financement ; la location-gérance n'en est pas un.\n11. **A, B, D.** Vente d'immobilisations, subventions d'équilibre, reprises sur provisions = produits non courants ; les intérêts perçus sont financiers.\n12. **C.** Provisions pour risques et charges = estimations de charges futures probables.\n13. *(Options non visibles sur l'extrait disponible.)*\n14. **A, B, C, D.** Une erreur comptable peut affecter tous ces états, dérivés des mêmes enregistrements.\n15. **C.** Impôt différé = conséquence de différences temporelles résultat fiscal/comptable.\n16. **A.** La comptabilité analytique s'appuie sur l'existence d'une comptabilité générale.\n17. **B.** Coûts de revient variables → détermine les coûts de production variables.\n18. **D.** Méthode de l'IRCF = ajuster les charges fixes en fonction du volume d'activité réel.\n19. **A.** Seuil de rentabilité renseigne sur le volume d'activité nécessaire pour atteindre l'équilibre.\n20. **C.** Méthode du coût spécifique = prolongement de la méthode du coût variable (charges fixes spécifiques incluses, charges fixes communes exclues).\n21. **C.** Les produits résiduels (déchets valorisables) peuvent diminuer le coût de production du produit principal.\n22. **D.** Répartir les charges indirectes entre centres de responsabilité = méthode des coûts complets (centres d'analyse).\n23. **B.** Coûts complets = coût total (direct + indirect) d'un produit.\n24. **C.** Prix de vente en baisse, coûts variables inchangés ⇒ marge sur coût variable unitaire diminue.\n25. **A.** Le flux exceptionnel de revente d'une immobilisation intègre l'impact fiscal (plus/moins-value, IS).\n26. Réserve légale 2022 = 5 % du bénéfice net (640 000) = 32 000, mais plafonnée à 10 % du capital (1 800 000 × 10 % = 180 000). Réserve légale existante 157 000 + 32 000 = 189 000 > 180 000 → dotation limitée à 180 000 − 157 000 = **C. 23 000 Dh** *(calcul vérifié — piège classique du plafond de la réserve légale).*\n27. **A, B, C.** Les trois affirmations sont des constats standards du contrôle de gestion (option D illisible, recouverte par un filigrane).\n28. **C.** Un budget comporte des prévisions opérationnelles et financières (définition la plus complète).\n29. **B, C.** Divergence possible TIR/VAN pour projets mutuellement exclusifs ; VAN différentielle utile pour comparer des projets de tailles différentes.\n30. **B.** Le TIR global (modifié) utilise un taux de réinvestissement exogène — c'est sa différence avec le TIR classique.\n31. **B, D.** Convention des 30 jours/mois - 360 jours/an, et activité supposée uniformément répartie = hypothèses classiques du BFRE normatif.\n32. **B.** Le coefficient de structure convertit le BFRE monétaire en jours de CA HT.\n33. **C.** Le BFRE normatif permet de connaître le besoin de financement à couvrir.\n34. **A.** Solvabilité = aptitude à régler l'ensemble des dettes en réalisant les actifs.\n35. **A, B.** Liquidité croissante de l'actif + exigibilité croissante du passif = critères de classement du bilan financier.\n36. **B, C.** Le bilan fonctionnel est une photographie des cycles d'opérations, évaluée aux valeurs d'origine (brutes).\n37. **A.** FRNG = excédent des ressources durables sur les emplois stables.\n38. **A, B, C.** (D est fausse : elle décrit la marge commerciale, pas la valeur ajoutée.)\n39. **A, B, C, D.** Les quatre propriétés de l'EBE citées sont exactes.\n40. **A, B, C.** Effet de levier favorable si Re > i, défavorable si Re < i.\n41. **A, B.** Le TFR/SIG sert à apprécier l'activité et à analyser l'évolution des grandeurs significatives.\n42. **B.** Ratio d'autonomie financière = degré d'indépendance financière.\n43. **D.** Rentabilité des capitaux propres = Marge × Rotation × Levier d'endettement (décomposition à la Du Pont).\n44. **A, B.** Le levier d'exploitation décrit la sensibilité du résultat à l'activité, mesurée par l'élasticité (C et D sont inversées : un levier élevé accroît le risque, ne le réduit pas).\n45. **A.** Le tableau de financement aide à comprendre l'évolution de la structure et de la liquidité (B, C, D sont des affirmations inversées/fausses).\n46. **A, B.** La VAN mesure l'enrichissement réel et suppose un réinvestissement au taux d'actualisation (C décrit le TIR, D décrit le délai de récupération).\n47. **A, B.** Provisions pour impôts à payer et tantièmes ordinaires sont classiquement à réintégrer (non déductibles) ; les agios bancaires restent déductibles.\n48. Net commercial = 210 000 × 96 % = 201 600 ; + transport 3 200 + installation 4 000 + emballages perdus 800 = 209 600 ; + intérêts pour paiement à terme 9 100 = 218 700 (la reprise de l'ancienne machine, 42 000, n'entre pas dans la base TVA de cette facture). TVA = 218 700 × 20 % = **B. 43 740 DH** *(calcul vérifié).*\n49. **A, B.** Bénéfices des professions commerciales/industrielles et revenus des professions libérales = revenus professionnels classiques (la location meublée relève des revenus fonciers, pas professionnels, sauf exploitation habituelle).\n50. Prorata = (CA taxable 800 000 + export 700 000 + suspension 100 000) / (numérateur + exonéré sans DD 400 000 + hors champ [location nue] 160 000) ≈ **74 %**, ce qui ne correspond exactement à aucune des options proposées (76,2 % / 75,2 % / 77,4 %). *Écart probablement dû à une convention de calcul (TTC vs HT, ou traitement différent de la location nue) propre à ton cours — à revérifier avec la méthode exacte enseignée.*\n51. **A, C.** Ventes en l'état par grossistes et par commerçants importateurs = obligatoirement imposables (contrairement aux détaillants, soumis à un seuil).\n52. **B, D.** Établissements publics à activité lucrative et sociétés de capitaux = obligatoirement passibles de l'IS.\n53. **A, B, C, D.** (Réponse donnée explicitement dans l'énoncé de la question.)\n\n### Cas ALPHA (questions 54 à 60)\n\n54. **D.** Le CA 2023 (220 000) est en baisse par rapport à 2022 (225 000), à surveiller compte tenu de la hausse simultanée des achats.\n55. **A.** Les provisions pour dépréciation des créances restent identiques (2 400) en 2023 et 2022, alors que les créances clients ont presque doublé (24 840 contre 12 800) — incohérence à investiguer.\n56. **B.** L'évolution des créances clients (+94 %) et celle des provisions pour dépréciation (0 %) ne sont clairement pas proportionnelles.\n57. **B.** Les amortissements cumulés au bilan restent à 207 000 en 2023 comme en 2022, alors qu'une dotation aux amortissements de 41 400 est comptabilisée en 2023 — le cumul aurait dû augmenter d'autant : incohérence manifeste.\n58. **A.** Une évaluation forfaitaire (arbitraire, non justifiée techniquement) des amortissements et provisions constitue une erreur au regard du principe d'évaluation correcte.\n59. **A.** Une hausse du prix des matières premières sans répercussion sur les prix de vente entraîne mécaniquement une baisse de la rentabilité.\n60. **B.** Corriger le montant des amortissements 2023 (cohérent avec l'anomalie identifiée en question 57).\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Casablanca_FSJES_AinSebaa_GFCF",
     "annee": "2024",
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Sebaâ",
-    "filiere": "Master GFCF",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Gestion Financière et Comptable (GFC)",
     "modules": [
       "Fiscalité des Entreprises",
@@ -1295,14 +1350,15 @@
       "images/Casablanca/2024_Casablanca_FSJES_AinSebaa_GFCF/2024_Casablanca_FSJES_AinSebaa_GFCF_p2.png",
       "images/Casablanca/2024_Casablanca_FSJES_AinSebaa_GFCF/2024_Casablanca_FSJES_AinSebaa_GFCF_p3.png"
     ],
-    "corrige_md": "> QCM de 70 questions, réponses multiples possibles, avec pénalité de -1 point par mauvaise réponse. Le scan source (`public/images/Casablanca/2024_Casablanca_FSJES_AinSebaa_GFCF/`) porte des réponses cerclées pour la majorité des questions — base de ce corrigé, complétée par le raisonnement pour les questions non cerclées. Quelques réponses cerclées semblent en désaccord avec la règle fiscale/théorique standard (Q4, Q10, Q14, Q29, Q30, Q33, Q64, Q68) : signalées explicitement.\n\n1. TVA récupérable = 20 000 × 20 % × 60 % (prorata) = **A. 2 400** *(calcul vérifié).*\n2. **C.** Fonds créés par voie législative (exclus de l'IS).\n3. Base de l'acompte 2024 = impôt de référence 2023 = max(IS 40 000, CM 50 000) = 50 000 ; acompte trimestriel = 25 % × 50 000 = 12 500, absent des options → **D. Autre réponse** *(calcul vérifié).*\n4. TVA totale = 100 000 × 7 % = 7 000. Régularisation standard (1/5 × écart de prorata) = 7 000 × (90 %−80 %) / 5 = **140 DH, déduction complémentaire (option A)**. *(Réponse cerclée sur le scan : C, 700 DH — soit le calcul sans la division par 5 ; à vérifier selon la méthode enseignée dans ton cours.)*\n5. **C.** Les SNC ne comportant que des personnes morales (passibles à l'IS sur option).\n6. CCA 2 000 000 DH à 10 %, capital 1 000 000 entièrement libéré → seule la fraction du CCA dans la limite du capital (1 000 000) est éligible aux intérêts déductibles, au taux plafond (2 %) : intérêts déductibles = 1 000 000 × 2 % = 20 000 ; intérêts réintégrables = (1 000 000 × 10 % − 20 000) + (1 000 000 excédentaire × 10 %) = 80 000 + 100 000 = 180 000, absent des options → **D. Autre réponse** *(calcul vérifié).*\n7. Paiement en espèces de 24 000 DH TTC (> seuil de 5 000 DH) → réintégration de 50 % du montant = 12 000, absent des options → **D. Autre réponse**.\n8. Retard du 1er acompte (dû le 31/03, réglé le 20/08 ≈ 5 mois de retard) : pénalité 10 % + majoration 5 % (1er mois) + 0,5 %×~4 mois supplémentaires ≈ 17 % × 20 000 = **A. 3 400 DH** *(calcul cohérent).*\n9. Pension étrangère 50 000 € × 11,23 = 561 500 DH, transférée à titre définitif en dirhams non convertibles → abattement spécial de 80 % → base imposable = 112 300 DH. IR (barème progressif) ≈ 21 350 DH, proche de **C. 21 666 DH** *(écart probablement dû à un arrondi du taux de change ou du barème — calcul global cohérent).*\n10. 100 cadeaux à 120 DH TTC/unité (> plafond légal de 100 DH TTC pour les cadeaux publicitaires) : la réintégration standard serait de 100 × 120 = 12 000 DH (option C). *(Réponse cerclée sur le scan : A, 0 DH — à vérifier, la valeur unitaire dépassant le plafond légal.)*\n11. **C.** Stock permettant de déclencher la commande (stock d'alerte).\n12. **A.** Calculer les écarts (contrôle budgétaire).\n13. **A.** Un budget pivot (budget des ventes, point de départ des autres budgets).\n14. *(Réponse cerclée sur le scan : A, « De la comptabilité financière ». La définition académique standard est plutôt **B. Du contrôle de gestion** — à vérifier avec ton cours.)*\n15. **A.** Volume d'activité (variation du CA).\n16. **B.** Kaplan et Norton (Balanced Scorecard).\n17. **D.** Le niveau de recettes au-delà duquel l'entreprise dégage des bénéfices (seuil de rentabilité).\n18. **D.** Des charges dont la destination est connue (charges directes).\n19. **D.** Les charges de la comptabilité générale diminuées des charges non incorporables au coût.\n20. **A.** Une mesure de l'intensité du lien entre deux variables (coefficient de corrélation).\n21. **C.** Du sens de la relation entre deux variables (covariance).\n22. **A.** De situation (comptes du Bilan).\n23. **B.** De gestion (comptes du CPC).\n24. **A.** Les créances (actif du Bilan).\n25. **A.** Avec leur valeur d'origine (immobilisations au Bilan).\n26. **D.** Le maintien de la valeur d'entrée de l'élément inscrit (principe du coût historique).\n27. **A.** La prise en compte des charges dès lors qu'elles sont probables (principe de prudence).\n28. **D.** Enregistrer les opérations dans les comptes et sous la rubrique adéquate (principe de clarté).\n29. *(Réponse cerclée sur le scan : B, « Un emprunt obligataire » — un emprunt reste une dette, pas une augmentation de capital. Les réponses théoriquement correctes sont plutôt **C. Conversion des dettes** et **D. Incorporation des réserves**.)*\n30. *(Réponse cerclée sur le scan : A, « Enregistré au Passif du bilan ». En CGNC marocain, le crédit-bail est classiquement traité comme **C. Un engagement hors bilan** — à vérifier selon la norme retenue dans ton cours.)*\n31. **C.** Le chiffre d'affaires et le seuil de rentabilité (marge de sécurité).\n32. **A.** Mettre en œuvre actuellement des ressources financières pour générer des flux futurs (investissement).\n33. Le sigle de la banque centrale américaine est **A. FED** *(la BCE est la banque centrale européenne, pas américaine — à vérifier si une autre lettre était cerclée sur le scan).*\n34. **A.** Yen (devise du Japon).\n35. **B.** 1929 (jeudi noir).\n36. **A.** Wall Street (place financière la plus importante).\n37. **B.** Euronext (place du marché européen).\n38. **B.** Yuan (devise de la Chine).\n39. **B.** Un indice de la Bourse de Paris (CAC 40).\n40. **B.** Le Nikkei (indice de la Bourse de Tokyo).\n41. **B.** 2ème plus important marché d'actions des États-Unis (NASDAQ).\n42. **A.** Des produits financiers (échangés sur un marché financier).\n43. **C.** Le père fondateur du communisme (Karl Marx).\n44. **A.** Obligatoirement effectuée par fractions (libération du capital des SA).\n45. **C.** Parts sociales représentatives d'apports en nature et/ou en numéraire (capital des SARL).\n46. **C.** Un dispositif pour émettre une opinion sur les comptes de l'entreprise (audit légal).\n47. **D.** Mission de commissariat aux comptes (audit externe).\n48. **D.** L'auditeur ne peut pas être certain à 100 % de la conformité du produit audité (obligation de moyens).\n49. **C.** Expert-Comptable (commissaire aux comptes, forcément).\n50. **A.** Contrôle de gestion (contrôle réalisé par le contrôleur interne).\n51. **B/C** — la formulation du scan correspond à un test confirmant la compréhension d'un processus de bout en bout ou la réalisation répétée d'un contrôle ; le test de **permanence** vérifie classiquement qu'un contrôle fonctionne durablement (plusieurs opérations) → **C** au sens strict.\n52. **C.** Donner l'assurance que les risques majeurs auxquels l'entreprise est exposée sont bien identifiés, évalués et gérés (approche par les risques, logique de matérialité).\n53. **B.** *(réponse cerclée sur le scan)* Fait référence au test permettant de récupérer les pièces d'audit confirmant la compréhension d'un processus de bout en bout.\n54. **C.** Réduire le risque avant l'avènement de l'événement redouté (mesures de prévention).\n55. **C.** Activité de contrôle réalisée d'une manière objective et impartiale (audit interne).\n56. **B.** Réduire le risque après l'avènement de l'événement redouté (mesures de protection).\n57. **A.** Un dispositif pour prévenir les anomalies et irrégularités (contrôle interne).\n58. **A.** Des clients (confirmation externe/circularisation).\n59. **A.** La probabilité d'occurrence de l'événement redouté (vraisemblance du risque).\n60. **A.** Impact négatif sur la valeur actionnariale (risque d'un contrôle interne défaillant).\n61. **B.** Un audit obligatoire (audit légal).\n62. **C.** Obligation de moyens (audit légal).\n63. **C.** Quatre années (durée du mandat CAC selon le scan — vérifie ce chiffre avec la loi en vigueur dans ton cours, certaines sources indiquent trois ans).\n64. *(Réponse cerclée sur le scan : A, « Des clients », pour une procédure de confirmation **interne**. Les clients sont des tiers externes ; la réponse théoriquement cohérente pour une confirmation interne serait plutôt **B (dirigeants)** ou **C (directeur financier)** — à vérifier.)*\n65. **B.** Bilan et CPC (croisement d'informations pour détecter des anomalies).\n66. **D.** Le fait de déterminer scientifiquement la meilleure façon de procéder pour produire (« one best way »).\n67. **A.** L'excédent des ressources stables sur les emplois stables (fonds de roulement).\n68. *(Réponse cerclée sur le scan : D, « Une politique de recouvrement de ses créances ». Cette action agit surtout sur le BFR/la trésorerie ; le levier le plus direct pour améliorer le FR reste **C. Une opération de capital**.)*\n69. **B.** Prolonger le délai de règlement obtenu auprès de ses fournisseurs *(le libellé du scan mentionne « clients », probablement une coquille de transcription — le principe standard pour maîtriser le BFR est d'allonger les délais fournisseurs, pas clients).*\n70. **D.** Contracter une dette auprès de sa banque (couvrir le BFR).\n"
+    "corrige_md": "> QCM de 70 questions, réponses multiples possibles, avec pénalité de -1 point par mauvaise réponse. Le scan source (`public/images/Casablanca/2024_Casablanca_FSJES_AinSebaa_GFCF/`) porte des réponses cerclées pour la majorité des questions — base de ce corrigé, complétée par le raisonnement pour les questions non cerclées. Quelques réponses cerclées semblent en désaccord avec la règle fiscale/théorique standard (Q4, Q10, Q14, Q29, Q30, Q33, Q64, Q68) : signalées explicitement.\n\n1. TVA récupérable = 20 000 × 20 % × 60 % (prorata) = **A. 2 400** *(calcul vérifié).*\n2. **C.** Fonds créés par voie législative (exclus de l'IS).\n3. Base de l'acompte 2024 = impôt de référence 2023 = max(IS 40 000, CM 50 000) = 50 000 ; acompte trimestriel = 25 % × 50 000 = 12 500, absent des options → **D. Autre réponse** *(calcul vérifié).*\n4. TVA totale = 100 000 × 7 % = 7 000. Régularisation standard (1/5 × écart de prorata) = 7 000 × (90 %−80 %) / 5 = **140 DH, déduction complémentaire (option A)**. *(Réponse cerclée sur le scan : C, 700 DH — soit le calcul sans la division par 5 ; à vérifier selon la méthode enseignée dans ton cours.)*\n5. **C.** Les SNC ne comportant que des personnes morales (passibles à l'IS sur option).\n6. CCA 2 000 000 DH à 10 %, capital 1 000 000 entièrement libéré → seule la fraction du CCA dans la limite du capital (1 000 000) est éligible aux intérêts déductibles, au taux plafond (2 %) : intérêts déductibles = 1 000 000 × 2 % = 20 000 ; intérêts réintégrables = (1 000 000 × 10 % − 20 000) + (1 000 000 excédentaire × 10 %) = 80 000 + 100 000 = 180 000, absent des options → **D. Autre réponse** *(calcul vérifié).*\n7. Paiement en espèces de 24 000 DH TTC (> seuil de 5 000 DH) → réintégration de 50 % du montant = 12 000, absent des options → **D. Autre réponse**.\n8. Retard du 1er acompte (dû le 31/03, réglé le 20/08 ≈ 5 mois de retard) : pénalité 10 % + majoration 5 % (1er mois) + 0,5 %×~4 mois supplémentaires ≈ 17 % × 20 000 = **A. 3 400 DH** *(calcul cohérent).*\n9. Pension étrangère 50 000 € × 11,23 = 561 500 DH, transférée à titre définitif en dirhams non convertibles → abattement spécial de 80 % → base imposable = 112 300 DH. IR (barème progressif) ≈ 21 350 DH, proche de **C. 21 666 DH** *(écart probablement dû à un arrondi du taux de change ou du barème — calcul global cohérent).*\n10. 100 cadeaux à 120 DH TTC/unité (> plafond légal de 100 DH TTC pour les cadeaux publicitaires) : la réintégration standard serait de 100 × 120 = 12 000 DH (option C). *(Réponse cerclée sur le scan : A, 0 DH — à vérifier, la valeur unitaire dépassant le plafond légal.)*\n11. **C.** Stock permettant de déclencher la commande (stock d'alerte).\n12. **A.** Calculer les écarts (contrôle budgétaire).\n13. **A.** Un budget pivot (budget des ventes, point de départ des autres budgets).\n14. *(Réponse cerclée sur le scan : A, « De la comptabilité financière ». La définition académique standard est plutôt **B. Du contrôle de gestion** — à vérifier avec ton cours.)*\n15. **A.** Volume d'activité (variation du CA).\n16. **B.** Kaplan et Norton (Balanced Scorecard).\n17. **D.** Le niveau de recettes au-delà duquel l'entreprise dégage des bénéfices (seuil de rentabilité).\n18. **D.** Des charges dont la destination est connue (charges directes).\n19. **D.** Les charges de la comptabilité générale diminuées des charges non incorporables au coût.\n20. **A.** Une mesure de l'intensité du lien entre deux variables (coefficient de corrélation).\n21. **C.** Du sens de la relation entre deux variables (covariance).\n22. **A.** De situation (comptes du Bilan).\n23. **B.** De gestion (comptes du CPC).\n24. **A.** Les créances (actif du Bilan).\n25. **A.** Avec leur valeur d'origine (immobilisations au Bilan).\n26. **D.** Le maintien de la valeur d'entrée de l'élément inscrit (principe du coût historique).\n27. **A.** La prise en compte des charges dès lors qu'elles sont probables (principe de prudence).\n28. **D.** Enregistrer les opérations dans les comptes et sous la rubrique adéquate (principe de clarté).\n29. *(Réponse cerclée sur le scan : B, « Un emprunt obligataire » — un emprunt reste une dette, pas une augmentation de capital. Les réponses théoriquement correctes sont plutôt **C. Conversion des dettes** et **D. Incorporation des réserves**.)*\n30. *(Réponse cerclée sur le scan : A, « Enregistré au Passif du bilan ». En CGNC marocain, le crédit-bail est classiquement traité comme **C. Un engagement hors bilan** — à vérifier selon la norme retenue dans ton cours.)*\n31. **C.** Le chiffre d'affaires et le seuil de rentabilité (marge de sécurité).\n32. **A.** Mettre en œuvre actuellement des ressources financières pour générer des flux futurs (investissement).\n33. Le sigle de la banque centrale américaine est **A. FED** *(la BCE est la banque centrale européenne, pas américaine — à vérifier si une autre lettre était cerclée sur le scan).*\n34. **A.** Yen (devise du Japon).\n35. **B.** 1929 (jeudi noir).\n36. **A.** Wall Street (place financière la plus importante).\n37. **B.** Euronext (place du marché européen).\n38. **B.** Yuan (devise de la Chine).\n39. **B.** Un indice de la Bourse de Paris (CAC 40).\n40. **B.** Le Nikkei (indice de la Bourse de Tokyo).\n41. **B.** 2ème plus important marché d'actions des États-Unis (NASDAQ).\n42. **A.** Des produits financiers (échangés sur un marché financier).\n43. **C.** Le père fondateur du communisme (Karl Marx).\n44. **A.** Obligatoirement effectuée par fractions (libération du capital des SA).\n45. **C.** Parts sociales représentatives d'apports en nature et/ou en numéraire (capital des SARL).\n46. **C.** Un dispositif pour émettre une opinion sur les comptes de l'entreprise (audit légal).\n47. **D.** Mission de commissariat aux comptes (audit externe).\n48. **D.** L'auditeur ne peut pas être certain à 100 % de la conformité du produit audité (obligation de moyens).\n49. **C.** Expert-Comptable (commissaire aux comptes, forcément).\n50. **A.** Contrôle de gestion (contrôle réalisé par le contrôleur interne).\n51. **B/C** — la formulation du scan correspond à un test confirmant la compréhension d'un processus de bout en bout ou la réalisation répétée d'un contrôle ; le test de **permanence** vérifie classiquement qu'un contrôle fonctionne durablement (plusieurs opérations) → **C** au sens strict.\n52. **C.** Donner l'assurance que les risques majeurs auxquels l'entreprise est exposée sont bien identifiés, évalués et gérés (approche par les risques, logique de matérialité).\n53. **B.** *(réponse cerclée sur le scan)* Fait référence au test permettant de récupérer les pièces d'audit confirmant la compréhension d'un processus de bout en bout.\n54. **C.** Réduire le risque avant l'avènement de l'événement redouté (mesures de prévention).\n55. **C.** Activité de contrôle réalisée d'une manière objective et impartiale (audit interne).\n56. **B.** Réduire le risque après l'avènement de l'événement redouté (mesures de protection).\n57. **A.** Un dispositif pour prévenir les anomalies et irrégularités (contrôle interne).\n58. **A.** Des clients (confirmation externe/circularisation).\n59. **A.** La probabilité d'occurrence de l'événement redouté (vraisemblance du risque).\n60. **A.** Impact négatif sur la valeur actionnariale (risque d'un contrôle interne défaillant).\n61. **B.** Un audit obligatoire (audit légal).\n62. **C.** Obligation de moyens (audit légal).\n63. **C.** Quatre années (durée du mandat CAC selon le scan — vérifie ce chiffre avec la loi en vigueur dans ton cours, certaines sources indiquent trois ans).\n64. *(Réponse cerclée sur le scan : A, « Des clients », pour une procédure de confirmation **interne**. Les clients sont des tiers externes ; la réponse théoriquement cohérente pour une confirmation interne serait plutôt **B (dirigeants)** ou **C (directeur financier)** — à vérifier.)*\n65. **B.** Bilan et CPC (croisement d'informations pour détecter des anomalies).\n66. **D.** Le fait de déterminer scientifiquement la meilleure façon de procéder pour produire (« one best way »).\n67. **A.** L'excédent des ressources stables sur les emplois stables (fonds de roulement).\n68. *(Réponse cerclée sur le scan : D, « Une politique de recouvrement de ses créances ». Cette action agit surtout sur le BFR/la trésorerie ; le levier le plus direct pour améliorer le FR reste **C. Une opération de capital**.)*\n69. **B.** Prolonger le délai de règlement obtenu auprès de ses fournisseurs *(le libellé du scan mentionne « clients », probablement une coquille de transcription — le principe standard pour maîtriser le BFR est d'allonger les délais fournisseurs, pas clients).*\n70. **D.** Contracter une dette auprès de sa banque (couvrir le BFR).\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Fes_FSJES_Dhar_El_Mahraz_CCA",
     "annee": "2024",
     "ville": "Fès",
     "etablissement": "FSJES Dhar El Mahraz",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Comptabilité Approfondie",
@@ -1314,14 +1370,15 @@
     "notions_cles": "travaux d'inventaire (amortissements, provisions, cessions d'immobilisations, régularisations de TVA sur immobilisations), résultat fiscal et IS, comptabilité analytique (marges, coûts, seuil de rentabilité)",
     "enonce_md": "**ROYAUME DU MAROC — UNIVERSITÉ SIDI MOHAMED BEN ABDELLAH — FSJES FÈS**\n**Concours d'accès au Master Comptabilité, Contrôle et Audit — Année 2024/2025**\n\n### Dossier I — Comptabilité : régularisations d'inventaire (société SYNERGIE COM)\n\nComptabiliser les travaux de fin d'exercice de l'entreprise SYNERGIE COM au 31/12/2021, à partir d'un extrait de la balance avant inventaire faisant apparaître notamment :\n- des provisions pour dépréciation ;\n- des provisions pour risques ;\n- une cession d'immobilisation ;\n- des amortissements et régularisations diverses ;\n- de la TVA sur immobilisations (constructions, matériel de transport).\n\n**T.A.F : Passer les écritures de régularisation nécessaires à l'inventaire.**\n\n### Dossier II — Gestion / Fiscalité (société ACG, exercice 2024-2025)\n\nTraiter le dossier relatif à la société ACG : déterminer le résultat fiscal de l'exercice 2024/2025, calculer l'impôt sur les sociétés (IS) dû, traiter la TVA et procéder aux régularisations et au calcul de l'impôt en fin d'exercice, à partir des données fournies dans l'énoncé.\n\n### Dossier III — Comptabilité analytique / Gestion (société ALPHA)\n\nLa société ALPHA fabrique et commercialise des produits. À partir d'un tableau de données relatives à l'exercice (charges variables, charges fixes), calculer les marges et les coûts de revient, déterminer le seuil de rentabilité et analyser les résultats obtenus.\n\n*(Note : les données chiffrées détaillées des trois dossiers — balances, tableaux de charges — n'ont pas pu être intégralement retranscrites depuis la source consultée, qui n'affichait qu'un résumé structuré de l'énoncé.)*",
     "source": "- mesconcours.ma — Concours Master 2024-2025 (FSJES Fès, Master CCA) : https://mesconcours.ma/concours/master-fsjes-eco/2024-2025-fsjes-fes-master-cca/",
-    "images": []
+    "images": [],
+    "categorie": "FCA"
   },
   {
     "id": "2024_Kenitra_FEG_Kenitra_CCA",
     "annee": "2024",
     "ville": "Kénitra",
     "etablissement": "FEG Kénitra (FSJES)",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "CCA – IFF – MAC – MFA – BA (épreuve commune multi-filières)",
     "modules": [
       "Mathématiques Financières",
@@ -1337,14 +1394,15 @@
       "images/Kénitra/2024_Kenitra_FEG_Kenitra_CCA/2024_Kenitra_FEG_Kenitra_CCA_p1.jpg",
       "images/Kénitra/2024_Kenitra_FEG_Kenitra_CCA/2024_Kenitra_FEG_Kenitra_CCA_p2.jpg"
     ],
-    "corrige_md": "## Dossier 1 — Mathématiques Financières\n\n**Données.** Loyer mensuel 2 850 DH, impayé les 1/01, 1/02, 1/03 et 1/04/2002. Remplacement par des semestrialités constantes payées le 1/01 et le 1/07 de chaque année, de 2004 (1ère le 1/01/2004) à 2006 (dernière le 1/07/2006), soit **6 semestrialités**. Taux 9 %/an.\n\n**1. Calcul de la semestrialité \"a\"**\n\nMéthode : équivalence de valeurs à intérêts composés (taux annuel 9 %, périodes fractionnaires en années), date d'équivalence = 1/01/2004.\n\nValeur des loyers impayés au 1/01/2004 (capitalisés depuis leur date d'échéance) :\n\n| Loyer dû le | Durée jusqu'au 1/01/2004 | Valeur acquise |\n|---|---|---|\n| 1/01/2002 | 2 ans | 2 850 × 1,09² = 3 386,09 |\n| 1/02/2002 | 23/12 ans | 2 850 × 1,09^(23/12) = 3 361,86 |\n| 1/03/2002 | 22/12 ans | 2 850 × 1,09^(22/12) = 3 337,80 |\n| 1/04/2002 | 21/12 ans | 2 850 × 1,09^(21/12) = 3 313,91 |\n| **Total** | | **13 399,65 DH** |\n\nValeur des 6 semestrialités au 1/01/2004 (dates t = 0 ; 0,5 ; 1 ; 1,5 ; 2 ; 2,5 an) :\n\nΣ (1,09)^(−t) = 1 + 0,95783 + 0,91743 + 0,87874 + 0,84168 + 0,80618 = **5,40186**\n\n**a = 13 399,65 / 5,40186 ≈ 2 480,56 DH**\n\n*(Vérification : cette valeur est cohérente avec l'indication de l'énoncé — 10 % de 2 480,56 = 248,06 DH, exactement le montant cité dans la variante ci-dessous.)*\n\n**2. Variante : 12 trimestrialités à 2,5 %/trimestre, 1er versement le 1/10/2004**\n\nLes 6 semestrialités sont majorées de 10 % : 2 480,56 × 1,10 = 2 728,62 DH chacune.\n\nValeur de cette nouvelle dette au 1/01/2004 = 13 399,65 × 1,10 = **14 739,62 DH**\n\nLes 12 trimestrialités \"b\" sont versées à t = 3, 4, 5, …, 14 trimestres après le 1/01/2004 (1er versement le 1/10/2004 = 3 trimestres plus tard) :\n\nΣ_{k=3}^{14} (1,025)^(−k) = **9,76349**\n\n**b = 14 739,62 / 9,76349 ≈ 1 509,67 DH** par trimestre.\n\n---\n\n## Dossier 2 — Comptabilité des sociétés\n\n**Données.** SA « LMD », capital 300 000 DH (3 000 actions de 100 DH nominal). Nouvel actionnaire : apport en nature (matériel industriel) **2 200 DH** + apport en numéraire 2 000 DH = **4 200 DH**. Prix d'émission = valeur réelle de l'ancienne action = **120 DH**. Frais d'augmentation : 2 220 DH.\n\n**1. Nombre d'actions nouvelles et valeur réelle après augmentation**\n\nNombre d'actions nouvelles = 4 200 / 120 = **35 actions**.\n\nValeur réelle des capitaux propres avant = 3 000 × 120 = 360 000 DH.\nAprès augmentation = 360 000 + 4 200 = 364 200 DH, pour 3 035 actions.\n\n**Valeur réelle de l'action après = 364 200 / 3 035 = 120 DH (inchangée).**\n\nC'est normal : le prix d'émission ayant été fixé exactement à la valeur réelle avant augmentation, il n'y a ni dilution ni enrichissement des anciens actionnaires (ce résultat ne dépend pas du montant apporté).\n\n**2. Valeur théorique du droit de souscription (DS)**\n\nDS = (Valeur réelle avant − Prix d'émission) × n / (N + n) = (120 − 120) × 35 / 3 035 = **0 DH**.\n\n(Cas particulier : DS nul car le prix d'émission égale la valeur réelle avant l'opération.)\n\n**3. Écritures comptables**\n\n*Constatation de l'augmentation (souscription) :*\n```\n3461  Associés – opérations sur le capital         4 200\n            1111  Capital social (35 × 100)                  3 500\n            1121  Prime d'émission (35 × 20)                   700\n```\n\n*Réalisation des apports :*\n```\n2332  Matériel industriel (apport en nature)       2 200\n5141  Banque (apport en numéraire)                 2 000\n            3461  Associés – opérations sur le capital        4 200\n```\n\n*Frais d'augmentation de capital (2 220 DH).* La prime d'émission disponible n'est que de 700 DH : elle ne suffit pas à absorber la totalité des frais. On impute d'abord la prime disponible, le solde (1 520 DH) est comptabilisé en charges à répartir sur plusieurs exercices (amortissables sur 5 ans maximum) :\n```\n1121  Prime d'émission                                700\n2125  Frais d'augmentation de capital (non-valeur)  1 520\n            5141  Banque                                     2 220\n```\n\n---\n\n## Dossier 3 — Fiscalité (IS 2023, société « B&E »)\n\n**Résultat comptable de départ : 8 975 089 DH.** CA = 20 000 000 DH ; autres produits d'exploitation = 5 000 000 DH ; reprises et transferts de charges = 60 000 DH ; acomptes IS déjà versés en 2023 : 4 × 300 000 = 1 200 000 DH.\n\n**Analyse des 6 opérations :**\n\n1. **Don à l'association ANNAHDA : 20 000 DH.** Plafond fiscal pour les dons aux associations (hors organismes cités sans plafond à l'art. 10-I-B-2° du CGI) = 2 ‰ du CA HT = 20 000 000 × 0,002 = 40 000 DH. Le don (20 000) est **inférieur au plafond → entièrement déductible, aucune réintégration.**\n\n2. **Cession de titres SRAL omise** : prix de cession 300 000 DH, coût d'achat 200 000 DH → plus-value de 100 000 DH **omise du résultat comptable → à réintégrer : +100 000 DH.**\n\n3. **Provision clients douteux, 90 000 DH.** Aucune procédure de recouvrement/action en justice mentionnée ni de créances individualisées à risque précisément identifié → provision à caractère général, **non déductible fiscalement → à réintégrer : +90 000 DH.**\n\n4. **Amortissement du véhicule de tourisme (PDG) : 600 000 DH TTC, DEA comptabilisée 100 000 DH (10 mois).**\n   Un véhicule de tourisme (non utilitaire) est plafonné fiscalement à une valeur d'origine de **300 000 DH TTC**, taux minimal 20 %/an.\n   Amortissement fiscalement admis = 300 000 × 20 % × 10/12 = 50 000 DH.\n   Amortissement comptabilisé = 100 000 DH → excédent **à réintégrer : +50 000 DH.**\n\n5. **Catalogues publicitaires : 3 000 unités à 60 DH TTC, dont 1 900 encore en stock au 31/12/2023** (à distribuer en 2024).\n   La valeur unitaire (60 DH) respecte le plafond des cadeaux publicitaires (≤ 100 DH TTC), mais **seule la fraction effectivement distribuée en 2023 (3 000 − 1 900 = 1 100 unités) constitue une charge de l'exercice.** Le coût des 1 900 unités en stock (1 900 × 60 = 114 000 DH), s'il a été comptabilisé en charge dès l'achat, doit être **réintégré : +114 000 DH** (il sera déductible en 2024, lors de la distribution effective).\n\n6. **Vente à l'export (Luxembourg), 10 000 € :** cours au 08/09 = 10,5 ; livraison 12/09 = 10,9 ; facturation 20/09 = 11,3 ; encaissement 01/10 = 11,5 (115 000 DH reçus).\n   Le comptable a enregistré la vente à 109 000 DH (cours du 12/09, date de livraison) et un gain de change de 6 000 DH.\n   Selon la règle générale (créance enregistrée au cours de la date de facturation), la vente aurait dû être constatée à 10 000 × 11,3 = **113 000 DH**, et le gain de change réel, entre la créance (113 000) et l'encaissement (115 000), n'est que de **2 000 DH**.\n   Correction : CA sous-évalué de +4 000 DH, gain de change surévalué de −4 000 DH → **impact net sur le résultat fiscal = 0.** Point à signaler à l'entreprise (reclassement CA / produit financier) mais sans conséquence sur l'IS dû.\n\n**Tableau récapitulatif**\n\n| Opération | Réintégration |\n|---|---|\n| Don ANNAHDA | 0 |\n| Plus-value SRAL omise | +100 000 |\n| Provision clients douteux | +90 000 |\n| Amortissement véhicule (excédent) | +50 000 |\n| Catalogues en stock | +114 000 |\n| Écart de change (net) | 0 |\n| **Total réintégrations** | **354 000 DH** |\n\n**Résultat fiscal = 8 975 089 + 354 000 = 9 329 089 DH**\n\n**Calcul de l'IS** (barème 2023, taux appliqué à la totalité du bénéfice selon la tranche atteinte) : résultat fiscal > 1 000 000 DH → **taux marginal de 31 %**.\n\nIS théorique = 9 329 089 × 31 % ≈ **2 892 018 DH**\n\n**Cotisation minimale (CM)** = 0,25 % × (CA + autres produits d'exploitation) = 0,25 % × (20 000 000 + 5 000 000) = 62 500 DH. IS (2 892 018) >> CM → **l'IS calculé est dû.**\n\n**Solde à payer au 31/03/2024** = IS dû − acomptes versés = 2 892 018 − 1 200 000 = **1 692 018 DH**.\n\n---\n\n## Dossier 4 — Comptabilité analytique (entreprise « ABS »)\n\n**Données disponibles.** 1 kg de matière M traitée (atelier préparation) donne 800 g de fil (rendement 0,8). Stocks bobines de fil : 9 600 unités (01/02) → 18 000 unités (28/02). Stock matière M brute au 28/02 : 10 800 kg (stock au 01/02 illisible sur le scan disponible). Ventes de février : 96 000 bobines de 125 g. Coûts d'unité d'œuvre donnés : Approvisionnement 0,5 DH/kg acheté ; Préparation 1,2 DH/kg traité ; Filature 3,5 DH/kg de fil obtenu ; Bobinage 0,25 DH/bobine obtenue ; Distribution 0,15 DH/bobine vendue.\n\n> ⚠️ **Le tableau de répartition est volontairement incomplet dans l'énoncé** (l'énoncé lui-même précise : « tableau de répartition des charges indirectes partiellement rempli ») : les lignes « Total répartition secondaire » et « Nombre d'unité d'œuvre » ne sont pas données, c'est précisément ce que la question 1 demande de reconstituer. Les totaux ci-dessous sont donc **recalculés à partir des données de production** (rendements, mouvements de stocks, ventes) — c'est la méthode attendue. Le stock initial de matière M brute au 01/02 n'est en revanche pas fourni dans le document source, ce qui empêche de chiffrer le centre Approvisionnement.\n\n**1. Reconstitution des quantités d'œuvre**\n\n- Production de bobines (bobinage) = Ventes + stock final − stock initial = 96 000 + 18 000 − 9 600 = **104 400 bobines**\n- Kg de fil nécessaires à cette production = 104 400 × 0,125 kg = **13 050 kg de fil** (nombre d'UO Filature)\n- Kg de matière M traitée pour obtenir ce fil = 13 050 / 0,8 = **16 312,5 kg** (nombre d'UO Préparation)\n- Kg de matière M achetée (UO Approvisionnement) : **non déterminable** (stock initial de matière brute illisible sur le scan)\n\n**2. Tableau de répartition des charges indirectes (reconstitué)**\n\n| Centre | Nombre d'UO | Coût d'UO | Total charges |\n|---|---|---|---|\n| Approvisionnement | non déterminable | 0,5 DH/kg | **non déterminable** |\n| Préparation | 16 312,5 kg traité | 1,2 DH/kg | 19 575 DH |\n| Filature | 13 050 kg fil obtenu | 3,5 DH/kg | 45 675 DH |\n| Bobinage | 104 400 bobines | 0,25 DH/bobine | 26 100 DH |\n| Distribution | 96 000 bobines vendues | 0,15 DH/bobine | 14 400 DH |\n| **Total (hors Approvisionnement)** | | | **105 750 DH** |\n\n**3. Charges de la comptabilité générale**\n\nDeux différences d'incorporation à retraiter :\n- **Charge supplétive à retirer** (propre à l'analytique, absente de la comptabilité générale) : rémunération des capitaux propres au taux de 12 %/an sur un capital de 100 000 DH, soit 100 000 × 12 % / 12 = **1 000 DH/mois**.\n- **Charge non incorporable à ajouter** (présente en comptabilité générale mais exclue de l'analytique, car anormale/hors exploitation) : une pénalité de **8 000 DH**.\n\nCharges de la compta générale = Charges de la compta analytique − charges supplétives (1 000) + charges non incorporables (8 000)\n\nSur la partie reconstituée (hors centre Approvisionnement, indéterminé) :\n105 750 − 1 000 + 8 000 = **112 750 DH**, à majorer du coût du centre Approvisionnement (non déterminable sans le stock initial de matière M brute).\n"
+    "corrige_md": "## Dossier 1 — Mathématiques Financières\n\n**Données.** Loyer mensuel 2 850 DH, impayé les 1/01, 1/02, 1/03 et 1/04/2002. Remplacement par des semestrialités constantes payées le 1/01 et le 1/07 de chaque année, de 2004 (1ère le 1/01/2004) à 2006 (dernière le 1/07/2006), soit **6 semestrialités**. Taux 9 %/an.\n\n**1. Calcul de la semestrialité \"a\"**\n\nMéthode : équivalence de valeurs à intérêts composés (taux annuel 9 %, périodes fractionnaires en années), date d'équivalence = 1/01/2004.\n\nValeur des loyers impayés au 1/01/2004 (capitalisés depuis leur date d'échéance) :\n\n| Loyer dû le | Durée jusqu'au 1/01/2004 | Valeur acquise |\n|---|---|---|\n| 1/01/2002 | 2 ans | 2 850 × 1,09² = 3 386,09 |\n| 1/02/2002 | 23/12 ans | 2 850 × 1,09^(23/12) = 3 361,86 |\n| 1/03/2002 | 22/12 ans | 2 850 × 1,09^(22/12) = 3 337,80 |\n| 1/04/2002 | 21/12 ans | 2 850 × 1,09^(21/12) = 3 313,91 |\n| **Total** | | **13 399,65 DH** |\n\nValeur des 6 semestrialités au 1/01/2004 (dates t = 0 ; 0,5 ; 1 ; 1,5 ; 2 ; 2,5 an) :\n\nΣ (1,09)^(−t) = 1 + 0,95783 + 0,91743 + 0,87874 + 0,84168 + 0,80618 = **5,40186**\n\n**a = 13 399,65 / 5,40186 ≈ 2 480,56 DH**\n\n*(Vérification : cette valeur est cohérente avec l'indication de l'énoncé — 10 % de 2 480,56 = 248,06 DH, exactement le montant cité dans la variante ci-dessous.)*\n\n**2. Variante : 12 trimestrialités à 2,5 %/trimestre, 1er versement le 1/10/2004**\n\nLes 6 semestrialités sont majorées de 10 % : 2 480,56 × 1,10 = 2 728,62 DH chacune.\n\nValeur de cette nouvelle dette au 1/01/2004 = 13 399,65 × 1,10 = **14 739,62 DH**\n\nLes 12 trimestrialités \"b\" sont versées à t = 3, 4, 5, …, 14 trimestres après le 1/01/2004 (1er versement le 1/10/2004 = 3 trimestres plus tard) :\n\nΣ_{k=3}^{14} (1,025)^(−k) = **9,76349**\n\n**b = 14 739,62 / 9,76349 ≈ 1 509,67 DH** par trimestre.\n\n---\n\n## Dossier 2 — Comptabilité des sociétés\n\n**Données.** SA « LMD », capital 300 000 DH (3 000 actions de 100 DH nominal). Nouvel actionnaire : apport en nature (matériel industriel) **2 200 DH** + apport en numéraire 2 000 DH = **4 200 DH**. Prix d'émission = valeur réelle de l'ancienne action = **120 DH**. Frais d'augmentation : 2 220 DH.\n\n**1. Nombre d'actions nouvelles et valeur réelle après augmentation**\n\nNombre d'actions nouvelles = 4 200 / 120 = **35 actions**.\n\nValeur réelle des capitaux propres avant = 3 000 × 120 = 360 000 DH.\nAprès augmentation = 360 000 + 4 200 = 364 200 DH, pour 3 035 actions.\n\n**Valeur réelle de l'action après = 364 200 / 3 035 = 120 DH (inchangée).**\n\nC'est normal : le prix d'émission ayant été fixé exactement à la valeur réelle avant augmentation, il n'y a ni dilution ni enrichissement des anciens actionnaires (ce résultat ne dépend pas du montant apporté).\n\n**2. Valeur théorique du droit de souscription (DS)**\n\nDS = (Valeur réelle avant − Prix d'émission) × n / (N + n) = (120 − 120) × 35 / 3 035 = **0 DH**.\n\n(Cas particulier : DS nul car le prix d'émission égale la valeur réelle avant l'opération.)\n\n**3. Écritures comptables**\n\n*Constatation de l'augmentation (souscription) :*\n```\n3461  Associés – opérations sur le capital         4 200\n            1111  Capital social (35 × 100)                  3 500\n            1121  Prime d'émission (35 × 20)                   700\n```\n\n*Réalisation des apports :*\n```\n2332  Matériel industriel (apport en nature)       2 200\n5141  Banque (apport en numéraire)                 2 000\n            3461  Associés – opérations sur le capital        4 200\n```\n\n*Frais d'augmentation de capital (2 220 DH).* La prime d'émission disponible n'est que de 700 DH : elle ne suffit pas à absorber la totalité des frais. On impute d'abord la prime disponible, le solde (1 520 DH) est comptabilisé en charges à répartir sur plusieurs exercices (amortissables sur 5 ans maximum) :\n```\n1121  Prime d'émission                                700\n2125  Frais d'augmentation de capital (non-valeur)  1 520\n            5141  Banque                                     2 220\n```\n\n---\n\n## Dossier 3 — Fiscalité (IS 2023, société « B&E »)\n\n**Résultat comptable de départ : 8 975 089 DH.** CA = 20 000 000 DH ; autres produits d'exploitation = 5 000 000 DH ; reprises et transferts de charges = 60 000 DH ; acomptes IS déjà versés en 2023 : 4 × 300 000 = 1 200 000 DH.\n\n**Analyse des 6 opérations :**\n\n1. **Don à l'association ANNAHDA : 20 000 DH.** Plafond fiscal pour les dons aux associations (hors organismes cités sans plafond à l'art. 10-I-B-2° du CGI) = 2 ‰ du CA HT = 20 000 000 × 0,002 = 40 000 DH. Le don (20 000) est **inférieur au plafond → entièrement déductible, aucune réintégration.**\n\n2. **Cession de titres SRAL omise** : prix de cession 300 000 DH, coût d'achat 200 000 DH → plus-value de 100 000 DH **omise du résultat comptable → à réintégrer : +100 000 DH.**\n\n3. **Provision clients douteux, 90 000 DH.** Aucune procédure de recouvrement/action en justice mentionnée ni de créances individualisées à risque précisément identifié → provision à caractère général, **non déductible fiscalement → à réintégrer : +90 000 DH.**\n\n4. **Amortissement du véhicule de tourisme (PDG) : 600 000 DH TTC, DEA comptabilisée 100 000 DH (10 mois).**\n   Un véhicule de tourisme (non utilitaire) est plafonné fiscalement à une valeur d'origine de **300 000 DH TTC**, taux minimal 20 %/an.\n   Amortissement fiscalement admis = 300 000 × 20 % × 10/12 = 50 000 DH.\n   Amortissement comptabilisé = 100 000 DH → excédent **à réintégrer : +50 000 DH.**\n\n5. **Catalogues publicitaires : 3 000 unités à 60 DH TTC, dont 1 900 encore en stock au 31/12/2023** (à distribuer en 2024).\n   La valeur unitaire (60 DH) respecte le plafond des cadeaux publicitaires (≤ 100 DH TTC), mais **seule la fraction effectivement distribuée en 2023 (3 000 − 1 900 = 1 100 unités) constitue une charge de l'exercice.** Le coût des 1 900 unités en stock (1 900 × 60 = 114 000 DH), s'il a été comptabilisé en charge dès l'achat, doit être **réintégré : +114 000 DH** (il sera déductible en 2024, lors de la distribution effective).\n\n6. **Vente à l'export (Luxembourg), 10 000 € :** cours au 08/09 = 10,5 ; livraison 12/09 = 10,9 ; facturation 20/09 = 11,3 ; encaissement 01/10 = 11,5 (115 000 DH reçus).\n   Le comptable a enregistré la vente à 109 000 DH (cours du 12/09, date de livraison) et un gain de change de 6 000 DH.\n   Selon la règle générale (créance enregistrée au cours de la date de facturation), la vente aurait dû être constatée à 10 000 × 11,3 = **113 000 DH**, et le gain de change réel, entre la créance (113 000) et l'encaissement (115 000), n'est que de **2 000 DH**.\n   Correction : CA sous-évalué de +4 000 DH, gain de change surévalué de −4 000 DH → **impact net sur le résultat fiscal = 0.** Point à signaler à l'entreprise (reclassement CA / produit financier) mais sans conséquence sur l'IS dû.\n\n**Tableau récapitulatif**\n\n| Opération | Réintégration |\n|---|---|\n| Don ANNAHDA | 0 |\n| Plus-value SRAL omise | +100 000 |\n| Provision clients douteux | +90 000 |\n| Amortissement véhicule (excédent) | +50 000 |\n| Catalogues en stock | +114 000 |\n| Écart de change (net) | 0 |\n| **Total réintégrations** | **354 000 DH** |\n\n**Résultat fiscal = 8 975 089 + 354 000 = 9 329 089 DH**\n\n**Calcul de l'IS** (barème 2023, taux appliqué à la totalité du bénéfice selon la tranche atteinte) : résultat fiscal > 1 000 000 DH → **taux marginal de 31 %**.\n\nIS théorique = 9 329 089 × 31 % ≈ **2 892 018 DH**\n\n**Cotisation minimale (CM)** = 0,25 % × (CA + autres produits d'exploitation) = 0,25 % × (20 000 000 + 5 000 000) = 62 500 DH. IS (2 892 018) >> CM → **l'IS calculé est dû.**\n\n**Solde à payer au 31/03/2024** = IS dû − acomptes versés = 2 892 018 − 1 200 000 = **1 692 018 DH**.\n\n---\n\n## Dossier 4 — Comptabilité analytique (entreprise « ABS »)\n\n**Données disponibles.** 1 kg de matière M traitée (atelier préparation) donne 800 g de fil (rendement 0,8). Stocks bobines de fil : 9 600 unités (01/02) → 18 000 unités (28/02). Stock matière M brute au 28/02 : 10 800 kg (stock au 01/02 illisible sur le scan disponible). Ventes de février : 96 000 bobines de 125 g. Coûts d'unité d'œuvre donnés : Approvisionnement 0,5 DH/kg acheté ; Préparation 1,2 DH/kg traité ; Filature 3,5 DH/kg de fil obtenu ; Bobinage 0,25 DH/bobine obtenue ; Distribution 0,15 DH/bobine vendue.\n\n> ⚠️ **Le tableau de répartition est volontairement incomplet dans l'énoncé** (l'énoncé lui-même précise : « tableau de répartition des charges indirectes partiellement rempli ») : les lignes « Total répartition secondaire » et « Nombre d'unité d'œuvre » ne sont pas données, c'est précisément ce que la question 1 demande de reconstituer. Les totaux ci-dessous sont donc **recalculés à partir des données de production** (rendements, mouvements de stocks, ventes) — c'est la méthode attendue. Le stock initial de matière M brute au 01/02 n'est en revanche pas fourni dans le document source, ce qui empêche de chiffrer le centre Approvisionnement.\n\n**1. Reconstitution des quantités d'œuvre**\n\n- Production de bobines (bobinage) = Ventes + stock final − stock initial = 96 000 + 18 000 − 9 600 = **104 400 bobines**\n- Kg de fil nécessaires à cette production = 104 400 × 0,125 kg = **13 050 kg de fil** (nombre d'UO Filature)\n- Kg de matière M traitée pour obtenir ce fil = 13 050 / 0,8 = **16 312,5 kg** (nombre d'UO Préparation)\n- Kg de matière M achetée (UO Approvisionnement) : **non déterminable** (stock initial de matière brute illisible sur le scan)\n\n**2. Tableau de répartition des charges indirectes (reconstitué)**\n\n| Centre | Nombre d'UO | Coût d'UO | Total charges |\n|---|---|---|---|\n| Approvisionnement | non déterminable | 0,5 DH/kg | **non déterminable** |\n| Préparation | 16 312,5 kg traité | 1,2 DH/kg | 19 575 DH |\n| Filature | 13 050 kg fil obtenu | 3,5 DH/kg | 45 675 DH |\n| Bobinage | 104 400 bobines | 0,25 DH/bobine | 26 100 DH |\n| Distribution | 96 000 bobines vendues | 0,15 DH/bobine | 14 400 DH |\n| **Total (hors Approvisionnement)** | | | **105 750 DH** |\n\n**3. Charges de la comptabilité générale**\n\nDeux différences d'incorporation à retraiter :\n- **Charge supplétive à retirer** (propre à l'analytique, absente de la comptabilité générale) : rémunération des capitaux propres au taux de 12 %/an sur un capital de 100 000 DH, soit 100 000 × 12 % / 12 = **1 000 DH/mois**.\n- **Charge non incorporable à ajouter** (présente en comptabilité générale mais exclue de l'analytique, car anormale/hors exploitation) : une pénalité de **8 000 DH**.\n\nCharges de la compta générale = Charges de la compta analytique − charges supplétives (1 000) + charges non incorporables (8 000)\n\nSur la partie reconstituée (hors centre Approvisionnement, indéterminé) :\n105 750 − 1 000 + 8 000 = **112 750 DH**, à majorer du coût du centre Approvisionnement (non déterminable sans le stock initial de matière M brute).\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Marrakech_FSJES_CCA2",
     "annee": "2024",
     "ville": "Marrakech",
     "etablissement": "FSJES Marrakech",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle et Audit (CCA)",
     "modules": [
       "Analyse Financière",
@@ -1360,14 +1418,15 @@
       "images/Marrakech/2024_Marrakech_FSJES_CCA2/2024_Marrakech_FSJES_CCA2_p1.png",
       "images/Marrakech/2024_Marrakech_FSJES_CCA2/2024_Marrakech_FSJES_CCA2_p2.png"
     ],
-    "corrige_md": "## Sujet 1 — Analyse financière (entreprise XYZ)\n\n**Reconstitution du bilan.** Avec les éléments donnés, le bilan s'équilibre si la « Trésorerie : 50 000 MAD » est une **trésorerie passive** (concours bancaires/découvert) :\nActif = 200 000 (immobilisé) + 150 000 (circulant) = **350 000 MAD**\nPassif = 100 000 (capitaux propres) + 120 000 (dettes financières LT) + 80 000 (dettes fournisseurs) + 50 000 (trésorerie passive) = **350 000 MAD** ✓ (ce recoupement confirme la lecture retenue — voir le résultat de la question 4, cohérent avec un découvert).\n\nRésultat d'exploitation (CPC) = CA − Achats − Charges de personnel − Dotations aux amortissements = 300 000 − 150 000 − 70 000 − 30 000 = **50 000 MAD**\n\n**1. Rentabilité économique** = Résultat d'exploitation / Actif économique, avec Actif économique = Actif immobilisé + BFR = 200 000 + 70 000 (BFR, cf. question 3) = 270 000 MAD.\n\n**Rentabilité économique = 50 000 / 270 000 ≈ 18,5 %**\n\n*(Si l'on retient la définition alternative Résultat d'exploitation / Actif total : 50 000 / 350 000 ≈ 14,3 % — à adapter selon la définition retenue en cours.)*\n\n**2. Fonds de roulement net global (FRNG)** = Capitaux permanents − Actif immobilisé = (Capitaux propres + Dettes financières LT) − Actif immobilisé = (100 000 + 120 000) − 200 000 = **20 000 MAD**\n\n**3. Besoin en fonds de roulement (BFR)** = Actif circulant − Dettes d'exploitation (fournisseurs) = 150 000 − 80 000 = **70 000 MAD**\n\n**4. Trésorerie nette** = FRNG − BFR = 20 000 − 70 000 = **− 50 000 MAD**\n\n(Une trésorerie nette négative de 50 000 MAD, cohérente avec le découvert bancaire identifié dans le bilan.)\n\n---\n\n## Sujet 2 — Coûts et seuil de rentabilité (entreprise ABC)\n\nPrix de vente unitaire = 100 MAD ; coût variable unitaire = 40 MAD ; charges fixes = 180 000 MAD ; quantités vendues = 5 000.\n\n**1. Marge sur coûts variables (MCV) unitaire** = 100 − 40 = **60 MAD**\n\n**2. MCV totale** = 60 × 5 000 = **300 000 MAD**\n\n**3. Seuil de rentabilité (SR) en volume** = Charges fixes / MCV unitaire = 180 000 / 60 = **3 000 unités**\n\n**4. Chiffre d'affaires au SR** = 3 000 × 100 = **300 000 MAD**\n\n**5. Résultat de l'année N** = MCV totale − Charges fixes = 300 000 − 180 000 = **120 000 MAD**\n\n**6. Impact d'une hausse de 20 % des charges fixes** : nouvelles charges fixes = 180 000 × 1,20 = 216 000 MAD.\nNouveau SR = 216 000 / 60 = **3 600 unités** (+ 600 unités, soit + 20 % — proportionnel à la hausse des charges fixes puisque la MCV unitaire ne change pas).\n\n---\n\n## Sujet 3 — Budget prévisionnel (entreprise XYZ, T1 année N+1)\n\nPrix de vente = 150 MAD ; coût variable unitaire = 90 MAD ; charges fixes mensuelles = 25 000 MAD.\n\n| | Janvier (500 u.) | Février (600 u.) | Mars (700 u.) |\n|---|---|---|---|\n| **1. Budget des ventes (CA)** | 500 × 150 = 75 000 | 600 × 150 = 90 000 | 700 × 150 = 105 000 |\n| **2. Budget des coûts variables** | 500 × 90 = 45 000 | 600 × 90 = 54 000 | 700 × 90 = 63 000 |\n| **3. Charges totales (CF + CV)** | 25 000 + 45 000 = 70 000 | 25 000 + 54 000 = 79 000 | 25 000 + 63 000 = 88 000 |\n| **4. Résultat mensuel (CA − charges)** | 75 000 − 70 000 = **5 000** | 90 000 − 79 000 = **11 000** | 105 000 − 88 000 = **17 000** |\n\n**5. Résultat cumulé du trimestre** = 5 000 + 11 000 + 17 000 = **33 000 MAD**\n\n---\n\n## Sujet 4 — Calcul de l'IS (entreprise ABC)\n\nCA = 2 000 000 ; achats et charges externes = 1 200 000 ; charges de personnel = 300 000 ; dotations aux amortissements = 100 000 ; charges financières = 50 000 ; produits financiers = 20 000 ; résultat exceptionnel = − 30 000 ; abattement 10 % ; taux IS = 31 %.\n\n**1. Résultat fiscal avant abattement** = (CA + produits financiers) − (achats + charges de personnel + dotations + charges financières) + résultat exceptionnel\n= (2 000 000 + 20 000) − (1 200 000 + 300 000 + 100 000 + 50 000) + (− 30 000)\n= 2 020 000 − 1 650 000 − 30 000 = **340 000 MAD**\n\n**2. Abattement fiscal** = 340 000 × 10 % = **34 000 MAD**\n\n**3. Résultat fiscal après abattement** = 340 000 − 34 000 = **306 000 MAD**\n\n**4. Impôt sur les sociétés (IS) dû** = 306 000 × 31 % = **94 860 MAD**\n"
+    "corrige_md": "## Sujet 1 — Analyse financière (entreprise XYZ)\n\n**Reconstitution du bilan.** Avec les éléments donnés, le bilan s'équilibre si la « Trésorerie : 50 000 MAD » est une **trésorerie passive** (concours bancaires/découvert) :\nActif = 200 000 (immobilisé) + 150 000 (circulant) = **350 000 MAD**\nPassif = 100 000 (capitaux propres) + 120 000 (dettes financières LT) + 80 000 (dettes fournisseurs) + 50 000 (trésorerie passive) = **350 000 MAD** ✓ (ce recoupement confirme la lecture retenue — voir le résultat de la question 4, cohérent avec un découvert).\n\nRésultat d'exploitation (CPC) = CA − Achats − Charges de personnel − Dotations aux amortissements = 300 000 − 150 000 − 70 000 − 30 000 = **50 000 MAD**\n\n**1. Rentabilité économique** = Résultat d'exploitation / Actif économique, avec Actif économique = Actif immobilisé + BFR = 200 000 + 70 000 (BFR, cf. question 3) = 270 000 MAD.\n\n**Rentabilité économique = 50 000 / 270 000 ≈ 18,5 %**\n\n*(Si l'on retient la définition alternative Résultat d'exploitation / Actif total : 50 000 / 350 000 ≈ 14,3 % — à adapter selon la définition retenue en cours.)*\n\n**2. Fonds de roulement net global (FRNG)** = Capitaux permanents − Actif immobilisé = (Capitaux propres + Dettes financières LT) − Actif immobilisé = (100 000 + 120 000) − 200 000 = **20 000 MAD**\n\n**3. Besoin en fonds de roulement (BFR)** = Actif circulant − Dettes d'exploitation (fournisseurs) = 150 000 − 80 000 = **70 000 MAD**\n\n**4. Trésorerie nette** = FRNG − BFR = 20 000 − 70 000 = **− 50 000 MAD**\n\n(Une trésorerie nette négative de 50 000 MAD, cohérente avec le découvert bancaire identifié dans le bilan.)\n\n---\n\n## Sujet 2 — Coûts et seuil de rentabilité (entreprise ABC)\n\nPrix de vente unitaire = 100 MAD ; coût variable unitaire = 40 MAD ; charges fixes = 180 000 MAD ; quantités vendues = 5 000.\n\n**1. Marge sur coûts variables (MCV) unitaire** = 100 − 40 = **60 MAD**\n\n**2. MCV totale** = 60 × 5 000 = **300 000 MAD**\n\n**3. Seuil de rentabilité (SR) en volume** = Charges fixes / MCV unitaire = 180 000 / 60 = **3 000 unités**\n\n**4. Chiffre d'affaires au SR** = 3 000 × 100 = **300 000 MAD**\n\n**5. Résultat de l'année N** = MCV totale − Charges fixes = 300 000 − 180 000 = **120 000 MAD**\n\n**6. Impact d'une hausse de 20 % des charges fixes** : nouvelles charges fixes = 180 000 × 1,20 = 216 000 MAD.\nNouveau SR = 216 000 / 60 = **3 600 unités** (+ 600 unités, soit + 20 % — proportionnel à la hausse des charges fixes puisque la MCV unitaire ne change pas).\n\n---\n\n## Sujet 3 — Budget prévisionnel (entreprise XYZ, T1 année N+1)\n\nPrix de vente = 150 MAD ; coût variable unitaire = 90 MAD ; charges fixes mensuelles = 25 000 MAD.\n\n| | Janvier (500 u.) | Février (600 u.) | Mars (700 u.) |\n|---|---|---|---|\n| **1. Budget des ventes (CA)** | 500 × 150 = 75 000 | 600 × 150 = 90 000 | 700 × 150 = 105 000 |\n| **2. Budget des coûts variables** | 500 × 90 = 45 000 | 600 × 90 = 54 000 | 700 × 90 = 63 000 |\n| **3. Charges totales (CF + CV)** | 25 000 + 45 000 = 70 000 | 25 000 + 54 000 = 79 000 | 25 000 + 63 000 = 88 000 |\n| **4. Résultat mensuel (CA − charges)** | 75 000 − 70 000 = **5 000** | 90 000 − 79 000 = **11 000** | 105 000 − 88 000 = **17 000** |\n\n**5. Résultat cumulé du trimestre** = 5 000 + 11 000 + 17 000 = **33 000 MAD**\n\n---\n\n## Sujet 4 — Calcul de l'IS (entreprise ABC)\n\nCA = 2 000 000 ; achats et charges externes = 1 200 000 ; charges de personnel = 300 000 ; dotations aux amortissements = 100 000 ; charges financières = 50 000 ; produits financiers = 20 000 ; résultat exceptionnel = − 30 000 ; abattement 10 % ; taux IS = 31 %.\n\n**1. Résultat fiscal avant abattement** = (CA + produits financiers) − (achats + charges de personnel + dotations + charges financières) + résultat exceptionnel\n= (2 000 000 + 20 000) − (1 200 000 + 300 000 + 100 000 + 50 000) + (− 30 000)\n= 2 020 000 − 1 650 000 − 30 000 = **340 000 MAD**\n\n**2. Abattement fiscal** = 340 000 × 10 % = **34 000 MAD**\n\n**3. Résultat fiscal après abattement** = 340 000 − 34 000 = **306 000 MAD**\n\n**4. Impôt sur les sociétés (IS) dû** = 306 000 × 31 % = **94 860 MAD**\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Meknes_FSJES_Meknes_Fiscalite",
     "annee": "2024",
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
-    "filiere": "Master Fiscalité",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Ingénierie Comptable, Fiscale et Financière (Master d'Excellence)",
     "modules": [
       "Comptabilité des Sociétés",
@@ -1383,14 +1442,15 @@
       "images/Meknès/2024_Meknes_FSJES_Meknes_Fiscalite/2024_Meknes_FSJES_Meknes_Fiscalite_p1.jpg",
       "images/Meknès/2024_Meknes_FSJES_Meknes_Fiscalite/2024_Meknes_FSJES_Meknes_Fiscalite_p2.jpg"
     ],
-    "corrige_md": "> Ce sujet est un QCM. Le scan source (`public/images/Meknès/2024_Meknes_FSJES_Meknes_Fiscalite/`) porte les bonnes réponses cochées en rose par la source — c'est la base de ce corrigé, avec justification et calcul de vérification quand la question l'exige.\n\n**1.** C'est le propriétaire d'une partie du capital de la société.\n\n**2.** Cash-flow annuel prévu : **101 830 DH** (réponse retenue par la source). Méthode générale : Cash-flow = Résultat net + Dotations aux amortissements, avec Résultat net = (CA − Charges variables − Charges fixes y compris amortissement − Charges non courantes) × (1 − taux IS). *Notre propre recalcul avec les données telles que transcrites (CA 315 000, CV 40 %, charges fixes 134 100, charges non courantes 5 266, IS 30 %) ne reproduit pas exactement 101 830 DH — vérifie ce calcul avec les données précises de ton cours si tu retravailles cet exercice, la formule ci-dessus reste la bonne méthode.*\n\n**3.** Les éléments incorporels du fonds de commerce.\n\n**4.** Le montant retenu qui sert de base de calcul d'un impôt.\n\n**5.** L'organisation scientifique du travail (Taylor — « the right man on the right place »).\n\n**6.** Bénéfice fiscal 340 000 DH, acomptes déjà versés 24 000 DH → régularisation avant le 1er avril 2027 : la source retient **« paiera un montant total avant le 1er avril 2027 de 61 000 DH »**. *(Le barème exact utilisé par ce cours pour aboutir à 61 000 DH n'est pas certain à 100 % à partir des seules données du QCM — applique le barème IS en vigueur dans ton support de cours pour retrouver ce montant par toi-même.)*\n\n**7.** La retenue à la source non libératoire des produits financiers nets est à réintégrer au résultat comptable (le résultat comptable n'enregistre que le montant net, il faut reconstituer le produit brut imposable).\n\n**8.** Fonds de roulement = Capitaux permanents − Actif immobilisé.\n\n**9.** Un solde créditeur du compte « Banque » signifie que la société est dans une situation de découvert bancaire (le compte « Banque » est tenu en miroir : un solde créditeur côté entreprise = la banque doit de l'argent à... non, l'entreprise est débitrice envers la banque, d'où le découvert).\n\n**10.** L'ordre de liquidité croissante (les postes de l'actif sont classés du moins liquide — immobilisations — au plus liquide — trésorerie).\n\n**11.** Intervenir sur le marché primaire (souscription = achat d'actions nouvellement émises).\n\n**12.** Intérêts nets perçus = 16 000 DH (net d'une retenue à la source non libératoire de 20 %). Montant brut = 16 000 / (1 − 0,20) = 20 000 DH → retenue déjà prélevée = 4 000 DH. **Réintégration de 4 000 DH** (pour reconstituer le produit financier brut imposable ; la retenue constitue ensuite un crédit d'impôt imputable sur l'IS).\n\n**13.** Résultat fiscal = Résultat comptable + réintégrations fiscales − déductions fiscales.\n\n**14.** Les intérêts nets d'un compte bloqué (déjà taxés via la retenue à la source spécifique, non réintégrés dans l'assiette IS de droit commun une fois le complément de 20 % réintégré — cf. Q12).\n\n**15.** Les droits de propriété (principe fondateur de la finance participative : partage du risque et de la propriété, pas de rémunération fixe garantie assimilable à un intérêt).\n\n**16.** Le prorata de déduction est de 64,28 % (réponse retenue par la source, à partir de la répartition 25 % hors champ / 15 % exonéré sans droit à déduction / 20 % exonéré avec droit à déduction / 40 % taxable).\n\n**17.** CCA de 205 000 DH rémunéré à 13 %, taux plafond fiscalement déductible 7 %, capital entièrement libéré (condition remplie).\nIntérêts comptabilisés = 205 000 × 13 % = 26 650 DH.\nIntérêts déductibles (plafond) = 205 000 × 7 % = 14 350 DH.\n**Montant à réintégrer = 26 650 − 14 350 = 12 300 DH.** ✓ (cohérent avec le calcul direct)\n\n**18.** La TVA facturée constitue une dette du vendeur envers l'État (il la collecte pour le compte du Trésor).\n\n**19.** Les récoltes de pommes conditionnées en emballages carton (sans transformation) sont hors champ d'application de la TVA — un simple conditionnement ne constitue pas une transformation industrielle.\n\n**20.** Le terme de finance ne s'applique pas à « la recherche de l'investissement » au sens strict (la finance porte sur la recherche de financement/l'organisation des flux financiers, l'investissement lui-même relevant de la décision économique, pas de la fonction finance en tant que telle).\n"
+    "corrige_md": "> Ce sujet est un QCM. Le scan source (`public/images/Meknès/2024_Meknes_FSJES_Meknes_Fiscalite/`) porte les bonnes réponses cochées en rose par la source — c'est la base de ce corrigé, avec justification et calcul de vérification quand la question l'exige.\n\n**1.** C'est le propriétaire d'une partie du capital de la société.\n\n**2.** Cash-flow annuel prévu : **101 830 DH** (réponse retenue par la source). Méthode générale : Cash-flow = Résultat net + Dotations aux amortissements, avec Résultat net = (CA − Charges variables − Charges fixes y compris amortissement − Charges non courantes) × (1 − taux IS). *Notre propre recalcul avec les données telles que transcrites (CA 315 000, CV 40 %, charges fixes 134 100, charges non courantes 5 266, IS 30 %) ne reproduit pas exactement 101 830 DH — vérifie ce calcul avec les données précises de ton cours si tu retravailles cet exercice, la formule ci-dessus reste la bonne méthode.*\n\n**3.** Les éléments incorporels du fonds de commerce.\n\n**4.** Le montant retenu qui sert de base de calcul d'un impôt.\n\n**5.** L'organisation scientifique du travail (Taylor — « the right man on the right place »).\n\n**6.** Bénéfice fiscal 340 000 DH, acomptes déjà versés 24 000 DH → régularisation avant le 1er avril 2027 : la source retient **« paiera un montant total avant le 1er avril 2027 de 61 000 DH »**. *(Le barème exact utilisé par ce cours pour aboutir à 61 000 DH n'est pas certain à 100 % à partir des seules données du QCM — applique le barème IS en vigueur dans ton support de cours pour retrouver ce montant par toi-même.)*\n\n**7.** La retenue à la source non libératoire des produits financiers nets est à réintégrer au résultat comptable (le résultat comptable n'enregistre que le montant net, il faut reconstituer le produit brut imposable).\n\n**8.** Fonds de roulement = Capitaux permanents − Actif immobilisé.\n\n**9.** Un solde créditeur du compte « Banque » signifie que la société est dans une situation de découvert bancaire (le compte « Banque » est tenu en miroir : un solde créditeur côté entreprise = la banque doit de l'argent à... non, l'entreprise est débitrice envers la banque, d'où le découvert).\n\n**10.** L'ordre de liquidité croissante (les postes de l'actif sont classés du moins liquide — immobilisations — au plus liquide — trésorerie).\n\n**11.** Intervenir sur le marché primaire (souscription = achat d'actions nouvellement émises).\n\n**12.** Intérêts nets perçus = 16 000 DH (net d'une retenue à la source non libératoire de 20 %). Montant brut = 16 000 / (1 − 0,20) = 20 000 DH → retenue déjà prélevée = 4 000 DH. **Réintégration de 4 000 DH** (pour reconstituer le produit financier brut imposable ; la retenue constitue ensuite un crédit d'impôt imputable sur l'IS).\n\n**13.** Résultat fiscal = Résultat comptable + réintégrations fiscales − déductions fiscales.\n\n**14.** Les intérêts nets d'un compte bloqué (déjà taxés via la retenue à la source spécifique, non réintégrés dans l'assiette IS de droit commun une fois le complément de 20 % réintégré — cf. Q12).\n\n**15.** Les droits de propriété (principe fondateur de la finance participative : partage du risque et de la propriété, pas de rémunération fixe garantie assimilable à un intérêt).\n\n**16.** Le prorata de déduction est de 64,28 % (réponse retenue par la source, à partir de la répartition 25 % hors champ / 15 % exonéré sans droit à déduction / 20 % exonéré avec droit à déduction / 40 % taxable).\n\n**17.** CCA de 205 000 DH rémunéré à 13 %, taux plafond fiscalement déductible 7 %, capital entièrement libéré (condition remplie).\nIntérêts comptabilisés = 205 000 × 13 % = 26 650 DH.\nIntérêts déductibles (plafond) = 205 000 × 7 % = 14 350 DH.\n**Montant à réintégrer = 26 650 − 14 350 = 12 300 DH.** ✓ (cohérent avec le calcul direct)\n\n**18.** La TVA facturée constitue une dette du vendeur envers l'État (il la collecte pour le compte du Trésor).\n\n**19.** Les récoltes de pommes conditionnées en emballages carton (sans transformation) sont hors champ d'application de la TVA — un simple conditionnement ne constitue pas une transformation industrielle.\n\n**20.** Le terme de finance ne s'applique pas à « la recherche de l'investissement » au sens strict (la finance porte sur la recherche de financement/l'organisation des flux financiers, l'investissement lui-même relevant de la décision économique, pas de la fonction finance en tant que telle).\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Mohammedia_FSJES_CCA",
     "annee": "2024",
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité Contrôle Audit (CCA)",
     "modules": [
       "Comptabilité Générale",
@@ -1404,14 +1464,15 @@
       "images/Mohammedia/2024_Mohammedia_FSJES_CCA/2024_Mohammedia_FSJES_CCA_p1.png",
       "images/Mohammedia/2024_Mohammedia_FSJES_CCA/2024_Mohammedia_FSJES_CCA_p2.png"
     ],
-    "corrige_md": "## Exercice 1 — Comptabilité générale (bilan d'ouverture, M. YAHYA)\n\n**1. Détermination du capital**\n\nTotal de l'actif (tout ce que M. YAHYA possède) :\n\n| Poste | Montant |\n|---|---|\n| Brevet | 2 000 000 |\n| Terrain | 4 000 000 |\n| Machines industrielles | 2 000 000 |\n| Installations industrielles | 1 000 000 |\n| Locaux | 4 000 000 |\n| Aménagements intérieurs | 400 000 |\n| Véhicules | 1 000 000 |\n| Prêt (18 mois — immobilisation financière) | 1 000 000 |\n| Mobilier de bureau et matériel informatique | 800 000 |\n| Stock de matières premières | 4 000 000 |\n| Stock de produits finis | 8 000 000 |\n| Clients | 2 000 000 |\n| Banque | 1 000 000 |\n| Caisse | 100 000 |\n| **Total Actif** | **31 300 000** |\n\nTotal du passif hors capital (tout ce que M. YAHYA doit, plus les postes de capitaux propres autres que le capital) :\n\n| Poste | Montant |\n|---|---|\n| Subvention d'investissement reçue de l'État | 800 000 |\n| Réserves | 800 000 |\n| Provisions pour amortissements dérogatoires | 900 000 |\n| Emprunt obligataire (50 000 × 100 DH) | 5 000 000 |\n| Dettes bancaires | 4 500 000 |\n| Fournisseurs (dont 500 000 fournisseurs d'immobilisations) | 1 500 000 |\n| Taxes dues à l'État | 800 000 |\n| Cotisations à la sécurité sociale | 300 000 |\n| Découvert bancaire (trésorerie passif) | 600 000 |\n| **Total passif hors capital** | **15 200 000** |\n\n**Capital = Total Actif − Total passif hors capital = 31 300 000 − 15 200 000 = 15 200 000... soit 16 100 000 DH**\n\n**2. Bilan au 01/01/2023**\n\n| ACTIF | Montant | PASSIF | Montant |\n|---|---|---|---|\n| Brevet | 2 000 000 | Capital | 16 100 000 |\n| Terrain | 4 000 000 | Réserves | 800 000 |\n| Machines industrielles | 2 000 000 | Subventions d'investissement | 800 000 |\n| Installations industrielles | 1 000 000 | Provisions pour amort. dérogatoires | 900 000 |\n| Locaux | 4 000 000 | Emprunts obligataires | 5 000 000 |\n| Aménagements intérieurs | 400 000 | Dettes de financement (banque) | 4 500 000 |\n| Véhicules | 1 000 000 | Fournisseurs | 1 500 000 |\n| Prêts (immo. financière) | 1 000 000 | État, taxes à payer | 800 000 |\n| Mobilier et matériel informatique | 800 000 | Organismes sociaux | 300 000 |\n| Stock matières premières | 4 000 000 | Trésorerie passif (découvert) | 600 000 |\n| Stock produits finis | 8 000 000 | | |\n| Clients | 2 000 000 | | |\n| Banque | 1 000 000 | | |\n| Caisse | 100 000 | | |\n| **Total** | **31 300 000** | **Total** | **31 300 000** |\n\n---\n\n## Exercice 2 — Comptabilité analytique (Bagagerie & Fils)\n\n**1. Répartition secondaire** (Logistique et Études se cèdent mutuellement des charges — prestations réciproques, à résoudre par un système à deux inconnues) :\n\nSoit L le total de Logistique après réception de la part d'Études, E le total d'Études après réception de la part de Logistique :\n- L = 151 900 + 20 % × E\n- E = 280 000 + 5 % × L\n\n⇒ **L = 210 000** et **E = 290 500**\n\nRépartition vers les centres principaux :\n\n| Centre principal | Part de L (hors 5 % vers Études) | Part de E (hors 20 % vers Logistique) | Totaux primaires | **Total après répartition secondaire** |\n|---|---|---|---|---|\n| Achats | 15 % × 210 000 = 31 500 | 20 % × 290 500 = 58 100 | 220 000 | **309 600** |\n| Découpe | 15 % × 210 000 = 31 500 | 20 % × 290 500 = 58 100 | 300 000 | **389 600** |\n| Assemblage | 40 % × 210 000 = 84 000 | 20 % × 290 500 = 58 100 | 440 000 | **582 100** |\n| Distribution | 25 % × 210 000 = 52 500 | 20 % × 290 500 = 58 100 | 120 000 | **230 600** |\n\n*(Vérification : 309 600 + 389 600 + 582 100 + 230 600 = 1 511 900 = somme de tous les totaux primaires, y compris les centres auxiliaires — la répartition est équilibrée.)*\n\n> Les 100 000 DH de charges supplétives et les 170 000 DH de dépréciations non incorporées, mentionnés dans l'énoncé, sont des **différences d'incorporation** : ils expliquent l'écart entre le total des charges de la comptabilité analytique ci-dessus et celui de la comptabilité générale, mais n'entrent pas dans le calcul des coûts analytiques eux-mêmes (déjà donnés via les « totaux primaires »).\n\n**2. Coûts unitaires des unités d'œuvre**\n\n- **Achats** (UO = m de tissu acheté) : 7 000 m achetés (5 000 + 2 000) → 309 600 / 7 000 = **44,23 DH/m**\n- **Découpe** (UO = heure de MOD) : 100 h (valises) + 180 h (sacs à dos) = 280 h → 389 600 / 280 = **1 391,43 DH/h**\n- **Assemblage** (UO = m de tissu assemblé) : voir question 3 pour la quantité (6 570 m) → 582 100 / 6 570 = **88,60 DH/m**\n- **Distribution** (UO = 1 000 DH de CA HT) : non calculable avec les données disponibles (voir note en fin de corrigé).\n\n**3. Coût d'achat du tissu**\n\n| | Quantité | Prix d'achat | Charges indirectes (centre Achats) | Coût d'achat total |\n|---|---|---|---|---|\n| Février | 5 000 m | 150 000 | | |\n| Mars | 2 000 m | 80 000 | | |\n| **Total** | **7 000 m** | **230 000** | **309 600** | **539 600** |\n\n**Coût d'achat unitaire = 539 600 / 7 000 ≈ 77,09 DH/m**\n\n**4. Compte de stock de tissu (CUMP)**\n\n| Entrées | Quantité | Valeur |\n|---|---|---|\n| Stock initial | 400 m | 12 000 |\n| Achats (coût d'achat total) | 7 000 m | 539 600 |\n| **Total entrées** | **7 400 m** | **551 600** |\n\n**CUMP = 551 600 / 7 400 ≈ 74,54 DH/m**\n\n- Sortie pour consommation : 7 300 m × 74,54 ≈ **544 146 DH**\n- Perte de 10 % à la découpe : 7 300 × 10 % = 730 m de déchets, revendus à 5 DH/m → produit de la vente des déchets = **3 650 DH**, à déduire du coût matière.\n- **Tissu net incorporé dans les produits finis : 7 300 − 730 = 6 570 m**\n- **Coût matière net = 544 146 − 3 650 ≈ 540 496 DH**\n- Stock final théorique = 7 400 − 7 300 = **100 m** (valeur ≈ 7 454 DH), mais l'inventaire physique réel indique **150 m** : écart de **+ 50 m (boni d'inventaire)**, soit environ 3 727 DH à régulariser en produit (ou en diminution des charges de la période).\n\n**5. Coûts de production, coût de revient et résultats analytiques**\n\nÉléments calculables en agrégat (production totale, valises + sacs à dos confondus) :\n\n| Élément | Montant |\n|---|---|\n| Coût matière (net des déchets) | 540 496 |\n| MOD Découpe (100 h × 37,5 + 180 h × 35) | 10 050 |\n| Charges indirectes Découpe | 389 600 |\n| MOD Assemblage (119 h × 37,5 + 1 791 h × 37,5) | 71 625 |\n| Charges indirectes Assemblage | 582 100 |\n| **Coût de production total (agrégat)** | **≈ 1 593 871 DH** |\n\n> ⚠️ **Limite des données disponibles.** L'énoncé donne les heures de MOD *par produit* (ce qui permet en théorie de répartir les coûts de Découpe et d'Assemblage entre valises et sacs à dos), mais **ne donne pas la quantité de tissu consommée par valise et par sac à dos** individuellement — seul le total (7 300 m pour 657 valises + 5 913 sacs) est fourni. Sans cette donnée (ou un poids/une surface de tissu standard par produit), il n'est pas possible de répartir le coût matière, ni donc le coût de production, le coût hors production (incluant la Distribution, qui elle-même dépend du CA HT — donc du prix de vente, donc du coût de production par produit), le coût de revient, ni les résultats analytiques élémentaires par produit, sans supposer arbitrairement une clé de répartition non fournie par l'énoncé. Si tu as cette donnée dans ton propre support de cours (ex. « 1 valise = X m de tissu, 1 sac = Y m »), les formules ci-dessus (coûts unitaires des UO, CUMP, coût d'achat) restent valables et permettent de terminer le calcul.\n\n---\n\n## Notions à expliquer\n\n- **Fonds de roulement (FR)** : différence entre les capitaux permanents (capitaux propres + dettes de financement) et l'actif immobilisé net. Il mesure la marge de sécurité financière à long terme de l'entreprise.\n- **Besoin en fonds de roulement (BFR)** : différence entre l'actif circulant (hors trésorerie) et le passif circulant (hors trésorerie). Il représente le besoin de financement généré par le cycle d'exploitation (stocks + créances clients − dettes fournisseurs, essentiellement).\n- **Amortissement dérogatoire** : différence entre l'amortissement fiscal (dégressif, accéléré) et l'amortissement économique (linéaire), constatée en provision réglementée lorsque le fiscal excède l'économique. C'est un outil d'optimisation fiscale, sans lien avec la dépréciation réelle du bien.\n- **Valeur ajoutée** : richesse créée par l'entreprise dans son activité = production de l'exercice + marge commerciale − consommations en provenance de tiers (achats et charges externes).\n- **Rentabilité économique** : capacité de l'ensemble des capitaux investis (capitaux propres + dettes) à générer un résultat d'exploitation, indépendamment du mode de financement. Rentabilité économique = Résultat d'exploitation / Actif économique.\n- **Rentabilité financière** : capacité des seuls capitaux propres à générer un résultat net. Rentabilité financière = Résultat net / Capitaux propres. Elle intègre l'effet de levier de l'endettement.\n- **Autofinancement** : ressources internes dégagées par l'entreprise sur un exercice pour financer son développement, sans recourir à des financements externes = Capacité d'autofinancement (CAF) − dividendes distribués.\n"
+    "corrige_md": "## Exercice 1 — Comptabilité générale (bilan d'ouverture, M. YAHYA)\n\n**1. Détermination du capital**\n\nTotal de l'actif (tout ce que M. YAHYA possède) :\n\n| Poste | Montant |\n|---|---|\n| Brevet | 2 000 000 |\n| Terrain | 4 000 000 |\n| Machines industrielles | 2 000 000 |\n| Installations industrielles | 1 000 000 |\n| Locaux | 4 000 000 |\n| Aménagements intérieurs | 400 000 |\n| Véhicules | 1 000 000 |\n| Prêt (18 mois — immobilisation financière) | 1 000 000 |\n| Mobilier de bureau et matériel informatique | 800 000 |\n| Stock de matières premières | 4 000 000 |\n| Stock de produits finis | 8 000 000 |\n| Clients | 2 000 000 |\n| Banque | 1 000 000 |\n| Caisse | 100 000 |\n| **Total Actif** | **31 300 000** |\n\nTotal du passif hors capital (tout ce que M. YAHYA doit, plus les postes de capitaux propres autres que le capital) :\n\n| Poste | Montant |\n|---|---|\n| Subvention d'investissement reçue de l'État | 800 000 |\n| Réserves | 800 000 |\n| Provisions pour amortissements dérogatoires | 900 000 |\n| Emprunt obligataire (50 000 × 100 DH) | 5 000 000 |\n| Dettes bancaires | 4 500 000 |\n| Fournisseurs (dont 500 000 fournisseurs d'immobilisations) | 1 500 000 |\n| Taxes dues à l'État | 800 000 |\n| Cotisations à la sécurité sociale | 300 000 |\n| Découvert bancaire (trésorerie passif) | 600 000 |\n| **Total passif hors capital** | **15 200 000** |\n\n**Capital = Total Actif − Total passif hors capital = 31 300 000 − 15 200 000 = 15 200 000... soit 16 100 000 DH**\n\n**2. Bilan au 01/01/2023**\n\n| ACTIF | Montant | PASSIF | Montant |\n|---|---|---|---|\n| Brevet | 2 000 000 | Capital | 16 100 000 |\n| Terrain | 4 000 000 | Réserves | 800 000 |\n| Machines industrielles | 2 000 000 | Subventions d'investissement | 800 000 |\n| Installations industrielles | 1 000 000 | Provisions pour amort. dérogatoires | 900 000 |\n| Locaux | 4 000 000 | Emprunts obligataires | 5 000 000 |\n| Aménagements intérieurs | 400 000 | Dettes de financement (banque) | 4 500 000 |\n| Véhicules | 1 000 000 | Fournisseurs | 1 500 000 |\n| Prêts (immo. financière) | 1 000 000 | État, taxes à payer | 800 000 |\n| Mobilier et matériel informatique | 800 000 | Organismes sociaux | 300 000 |\n| Stock matières premières | 4 000 000 | Trésorerie passif (découvert) | 600 000 |\n| Stock produits finis | 8 000 000 | | |\n| Clients | 2 000 000 | | |\n| Banque | 1 000 000 | | |\n| Caisse | 100 000 | | |\n| **Total** | **31 300 000** | **Total** | **31 300 000** |\n\n---\n\n## Exercice 2 — Comptabilité analytique (Bagagerie & Fils)\n\n**1. Répartition secondaire** (Logistique et Études se cèdent mutuellement des charges — prestations réciproques, à résoudre par un système à deux inconnues) :\n\nSoit L le total de Logistique après réception de la part d'Études, E le total d'Études après réception de la part de Logistique :\n- L = 151 900 + 20 % × E\n- E = 280 000 + 5 % × L\n\n⇒ **L = 210 000** et **E = 290 500**\n\nRépartition vers les centres principaux :\n\n| Centre principal | Part de L (hors 5 % vers Études) | Part de E (hors 20 % vers Logistique) | Totaux primaires | **Total après répartition secondaire** |\n|---|---|---|---|---|\n| Achats | 15 % × 210 000 = 31 500 | 20 % × 290 500 = 58 100 | 220 000 | **309 600** |\n| Découpe | 15 % × 210 000 = 31 500 | 20 % × 290 500 = 58 100 | 300 000 | **389 600** |\n| Assemblage | 40 % × 210 000 = 84 000 | 20 % × 290 500 = 58 100 | 440 000 | **582 100** |\n| Distribution | 25 % × 210 000 = 52 500 | 20 % × 290 500 = 58 100 | 120 000 | **230 600** |\n\n*(Vérification : 309 600 + 389 600 + 582 100 + 230 600 = 1 511 900 = somme de tous les totaux primaires, y compris les centres auxiliaires — la répartition est équilibrée.)*\n\n> Les 100 000 DH de charges supplétives et les 170 000 DH de dépréciations non incorporées, mentionnés dans l'énoncé, sont des **différences d'incorporation** : ils expliquent l'écart entre le total des charges de la comptabilité analytique ci-dessus et celui de la comptabilité générale, mais n'entrent pas dans le calcul des coûts analytiques eux-mêmes (déjà donnés via les « totaux primaires »).\n\n**2. Coûts unitaires des unités d'œuvre**\n\n- **Achats** (UO = m de tissu acheté) : 7 000 m achetés (5 000 + 2 000) → 309 600 / 7 000 = **44,23 DH/m**\n- **Découpe** (UO = heure de MOD) : 100 h (valises) + 180 h (sacs à dos) = 280 h → 389 600 / 280 = **1 391,43 DH/h**\n- **Assemblage** (UO = m de tissu assemblé) : voir question 3 pour la quantité (6 570 m) → 582 100 / 6 570 = **88,60 DH/m**\n- **Distribution** (UO = 1 000 DH de CA HT) : non calculable avec les données disponibles (voir note en fin de corrigé).\n\n**3. Coût d'achat du tissu**\n\n| | Quantité | Prix d'achat | Charges indirectes (centre Achats) | Coût d'achat total |\n|---|---|---|---|---|\n| Février | 5 000 m | 150 000 | | |\n| Mars | 2 000 m | 80 000 | | |\n| **Total** | **7 000 m** | **230 000** | **309 600** | **539 600** |\n\n**Coût d'achat unitaire = 539 600 / 7 000 ≈ 77,09 DH/m**\n\n**4. Compte de stock de tissu (CUMP)**\n\n| Entrées | Quantité | Valeur |\n|---|---|---|\n| Stock initial | 400 m | 12 000 |\n| Achats (coût d'achat total) | 7 000 m | 539 600 |\n| **Total entrées** | **7 400 m** | **551 600** |\n\n**CUMP = 551 600 / 7 400 ≈ 74,54 DH/m**\n\n- Sortie pour consommation : 7 300 m × 74,54 ≈ **544 146 DH**\n- Perte de 10 % à la découpe : 7 300 × 10 % = 730 m de déchets, revendus à 5 DH/m → produit de la vente des déchets = **3 650 DH**, à déduire du coût matière.\n- **Tissu net incorporé dans les produits finis : 7 300 − 730 = 6 570 m**\n- **Coût matière net = 544 146 − 3 650 ≈ 540 496 DH**\n- Stock final théorique = 7 400 − 7 300 = **100 m** (valeur ≈ 7 454 DH), mais l'inventaire physique réel indique **150 m** : écart de **+ 50 m (boni d'inventaire)**, soit environ 3 727 DH à régulariser en produit (ou en diminution des charges de la période).\n\n**5. Coûts de production, coût de revient et résultats analytiques**\n\nÉléments calculables en agrégat (production totale, valises + sacs à dos confondus) :\n\n| Élément | Montant |\n|---|---|\n| Coût matière (net des déchets) | 540 496 |\n| MOD Découpe (100 h × 37,5 + 180 h × 35) | 10 050 |\n| Charges indirectes Découpe | 389 600 |\n| MOD Assemblage (119 h × 37,5 + 1 791 h × 37,5) | 71 625 |\n| Charges indirectes Assemblage | 582 100 |\n| **Coût de production total (agrégat)** | **≈ 1 593 871 DH** |\n\n> ⚠️ **Limite des données disponibles.** L'énoncé donne les heures de MOD *par produit* (ce qui permet en théorie de répartir les coûts de Découpe et d'Assemblage entre valises et sacs à dos), mais **ne donne pas la quantité de tissu consommée par valise et par sac à dos** individuellement — seul le total (7 300 m pour 657 valises + 5 913 sacs) est fourni. Sans cette donnée (ou un poids/une surface de tissu standard par produit), il n'est pas possible de répartir le coût matière, ni donc le coût de production, le coût hors production (incluant la Distribution, qui elle-même dépend du CA HT — donc du prix de vente, donc du coût de production par produit), le coût de revient, ni les résultats analytiques élémentaires par produit, sans supposer arbitrairement une clé de répartition non fournie par l'énoncé. Si tu as cette donnée dans ton propre support de cours (ex. « 1 valise = X m de tissu, 1 sac = Y m »), les formules ci-dessus (coûts unitaires des UO, CUMP, coût d'achat) restent valables et permettent de terminer le calcul.\n\n---\n\n## Notions à expliquer\n\n- **Fonds de roulement (FR)** : différence entre les capitaux permanents (capitaux propres + dettes de financement) et l'actif immobilisé net. Il mesure la marge de sécurité financière à long terme de l'entreprise.\n- **Besoin en fonds de roulement (BFR)** : différence entre l'actif circulant (hors trésorerie) et le passif circulant (hors trésorerie). Il représente le besoin de financement généré par le cycle d'exploitation (stocks + créances clients − dettes fournisseurs, essentiellement).\n- **Amortissement dérogatoire** : différence entre l'amortissement fiscal (dégressif, accéléré) et l'amortissement économique (linéaire), constatée en provision réglementée lorsque le fiscal excède l'économique. C'est un outil d'optimisation fiscale, sans lien avec la dépréciation réelle du bien.\n- **Valeur ajoutée** : richesse créée par l'entreprise dans son activité = production de l'exercice + marge commerciale − consommations en provenance de tiers (achats et charges externes).\n- **Rentabilité économique** : capacité de l'ensemble des capitaux investis (capitaux propres + dettes) à générer un résultat d'exploitation, indépendamment du mode de financement. Rentabilité économique = Résultat d'exploitation / Actif économique.\n- **Rentabilité financière** : capacité des seuls capitaux propres à générer un résultat net. Rentabilité financière = Résultat net / Capitaux propres. Elle intègre l'effet de levier de l'endettement.\n- **Autofinancement** : ressources internes dégagées par l'entreprise sur un exercice pour financer son développement, sans recourir à des financements externes = Capacité d'autofinancement (CAF) − dividendes distribués.\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Rabat_FSJESAgdal_GFCF",
     "annee": "2024",
     "ville": "Rabat",
     "etablissement": "FSJES Agdal",
-    "filiere": "Master GFCF",
+    "filiere": "Fiscalité & Gestion Financière",
     "master_reel": "Gestion Financière Comptable et Fiscale (GFCF)",
     "modules": [
       "Analyse Financière",
@@ -1438,14 +1499,15 @@
       "images/Rabat/2024_Rabat_FSJESAgdal_GFCF/2024_Rabat_FSJESAgdal_GFCF_p7.png",
       "images/Rabat/2024_Rabat_FSJESAgdal_GFCF/2024_Rabat_FSJESAgdal_GFCF_p8.png"
     ],
-    "corrige_md": "> QCM de 90 questions, une seule réponse correcte par question, barème +1/-1/0. Seules les 20 premières questions (page 1-2) portent des réponses cerclées sur le scan source (`public/images/Rabat/2024_Rabat_FSJESAgdal_GFCF/`) ; au-delà, tout est raisonné (finance, comptabilité CGNC, contrôle de gestion, économie, statistiques, culture générale, management), sans clé externe à vérifier — logique déjà annoncée en début de session pour les sujets sans annotations. Justifications volontairement courtes vu le volume.\n\n1. **b.** Maximiser la richesse des actionnaires (objectif de la politique de dividende).\n2. **b.** VAN = différence entre flux de trésorerie actualisés et investissement initial.\n3. *(Réponse cerclée sur le scan : d, « Le prix de vente moins la marge bénéficiaire » — algébriquement équivalent si marge = PV − coût de revient, mais la définition académique directe est plutôt **c. Le coût total de production et de distribution d'un produit**.)*\n4. **c.** Non affectées directement à un produit (charges indirectes).\n5. **a.** Les coûts fixes et variables ainsi que le chiffre d'affaires (seuil de rentabilité).\n6. **b.** Une unité où les coûts sont rassemblés et analysés (centre de coûts).\n7. **b.** Répartir les coûts fixes et variables sur les produits (méthode des coûts complets).\n8. **a.** Vérifier les écarts entre coûts prévisionnels et coûts réels (contrôle budgétaire).\n9. **b.** Des fonds propres externes (augmentation de capital).\n10. **a.** La réalisation des phases de conception, d'étude technique et d'étude financière.\n11. **c.** Les intérêts de la dette sont déductibles fiscalement (avantage du financement par dette).\n12. **a.** Rating Kettering (n'est pas une agence de notation réelle).\n13. **d.** Réponse b) et c) (bêta mesure la sensibilité au risque de marché).\n14. **c.** Les dividendes progressent sur un horizon infini (modèle de Gordon-Shapiro).\n15. *(Réponse cerclée sur le scan : b, « au coût d'endettement ». La règle standard en finance d'entreprise est plutôt **a. au coût des capitaux investis** (CMPC/WACC) — à vérifier.)*\n16. **d.** Les réponses b et c (méthode probabiliste et arbre de décision).\n17. Marge brute = 500 000 − 300 000 = **a. 200 000** *(calcul vérifié).*\n18. **a.** Contrôler les accords commerciaux et les délais de paiement (gestion du poste clients).\n19. **c.** Obtenir un financement rapide contre cession de créances clients (affacturage).\n20. **a.** Préserver le contrôle des actionnaires majoritaires (DPS lors d'une augmentation de capital).\n21. **b.** La capacité de remboursement des emprunts (solvabilité générale).\n22. **b.** D'une entreprise non endettée augmentée de l'économie d'impôt sur l'endettement (Modigliani-Miller avec impôts).\n23. **c.** Le taux d'intérêt fixé par la banque centrale pour les prêts aux banques (taux directeur).\n24. **b.** Sont des produits de couverture contre le risque (produits dérivés).\n25. *(Réponse cerclée sur le scan : b, « Garantir un rendement élevé » — aucun fonds ne peut garantir un rendement. La réponse standard est **a. Réduire le risque en diversifiant les investissements**.)*\n26. **d.** Le risque de perte en capital (risque principal de l'investissement en bourse).\n27. **b.** Un ordre exécuté uniquement si le cours atteint un niveau prédéfini (ordre limite).\n28. **b.** En accordant des crédits (création monétaire bancaire).\n29. **d.** Le risque qu'un événement affecte l'ensemble du système financier (risque systémique).\n30. **b.** Consommation-revenu (courbe d'Engel).\n31. **b.** J-B. Say (loi des débouchés).\n32. **b.** DAMAS (n'est pas une ville marocaine).\n33. **c.** REINE ELISABETH 2 (n'est pas/n'était pas présidente d'un pays).\n34. 0,5 % × 62 000 000 = **b. 310 000** *(calcul vérifié).*\n35. (19,9 − 14,85) / 14,85 ≈ **c. 34 %** *(calcul vérifié).*\n36. **c.** Coefficient de corrélation (relation entre deux variables statistiques).\n37. **d.** Aucune parmi les réponses citées ne convient (la partie double n'est ni un principe CGNC, ni spécifique au Maroc, ni une technique d'audit).\n38. **a.** Leur date de facturation (séparation des exercices, enregistrement des marchandises).\n39. **a.** Le principe de prudence (régularisation des stocks).\n40. **c.** Les droits d'enregistrement (frais d'acquisition inscrits en non-valeurs).\n41. **c.** Les créances de l'actif immobilisé (avances sur acquisition d'immobilisations).\n42. **b.** Les machines de fabrication (amortissement dégressif).\n43. **a.** L'amortissement linéaire est supérieur à l'amortissement dégressif (débit du compte d'amortissement dérogatoire, reprise en fin de vie du bien).\n44. **a.** Les postes 711 et 712 (composantes du chiffre d'affaires).\n45. **c.** Pour toute l'année sans prorata temporis (1ère annuité des non-valeurs, règle spécifique CGNC).\n46. **b.** Un compte de passif circulant (billet de fonds créditeur).\n47. **d.** Aucune parmi les réponses citées ne convient (la règle d'intangibilité concerne le bilan d'ouverture, pas le CPC/tableau de financement/ESG).\n48. **c.** Les marchandises livrées non encore facturées (charge à rattacher — factures non parvenues).\n49. **d.** Aucune parmi les réponses citées ne convient (actifs fictifs = non-valeurs, catégorie distincte).\n50. **c.** La réception de ces 300 kg de marchandises (fait générateur de l'enregistrement comptable).\n51. **b.** Sur une durée de 3 à 5 ans (amortissement des frais préliminaires).\n52. **a.** Le même système d'amortissement de l'immobilisation subventionnée, sur 5 ans.\n53. **b.** Au cours de l'année (paliers de charges fixes).\n54. **a.** Des charges de la comptabilité générale (charges non incorporables).\n55. **c.** Les deux à la fois — processus et procédures (objet du contrôle de gestion).\n56. **d.** Aucune parmi les réponses citées ne convient (l'IS est classiquement une charge *non* incorporable, absente des options telles quelles).\n57. **a.** Par nature (analyse des charges en contrôle de gestion).\n58. **b.** Plus stratégiques que dans le passé (évolution des outils de contrôle de gestion).\n59. *(Aucune option ne correspond exactement — la marge commerciale est un indicateur propre aux entreprises commerciales/de négoce, absentes des choix proposés.)*\n60. *(Formule imprécise dans les options — la valeur ajoutée standard = Production de l'exercice + Marge commerciale − Consommations de l'exercice ; l'option **a** s'en rapproche le plus mais décrit techniquement la production de l'exercice.)*\n61. **d.** Aucune parmi les réponses citées ne convient (le crédit de TVA est une créance sur l'État, pas une dette ni une charge).\n62. **b.** 30 (taille d'échantillon à partir de laquelle le théorème central limite s'applique usuellement).\n63. **a.** F(−∞) = 0 (propriété universelle d'une fonction de répartition).\n64. **b.** Les capitaux propres comprennent le capital social et les bénéfices non distribués.\n65. **b.** Le ratio entre la valeur de marché et les bénéfices par action (PER).\n66. **c.** Un titre de créance émis par une entreprise ou un État (obligation).\n67. **b.** Taux auquel la VA des flux de trésorerie futurs est égale à l'investissement initial (TRI).\n68. **b.** La facilité qu'un actif peut être converti en espèces sans impact sur son prix (liquidité de marché).\n69. **a.** Coûts fixes / (Prix de vente unitaire − Coût variable unitaire) — seuil de rentabilité en quantité.\n70. **a.** D'identifier la cause des variations entre coûts prévus et réels (analyse des écarts).\n71. **a.** Les actifs circulants par les dettes circulantes (ratio de liquidité générale).\n72. **b.** Divisant le résultat net par le chiffre d'affaires (taux de marge nette).\n73. **b.** La capacité de l'entreprise à financer ses investissements avec ses ressources propres (CAF).\n74. **b.** Le taux de rentabilité des capitaux propres — ROE (rentabilité financière).\n75. **b.** La capacité à générer suffisamment de trésorerie pour rembourser ses dettes (capacité d'endettement).\n76. **b.** Pour comptabiliser les actifs loués comme des immobilisations (retraitement du crédit-bail).\n77. **d.** Neutraliser les impacts des variations de taux de change sur les capitaux propres (écarts de conversion).\n78. **b.** Pour refléter le coût réel de la masse salariale permanente (retraitement des charges de personnel extérieur).\n79. **c.** Produits d'exploitation (transfert de charges liées à l'activité).\n80. **c.** Les dépenses probables liées aux risques futurs (ajustement des provisions).\n81. **d.** Lorsque le BFR est supérieur à zéro mais inférieur au FRNG (situation saine, trésorerie nette positive).\n82. **b.** Ensemble de charges à étaler sur plusieurs exercices (actif immobilisé fictif = non-valeurs).\n83. Somme des 4 notes = 11,5 × 4 = 46 ; 4ème note = 46 − (12+10+13) = **b. 11/20** *(calcul vérifié).*\n84. Somme après 4 devoirs = 14,5 × 4 = 58 ; note nécessaire au 5ème devoir pour une moyenne de 15 sur 5 devoirs = 15×5 − 58 = **d. 17/20** *(calcul vérifié).*\n85. **a.** E. Mayo (père du courant psychosociologique / école des relations humaines).\n86. **c.** H. Simon (théorie de la rationalité limitée).\n87. **c.** V. Pareto (théorie de l'utilité ordinale).\n88. **b.** Le taux d'intérêt est à son niveau minimal (trappe de liquidité).\n89. **a.** F. Quesnay (père des Physiocrates).\n90. **d.** H. Mintzberg (auteur de « Structure et dynamique des organisations »).\n"
+    "corrige_md": "> QCM de 90 questions, une seule réponse correcte par question, barème +1/-1/0. Seules les 20 premières questions (page 1-2) portent des réponses cerclées sur le scan source (`public/images/Rabat/2024_Rabat_FSJESAgdal_GFCF/`) ; au-delà, tout est raisonné (finance, comptabilité CGNC, contrôle de gestion, économie, statistiques, culture générale, management), sans clé externe à vérifier — logique déjà annoncée en début de session pour les sujets sans annotations. Justifications volontairement courtes vu le volume.\n\n1. **b.** Maximiser la richesse des actionnaires (objectif de la politique de dividende).\n2. **b.** VAN = différence entre flux de trésorerie actualisés et investissement initial.\n3. *(Réponse cerclée sur le scan : d, « Le prix de vente moins la marge bénéficiaire » — algébriquement équivalent si marge = PV − coût de revient, mais la définition académique directe est plutôt **c. Le coût total de production et de distribution d'un produit**.)*\n4. **c.** Non affectées directement à un produit (charges indirectes).\n5. **a.** Les coûts fixes et variables ainsi que le chiffre d'affaires (seuil de rentabilité).\n6. **b.** Une unité où les coûts sont rassemblés et analysés (centre de coûts).\n7. **b.** Répartir les coûts fixes et variables sur les produits (méthode des coûts complets).\n8. **a.** Vérifier les écarts entre coûts prévisionnels et coûts réels (contrôle budgétaire).\n9. **b.** Des fonds propres externes (augmentation de capital).\n10. **a.** La réalisation des phases de conception, d'étude technique et d'étude financière.\n11. **c.** Les intérêts de la dette sont déductibles fiscalement (avantage du financement par dette).\n12. **a.** Rating Kettering (n'est pas une agence de notation réelle).\n13. **d.** Réponse b) et c) (bêta mesure la sensibilité au risque de marché).\n14. **c.** Les dividendes progressent sur un horizon infini (modèle de Gordon-Shapiro).\n15. *(Réponse cerclée sur le scan : b, « au coût d'endettement ». La règle standard en finance d'entreprise est plutôt **a. au coût des capitaux investis** (CMPC/WACC) — à vérifier.)*\n16. **d.** Les réponses b et c (méthode probabiliste et arbre de décision).\n17. Marge brute = 500 000 − 300 000 = **a. 200 000** *(calcul vérifié).*\n18. **a.** Contrôler les accords commerciaux et les délais de paiement (gestion du poste clients).\n19. **c.** Obtenir un financement rapide contre cession de créances clients (affacturage).\n20. **a.** Préserver le contrôle des actionnaires majoritaires (DPS lors d'une augmentation de capital).\n21. **b.** La capacité de remboursement des emprunts (solvabilité générale).\n22. **b.** D'une entreprise non endettée augmentée de l'économie d'impôt sur l'endettement (Modigliani-Miller avec impôts).\n23. **c.** Le taux d'intérêt fixé par la banque centrale pour les prêts aux banques (taux directeur).\n24. **b.** Sont des produits de couverture contre le risque (produits dérivés).\n25. *(Réponse cerclée sur le scan : b, « Garantir un rendement élevé » — aucun fonds ne peut garantir un rendement. La réponse standard est **a. Réduire le risque en diversifiant les investissements**.)*\n26. **d.** Le risque de perte en capital (risque principal de l'investissement en bourse).\n27. **b.** Un ordre exécuté uniquement si le cours atteint un niveau prédéfini (ordre limite).\n28. **b.** En accordant des crédits (création monétaire bancaire).\n29. **d.** Le risque qu'un événement affecte l'ensemble du système financier (risque systémique).\n30. **b.** Consommation-revenu (courbe d'Engel).\n31. **b.** J-B. Say (loi des débouchés).\n32. **b.** DAMAS (n'est pas une ville marocaine).\n33. **c.** REINE ELISABETH 2 (n'est pas/n'était pas présidente d'un pays).\n34. 0,5 % × 62 000 000 = **b. 310 000** *(calcul vérifié).*\n35. (19,9 − 14,85) / 14,85 ≈ **c. 34 %** *(calcul vérifié).*\n36. **c.** Coefficient de corrélation (relation entre deux variables statistiques).\n37. **d.** Aucune parmi les réponses citées ne convient (la partie double n'est ni un principe CGNC, ni spécifique au Maroc, ni une technique d'audit).\n38. **a.** Leur date de facturation (séparation des exercices, enregistrement des marchandises).\n39. **a.** Le principe de prudence (régularisation des stocks).\n40. **c.** Les droits d'enregistrement (frais d'acquisition inscrits en non-valeurs).\n41. **c.** Les créances de l'actif immobilisé (avances sur acquisition d'immobilisations).\n42. **b.** Les machines de fabrication (amortissement dégressif).\n43. **a.** L'amortissement linéaire est supérieur à l'amortissement dégressif (débit du compte d'amortissement dérogatoire, reprise en fin de vie du bien).\n44. **a.** Les postes 711 et 712 (composantes du chiffre d'affaires).\n45. **c.** Pour toute l'année sans prorata temporis (1ère annuité des non-valeurs, règle spécifique CGNC).\n46. **b.** Un compte de passif circulant (billet de fonds créditeur).\n47. **d.** Aucune parmi les réponses citées ne convient (la règle d'intangibilité concerne le bilan d'ouverture, pas le CPC/tableau de financement/ESG).\n48. **c.** Les marchandises livrées non encore facturées (charge à rattacher — factures non parvenues).\n49. **d.** Aucune parmi les réponses citées ne convient (actifs fictifs = non-valeurs, catégorie distincte).\n50. **c.** La réception de ces 300 kg de marchandises (fait générateur de l'enregistrement comptable).\n51. **b.** Sur une durée de 3 à 5 ans (amortissement des frais préliminaires).\n52. **a.** Le même système d'amortissement de l'immobilisation subventionnée, sur 5 ans.\n53. **b.** Au cours de l'année (paliers de charges fixes).\n54. **a.** Des charges de la comptabilité générale (charges non incorporables).\n55. **c.** Les deux à la fois — processus et procédures (objet du contrôle de gestion).\n56. **d.** Aucune parmi les réponses citées ne convient (l'IS est classiquement une charge *non* incorporable, absente des options telles quelles).\n57. **a.** Par nature (analyse des charges en contrôle de gestion).\n58. **b.** Plus stratégiques que dans le passé (évolution des outils de contrôle de gestion).\n59. *(Aucune option ne correspond exactement — la marge commerciale est un indicateur propre aux entreprises commerciales/de négoce, absentes des choix proposés.)*\n60. *(Formule imprécise dans les options — la valeur ajoutée standard = Production de l'exercice + Marge commerciale − Consommations de l'exercice ; l'option **a** s'en rapproche le plus mais décrit techniquement la production de l'exercice.)*\n61. **d.** Aucune parmi les réponses citées ne convient (le crédit de TVA est une créance sur l'État, pas une dette ni une charge).\n62. **b.** 30 (taille d'échantillon à partir de laquelle le théorème central limite s'applique usuellement).\n63. **a.** F(−∞) = 0 (propriété universelle d'une fonction de répartition).\n64. **b.** Les capitaux propres comprennent le capital social et les bénéfices non distribués.\n65. **b.** Le ratio entre la valeur de marché et les bénéfices par action (PER).\n66. **c.** Un titre de créance émis par une entreprise ou un État (obligation).\n67. **b.** Taux auquel la VA des flux de trésorerie futurs est égale à l'investissement initial (TRI).\n68. **b.** La facilité qu'un actif peut être converti en espèces sans impact sur son prix (liquidité de marché).\n69. **a.** Coûts fixes / (Prix de vente unitaire − Coût variable unitaire) — seuil de rentabilité en quantité.\n70. **a.** D'identifier la cause des variations entre coûts prévus et réels (analyse des écarts).\n71. **a.** Les actifs circulants par les dettes circulantes (ratio de liquidité générale).\n72. **b.** Divisant le résultat net par le chiffre d'affaires (taux de marge nette).\n73. **b.** La capacité de l'entreprise à financer ses investissements avec ses ressources propres (CAF).\n74. **b.** Le taux de rentabilité des capitaux propres — ROE (rentabilité financière).\n75. **b.** La capacité à générer suffisamment de trésorerie pour rembourser ses dettes (capacité d'endettement).\n76. **b.** Pour comptabiliser les actifs loués comme des immobilisations (retraitement du crédit-bail).\n77. **d.** Neutraliser les impacts des variations de taux de change sur les capitaux propres (écarts de conversion).\n78. **b.** Pour refléter le coût réel de la masse salariale permanente (retraitement des charges de personnel extérieur).\n79. **c.** Produits d'exploitation (transfert de charges liées à l'activité).\n80. **c.** Les dépenses probables liées aux risques futurs (ajustement des provisions).\n81. **d.** Lorsque le BFR est supérieur à zéro mais inférieur au FRNG (situation saine, trésorerie nette positive).\n82. **b.** Ensemble de charges à étaler sur plusieurs exercices (actif immobilisé fictif = non-valeurs).\n83. Somme des 4 notes = 11,5 × 4 = 46 ; 4ème note = 46 − (12+10+13) = **b. 11/20** *(calcul vérifié).*\n84. Somme après 4 devoirs = 14,5 × 4 = 58 ; note nécessaire au 5ème devoir pour une moyenne de 15 sur 5 devoirs = 15×5 − 58 = **d. 17/20** *(calcul vérifié).*\n85. **a.** E. Mayo (père du courant psychosociologique / école des relations humaines).\n86. **c.** H. Simon (théorie de la rationalité limitée).\n87. **c.** V. Pareto (théorie de l'utilité ordinale).\n88. **b.** Le taux d'intérêt est à son niveau minimal (trappe de liquidité).\n89. **a.** F. Quesnay (père des Physiocrates).\n90. **d.** H. Mintzberg (auteur de « Structure et dynamique des organisations »).\n",
+    "categorie": "FCA"
   },
   {
     "id": "2024_Taza_FPTaza_CCA",
     "annee": "2024",
     "ville": "Taza",
     "etablissement": "FP Taza",
-    "filiere": "Master CCA",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Comptabilité, Contrôle, Audit (CCA)",
     "modules": [
       "Comptabilité Analytique",
@@ -1462,14 +1524,15 @@
       "images/Taza/2024_Taza_FPTaza_CCA/2024_Taza_FPTaza_CCA_p3.png",
       "images/Taza/2024_Taza_FPTaza_CCA/2024_Taza_FPTaza_CCA_p4.png"
     ],
-    "corrige_md": "## Sujet général — Le rôle du contrôle interne dans l'amélioration de la performance de l'entreprise\n\n**Définition.** Le contrôle interne est l'ensemble des dispositifs mis en place par une entreprise (organisation, procédures, méthodes) pour maîtriser ses activités, sécuriser ses actifs, fiabiliser l'information financière et assurer la conformité aux lois et règlements.\n\n**Contribution à la performance :**\n\n1. **Fiabilisation de l'information de gestion.** Un contrôle interne solide garantit que les données comptables et analytiques (coûts, marges, résultats) sont exactes et disponibles à temps, ce qui permet des décisions de gestion mieux informées (fixation des prix, arbitrages entre produits, etc.).\n2. **Maîtrise des risques opérationnels.** La séparation des tâches, les procédures d'autorisation et les rapprochements réguliers (stocks, trésorerie) réduisent les erreurs, les fraudes et les pertes — un impact direct sur la rentabilité.\n3. **Optimisation des ressources.** En structurant les processus (achats, production, ventes), le contrôle interne limite les gaspillages et les inefficacités, ce qui améliore la productivité et réduit les coûts.\n4. **Conformité et image de l'entreprise.** Le respect des obligations légales et fiscales évite les sanctions et pénalités, et renforce la confiance des partenaires (banques, actionnaires, clients).\n5. **Aide à la prise de décision stratégique.** En fournissant une vision fiable de la performance par activité ou par produit (via la comptabilité analytique notamment), le contrôle interne éclaire les choix d'investissement et de développement.\n\n**Limites à mentionner :** le contrôle interne a un coût (temps, procédures, personnel dédié) et ne peut offrir qu'une assurance raisonnable, jamais absolue, contre les risques — d'où l'intérêt de le compléter par un audit interne/externe périodique.\n\n---\n\n## Épreuve pratique — SKYGLAS (comptabilité analytique)\n\n> ⚠️ **Le tableau des clés de répartition des charges indirectes, tel que disponible dans le scan source, contient une incohérence qui empêche un calcul fiable.** Par exemple, la ligne « Fournitures consommables » (55 000 DH) affiche des clés de répartition qui, additionnées telles quelles (4 % + 60 % + 16 % + 50 % + 20 % = 150 %), dépassent 100 % — ce qui est impossible pour une répartition directe d'une charge. Cela indique une erreur de transcription/lecture du tableau original (colonnes mal alignées sur la photo disponible) que je ne peux pas corriger avec certitude sans le document source net. **Je préfère te donner la méthode complète plutôt que des chiffres qui pourraient être faux** — reprends les calculs ci-dessous avec le tableau de ta propre copie du sujet.\n\n### Méthode à suivre (question par question)\n\n**1. Tableau de répartition des charges indirectes**\n- Reporter chaque charge par nature dans les centres selon les clés données (pourcentages ou nombre de parts selon la ligne).\n- Pour les centres auxiliaires **Prestations connexes** et **Gestion des moyens**, qui se cèdent mutuellement des charges (répartition croisée, comme un système à deux équations — même principe que dans les corrigés Kénitra/Mohammedia de ce site), poser :\n  `PC = Total primaire PC + part reçue de GM`\n  `GM = Total primaire GM + part reçue de PC`\n  et résoudre le système à deux inconnues.\n- Répartir ensuite PC et GM vers les centres principaux (Approvisionnement, Atelier fusion, Atelier finition, Distribution, Administration générale) selon les clés données.\n- Diviser chaque total de centre principal par son unité d'œuvre (donnée dans le sujet : kg de mélange acheté pour Approvisionnement, m² de verre coulé pour Atelier fusion, heure MOD pour Atelier finition, coût de production des glaces vendues pour Distribution) pour obtenir le coût unitaire — à arrondir au DH inférieur comme demandé.\n\n**2. Coût d'achat des matières premières (CUMP)**\n- Coût d'achat = prix d'achat (25 000 kg × 26,8 DH = 670 000 DH) + charges indirectes du centre Approvisionnement (calculées en 1).\n- CUMP = (Stock initial en valeur + coût d'achat total) / (Stock initial en quantité + quantité achetée), avec SI = 35 000 kg à 30 DH = 1 050 000 DH.\n\n**3. Coût de production du verre coulé (atelier fusion)**\n- Matière consommée : 36 000 kg de mélange, valorisée au CUMP de la question 2.\n- + Main d'œuvre directe fusion : 120 000 DH.\n- + Charges indirectes de l'atelier fusion (coût unitaire × 1 000 m² produits).\n- Diviser par 1 000 m² pour le coût unitaire du verre coulé.\n\n**4. Coûts de production des glaces terminées (types D et E)**\n- Pour chaque type : verre coulé consommé (450 m² pour D, 550 m² pour E) valorisé au coût unitaire trouvé en 3, + MOD finition (1 550 h × taux horaire pour D, 4 450 h pour E — le taux horaire n'est pas donné explicitement dans le texte disponible, à reprendre depuis l'énoncé complet) + charges indirectes de l'atelier finition (coût unitaire × heures).\n- Tenir compte des en-cours (production en cours de début et fin de période, méthode de l'inventaire permanent) pour isoler le coût de la production **terminée** du mois (460 m² pour D, 500 m² pour E).\n\n**5. Coûts de revient et résultats**\n- Coût de revient = coût de production des glaces vendues (sorties de stock au CUMP, stock initial de produits finis donné : D 600 m² à 1 587,5 DH, E 200 m² à 1 977,5 DH) + charges indirectes de Distribution (assiette = coût de production des glaces vendues).\n- Résultat analytique par type = Prix de vente (700 m² × 1 540 DH pour D, 600 m² × 1 710 DH pour E) − Coût de revient correspondant.\n\n**3 (rapprochement).** Résultat de la comptabilité analytique = Σ résultats élémentaires. Résultat de la comptabilité générale = résultat analytique **corrigé** des différences d'incorporation mentionnées dans l'énoncé : retirer les charges non incorporables (21 000 DH de dotations non incorporables), retirer les charges supplétives (rémunération du chef d'entreprise 385 200 DH/an → 32 100 DH/mois ; rémunération des capitaux 10 000 DH/mois), et réintégrer les éléments non courants (produits non courants 6 800 DH, charges non courantes 4 560 DH, perte client 3 577,5 DH classée en charge de distribution).\n\n**4. Interprétation.** À comparer une fois les chiffres obtenus : marge par type de glace, part de chaque centre dans le coût de revient, écart éventuel entre résultat analytique et résultat comptable (qui doit se limiter aux différences d'incorporation identifiées).\n\n**5. Conformité au CGNC.** Le CGNC (Code Général de Normalisation Comptable marocain) n'impose pas de méthode de calcul des coûts particulière pour la comptabilité analytique (elle reste un outil de gestion interne, non obligatoire dans sa forme). Le point à discuter est la cohérence de la méthode des coûts complets utilisée par SKYGLAS avec les principes de rattachement des charges à l'exercice et de distinction charges incorporables/non incorporables, que le CGNC encadre au niveau de la comptabilité générale — la méthode utilisée ici (coûts complets avec centres d'analyse) est une pratique reconnue et compatible, à condition que les retraitements (charges supplétives, non incorporables) soient bien opérés pour le rapprochement avec la comptabilité générale, comme fait en question 3.\n"
+    "corrige_md": "## Sujet général — Le rôle du contrôle interne dans l'amélioration de la performance de l'entreprise\n\n**Définition.** Le contrôle interne est l'ensemble des dispositifs mis en place par une entreprise (organisation, procédures, méthodes) pour maîtriser ses activités, sécuriser ses actifs, fiabiliser l'information financière et assurer la conformité aux lois et règlements.\n\n**Contribution à la performance :**\n\n1. **Fiabilisation de l'information de gestion.** Un contrôle interne solide garantit que les données comptables et analytiques (coûts, marges, résultats) sont exactes et disponibles à temps, ce qui permet des décisions de gestion mieux informées (fixation des prix, arbitrages entre produits, etc.).\n2. **Maîtrise des risques opérationnels.** La séparation des tâches, les procédures d'autorisation et les rapprochements réguliers (stocks, trésorerie) réduisent les erreurs, les fraudes et les pertes — un impact direct sur la rentabilité.\n3. **Optimisation des ressources.** En structurant les processus (achats, production, ventes), le contrôle interne limite les gaspillages et les inefficacités, ce qui améliore la productivité et réduit les coûts.\n4. **Conformité et image de l'entreprise.** Le respect des obligations légales et fiscales évite les sanctions et pénalités, et renforce la confiance des partenaires (banques, actionnaires, clients).\n5. **Aide à la prise de décision stratégique.** En fournissant une vision fiable de la performance par activité ou par produit (via la comptabilité analytique notamment), le contrôle interne éclaire les choix d'investissement et de développement.\n\n**Limites à mentionner :** le contrôle interne a un coût (temps, procédures, personnel dédié) et ne peut offrir qu'une assurance raisonnable, jamais absolue, contre les risques — d'où l'intérêt de le compléter par un audit interne/externe périodique.\n\n---\n\n## Épreuve pratique — SKYGLAS (comptabilité analytique)\n\n> ⚠️ **Le tableau des clés de répartition des charges indirectes, tel que disponible dans le scan source, contient une incohérence qui empêche un calcul fiable.** Par exemple, la ligne « Fournitures consommables » (55 000 DH) affiche des clés de répartition qui, additionnées telles quelles (4 % + 60 % + 16 % + 50 % + 20 % = 150 %), dépassent 100 % — ce qui est impossible pour une répartition directe d'une charge. Cela indique une erreur de transcription/lecture du tableau original (colonnes mal alignées sur la photo disponible) que je ne peux pas corriger avec certitude sans le document source net. **Je préfère te donner la méthode complète plutôt que des chiffres qui pourraient être faux** — reprends les calculs ci-dessous avec le tableau de ta propre copie du sujet.\n\n### Méthode à suivre (question par question)\n\n**1. Tableau de répartition des charges indirectes**\n- Reporter chaque charge par nature dans les centres selon les clés données (pourcentages ou nombre de parts selon la ligne).\n- Pour les centres auxiliaires **Prestations connexes** et **Gestion des moyens**, qui se cèdent mutuellement des charges (répartition croisée, comme un système à deux équations — même principe que dans les corrigés Kénitra/Mohammedia de ce site), poser :\n  `PC = Total primaire PC + part reçue de GM`\n  `GM = Total primaire GM + part reçue de PC`\n  et résoudre le système à deux inconnues.\n- Répartir ensuite PC et GM vers les centres principaux (Approvisionnement, Atelier fusion, Atelier finition, Distribution, Administration générale) selon les clés données.\n- Diviser chaque total de centre principal par son unité d'œuvre (donnée dans le sujet : kg de mélange acheté pour Approvisionnement, m² de verre coulé pour Atelier fusion, heure MOD pour Atelier finition, coût de production des glaces vendues pour Distribution) pour obtenir le coût unitaire — à arrondir au DH inférieur comme demandé.\n\n**2. Coût d'achat des matières premières (CUMP)**\n- Coût d'achat = prix d'achat (25 000 kg × 26,8 DH = 670 000 DH) + charges indirectes du centre Approvisionnement (calculées en 1).\n- CUMP = (Stock initial en valeur + coût d'achat total) / (Stock initial en quantité + quantité achetée), avec SI = 35 000 kg à 30 DH = 1 050 000 DH.\n\n**3. Coût de production du verre coulé (atelier fusion)**\n- Matière consommée : 36 000 kg de mélange, valorisée au CUMP de la question 2.\n- + Main d'œuvre directe fusion : 120 000 DH.\n- + Charges indirectes de l'atelier fusion (coût unitaire × 1 000 m² produits).\n- Diviser par 1 000 m² pour le coût unitaire du verre coulé.\n\n**4. Coûts de production des glaces terminées (types D et E)**\n- Pour chaque type : verre coulé consommé (450 m² pour D, 550 m² pour E) valorisé au coût unitaire trouvé en 3, + MOD finition (1 550 h × taux horaire pour D, 4 450 h pour E — le taux horaire n'est pas donné explicitement dans le texte disponible, à reprendre depuis l'énoncé complet) + charges indirectes de l'atelier finition (coût unitaire × heures).\n- Tenir compte des en-cours (production en cours de début et fin de période, méthode de l'inventaire permanent) pour isoler le coût de la production **terminée** du mois (460 m² pour D, 500 m² pour E).\n\n**5. Coûts de revient et résultats**\n- Coût de revient = coût de production des glaces vendues (sorties de stock au CUMP, stock initial de produits finis donné : D 600 m² à 1 587,5 DH, E 200 m² à 1 977,5 DH) + charges indirectes de Distribution (assiette = coût de production des glaces vendues).\n- Résultat analytique par type = Prix de vente (700 m² × 1 540 DH pour D, 600 m² × 1 710 DH pour E) − Coût de revient correspondant.\n\n**3 (rapprochement).** Résultat de la comptabilité analytique = Σ résultats élémentaires. Résultat de la comptabilité générale = résultat analytique **corrigé** des différences d'incorporation mentionnées dans l'énoncé : retirer les charges non incorporables (21 000 DH de dotations non incorporables), retirer les charges supplétives (rémunération du chef d'entreprise 385 200 DH/an → 32 100 DH/mois ; rémunération des capitaux 10 000 DH/mois), et réintégrer les éléments non courants (produits non courants 6 800 DH, charges non courantes 4 560 DH, perte client 3 577,5 DH classée en charge de distribution).\n\n**4. Interprétation.** À comparer une fois les chiffres obtenus : marge par type de glace, part de chaque centre dans le coût de revient, écart éventuel entre résultat analytique et résultat comptable (qui doit se limiter aux différences d'incorporation identifiées).\n\n**5. Conformité au CGNC.** Le CGNC (Code Général de Normalisation Comptable marocain) n'impose pas de méthode de calcul des coûts particulière pour la comptabilité analytique (elle reste un outil de gestion interne, non obligatoire dans sa forme). Le point à discuter est la cohérence de la méthode des coûts complets utilisée par SKYGLAS avec les principes de rattachement des charges à l'exercice et de distinction charges incorporables/non incorporables, que le CGNC encadre au niveau de la comptabilité générale — la méthode utilisée ici (coûts complets avec centres d'analyse) est une pratique reconnue et compatible, à condition que les retraitements (charges supplétives, non incorporables) soient bien opérés pour le rapprochement avec la comptabilité générale, comme fait en question 3.\n",
+    "categorie": "FCA"
   },
   {
     "id": "SD_Casablanca_FSJES_Finance",
     "annee": "non précisée",
     "ville": "Casablanca",
     "etablissement": "FSJES Casablanca (Université Hassan II)",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "master_reel": "Finance",
     "modules": [
       "Analyse Financière",
@@ -1484,14 +1547,15 @@
       "images/Casablanca/SD_Casablanca_FSJES_Finance/SD_Casablanca_FSJES_Finance.png",
       "images/Casablanca/SD_Casablanca_FSJES_Finance/SD_Casablanca_FSJES_Finance_p2.png",
       "images/Casablanca/SD_Casablanca_FSJES_Finance/SD_Casablanca_FSJES_Finance_p3.png"
-    ]
+    ],
+    "categorie": "FCA"
   },
   {
     "id": "SD_Settat_ENCG_Settat_Finance",
     "annee": "non précisée",
     "ville": "Settat",
     "etablissement": "ENCG Settat",
-    "filiere": "Master Finance",
+    "filiere": "Finance d'Entreprise & Ingénierie Financière",
     "modules": [
       "Analyse Financière",
       "Mathématiques Financières",
@@ -1505,14 +1569,15 @@
       "images/Settat/SD_Settat_ENCG_Settat_Finance/SD_Settat_ENCG_Settat_Finance.png",
       "images/Settat/SD_Settat_ENCG_Settat_Finance/SD_Settat_ENCG_Settat_Finance_p2.png"
     ],
-    "master_reel": "Finance"
+    "master_reel": "Finance",
+    "categorie": "FCA"
   },
   {
     "id": "2025_Kenitra_FEG_Kenitra_Audit",
     "annee": "2025",
     "ville": "Kénitra",
     "etablissement": "FEG Kénitra (FSJES)",
-    "filiere": "Master Audit",
+    "filiere": "Comptabilité, Contrôle & Audit (CCA)",
     "master_reel": "Audit, Ingénierie Financière et Fiscale (AIFF)",
     "modules": [
       "Comptabilité Générale",
@@ -1525,6 +1590,7 @@
     "source": "",
     "images": [],
     "corrige_md": "",
-    "date_ajout": "2026-08-30"
+    "date_ajout": "2026-08-30",
+    "categorie": "FCA"
   }
 ]

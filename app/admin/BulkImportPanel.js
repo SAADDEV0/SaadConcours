@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { allSousFilieres } from "../../lib/taxonomy";
 
 /* -------------------------------------------------------------------
  * Bulk import for concours — the bottleneck standing between "66 concours"
@@ -17,12 +18,16 @@ import { useEffect, useMemo, useState } from "react";
 const REQUIRED = ["annee", "ville", "etablissement", "filiere", "enonce_md"];
 const JSON_FIELDS = ["annee", "ville", "etablissement", "filiere", "master_reel", "difficulte", "modules", "notions_cles", "source", "enonce_md", "corrige_md", "statut"];
 
+// filiere must match one of the fixed taxonomy's sous-filières exactly
+// (see lib/taxonomy.js and the "Filières" admin tab for the full list) —
+// `categorie` is then derived automatically (lib/store.js withDerivedCategorie),
+// so it doesn't need its own column here.
 const JSON_EXAMPLE = `[
   {
     "annee": "2024",
     "ville": "Casablanca",
     "etablissement": "ENCG Casablanca",
-    "filiere": "Master Marketing et Action Commerciale",
+    "filiere": "Marketing & Stratégie Commerciale",
     "modules": ["Marketing stratégique", "Études de marché"],
     "notions_cles": "Segmentation, positionnement, mix marketing",
     "source": "https://...",
@@ -31,7 +36,7 @@ const JSON_EXAMPLE = `[
 ]`;
 
 const CSV_EXAMPLE = `annee,ville,etablissement,filiere,master_reel,difficulte,modules,notions_cles,source,enonce_md
-2024,Casablanca,ENCG Casablanca,Master Marketing et Action Commerciale,,3/5,Marketing stratégique;Études de marché,Segmentation;positionnement,https://...,"# Sujet\n\n1) ..."`;
+2024,Casablanca,ENCG Casablanca,Marketing & Stratégie Commerciale,,3/5,Marketing stratégique;Études de marché,Segmentation;positionnement,https://...,"# Sujet\n\n1) ..."`;
 
 // Small RFC4180-ish CSV parser — handles quoted fields with embedded commas
 // and newlines ("...") since enonce_md realistically needs both. Not a full
@@ -151,11 +156,16 @@ export default function BulkImportPanel() {
       setParseError("Aucune ligne détectée.");
       return;
     }
+    const known = new Set(allSousFilieres());
     setRows(
       entries.map((entry) => ({
         entry,
         errors: REQUIRED.filter((k) => !String(entry[k] || "").trim()),
         duplicate: isDuplicate(entry),
+        // Doesn't block import (still lands in "Valeurs hors taxonomie" on
+        // the Filières tab) but won't get a `categorie` auto-derived, so
+        // it's worth catching before the commit rather than after.
+        unknownFiliere: Boolean(entry.filiere) && !known.has(String(entry.filiere).trim()),
       }))
     );
   }
@@ -218,7 +228,11 @@ export default function BulkImportPanel() {
         </div>
 
         <div className="admin-field">
-          <label>Champs requis : annee, ville, etablissement, filiere, enonce_md — le reste est optionnel.</label>
+          <label>
+            Champs requis : annee, ville, etablissement, filiere, enonce_md — le reste est optionnel. filiere doit
+            correspondre exactement à une sous-filière de l'onglet "Filières" (la catégorie est déduite
+            automatiquement).
+          </label>
           <textarea
             style={{ minHeight: 220, fontFamily: "monospace", fontSize: ".8rem" }}
             value={text}
@@ -266,6 +280,8 @@ export default function BulkImportPanel() {
                     <td>
                       {r.errors.length ? (
                         <span style={{ color: "var(--red)" }}>⚠ {r.errors.join(", ")} manquant(s)</span>
+                      ) : r.unknownFiliere ? (
+                        <span style={{ color: "var(--amber)" }}>⚠ filière hors taxonomie (importé quand même, sans catégorie)</span>
                       ) : r.duplicate ? (
                         <span style={{ color: "var(--amber)" }}>⚠ doublon probable (importé quand même)</span>
                       ) : (

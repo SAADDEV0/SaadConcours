@@ -35,7 +35,13 @@ export async function POST(req) {
   }
 
   const news = await getAllNews();
-  const urgent = computeUrgentNews(news);
+  // Only alert on établissements the public /news page actually shows
+  // (app/news/page.js applies the same newsEtablissementsVisibles filter) —
+  // otherwise a subscriber could get "closes soon" for a posting (Médecine,
+  // Chariaa...) that never appears anywhere on the site.
+  const visibles = settings.newsEtablissementsVisibles || [];
+  const visibleNews = visibles.length ? news.filter((i) => visibles.includes(i.etablissement)) : news;
+  const urgent = computeUrgentNews(visibleNews);
   if (!urgent.length) {
     return NextResponse.json({ sent: 0, reason: "Aucun concours ne ferme dans les prochains jours." });
   }

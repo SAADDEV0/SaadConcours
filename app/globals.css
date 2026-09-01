@@ -1128,6 +1128,12 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .taxonomy-rename-form input{
   flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg-elev); color:var(--text); font-size:.85rem;
 }
+.taxonomy-coverage{display:flex; flex-direction:column; gap:18px;}
+.taxonomy-cat{border:1px solid var(--border); border-radius:10px; padding:12px 14px;}
+.taxonomy-cat-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
+.taxonomy-cat-label{font-weight:700; font-size:.92rem; color:var(--text);}
+.taxonomy-cat-total{font-size:.78rem; color:var(--text-dim);}
+.taxonomy-cat .taxonomy-row{padding:8px 4px;}
 
 /* Social post generator */
 .social-gen-tabs{flex-wrap:wrap; height:auto;}
