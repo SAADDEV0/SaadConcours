@@ -214,15 +214,18 @@ export default function ConcoursPage() {
         card.className = "card";
         const hasImg = (c.images || []).length > 0;
         const hasCorrige = Boolean(c.corrige_md || c.corrige_from_github);
+        // Master name leads (same convention as the detail page H1) —
+        // établissement/ville move into the meta line underneath.
+        const masterLabel = c.master_reel || c.filiere || `${c.etablissement} — ${c.ville} — ${c.annee}`;
         card.innerHTML = `
           <div class="card-top">
-            <div class="card-title">${escapeHtml(c.etablissement)}</div>
+            <div class="card-title">${escapeHtml(masterLabel)}</div>
             <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
               <div class="card-year">${escapeHtml(String(c.annee))}</div>
               <button class="card-dl" title="Télécharger l'énoncé (PDF)">⬇</button>
             </div>
           </div>
-          <div class="card-meta">📍 ${escapeHtml(c.ville)} · ${escapeHtml(c.master_reel || c.filiere)}</div>
+          <div class="card-meta">🏫 ${escapeHtml(c.etablissement)} · 📍 ${escapeHtml(c.ville)}</div>
           <div class="card-modules">${(c.modules || [])
             .slice(0, 4)
             .map((m) => `<span class="mod-tag">${escapeHtml(m)}</span>`)
