@@ -6,6 +6,9 @@ import ThemeToggle from "../_shared/ThemeToggle";
 import { pub } from "../_shared/chrome";
 import BrandLogo from "../_shared/BrandLogo";
 import MarkdownEditor from "./MarkdownEditor";
+import BulkImportPanel from "./BulkImportPanel";
+import TaxonomyPanel from "./TaxonomyPanel";
+import SocialGeneratorPanel from "./SocialGeneratorPanel";
 
 /* -------------------------------------------------------------------
  * Field-driven CRUD panel. Each resource (concours/cours/quiz/news) is
@@ -16,12 +19,18 @@ import MarkdownEditor from "./MarkdownEditor";
  * since raw-JSON editing of 100 nested questions is unusable.
  * ---------------------------------------------------------------- */
 
+// Table pagination — a "load more" button rather than real pages, since the
+// underlying list is already fully loaded client-side (see ResourcePanel's
+// load()). Keeps the DOM small once a resource crosses a couple hundred rows.
+const PAGE_SIZE = 50;
+
 function emptyFormFor(fields) {
   const form = {};
   fields.forEach((f) => {
     if (f.type === "checkbox") form[f.key] = false;
     else if (f.type === "quiz-questions") form[f.key] = [];
     else if (f.type === "image-list") form[f.key] = [];
+    else if (f.type === "select") form[f.key] = f.options?.[0]?.value ?? "";
     else form[f.key] = "";
   });
   return form;
@@ -347,6 +356,8 @@ function ResourcePanel({ config }) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(() => new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [view, setView] = useState("list");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   async function load() {
     setLoading(true);
@@ -382,6 +393,15 @@ function ResourcePanel({ config }) {
     );
   }, [list, search, columns, fields]);
 
+  // Reset pagination whenever the visible set changes shape (new search,
+  // fresh load) so "Afficher plus" always starts from the top of the
+  // current result set instead of an offset that no longer makes sense.
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, list]);
+
+  const pagedList = useMemo(() => filteredList.slice(0, visibleCount), [filteredList, visibleCount]);
+
   const checkboxFields = fields.filter((f) => f.type === "checkbox");
 
   function toggleSelected(id) {
@@ -395,11 +415,20 @@ function ResourcePanel({ config }) {
 
   function toggleSelectAllVisible() {
     setSelected((prev) => {
-      const visibleIds = filteredList.map((i) => i.id);
+      const visibleIds = pagedList.map((i) => i.id);
       const allSelected = visibleIds.length > 0 && visibleIds.every((id) => prev.has(id));
       if (allSelected) return new Set([...prev].filter((id) => !visibleIds.includes(id)));
       return new Set([...prev, ...visibleIds]);
     });
+  }
+
+  async function handleChangeStatut(id, statut) {
+    await fetch(`${apiBase}/${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ statut }),
+    });
+    await load();
   }
 
   function findDuplicate() {
@@ -569,6 +598,17 @@ function ResourcePanel({ config }) {
                     ville={form.ville}
                   />
                 </>
+              ) : f.type === "select" ? (
+                <>
+                  <label>{f.label}</label>
+                  <select value={form[f.key] || ""} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}>
+                    {f.options.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </>
               ) : f.markdown ? (
                 <>
                   <label>{f.label}</label>
@@ -628,6 +668,24 @@ function ResourcePanel({ config }) {
           onChange={(e) => setSearch(e.target.value)}
           placeholder={`Rechercher parmi les ${resourceLabel.toLowerCase()}s...`}
         />
+        {config.pipeline && (
+          <div className="admin-view-toggle">
+            <button
+              type="button"
+              className={"admin-view-toggle-btn" + (view === "list" ? " active" : "")}
+              onClick={() => setView("list")}
+            >
+              ☰ Liste
+            </button>
+            <button
+              type="button"
+              className={"admin-view-toggle-btn" + (view === "pipeline" ? " active" : "")}
+              onClick={() => setView("pipeline")}
+            >
+              🗂️ Pipeline
+            </button>
+          </div>
+        )}
       </div>
 
       {selected.size > 0 && (
@@ -652,51 +710,143 @@ function ResourcePanel({ config }) {
         </div>
       )}
 
-      <div className="admin-table-wrap">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={filteredList.length > 0 && filteredList.every((i) => selected.has(i.id))}
-                  onChange={toggleSelectAllVisible}
-                />
-              </th>
-              {columns.map((c) => (
-                <th key={c.key}>{c.label}</th>
-              ))}
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredList.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <input type="checkbox" checked={selected.has(item.id)} onChange={() => toggleSelected(item.id)} />
-                </td>
-                {columns.map((c) => {
-                  const val = c.render ? c.render(item) : String(item[c.key] ?? "");
-                  return <td key={c.key}>{c.mono ? <span className="admin-id-chip">{val}</span> : val}</td>;
-                })}
-                <td>
-                  <div className="admin-row-actions">
-                    {allowEdit && (
-                      <button className="admin-icon-btn" title="Modifier" onClick={() => startEdit(item)}>
-                        ✏️
-                      </button>
-                    )}
-                    <button className="admin-icon-btn danger" title="Supprimer" onClick={() => onDelete(item.id)}>
-                      🗑️
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {config.pipeline && view === "pipeline" ? (
+        <ConcoursPipeline list={filteredList} onEdit={startEdit} onDelete={onDelete} onChangeStatut={handleChangeStatut} />
+      ) : (
+        <>
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      checked={pagedList.length > 0 && pagedList.every((i) => selected.has(i.id))}
+                      onChange={toggleSelectAllVisible}
+                    />
+                  </th>
+                  {columns.map((c) => (
+                    <th key={c.key}>{c.label}</th>
+                  ))}
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {pagedList.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <input type="checkbox" checked={selected.has(item.id)} onChange={() => toggleSelected(item.id)} />
+                    </td>
+                    {columns.map((c) => {
+                      const val = c.render ? c.render(item) : String(item[c.key] ?? "");
+                      return <td key={c.key}>{c.mono ? <span className="admin-id-chip">{val}</span> : val}</td>;
+                    })}
+                    <td>
+                      <div className="admin-row-actions">
+                        {allowEdit && (
+                          <button className="admin-icon-btn" title="Modifier" onClick={() => startEdit(item)}>
+                            ✏️
+                          </button>
+                        )}
+                        <button className="admin-icon-btn danger" title="Supprimer" onClick={() => onDelete(item.id)}>
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {filteredList.length > pagedList.length && (
+            <div className="admin-load-more">
+              <button type="button" className="admin-btn secondary" onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}>
+                Afficher plus ({filteredList.length - pagedList.length} restant{filteredList.length - pagedList.length > 1 ? "s" : ""})
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </>
+  );
+}
+
+/* ------------------------------ Pipeline ------------------------------ *
+ * A concours moves brouillon -> sujet_publie -> corrige_en_cours -> pret as
+ * it's worked on, tracked in a plain "statut" field on the concours object
+ * itself (nothing new to sync). Existing concours predating this field have
+ * no `statut` at all — treated as "pret" (not "brouillon"), since they're
+ * already live on the public site; only new/imported entries default to
+ * "brouillon" (see addConcours/addConcoursBulk in lib/store.js).
+ * ---------------------------------------------------------------------- */
+
+const STATUT_OPTIONS = [
+  { value: "brouillon", label: "📝 Brouillon" },
+  { value: "sujet_publie", label: "📄 Sujet publié" },
+  { value: "corrige_en_cours", label: "✍️ Corrigé en cours" },
+  { value: "pret", label: "✅ Prêt" },
+];
+
+function statutValue(item) {
+  return item.statut || "pret";
+}
+
+function statutLabel(item) {
+  return STATUT_OPTIONS.find((o) => o.value === statutValue(item))?.label || "✅ Prêt";
+}
+
+function ConcoursPipeline({ list, onEdit, onDelete, onChangeStatut }) {
+  return (
+    <div className="pipeline-board">
+      {STATUT_OPTIONS.map((col) => {
+        const items = list.filter((i) => statutValue(i) === col.value);
+        return (
+          <div className="pipeline-col" key={col.value}>
+            <div className="pipeline-col-head">
+              <span>{col.label}</span>
+              <span className="pipeline-col-count">{items.length}</span>
+            </div>
+            <div className="pipeline-col-body">
+              {items.length ? (
+                items.map((item) => (
+                  <div className="pipeline-card" key={item.id}>
+                    <div className="pipeline-card-title" onClick={() => onEdit(item)}>
+                      {item.etablissement || item.id}
+                    </div>
+                    <div className="pipeline-card-meta">
+                      {[item.ville, item.filiere, item.annee].filter(Boolean).join(" · ")}
+                    </div>
+                    <div className="pipeline-card-actions">
+                      <select
+                        className="pipeline-move-select"
+                        value={col.value}
+                        onChange={(e) => onChangeStatut(item.id, e.target.value)}
+                      >
+                        {STATUT_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        className="admin-icon-btn danger"
+                        title="Supprimer"
+                        onClick={() => onDelete(item.id)}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="pipeline-col-empty">Vide</div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -707,11 +857,13 @@ const CONCOURS_CONFIG = {
   resourceLabel: "Concours",
   showIdField: true,
   idPlaceholder: "ex: 2024_Rabat_FSJES_Souissi_CCA",
+  pipeline: true,
   fields: [
     { key: "annee", label: "Année", required: true },
     { key: "ville", label: "Ville", required: true },
     { key: "etablissement", label: "Établissement", required: true },
     { key: "filiere", label: "Filière (catégorie utilisée pour le filtre du site)", required: true },
+    { key: "statut", label: "Statut (pipeline de contenu)", type: "select", options: STATUT_OPTIONS },
     {
       key: "master_reel",
       label: "Nom réel du master (intitulé officiel écrit sur le sujet, ex: « Finance, Audit et Contrôle de Gestion »)",
@@ -737,6 +889,7 @@ const CONCOURS_CONFIG = {
     { key: "filiere", label: "Filière" },
     { key: "master_reel", label: "Nom réel du master", render: (i) => i.master_reel || "—" },
     { key: "annee", label: "Année" },
+    { key: "statut", label: "Statut", render: statutLabel },
     {
       key: "corrige",
       label: "Corrigé",
@@ -981,9 +1134,51 @@ function DonutChart({ segments, centerLabel }) {
   );
 }
 
+// Auto-generated from the site's real current state (never a fixed/manual
+// list) — items disappear on their own once fixed, instead of an admin
+// having to remember to update a static checklist somewhere.
+function buildTodoItems({ settings, emailConfigured, filiereCounts }, onNavigate) {
+  const items = [];
+  if (settings) {
+    const socialFilled = SOCIAL_FIELDS.some((f) => f.key !== "email" && String(settings[f.key] || "").trim());
+    if (!socialFilled) {
+      items.push({
+        key: "social",
+        text: "Aucun réseau social configuré — les icônes du site restent invisibles.",
+        action: () => onNavigate("settings"),
+        actionLabel: "Réglages →",
+      });
+    }
+  }
+  if (emailConfigured === false) {
+    items.push({
+      key: "email",
+      text: "Envoi d'email non configuré côté serveur (GMAIL_USER / GMAIL_APP_PASSWORD).",
+      action: () => onNavigate("email"),
+      actionLabel: "Alertes concours →",
+    });
+  }
+  if (filiereCounts) {
+    const low = Object.entries(filiereCounts).filter(([, n]) => n < 3);
+    if (low.length) {
+      items.push({
+        key: "taxonomy",
+        text: `${low.length} filière${low.length > 1 ? "s" : ""} avec moins de 3 concours : ${low
+          .map(([name]) => name)
+          .slice(0, 4)
+          .join(", ")}${low.length > 4 ? "…" : ""}.`,
+        action: () => onNavigate("taxonomy"),
+        actionLabel: "Filières →",
+      });
+    }
+  }
+  return items;
+}
+
 function StatsPanel({ onNavigate }) {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
+  const [extra, setExtra] = useState({ settings: null, emailConfigured: null, filiereCounts: null });
 
   useEffect(() => {
     fetch("/api/admin/stats")
@@ -993,6 +1188,18 @@ function StatsPanel({ onNavigate }) {
       })
       .then(setStats)
       .catch((e) => setError(e.message));
+
+    Promise.all([
+      fetch("/api/settings").then((r) => r.json()).catch(() => null),
+      fetch("/api/admin/email-status").then((r) => r.json()).catch(() => null),
+      fetch("/api/admin/taxonomy").then((r) => r.json()).catch(() => null),
+    ]).then(([settings, emailStatus, taxonomy]) => {
+      setExtra({
+        settings,
+        emailConfigured: emailStatus ? emailStatus.configured : null,
+        filiereCounts: taxonomy ? taxonomy.counts : null,
+      });
+    });
   }, []);
 
   const greeting = useMemo(() => {
@@ -1013,6 +1220,7 @@ function StatsPanel({ onNavigate }) {
     return <div className="admin-card">Chargement des statistiques...</div>;
   }
 
+  const todoItems = buildTodoItems(extra, onNavigate);
   const pdfThisWeek = stats.pdfLast7Days.reduce((sum, [, n]) => sum + n, 0);
   const dayLabel = (d) =>
     new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short" }).replace(".", "");
@@ -1056,6 +1264,22 @@ function StatsPanel({ onNavigate }) {
           </a>
         </div>
       </div>
+
+      {todoItems.length > 0 && (
+        <div className="admin-card dash-todo-card">
+          <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>✅ À faire</h2>
+          <ul className="dash-todo-list">
+            {todoItems.map((item) => (
+              <li key={item.key} className="dash-todo-item">
+                <span>{item.text}</span>
+                <button type="button" className="admin-link-btn" onClick={item.action}>
+                  {item.actionLabel}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="stat-grid">
         <StatCard
@@ -1213,13 +1437,17 @@ const NEWS_ETABLISSEMENTS = [
 
 function SubscribersManager() {
   const [emails, setEmails] = useState(null);
+  const [history, setHistory] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(null);
 
   function load() {
     fetch("/api/admin/subscribers")
       .then((r) => r.json())
-      .then((data) => setEmails(data.emails || []))
+      .then((data) => {
+        setEmails(data.emails || []);
+        setHistory(data.history || []);
+      })
       .catch(() => setError("Erreur lors du chargement des abonnés."));
   }
 
@@ -1242,11 +1470,19 @@ function SubscribersManager() {
   if (error) return <div className="admin-error">{error}</div>;
   if (emails === null) return <div className="admin-image-hint">Chargement des abonnés...</div>;
 
+  const dayLabel = (d) => new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+  const hasHistory = history && history.some((p) => p.count > 0);
+
   return (
     <div>
       <div className="admin-image-hint" style={{ marginBottom: 10 }}>
         {emails.length} abonné{emails.length > 1 ? "s" : ""} à l'alerte "concours qui ferme bientôt"
       </div>
+      {hasHistory && (
+        <div style={{ marginBottom: 16 }}>
+          <AreaChart points={history.map((p) => ({ label: dayLabel(p.date), value: p.count }))} formatValue={(v) => `${v} abonnés`} />
+        </div>
+      )}
       {emails.length ? (
         <div className="subscriber-list">
           {emails.map((email) => (
@@ -1817,18 +2053,22 @@ function EmailPanel() {
 const TABS = [
   { key: "dashboard", label: "Tableau de bord", icon: "📊" },
   { key: "concours", label: "Concours", icon: "📚", config: CONCOURS_CONFIG },
+  { key: "import", label: "Import groupé", icon: "⬆️" },
+  { key: "taxonomy", label: "Filières", icon: "🏷️" },
   { key: "cours", label: "Cours", icon: "📖", config: COURS_CONFIG },
   { key: "quiz", label: "Évaluation", icon: "📝", config: QUIZ_CONFIG },
   { key: "news", label: "News", icon: "🆕", config: NEWS_CONFIG },
   { key: "blog", label: "Blog", icon: "📰", config: BLOG_CONFIG },
-  { key: "email", label: "Email", icon: "📧" },
+  { key: "social", label: "Réseaux sociaux", icon: "📣" },
+  { key: "email", label: "Alertes concours", icon: "🔔" },
   { key: "settings", label: "Réglages", icon: "⚙️" },
 ];
 
 const NAV_GROUPS = [
-  { label: "Aperçu", keys: ["dashboard"] },
-  { label: "Contenu", keys: ["concours", "cours", "quiz", "news", "blog"] },
-  { label: "Système", keys: ["email", "settings"] },
+  { label: "Aujourd'hui", keys: ["dashboard"] },
+  { label: "Contenu", keys: ["concours", "import", "taxonomy", "cours", "quiz", "news", "blog"] },
+  { label: "Distribution", keys: ["social", "email"] },
+  { label: "Réglages", keys: ["settings"] },
 ];
 
 /* ------------------------------- Topbar bits ------------------------------- */
@@ -2082,6 +2322,12 @@ export default function AdminPage() {
           {/* key={tab} forces a remount on tab switch, so each panel gets its own fresh state */}
           {tab === "dashboard" ? (
             <StatsPanel key="dashboard" onNavigate={setTab} />
+          ) : tab === "import" ? (
+            <BulkImportPanel key="import" />
+          ) : tab === "taxonomy" ? (
+            <TaxonomyPanel key="taxonomy" />
+          ) : tab === "social" ? (
+            <SocialGeneratorPanel key="social" />
           ) : tab === "email" ? (
             <EmailPanel key="email" />
           ) : tab === "settings" ? (
