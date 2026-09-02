@@ -36,6 +36,7 @@ export const metadata = {
   },
   robots: { index: true, follow: true },
   verification: { google: "psUjgmpZoBIvwFbyh0gIAS6cYM0MzeOU9Apw_swXJ7g" },
+  other: { "google-adsense-account": "ca-pub-2207983003890908" },
   // iOS Safari ignores the web manifest for "Add to Home Screen" and reads
   // these specific meta tags instead — apple-touch-icon itself already
   // comes from app/apple-icon.js.
