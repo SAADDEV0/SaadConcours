@@ -1,5 +1,53 @@
 [
   {
+    "id": "27f24c7018f18389",
+    "titre": "Master FLSH Meknès 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Meknès",
+    "filiere": null,
+    "date_limite": "2026-09-18",
+    "cloture": false,
+    "lien_inscription": "https://candidature.umi.ac.ma",
+    "source": "https://www.almaster-maroc.com/2026/07/master-flsh-meknes-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "87e326f8e7768478",
+    "titre": "Masters Ouverts au Maroc 2026-2027",
+    "etablissement": null,
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2024/04/Masters-Ouverts-au-Maroc.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "4b76259e0470d984",
+    "titre": "Master FSJES Mohammedia 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Mohammedia",
+    "filiere": null,
+    "date_limite": "2026-09-07",
+    "cloture": false,
+    "lien_inscription": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4WhyphenhyphenLcaXWTmFPX7d8U_2uMpScwNBT6wvGc0pahjbKNEB-nzaziV9NZC9owAcBipBSYhRskX9KEt5G0UycInSKhP_CC70jjdtBst65BVzOkyUCRU3FcFkYGC9qSM5TBmnNiTUlvNSAwfANL1cjY2QnyhwoAtH9nxvXe5IfAmfyMvkFRhEf2U6OkRNsuov7/s1755/AVIS-DOUVERTURE-DES-PRE-CANDIDATURES-EN-LIGNE-MASTERS-Temps-Normal-%E2%80%93-Temps-Amenage_page-0001.jpg",
+    "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-mohammedia-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "7e8caf26dd042424",
+    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
+    "etablissement": "FST",
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
     "id": "e1f817d48ef8f17b",
     "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
     "etablissement": "FSJES",
@@ -768,18 +816,6 @@
     "date_publication": "2026-08-08"
   },
   {
-    "id": "27f24c7018f18389",
-    "titre": "Master FLSH Meknès 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Meknès",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": false,
-    "lien_inscription": "https://candidature.umi.ac.ma",
-    "source": "https://www.almaster-maroc.com/2026/07/master-flsh-meknes-2026-2027.html",
-    "date_publication": "2026-08-08"
-  },
-  {
     "id": "dc42b89ed6d0768c",
     "titre": "Master FP Sidi Bennour 2026-2027",
     "etablissement": "FP",
@@ -1025,8 +1061,8 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": true,
+    "date_limite": null,
+    "cloture": false,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
@@ -1102,18 +1138,6 @@
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/6",
     "source": "https://www.almaster-maroc.com/2026/07/master-i2s-settat-2026-2027.html",
     "date_publication": "2026-08-03"
-  },
-  {
-    "id": "87e326f8e7768478",
-    "titre": "Masters Ouverts au Maroc 2026-2027",
-    "etablissement": null,
-    "ville": null,
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2024/04/Masters-Ouverts-au-Maroc.html",
-    "date_publication": "2026-08-01"
   },
   {
     "id": "bdca6dab942c0b78",
@@ -1229,23 +1253,11 @@
     "etablissement": "FST",
     "ville": "Settat",
     "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": true,
+    "date_limite": null,
+    "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/3",
     "source": "https://www.almaster-maroc.com/2026/07/master-fst-settat-2026-2027.html",
     "date_publication": "2026-07-30"
-  },
-  {
-    "id": "4b76259e0470d984",
-    "titre": "Master FSJES Mohammedia 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Mohammedia",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4WhyphenhyphenLcaXWTmFPX7d8U_2uMpScwNBT6wvGc0pahjbKNEB-nzaziV9NZC9owAcBipBSYhRskX9KEt5G0UycInSKhP_CC70jjdtBst65BVzOkyUCRU3FcFkYGC9qSM5TBmnNiTUlvNSAwfANL1cjY2QnyhwoAtH9nxvXe5IfAmfyMvkFRhEf2U6OkRNsuov7/s1755/AVIS-DOUVERTURE-DES-PRE-CANDIDATURES-EN-LIGNE-MASTERS-Temps-Normal-%E2%80%93-Temps-Amenage_page-0001.jpg",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-mohammedia-2026-2027.html",
-    "date_publication": "2026-07-29"
   },
   {
     "id": "de92456d6b743b2c",
@@ -1289,8 +1301,8 @@
     "etablissement": null,
     "ville": "Rabat",
     "filiere": null,
-    "date_limite": null,
-    "cloture": false,
+    "date_limite": "2026-08-31",
+    "cloture": true,
     "lien_inscription": "https://preinscription.isic.ma/master/",
     "source": "https://www.almaster-maroc.com/2026/07/master-isic-rabat-2026-2027.html",
     "date_publication": "2026-07-29"
@@ -1425,18 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://e-candidature.uca.ma/master.flla/form/index.php",
     "source": "https://www.almaster-maroc.com/2026/07/master-flla-safi-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "f2facfb737ae88b3",
-    "titre": "Master FSJP Marrakech 2026-2027",
-    "etablissement": null,
-    "ville": "Marrakech",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fsjpm/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fsjp-marrakech-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
