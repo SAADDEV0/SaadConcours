@@ -48,8 +48,9 @@ ${chromeHtml({ active: "home", showSearch: false })}
   <section class="home-hero">
     <h1 class="home-hero-title">Prépare ton concours d'accès au Master 🎓</h1>
     <p class="home-hero-sub">
-      Sujets réels, fiches de cours et QCM d'auto-évaluation pour les Masters spécialisés
-      (CCA, GFCF, Finance, Fiscalité, Audit) des universités marocaines.
+      Sujets réels, fiches de cours et QCM d'auto-évaluation pour les Masters économie-gestion
+      (Finance & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie)
+      des universités marocaines.
     </p>
   </section>
 

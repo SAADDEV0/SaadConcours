@@ -75,7 +75,7 @@ export default function TaxonomyPanel() {
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           {grandTotal} concours répartis sur les 5 catégories de la taxonomie. Une sous-filière avec moins de{" "}
           {LOW_COVERAGE_THRESHOLD} concours (y compris 0) est signalée en orange — c'est le plan de collecte pour
-          élargir au-delà de Finance/Compta/Audit.
+          combler les catégories les moins couvertes (au-delà de Finance/Compta/Audit).
         </p>
         <div className="taxonomy-coverage">
           {coverage.map((cat) => (

@@ -4,17 +4,17 @@ import { Analytics } from "@vercel/analytics/react";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
-const SITE_TITLE = "SaadConcours — Concours Masters Maroc (CCA · GFCF · Finance · Fiscalité · Audit)";
+const SITE_TITLE = "SaadConcours — Concours Masters Économie & Gestion au Maroc";
 const SITE_DESCRIPTION =
-  "Base de données gratuite de sujets de concours réels d'accès aux Masters spécialisés (CCA, GFCF, Finance, Fiscalité, Audit) dans les universités marocaines — énoncés, corrigés indicatifs, fiches de cours et QCM d'entraînement.";
+  "Base de données gratuite de sujets de concours réels d'accès aux Masters économie-gestion (Finance, Comptabilité & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie) dans les universités marocaines — énoncés, corrigés indicatifs, fiches de cours et QCM d'entraînement.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_TITLE, template: "%s | SaadConcours" },
   description: SITE_DESCRIPTION,
   keywords: [
-    "concours master maroc", "master CCA", "master GFCF", "master finance maroc",
-    "ENCG concours", "FSJES master", "concours accès master maroc", "épreuves concours master",
+    "concours master maroc", "master économie gestion maroc", "master finance maroc", "master marketing maroc",
+    "master management maroc", "ENCG concours", "FSJES master", "concours accès master maroc", "épreuves concours master",
   ],
   alternates: { canonical: "/" },
   // Real favicon/apple-icon files (app/icon.js, app/apple-icon.js) replace

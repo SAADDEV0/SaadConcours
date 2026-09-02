@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Concours Masters Maroc — Sujets réels avec corrigés (CCA, GFCF, Finance)",
+  title: "Concours Masters Maroc — Sujets réels avec corrigés (toutes filières économie-gestion)",
   description:
     "Base de sujets de concours d'accès aux Masters marocains réellement tombés (FSJES, ENCG...) — énoncés complets, scans originaux, corrigés indicatifs et export PDF gratuit.",
   alternates: { canonical: "/concours" },

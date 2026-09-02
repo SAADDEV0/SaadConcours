@@ -8,6 +8,6 @@ export default async function Image() {
   return buildOgImage({
     eyebrow: "SaadConcours",
     title: "Prépare ton concours d'accès au Master au Maroc",
-    subtitle: "Sujets réels, fiches de cours et QCM — CCA, GFCF, Finance, Fiscalité, Audit",
+    subtitle: "Sujets réels, fiches de cours et QCM — Finance, Management, Marketing, Économie...",
   });
 }

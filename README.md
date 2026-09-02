@@ -1,6 +1,6 @@
 # Concours Masters Maroc
 
-Base de données de sujets réels de concours d'accès aux Masters spécialisés (CCA, GFCF, Finance, Fiscalité, Audit) dans les universités marocaines (FSJES, ENCG, Facultés Polydisciplinaires...).
+Base de données de sujets réels de concours d'accès aux Masters économie-gestion (Finance, Comptabilité & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie) dans les universités marocaines (FSJES, ENCG, Facultés Polydisciplinaires...).
 
 Application Next.js multi-pages :
 
