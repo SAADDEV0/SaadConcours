@@ -2029,6 +2029,91 @@ function SettingsPanel() {
       </div>
 
       <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Publicités (Google AdSense)</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+          Contrôle l'affichage des annonces sur le site. L'interrupteur général charge (ou non) le script AdSense
+          sur tout le site — garde-le activé pendant la validation de ton compte par Google. Chaque emplacement
+          ci-dessous reste invisible tant que tu n'as pas renseigné son ID d'emplacement ("ad slot") créé dans
+          ton tableau de bord AdSense.
+        </p>
+
+        <div className="admin-field">
+          <label>
+            <input
+              type="checkbox"
+              checked={form.adsEnabled !== false}
+              onChange={(e) => setForm({ ...form, adsEnabled: e.target.checked })}
+              style={{ marginRight: 8 }}
+            />
+            Activer Google AdSense sur le site (interrupteur général)
+          </label>
+        </div>
+
+        <div className="admin-field">
+          <label>ID éditeur AdSense (ca-pub-...)</label>
+          <input
+            value={form.adsPublisherId || ""}
+            placeholder="ca-pub-XXXXXXXXXXXXXXXX"
+            onChange={(e) => setForm({ ...form, adsPublisherId: e.target.value })}
+          />
+        </div>
+
+        {[
+          {
+            enabledKey: "adsHomeBannerEnabled",
+            slotKey: "adsHomeBannerSlot",
+            title: "Bannière — page d'accueil",
+            desc: "Affichée sous le titre d'accueil, avant les alertes de concours.",
+          },
+          {
+            enabledKey: "adsConcoursMidEnabled",
+            slotKey: "adsConcoursMidSlot",
+            title: "Fiche concours — entre l'énoncé et le corrigé",
+            desc: "Un seul bloc, entre les sections Énoncé et Corrigé.",
+          },
+          {
+            enabledKey: "adsConcoursBottomEnabled",
+            slotKey: "adsConcoursBottomSlot",
+            title: "Fiche concours — bas de page",
+            desc: "Après les extraits scannés, avant la source et les concours similaires.",
+          },
+        ].map((slot) => (
+          <div
+            key={slot.enabledKey}
+            style={{ border: "1px solid var(--border)", borderRadius: 8, padding: 14, marginBottom: 12 }}
+          >
+            <div className="admin-field" style={{ marginBottom: 8 }}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={Boolean(form[slot.enabledKey])}
+                  onChange={(e) => setForm({ ...form, [slot.enabledKey]: e.target.checked })}
+                  style={{ marginRight: 8 }}
+                />
+                {slot.title}
+              </label>
+              <p className="admin-image-hint" style={{ margin: "4px 0 0" }}>{slot.desc}</p>
+            </div>
+            <div className="admin-field" style={{ marginBottom: 0 }}>
+              <label>ID d'emplacement (ad slot)</label>
+              <input
+                value={form[slot.slotKey] || ""}
+                placeholder="1234567890"
+                disabled={!form[slot.enabledKey]}
+                onChange={(e) => setForm({ ...form, [slot.slotKey]: e.target.value })}
+              />
+            </div>
+          </div>
+        ))}
+
+        <p className="admin-image-hint">
+          Aucune annonce n'est placée à côté ou déclenchée par le bouton "Télécharger" — les règles AdSense
+          interdisent les annonces déclenchées par un clic ou trop proches d'un bouton d'action, sous peine de
+          suspension du compte.
+        </p>
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
         <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Concours ouverts affichés (News)</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           Le scraper récupère désormais toutes les publications almaster-maroc.com. Choisis ici quels

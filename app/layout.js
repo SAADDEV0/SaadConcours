@@ -1,6 +1,7 @@
 import "./globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
+import { getSettings } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
@@ -73,7 +74,10 @@ const WEBSITE_JSON_LD = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const settings = await getSettings().catch(() => null);
+  const adsEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
+
   return (
     <html lang="fr">
       <head>
@@ -93,12 +97,14 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2207983003890908"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {adsEnabled && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.adsPublisherId}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
       </head>
       <body>
         {children}

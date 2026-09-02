@@ -341,6 +341,9 @@ header{
 .cd-card{background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:18px; box-shadow:var(--shadow);}
 .cd-card h2{margin-top:0; font-size:1.05rem;}
 
+.ad-slot{background:var(--bg-elev); border:1px dashed var(--border); border-radius:var(--radius); padding:10px; margin:0 0 18px; text-align:center; overflow:hidden;}
+.ad-slot-label{display:block; font-size:0.68rem; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted, #94a3b8); margin-bottom:6px;}
+
 .faq-item{border-bottom:1px solid var(--border); padding:14px 0;}
 .faq-item:last-child{border-bottom:none;}
 .faq-item summary{font-weight:600; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px;}

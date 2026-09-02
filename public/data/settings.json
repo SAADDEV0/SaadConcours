@@ -22,5 +22,13 @@
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
   "pdfWatermarkOpacity": 0.09,
-  "pdfShowSocialFooter": true
+  "pdfShowSocialFooter": true,
+  "adsEnabled": true,
+  "adsPublisherId": "ca-pub-2207983003890908",
+  "adsHomeBannerEnabled": false,
+  "adsHomeBannerSlot": "",
+  "adsConcoursMidEnabled": false,
+  "adsConcoursMidSlot": "",
+  "adsConcoursBottomEnabled": false,
+  "adsConcoursBottomSlot": ""
 }

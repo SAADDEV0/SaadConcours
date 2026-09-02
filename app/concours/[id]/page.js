@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllConcours, getCorrigeFile } from "@/lib/store";
+import { getAllConcours, getCorrigeFile, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { formatQCM } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
+import AdSlot from "../../_shared/AdSlot";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -90,6 +91,9 @@ export async function generateStaticParams() {
 export default async function ConcoursDetailPage({ params }) {
   const { c, list } = await findConcours(params.id);
   if (!c) notFound();
+
+  const settings = await getSettings().catch(() => null);
+  const adsGloballyEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   const enonceHtml = renderMarkdownWithMath(marked, formatQCM(c.enonce_md) || "*Énoncé non disponible.*");
   const corrigeMd = await resolveCorrigeMd(c);
@@ -180,6 +184,13 @@ export default async function ConcoursDetailPage({ params }) {
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: enonceHtml }} />
         </div>
 
+        <AdSlot
+          enabled={adsGloballyEnabled && settings?.adsConcoursMidEnabled}
+          publisherId={settings?.adsPublisherId}
+          slotId={settings?.adsConcoursMidSlot}
+          label="Publicité — entre énoncé et corrigé"
+        />
+
         {corrigeHtml && (
           <div className="cd-card" id="section-corrige">
             <h2>Corrigé</h2>
@@ -200,6 +211,13 @@ export default async function ConcoursDetailPage({ params }) {
             </div>
           </div>
         )}
+
+        <AdSlot
+          enabled={adsGloballyEnabled && settings?.adsConcoursBottomEnabled}
+          publisherId={settings?.adsPublisherId}
+          slotId={settings?.adsConcoursBottomSlot}
+          label="Publicité — bas de page"
+        />
 
         {hasSource && (
           <div className="cd-card" id="section-source">

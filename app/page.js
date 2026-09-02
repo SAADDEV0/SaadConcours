@@ -54,6 +54,8 @@ ${chromeHtml({ active: "home", showSearch: false })}
     </p>
   </section>
 
+  <div id="homeBannerAd"></div>
+
   <section class="home-recent" id="homeRecent" style="display:none;">
     <div class="home-alert-head">
       <span class="home-alert-title">🆕 Derniers concours ajoutés</span>
@@ -160,6 +162,17 @@ export default function HomePage() {
         .catch(() => null),
     ])
       .then(([rawData, settings]) => {
+        if (settings?.adsEnabled && settings?.adsHomeBannerEnabled && settings?.adsPublisherId && settings?.adsHomeBannerSlot) {
+          const holder = $("#homeBannerAd");
+          holder.innerHTML = `
+            <div class="ad-slot" aria-label="Publicité">
+              <span class="ad-slot-label">Publicité</span>
+              <ins class="adsbygoogle" style="display:block" data-ad-client="${settings.adsPublisherId}" data-ad-slot="${settings.adsHomeBannerSlot}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            </div>
+          `;
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        }
+
         // Same établissement visibility filter as /news, so the "closing
         // soon" count here always matches what students actually see when
         // they click through - showing 11 here and 3 there would look broken.
