@@ -48,6 +48,30 @@
     "date_publication": "2026-09-01"
   },
   {
+    "id": "488b06092dacec05",
+    "titre": "Master FSJES Souissi Rabat 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": "2026-09-04",
+    "cloture": false,
+    "lien_inscription": "https://preins.um5.ac.ma/",
+    "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-souissi-rabat-2026-2027.html",
+    "date_publication": "2026-09-01"
+  },
+  {
+    "id": "1d2277f7608e2969",
+    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
+    "date_publication": "2026-09-01"
+  },
+  {
     "id": "443e7f36b70745bd",
     "titre": "Master FSJES Ain Sebaâ Casablanca 2026-2027",
     "etablissement": "FSJES",
@@ -101,7 +125,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": "2026-09-11",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
@@ -417,18 +441,6 @@
     "cloture": false,
     "lien_inscription": "http://preinscription.uiz.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-feg-guelmim-2026-2027.html",
-    "date_publication": "2026-08-11"
-  },
-  {
-    "id": "488b06092dacec05",
-    "titre": "Master FSJES Souissi Rabat 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": "2026-09-01",
-    "cloture": false,
-    "lien_inscription": "https://preins.um5.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-souissi-rabat-2026-2027.html",
     "date_publication": "2026-08-11"
   },
   {
@@ -1425,18 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://e-candidature.uca.ma/master.fsjpm/form/index.php",
     "source": "https://www.almaster-maroc.com/2026/07/master-fsjp-marrakech-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "37639578b21ca2e5",
-    "titre": "Master FST Marrakech 2026-2027",
-    "etablissement": "FST",
-    "ville": "Marrakech",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fst/inscription.php",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fst-marrakech-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
