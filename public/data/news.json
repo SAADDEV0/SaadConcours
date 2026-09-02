@@ -48,6 +48,54 @@
     "date_publication": "2026-09-02"
   },
   {
+    "id": "1d2277f7608e2969",
+    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "42c194aabd07d91d",
+    "titre": "Master FSJP Kénitra 2026-2027",
+    "etablissement": null,
+    "ville": "Kénitra",
+    "filiere": null,
+    "date_limite": "2026-09-06",
+    "cloture": false,
+    "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
+    "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-kenitra-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "8862da27ac61edb3",
+    "titre": "Master FSJP Tanger 2026-2027",
+    "etablissement": null,
+    "ville": "Tanger",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/09/master-fsjp-tanger-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "7538b7bb977b3c87",
+    "titre": "Master FEG Tanger 2026-2027",
+    "etablissement": "FEG",
+    "ville": "Tanger",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/09/master-feg-tanger-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
     "id": "e1f817d48ef8f17b",
     "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
     "etablissement": "FSJES",
@@ -105,18 +153,6 @@
     "cloture": false,
     "lien_inscription": "https://preins.um5.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-souissi-rabat-2026-2027.html",
-    "date_publication": "2026-09-01"
-  },
-  {
-    "id": "1d2277f7608e2969",
-    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
     "date_publication": "2026-09-01"
   },
   {
@@ -924,18 +960,6 @@
     "date_publication": "2026-08-06"
   },
   {
-    "id": "42c194aabd07d91d",
-    "titre": "Master FSJP Kénitra 2026-2027",
-    "etablissement": null,
-    "ville": "Kénitra",
-    "filiere": null,
-    "date_limite": "2026-09-06",
-    "cloture": false,
-    "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-kenitra-2026-2027.html",
-    "date_publication": "2026-08-06"
-  },
-  {
     "id": "205afc05c7359c0d",
     "titre": "Master FST Errachidia 2026-2027",
     "etablissement": "FST",
@@ -1061,8 +1085,8 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
-    "cloture": false,
+    "date_limite": "2026-08-31",
+    "cloture": true,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
@@ -1241,8 +1265,8 @@
     "etablissement": "ENSA",
     "ville": null,
     "filiere": null,
-    "date_limite": null,
-    "cloture": false,
+    "date_limite": "2026-08-31",
+    "cloture": true,
     "lien_inscription": "https://www-ensab.uh1.ac.ma/master-inscription",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensa-berrechid-2026-2027.html",
     "date_publication": "2026-07-30"
@@ -1253,8 +1277,8 @@
     "etablissement": "FST",
     "ville": "Settat",
     "filiere": null,
-    "date_limite": null,
-    "cloture": false,
+    "date_limite": "2026-08-31",
+    "cloture": true,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/3",
     "source": "https://www.almaster-maroc.com/2026/07/master-fst-settat-2026-2027.html",
     "date_publication": "2026-07-30"
@@ -1325,7 +1349,7 @@
     "etablissement": "ENS",
     "ville": "Casablanca",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-04",
     "cloture": false,
     "lien_inscription": "https://enscasa.ac.ma/preinscription-masters/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ens-casablanca-2026-2027.html",
@@ -1413,30 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://e-candidature.uca.ma/master.fsjp/form/index.php",
     "source": "https://www.almaster-maroc.com/2026/07/master-fsjp-safi-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "0360b0705eaa611b",
-    "titre": "Master FSA Safi 2026-2027",
-    "etablissement": "FSA",
-    "ville": "Safi",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fsa/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fsa-safi-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "4acfc608f210a369",
-    "titre": "Master FLLA Safi 2026-2027",
-    "etablissement": null,
-    "ville": "Safi",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.flla/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/07/master-flla-safi-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
