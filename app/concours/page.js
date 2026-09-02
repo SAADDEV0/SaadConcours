@@ -114,11 +114,52 @@ export default function ConcoursPage() {
       });
     }
 
+    // Modules aren't part of the fixed taxonomy (they're free-form per
+    // concours), so grouping is derived from the data itself: which
+    // catégorie each module actually shows up under, rather than a static
+    // mapping that would drift as new modules get added via /admin.
+    function fillModuleSelect() {
+      const el = $("#filterModule");
+      el.innerHTML = '<option value="">Tous les modules</option>';
+      const byCategorie = {};
+      ALL.forEach((c) => {
+        const code = c.categorie || "";
+        (c.modules || []).forEach((m) => {
+          if (!byCategorie[code]) byCategorie[code] = new Set();
+          byCategorie[code].add(m);
+        });
+      });
+      FILIERE_CATEGORIES.forEach((cat) => {
+        const mods = byCategorie[cat.code];
+        if (!mods || !mods.size) return;
+        const group = document.createElement("optgroup");
+        group.label = cat.label;
+        [...mods].sort().forEach((m) => {
+          const opt = document.createElement("option");
+          opt.value = m;
+          opt.textContent = m;
+          group.appendChild(opt);
+        });
+        el.appendChild(group);
+      });
+      const uncategorized = byCategorie[""];
+      if (uncategorized && uncategorized.size) {
+        const group = document.createElement("optgroup");
+        group.label = "Autres";
+        [...uncategorized].sort().forEach((m) => {
+          const opt = document.createElement("option");
+          opt.value = m;
+          opt.textContent = m;
+          group.appendChild(opt);
+        });
+        el.appendChild(group);
+      }
+    }
+
     function initFilters() {
       const villes = uniq(ALL.map((c) => c.ville));
       const etabs = uniq(ALL.map((c) => c.etablissement));
       const annees = uniq(ALL.map((c) => c.annee)).sort((a, b) => String(b).localeCompare(String(a)));
-      const modules = uniq(ALL.flatMap((c) => c.modules || []));
 
       fillSelect("#filterVille", villes);
       const catEl = $("#filterCategorie");
@@ -131,7 +172,7 @@ export default function ConcoursPage() {
       fillFiliereSelect("");
       fillSelect("#filterEtab", etabs);
       fillSelect("#filterAnnee", annees);
-      fillSelect("#filterModule", modules);
+      fillModuleSelect();
 
       $("#filterCategorie").addEventListener("change", () => {
         fillFiliereSelect($("#filterCategorie").value);
