@@ -33,7 +33,7 @@ ${chromeHtml({ active: "concours", showSearch: true })}
     </div>
     <div class="filter-group">
       <label style="font-size:.8rem;color:var(--text-dim);">Module requis</label>
-      <div class="chip-list" id="moduleChips"></div>
+      <select id="filterModule"><option value="">Tous les modules</option></select>
     </div>
     <button class="reset-btn" id="resetBtn">✕ Réinitialiser les filtres</button>
   </aside>
@@ -58,7 +58,6 @@ export default function ConcoursPage() {
 
     let ALL = [];
     let filtered = [];
-    let activeModule = "";
 
     const root = containerRef.current;
     const $ = (sel) => root.querySelector(sel);
@@ -132,34 +131,20 @@ export default function ConcoursPage() {
       fillFiliereSelect("");
       fillSelect("#filterEtab", etabs);
       fillSelect("#filterAnnee", annees);
-
-      const chipWrap = $("#moduleChips");
-      modules.forEach((m) => {
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = m;
-        chip.addEventListener("click", () => {
-          activeModule = activeModule === m ? "" : m;
-          $$(".chip").forEach((c) => c.classList.toggle("active", c.textContent === activeModule));
-          applyFilters();
-        });
-        chipWrap.appendChild(chip);
-      });
+      fillSelect("#filterModule", modules);
 
       $("#filterCategorie").addEventListener("change", () => {
         fillFiliereSelect($("#filterCategorie").value);
         applyFilters();
       });
-      ["#filterVille", "#filterFiliere", "#filterEtab", "#filterAnnee"].forEach((id) => {
+      ["#filterVille", "#filterFiliere", "#filterEtab", "#filterAnnee", "#filterModule"].forEach((id) => {
         $(id).addEventListener("change", applyFilters);
       });
       $("#searchInput").addEventListener("input", applyFilters);
       $("#resetBtn").addEventListener("click", () => {
-        ["#filterVille", "#filterCategorie", "#filterEtab", "#filterAnnee"].forEach((id) => ($(id).value = ""));
+        ["#filterVille", "#filterCategorie", "#filterEtab", "#filterAnnee", "#filterModule"].forEach((id) => ($(id).value = ""));
         fillFiliereSelect("");
         $("#searchInput").value = "";
-        activeModule = "";
-        $$(".chip").forEach((c) => c.classList.remove("active"));
         applyFilters();
       });
     }
@@ -170,6 +155,7 @@ export default function ConcoursPage() {
       const filiere = $("#filterFiliere").value;
       const etab = $("#filterEtab").value;
       const annee = $("#filterAnnee").value;
+      const module = $("#filterModule").value;
       const q = $("#searchInput").value.trim().toLowerCase();
 
       filtered = ALL.filter((c) => {
@@ -178,7 +164,7 @@ export default function ConcoursPage() {
         if (filiere && c.filiere !== filiere) return false;
         if (etab && c.etablissement !== etab) return false;
         if (annee && String(c.annee) !== annee) return false;
-        if (activeModule && !(c.modules || []).includes(activeModule)) return false;
+        if (module && !(c.modules || []).includes(module)) return false;
         if (q) {
           const hay = [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")]
             .join(" ")
