@@ -16,7 +16,7 @@ export default function CustomizePanel({ open, onClose, layout }) {
           const ids = order.filter((id) => widgetById(id)?.section === section.id);
           if (!ids.length) return null;
           return (
-            <div key={section.id}>
+            <div className="customize-group" key={section.id}>
               <div className="customize-group-label">
                 {section.icon} {section.label}
               </div>

@@ -56,14 +56,6 @@ ${chromeHtml({ active: "home", showSearch: false })}
 
   <div id="homeBannerAd"></div>
 
-  <section class="home-recent" id="homeRecent" style="display:none;">
-    <div class="home-alert-head">
-      <span class="home-alert-title">🆕 Derniers concours ajoutés</span>
-      <a class="home-alert-link" href="/concours">Voir tout →</a>
-    </div>
-    <div class="cd-related-grid" id="homeRecentGrid"></div>
-  </section>
-
   <section class="urgent-alert" id="urgentAlert" style="display:none;">
     <div class="urgent-alert-head">
       <span class="urgent-alert-title">⏰ <strong id="urgentCount"></strong> concours ferment bientôt</span>
@@ -88,6 +80,14 @@ ${chromeHtml({ active: "home", showSearch: false })}
   <section class="home-actions">
     <h2 class="home-section-title">Que veux-tu faire ?</h2>
     <div class="home-actions-grid" id="homeActionsGrid"></div>
+  </section>
+
+  <section class="home-recent" id="homeRecent" style="display:none;">
+    <div class="home-alert-head">
+      <span class="home-alert-title">🆕 Derniers concours ajoutés</span>
+      <a class="home-alert-link" href="/concours">Voir tout →</a>
+    </div>
+    <div class="cd-related-grid" id="homeRecentGrid"></div>
   </section>
 </div>
 
