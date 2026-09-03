@@ -96,6 +96,54 @@
     "date_publication": "2026-09-02"
   },
   {
+    "id": "fd5625e8a608c8ec",
+    "titre": "Master Université Sultan Moulay Slimane Béni Mellal 2026-2027",
+    "etablissement": null,
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2023/07/master-universite-sultan-moulay-slimane.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "f09a739d4026a68f",
+    "titre": "Résultats Présélection Master FS Ain Chock Casablanca 2026-2027",
+    "etablissement": null,
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsac.univh2c.ma/Docs/attachments/1229/Liste%20des%20candidats-De%CC%81po%CC%82t-Dossier-master-CSNM-%202026-2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/05/Resultats-Preselection-Master-FS-Ain-Chock-Casablanca-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "c18965f1904d47b3",
+    "titre": "Master ESEF Béni Mellal 2026-2027",
+    "etablissement": null,
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": "2026-09-23",
+    "cloture": false,
+    "lien_inscription": "https://esefbm.usms.ac.ma/e-candidature-master/",
+    "source": "https://www.almaster-maroc.com/2026/09/master-esef-beni-mellal-2026-2027.html",
+    "date_publication": "2026-09-02"
+  },
+  {
+    "id": "f1a18c0ced73e83f",
+    "titre": "Master Université Abdelmalek Essaâdi Tétouan 2026-2027",
+    "etablissement": null,
+    "ville": "Tétouan",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2022/08/master-universite-abdelmalek-essaadi.html",
+    "date_publication": "2026-09-02"
+  },
+  {
     "id": "e1f817d48ef8f17b",
     "titre": "Master FSJES Ain Chock Casablanca 2026-2027",
     "etablissement": "FSJES",
@@ -732,18 +780,6 @@
     "date_publication": "2026-08-10"
   },
   {
-    "id": "fd5625e8a608c8ec",
-    "titre": "Master Université Sultan Moulay Slimane Béni Mellal 2026-2027",
-    "etablissement": null,
-    "ville": "Béni Mellal",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2023/07/master-universite-sultan-moulay-slimane.html",
-    "date_publication": "2026-08-10"
-  },
-  {
     "id": "919c6fe4b79b8e82",
     "titre": "Master Université Chouaib Doukkali El Jadida 2026-2027",
     "etablissement": null,
@@ -810,7 +846,7 @@
     "ville": "Settat",
     "filiere": null,
     "date_limite": "2026-09-02",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/8",
     "source": "https://www.almaster-maroc.com/2026/08/master-flash-settat-2026-2027.html",
     "date_publication": "2026-08-09"
@@ -1401,42 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://preins.um5.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/07/master-fse-rabat-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "b89fed6abebfec8d",
-    "titre": "Master FMD Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": "2026-09-02",
-    "cloture": false,
-    "lien_inscription": "https://preins.um5.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fmd-rabat-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "484137faafd93bf3",
-    "titre": "Master FMP Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://preins.um5.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fmp-rabat-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "779a61c70dd9e766",
-    "titre": "Master FSJP Safi 2026-2027",
-    "etablissement": null,
-    "ville": "Safi",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fsjp/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fsjp-safi-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
