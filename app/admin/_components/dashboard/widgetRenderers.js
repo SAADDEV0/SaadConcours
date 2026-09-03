@@ -127,6 +127,39 @@ export function renderWidget(id, ctx, onDismiss) {
         </WidgetCard>
       );
 
+    case "chart.visitSources": {
+      const labels = {
+        direct: "Direct",
+        google: "Google",
+        facebook: "Facebook",
+        instagram: "Instagram",
+        twitter: "Twitter / X",
+        whatsapp: "WhatsApp",
+        tiktok: "TikTok",
+        youtube: "YouTube",
+        bing: "Bing",
+        autre: "Autre",
+      };
+      const colors = ["var(--accent)", "var(--green)", "var(--amber)", "var(--red, #ef4444)", "var(--violet, #8b5cf6)", "var(--border)"];
+      const sources = stats.visitSources || [];
+      return (
+        <WidgetCard key={id} title="Sources de visiteurs" sub="D'où viennent les visiteurs (referrer / utm_source)" onDismiss={onDismiss}>
+          {sources.length ? (
+            <DonutChart
+              segments={sources.map(({ member, score }, i) => ({
+                label: labels[member] || member,
+                value: score,
+                color: colors[i % colors.length],
+              }))}
+              centerLabel="visites"
+            />
+          ) : (
+            <EmptyState icon="🌐" message="Pas encore assez de données sur les sources de visiteurs." />
+          )}
+        </WidgetCard>
+      );
+    }
+
     case "list.topConcours":
       return (
         <WidgetCard key={id} title="Concours les plus consultés" onDismiss={onDismiss}>

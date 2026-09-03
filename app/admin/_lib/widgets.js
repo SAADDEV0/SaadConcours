@@ -27,6 +27,7 @@ export const DASHBOARD_WIDGETS = [
   { id: "list.newSubscribers", section: "audience", label: "Derniers abonnés", size: "half", default: true },
   { id: "chart.pdf7d", section: "audience", label: "Téléchargements (7 jours)", size: "half", default: true },
   { id: "chart.pdfKind", section: "audience", label: "Répartition par type", size: "half", default: true },
+  { id: "chart.visitSources", section: "audience", label: "Sources de visiteurs", size: "half", default: true },
 
   { id: "list.todo", section: "todo", label: "À faire", size: "full", default: true },
   { id: "list.sansCorrige", section: "todo", label: "Concours sans corrigé", size: "half", default: true },
