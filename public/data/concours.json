@@ -2727,5 +2727,212 @@
     "enonce_md": "**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales — Souissi**\n\n**Test d'admission au Master ESMA — Année Universitaire : 2017-2018 — Durée : 2 heures**\n\n*N.B. : Chaque partie doit être traitée sur une feuille séparée*\n\n**Partie 1 — Macroéconomie**\n\nSupposons que le Maroc comprend une entreprise représentative dont la fonction de production est donnée par : y = f(N) = 2N − (1/2)N² sachant que N est la taille de l'emploi.\n\n1) Écrire le profit de cette entreprise sachant que le prix du bien est P, et que le salaire est W.\n2) Déterminer la demande de travail (l'offre d'emploi) qui est la taille optimale de cette entreprise.\n3) En déduire la taille de production optimale (en volume) qu'est, l'offre optimale en volume du bien produit de cette entreprise, et commenter.\n4) Supposons que l'offre totale de travail (la demande totale d'emploi) est exogène, et est donnée par : Nˢ = (W/P). Définir alors la notion d'équilibre du marché du travail, et calculer le salaire réel d'équilibre de cette économie.\n5) À cet équilibre général, calculer la production totale (en volume), la masse salariale réelle totale, le total des profits réels (profits déflatés par le prix) et commenter la répartition dans cette économie.\n\n**Partie 2 — Microéconomie**\n\nLa production d'un bien A est possible grâce à une technologie ayant pour fonction de coût total : C(q) = 50 + q² où q est la quantité offerte par une entreprise. La demande du bien A est donnée par : P(Q) = 40 − Q où Q est la quantité offerte par la branche.\n\n1) Comment distingue-t-on entre le court terme et le long terme dans une entreprise ?\n2) Déterminez l'équilibre de concurrence de long terme ;\n3) Déterminez l'équilibre du monopole ;\n4) Calculez le surplus du consommateur et du producteur à l'équilibre concurrentiel de long terme ;\n5) Comparez le surplus net à l'équilibre concurrentiel de long terme par rapport à celui du monopole et concluez.\n6) Dans quelles conditions un monopole peut être préférable à la concurrence en termes d'efficacité ?\n\n**Partie 3 — Statistique**\n\n**Exercice 1**\n\nSoit X une variable aléatoire, et X₁, X₂, X₃ sont des variables aléatoires représentant un échantillon de X dont sont de même loi que X et qui sont indépendantes deux à deux. Pour l'estimation de la moyenne m de X, on utilise la fonction suivante :\n\nY = 0,6 × X₁ + 0,1 × X₂ + X₃\n\nAvec : c ∈ ℝ\n\n- Quelle est la condition pour que Y soit un estimateur biaisé de la moyenne m de X ?\n\n**Exercice 2**\n\nSoit Y une série chronologique, les données de cette série sur quatre trimestres et sur deux années, sont représentées dans le tableau ci-dessous :\n\n| | Trimestre 1 | Trimestre 2 | Trimestre 3 | Trimestre 4 |\n|---|---|---|---|---|\n| 2006 | 0,5 | 1 | 0,6 | 1,5 |\n| 2008 | 1,1 | 2 | 1,3 | 2,5 |\n\nLe modèle de cette série est supposé additif : Cₜ = Ĉₜ + Sₜ + Eₜ, avec Ĉₜ = 0,25t + 0,25\n\n1) Calculer les quatre coefficients saisonniers de cette série.\n\n**Partie 4 — Mathématique**\n\n**Exercice 1 : (08 points)**\n\nMontrer que l'ensemble E = {(x, y, z) / z=0} est sous-espace vectoriel de ℝ³ ?\n\n**Exercice 2 : (12 points)**\n\nSoit f la fonction de deux variables définie par : f(x,y) = xy(1−x−y)\n\n1) Justifier en une phrase que f est de classe C²\n2) Déterminer les points critiques de f ;\n3) Préciser la nature des points critiques de f.\n",
     "corrige_md": "> Corrigé indicatif rédigé à partir du programme standard de macro/microéconomie, statistique et mathématiques — aucune grille de correction officielle disponible pour ce sujet.\n\n**Partie 1 — Macroéconomie**\n\n**1.** Profit : π(N) = P×f(N) − W×N = P×[2N − (1/2)N²] − W×N.\n\n**2.** Demande de travail : maximisation de π par rapport à N → dπ/dN = P×(2 − N) − W = 0 → N* = 2 − W/P.\n\n**3.** Production optimale : y* = f(N*) = 2N* − (1/2)N*² = 2(2 − W/P) − (1/2)(2 − W/P)². En posant w = W/P (salaire réel), y* = 2(2−w) − (1/2)(2−w)². Commentaire : la production optimale décroît quand le salaire réel augmente, ce qui traduit la loi des rendements décroissants du travail combinée au coût croissant de la main-d'œuvre.\n\n**4.** L'équilibre du marché du travail est atteint lorsque l'offre de travail égale la demande de travail : Nˢ = Nᵈ. Ici Nˢ = W/P et Nᵈ = N* = 2 − W/P. À l'équilibre : W/P = 2 − W/P → 2×(W/P) = 2 → **(W/P)* = 1** (salaire réel d'équilibre).\n\n**5.** À l'équilibre : N* = (W/P)* = 1. Production totale : y* = 2(1) − (1/2)(1)² = 2 − 0,5 = **1,5**. Masse salariale réelle : (W/P)×N = 1×1 = **1**. Profit réel : π/P = y* − (W/P)×N = 1,5 − 1 = **0,5**. Commentaire : sur une production totale de 1,5, les deux tiers (1) reviennent aux travailleurs sous forme de salaires et un tiers (0,5) revient à l'entreprise sous forme de profit — une répartition cohérente avec les rendements décroissants du facteur travail dans cette fonction de production.\n\n**Partie 2 — Microéconomie**\n\n**1.** Le court terme est la période durant laquelle au moins un facteur de production est fixe (l'entreprise ne peut ajuster que sa quantité produite avec sa capacité existante) ; le long terme est la période durant laquelle tous les facteurs sont variables, y compris la capacité de production et le nombre d'entreprises sur le marché (libre entrée/sortie).\n\n**2.** Équilibre de concurrence de long terme : le prix s'établit au minimum du coût moyen (profit nul à l'entrée libre). Coût marginal : Cm(q) = 2q. Coût moyen : CM(q) = 50/q + q, minimisé quand Cm = CM → 2q = 50/q + q → q = 50/q → q² = 50 → q* = √50 ≈ 7,07. Prix d'équilibre : P* = Cm(q*) = 2×7,07 ≈ 14,14. Quantité de marché : Q* = 40 − P* ≈ 25,86, soit un nombre d'entreprises n* = Q*/q* ≈ 3,66 (à arrondir selon le contexte).\n\n**3.** Équilibre de monopole : recette marginale Rm = 40 − 2Q (dérivée de la recette totale R = PQ = (40−Q)Q) égalée au coût marginal Cm = 2Q (au niveau de la branche) : 40 − 2Q = 2Q → **Q_m = 10**, et **P_m = 40 − 10 = 30**.\n\n**4.** À l'équilibre concurrentiel (P*≈14,14 ; Q*≈25,86) : Surplus du consommateur = (1/2)×(40 − P*)×Q* = (1/2)×25,86×25,86 ≈ **334,4**. Surplus du producteur (à long terme, profit nul par construction) ≈ **0** (les profits sont nuls à l'équilibre concurrentiel de long terme, toute rente étant dissipée par l'entrée de nouvelles entreprises).\n\n**5.** Sous monopole (Q_m=10, P_m=30) : Surplus du consommateur = (1/2)×(40−30)×10 = 50, nettement inférieur à celui de la concurrence. Le surplus net total (CS+PS) est maximal en concurrence pure et parfaite de long terme, le monopole créant une perte sèche de bien-être (deadweight loss) en restreignant la quantité produite pour maintenir un prix plus élevé.\n\n**6.** Un monopole peut être préférable en termes d'efficacité dynamique lorsque des rendements d'échelle croissants importants (monopole naturel, coûts fixes très élevés comme les réseaux d'infrastructure) rendent la duplication de plusieurs producteurs inefficiente, ou lorsque la rente de monopole finance une innovation ou une R&D que la concurrence pure ne permettrait pas de rentabiliser (argument schumpétérien).\n\n**Partie 3 — Statistique**\n\n**Exercice 1.** Y = 0,6X₁ + 0,1X₂ + X₃ est estimateur *sans biais* de m si et seulement si E(Y) = m, soit (0,6+0,1+1)×m = m, ce qui exige que la somme des coefficients soit égale à 1. Or 0,6+0,1+1 = 1,7 ≠ 1 : **Y est donc biaisé** dès lors que la somme de ses coefficients diffère de 1 — c'est précisément la condition demandée : Y est un estimateur biaisé de m tant que 0,6+0,1+c₃ ≠ 1 (ici avec c₃=1 fixé dans l'énoncé, le biais vaut E(Y)−m = 0,7×m).\n\n**Exercice 2.** Tendance Ĉₜ = 0,25t + 0,25, avec t=1,2,3,4 pour 2006 et t=5,6,7,8 pour 2008 (en admettant une numérotation continue des 2 années considérées comme années 1 et 3 de la série, faute de trimestres 2007 fournis) : les coefficients saisonniers s'obtiennent par Sₜ = Cₜ − Ĉₜ pour chaque trimestre, puis en moyennant les écarts obtenus pour un même trimestre sur les deux années disponibles. Par exemple pour T1 : écarts (0,5 − Ĉ₁) et (1,1 − Ĉ₅) moyennés donnent le coefficient saisonnier S₁, et ainsi de suite pour T2, T3, T4 — la méthode exacte des valeurs numériques dépend de la convention retenue pour numéroter t sur la période manquante (2007), non fournie dans le scan disponible.\n\n**Partie 4 — Mathématiques**\n\n**Exercice 1.** E = {(x,y,z) ∈ ℝ³ / z=0}. E est un sous-espace vectoriel de ℝ³ car : (i) le vecteur nul (0,0,0) appartient à E (z=0 vérifié) ; (ii) E est stable par combinaison linéaire : si u=(x₁,y₁,0) et v=(x₂,y₂,0) appartiennent à E et λ,μ∈ℝ, alors λu+μv = (λx₁+μx₂, λy₁+μy₂, 0) a bien sa troisième composante nulle, donc appartient à E. E est donc bien un sous-espace vectoriel de ℝ³ (c'est le plan (x,y)).\n\n**Exercice 2.** f(x,y) = xy(1−x−y) = xy − x²y − xy².\n\n1) f est un polynôme en (x,y), donc indéfiniment dérivable ; toutes ses dérivées partielles sont continues, donc **f est de classe C²** (et même C^∞).\n\n2) Points critiques : ∂f/∂x = y − 2xy − y² = y(1−2x−y) = 0 et ∂f/∂y = x − x² − 2xy = x(1−x−2y) = 0. En résolvant ce système, les solutions sont : (0,0), (1,0), (0,1), et (1/3, 1/3) (obtenu en résolvant simultanément 1−2x−y=0 et 1−x−2y=0, qui donne x=y=1/3).\n\n3) Nature des points critiques (via le hessien : r=f''ₓₓ=−2y, t=f''ᵧᵧ=−2x, s=f''ₓᵧ=1−2x−2y) :\n   - En (0,0) : r=0, t=0, s=1 → rt−s² = −1 < 0 → **point-selle**.\n   - En (1,0) : r=0, t=−2, s=−1 → rt−s² = −1 < 0 → **point-selle**.\n   - En (0,1) : r=−2, t=0, s=−1 → rt−s² = −1 < 0 → **point-selle**.\n   - En (1/3,1/3) : r=−2/3, t=−2/3, s=1−2/3−2/3=−1/3 → rt−s² = 4/9 − 1/9 = 3/9 > 0 et r<0 → **maximum local** (f(1/3,1/3) = (1/3)(1/3)(1/3) = 1/27 > 0).\n",
     "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2024_ElKelaaDesSraghna_FSJES_GRHTransformationNumerique",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "El Kelâa des Sraghna",
+    "etablissement": "FSJES El Kelâa des Sraghna (Cadi Ayyad)",
+    "annee": "2024",
+    "master_reel": "Gestion des Ressources Humaines et Transformations Numériques",
+    "modules": [
+      "Gestion des Ressources Humaines",
+      "Transformation Digitale",
+      "Intelligence Artificielle"
+    ],
+    "notions_cles": "transformation numérique des organisations marocaines, impact sur la GRH, IA générative et marché de l'emploi, enjeux éthiques et organisationnels de la gestion des talents",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2025/08/master-GRH-transformations-numeriques-2024-fsjes-el-kelaa-des-sraghna.html",
+    "images": [],
+    "enonce_md": "**Royaume du Maroc — Université Cadi Ayyad — Faculté des Sciences Juridiques, Économiques et Sociales, El Kelâa des Sraghna**\n\n**Concours Master d'Excellence « Gestion des Ressources Humaines et Transformations Numériques » — Année Universitaire 2024/2025 — Test écrit**\n\n**Question :** Traitez l'un des deux sujets suivants au choix (20 points)\n\n**Sujet 1 :**\n\n« Les défis de la transformation numérique dans les organisations marocaines : quel impact sur la gestion des ressources humaines et comment l'intelligence artificielle peut-elle contribuer à surmonter ces défis ? »\n\n**Sujet 2 :**\n\n« Comment la transformation numérique et l'IA générative influencent-elles le marché de l'emploi au Maroc, et quels sont les enjeux éthiques et organisationnels pour les organisations en matière de gestion des talents ? »\n\n**Remarque :** Veuillez mentionner le sujet auquel vous avez répondu (Sujet 1 ou Sujet 2) sur la première page, au début de votre réponse.",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2024_Mohammedia_FSJES_CommerceInternationalLogistique",
+    "categorie": "MCL",
+    "filiere": "Commerce International",
+    "ville": "Mohammedia",
+    "etablissement": "FSJES Mohammedia (Hassan II)",
+    "annee": "2024",
+    "master_reel": "Management du Commerce International et Logistique",
+    "modules": [
+      "Commerce International",
+      "Logistique de Transport",
+      "Coûts et Transitaire"
+    ],
+    "notions_cles": "rentabilité d'un marché d'exportation, coûts logistiques et douaniers, groupement d'expéditions et affrètement maritime, diagnostic export comme outil d'aide à la décision",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2025/08/management-du-commerce-international-et-logistique-2024.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales de Mohammedia**\n\n**Test écrit d'accès au Master « Management du Commerce International et Logistique » — Année Universitaire 2024/2025 — Durée : 2H**\n\n### I/ Traiter l'exercice suivant :\n\nM. Benjelloun, producteur d'agrumes au Maroc, souhaite exporter 10 conteneurs de clémentine vers la Russie. Chaque conteneur peut recevoir 10 tonnes de clémentine. Le prix de vente d'un Kg en Russie ne dépasse pas 140 roubles. On suppose que : 1 dollar USA = 8 DH et 1 rouble russe = 0,15 DH.\n\n**Travail à faire :**\n1. Selon le transitaire, le marché russe n'est pas rentable. Assurez-vous des propos du transitaire ;\n2. Le transitaire propose à ses clients producteurs de clémentine de la région qui vont exporter vers la même destination une exportation en groupement et par affrètement du bateau. Ce groupement réduira le fret maritime de 40% et les frais jusqu'au FOB de 30%. Le résultat est-il intéressant ?\n\n**Annexe 1 : caractéristiques du produit**\n\nLe prix de vente désiré par M. Benjelloun, compte tenu des autres destinations d'exportation, est de 10 DH/kg.\n\n**Annexe 2 : caractéristiques logistiques**\n\n| Poste | Montant |\n|---|---|\n| Location du conteneur | 10 000 DH |\n| Chargement du conteneur | 1 000 DH |\n| Transport jusqu'au port de Tanger | 3 000 DH/conteneur |\n| Frais du transitaire | 10 000 DH |\n| Sommes acquittées par le transitaire pour d'autres administrations | 500 DH/conteneur |\n| Passage portuaire | 5 000 DH |\n| Chargement sur le bateau | 2 500 DH |\n| Société de transport maritime | 3 750 dollars/conteneur |\n| Majoration sur prix du carburant | 2% |\n| Assurance maritime | 625 dollars |\n| Déchargement du navire | 23 333 roubles russes |\n| Frais du transitaire à l'arrivée | 103 333 roubles russes |\n| Chargement sur le camion | 23 333 roubles russes |\n| Déplacement à l'arrivée | 70 000 roubles russes |\n| Droits de douane en Russie | 20% |\n| TVA | 20% |\n\n### II/ Répondre de façon concise à la question suivante :\n\nLe diagnostic export en tant qu'outil d'aide à la prise de décision en faveur des entreprises souhaitant s'internationaliser. (À ne pas dépasser deux pages)",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2024_Marrakech_FSJES_MarketingLogistique",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Marrakech",
+    "etablissement": "FSJES Marrakech (Cadi Ayyad)",
+    "annee": "2024",
+    "master_reel": "Marketing et Logistique",
+    "modules": [
+      "Marketing Stratégique",
+      "Marketing Opérationnel",
+      "Supply Chain Management"
+    ],
+    "notions_cles": "défis de l'environnement économique globalisé, articulation marketing stratégique / marketing opérationnel, mix-marketing, gestion de la chaîne logistique et performance globale",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2024/09/master-marketing-et-logistique-2024-fsjes-marrakech.html",
+    "images": [],
+    "enonce_md": "**Université Cadi Ayyad — Faculté des Sciences Juridiques, Économiques et Sociales, Marrakech**\n\n**Épreuve écrite pour l'accès au Master Marketing et Logistique — Année universitaire 2024-2025 — Durée d'examen : 02 heures**\n\n**Sujet N°1 : Obligatoire**\n\nSelon vous, quels sont les défis majeurs auxquels les entreprises doivent faire face dans un environnement économique globalisé, et quelles stratégies peuvent-elles adopter pour surmonter ces défis ?\n\n**Sujet N°2 au choix (en fonction du parcours choisi) :**\n\nRépondez à l'une des questions ci-dessous en fonction du choix de votre parcours (indiquez le parcours choisi sur votre copie d'examen).\n\n**Parcours Marketing :**\n\nLe marketing repose sur un équilibre subtil entre deux dimensions essentielles : la stratégie à long terme et les actions à court terme. D'un côté, le marketing stratégique fixe les orientations majeures et les objectifs à long terme, tandis que le marketing opérationnel met en œuvre ces orientations à travers des actions concrètes et tactiques. L'interaction entre ces deux approches est cruciale pour garantir la cohérence et l'efficacité d'une stratégie marketing globale. Le mix-marketing, qui regroupe l'ensemble des leviers opérationnels, joue un rôle central dans cette coordination, permettant ainsi de traduire les choix stratégiques en actions concrètes. Dans ce contexte, analysez comment le mix-marketing contribue à l'exécution d'une stratégie marketing globale en explorant les interactions entre le marketing stratégique et le marketing opérationnel, et en montrant comment une bonne coordination entre les deux peut renforcer l'impact des actions marketing.\n\n**Parcours Logistique :**\n\nExpliquez comment la gestion de la chaîne logistique (Supply Chain Management) peut contribuer à l'amélioration de la performance globale d'une entreprise. Donnez des exemples concrets pour illustrer votre réponse.",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2024_Marrakech_FSJES_SMRH_Leadership",
+    "categorie": "MRH",
+    "filiere": "Management Stratégique & Gestion des Organisations",
+    "ville": "Marrakech",
+    "etablissement": "FSJES Marrakech (Cadi Ayyad)",
+    "annee": "2024",
+    "master_reel": "Stratégie & Management des Ressources Humaines (SMRH)",
+    "modules": [
+      "Leadership",
+      "Management Stratégique",
+      "Gestion des Ressources Humaines"
+    ],
+    "notions_cles": "styles de leadership genrés (démocratique vs directif), approches du leadership (traits de personnalité, comportementale, situationnelle, transformationnelle/transactionnelle), planification stratégique à long terme",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com (Laboratoire NPG, FSJES Marrakech)",
+    "images": [],
+    "enonce_md": "**Université Cadi Ayyad — Faculté des Sciences Juridiques, Économiques et Sociales, Marrakech — Laboratoire de Recherche « Nouvelles Pratiques de Gestion » (NPG)**\n\n**Test écrit d'accès au Master Stratégie & Management des Ressources Humaines — 18 Septembre 2024**\n\nTravail individuel / documents non autorisés / noté sur 20 / Durée 2h. Seront pris en considération la qualité de la rédaction et la présentation de la copie.\n\n### Les hommes et les femmes dirigent-ils différemment ?\n\nLe sexe du leader influence-t-il son style de leadership (la manière de diriger et de commander) ? Les hommes sont-ils plus efficaces, ou cet honneur revient-il aux femmes ? Le fait de poser ces questions ne peut manquer de provoquer, dans chacun des deux camps, de vives réactions.\n\nDe toute évidence, les deux sexes présentent néanmoins, dans leur manière de diriger, plus de similitudes que de différences. Cette proximité s'explique par le fait que les leaders, qu'ils soient hommes ou femmes, exercent une activité similaire, qui consiste à influencer d'autres personnes. C'est l'essence de leur travail, et les deux sexes s'en acquittent aussi bien l'un que l'autre. Il en va de même dans toutes les professions. Ainsi, le stéréotype de l'infirmière n'empêche aucunement les infirmiers de faire d'aussi belles carrières et de se montrer aussi efficaces.\n\nPour autant, dire que les deux sexes sont plus semblables que différents, c'est aussi dire qu'ils ne sont pas exactement identiques. La différence la plus évidente se situe au niveau du style de leadership. Les femmes ont tendance à employer un style plus démocratique. Elles encouragent leurs subordonnés à participer, et sont plus enclines à partager leur pouvoir. Elles possèdent en outre la faculté d'influencer les autres en usant de leur charme. De leur côté, les hommes adoptent généralement un style centré sur la tâche et s'appuient sur leur autorité pour contrôler l'activité de leurs collaborateurs. Pourtant, bizarrement, cette distinction reste elle-même floue. Tout bien considéré, lorsqu'une femme occupe un poste traditionnellement masculin (tel que celui d'officier de police), elle tend elle aussi à se concentrer sur la tâche.\n\nL'évolution du rôle des leaders dans les entreprises modernes complique encore la donne. Avec l'importance croissante accordée au travail en équipe, à l'implication des employés et aux compétences interpersonnelles, le style démocratique est de plus en plus prisé. Les leaders doivent prêter davantage attention aux besoins de leurs subordonnés, et communiquer de manière plus ouverte ; il leur faut instaurer une confiance plus forte au sein de l'entreprise. Or nombre de ces facteurs correspondent à des tendances comportementales que beaucoup de femmes ont eu l'occasion de développer.\n\nTrois principales approches du leadership sont citées par la littérature : la première approche, basée sur les traits de personnalité du leader, a très tôt montré ses limites et a fait place à l'approche du comportement du leader. Celle-ci va élargir l'étude du leadership en prenant en compte les subordonnés. Le leadership situationnel va en plus des subordonnés suggérer la prise en compte de la situation pour un leadership plus efficace. Dans le prolongement de cette dernière approche, les approches récentes du leadership comme le leadership charismatique, le leadership transformationnel / transactionnel vont permettre des approches plus globales et plus élaborées du leadership.\n\n*(Extrait de l'ouvrage Management, l'essentiel des concepts et des pratiques. Gabilliet. Nouveaux horizons. 2006).*\n\n**Questions :**\n\n1. Quels sont d'après le texte les nouveaux enjeux du leadership moderne ? Et comment le genre se positionne par rapport à ces derniers.\n2. La planification à long terme a depuis longtemps été un pilier fondamental du management stratégique. Considérez-vous que cette planification soit toujours indispensable de nos jours ? Argumentez votre réponse.",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2023_Casablanca_FSJES_AinSebaa_MRH_QCM",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Sebaa",
+    "annee": "2023",
+    "master_reel": "Management des Ressources Humaines (MRH)",
+    "modules": [
+      "GRH",
+      "Management",
+      "Communication Interne"
+    ],
+    "notions_cles": "QCM (40 questions) : théories des organisations et de la motivation (Adam Smith, Maslow, Kurt Lewin, Elton Mayo, Weber, Deci & Ryan), marque employeur, RSE et Greenwashing, recrutement, rémunération, communication et gouvernance d'entreprise",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2023/09/concours-master-mrh-2023-fsjes-ain-sebaa.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales, Ain Sebaâ**\n\n**Test écrit d'accès au Master Management des Ressources Humaines — 2023-2024**\n\n*QCM de 40 questions (extrait représentatif ci-dessous) :*\n\n1. Où doit le concept de la « main invisible » par : Adam Smith / Abraham Maslow / Kurt Lewin / Aucune réponse\n2. Les plateformes digitales ont grandement influencé le rôle et l'efficacité de la fonction RH par : la performance / l'attractivité / la marque employeur / aucune réponse\n3. Dans une optique « marque employeur » : les employés et les candidats sont les meilleurs ambassadeurs de l'entreprise\n4. Le principe de la RSE (responsabilité sociétale des entreprises) est : un investissement coûteux sans retour, une affaire de grandes entreprises, un effet de mode, aucune réponse\n5. La logique entrepreneuriale a pour fondement de : repérer des opportunités et prendre des risques\n6. Les trente glorieuses (1945-1975) sont une période caractérisée par : une forte croissance économique et sociale\n7. Le « GreenWashing » consiste à : redorer l'image de l'entreprise à travers un positionnement écologique qu'elle ne respecte pas réellement\n8. Selon le mouvement des relations humaines (Elton Mayo) : le facteur humain doit être considéré à sa juste valeur\n9. Dans le processus de recrutement, quel est l'outil principal de présélection des candidats : le dossier de candidature\n10. Quel est le but de la rémunération individualisée : encourager le personnel\n11. Le salaire minimum interprofessionnel garanti (SMIG) pour une heure de travail applicable au Maroc : 15,55 Dhs/heure\n12. La motivation est définie comme : les forces internes de l'individu en direction d'un but\n13. Par quel moyen peut-on fidéliser les salariés d'une entreprise ? par l'évolution de carrière\n14. La durée légale du congé annuel est de : 18 jours ouvrables\n15. La période d'essai en CDI supérieur à 6 mois est de : 3 mois\n16. Le contrat d'insertion ANAPEC est un contrat de type : IDMAJ\n17. Le principe du « mentorat inversé » signifie que : les jeunes collaborateurs peuvent mieux maîtriser les codes de la transformation digitale et guider leurs aînés (« reverse mentoring »)\n18. Selon Deci et Ryan (2002), tout individu cherche à satisfaire trois types fondamentaux de besoins psychologiques : besoins d'autonomie, de compétence et d'appartenance sociale\n19. Selon Weber, la gouvernance bureaucratique est caractérisée par : une hiérarchie claire et bien définie, des règles impersonnelles et une répartition claire des compétences\n20. Parmi les propositions suivantes, quels sont les 4 principes de gestion de Taylor ? l'unité de direction, la clarté de la hiérarchie, la division verticale du travail\n21. Quelle notion correspond à la capacité permanente à s'adapter aux variations de son environnement ? la flexibilité\n22. Les cinq écrits professionnels parmi ces propositions sont : le compte rendu, le rapport, le courrier, la note de synthèse\n23. Les canaux les plus souvent utilisés en communication sont : le canal direct et le canal indirect\n24. Le synonyme d'une proposition commerciale est : devis commercial\n25. Les enjeux en communication sont : informatif, relationnel, informationnel et d'influence\n26. L'« équité externe » signifie que : l'organisation doit assurer sa compétitivité sur le marché au niveau de la rémunération\n27. La culture et la programmation mentale (Geert Hofstede) : chaque culture fonctionne selon son propre système de valeurs\n28. L'objectif ultime de la « gouvernance d'entreprise » est de : donner davantage de pouvoir aux actionnaires, concilier les intérêts des actionnaires, dirigeants et parties prenantes\n29. Le e-recrutement présente plusieurs avantages : réduction des coûts et délais, amélioration de la visibilité de la marque employeur\n30. L'innovation sociale consiste à : élaborer des réponses nouvelles à des besoins sociaux nouveaux ou mal satisfaits\n31. La différenciation par le mentorat inversé permet de concentrer toute son énergie vers l'avenir\n32. Qu'est-ce que la reformulation en communication ? dire la même chose que mon interlocuteur en prenant soin de réutiliser ses mots\n33. Le scandale de gouvernance « Cambridge Analytica » touche : Facebook\n34. Le JIT (just in time) signifie : la minimisation des stocks et des en-cours de fabrication\n35. Le modèle des cinq forces de Porter définit les dimensions sur lesquelles l'entreprise doit bâtir son avantage concurrentiel\n36. La théorie des parties prenantes stipule que l'entreprise doit collaborer avec l'ensemble de ses parties prenantes\n\n*(NB : les 40 questions complètes du QCM sont réparties sur trois colonnes dans le sujet original ; l'extrait ci-dessus reprend l'ensemble des thèmes abordés.)*",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2023_Casablanca_FSJES_AinSebaa_ChaineLogistique",
+    "categorie": "MCL",
+    "filiere": "Logistique & Supply Chain Management",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Sebaa",
+    "annee": "2023",
+    "master_reel": "Management de la Chaîne Logistique",
+    "modules": [
+      "Logistique",
+      "Économie Internationale",
+      "Actualité Économique"
+    ],
+    "notions_cles": "conséquences économiques de la guerre en Ukraine sur le Maroc, réponses institutionnelles au séisme d'Al Haouz (septembre 2023)",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2023/09/master-management-de-la-chaine-logistique-2023-fsjes-ain-sebaa.html",
+    "images": [],
+    "enonce_md": "**Faculté des Sciences Juridiques, Économiques et Sociales de Casablanca — Ain Sebaâ**\n\n**Master « Management de la chaîne logistique » — Test écrit Septembre 2023 — Durée : 1h**\n\nTraitez au choix l'un des sujets suivants :\n\n1. La guerre en Ukraine a eu des conséquences sur l'économie marocaine :\n   - Quelles sont, à votre avis, les conséquences positives ?\n   - Précisez également les conséquences négatives, s'il y a lieu !\n\n2. Quels sont les différents moyens mis en place par le Maroc pour faire face aux conséquences du dernier tremblement de terre dans les régions concernées ?",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Sale_FSJES_EntrepreneuriatIngenierieManageriale",
+    "categorie": "MRH",
+    "filiere": "Entrepreneuriat & Management de Projets",
+    "ville": "Salé",
+    "etablissement": "FSJES Salé",
+    "annee": "2016",
+    "master_reel": "Entrepreneuriat et Ingénierie Managériale",
+    "modules": [
+      "Management",
+      "Théorie des Organisations"
+    ],
+    "notions_cles": "dimension humaine des organisations, universalité vs contextualisation locale des outils de management, transfert de pratiques de management dans les pays en développement (Philippe d'Iribarne)",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-entrepreneuriat-et-ingenierie-manageriale-2016-2017.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V Rabat — Faculté des Sciences Juridiques, Économiques et Sociales — Salé**\n\n**Master Entrepreneuriat et Ingénierie Managériale — 2016-2017 — Durée 2 heures**\n\n**Sujet de dissertation :** Dimension humaine des organisations et universalité des outils du management ?\n\n**Annexe (texte à commenter, à titre indicatif) :**\n\n« Les théories du management peinent, actuellement, à articuler convenablement l'universel et le local. Le débat fait rage entre ceux, majoritaires, qui défendent le caractère universel des bonnes pratiques de management, et ceux qui mettent en avant leur ancrage local. De fait, les deux thèses apparaissent l'une et l'autre à la fois juste et insuffisante. Qu'il s'agisse de l'exercice de l'autorité, de la mobilisation des hommes, de la démarche éthique ou encore, il existe bien, à un haut niveau d'abstraction, de grands principes de gestion, de portée universelle. Mais quand, se préoccupant d'exécution, on rentre dans le concret de l'action, il devient nécessaire de prendre en compte le local. Le trouble vient de ce que les théoriciens du management tendent à confondre ces deux niveaux. Ils justifient par des principes de portée universelle ce qui n'est que modalité d'applications singulières, marquées par les sociétés particulières où elles ont pris corps. Or, pour bien démêler en quoi et de quelle façon des théories occidentales de management doivent tenir compte du contexte local, il est nécessaire de révolutionner la manière dont les théories du management considèrent les rapports entre les outils de gestion et les hommes qui s'en servent. Au lieu de se contenter de s'intéresser aux outils en faisant abstraction des hommes, il leur faut prendre en compte la manière dont l'usage des outils s'intègre dans l'univers mental, et donc culturel, de ceux qui les mettent en œuvre. Le champ même des phénomènes qu'il devient nécessaire de prendre en compte se trouve considérablement élargi, ce qui représente pour la discipline, ainsi tenue de s'ouvrir à des approches qui lui sont traditionnellement étrangères, une mutation terriblement exigeante.\n\nFaute d'une telle réforme, l'utilisation des théories du management dans les pays en développement risque fort d'être souvent contre-productive, tant les contextes culturels et sociaux sont marqués par des différences de taille par rapport à ceux qui prévalent là où les pratiques habituellement données en modèle ont été conçues. Les théories usuelles supposent que chaque individu remplit dans l'entreprise un rôle professionnel parfaitement déconnecté des relations personnelles, de connivence ou d'hostilité, qu'il entretient avec ses collègues supérieurs, subordonnés, clients, etc. »\n\n*Source : Philippe d'Iribarne, Le Tiers-Monde qui réussit. Nouveaux modèles, Paris, Odile Jacob, 2003.*\n\n*(Le texte ci-dessus est à titre indicatif.)*",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Kenitra_FSJES_MarketingLogistique",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Kénitra",
+    "etablissement": "FSJES Kénitra (Ibn Tofaïl)",
+    "annee": "2015",
+    "master_reel": "Marketing Logistique",
+    "modules": [
+      "Marketing et Distribution",
+      "Logistique et Supply Chain"
+    ],
+    "notions_cles": "servuction et implications marketing, stratégies d'internationalisation (adaptation vs standardisation de l'offre)",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2017/07/exemple-concours-master-marketing.html",
+    "images": [],
+    "enonce_md": "**Université Ibn Tofaïl — Faculté des Sciences Juridiques, Économiques et Sociales, Kénitra**\n\n**Concours d'accès au master : Marketing Logistique — Option : Marketing et Distribution — Option : Logistique et Supply Chain — Année : 2015/2016**\n\nTraiter au choix l'un des deux sujets suivants :\n\nI. La servuction et ses implications marketing.\n\nII. Stratégies d'internationalisation : Adaptation ou Standardisation ?\n\n*N.B. : Un plan pour le sujet est obligatoire, le plan doit impérativement s'insérer dans la dissertation.*\n\n*(1) L'adaptation consiste à ajuster l'offre de l'entreprise aux spécificités de chaque marché. (2) La standardisation consiste à mettre la même offre sur des marchés différents.*",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Rabat_FSJESAgdal_ActuariatFinance",
+    "categorie": "EDMQ",
+    "filiere": "Actuariat & Ingénierie Mathématique-Financière",
+    "ville": "Rabat",
+    "etablissement": "FSJES Agdal",
+    "annee": "2015",
+    "master_reel": "Actuariat & Finance",
+    "modules": [
+      "Mathématiques Financières",
+      "Statistiques",
+      "Économie et Finance"
+    ],
+    "notions_cles": "inversibilité de matrice, résolution de système linéaire, intérêts simples et composés, taux d'accroissement démographique, probabilités conditionnelles, test d'hypothèse sur une proportion, risques financiers du système bancaire marocain",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-actuariat-et-finance-2015-2016.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V — Agdal — Faculté des Sciences Juridiques, Économiques et Sociales — Rabat — Département des Sciences Économiques**\n\n**Le test écrit d'admission au Master « Actuariat & Finance » — Année Universitaire 2015-2016 — Mercredi 16 septembre 2015 à 14h00**\n\n### Contrôle des connaissances en Mathématiques\n\n**Exercice 1 :** Pour quelle valeur du réel *m* la matrice\n\nA = [[1,1,1],[1,2,4],[1,3,m]]\n\nest-elle inversible ? Calculer dans ce cas son inverse.\n\n**Exercice 2 :** Résoudre le système linéaire suivant :\n\nx + y + z = 1\nx + 2y + 4z = 2\nx + 3y + 6z = 3\n\n**Exercice 3 :** Vous placez un capital C₀ au taux d'intérêt annuel 2% pendant dix ans. On envisage les deux situations suivantes : (a) les intérêts sont simples (b) les intérêts sont composés.\n1. De combien d'années faut-il prolonger votre placement pour doubler le montant des intérêts dans chacune des deux situations ?\n2. Vos réponses auraient-elles été les mêmes avec un taux d'intérêt annuel de 4% ?\n\n**Exercice 4 :** Si vous placez à intérêts composés 10 000,00 Dhs au taux d'intérêt annuel 3% pendant quatre ans puis au taux annuel 4% durant les trois années suivantes.\n1. Quelle est la valeur de votre placement au terme des sept années ?\n2. Quel est le taux moyen du placement ?\n\n### Contrôle des connaissances en Statistiques\n\n**Exercice 1 :** La population du Maroc est passée de 29,6 millions d'habitants en 2004 à 33,8 millions d'habitants en 2014. Quel est le taux d'accroissement annuel moyen de cette population entre 2004 et 2014 ?\n\n**Exercice 2 :** La moyenne d'âge d'un groupe constitué d'hommes et de femmes est de 40 ans. La moyenne d'âge des hommes est de 35 ans, celle des femmes de 50 ans. Quelle est la proportion d'hommes dans ce groupe ?\n\n**Exercice 3 :** Dans une école, 40% des élèves ont une mauvaise vue ; 70% des élèves ayant une mauvaise vue portent des lunettes et les 30% restant ont des lentilles de contact. On choisit de façon aléatoire un élève dans cette école.\n1. Quelle est la probabilité qu'il ait une bonne vue ?\n2. Quelle est la probabilité qu'il ait une mauvaise vue et porte des lentilles ?\n\n**Exercice 4 :** Au cours des élections, un candidat est élu avec 52% des voix. Plusieurs mois après l'élection, un institut de sondage interroge 1600 électeurs, dont 800 déclarent qu'ils voteraient en cas d'élection, pour le même candidat. On souhaite savoir si la popularité de l'élu a baissé. Le résultat du test statistique donne la valeur de décision 1,75 pour une valeur critique de la table de 1,65 au seuil de 5%. Formuler les hypothèses du test et donner une conclusion.\n\n### Contrôle des connaissances en Économie et Finance\n\nExpliciter les risques auxquels est exposé le système financier marocain. Et quelles sont les méthodes de gestion de tels risques financiers ?",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Mohammedia_FSJES_ActionPubliqueGouvernanceTerritoriale",
+    "categorie": "MRH",
+    "filiere": "Management Public & Gouvernance Territoriale",
+    "ville": "Mohammedia",
+    "etablissement": "FSJES Mohammedia (Hassan II)",
+    "annee": "2016",
+    "master_reel": "Action Publique et Gouvernance Territoriale",
+    "modules": [
+      "Gouvernance Territoriale",
+      "Action Publique"
+    ],
+    "notions_cles": "dispositifs participatifs à la décision publique, démocratie participative, relations entre citoyens et décideurs politiques au niveau territorial",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2019/01/master-action-publique-et-gouvernance-territoriale-2016-2017.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales de Mohammedia**\n\n**Master Action Publique et Gouvernance Territoriale — Examen écrit d'admission 2016-2017 — Durée : deux heures**\n\nL'introduction de dispositifs participatifs à la décision publique constitue une avancée démocratique considérable. Dans quelles mesures cette ouverture permettra de repenser les relations entre les citoyens et les décideurs politiques notamment au niveau territorial ?",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
   }
 ]
