@@ -14,6 +14,7 @@ const PROTECTED_API_PREFIXES = [
 const PROTECTED_API_ALWAYS = [
   "/api/admin/stats",
   "/api/admin/export",
+  "/api/admin/export-content",
   "/api/admin/subscribers",
   "/api/admin/send-digest",
   "/api/admin/preview-digest",

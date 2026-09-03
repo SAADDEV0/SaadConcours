@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { allSousFilieres } from "../../lib/taxonomy";
+import { allSousFilieres } from "@/lib/taxonomy";
 
 /* -------------------------------------------------------------------
  * Bulk import for concours — the bottleneck standing between "66 concours"
@@ -203,7 +203,7 @@ export default function BulkImportPanel() {
   return (
     <div>
       <div className="admin-card">
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>⬆️ Import groupé de concours</h2>
+        <h2 className="admin-section-title">⬆️ Import groupé de concours</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           Colle plusieurs concours d'un coup (JSON ou CSV) au lieu de les ajouter un par un. Tout le lot est écrit en
           un seul commit GitHub. Chaque entrée importée démarre au statut <strong>📝 Brouillon</strong> dans le
@@ -254,7 +254,7 @@ export default function BulkImportPanel() {
 
       {rows && (
         <div className="admin-card" style={{ marginTop: 18 }}>
-          <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>
+          <h2 className="admin-section-title">
             Aperçu — {importable.length} / {rows.length} ligne{rows.length > 1 ? "s" : ""} importable{importable.length > 1 ? "s" : ""}
           </h2>
           <div className="admin-table-wrap">
@@ -272,12 +272,12 @@ export default function BulkImportPanel() {
               <tbody>
                 {rows.map((r, i) => (
                   <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{r.entry.etablissement || "—"}</td>
-                    <td>{r.entry.ville || "—"}</td>
-                    <td>{r.entry.filiere || "—"}</td>
-                    <td>{r.entry.annee || "—"}</td>
-                    <td>
+                    <td data-label="#">{i + 1}</td>
+                    <td data-label="Établissement">{r.entry.etablissement || "—"}</td>
+                    <td data-label="Ville">{r.entry.ville || "—"}</td>
+                    <td data-label="Filière">{r.entry.filiere || "—"}</td>
+                    <td data-label="Année">{r.entry.annee || "—"}</td>
+                    <td data-label="Statut">
                       {r.errors.length ? (
                         <span style={{ color: "var(--red)" }}>⚠ {r.errors.join(", ")} manquant(s)</span>
                       ) : r.unknownFiliere ? (

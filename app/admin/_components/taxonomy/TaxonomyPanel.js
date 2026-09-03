@@ -71,7 +71,7 @@ export default function TaxonomyPanel() {
   return (
     <div>
       <div className="admin-card">
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>🏷️ Couverture des filières</h2>
+        <h2 className="admin-section-title">🏷️ Couverture des filières</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           {grandTotal} concours répartis sur les 5 catégories de la taxonomie. Une sous-filière avec moins de{" "}
           {LOW_COVERAGE_THRESHOLD} concours (y compris 0) est signalée en orange — c'est le plan de collecte pour
@@ -100,7 +100,7 @@ export default function TaxonomyPanel() {
       </div>
 
       <div className="admin-card" style={{ marginTop: 18 }}>
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Valeurs hors taxonomie</h2>
+        <h2 className="admin-section-title">Valeurs hors taxonomie</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           Filière/concours n'ayant pas de correspondance exacte dans la taxonomie fixe ci-dessus — normalement vide,
           puisque le formulaire concours n'autorise plus que les sous-filières listées : ça ne peut arriver que via

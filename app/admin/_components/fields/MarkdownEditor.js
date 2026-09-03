@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { protectMath, renderMathWhenReady } from "../_shared/mathMarkdown";
-import { ensureKatexCss } from "../_shared/chrome";
+import { protectMath, renderMathWhenReady } from "@/app/_shared/mathMarkdown";
+import { ensureKatexCss } from "@/app/_shared/chrome";
 
 /* -------------------------------------------------------------------
  * Rich-ish Markdown editor for admin content fields (cours, énoncés,
@@ -301,6 +301,16 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
   }
 
   function handleKeyDown(e) {
+    if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
+      // Let a Ctrl/Cmd+S inside the editor submit the enclosing form instead
+      // of triggering the browser's "Save page" dialog.
+      const form = taRef.current?.closest("form");
+      if (form) {
+        e.preventDefault();
+        form.requestSubmit ? form.requestSubmit() : form.submit();
+      }
+      return;
+    }
     if (!(e.ctrlKey || e.metaKey)) return;
     if (e.key === "b") {
       e.preventDefault();
@@ -347,13 +357,13 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
           )}
         </div>
         <div className="md-mode-switch">
-          <button type="button" className={mode === "write" ? "active" : ""} onClick={() => setMode("write")}>
+          <button type="button" data-mode="write" className={mode === "write" ? "active" : ""} onClick={() => setMode("write")}>
             ✏️ Écrire
           </button>
-          <button type="button" className={mode === "split" ? "active" : ""} onClick={() => setMode("split")}>
+          <button type="button" data-mode="split" className={mode === "split" ? "active" : ""} onClick={() => setMode("split")}>
             ⬍ Fractionné
           </button>
-          <button type="button" className={mode === "preview" ? "active" : ""} onClick={() => setMode("preview")}>
+          <button type="button" data-mode="preview" className={mode === "preview" ? "active" : ""} onClick={() => setMode("preview")}>
             👁 Aperçu
           </button>
         </div>

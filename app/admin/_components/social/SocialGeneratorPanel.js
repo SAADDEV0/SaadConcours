@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useConfirm } from "../ui/ConfirmProvider";
 
 /* -------------------------------------------------------------------
  * V2 — Turns a concours, une actu "concours ouvert", un article de blog
@@ -745,6 +746,7 @@ export default function SocialGeneratorPanel() {
   const [publishing, setPublishing] = useState(false);
   const [publishResult, setPublishResult] = useState(null); // { ok, url, error }
   const canvasRef = useRef(null);
+  const confirm = useConfirm();
 
   useEffect(() => {
     CONTENT_TYPES.forEach((t) => {
@@ -820,7 +822,11 @@ export default function SocialGeneratorPanel() {
   // réseau plutôt qu'un simple clic.
   async function publishToFacebook() {
     if (!imgSrc || !text || publishing) return;
-    const ok = window.confirm("Publier ce post maintenant sur la Page Facebook de SaadConcours ?");
+    const ok = await confirm({
+      title: "Publier sur Facebook ?",
+      body: "Ce post sera immédiatement visible sur la Page Facebook de SaadConcours.",
+      confirmLabel: "Publier",
+    });
     if (!ok) return;
     setPublishing(true);
     setPublishResult(null);
@@ -846,7 +852,7 @@ export default function SocialGeneratorPanel() {
   return (
     <div>
       <div className="admin-card">
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>📣 Générateur de post</h2>
+        <h2 className="admin-section-title">📣 Générateur de post</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           Choisis un concours, une actu "concours ouvert", un article de blog ou une évaluation : récupère un texte
           prêt à coller (avec hashtags ciblés SEO) et une image générée automatiquement — pour Instagram, Facebook ou
@@ -895,7 +901,7 @@ export default function SocialGeneratorPanel() {
         <>
           <div className="social-gen-result">
             <div className="admin-card">
-              <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Texte (avec tags SEO)</h2>
+              <h2 className="admin-section-title">Texte (avec tags SEO)</h2>
               <textarea readOnly style={{ minHeight: 240, fontFamily: "monospace", fontSize: ".85rem" }} value={text} />
 
               <div className="seo-checks">
@@ -914,7 +920,7 @@ export default function SocialGeneratorPanel() {
             </div>
 
             <div className="admin-card">
-              <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>
+              <h2 className="admin-section-title">
                 Image ({format.width}×{format.height})
               </h2>
               <div className="format-picker">
@@ -965,7 +971,7 @@ export default function SocialGeneratorPanel() {
           </div>
 
           <div className="admin-card" style={{ marginTop: 18 }}>
-            <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Aperçu sur les réseaux</h2>
+            <h2 className="admin-section-title">Aperçu sur les réseaux</h2>
             <p className="admin-image-hint" style={{ marginBottom: 16 }}>
               Rendu approximatif (troncature de la légende incluse) — la mise en page réelle varie légèrement selon
               l'app et l'appareil.
