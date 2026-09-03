@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sha256Hex, constantTimeEqual } from "./lib/security";
 
 const PROTECTED_API_PREFIXES = [
   "/api/concours",
@@ -32,12 +33,13 @@ function isProtectedApiAlways(pathname) {
   return PROTECTED_API_ALWAYS.some((p) => pathname.startsWith(p));
 }
 
-export function middleware(req) {
+export async function middleware(req) {
   try {
     const { pathname } = req.nextUrl;
     const expected = process.env.ADMIN_PASSWORD;
     const cookie = req.cookies.get("sc_admin")?.value;
-    const authorized = Boolean(expected) && cookie === expected;
+    const authorized =
+      Boolean(expected) && Boolean(cookie) && constantTimeEqual(cookie, await sha256Hex(expected));
 
     if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
       if (!authorized) {
