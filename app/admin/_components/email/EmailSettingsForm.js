@@ -66,14 +66,16 @@ export default function EmailSettingsForm() {
             Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours, via le
             compte Gmail configuré côté serveur (GMAIL_USER / GMAIL_APP_PASSWORD) — sans ça, l'envoi ne fait rien.
           </p>
-          <label className="admin-checkbox-label">
-            <input
-              type="checkbox"
-              checked={Boolean(form.newsAlertsEnabled)}
-              onChange={(e) => setForm({ ...form, newsAlertsEnabled: e.target.checked })}
-            />
-            <span className="toggle-thumb" aria-hidden="true" />
-            Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)
+          <label className="admin-switch-row">
+            <span className="admin-switch-row-label">Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)</span>
+            <span className="admin-switch">
+              <input
+                type="checkbox"
+                checked={Boolean(form.newsAlertsEnabled)}
+                onChange={(e) => setForm({ ...form, newsAlertsEnabled: e.target.checked })}
+              />
+              <span className="admin-switch-thumb" aria-hidden="true" />
+            </span>
           </label>
 
           <div className="admin-field" style={{ marginTop: 16 }}>

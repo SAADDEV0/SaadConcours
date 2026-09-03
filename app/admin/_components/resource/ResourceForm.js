@@ -33,19 +33,26 @@ export default function ResourceForm({
           )}
           {fields.map((f) => {
             const isWide =
-              f.type === "textarea" || f.markdown || f.type === "image-list" || f.type === "quiz-questions" || f.type === "list";
+              f.type === "textarea" ||
+              f.markdown ||
+              f.type === "image-list" ||
+              f.type === "quiz-questions" ||
+              f.type === "list" ||
+              f.type === "checkbox";
             const fieldClass = f.type === "quiz-questions" ? "admin-form-wide" : "admin-field" + (isWide ? " admin-form-wide" : "");
             return (
               <div className={fieldClass} key={f.key}>
                 {f.type === "checkbox" ? (
-                  <label className="admin-checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(form[f.key])}
-                      onChange={(e) => setForm({ ...form, [f.key]: e.target.checked })}
-                    />
-                    <span className="toggle-thumb" aria-hidden="true" />
-                    {f.label}
+                  <label className="admin-switch-row">
+                    <span className="admin-switch-row-label">{f.label}</span>
+                    <span className="admin-switch">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(form[f.key])}
+                        onChange={(e) => setForm({ ...form, [f.key]: e.target.checked })}
+                      />
+                      <span className="admin-switch-thumb" aria-hidden="true" />
+                    </span>
                   </label>
                 ) : f.type === "quiz-questions" ? (
                   <div className="admin-field">

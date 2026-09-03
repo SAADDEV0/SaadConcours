@@ -95,6 +95,32 @@
 }
 .admin-checkbox-label input[type="checkbox"]:checked ~ .toggle-thumb{transform:translateX(17px);}
 
+/* Switch row — a bordered, full-width toggle setting ("Disponible",
+ * "Publié", "Activer AdSense"...) instead of a bare label+switch floating
+ * inline among text fields, where it used to read as visually broken. */
+.admin-switch-row{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:13px 16px; border:1.5px solid var(--border); border-radius:12px; background:var(--bg-card);
+  cursor:pointer; margin-bottom:16px; transition:border-color .12s ease, background-color .12s ease;
+}
+.admin-switch-row:hover{border-color:var(--accent);}
+.admin-switch-row:has(input:checked){border-color:color-mix(in srgb, var(--accent) 45%, var(--border)); background:var(--accent-dim);}
+.admin-switch-row-label{font-size:.88rem; font-weight:600; color:var(--text);}
+.admin-switch-row-hint{display:block; font-size:.76rem; font-weight:400; color:var(--text-faint); margin-top:2px;}
+.admin-switch{position:relative; display:inline-flex; align-items:center; flex-shrink:0;}
+.admin-switch input[type="checkbox"]{
+  appearance:none; -webkit-appearance:none; width:44px; height:26px; border-radius:999px; margin:0; flex-shrink:0;
+  background:var(--border); border:1px solid var(--border); cursor:pointer;
+  transition:background .18s ease, border-color .18s ease;
+}
+.admin-switch input[type="checkbox"]:checked{background:var(--brand-grad); border-color:transparent;}
+.admin-switch input[type="checkbox"]:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);}
+.admin-switch-thumb{
+  position:absolute; left:4px; top:50%; margin-top:-9.5px; width:19px; height:19px; border-radius:50%;
+  background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.35); pointer-events:none; transition:transform .18s ease;
+}
+.admin-switch input[type="checkbox"]:checked ~ .admin-switch-thumb{transform:translateX(18px);}
+
 .settings-chip-grid{display:flex; flex-wrap:wrap; gap:8px;}
 .settings-chip{
   position:relative; display:inline-flex; align-items:center; padding:8px 16px; border-radius:999px;
@@ -517,6 +543,27 @@
 .dash-hero-greeting{font-size:1.3rem; font-weight:800; color:var(--text); letter-spacing:-.015em;}
 .dash-quick-actions{display:flex; gap:8px; flex-wrap:wrap;}
 
+/* Quick-nav pills — jump links to each dashboard section, since the
+   sectioned layout is taller than the old flat grid. */
+.dash-quicknav{display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;}
+.dash-quicknav-pill{
+  display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:999px; font-size:.78rem; font-weight:600;
+  background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim); text-decoration:none;
+  transition:border-color .12s ease, color .12s ease, background-color .12s ease;
+}
+.dash-quicknav-pill:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-dim);}
+
+/* Section headers grouping the dashboard into Vue d'ensemble / Audience /
+   Concours à traiter / Performance — scroll-margin so the sticky topbar
+   never covers the heading when a quick-nav pill jumps to it. */
+.dash-section{margin-top:34px;}
+.dash-section:first-of-type{margin-top:0;}
+.dash-section-title{
+  display:flex; align-items:center; gap:9px; font-size:1.05rem; font-weight:800; color:var(--text);
+  margin:0 0 14px; letter-spacing:-.01em; scroll-margin-top:84px;
+}
+.dash-section-icon{font-size:1.05rem;}
+
 .stat-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(220px,100%), 1fr)); gap:16px;}
 .stat-card{
   background:var(--bg-elev); border:1px solid var(--border); border-radius:16px; padding:18px 19px;
@@ -591,7 +638,9 @@
 .dash-list{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column; max-height:320px; overflow-y:auto;}
 .dash-list li{padding:10px 2px; border-bottom:1px solid var(--border); font-size:.85rem; color:var(--text);}
 .dash-list li:last-child{border-bottom:none;}
-.dash-list-date{color:var(--text-faint); font-size:.78rem;}
+.dash-list-date{color:var(--text-faint); font-size:.78rem; flex-shrink:0;}
+.dash-list-subscriber{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.dash-list-subscriber-email{font-family:monospace; font-size:.82rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
 
 .stat-rank-list{margin:0; padding-left:0; list-style:none; counter-reset:rank; display:flex; flex-direction:column; gap:2px;}
 .stat-rank-list li{
@@ -624,27 +673,56 @@
 .qz-count{font-size:.82rem; color:var(--text-dim); font-weight:600;}
 .qz-filter{padding:7px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg-elev); color:var(--text); font-size:.82rem;}
 .qz-list{display:flex; flex-direction:column; gap:8px; max-height:520px; overflow-y:auto; padding-right:4px;}
-.qz-question{background:var(--bg-card); border:1px solid var(--border); border-radius:8px; overflow:hidden;}
-.qz-question-row{display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer;}
+.qz-question{background:var(--bg-card); border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color .12s ease;}
+.qz-question.open{border-color:color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow:0 0 0 3px var(--accent-dim);}
+.qz-question-row{display:flex; align-items:center; gap:10px; padding:11px 12px; cursor:pointer;}
 .qz-question-row:hover{background:var(--bg);}
-.qz-question-num{font-size:.72rem; font-weight:700; color:var(--accent); flex-shrink:0;}
+.qz-question-num{
+  font-size:.72rem; font-weight:800; color:var(--accent); flex-shrink:0; background:var(--accent-dim);
+  border-radius:6px; padding:3px 7px;
+}
 .qz-question-chapter{
   font-size:.68rem; color:var(--text-faint); background:var(--bg); border:1px solid var(--border);
-  padding:2px 8px; border-radius:6px; flex-shrink:0; white-space:nowrap;
+  padding:2px 8px; border-radius:6px; flex-shrink:0; white-space:nowrap; max-width:220px; overflow:hidden; text-overflow:ellipsis;
 }
-.qz-question-preview{flex:1; font-size:.86rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.qz-question-preview{flex:1; font-size:.86rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
+.qz-question-answer-badges{display:flex; gap:3px; flex-shrink:0;}
+.qz-mini-badge{
+  display:inline-flex; align-items:center; justify-content:center; min-width:19px; height:19px; padding:0 4px;
+  border-radius:6px; font-size:.68rem; font-weight:800; background:var(--green-dim); color:var(--green);
+}
+.qz-mini-badge.warn{background:color-mix(in srgb, var(--amber) 20%, transparent); color:var(--amber);}
 .qz-question-toggle{color:var(--text-faint); font-size:.7rem; flex-shrink:0;}
-.qz-question-body{padding:6px 14px 14px; border-top:1px solid var(--border);}
-.qz-option{display:flex; align-items:center; gap:8px; margin-bottom:6px;}
-.qz-option-check{flex-shrink:0; width:18px; height:18px; accent-color:var(--green);}
-.qz-option-letter{width:38px; flex-shrink:0; text-align:center; padding:7px 4px; border-radius:6px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:.85rem;}
-.qz-option-text{flex:1; padding:7px 10px; border-radius:6px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:.85rem;}
+.qz-question-body{padding:16px; border-top:1px solid var(--border); background:var(--bg-elev);}
+.qz-question-body-grid{display:grid; grid-template-columns:minmax(220px,320px); gap:14px;}
+.qz-question-textarea{min-height:78px; line-height:1.5;}
+
+.qz-options{display:flex; flex-direction:column; gap:8px;}
+.qz-option{
+  display:flex; align-items:center; gap:8px; padding:6px; border-radius:10px; border:1.5px solid var(--border);
+  background:var(--bg); transition:border-color .12s ease, background-color .12s ease;
+}
+.qz-option.correct{border-color:color-mix(in srgb, var(--green) 55%, var(--border)); background:color-mix(in srgb, var(--green) 7%, var(--bg));}
+.qz-option-check{
+  flex-shrink:0; width:30px; height:30px; border-radius:8px; border:1.5px solid var(--border); background:var(--bg-elev);
+  color:transparent; font-size:.95rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:background-color .12s ease, border-color .12s ease, color .12s ease;
+}
+.qz-option-check:hover{border-color:var(--green);}
+.qz-option-check.checked{background:var(--green); border-color:var(--green); color:#fff;}
+.qz-option-letter{
+  width:30px; flex-shrink:0; text-align:center; padding:4px; border-radius:8px; border:1px solid transparent;
+  background:transparent; color:var(--text-faint); font-size:.78rem; font-weight:700; text-transform:uppercase;
+}
+.qz-option-letter:focus{border-color:var(--border); background:var(--bg-elev); color:var(--text);}
+.qz-option-text{flex:1; min-width:0; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg-elev); color:var(--text); font-size:.85rem;}
 .qz-option-remove{
-  flex-shrink:0; width:28px; height:28px; border-radius:6px; border:1px solid var(--border); background:var(--bg);
+  flex-shrink:0; width:30px; height:30px; border-radius:8px; border:1px solid var(--border); background:var(--bg-elev);
   color:var(--text-faint); cursor:pointer;
 }
 .qz-option-remove:hover{color:var(--red); border-color:var(--red);}
-.qz-question-actions{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);}
+.qz-question-actions{display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:14px; padding-top:14px; border-top:1px dashed var(--border);}
+.qz-question-actions-move{display:flex; gap:6px;}
 
 /* --------------------------- Admin v2 additions --------------------------- */
 

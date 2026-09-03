@@ -5,6 +5,7 @@ import BrandLogo from "@/app/_shared/BrandLogo";
 import SidebarNav from "./SidebarNav";
 import Topbar from "./Topbar";
 import { Scrim, useMobileDrawer } from "./MobileDrawer";
+import SubscriberAlerts from "./SubscriberAlerts";
 import { ToastProvider } from "../ui/ToastProvider";
 import { ConfirmProvider } from "../ui/ConfirmProvider";
 import { useLocalStorage } from "../../_lib/useLocalStorage";
@@ -17,6 +18,7 @@ export default function AdminShell({ children }) {
   return (
     <ToastProvider>
       <ConfirmProvider>
+        <SubscriberAlerts />
         <div className="admin-shell">
           <Scrim open={navOpen} onClose={() => setNavOpen(false)} />
           <aside

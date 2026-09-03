@@ -36,16 +36,16 @@ export function useDashboardLayout() {
   );
   const toggle = useCallback((id) => (isVisible(id) ? hide(id) : show(id)), [isVisible, hide, show]);
 
-  // Swaps `id` with its neighbor within the same registry group, so arrow
-  // buttons in the "Personnaliser" panel (grouped by KPI/Graphiques/Listes)
-  // never reorder a widget across a group boundary.
+  // Swaps `id` with its neighbor within the same dashboard section, so arrow
+  // buttons in the "Personnaliser" panel (grouped by section, same grouping
+  // the live dashboard uses) never reorder a widget across a section boundary.
   const move = useCallback(
     (id, direction) => {
       setRaw((prev) => {
         const current = (prev.order && prev.order.length ? prev.order : order).filter((x) => WIDGET_IDS.includes(x));
         const full = [...current, ...WIDGET_IDS.filter((x) => !current.includes(x))];
-        const group = widgetById(id)?.group;
-        const groupIndices = full.map((wid, idx) => (widgetById(wid)?.group === group ? idx : -1)).filter((idx) => idx !== -1);
+        const section = widgetById(id)?.section;
+        const groupIndices = full.map((wid, idx) => (widgetById(wid)?.section === section ? idx : -1)).filter((idx) => idx !== -1);
         const posInGroup = groupIndices.indexOf(full.indexOf(id));
         const targetPos = posInGroup + direction;
         if (targetPos < 0 || targetPos >= groupIndices.length) return prev;

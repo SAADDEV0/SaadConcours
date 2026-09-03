@@ -1,16 +1,55 @@
+import Link from "next/link";
 import StatCard from "./StatCard";
 import WidgetCard from "./WidgetCard";
 import AreaChart from "./AreaChart";
 import DonutChart from "./DonutChart";
 import TodoCard from "./TodoCard";
-import { trendFromSeries, dayLabelShort } from "../../_lib/format";
+import EmptyState from "../ui/EmptyState";
+import { trendFromSeries, dayLabelShort, dayLabelMed, timeAgoFr } from "../../_lib/format";
 import { buildTodoItems } from "../../_lib/todo";
 
 // Renders one dashboard widget by id, given the shared fetch context. Kept
 // separate from the (serializable) registry in _lib/widgets.js so that file
 // can stay a plain data list reusable by the "Personnaliser" panel.
 export function renderWidget(id, ctx, onDismiss) {
-  const { stats, extra } = ctx;
+  const { stats, extra, subscribers } = ctx;
+
+  // The two subscriber widgets only need `subscribers`, not `stats` (which
+  // can still be loading) — render them independently so the audience
+  // section isn't blocked on the (separate) stats fetch.
+  if (id === "chart.subscriberGrowth") {
+    if (!subscribers) return null;
+    const hasHistory = subscribers.history?.some((p) => p.count > 0);
+    return (
+      <WidgetCard key={id} title="Croissance des abonnés" sub="Total d'abonnés aux alertes, 14 derniers jours" href="/admin/alertes/abonnes" onDismiss={onDismiss}>
+        {hasHistory ? (
+          <AreaChart points={subscribers.history.map((p) => ({ label: dayLabelMed(p.date), value: p.count }))} formatValue={(v) => `${v} abonnés`} />
+        ) : (
+          <EmptyState icon="📈" message="Pas encore assez de données pour tracer une courbe." />
+        )}
+      </WidgetCard>
+    );
+  }
+  if (id === "list.newSubscribers") {
+    if (!subscribers) return null;
+    return (
+      <WidgetCard key={id} title="🎉 Derniers abonnés" sub={`${subscribers.count} abonné${subscribers.count > 1 ? "s" : ""} au total`} href="/admin/alertes/abonnes" onDismiss={onDismiss}>
+        {subscribers.recent?.length ? (
+          <ul className="dash-list">
+            {subscribers.recent.map((r) => (
+              <li key={r.email} className="dash-list-subscriber">
+                <span className="dash-list-subscriber-email">{r.email}</span>
+                <span className="dash-list-date">{timeAgoFr(r.subscribedAt)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <EmptyState icon="📭" message="Aucun nouvel abonné suivi pour l'instant." />
+        )}
+      </WidgetCard>
+    );
+  }
+
   if (!stats) return null;
 
   const pdfSeries = stats.pdfLast7Days.map(([, n]) => n);

@@ -117,14 +117,16 @@ export default function PdfSettingsForm() {
           </select>
         </div>
 
-        <label className="admin-checkbox-label">
-          <input
-            type="checkbox"
-            checked={form.pdfWatermarkEnabled !== false}
-            onChange={(e) => setForm({ ...form, pdfWatermarkEnabled: e.target.checked })}
-          />
-          <span className="toggle-thumb" aria-hidden="true" />
-          Afficher un filigrane sur les pages
+        <label className="admin-switch-row">
+          <span className="admin-switch-row-label">Afficher un filigrane sur les pages</span>
+          <span className="admin-switch">
+            <input
+              type="checkbox"
+              checked={form.pdfWatermarkEnabled !== false}
+              onChange={(e) => setForm({ ...form, pdfWatermarkEnabled: e.target.checked })}
+            />
+            <span className="admin-switch-thumb" aria-hidden="true" />
+          </span>
         </label>
 
         {form.pdfWatermarkEnabled !== false && (
@@ -151,14 +153,16 @@ export default function PdfSettingsForm() {
           </>
         )}
 
-        <label className="admin-checkbox-label">
-          <input
-            type="checkbox"
-            checked={form.pdfShowSocialFooter !== false}
-            onChange={(e) => setForm({ ...form, pdfShowSocialFooter: e.target.checked })}
-          />
-          <span className="toggle-thumb" aria-hidden="true" />
-          Afficher le site et les réseaux sociaux (onglet Général) en pied de page des PDF
+        <label className="admin-switch-row">
+          <span className="admin-switch-row-label">Afficher le site et les réseaux sociaux (onglet Général) en pied de page des PDF</span>
+          <span className="admin-switch">
+            <input
+              type="checkbox"
+              checked={form.pdfShowSocialFooter !== false}
+              onChange={(e) => setForm({ ...form, pdfShowSocialFooter: e.target.checked })}
+            />
+            <span className="admin-switch-thumb" aria-hidden="true" />
+          </span>
         </label>
       </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "../ui/Modal";
-import { WIDGET_GROUPS, widgetById } from "../../_lib/widgets";
+import { DASHBOARD_SECTIONS, widgetById } from "../../_lib/widgets";
 
 export default function CustomizePanel({ open, onClose, layout }) {
   const { order, isVisible, toggle, move, reset } = layout;
@@ -12,12 +12,14 @@ export default function CustomizePanel({ open, onClose, layout }) {
         ⚙️ Personnaliser le tableau de bord
       </h2>
       <div className="customize-panel">
-        {WIDGET_GROUPS.map((group) => {
-          const ids = order.filter((id) => widgetById(id)?.group === group.id);
+        {DASHBOARD_SECTIONS.map((section) => {
+          const ids = order.filter((id) => widgetById(id)?.section === section.id);
           if (!ids.length) return null;
           return (
-            <div key={group.id}>
-              <div className="customize-group-label">{group.label}</div>
+            <div key={section.id}>
+              <div className="customize-group-label">
+                {section.icon} {section.label}
+              </div>
               {ids.map((id, idx) => (
                 <CustomizeRow
                   key={id}
@@ -47,7 +49,7 @@ export default function CustomizePanel({ open, onClose, layout }) {
 }
 
 function CustomizeRow({ id, visible, onToggle, onMoveUp, onMoveDown, disabledUp, disabledDown }) {
-  const label = widgetLabel(id);
+  const label = widgetById(id)?.label || id;
   return (
     <div className="customize-row">
       <label className="admin-checkbox-label" style={{ margin: 0, flex: 1 }}>
@@ -65,8 +67,4 @@ function CustomizeRow({ id, visible, onToggle, onMoveUp, onMoveDown, disabledUp,
       </div>
     </div>
   );
-}
-
-function widgetLabel(id) {
-  return widgetById(id)?.label || id;
 }

@@ -75,14 +75,16 @@ export default function AdsSettingsForm() {
           ton tableau de bord AdSense.
         </p>
 
-        <label className="admin-checkbox-label">
-          <input
-            type="checkbox"
-            checked={form.adsEnabled !== false}
-            onChange={(e) => setForm({ ...form, adsEnabled: e.target.checked })}
-          />
-          <span className="toggle-thumb" aria-hidden="true" />
-          Activer Google AdSense sur le site (interrupteur général)
+        <label className="admin-switch-row">
+          <span className="admin-switch-row-label">Activer Google AdSense sur le site (interrupteur général)</span>
+          <span className="admin-switch">
+            <input
+              type="checkbox"
+              checked={form.adsEnabled !== false}
+              onChange={(e) => setForm({ ...form, adsEnabled: e.target.checked })}
+            />
+            <span className="admin-switch-thumb" aria-hidden="true" />
+          </span>
         </label>
 
         <div className="admin-field" style={{ marginTop: 16 }}>
@@ -95,19 +97,21 @@ export default function AdsSettingsForm() {
         </div>
 
         {SLOTS.map((slot) => (
-          <div key={slot.enabledKey} style={{ border: "1px solid var(--border)", borderRadius: 8, padding: 14, marginBottom: 12 }}>
-            <label className="admin-checkbox-label" style={{ marginBottom: 4 }}>
-              <input
-                type="checkbox"
-                checked={Boolean(form[slot.enabledKey])}
-                onChange={(e) => setForm({ ...form, [slot.enabledKey]: e.target.checked })}
-              />
-              <span className="toggle-thumb" aria-hidden="true" />
-              {slot.title}
+          <div key={slot.enabledKey} style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+            <label className="admin-switch-row" style={{ marginBottom: 10, background: "var(--bg-elev)" }}>
+              <span className="admin-switch-row-label">
+                {slot.title}
+                <span className="admin-switch-row-hint">{slot.desc}</span>
+              </span>
+              <span className="admin-switch">
+                <input
+                  type="checkbox"
+                  checked={Boolean(form[slot.enabledKey])}
+                  onChange={(e) => setForm({ ...form, [slot.enabledKey]: e.target.checked })}
+                />
+                <span className="admin-switch-thumb" aria-hidden="true" />
+              </span>
             </label>
-            <p className="admin-image-hint" style={{ margin: "0 0 10px" }}>
-              {slot.desc}
-            </p>
             <div className="admin-field" style={{ marginBottom: 0 }}>
               <label>ID d'emplacement (ad slot)</label>
               <input

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { emptyOption, nextQuestionId } from "../../_lib/resourceForm";
 import { useConfirm } from "../ui/ConfirmProvider";
 
@@ -12,6 +12,7 @@ export default function QuestionsEditor({ value, onChange }) {
   const [expanded, setExpanded] = useState(() => new Set());
   const [visibleCount, setVisibleCount] = useState(QUESTIONS_PAGE_SIZE);
   const confirm = useConfirm();
+  const chapterListId = useId();
 
   const chapters = [...new Set(questions.map((q) => q.chapter).filter(Boolean))];
   const filtered = questions
@@ -102,62 +103,102 @@ export default function QuestionsEditor({ value, onChange }) {
         </button>
       </div>
 
+      <datalist id={chapterListId}>
+        {chapters.map((c) => (
+          <option key={c} value={c} />
+        ))}
+      </datalist>
+
       <div className="qz-list">
         {visible.map((idx) => {
           const q = questions[idx];
           const isOpen = expanded.has(q.id);
+          const correctLetters = (q.correct || []).slice().sort();
           return (
-            <div className="qz-question" key={q.id}>
+            <div className={"qz-question" + (isOpen ? " open" : "")} key={q.id}>
               <div className="qz-question-row" onClick={() => toggleExpanded(q.id)}>
                 <span className="qz-question-num">Q{idx + 1}</span>
                 {q.chapter && <span className="qz-question-chapter">{q.chapter}</span>}
                 <span className="qz-question-preview">{q.question || "(question vide)"}</span>
+                <span className="qz-question-answer-badges">
+                  {correctLetters.length ? (
+                    correctLetters.map((l) => (
+                      <span className="qz-mini-badge" key={l}>
+                        {l.toUpperCase()}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="qz-mini-badge warn" title="Aucune bonne réponse cochée">
+                      ?
+                    </span>
+                  )}
+                </span>
                 <span className="qz-question-toggle">{isOpen ? "▲" : "▼"}</span>
               </div>
 
               {isOpen && (
                 <div className="qz-question-body" onClick={(e) => e.stopPropagation()}>
-                  <div className="admin-field">
-                    <label>Chapitre</label>
-                    <input value={q.chapter || ""} onChange={(e) => updateQuestion(idx, { chapter: e.target.value })} />
+                  <div className="qz-question-body-grid">
+                    <div className="admin-field qz-chapter-field">
+                      <label>Chapitre</label>
+                      <input
+                        list={chapterListId}
+                        value={q.chapter || ""}
+                        placeholder="ex: Chapitre 1 — ..."
+                        onChange={(e) => updateQuestion(idx, { chapter: e.target.value })}
+                      />
+                    </div>
                   </div>
                   <div className="admin-field">
                     <label>Énoncé de la question</label>
                     <textarea
-                      style={{ minHeight: 70 }}
+                      className="qz-question-textarea"
                       value={q.question || ""}
                       onChange={(e) => updateQuestion(idx, { question: e.target.value })}
                     />
                   </div>
                   <div className="admin-field">
-                    <label>Options (coche la ou les bonnes réponses)</label>
-                    {(q.options || []).map((o, oIdx) => (
-                      <div className="qz-option" key={oIdx}>
-                        <input
-                          type="checkbox"
-                          className="qz-option-check"
-                          checked={(q.correct || []).includes(o.letter)}
-                          onChange={() => toggleCorrect(idx, o.letter)}
-                          title="Réponse correcte"
-                        />
-                        <input
-                          className="qz-option-letter"
-                          value={o.letter}
-                          maxLength={2}
-                          onChange={(e) => updateOption(idx, oIdx, { letter: e.target.value })}
-                        />
-                        <input
-                          className="qz-option-text"
-                          placeholder="Texte de la réponse"
-                          value={o.text || ""}
-                          onChange={(e) => updateOption(idx, oIdx, { text: e.target.value })}
-                        />
-                        <button type="button" className="qz-option-remove" onClick={() => removeOption(idx, oIdx)}>
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                    <button type="button" className="admin-btn secondary" style={{ marginTop: 6 }} onClick={() => addOption(idx)}>
+                    <label>Options — clique sur ✓ pour marquer la ou les bonnes réponses</label>
+                    <div className="qz-options">
+                      {(q.options || []).map((o, oIdx) => {
+                        const isCorrect = (q.correct || []).includes(o.letter);
+                        return (
+                          <div className={"qz-option" + (isCorrect ? " correct" : "")} key={oIdx}>
+                            <button
+                              type="button"
+                              className={"qz-option-check" + (isCorrect ? " checked" : "")}
+                              onClick={() => toggleCorrect(idx, o.letter)}
+                              title={isCorrect ? "Bonne réponse" : "Marquer comme bonne réponse"}
+                              aria-pressed={isCorrect}
+                            >
+                              {isCorrect ? "✓" : ""}
+                            </button>
+                            <input
+                              className="qz-option-letter"
+                              value={o.letter}
+                              maxLength={2}
+                              title="Lettre de l'option"
+                              onChange={(e) => updateOption(idx, oIdx, { letter: e.target.value })}
+                            />
+                            <input
+                              className="qz-option-text"
+                              placeholder="Texte de la réponse"
+                              value={o.text || ""}
+                              onChange={(e) => updateOption(idx, oIdx, { text: e.target.value })}
+                            />
+                            <button
+                              type="button"
+                              className="qz-option-remove"
+                              title="Retirer cette option"
+                              onClick={() => removeOption(idx, oIdx)}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <button type="button" className="admin-btn secondary" style={{ marginTop: 10 }} onClick={() => addOption(idx)}>
                       + Option
                     </button>
                   </div>
@@ -166,19 +207,22 @@ export default function QuestionsEditor({ value, onChange }) {
                     <input value={q.justification || ""} onChange={(e) => updateQuestion(idx, { justification: e.target.value })} />
                   </div>
                   <div className="qz-question-actions">
-                    <button type="button" className="admin-btn secondary" onClick={() => moveQuestion(idx, -1)} disabled={idx === 0}>
-                      ↑ Monter
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-btn secondary"
-                      onClick={() => moveQuestion(idx, 1)}
-                      disabled={idx === questions.length - 1}
-                    >
-                      ↓ Descendre
-                    </button>
+                    <div className="qz-question-actions-move">
+                      <button type="button" className="admin-icon-btn" title="Monter" onClick={() => moveQuestion(idx, -1)} disabled={idx === 0}>
+                        ↑
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-icon-btn"
+                        title="Descendre"
+                        onClick={() => moveQuestion(idx, 1)}
+                        disabled={idx === questions.length - 1}
+                      >
+                        ↓
+                      </button>
+                    </div>
                     <button type="button" className="admin-btn danger" onClick={() => removeQuestion(idx)}>
-                      Supprimer la question
+                      🗑️ Supprimer la question
                     </button>
                   </div>
                 </div>

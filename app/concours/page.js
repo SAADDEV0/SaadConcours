@@ -114,44 +114,79 @@ export default function ConcoursPage() {
       });
     }
 
+    // Accent/case/whitespace-insensitive key so "Contrôle de Gestion" and
+    // "Contrôle de gestion" (free-text data entered by different admins)
+    // collapse into the same module instead of listing as two options.
+    function normalizeModuleKey(s) {
+      return String(s || "")
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ");
+    }
+
     // Modules aren't part of the fixed taxonomy (they're free-form per
-    // concours), so grouping is derived from the data itself: which
-    // catégorie each module actually shows up under, rather than a static
-    // mapping that would drift as new modules get added via /admin.
+    // concours), so grouping is derived from the data itself. A module is
+    // legitimately used across several catégories (e.g. "Microéconomie" in
+    // both FCA and EAPP concours) — each one is placed under a single
+    // "home" catégorie (whichever uses it the most) instead of being listed
+    // once per catégorie, otherwise the same module name repeats in every
+    // group it happens to appear in.
     function fillModuleSelect() {
       const el = $("#filterModule");
       el.innerHTML = '<option value="">Tous les modules</option>';
-      const byCategorie = {};
+
+      const byKey = new Map(); // normalizedKey -> { forms: Map<rawForm,count>, catCounts: Map<catCode,count> }
       ALL.forEach((c) => {
         const code = c.categorie || "";
-        (c.modules || []).forEach((m) => {
-          if (!byCategorie[code]) byCategorie[code] = new Set();
-          byCategorie[code].add(m);
+        (c.modules || []).forEach((raw) => {
+          const key = normalizeModuleKey(raw);
+          if (!key) return;
+          if (!byKey.has(key)) byKey.set(key, { forms: new Map(), catCounts: new Map() });
+          const entry = byKey.get(key);
+          entry.forms.set(raw, (entry.forms.get(raw) || 0) + 1);
+          entry.catCounts.set(code, (entry.catCounts.get(code) || 0) + 1);
         });
       });
+
+      const byCategorie = {};
+      byKey.forEach((entry) => {
+        // Canonical display spelling = the most-used raw form for this
+        // module, ties broken alphabetically so the choice is deterministic.
+        const display = [...entry.forms.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "fr"))[0][0];
+        const home = [...entry.catCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0];
+        if (!byCategorie[home]) byCategorie[home] = [];
+        byCategorie[home].push(display);
+      });
+
       FILIERE_CATEGORIES.forEach((cat) => {
         const mods = byCategorie[cat.code];
-        if (!mods || !mods.size) return;
+        if (!mods || !mods.length) return;
         const group = document.createElement("optgroup");
         group.label = cat.label;
-        [...mods].sort().forEach((m) => {
-          const opt = document.createElement("option");
-          opt.value = m;
-          opt.textContent = m;
-          group.appendChild(opt);
-        });
+        mods
+          .sort((a, b) => a.localeCompare(b, "fr"))
+          .forEach((m) => {
+            const opt = document.createElement("option");
+            opt.value = m;
+            opt.textContent = m;
+            group.appendChild(opt);
+          });
         el.appendChild(group);
       });
       const uncategorized = byCategorie[""];
-      if (uncategorized && uncategorized.size) {
+      if (uncategorized && uncategorized.length) {
         const group = document.createElement("optgroup");
         group.label = "Autres";
-        [...uncategorized].sort().forEach((m) => {
-          const opt = document.createElement("option");
-          opt.value = m;
-          opt.textContent = m;
-          group.appendChild(opt);
-        });
+        uncategorized
+          .sort((a, b) => a.localeCompare(b, "fr"))
+          .forEach((m) => {
+            const opt = document.createElement("option");
+            opt.value = m;
+            opt.textContent = m;
+            group.appendChild(opt);
+          });
         el.appendChild(group);
       }
     }
@@ -205,7 +240,10 @@ export default function ConcoursPage() {
         if (filiere && c.filiere !== filiere) return false;
         if (etab && c.etablissement !== etab) return false;
         if (annee && String(c.annee) !== annee) return false;
-        if (module && !(c.modules || []).includes(module)) return false;
+        if (module) {
+          const key = normalizeModuleKey(module);
+          if (!(c.modules || []).some((m) => normalizeModuleKey(m) === key)) return false;
+        }
         if (q) {
           const hay = [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")]
             .join(" ")
