@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml } from "./_shared/chrome";
+import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "./_shared/chrome";
 
 const ACTIONS = [
   {
@@ -69,12 +69,12 @@ ${chromeHtml({ active: "home", showSearch: false })}
     <div class="alert-form-msg" id="alertFormMsg"></div>
   </section>
 
-  <section class="home-alert" id="homeAlert" style="display:none;">
+  <section class="home-alert" id="homeAlert">
     <div class="home-alert-head">
       <span class="home-alert-title">🔔 Concours récemment ouverts</span>
       <a class="home-alert-link" href="/news">Voir tout →</a>
     </div>
-    <div class="home-alert-list" id="homeAlertList"></div>
+    <div class="home-alert-list" id="homeAlertList">${spinnerHtml("Chargement des concours ouverts...")}</div>
   </section>
 
   <section class="home-actions">
@@ -202,7 +202,10 @@ export default function HomePage() {
         const recent = [...open]
           .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
           .slice(0, 3);
-        if (!recent.length) return;
+        if (!recent.length) {
+          $("#homeAlert").style.display = "none";
+          return;
+        }
 
         const list = $("#homeAlertList");
         list.innerHTML = "";
@@ -219,9 +222,10 @@ export default function HomePage() {
           `;
           list.appendChild(row);
         });
-        $("#homeAlert").style.display = "block";
       })
-      .catch(() => {});
+      .catch(() => {
+        $("#homeAlert").style.display = "none";
+      });
 
     const alertForm = $("#alertForm");
     // Guard against React StrictMode's dev-only double effect invoke
