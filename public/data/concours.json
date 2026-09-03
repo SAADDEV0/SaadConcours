@@ -2934,5 +2934,813 @@
     "enonce_md": "**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales de Mohammedia**\n\n**Master Action Publique et Gouvernance Territoriale — Examen écrit d'admission 2016-2017 — Durée : deux heures**\n\nL'introduction de dispositifs participatifs à la décision publique constitue une avancée démocratique considérable. Dans quelles mesures cette ouverture permettra de repenser les relations entre les citoyens et les décideurs politiques notamment au niveau territorial ?",
     "corrige_md": "",
     "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2023_Kenitra_FEG_MarketingManagementCommercial",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Kénitra",
+    "etablissement": "FEG Kénitra (Ibn Tofaïl)",
+    "annee": "2023",
+    "master_reel": "Marketing et Management Commercial",
+    "modules": [
+      "Marketing",
+      "Management Commercial"
+    ],
+    "notions_cles": "processus d'achat B2B",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2024/07/exemple-concours-master-marketing-et-management-commercial-2023-e.html",
+    "images": [],
+    "enonce_md": "**Université Ibn Tofaïl — Faculté des Sciences Juridiques, Économiques et Sociales de Kénitra**\n\n**Concours d'accès au Master « Marketing et Management Commercial » — Durée : 2H**\n\n**Sujet**\n\nLe processus d'achat en B2B.\n\n*N.B. : Il est obligatoire de mettre le plan dans la première page.*\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2023_Casablanca_FSJES_AinChock_Marketing2",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Ain Chock",
+    "annee": "2023",
+    "master_reel": "Marketing",
+    "modules": [
+      "Marketing",
+      "Intelligence Artificielle"
+    ],
+    "notions_cles": "tarification dynamique (yield management, cas Al Boraq/ONCF), impact de l'IA sur les stratégies marketing au Maroc",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2023/09/master-marketing-2023-fsjes-ain-chock.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II de Casablanca — FSJES Ain Chock**\n\n**Concours d'accès au Master Marketing — 2023-2024**\n\n**Exercice 1 : Al Boraq, un concept de billetterie axé sur la flexibilité**\n\nL'ONCF a adopté pour la Ligne à Grande Vitesse une tarification dynamique. Le prix du billet variant selon plusieurs paramètres : date d'achat, heure du voyage, classe choisie, niveau de flexibilité et carte de réduction. Par exemple, un trajet coûtera moins de 10% de son tarif initial si le billet est acquis 24h avant le départ. Idem pour l'heure du voyage. Les trajets aux heures de pointe coûtent plus cher que ceux en période de faible affluence. De même, il est possible de bénéficier de tarifs promotionnels, à condition de réserver au minimum 7 jours à l'avance des tickets qui seront non-échangeables et non-remboursables. Pour un billet de première classe, les prix augmenteront progressivement, selon l'évolution des ventes jusqu'à l'instant de départ.\n\n*(La Vie Éco, 22 novembre 2018)*\n\nLa politique tarifaire d'Al Boraq repose sur un concept marketing largement adopté dans certains secteurs d'activités.\n\n1. Préciser ce concept et ses objectifs\n2. Préciser les secteurs d'activités éligibles à cette technique marketing et leurs caractéristiques communes les rendant éligibles à la technique ?\n3. Selon vous, que faut-il faire pour réussir la mise en place de ce concept dans l'entreprise ?\n\n**Exercice 2**\n\nQue retenir de l'impact de la montée en puissance de l'intelligence artificielle sur les stratégies marketing dans les entreprises au Maroc ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2023_Rabat_FSJESSouissi_CommerceInternational2",
+    "categorie": "MCL",
+    "filiere": "Commerce International",
+    "ville": "Rabat",
+    "etablissement": "FSJES Souissi",
+    "annee": "2023",
+    "master_reel": "Commerce International",
+    "modules": [
+      "Commerce International",
+      "Économie Internationale"
+    ],
+    "notions_cles": "commerce extérieur et emploi/pauvreté, rôle de l'OMC dans la préservation du système économique multilatéral",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2023/09/concours-master-commerce-international-2023-fsjes-souissi.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V de Rabat — FSJES Souissi**\n\n**Master Commerce International — 2023-2024 — Concours d'accès**\n\nTraitez l'un des deux sujets suivants :\n\n**Sujet 1 :** Discutez l'idée suivante : « Le commerce extérieur crée des emplois, réduit la pauvreté et ouvre des perspectives économiques. »\n\n**Sujet 2 :** Traitez le sujet suivant : « Le rôle de l'OMC est de plus en plus évoqué dans la préservation du système économique multilatéral en temps de crise. »\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Settat_FSJES_MarketingActionCommerciale",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Settat",
+    "etablissement": "FSJES Settat",
+    "annee": "2016",
+    "master_reel": "Marketing et Action Commerciale",
+    "modules": [
+      "Marketing",
+      "Techniques Commerciales"
+    ],
+    "notions_cles": "motivations SONCAS, processus de décision d'achat, méthodes de positionnement, préparation d'une négociation commerciale",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2022/10/exemple-mac-2016-fsjes.html",
+    "images": [],
+    "enonce_md": "**Faculté des Sciences Juridiques, Économiques et Sociales de Settat**\n\n**Test de connaissances — Master Marketing et Action Commerciale**\n\n**I - Marketing général :**\n\n1. Les motivations SONCAS, pourquoi et comment l'utiliser ?\n2. Décrire le processus de décision de la perception du besoin à la satisfaction. Quel est son utilité et les précautions à prendre ?\n3. Quelle est la méthode de positionnement, pourquoi et comment l'utiliser ? Quel est son utilité et les précautions à prendre ?\n\n**II - Techniques commerciales :**\n\n1. Comment préparer une négociation, citer l'une des méthodes que vous connaissez ?\n2. Comment se gère le face à face dans une négociation ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Settat_FSJES_MarketingActionCommerciale",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Settat",
+    "etablissement": "FSJES Settat",
+    "annee": "2015",
+    "master_reel": "Marketing et Action Commerciale",
+    "modules": [
+      "Marketing"
+    ],
+    "notions_cles": "packaging et ses fonctions, notion de concurrent d'un produit, niveaux de l'espace concurrentiel",
+    "difficulte": "1/5",
+    "source": "https://www.fsjesmaster.com/2022/10/exemple-mac-2015-fsjes-settat.html",
+    "images": [],
+    "enonce_md": "**La Faculté des Sciences Juridiques, Économiques et Sociales — Settat**\n\n**Professeur : Essaid EL MESKINI — Test de connaissances en Marketing — Durée : 1h30**\n\n1. Après avoir défini le Packaging et ses composantes, expliquer ces deux principales fonctions.\n\n2. Qu'est-ce qu'un concurrent d'un produit ? Quels sont les trois niveaux de l'espace concurrentiel d'un produit ou d'une marque ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Agadir_ENCG_MarketingManagementTouristique",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Agadir",
+    "etablissement": "ENCG Agadir",
+    "annee": "2016",
+    "master_reel": "Marketing et Management Touristique",
+    "modules": [
+      "Marketing du Tourisme",
+      "Gouvernance des Destinations",
+      "Anglais"
+    ],
+    "notions_cles": "gouvernance des destinations touristiques, axes du marketing stratégique touristique, évaluation de la Vision touristique 2020",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2022/10/Marketing-et-Management-Touristique-2016-ENCG-Agadir.html",
+    "images": [],
+    "enonce_md": "**École Nationale de Commerce et de Gestion d'Agadir — Université Ibn Zohr**\n\n**Épreuves écrites pour l'admissibilité au Master Marketing et Management Touristique — Durée : 2 heures pour les deux parties (en français et en anglais)**\n\n**Partie I :**\n\n« Le tourisme est connu pour être un secteur d'activité très transversal : les besoins et les pratiques du touriste le mettent en relation avec l'offre de services locaux de toutes natures, privés et publics, spécifiques du tourisme ou généraux. Vue comme système d'offre, la destination repose ainsi sur des acteurs multiples, autonomes et interdépendants, ce qui crée un besoin de coordination. La question principale qui se pose à ce niveau est de savoir quel mode de gouvernance est le plus efficace pour bâtir un management et un marketing stratégique pouvant garantir la compétitivité et la durabilité d'une destination touristique. »\n\nÀ la lumière de cette citation développez les questions suivantes :\n\n1. Quel mode de gouvernance est le plus approprié pour une bonne gestion d'une destination touristique ?\n2. Quels sont les principaux axes du marketing stratégique que doivent promouvoir les responsables du management d'une destination touristique pour lui assurer une bonne compétitivité ?\n\n**Partie II :**\n\nMake an evaluation of the tourism vision 2020.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Agadir_ENCG_MarketingManagementTouristique",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Agadir",
+    "etablissement": "ENCG Agadir",
+    "annee": "2015",
+    "master_reel": "Marketing et Management Touristique",
+    "modules": [
+      "Marketing du Tourisme"
+    ],
+    "notions_cles": "définitions clés (destination touristique, segmentation, marketing, compétitivité), stratégie et plan marketing pour une destination touristique",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2022/10/Marketing-et-Management-Touristique-2015-ENCG-Agadir.html",
+    "images": [],
+    "enonce_md": "**Université Ibn Zohr — École Nationale de Commerce et de Gestion, Agadir**\n\n**Concours d'accès au Master spécialisé « Marketing et Management Touristique » — Année universitaire 2015-2016 — Épreuve 2**\n\n« Au cours des vingt dernières années, le système touristique a été confronté à un grand nombre de changements dans la demande, à une fluctuation des flux touristiques, à une évolution des motivations et des attentes des touristes ainsi qu'à une modification de l'organisation de l'offre. La vitesse à laquelle les motivations et les besoins des touristes s'accroissent et varient se traduit par une segmentation complexe de la demande touristique. Cela implique une plus grande diversification de l'offre et une personnalisation du produit touristique dans son ensemble, mais aussi de ses nombreuses composantes, dont chacune contribue à former l'expérience touristique. C'est surtout vrai si le produit touristique est la destination, qui peut normalement offrir plusieurs possibilités d'attraction et se vend à différents types de clients. Les destinations devraient proposer autant de produits qu'il existe de segments de la demande touristique et doivent définir des stratégies de développement touristique afin de créer de la valeur pour l'ensemble du système et améliorer leur compétitivité. »\n\nRépondez à toutes les questions suivantes :\n\n1. Donnez la signification (ou définition) des concepts et expressions suivants : (08pts)\n   a. Destination touristique\n   b. Segmentation\n   c. Marketing\n   d. Compétitivité\n\n2. Sujet (12pts) : En vous inspirant de la citation ci-dessus et en vous basant sur vos connaissances présentez les principaux axes d'une stratégie et d'un plan marketing efficaces pour le développement d'une destination touristique (vous pouvez vous appuyer sur un exemple de votre choix.)\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Casablanca_FSJES_AinChock_Marketing2",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Ain Chock",
+    "annee": "2016",
+    "master_reel": "Marketing",
+    "modules": [
+      "Marketing",
+      "Statistiques",
+      "Anglais"
+    ],
+    "notions_cles": "marché comme lieu de rencontre offre/demande, génération Y et stratégie de communication, hypothèse 'toutes choses égales par ailleurs', résolution matricielle, traduction anglais-français",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2022/10/blog-post.html",
+    "images": [],
+    "enonce_md": "**Master Marketing — Université Hassan II Casablanca — Test écrit / P7-15/16 / 2H**\n\n**Question I**\n\nDéfinissez en premier lieu, le marché de l'espoir, tout en gardant à l'esprit que le marché est le lieu de rencontre entre l'offre et la demande relatives à un produit qu'il ne se compose que de 3 éléments : l'offre, la demande et l'environnement.\n\nRépondez ensuite aux deux questions suivantes :\n1. Quels sont les acteurs industriels qui peuvent s'intéresser à ce marché ?\n2. Quel est le profil du client idéal de ce marché ? (Possibilité plusieurs profils)\n\n**Question II**\n\n« La génération Y regroupe les personnes nées approximativement entre le milieu des années 1970 et le milieu des années 1995. L'origine de ce nom a plusieurs attributions : pour les uns il vient du « y » que l'on trace le fil derrière lui lorsqu'on le prononce en anglais (why), signifiant « pourquoi » »\n\n1. Quelle est la particularité de ce segment du marché ?\n2. Quelles approches en « stratégie de communication » recommandez-vous aux marques ciblant la génération Y ?\n\n**Question III — L'hypothèse « toutes choses égales par ailleurs »**\n\n« Pour isoler un facteur parmi plusieurs et en examiner l'importance dans la relation entre deux phénomènes, on est amené à contrôler la réalité au sein de laquelle on effectue les observations : on raisonne alors « toutes choses égales par ailleurs » »\n\nExpliquez à votre manière cette hypothèse et s'appuyant sur l'exemple suivant : le salaire des hommes est en moyenne supérieur de 16% à celui des femmes.\n\n**Question IV**\n\nTraduisez en anglais le paragraphe ci-dessous : « Le marché des services audio en ligne représentait de l'ordre de 200 millions USD en 2007. Il devrait atteindre 2,1 milliards USD en 2012, soit environ 10% du marché total des services audio hors ligne et en ligne (hors téléchargements payants et musique). La part des services en ligne de la marché audio total variera fortement entre pays, en fonction du poids actuel des médias radio traditionnel (en termes de durée d'écoute et de revenus publicitaires) et du niveau de développement de l'accès haut débit. »\n\n**Question 3**\n\nI- Résoudre matriciellement le système :\n3x + 5y = 3\nx + 2y = 2\n\nII- Dans le tableau suivant on donne le chiffre d'affaires réalisé par six points de vente d'une entreprise donnée : CA en 10³ DH : 10, 13, 15, 16, 18, 18. Calculer la moyenne arithmétique et l'écart-type de la série considérée. Donner la signification de l'écart-type.\n\n**Question 4**\n\nTraduisez le texte ci-après en anglais : « Les enfants sont prescripteurs de marques, surtout dans le domaine des nouvelles technologies, vêtements, les jeux et les jouets, et l'alimentation. Ils exigent des produits « tendance », et les parents cèdent le plus souvent. Ils se font manipuler, négocient avec leurs enfants, tentent de détecter la différence entre besoins et envies. La mode fait que l'enfant paraît. Il se donne un look : coiffure, vêtements, accessoires – iPhone, MP3 – et produits « tendance écologique ». Le style est souvent urbain : la campagne est peu valorisante. Ces marques et ces objets aident à leur chemin initiatique vers le monde des adultes et à construire leur identité. »\n\n*(Jean-Jacques Urvoy et Annie Llorca, Gérer une marque enfants, Éditions d'organisation, 2010, pages 31-32.)*\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Casablanca_FSJES_AinChock_Marketing2",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Ain Chock",
+    "annee": "2015",
+    "master_reel": "Marketing",
+    "modules": [
+      "Marketing"
+    ],
+    "notions_cles": "positionnement à partir de visuels publicitaires, prix psychologique et comportement du consommateur (cas eaux minérales)",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2022/10/concours-marketing-2015.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II Casablanca — Master Marketing — Épreuve d'admission — 2016/2017**\n\n**Question 1**\n\na) En vous basant sur les visuels du set de table en papier du restaurant, quel positionnement retenez-vous de Oasis café ?\n\nb) En examinant l'ensemble des éléments du set de table (textes et visuels), dégagez les différents publics cibles de Oasis Café sachant qu'il s'agit d'une aire de repos se situant sur l'autoroute Casablanca-Marrakech. Vos réponses doivent être clairement explicitées et argumentées.\n\n**Question 2**\n\nQuand vous achetez une bouteille d'eau de SIDI ALI dont la contenance est de 33 cl, à combien vous revient la bouteille de 150 cl sachant que la bouteille de 33 cl coûte 2 DH ? Expliquez d'un point de vue du comportement du consommateur l'acceptabilité du prix de la bouteille de 33 cl. Montrez que le prix 2 DH affiché par la bouteille est un prix psychologique. Quels enseignements d'un point de vue marketing tirez-vous de la politique de prix adoptée par les Eaux Minérales d'Oulmès concernant la bouteille de 33 cl à 2 DH ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2019_Agadir_ENCG_MarketingManagementTouristique",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Agadir",
+    "etablissement": "ENCG Agadir",
+    "annee": "2019",
+    "master_reel": "Marketing et Management Touristique",
+    "modules": [
+      "Marketing du Tourisme",
+      "Anglais"
+    ],
+    "notions_cles": "limites des stratégies marketing et promotionnelles traditionnelles des destinations touristiques, tourisme durable et développement économique",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2021/07/exemple-de-concours-master-marketing-et-management-touristique-2019-2020-encg-agadir.html",
+    "images": [],
+    "enonce_md": "**École Nationale de Commerce et de Gestion, Agadir — Concours d'accès au Master Spécialisé 'Marketing et Management Touristique' — Année universitaire 2019-2020 — Test écrit — Durée : 2 heures**\n\nTraitez les deux sujets suivants :\n\n**Sujet 1 :**\n\nLe tourisme de par sa forte croissance et ses enjeux pour le développement socioéconomique des pays a attiré l'attention de nombreux pays et de nombreuses destinations ont ainsi vu le jour entraînant le secteur dans une concurrence acharnée. De leur côté, les touristes sont devenus de plus en plus exigeants et ne cherchent pas uniquement le voyage mais plutôt de vivre des expériences mémorables. Dans un tel contexte les stratégies marketing et promotionnelles traditionnelles sont révolues et ne suffisent plus pour assurer la compétitivité des destinations touristiques.\n\n**Question :** À la lumière de ce texte et en vous basant sur vos connaissances, discutez des limites des stratégies marketing et promotionnelles traditionnelles des destinations touristiques et proposez des axes ou des pistes d'actions pour une meilleure compétitivité de ces dernières.\n\n**Sujet 2 :** Discuss the following sentence: As compared to other types of tourism, sustainable tourism has a major capacity to distribute wealth, and to contribute especially to economic development of the Moroccan economy.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2017_Agadir_ENCG_MarketingManagementTouristique",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Agadir",
+    "etablissement": "ENCG Agadir",
+    "annee": "2017",
+    "master_reel": "Marketing et Management Touristique",
+    "modules": [
+      "Marketing du Tourisme",
+      "Anglais"
+    ],
+    "notions_cles": "impact du tourisme rural sur le développement régional, bilan de la Vision touristique 2010/2020",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2020/06/exemple-de-concours-master-marketing-et-management-touristique-2017-2018-encg-agadir.html",
+    "images": [],
+    "enonce_md": "**École Nationale de Commerce et de Gestion, Agadir — Concours d'accès au Master Spécialisé 'Marketing et Management Touristique' — Année universitaire 2017-2018 — Épreuve de spécialité — Durée : 2 heures**\n\nTraiter les deux sujets suivants :\n\n**Sujet 1 :** Nowadays, rural tourism is considered as an important sector. it promotes the local economy, socio-cultural changes, sustainability and life style of the people residing around the tourist destination. In Morocco, rural tourism is expected to play a key role in the country's economic growth, human resource, culture, etc. Discuss briefly different impacts of the rural tourism on Morocco as a north African destination.\n\n**Sujet 2 :** « À vue de l'importante croissante que connaissait le tourisme mondial et possédant des atouts naturels importants et un patrimoine culturel riche et diversifié et conscient du rôle déterminant du secteur dans le développement économique du pays, le secteur touristique au Maroc va, à partir de l'année 2001, connaître un grand changement dans sa politique de développement et de promotion à travers la mise en place d'une vraie stratégie de développement touristique volontariste susceptible de déclencher une dynamique de développement durable et intégrée. Cette nouvelle baptisée l'ère des «Visions» va commencer avec la vision dite «Vision 2010», qui va permettre une grande avancée dans le secteur touristique national. À la vue des résultats intéressants de la Vision 2010 et des opportunités offertes par les nouvelles tendances du tourisme mondial, le pays a décidé de reconduire sa stratégie touristique à travers la «Vision 2020» qui avait pour ambitions de hisser le Maroc en 2020 parmi les 20 premières destinations touristiques mondiales et d'atteindre 20 millions d'arrivées touristiques. La dynamique créée par ces deux visions a pu rapidement donner ses fruits en permettant de bonnes performances. Toutefois, malgré ces réalisations et à trois années de l'horizon stratégique arrêté la grille de lecture du secteur touristique marocain manifeste encore d'importants retards par rapport aux objectifs et ambitions annoncés. »\n\nEn vous inspirant de ce texte et en vous basant sur vos connaissances répondez aux deux questions suivantes (vos réponses doivent être concises et motivées) :\n\n1. Quels sont, à votre avis, les principaux facteurs ayant limité la réalisation des objectifs annoncés par la vision 2020 ?\n2. Formulez les principaux axes d'une stratégie qui, selon vous, pourrait redynamiser le secteur touristique marocain.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2018_Rabat_FSJESSouissi_CommerceInternational2",
+    "categorie": "MCL",
+    "filiere": "Commerce International",
+    "ville": "Rabat",
+    "etablissement": "FSJES Souissi",
+    "annee": "2018",
+    "master_reel": "Commerce International",
+    "modules": [
+      "Commerce International"
+    ],
+    "notions_cles": "double nature juridique et économique du commerce international, régulation multilatérale/régionale/bilatérale, insertion des pays dans l'économie mondiale",
+    "difficulte": "1/5",
+    "source": "https://www.fsjesmaster.com/2019/06/master-commerce-international-2018-2019.html",
+    "images": [],
+    "enonce_md": "**FSJES de Rabat-Souissi — Année universitaire 2018-2019**\n\n**Test écrit d'entrée au Master : Commerce International**\n\nTraitez le sujet suivant :\n\nLe commerce international intéresse à la fois le droit et l'économie. D'une part, il est régulé par les accords commerciaux multilatéraux, régionaux et bilatéraux ; et d'autre part, il est influencé par le degré d'insertion et de spécialisation des pays dans l'économie mondiale.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Meknes_FSJES_MarketingStrategiesCommerciales2",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Meknès",
+    "etablissement": "FSJES Meknès",
+    "annee": "2016",
+    "master_reel": "Marketing et Stratégies Commerciales",
+    "modules": [
+      "Marketing",
+      "Stratégies Commerciales"
+    ],
+    "notions_cles": "rôle de la fonction marketing, stratégie de segmentation du marché, composantes du marketing-mix",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/08/exemple-concours-master-marketing-et-strategies-commerciales.html",
+    "images": [],
+    "enonce_md": "**Université Moulay Ismaïl — Faculté des Sciences Juridiques, Économiques et Sociales — Meknès**\n\n**Concours d'accès au cycle de Master — Session 15 octobre 2016 — Filière : Marketing et stratégies commerciales — Durée : 1h30min**\n\n**Sujet de spécialité :**\n\nRépondre à toutes les questions suivantes :\n\n1. Discuter le rôle de la fonction marketing pour l'entreprise.\n2. Présenter la stratégie de segmentation du marché.\n3. Analyser les composantes de marketing-mix.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2013_Rabat_FSJESSouissi_OMCEchangesInternationaux",
+    "categorie": "MCL",
+    "filiere": "Commerce International",
+    "ville": "Rabat",
+    "etablissement": "FSJES Souissi",
+    "annee": "2013",
+    "master_reel": "OMC et Échanges Internationaux",
+    "modules": [
+      "Commerce International",
+      "Économie Internationale"
+    ],
+    "notions_cles": "règles de l'OMC, catégories de pays membres (développés, en développement, moins avancés), relations commerciales Nord-Sud",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/06/concours-master-commerce-international-2013-2014.html",
+    "images": [],
+    "enonce_md": "**FSJES de Rabat-Souissi — Année universitaire 2013-2014**\n\n**Concours d'entrée au Master : OMC et échanges internationaux**\n\nTraitez le sujet suivant :\n\nL'OMC, dont les règles de bonne conduite sont d'inspiration libérale, regroupe plusieurs catégories de pays : les pays développés, les pays en développement et les pays les moins avancés. Chaque pays membre cherche à profiter du gain que peut lui permettre son adhésion à l'OMC. Cependant, à l'exception des pays en développement qui ont émergé, les relations commerciales entre les pays développés et les autres n'ont pas donné les résultats attendus.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2012_Kenitra_ENCG_TechniquesMarketing",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Kénitra",
+    "etablissement": "ENCG Kénitra",
+    "annee": "2012",
+    "master_reel": "Techniques de Marketing",
+    "modules": [
+      "Marketing",
+      "Communication"
+    ],
+    "notions_cles": "étude de cas produit réel (Ambre Solaire — L'Oréal/Garnier), positionnement de marque, stratégies de rénovation d'image et de protection solaire",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2017/01/master-techniques-de-marketing.html",
+    "images": [],
+    "enonce_md": "**Université Ibn Tofaïl — École Nationale de Commerce et de Gestion — Kénitra — Passerelles Semestre 7**\n\n**Examen de Techniques de Marketing — Septembre 2012 — Durée : 1h30**\n\n« Ambre Solaire » est une marque très célèbre de crème solaire fabriquée par les Laboratoires Garnier, filiale du groupe L'Oréal. Lancé en 1935, le produit s'est à ce point associé au soleil et à la beauté que son nom s'est établi à un terme générique (à comparer avec « Frigidaire » pour les réfrigérateurs ou « Kleenex » pour les mouchoirs papiers).\n\nLeader de son marché, « Ambre Solaire » Avoue depuis des décennies la séduction et le plaisir. Néanmoins, la protection n'était pas totalement négligée. En effet, le premier slogan publicitaire du produit était : « Brunissez sans brûler avec Ambre Solaire ». Mais jusque là, ni les connaissances limitées sur les effets solaires et l'efficacité relative des produits protecteurs ne pouvaient être à la hauteur de l'argument principal.\n\nEn 1987, tout devient différent. On connaît mieux l'impact des rayons ultraviolets A et B. Plus les scientifiques nous apprennent sur le rayonnement solaire et sur la peau, plus on constate que la protection est un sujet délicat et difficile, comme le confirme la Directrice Marketing des Laboratoires Garnier.\n\nDès lors, les différents laboratoires se penchent sur l'élaboration de substances toujours plus efficaces et l'habitude se répand de mesurer cette efficacité par des indices.\n\nEn 1995, l'arrivée du Mexoryl SX révolutionne le marché des produits solaires. Il s'agit d'une molécule filtrante, brevetée par les chercheurs de l'Oréal, et qui a la particularité d'être photostable. Brève leçon du directeur de la communication scientifique du groupe : « Nos écrans ne sont pas fait uniquement pour ne pas brûler mais pour un longtemps appelés « bons UV », sont un fait extrêmement dangereux parce qu'ils pénètrent profondément dans la peau et détruisent à terme leurs structures. Or, il n'existe pas de filtre stable contre les UVA plus courts, la violence du rayonnement démolissant rapidement les molécules connues. Le Mexoryl SX, lui, résiste. »\n\nÉtant recruté au sein de cette entreprise, votre tâche est d'assister le Directeur Marketing du groupe dans le choix de son positionnement, la rénovation du produit, et la modification de plan de communication.\n\n1) Pour le positionnement, trois choix possibles quant à l'image à donner au produit :\n   a) Continuer de cultiver l'image traditionnelle de séduction et de plaisir ;\n   b) Cultiver une nouvelle image, axée sur le soin, la santé et la protection ;\n   c) Opter pour une image alliant le plaisir à la protection.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Mohammedia_FSJES_ManagementLogistiqueApplique2",
+    "categorie": "MCL",
+    "filiere": "Logistique & Supply Chain Management",
+    "ville": "Mohammedia",
+    "etablissement": "FSJES Mohammedia (Hassan II)",
+    "annee": "2016",
+    "master_reel": "Management Logistique Appliquée",
+    "modules": [
+      "Logistique",
+      "Systèmes d'Information",
+      "Recherche Opérationnelle"
+    ],
+    "notions_cles": "économie de la logistique, systèmes d'information et bases de données, prévisions de vente sous Excel, programme d'approvisionnement minimal (méthode graphique)",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2019/01/master-management-logidtique-appliquee-2016-2017.html",
+    "images": [],
+    "enonce_md": "**FSJES Mohammedia**\n\n**Concours d'accès au Master Management Logistique Appliquée — AU : 2016-2017 — Durée : 2h**\n\n**I - Traitez les questions suivantes :**\n\n1. L'économie de la logistique.\n2. Établir une comparaison entre l'économie classique et l'économie numérique.\n\n**Exercice :**\n\n1) Qu'est-ce qu'une base de données ? Et à quoi sert un SGBD ? Quelle est la différence entre « Donnée » et « Information » ; et quels sont les types de données traités dans une entreprise ?\n2) Définir ce qu'un système d'information. Expliquer le rôle des systèmes d'information dans la gestion des flux d'information d'une entreprise.\n3) Les données concernant le calcul des prévisions mensuelles de vente d'une entreprise industrielle, sont regroupées dans un tableau Excel donnant : Mois, Nombre de Jours de Production, Stock nécessaire en fin de mois, Besoin en Production (unités), Prévision ventes (unités).\n\n   a. Donner la formule qu'il faut appliquer à la cellule E3 pour calculer les prévisions mensuelles de vente sachant que : si le nombre de jours de production d'un mois n est inférieur à 21 alors : Prévisions du mois (n) = [Stock début du mois (n) – stock fin du mois (n)] + 75%(besoin en production (n)) ; sinon : Prévisions (n) = Stock début du mois (n) – stock fin du mois (n) + besoin en production (n)\n\n   b. Donner la formule qu'il faut appliquer à la cellule B9 pour déterminer la situation du semestre 1 sachant que : si la moyenne du nombre de jours de production au cours du semestre 1 est inférieure à 20 alors situation= « Anormale » sinon situation= « favorable ».\n\n4) Un vendeur d'ordinateurs portables doit approvisionner son magasin de Fès et de celui de Marrakech à partir des entrepôts de Casablanca et de Rabat. Les coûts unitaires en Dirhams de livraison sont les suivants : Casablanca→Marrakech 600, Casablanca→Fès 300, Rabat→Marrakech 500, Rabat→Fès 900. Le magasin de Marrakech commande 30 ordinateurs et celui de Fès en commande 25. On dispose de 45 appareils en stock à Casablanca et 40 à Rabat. Donner la fonction économique concernant le coût d'approvisionnement et déterminer par la méthode graphique un programme d'approvisionnement minimal.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2019_Settat_FSJES_MarketingActionCommerciale2",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Settat",
+    "etablissement": "FSJES Settat",
+    "annee": "2019",
+    "master_reel": "Marketing et Action Commerciale",
+    "modules": [
+      "Marketing",
+      "Système d'Information"
+    ],
+    "notions_cles": "planification stratégique fondée sur le système d'information, marketing interculturel",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2019/07/master-marketing-et-action-commerciales-2019-2020.html",
+    "images": [],
+    "enonce_md": "**FSJES Settat — Concours d'accès au Master Marketing et Action Commerciale — Responsable : Pr. E. EL MESKINI — Durée d'examen : 1h30**\n\nDéveloppez les deux sujets suivants :\n\n1. Pourquoi les entreprises aujourd'hui doivent fonder leurs analyses stratégiques sur la planification du système d'information ?\n2. Le marketing à travers les cultures\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Casablanca_FSJES_AinSebaa_IngenierieCommercialeMarketing",
+    "categorie": "MCL",
+    "filiere": "Marketing & Stratégie Commerciale",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Ain Sebaâ",
+    "annee": "2016",
+    "master_reel": "Ingénierie Commerciale et Marketing",
+    "modules": [
+      "Marketing",
+      "Digital"
+    ],
+    "notions_cles": "pouvoir du consommateur digitalisé, marque, packaging, stratégie de différenciation",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-ingenierie-commerciale-et-marketing.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II de Casablanca — Faculté des Sciences Économiques, Juridiques et Sociales d'Ain Sebaâ**\n\n**Concours d'accès au Master Ingénierie Commerciale et Marketing — Examen écrit — Durée 1h30 — Année universitaire 2016-2017**\n\n**I- On vous demande de débattre les idées principales citées dans le texte suivant :**\n\n« Aujourd'hui, avec l'intensification de la concurrence et l'évolution de la digitalisation et des médias sociaux, le consommateur commence à détenir de plus en plus le pouvoir entre ses mains. Ce dernier a plus de possibilité d'interagir avec l'entreprise et de gouverner le e-réputation de celle-ci. Il a aussi la possibilité de produire l'information au lieu d'en recevoir uniquement. Le consommateur, très exigeant, veut qu'on produise pour lui d'une manière personnalisée et avec lui dans la logique actuelle du consomm'acteur. »\n\n*N.B. : Veuillez rédiger votre réponse sur 4 pages au maximum dont la première doit contenir le plan de rédaction.*\n\n**II- Définir les concepts marketing suivants (4 lignes maximum par définition) :**\n\n- La marque.\n- Le packaging.\n- La stratégie de différenciation.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2018_AinSebaa_FSJES_EconomieSpatialeGouvernanceTerritoriale",
+    "categorie": "MRH",
+    "filiere": "Management Public & Gouvernance Territoriale",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Sebaa",
+    "annee": "2018",
+    "master_reel": "Économie Spatiale et Gouvernance Territoriale (ESGT)",
+    "modules": [
+      "Gouvernance Territoriale",
+      "Économie Régionale"
+    ],
+    "notions_cles": "régionalisation avancée et développement économique et socio-spatial du Maroc",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2022/10/master-economie-spatiale-et-gouvernance-territoriale-2018-fsjes.html",
+    "images": [],
+    "enonce_md": "**Concours d'accès au Master spécialisé : Économie Spatiale et Gouvernance Territoriale (MS-ESGT) — Test écrit — Le 17 juillet 2018 — Durée : 1h30**\n\n**Sujet :**\n\nLa régionalisation « avancée » et le développement économique et socio-spatial du Maroc. Quelles relations ?\n\n*N.B. : Le plan est obligatoire.*\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2019_Rabat_FSE_GouvernanceGRHIngenierieCompetences",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "Rabat",
+    "etablissement": "FSE Rabat (Université Mohammed V)",
+    "annee": "2019",
+    "master_reel": "Gouvernance, Gestion des Ressources Humaines et Ingénierie des Compétences",
+    "modules": [
+      "GRH",
+      "Gouvernance",
+      "Communication"
+    ],
+    "notions_cles": "citation de Lamennais sur le droit et la liberté, principes de bonne gouvernance, communication efficace, chômage au Maroc",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2020/05/exemple-concours-master-gouvernance-grh-et-ingenierie-des-competences-2019-2020.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V de Rabat**\n\n**Master Gouvernance, Gestion des Ressources Humaines et Ingénierie des Compétences — Concours d'accès — Année Universitaire 2019-2020 — Vendredi 12 juillet 2019 à 9h — Sous la direction de M. Guedira Mohammed — Durée : 3h**\n\nTraiter l'un des sujets suivant :\n\n**Sujet 1 :** Le droit est la garantie de notre existence individuelle et de notre liberté, il est notre liberté même ; il fait que nous sommes une personne et non une pure chose dont le premier venu est maître d'user à sa fantaisie. *Félicité Robert de Lamennais.* Quelle est votre réflexion concernant cette citation ?\n\n**Sujet 2 :** Plusieurs principes composent les bonnes pratiques de la gouvernance. Pouvez-vous les énumérer et les développer ?\n\n**Sujet 3 :** Peut-on parler d'une démarche de communication efficace ?\n\n**Sujet 4 :** Conscience et inconscience, qu'est-ce qui les différencie ?\n\n**Sujet 5 :** Comment expliquer le chômage au Maroc ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "SD_Agadir_FSJES_ManagementStrategiqueLogistiqueCulture",
+    "categorie": "MRH",
+    "filiere": "Management Stratégique & Gestion des Organisations",
+    "ville": "Agadir",
+    "etablissement": "FSJES Agadir (Ibn Zohr)",
+    "annee": "non précisée",
+    "master_reel": "Management Stratégique & Logistique",
+    "modules": [
+      "Management Stratégique",
+      "Culture Économique"
+    ],
+    "notions_cles": "la PME comme modèle d'entreprise dépassé ou d'avenir",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2020/05/exemple-concours-master-management-strategique-et-logistique.html",
+    "images": [],
+    "enonce_md": "**Université Ibn Zohr — Faculté des Sciences Juridiques, Économiques et Sociales — Agadir**\n\n**Concours d'accès au cycle Master Management Stratégique & Logistique — Épreuve de Culture Économique et/ou Managériale — Durée : 2H**\n\n**Sujet :**\n\nDans le cadre d'une réflexion structurée, argumentée et illustrée d'exemples, vous répondrez à la question suivante :\n\nLa PME : modèle d'entreprise dépassé ou d'avenir ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2017_Tetouan_FSJES_ManagementRessourcesHumaines2",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "Tétouan",
+    "etablissement": "FSJES Tétouan (Abdelmalek Essaâdi)",
+    "annee": "2017",
+    "master_reel": "Management des Ressources Humaines",
+    "modules": [
+      "GRH"
+    ],
+    "notions_cles": "coûts cachés en ressources humaines, pilotage RH et dysfonctionnements organisationnels",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2019/07/master-mrh-tetouan-2017-2018.html",
+    "images": [],
+    "enonce_md": "**Royaume du Maroc — Université Abdelmalek Essaâdi — Faculté des Sciences Juridiques, Économiques et Sociales — Tétouan**\n\n**Master management des ressources humaines — Épreuve écrite de sélection 2017-2018 — Durée : 2H**\n\nLe pilotage des ressources humaines implique le suivi et la gestion des acteurs au sein de l'organisation sur le plan quantitatif et qualitatif. Et parallèlement à l'étude des coûts visibles qui concerne essentiellement la masse salariale, un autre volet exploré dans le domaine de la qualité. Il s'agit des coûts cachés qui peuvent être appliqués et développés par les ressources humaines. Ces derniers touchent les vraies causes de dysfonctionnement et obligent les organisations à mettre en place des réglementations qui engendrent des coûts.\n\nDans cette perspective, quels sont les coûts cachés en ressources humaines ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2017_Rabat_FSJESAgdal_MSRH2",
+    "categorie": "MRH",
+    "filiere": "Management Stratégique & Gestion des Organisations",
+    "ville": "Rabat",
+    "etablissement": "FSJES Agdal",
+    "annee": "2017",
+    "master_reel": "Management Stratégique des Ressources Humaines (MSRH)",
+    "modules": [
+      "GRH",
+      "Management Stratégique"
+    ],
+    "notions_cles": "évaluation du rendement comme outil de promotion et d'amélioration des performances de l'entreprise",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2019/06/msrh-2017-2018.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V - Rabat — Faculté des Sciences Juridiques, Économiques et Sociales - Agdal**\n\n**Département des Sciences de Gestion — Concours Master Management Stratégique des Ressources Humaines — Année universitaire 2017-2018**\n\nTraiter en une 1h30 mn le sujet suivant :\n\nL'évaluation du rendement comme outil de promotion et d'amélioration des performances de l'entreprise.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Rabat_FSJESSouissi_EntrepreneuriatManagementProjet",
+    "categorie": "MRH",
+    "filiere": "Entrepreneuriat & Management de Projets",
+    "ville": "Rabat",
+    "etablissement": "FSJES Souissi",
+    "annee": "2015",
+    "master_reel": "Entrepreneuriat et Management de Projet",
+    "modules": [
+      "Entrepreneuriat",
+      "Management de Projet"
+    ],
+    "notions_cles": "rôle de l'entrepreneur dans le développement économique",
+    "difficulte": "1/5",
+    "source": "https://www.fsjesmaster.com/2017/06/concours-master-entrepreneuriat-et-management-de-projet-2015-2016.html",
+    "images": [],
+    "enonce_md": "**Faculté des Sciences Juridiques Économiques et Sociales Souissi — Université Mohammed V de Rabat**\n\n**Concours d'accès au Master spécialisé « Entrepreneuriat et Management de Projet » — 2015/2016**\n\nTraiter le sujet suivant :\n\nÀ votre avis, quel rôle peut jouer un entrepreneur dans le développement économique ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2014_Rabat_FSJESSouissi_EntrepreneuriatManagementProjet",
+    "categorie": "MRH",
+    "filiere": "Entrepreneuriat & Management de Projets",
+    "ville": "Rabat",
+    "etablissement": "FSJES Souissi",
+    "annee": "2014",
+    "master_reel": "Entrepreneuriat et Management de Projet",
+    "modules": [
+      "Entrepreneuriat",
+      "Management de Projet"
+    ],
+    "notions_cles": "définition de l'entrepreneur, formation de l'esprit entrepreneurial chez les étudiants marocains",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/06/concours-master-entrepreneuriat-et-management-de-projet-2014-2015.html",
+    "images": [],
+    "enonce_md": "**Faculté des Sciences Juridiques Économiques et Sociales Souissi — Université Mohammed V de Rabat**\n\n**Concours d'accès au Master spécialisé « Entrepreneuriat et Management de Projet » — A.U : 2014/2015**\n\nTraiter en 2h le sujet suivant :\n\n« L'entrepreneur est considéré comme un réalisateur de projets, et dans un sens plus strict, comme une personne capable de transformer un rêve, une idée, un problème ou une occasion en une entreprise. » À votre avis, comment peut-on inculquer aux étudiants marocains l'esprit entrepreneurial et former ainsi, des futurs entrepreneurs capables de mener à bien un projet d'entreprise ?\n\n*NB : Le nombre de pages ne doit pas dépasser 3.*\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Rabat_FSJESAgdal_MSRH3",
+    "categorie": "MRH",
+    "filiere": "Management Stratégique & Gestion des Organisations",
+    "ville": "Rabat",
+    "etablissement": "FSJES Agdal",
+    "annee": "2016",
+    "master_reel": "Management Stratégique des Ressources Humaines (MSRH)",
+    "modules": [
+      "GRH",
+      "Management Stratégique"
+    ],
+    "notions_cles": "gestion par objectifs comme outil de motivation ou source de stress",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-management-strategique-des-ressources-humaines-2016-2017.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V-Rabat — Faculté des Sciences Juridiques et Sociales — Agdal — Département des Sciences de Gestion**\n\n**Concours Master Management Stratégique des Ressources Humaines — Année universitaire 2016-2017**\n\nTraiter en une 1H30 le sujet suivant :\n\nLa gestion par objectifs : outil de motivation ou de stress ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Sale_FSJES_EntrepreneuriatIngenierieManageriale2",
+    "categorie": "MRH",
+    "filiere": "Entrepreneuriat & Management de Projets",
+    "ville": "Salé",
+    "etablissement": "FSJES Salé",
+    "annee": "2015",
+    "master_reel": "Entrepreneuriat et Ingénierie Managériale",
+    "modules": [
+      "Entrepreneuriat",
+      "Économie du Savoir"
+    ],
+    "notions_cles": "capital humain, croissance économique fondée sur le savoir, lutte contre le chômage et les inégalités sociales",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-entrepreneuriat-et-ingenierie-manageriale-2015-2016.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V-de Rabat — Faculté des Sciences Juridiques Économiques et Sociales-Salé**\n\n**Master Entrepreneuriat et Ingénierie Managériale — Concours d'accès**\n\n**Sujet :**\n\n« Les connaissances, les qualifications et les compétences représentent un atout essentiel pour soutenir la croissance économique et réduire les inégalités sociales. Cette richesse désignée souvent sous le terme de capital humain, est apparue comme un facteur clé pour combattre un chômage élevé et persistant, ainsi que les problèmes posés par la faiblesse des rémunérations et par la pauvreté. Alors que les économies sont de plus en plus fondées sur le savoir, le capital humain prend une importance encore plus grande. »\n\n**Question :** Montrer comment le capital humain contribue à la croissance économique dans une économie fondée sur le savoir ? (2 heures)\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2014_Sale_FSJES_EntrepreneuriatIngenierieManageriale2",
+    "categorie": "MRH",
+    "filiere": "Entrepreneuriat & Management de Projets",
+    "ville": "Salé",
+    "etablissement": "FSJES Salé",
+    "annee": "2014",
+    "master_reel": "Entrepreneuriat et Ingénierie Managériale",
+    "modules": [
+      "Entrepreneuriat",
+      "Économie Marocaine"
+    ],
+    "notions_cles": "discours royal du 20 août 2014 sur le nouveau modèle de développement, rôle du capital humain dans la croissance des entreprises marocaines",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-entrepreneuriat-et-ingenierie-manageriale-2014-2015.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V de Rabat — Faculté des Sciences Juridiques Économiques et Sociales-Salé**\n\n**Master Entrepreneuriat et Ingénierie Managériale — Test écrit (Mercredi 1er octobre 2014)**\n\n**Sujet :**\n\nSelon vous, et en s'inspirant de l'extrait ci-dessous du discours de Sa Majesté le Roi Mohammed VI (20 août 2014), comment le capital humain peut-il participer à la croissance des entreprises au Maroc ?\n\n« Notre modèle de développement a atteint un niveau de maturité qui l'habilite à faire une entrée définitive et méritée dans le concert des pays émergents. Toutefois, les prochaines années seront décisives pour préserver les acquis, corriger les dysfonctionnements et stimuler la croissance et l'investissement. Alors, ce modèle peut-il progresser, en relevant les défis et en éliminant les obstacles auxquels il est confronté ? Si les pays s'appuient essentiellement sur la compétitivité de leurs entreprises, notamment celles qui exportent leurs produits vers les marchés mondiaux, l'économie marocaine a enregistré, hélas, un retard significatif en la matière, en raison de l'éparpillement et de la faiblesse du tissu industriel et de la concurrence du secteur informel. Cette situation appelle la mise en place de groupes forts et d'entreprises puissantes permettant de renforcer la résilience de l'économie nationale, tant pour faire face à la concurrence internationale que pour tisser des partenariats avec les petites entreprises à même de favoriser le développement au niveau national. Se doter de ressources humaines qualifiées est un préalable majeur pour rehausser la compétitivité et répondre ainsi aux exigences du développement et du marché de l'emploi et pour accompagner la progression et la diversification que connaît l'économie nationale. Comme tout le monde le sait, la bonne gouvernance est la clé de réussite de toute réforme. Elle est essentielle à la réalisation des objectifs de toute stratégie ... »\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "SD_Casablanca_FSJES_AinChock_GestionRessourcesHumaines",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Ain Chock",
+    "annee": "non précisée",
+    "master_reel": "Gestion des Ressources Humaines",
+    "modules": [
+      "GRH",
+      "Entrepreneuriat"
+    ],
+    "notions_cles": "gestion du personnel et anticipation dans le temps, portée et limites de l'entreprenariat féminin au Maroc",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-gestion-des-ressources-humaines.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II — Aïn Chock — Faculté des Sciences Juridiques Économiques et Sociales Casablanca**\n\n**Concours écrit — Master Gestion des Ressources Humaines — Durée : 2 H**\n\nTraitez les deux sujets suivants :\n\n**Sujet 1 :** « Quand on gère du personnel, on se situe nécessairement dans le temps » Expliquez le sens de cette affirmation en montrant notamment en quoi l'anticipation est nécessaire dans la gestion des ressources Humaines. (10 pts)\n\n**Sujet 2 :** Expliquez la portée et limites de l'entreprenariat féminin au Maroc. (10 pts)\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_BeniMellal_FP_MRH2",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "Béni Mellal",
+    "etablissement": "Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane)",
+    "annee": "2015",
+    "master_reel": "Management des Ressources Humaines",
+    "modules": [
+      "GRH",
+      "Communication",
+      "Culture Générale"
+    ],
+    "notions_cles": "expressions idiomatiques en communication, réforme de l'éducation (Vision 2030), évolution de la relation salarié-entreprise, gouvernance des systèmes d'information",
+    "difficulte": "2/5",
+    "source": "https://www.fsjesmaster.com/2017/01/mrh-fp-beni-mellal-2015-2016.html",
+    "images": [],
+    "enonce_md": "**Faculté Polydisciplinaire — Université Sultan Moulay Slimane — Béni Mellal**\n\n**Concours d'accès au Master spécialisé « Management des Ressources Humaines » — Promotion 2015-2016 — Durée : 2H30**\n\n**Question I : Communication (5pts)**\n\n1. Que signifient ces expressions idiomatiques : Jeter l'argent par la fenêtre / Ne pas être dans son assiette / Manger de la vache enragée / Piquer du nez / En avoir pour son argent / N'y voir que du feu\n2. Trouver les erreurs qui se cachent dans cette offre d'emploi : « Une entreprise marocaine recherche une secrétaire de 45 ans maximum, pour un contrat à durée déterminée. Elle assurera le secrétariat des différents services de l'entreprise. Expérience et diplômes exigés. Salaire à débattre. Envoyer CV et lettre de motivation à ... »\n\n**Question II : Culture générale et actualité RH (5pts)**\n\nLe Conseil Supérieur de l'Éducation (CSE) a présenté récemment « la vision 2015-2030 de l'éducation », un projet ambitieux avec des enjeux socioéconomiques réels permettant de réaliser une rupture avec les problèmes vécus dans le secteur depuis les années 80. Dans quelle mesure cette vision peut-elle atteindre les objectifs de développement et de modernisation du système de l'éducation au Maroc ?\n\n**Question III : GRH (5pts)**\n\nLa relation salarié-entreprise a fortement évolué depuis 20 ans. L'implication de l'individu est devenu l'un des facteurs décisifs de la performance de l'entreprise que détermine sa compétitivité par les capacités de ses salariés à innover, à prendre des initiatives et à avoir une dynamique individuelle au-delà du travail prescrit. Expliquer l'évolution de la relation salarié-employeur ainsi que le rôle du management des ressources humaines dans cette évolution.\n\n**Question IV : Système d'information (5pts)**\n\nDepuis les années 90, l'apparition du concept de gouvernance d'entreprise en tant que moyen inhérent à la création de valeur aura servi de modèle déterminant pour le management des systèmes d'information. Quelques années plus tard avec la naissance de la notion de gouvernance des SI, cette discipline est devenue une composante indispensable de la gouvernance d'entreprise. Quels sont les axes piliers de la gouvernance des systèmes d'information et comment peut-on les mettre en œuvre au sein de l'entreprise ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2014_BeniMellal_FP_MRH2",
+    "categorie": "MRH",
+    "filiere": "Gestion des Ressources Humaines (GRH)",
+    "ville": "Béni Mellal",
+    "etablissement": "Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane)",
+    "annee": "2014",
+    "master_reel": "Management des Ressources Humaines",
+    "modules": [
+      "GRH",
+      "Protection Sociale"
+    ],
+    "notions_cles": "représentation collective des salariés et individualisation du rapport salarial, système de retraite marocain et réformes de la protection sociale",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2017/01/mrh-fp-beni-mellal.html",
+    "images": [],
+    "enonce_md": "**Faculté Polydisciplinaire — Université Sultan Moulay Slimane — Béni Mellal**\n\n**Concours d'accès au Master Spécialisé « Management des Ressources Humaines » — 1ère Promotion (2014-2015) — Durée : 2H — Coordonnateur pédagogique : Mohamed Jallal EL ADNANI**\n\nTraitez un sujet au choix :\n\n1. Comment les différentes formes de représentation collective des salariés parviennent-elles à se saisir d'une individualisation croissante du rapport salarial, soutenue par une gamme toujours plus étendue d'outils de Gestion des Ressources Humaines, qui tendent à légitimer des approches personnalisées et psychologisantes du « bien-être au travail » ?\n\n2. Le système de retraite marocain est caractérisé par un pluralisme institutionnel non coordonné et une couverture limitée à une population relativement réduite. Sa configuration et ses principales caractéristiques ont été décrites en détails dans les rapports réalisés par le Bureau International du Travail au cours des années 90, en particulier dans le Rapport sur la situation actuelle et les perspectives d'amélioration de la protection sociale. Dans quelle mesure les réformes de la caisse de retraite recommandées par le Conseil Économique, Social et Environnemental peuvent-elles atténuer/aggraver la crise du salariat au Maroc ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2017_Meknes_FSJES_Meknes_ActuariatGestionRisques2",
+    "categorie": "EDMQ",
+    "filiere": "Actuariat & Ingénierie Mathématique-Financière",
+    "ville": "Meknès",
+    "etablissement": "FSJES Meknès (Moulay Ismaïl)",
+    "annee": "2017",
+    "master_reel": "Actuariat et Gestion des Risques",
+    "modules": [
+      "Actuariat",
+      "Statistiques"
+    ],
+    "notions_cles": "intérêt de l'actuariat pour l'entreprise, interprétation de statistiques descriptives (moyenne, écart-type, mode, médiane), estimation d'un poids moyen à la naissance et intervalle de confiance",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2019/09/master-actuariat-et-gestion-des-risques-2017.html",
+    "images": [],
+    "enonce_md": "**Université Moulay Ismaïl — Faculté des Sciences Juridiques, Économiques et Sociales — Meknès**\n\n**Concours d'accès au cycle Master Recherche : Actuariat et Gestion des Risques — Samedi 16 septembre 2017 — Épreuve de spécialité — Durée 1H30**\n\n**Répondez à la question suivante :** Quel est l'intérêt de l'actuariat pour l'entreprise ?\n\n**Exercice 1 :**\n\nDans une étude de distribution des salaires, un chercheur a obtenu les statistiques suivantes sur un échantillon de 750 employés : Min = 3000 DH, Max = 15000, la moyenne X̄ = 8000 Dh, l'écart-type S = 1000 DH, le Mode M₀ = 8000 DH, la médiane Me = 8000 DH.\n\na) Donnez une interprétation précise de ces statistiques.\nb) La distribution des salaires est-elle symétrique ? Pourquoi ? (Max 2 lignes)\n\n**Exercice 2 :**\n\nDans une maternité, un chercheur a mesuré le poids à la naissance (Xᵢ) pour un échantillon aléatoire de 8 bébés et a obtenu les résultats suivants : Σ Xᵢ = 27,5 ; Σ Xᵢ² = 97,38.\n\nOn suppose que le poids à la naissance est réparti de façon normale dans la population totale des bébés avec une moyenne μ et une variance σ² inconnues.\n\n1) Rappelez la définition d'un estimateur sans biais et convergent\n2) Donnez une estimation ponctuelle du poids moyen des bébés à la naissance dans la population étudiée. Interprétez ce résultat\n3) Quelle est la loi de probabilité de l'estimateur de la moyenne μ et calculer ses paramètres\n4) Donnez une estimation par intervalle de confiance du poids moyen des bébés à la naissance dans la population au niveau de confiance 99%. On vous donne t₍₇₎₍₀,₉₉₅₎ = 3,499\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2015_Casablanca_FSJES_AinChock_Econometrie2",
+    "categorie": "EDMQ",
+    "filiere": "Économétrie & Modélisation Économique",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Chock",
+    "annee": "2015",
+    "master_reel": "Économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques",
+    "modules": [
+      "Microéconomie",
+      "Économétrie"
+    ],
+    "notions_cles": "biens complémentaires vs substituables, élasticités croisées de la demande, modèle économétrique des importations (FBCF, indice des prix)",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2019/08/master-econometrie-appliquee-2015.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II — Casablanca / FSJES — Master d'économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques**\n\n**Test de présélection des candidats — Lundi 12 octobre 2015 — 11h à 12h30**\n\nTraiter en 1h30 les questions suivantes :\n\n**Question 1 :** Produits complémentaires, produits substituables, expliquez en donnant deux exemples dans chaque cas (3 points)\n\n**Question 2 :** Dans une fonction y = f(x), l'élasticité de Y aux variations de x s'écrit E y/x = [ΔY / Y] / [ΔX / X].\nv) Soient Pₓ, Pᵧ et Pᵤ les prix des biens X, Y et Z. Définir l'élasticité de la demande de X aux prix de X, puis l'élasticité de la demande de X aux prix de Y et enfin au prix de Z. (1,5 points)\nvi) Quel signe attendez-vous pour la 1ʳᵉ élasticité et pourquoi ? (1 point)\nvii) Supposez que la 2ᵉ élasticité a un signe positif, qu'en conclure pour la nature du lien entre les biens X et Y et pourquoi ? (1,5 points)\nviii) Supposez que la 3ᵉ élasticité a un signe négatif, qu'en conclure pour la nature du lien entre les biens X et Z et pourquoi ? (1,5 points)\n\n**Question 3 :** Pour comprendre les raisons de la variation des Importations au Maroc, nous avons construit le modèle suivant :\n\nImpₜ = -0,83 LPrdAgriₜ + 0,38 LPrixₜ + 22,58\n(0,143) (0,239) (2,38)\n\nAvec Impₜ le niveau des importations en t et LPrAgriₜ le logarithme de la production agricole au Maroc en t, et LPrix, le logarithme des prix en t. Les paramètres de ce modèle ont été estimés sur la période 1978 à 2014.\n\nEntre parenthèses, figurent les écarts types estimés des estimateurs et R² = 0,93. Analysez ces résultats sur les plans économique et statistique. (6,5 points)\n\nQuestion 3 : Quelles autres variables peuvent être introduites pour améliorer la capacité explicative de ce modèle ? (2 points)\n\n**Question 4 : Questions de cours**\nii. Donner la formule de A, vecteur des estimateurs des coefficients d'un modèle linéaire de régression multiple de la forme Yᵢ = a₀Xᵢ₀ + a₁Xᵢ₁ + ... + aₚXᵢₚ + Uᵢ (2 points)\niv. Soit la formule â = Σ(Xᵢ-X̄)(Yᵢ-Ȳ) / Σ(Xᵢ-X̄)². Que représente ce coefficient et quel est le sens de chacune de ses composantes ? (2 points)\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Casablanca_FSJES_AinChock_Econometrie2",
+    "categorie": "EDMQ",
+    "filiere": "Économétrie & Modélisation Économique",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Chock",
+    "annee": "2016",
+    "master_reel": "Économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques",
+    "modules": [
+      "Microéconomie",
+      "Économétrie",
+      "Mathématiques"
+    ],
+    "notions_cles": "effets d'une hausse de prix (gasoil, sucre) sur la demande de biens liés, moyenne arithmétique/géométrique, modèle économétrique log-log de la demande de viande, fonctions de la monnaie, dérivée en microéconomie",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2019/08/master-econometrie-appliquee-2016.html",
+    "images": [],
+    "enonce_md": "**Master d'économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques**\n\n**Test de présélection des candidats en vue de l'inscription en master d'économétrie appliquée — Jeudi 6 Octobre 2016 – 10h**\n\nTraiter en 2 heures, les questions suivantes :\n\n**Question 1 (6 points) :** On suppose une augmentation du prix du Gasoil ; dire quels sont les effets et pourquoi sur : 1) la demande adressée à l'ONCF (Office National des Chemins de Fer) ; 2) les prix des tickets des cars entre villes ; 3) le prix des pommes de terre. NB : Raisonnez « toutes choses égales par ailleurs »\n\n**Question 2 (8 points) :** On suppose une augmentation du prix du sucre ; dire quels sont les effets et pourquoi sur : 1) la demande de thé ; 2) la demande de limonades ; 3) Quels indicateurs définissent les économistes, pour évaluer : l'effet observé en 1) et celui observé en 2) ? Donner les deux formules de ces indicateurs.\n\n**Question 3 (4 points) :** Donner la formule et dire l'intérêt de : 1) la moyenne arithmétique, 2) la moyenne géométrique, 3) l'écart type, 4) l'espérance mathématique\n\n**Question 4 (6 points) :** Considérez l'équation économétrique suivante : Log Dvr = -0,31 Log Pvr + 0,27 Log Ppl + 0,19 Log Pps + 37,8. Dvr : demande de Viande Rouge ; Pvr, Ppl, Pps : respectivement, prix de la Viande rouge, du Poulet et du poisson. Log signifie qu'on a introduit les logarithmes des variables. R² = 0,87. Les écarts types estimés des estimateurs sont respectivement : 0,052 ; 0,039 ; 0,48. Les paramètres de ce modèle ont été estimés sur la période 1975 à 2014. Commentez les résultats sur le plan statistique et sur le plan économique.\n\n**Question 5 (6 points) :** Effectuez la même analyse que celle demandée dans la question 4, en remplaçant la variable (endogène) Y par « les exportations marocaines », et les exogènes X1, X2 et X3 respectivement par : IPind (indice des prix à la production industrielle au Maroc), CPibUE (croissance économique dans l'Union Européenne) et IpTu (l'indice des prix en Tunisie).\n\n**Question 6 (6 points) :** Les fonctions de la Monnaie : les citer et dire en quoi chacune consiste. Indiquer parmi ces fonctions, laquelle est la moins bien remplie et expliquer pourquoi.\n\n**Question 7 (4 points) :** Quelles utilisations fait-on en économie de la dérivée f'(x) dans les cas de l'analyse de : a) La fonction d'utilité de la consommation d'un bien, b) la fonction de prix d'un bien, c) la fonction de coût\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2012_Casablanca_FSJES_AinChock_Econometrie2",
+    "categorie": "EDMQ",
+    "filiere": "Économétrie & Modélisation Économique",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Chock",
+    "annee": "2012",
+    "master_reel": "Économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques",
+    "modules": [
+      "Économétrie",
+      "Statistiques"
+    ],
+    "notions_cles": "fonctions de la monnaie, modèle économétrique des importations (FBCF, indice des prix des importations), statistique de Student",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2019/08/master-econometrie-appliquee-2012.html",
+    "images": [],
+    "enonce_md": "**Master d'économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques**\n\n**Test de présélection des candidats en vue de l'inscription en master d'économétrie appliquée à la modélisation des comportements macro et microéconomiques — Vendredi 12 Octobre 2012 – 9h**\n\nTraiter en 2 heures les questions suivantes :\n\n**Question 1 (6 points) :** Les fonctions de la Monnaie : les citer et dire en quoi chacune consiste. Indiquer parmi ces fonctions, laquelle est la moins bien remplie et expliquer pourquoi.\n\n**Question 2 (10 points) :** La spécification suivante retient deux variables : la FBCF (la Formation Brute de capital Fixe) et l'IprixM (l'Indice des prix des Importations), pour expliquer les importations (Imp), pour la période 1970 à 2008, et les résultats obtenus sont :\n\nImpₜ = 23,06 FBCFₜ − 0,43 IprixMₜ + 45,20\n(10,14) (0,21) (40,38)\n\nEntre parenthèses, figurent les écarts types estimés des estimateurs. R² = 0,95 et DW = 2,103. Analysez ces résultats sur le plan économique et sur le plan statistique.\n\n**Question 3 (4 points) :** Soit la statistique de Student : T = (âₖ - aₖ)/(δₐₖ√(V̂ₖ)) = (âₖ - aₖ)/(√(V̂ₖ.u'u/(n-p))). Donner le sens de chacune de ses composantes et dire l'intérêt de sa construction.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2014_Casablanca_FSJES_AinChock_Econometrie2",
+    "categorie": "EDMQ",
+    "filiere": "Économétrie & Modélisation Économique",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Chock",
+    "annee": "2014",
+    "master_reel": "Économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques",
+    "modules": [
+      "Microéconomie",
+      "Économétrie"
+    ],
+    "notions_cles": "rôle des modèles économétriques comme outils d'aide à la décision, corrélation vs causalité, modèle de l'investissement au Maroc (investissement public, prix des biens d'équipement)",
+    "difficulte": "3/5",
+    "source": "https://www.fsjesmaster.com/2019/08/master-econometrie-appliquee-2014.html",
+    "images": [],
+    "enonce_md": "**Master d'économétrie Appliquée à la Modélisation des Comportements Macro et Microéconomiques**\n\n**Test de présélection des candidats en vue de l'inscription en master d'économétrie appliquée — Vendredi 17 octobre 2014 – 9h**\n\nTraiter en 2 heures les questions suivantes :\n\n**Question 1 :**\niv. Expliquer en quoi les modèles économétriques constituent des outils d'aide à la décision. Pour illustrer le propos utiliser des exemples à niveaux micro et macroéconomique. (3 points)\nv. Corrélation et causalité, quelles différences ? (2 points)\nvi. Quel est le rôle et l'importance de l'Investissement dans une économie ? (2 points)\n\n**Question 2 :**\n\nPour comprendre les raisons de la variation de l'Investissement au Maroc, nous avons construit le modèle suivant :\n\nInvₜ = 0,79 LIPubₜ − 0,37 LPrEQtₜ + 1,70\n(0,132) (0,247) (2,38)\n\nAvec Invₜ l'Investissement en t et LIPubₜ le logarithme de l'investissement public en t et LPrEQtₜ le logarithme du prix des biens d'équipement en t. Les paramètres de ce modèle ont été estimés sur la période 1975 à 2012.\n\nEntre parenthèses, figurent les écarts types estimés des estimateurs et on a R² = 0,97 et DW = 1,04. Analysez ces résultats sur les plans économique et statistique. (7 points)\n\n**Question 3 :** Quelles autres variables peuvent aider à améliorer la capacité explicative de ce modèle ? (2 points)\n\n**Question 4 : Questions de cours**\niii. Donner la formule de A, vecteur des estimateurs des coefficients d'un modèle linéaire de régression multiple de la forme Yᵢ = a₀Xᵢ₀ + a₁Xᵢ₁ + ... + aₚXᵢₚ + Uᵢ (2 points)\niv. soit la formule â = Σ(Xᵢ-X̄)(Yᵢ-Ȳ) / Σ(Xᵢ-X̄)². Que représente ce coefficient et quel est le sens de chacune de ses composantes ? (2 points)\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2017_Casablanca_FSJES_AinSebaa_ActuariatFinanceMarches",
+    "categorie": "EDMQ",
+    "filiere": "Actuariat & Ingénierie Mathématique-Financière",
+    "ville": "Casablanca",
+    "etablissement": "FSJES Casablanca Ain Sebaa",
+    "annee": "2017",
+    "master_reel": "Actuariat et Finance de marchés",
+    "modules": [
+      "Mathématiques Financières",
+      "Algèbre Linéaire",
+      "Statistiques",
+      "Probabilités",
+      "Recherche Opérationnelle"
+    ],
+    "notions_cles": "QCM (30 questions) : intérêts simples et composés, algèbre matricielle, régression et corrélation, lois de probabilité, échantillonnage, programmation linéaire (méthode du simplexe)",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2019/06/master-actuariat-et-finance-de-marches-2017-2018.html",
+    "images": [],
+    "enonce_md": "**Université Hassan II — FSJES Ain Sebâa**\n\n**Examen écrit pour le concours du Master Actuariat et Finance de marchés — Année universitaire 2017-2018 — Durée 2h — QCM à points négatifs (-0,5 pt par réponse fausse)**\n\n**Mathématiques financières**\n\nQ1. Un capital de 5630 Dh, placé à intérêts simples pendant 94 jours, a produit 168 Dh d'intérêts simples. Quel est le taux de ce placement ?\nQ2. Un capital de 6700 Dh, placé à 7,5% à intérêts simples au bout, a acquis une valeur de 7035 Dh. Quelle est la durée de ce placement ?\nQ3. Quel est le taux mensuel équivalent au taux trimestriel de 5,3% ?\nQ4. Un capital de 11243 Dh est placé pendant 7 ans à intérêts composés au taux annuel de 4%. Quelle est la valeur acquise par ce capital au terme de son placement ?\nQ5. Un commerçant remplace les deux effets suivants : 13000 Dh échéant dans 2 ans, 17000 Dh échéant dans 4 ans, par un effet unique de nominal 32023,13 Dh. Sachant que le taux d'intérêts composés est 7,5% l'an, quelle serait l'échéance de cet effet ?\n\n**Algèbre linéaire**\n\nQ6. Soit les matrices A et B définies par A = [[1,-1,3],[5,0,2],[0,4,-3]] et B = [[0,2,4],[-2,6,3],[1,3,7]] ; le deuxième vecteur ligne de la matrice (AB)ᵗ est :\nQ7. Soit la matrice C définie par C = [[-2,1,-1],[-6,3,-2],[-3,1,0]]. Le polynôme caractéristique de C est égal à :\nQ8. Soit D la matrice définie par D = [[1,2,0],[1,2,-1],[1,2,3]]. La matrice D est :\nQ9. Soit la matrice E = PRP⁻¹, avec P = [[1,-1,0],[1,-1,-1],[1,0,-4]] et R = [[1,0,0],[0,-1,0],[0,0,-1]]. E¹² est égal à :\nQ10. On considère le système suivant : x+2y-3z=3 ; 2x+6y-11z=2 ; x-2y+7z=m. Pour quelle valeur de m le système admet-il une infinité de solutions ?\n\n**Statistique descriptive**\n\nLe tableau ci-dessous donne l'observation des prix « Y » (en Dirham) et des quantités disponibles « X » d'un produit sur le marché.\n\nQ11. La valeur de la moyenne de X vaut : Q12. La variance de X vaut : Q14. L'équation de la droite de régression est : Q15. Le coefficient de corrélation linéaire est égal à :\n\n**Probabilités**\n\nQ16. Si P(A∪B) = P(A) + P(B), alors les ensembles A et B sont : Q17. La densité de la loi exponentielle de paramètre 2 est : Q18. Le théorème central limite sert à approcher les lois par la loi : Q19. Si X suit une loi Binomiale de paramètres n=30 et p=0,1. Alors son espérance E(X) est : Q20. Soit X une loi de Poisson P(2), alors P(X<4/X>2) est égale à :\n\n**Échantillonnage**\n\nUn comptable pense que les problèmes de liquidité d'une entreprise sont une conséquence directe de l'encaissement lent des comptes fournisseurs. Le comptable prétend qu'au moins 70% des comptes fournisseurs datent de plus de deux mois. Un échantillon de 120 comptes fournisseurs a révélé que 88 dataient de plus de deux mois.\n\nQ21. Une estimation ponctuelle de la proportion « p » de comptes fournisseurs datant de plus de deux mois est : Q22. Sachant que le fractile « z » de la loi Normale à 99% pour la vraie proportion p est : Q23. La taille minimum n de l'échantillon à prélever pour que la marge d'erreur de l'estimation (au niveau de confiance 99%) soit inférieure à 0,03 est : Q24. Pour faire une estimation p sur la population d'un caractère donné, on doit connaître au minimum : Q25. Plus la taille de l'échantillon « n » est grande, plus l'amplitude de l'intervalle de confiance est :\n\n**Programmation linéaire**\n\nUn atelier fabrique trois produits P1, P2, et P3, en quantités x1, x2, et x3. Les marges unitaires de ces trois produits sont de 3, 4 et 12 dh respectivement. Le produit P1 nécessite 1 heure de travail par jour et le marché ne peut absorber plus de 40 unités de ce produit. Le produit P2 nécessite 2 heures de travail par jour. Le produit P3 nécessite 3 heures de travail par jour et le marché ne peut absorber plus de 80 unités. La capacité de travail dans l'atelier est de 300 heures par jour. Le tableau simplexe optimal du problème de programmation linéaire est donné.\n\nQ26. La fonction objectif (économique) est : Q27. La contrainte \"temps de travail\" est : Q28. D'après le tableau simplexe optimal, la solution optimale est : Q29. D'après le tableau simplexe optimal, la solution optimale du problème dual est : Q30. Si on augmente la capacité du temps de travail (301 au lieu de 300), le nouveau bénéfice optimal est :\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Rabat_FSJESSouissi_ESMA2",
+    "categorie": "EDMQ",
+    "filiere": "Économétrie & Modélisation Économique",
+    "ville": "Rabat",
+    "etablissement": "FSJES Rabat Souissi",
+    "annee": "2016",
+    "master_reel": "Économétrie, Statistique et Modélisation Appliquées (ESMA)",
+    "modules": [
+      "Mathématiques",
+      "Statistique",
+      "Microéconomie",
+      "Macroéconomie"
+    ],
+    "notions_cles": "applications linéaires et bases de R³, points critiques d'une fonction à deux variables, biais et correction de la variance empirique, fonction de coût total et paradoxe de Bertrand, équilibre général à trois agents (Q=y=H√N)",
+    "difficulte": "5/5",
+    "source": "https://www.fsjesmaster.com/2017/06/concours-master-esma-2016-2017.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V de Rabat — Faculté des Sciences Juridiques, Économiques et Sociales — Souissi**\n\n**Test d'admission au Master ESMA — Année Universitaire 2016-2017 — Durée : 2 heures — N.B. : Chaque partie doit être traitée sur une feuille séparée**\n\n**Partie 1 – Mathématiques**\n\n**Exercice 1 :** Soit f l'application de R³ dans R³ définie par f(x,y,z) = (x, -3y+4z, -2y+3z).\n1) Montrez que f est une application linéaire de R³ dans R³ ;\n2) Soit (e₁; e₂; e₃) la base canonique de R³, montrez que (f(e₁); f(e₂); f(e₃)) est une base de R³, en déduire que f est bijective.\n3) Calculez f∘f ; en déduire l'expression de f⁻¹.\n\n**Exercice 2 :** Soit la fonction f(x,y) = 4xy - 1\n1) Déterminez les points critiques de f sous la contrainte x²+y²-1=0\n2) Précisez la nature de ces points critiques.\n\n**Partie 2 – Statistique**\n\n**Exercice 1 :** On prend un échantillon de poids, et on trouve que la variance est proche de 0. Quelle est la signification de cette valeur ?\n\n**Exercice 2 :** Soit X une variable aléatoire de variance σ², pour estimer cette variance, on utilise la variance empirique de X : S² = (1/n)Σ(Xᵢ-X̄)².\n1) Montrez que S² est un estimateur biaisé de σ².\n2) Pour rendre cet estimateur sans biais, on définit S'² = (n/(n-1))S², montrez que S'² est un estimateur sans biais de σ².\n\n**Partie 3 – Microéconomie**\n\n**Exercice 1 :** En économie industrielle, qu'est-ce qu'on entend par le paradoxe de Bertrand ? Et comment le contourner ?\n\n**Exercice 2 :** Supposant que la fonction de coût total d'une entreprise est C(q) = 450 + 15q + 2q². C : le coût total ; q : la quantité produite. Si le prix de marché est de P = 15 et si l'entreprise est à l'optimum :\n1) Déterminez la quantité produite par l'entreprise à l'optimum.\n2) Déterminez le niveau de profit sur la partie de l'entreprise.\n3) La demande du marché est donnée par : Qₐ = 900 - 10P\n   a. Calculez le prix à l'équilibre de long terme.\n   b. Quelle est la quantité globale demandée sur le long terme ?\n   c. Quel est le nombre d'entreprises sur le marché ?\n   d. Quel sera le profit de chaque entreprise ?\n\n**Partie 4 – Macroéconomie**\n\nOn considère une économie à trois agents (les firmes, les ménages et l'État) comportant quatre marchés (marché des produits, de la monnaie, du travail et des capitaux). On suppose que l'État finance ses dépenses par l'emprunt ou la création monétaire uniquement. Les relations suivantes définissent les comportements et les équilibres caractéristiques de cette économie où H>0 représente (favorablement) la productivité du travail, où v>0 est le niveau de circulation de la masse monétaire, et où Nₛ est le niveau de la population active.\n\n(1) Q=y=H√N (7) G=Ḡ\n(2) Nᵈ=(H²/4)(W/P)⁻² (8) S=I+G\n(3) Nˢ=N̄ₛ (9) Mᵈ=(1/v)Py\n(4) Nˢ=Nᵈ=N (10) Mˢ=M̄\n(5) I=-2000i+1000 (11) Mᵈ=Mˢ\n(6) S=8000i-400\n\nQ est la production en volume réel, I l'investissement des entreprises en volume, S l'épargne des ménages, G les dépenses publiques, N l'emploi, W le salaire nominal, P le niveau général des prix, i le taux d'intérêt réel. Les variables exogènes sont surmontées d'une barre (Ḡ et M̄). Nˢ représente la fonction d'offre de travail (demande d'emploi), Nᵈ la fonction de demande de travail (offre d'emploi), Mᵈ la fonction de demande de monnaie, Mˢ la fonction d'offre de monnaie.\n\n1. Étudiez l'équilibre du marché du travail, et déterminez le niveau de salaire réel, de l'emploi et de la production d'équilibre de cette économie.\n2. Étudiez l'équilibre du marché de la monnaie, et déterminez le niveau général des prix de cette économie.\n3. Étudiez l'équilibre du marché des biens, et déterminez le taux d'intérêt réel de cette économie.\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2016_Rabat_FSJESAgdal_ActuariatFinance2",
+    "categorie": "EDMQ",
+    "filiere": "Actuariat & Ingénierie Mathématique-Financière",
+    "ville": "Rabat",
+    "etablissement": "FSJES Agdal",
+    "annee": "2016",
+    "master_reel": "Actuariat & Finance",
+    "modules": [
+      "Mathématiques Financières",
+      "Statistiques",
+      "Économie"
+    ],
+    "notions_cles": "protection sociale au Maroc, tableau croisé effectifs (test du khi-deux), systèmes linéaires paramétrés, matrices nilpotentes, valeur acquise d'une suite de versements",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-actuariat-et-finance-2016-2017.html",
+    "images": [],
+    "enonce_md": "**Université Mohammed V-Agdal — Faculté des Sciences Juridiques, Économiques et Sociales — Rabat — Département des Sciences Économiques**\n\n**Le test écrit d'admission au Master Spécialisé « Actuariat & Finance » — Pour l'année universitaire 2016-2017 — Mercredi 21 Septembre 2016 à 14h00 — Chaque partie doit être rédigée sur une copie à part**\n\n**Sujet de dissertation en économie :**\n\nLa protection sociale enjeux et perspective pour le Royaume du Maroc.\n\n**Exercices en statistique :**\n\n**Question 1 :** La moyenne d'âge d'un groupe constitué d'hommes et de femmes est de 40 ans. La moyenne d'âge des hommes est de 35 ans, celle des femmes de 50 ans. Quelle est la proportion d'hommes dans ce groupe ?\n\n**Question 2 :** Dans un établissement scolaire il y a 960 élèves. Un tiers des élèves sont en deuxième année. 60% des élèves du lycée sont des filles. 55% des élèves de deuxième année sont des filles.\n1/ Compléter le tableau suivant (Filles/Garçons/Total × 2ème année/1ère année/Terminale/Total, avec Garçons Terminale=140, Total=960).\n2/ On interroge un élève au hasard : a) Quelle est la probabilité que cela soit un élève de première année ? b) Quelle est la probabilité que cela ne soit pas un élève de Terminale ?\n\n**Question 3 :** On veut étudier l'existence d'un lien entre la parité et le sexe. Le test Khi-deux sur un échantillon donne la valeur de décision 0,45 pour une valeur critique de la table de 3,84 au seuil de 5%. Formuler les hypothèses du test et donner une conclusion.\n\n**Exercices en mathématiques et mathématiques financières :**\n\n**Question 1 :** Discuter, suivant le paramètre réel m, le système linéaire suivant : (3-m)x+z=1 ; 2x+(1-m)y+z=1 ; -x+y+(1-m)z=1.\n\n**Question 2 :** On considère une matrice carrée A d'ordre n vérifiant A³ - Iₙ = 0ₙ.\n1/ Exprimer (A+Iₙ)³ en fonction de la matrice A ;\n2/ En déduire que la matrice (A+Iₙ) est inversible (on exprimera l'inverse (A+Iₙ)⁻¹ en fonction de A.)\n\n**Question 3 :** Quelle sera la valeur acquise d'une série de versements de 500,00 Dh versés en fin de période pendant 8 ans au taux de 5,15 % par an ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
+  },
+  {
+    "id": "2014_Rabat_FSJESAgdal_ActuariatFinance2",
+    "categorie": "EDMQ",
+    "filiere": "Actuariat & Ingénierie Mathématique-Financière",
+    "ville": "Rabat",
+    "etablissement": "FSJES Agdal",
+    "annee": "2014",
+    "master_reel": "Actuariat & Finance",
+    "modules": [
+      "Mathématiques Financières",
+      "Statistiques",
+      "Algèbre"
+    ],
+    "notions_cles": "comparaison de placements à intérêts simples/composés, escompte d'effets de commerce, taux de capitalisation, matrices symétriques et antisymétriques, taux d'accroissement démographique, régression multiple",
+    "difficulte": "4/5",
+    "source": "https://www.fsjesmaster.com/2017/06/master-actuariat-et-finance-2014-2015.html",
+    "images": [],
+    "enonce_md": "**Département des Sciences Économiques — Université Mohammed V-Agdal**\n\n**Le test écrit d'admission au Master « Actuariat & Finance » — Mercredi 01 Octobre 2014 à 08h30 — Durée : 3 h — Chaque partie est traitée dans une feuille d'examen appropriée**\n\n**Partie I : Épreuve d'analyse mathématique et mathématiques financières**\n\n**Exercice 1 :** Pour un capital donné, vous avez le choix entre trois placements sur 2 ans, sans risque. Hiérarchisez-les.\n1. Avec intérêts composés, capitalisation annuelle et taux annuel de 6%.\n2. Avec intérêts simples et taux annuel de 6,2%.\n3. Avec intérêts composés, capitalisation mensuelle et taux mensuel de 0,49%.\n\n**Exercice 2 :** Une société X remet à l'escompte le 10 Janvier trois effets de commerce de valeurs nominales 45 000 dhs, 26 000 dhs et 12 000 dhs et d'échéances respectives 20 Mars, 15 Février et 30 Janvier. Le taux était 12%.\n1. Calculer pour chaque effet l'escompte et la valeur actuelle.\n2. Déterminer l'échéance moyenne des trois effets.\n\n**Exercice 3 :** Pour combien de mois faut-il verser 100 dhs pour avoir une valeur acquise de 2000 dhs sachant que le taux de capitalisation est de 1%.\n\n**Exercice 4 :** Soient les deux matrices réelles suivantes : A = [[1,0,1],[2,1,-1],[0,1,0]] et B = [[2,-1,-2],[3,4,-3],[0,1,2]].\n1. Construire deux matrices carrées symétriques à partir de la matrice A ;\n2. Calculer la partie symétrique et la partie antisymétrique de la matrice B ;\n3. Déterminer l'inverse de la matrice B.\n\n**Partie II : Épreuve de statistique et de probabilité**\n\n1) La population d'un pays est passée de 14,85 millions d'habitants en 2002 à 19,9 millions d'habitants en 2012. Quel est le taux d'accroissement annuel moyen de cette population entre 2002 et 2012 ?\n\n2) Dans un sondage, 50% des personnes interrogées ne sont pas encore fixées sur leur choix aux élections présidentielles, 24% optent pour le candidat A, 21% pour le candidat B, les autres se partagent sur les autres candidats. Combien le candidat A obtiendra-t-il de voix (en pourcentage) si 30% des personnes non encore fixées votent pour lui ?\n\n3) La sortie d'une régression multiple du type Y = a0 + a1 X1 + a2 X2 donne les résultats suivants : R² = 0,81 ; (Pr>F) = 0,049 ; (Pr>|t|) = 0,050 pour a0 ; (Pr>|t|) = 0,005 pour a1 ; (Pr>|t|) = 0,19 pour a2. Interpréter ces résultats.\n\n4) Vous voulez savoir s'il existe un lien entre les motivations d'achat des consommateurs et leur statut matrimonial. Quelle méthode statistique préconisez-vous ?\n\n**Partie III : Traiter le sujet suivant**\n\nQuel est le rôle de la Bourse des valeurs mobilières dans une économie nationale ?\n",
+    "corrige_md": "",
+    "date_ajout": "2026-09-03"
   }
 ]

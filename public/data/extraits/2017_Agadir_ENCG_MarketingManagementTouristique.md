@@ -1,0 +1,12 @@
+**École Nationale de Commerce et de Gestion, Agadir — Concours d'accès au Master Spécialisé 'Marketing et Management Touristique' — Année universitaire 2017-2018 — Épreuve de spécialité — Durée : 2 heures**
+
+Traiter les deux sujets suivants :
+
+**Sujet 1 :** Nowadays, rural tourism is considered as an important sector. it promotes the local economy, socio-cultural changes, sustainability and life style of the people residing around the tourist destination. In Morocco, rural tourism is expected to play a key role in the country's economic growth, human resource, culture, etc. Discuss briefly different impacts of the rural tourism on Morocco as a north African destination.
+
+**Sujet 2 :** « À vue de l'importante croissante que connaissait le tourisme mondial et possédant des atouts naturels importants et un patrimoine culturel riche et diversifié et conscient du rôle déterminant du secteur dans le développement économique du pays, le secteur touristique au Maroc va, à partir de l'année 2001, connaître un grand changement dans sa politique de développement et de promotion à travers la mise en place d'une vraie stratégie de développement touristique volontariste susceptible de déclencher une dynamique de développement durable et intégrée. Cette nouvelle baptisée l'ère des «Visions» va commencer avec la vision dite «Vision 2010», qui va permettre une grande avancée dans le secteur touristique national. À la vue des résultats intéressants de la Vision 2010 et des opportunités offertes par les nouvelles tendances du tourisme mondial, le pays a décidé de reconduire sa stratégie touristique à travers la «Vision 2020» qui avait pour ambitions de hisser le Maroc en 2020 parmi les 20 premières destinations touristiques mondiales et d'atteindre 20 millions d'arrivées touristiques. La dynamique créée par ces deux visions a pu rapidement donner ses fruits en permettant de bonnes performances. Toutefois, malgré ces réalisations et à trois années de l'horizon stratégique arrêté la grille de lecture du secteur touristique marocain manifeste encore d'importants retards par rapport aux objectifs et ambitions annoncés. »
+
+En vous inspirant de ce texte et en vous basant sur vos connaissances répondez aux deux questions suivantes (vos réponses doivent être concises et motivées) :
+
+1. Quels sont, à votre avis, les principaux facteurs ayant limité la réalisation des objectifs annoncés par la vision 2020 ?
+2. Formulez les principaux axes d'une stratégie qui, selon vous, pourrait redynamiser le secteur touristique marocain.

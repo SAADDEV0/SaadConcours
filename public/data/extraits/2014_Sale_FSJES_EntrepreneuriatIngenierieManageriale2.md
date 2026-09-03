@@ -1,0 +1,9 @@
+**Université Mohammed V de Rabat — Faculté des Sciences Juridiques Économiques et Sociales-Salé**
+
+**Master Entrepreneuriat et Ingénierie Managériale — Test écrit (Mercredi 1er octobre 2014)**
+
+**Sujet :**
+
+Selon vous, et en s'inspirant de l'extrait ci-dessous du discours de Sa Majesté le Roi Mohammed VI (20 août 2014), comment le capital humain peut-il participer à la croissance des entreprises au Maroc ?
+
+« Notre modèle de développement a atteint un niveau de maturité qui l'habilite à faire une entrée définitive et méritée dans le concert des pays émergents. Toutefois, les prochaines années seront décisives pour préserver les acquis, corriger les dysfonctionnements et stimuler la croissance et l'investissement. Alors, ce modèle peut-il progresser, en relevant les défis et en éliminant les obstacles auxquels il est confronté ? Si les pays s'appuient essentiellement sur la compétitivité de leurs entreprises, notamment celles qui exportent leurs produits vers les marchés mondiaux, l'économie marocaine a enregistré, hélas, un retard significatif en la matière, en raison de l'éparpillement et de la faiblesse du tissu industriel et de la concurrence du secteur informel. Cette situation appelle la mise en place de groupes forts et d'entreprises puissantes permettant de renforcer la résilience de l'économie nationale, tant pour faire face à la concurrence internationale que pour tisser des partenariats avec les petites entreprises à même de favoriser le développement au niveau national. Se doter de ressources humaines qualifiées est un préalable majeur pour rehausser la compétitivité et répondre ainsi aux exigences du développement et du marché de l'emploi et pour accompagner la progression et la diversification que connaît l'économie nationale. Comme tout le monde le sait, la bonne gouvernance est la clé de réussite de toute réforme. Elle est essentielle à la réalisation des objectifs de toute stratégie ... »
