@@ -1385,7 +1385,7 @@
     "etablissement": "ENS",
     "ville": "Casablanca",
     "filiere": null,
-    "date_limite": "2026-09-04",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://enscasa.ac.ma/preinscription-masters/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ens-casablanca-2026-2027.html",
