@@ -4,6 +4,7 @@ import { getAllConcours, getCorrigeFile, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { formatQCM } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
+import { faqJsonLd } from "../../_shared/faqSchema";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 
@@ -56,6 +57,42 @@ function seoTitle(c) {
   const masterLabel = c.master_reel || c.filiere;
   const location = `${c.etablissement}, ${c.ville} ${c.annee}`;
   return masterLabel ? `${masterLabel} — Concours ${location}` : `Concours ${location}`;
+}
+
+// Plain-text Q&A generated from fields already shown on the page (tags,
+// corrigé badge, difficulté) — kept in sync with what's visible so the
+// FAQPage schema below never markets content the page doesn't actually show.
+function buildConcoursFaq(c, hasCorrige) {
+  const masterLabel = c.master_reel || c.filiere;
+  const faqs = [];
+
+  if (c.modules && c.modules.length) {
+    faqs.push({
+      question: `Quelles sont les matières du concours ${masterLabel ? masterLabel + " " : ""}à ${c.etablissement} (${c.annee}) ?`,
+      answer: `Les épreuves portent sur : ${c.modules.join(", ")}.`,
+    });
+  }
+
+  faqs.push({
+    question: "Un corrigé est-il disponible pour ce sujet ?",
+    answer: hasCorrige
+      ? "Oui, un corrigé indicatif est disponible sur cette page — vérifie les calculs avant de t'y fier pour réviser, la relecture humaine n'est pas garantie."
+      : "Pas encore pour ce sujet précis — l'énoncé complet reste disponible gratuitement, et un corrigé pourra être ajouté ultérieurement.",
+  });
+
+  faqs.push({
+    question: "Ce sujet de concours est-il gratuit ?",
+    answer: "Oui, l'énoncé complet est consultable en ligne et téléchargeable en PDF gratuitement sur SaadConcours, sans inscription.",
+  });
+
+  if (c.difficulte) {
+    faqs.push({
+      question: "Quel est le niveau de difficulté de ce concours ?",
+      answer: `Ce sujet est classé avec une difficulté de ${c.difficulte} sur notre échelle, à titre indicatif.`,
+    });
+  }
+
+  return faqs;
 }
 
 export async function generateMetadata({ params }) {
@@ -113,6 +150,9 @@ export default async function ConcoursDetailPage({ params }) {
   // out, rather than emitting structured data Google would flag invalid.
   const sourceUrlMatch = (c.source || "").match(/https?:\/\/\S+/);
 
+  const faqs = buildConcoursFaq(c, Boolean(corrigeHtml));
+  const faqLd = faqJsonLd(faqs);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
@@ -146,6 +186,13 @@ export default async function ConcoursDetailPage({ params }) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false }) }} />
 
       <div className="cd-view">
@@ -229,6 +276,18 @@ export default async function ConcoursDetailPage({ params }) {
         )}
 
         <ConcoursDetailClient concours={fullConcours} />
+
+        {faqs.length > 0 && (
+          <div className="cd-card">
+            <h2>Questions fréquentes</h2>
+            {faqs.map((f) => (
+              <div key={f.question} className="faq-item">
+                <h3 className="faq-question">{f.question}</h3>
+                <p className="faq-answer">{f.answer}</p>
+              </div>
+            ))}
+          </div>
+        )}
 
         {related.length > 0 && (
           <div className="cd-card cd-related">

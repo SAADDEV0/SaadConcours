@@ -3,6 +3,7 @@ import { marked } from "marked";
 import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
+import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
 import BlogDetailClient from "./BlogDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -47,6 +48,7 @@ export default async function BlogDetailPage({ params }) {
   const contentHtml = renderMarkdownWithMath(marked, p.content || "");
   const url = `${SITE_URL}/blog/${p.id}`;
   const related = getRelatedPosts(list, p);
+  const faqLd = faqJsonLd(extractFaqFromMarkdown(p.content));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -82,6 +84,13 @@ export default async function BlogDetailPage({ params }) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", showSearch: false }) }} />
 
       <div className="cd-view">

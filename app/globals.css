@@ -336,6 +336,8 @@ header{
 .faq-item summary::after{content:"+"; color:var(--text-faint); font-size:1.2rem; flex-shrink:0;}
 .faq-item[open] summary::after{content:"−";}
 .faq-item p{color:var(--text-dim); margin:10px 0 0; line-height:1.6;}
+.faq-question{margin:0; font-size:.95rem; font-weight:600;}
+.faq-answer{color:var(--text-dim); margin:8px 0 0; line-height:1.6; font-size:.9rem;}
 .cd-images{display:flex; flex-direction:column; gap:14px;}
 .cd-images img{width:100%; border-radius:8px; border:1px solid var(--border);}
 .cd-source{font-size:.85rem; color:var(--text-dim); word-break:break-all; margin-bottom:24px;}
