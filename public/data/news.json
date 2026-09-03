@@ -1,5 +1,29 @@
 [
   {
+    "id": "7e8caf26dd042424",
+    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
+    "etablissement": "FST",
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsth.ma/documents/ouvrir.php?t=fcb50009c38eaf189b3b225e500319649f5dd99393c0df823170511f1dd44813",
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
+    "date_publication": "2026-09-03"
+  },
+  {
+    "id": "3c4a6079e73dc5e5",
+    "titre": "Résultats Présélection Master FST Béni Mellal 2026-2027",
+    "etablissement": "FST",
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fstbm.ac.ma/web/content/1495523/MST_NB_examen_2026.pdf",
+    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-FST-Beni-Mellal-2026-2027.html",
+    "date_publication": "2026-09-03"
+  },
+  {
     "id": "27f24c7018f18389",
     "titre": "Master FLSH Meknès 2026-2027",
     "etablissement": "FLSH",
@@ -33,18 +57,6 @@
     "cloture": false,
     "lien_inscription": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4WhyphenhyphenLcaXWTmFPX7d8U_2uMpScwNBT6wvGc0pahjbKNEB-nzaziV9NZC9owAcBipBSYhRskX9KEt5G0UycInSKhP_CC70jjdtBst65BVzOkyUCRU3FcFkYGC9qSM5TBmnNiTUlvNSAwfANL1cjY2QnyhwoAtH9nxvXe5IfAmfyMvkFRhEf2U6OkRNsuov7/s1755/AVIS-DOUVERTURE-DES-PRE-CANDIDATURES-EN-LIGNE-MASTERS-Temps-Normal-%E2%80%93-Temps-Amenage_page-0001.jpg",
     "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-mohammedia-2026-2027.html",
-    "date_publication": "2026-09-02"
-  },
-  {
-    "id": "7e8caf26dd042424",
-    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
-    "etablissement": "FST",
-    "ville": null,
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
     "date_publication": "2026-09-02"
   },
   {
@@ -1385,7 +1397,7 @@
     "etablissement": "ENS",
     "ville": "Casablanca",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-04",
     "cloture": false,
     "lien_inscription": "https://enscasa.ac.ma/preinscription-masters/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ens-casablanca-2026-2027.html",
@@ -1425,18 +1437,6 @@
     "cloture": false,
     "lien_inscription": "https://preins.um5.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensam-rabat-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "3d1a5c6f538b5f9f",
-    "titre": "Master FSE Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://preins.um5.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fse-rabat-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
