@@ -38,6 +38,9 @@ Puis ouvrir `http://localhost:3000`. Sans `GITHUB_TOKEN` configuré, l'API lit l
 
 Sans `GITHUB_TOKEN` en production, l'API se rabat sur les fichiers embarqués dans le build (figés à la dernière compilation) et `/admin` ne peut pas écrire — définir `GITHUB_TOKEN` est donc nécessaire pour que le panneau d'administration fonctionne.
 
-## GitHub Pages
+## Relation GitHub / Vercel
 
-L'ancienne URL GitHub Pages (`index.html` à la racine) redirige automatiquement vers l'URL Vercel du site.
+- **GitHub = source de vérité.** Le dépôt contient le code (déployé par Vercel à chaque push sur `main`) et les données (`public/data/*.json`, lues en direct par le site et écrites par `/admin` via des commits, voir ci-dessus).
+- **Vercel = hébergement.** Chaque push sur `main` déclenche un build et un déploiement automatique sur `saadconcours.space` (projet Vercel `saad-concours`, domaine custom configuré dans Vercel → Settings → Domains).
+- **GitHub Actions** exécute les jobs planifiés (`.github/workflows/`) : scraping almaster (`update-news.yml`) et digest email des concours qui ferment bientôt (`news-digest.yml`).
+- **GitHub Pages est désactivé.** Le site n'est plus servi que par Vercel/saadconcours.space ; `index.html` à la racine est un reliquat de l'ancienne redirection et peut être supprimé.
