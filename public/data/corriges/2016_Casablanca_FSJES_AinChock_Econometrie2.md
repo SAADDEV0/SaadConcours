@@ -1,0 +1,15 @@
+> Corrigé avec éléments de réponse et calculs.
+
+**Question 1** — Hausse du prix du gasoil : (1) demande à l'ONCF **augmente** (effet de substitution, le train devenant relativement moins cher que le transport routier) ; (2) prix des tickets de cars entre villes **augmente** (répercussion du coût du carburant sur le prix du transport routier) ; (3) prix des pommes de terre **augmente** légèrement (hausse du coût de transport/production agricole, le gasoil étant un intrant de la mécanisation et du transport).
+
+**Question 2** — Hausse du prix du sucre : (1) demande de thé **diminue** légèrement (le thé sucré étant un produit lié/complémentaire au sucre au Maroc) ; (2) demande de limonades **diminue** (le sucre est un intrant direct, la hausse de son prix renchérit le produit fini). Indicateurs : élasticité-prix croisée (pour mesurer l'effet 1, lien de complémentarité) et élasticité-coût de production répercutée sur le prix (pour l'effet 2). Formules : E_croisée=(ΔQthé/Qthé)/(ΔPsucre/Psucre) ; répercussion sur le prix ≈ part du sucre dans le coût de production du bien final.
+
+**Question 3** — Moyenne arithmétique : Ā=ΣXᵢ/n, utile pour résumer une tendance centrale de données additives. Moyenne géométrique : G=(ΠXᵢ)^(1/n), utile pour les taux de croissance/évolutions multiplicatives. Écart type : σ=√(Σ(Xᵢ-X̄)²/n), mesure la dispersion autour de la moyenne. Espérance mathématique : E(X)=ΣxᵢP(xᵢ), valeur moyenne théorique anticipée d'une variable aléatoire.
+
+**Question 4** — Modèle : Log Dvr = -0,31 Log Pvr + 0,27 Log Ppl + 0,19 Log Pps + 37,8, écarts-types 0,052 ; 0,039 ; 0,48. Interprétation : élasticité-prix directe de la viande rouge négative (-0,31), cohérente avec la loi de la demande. Élasticités croisées positives avec le poulet (+0,27) et le poisson (+0,19) indiquent que ces deux produits sont des **substituts** de la viande rouge. t-stat Pvr=-0,31/0,052≈-5,96 (significatif) ; t-stat Ppl=0,27/0,039≈6,92 (significatif) ; t-stat Pps=0,19/0,48≈0,40 (non significatif). R²=0,87 : bon ajustement global.
+
+**Question 5** — Même démarche appliquée aux exportations marocaines en fonction de IPind, CPibUE et IpTu : signe attendu négatif pour IPind (compétitivité-prix), positif pour CPibUE (effet-revenu du principal partenaire commercial), et effet ambigu pour IpTu selon que la Tunisie est perçue comme concurrente (effet positif sur nos exportations si ses prix montent) ou complémentaire.
+
+**Question 6** — Fonctions de la monnaie : unité de compte (mesure de valeur), intermédiaire des échanges (moyen de paiement), réserve de valeur (épargne). La fonction la moins bien remplie en contexte inflationniste est la **réserve de valeur** (l'inflation érode le pouvoir d'achat de la monnaie détenue).
+
+**Question 7** — Utilisation de la dérivée f'(x) : (a) fonction d'utilité — la dérivée donne l'utilité marginale du bien consommé ; (b) fonction de prix — la dérivée donne la recette marginale ou la sensibilité du prix à la quantité (élasticité) ; (c) fonction de coût — la dérivée donne le coût marginal, comparé au prix pour déterminer l'optimum de production.

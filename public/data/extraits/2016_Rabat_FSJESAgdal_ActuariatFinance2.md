@@ -11,7 +11,15 @@ La protection sociale enjeux et perspective pour le Royaume du Maroc.
 **Question 1 :** La moyenne d'âge d'un groupe constitué d'hommes et de femmes est de 40 ans. La moyenne d'âge des hommes est de 35 ans, celle des femmes de 50 ans. Quelle est la proportion d'hommes dans ce groupe ?
 
 **Question 2 :** Dans un établissement scolaire il y a 960 élèves. Un tiers des élèves sont en deuxième année. 60% des élèves du lycée sont des filles. 55% des élèves de deuxième année sont des filles.
-1/ Compléter le tableau suivant (Filles/Garçons/Total × 2ème année/1ère année/Terminale/Total, avec Garçons Terminale=140, Total=960).
+
+1/ Compléter le tableau suivant :
+
+| | 2ème année | 1ère année | Terminale | Total |
+|---|---|---|---|---|
+| Filles | | | | |
+| Garçons | | | 140 | |
+| Total | | 300 | | 960 |
+
 2/ On interroge un élève au hasard : a) Quelle est la probabilité que cela soit un élève de première année ? b) Quelle est la probabilité que cela ne soit pas un élève de Terminale ?
 
 **Question 3 :** On veut étudier l'existence d'un lien entre la parité et le sexe. Le test Khi-deux sur un échantillon donne la valeur de décision 0,45 pour une valeur critique de la table de 3,84 au seuil de 5%. Formuler les hypothèses du test et donner une conclusion.
