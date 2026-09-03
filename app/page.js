@@ -83,8 +83,8 @@ ${chromeHtml({ active: "home", showSearch: false })}
   </section>
 
   <section class="home-recent" id="homeRecent" style="display:none;">
-    <div class="home-alert-head">
-      <span class="home-alert-title">🆕 Derniers concours ajoutés</span>
+    <div class="home-recent-head">
+      <h2 class="home-section-title">🆕 Derniers concours ajoutés</h2>
       <a class="home-alert-link" href="/concours">Voir tout →</a>
     </div>
     <div class="cd-related-grid" id="homeRecentGrid"></div>
