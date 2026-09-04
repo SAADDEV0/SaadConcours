@@ -1,5 +1,17 @@
 [
   {
+    "id": "f09a739d4026a68f",
+    "titre": "Résultats Présélection Master FS Ain Chock Casablanca 2026-2027",
+    "etablissement": null,
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsac.univh2c.ma/Docs/attachments/1229/Liste%20des%20candidats-De%CC%81po%CC%82t-Dossier-master-CSNM-%202026-2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/05/Resultats-Preselection-Master-FS-Ain-Chock-Casablanca-2026-2027.html",
+    "date_publication": "2026-09-04"
+  },
+  {
     "id": "7e8caf26dd042424",
     "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
     "etablissement": "FST",
@@ -33,18 +45,6 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
-    "date_publication": "2026-09-03"
-  },
-  {
-    "id": "f09a739d4026a68f",
-    "titre": "Résultats Présélection Master FS Ain Chock Casablanca 2026-2027",
-    "etablissement": null,
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fsac.univh2c.ma/Docs/attachments/1229/Liste%20des%20candidats-De%CC%81po%CC%82t-Dossier-master-CSNM-%202026-2027.pdf",
-    "source": "https://www.almaster-maroc.com/2026/05/Resultats-Preselection-Master-FS-Ain-Chock-Casablanca-2026-2027.html",
     "date_publication": "2026-09-03"
   },
   {
@@ -617,7 +617,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-09-28",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
