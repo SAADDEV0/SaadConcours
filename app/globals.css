@@ -394,6 +394,7 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
   background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
   padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:var(--shadow); cursor:pointer;
   transition:transform .15s ease, border-color .15s ease;
+  text-decoration:none; color:inherit;
 }
 .eval-module-card:hover{border-color:var(--accent); transform:translateY(-2px);}
 .eval-module-card.disabled{opacity:.5; cursor:not-allowed;}
