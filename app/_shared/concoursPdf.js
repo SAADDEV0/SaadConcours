@@ -72,25 +72,50 @@ export async function downloadConcoursPdf(c) {
     const { indent = 0, bullet = false, size = 10.5, gapAfter = 1.8 } = opts;
     doc.setFontSize(size);
     const bx = marginX + indent + (bullet ? 4 : 0);
-    doc.setFont(undefined, "bold");
+    const availW = maxWidth - indent - (bullet ? 4 : 0);
     const prefixClean = stripInlineMd(prefix);
-    const prefixW = doc.getTextWidth(prefixClean + " ");
     const restClean = stripInlineMd(rest);
-    const wrapped = doc.splitTextToSize(restClean, maxWidth - indent - prefixW - (bullet ? 4 : 0));
+
+    doc.setFont(undefined, "bold");
+    // A QCM stem is often written entirely inside "**...**" with no trailing
+    // plain text, so the "prefix" alone can be longer than one line — wrap
+    // it too instead of drawing it as a single unbroken doc.text() call.
+    const prefixLines = prefixClean ? doc.splitTextToSize(prefixClean, availW) : [];
+
     ensureSpace(size * 0.42);
     if (bullet) {
       doc.setFont(undefined, "normal");
       doc.text("•", marginX + indent, y);
     }
     doc.setFont(undefined, "bold");
-    doc.text(prefixClean, bx, y);
-    doc.setFont(undefined, "normal");
-    if (wrapped[0]) doc.text(wrapped[0], bx + prefixW, y);
-    y += size * 0.42;
-    for (let i = 1; i < wrapped.length; i++) {
-      ensureSpace(size * 0.42);
-      doc.text(wrapped[i], bx, y);
+
+    if (prefixLines.length > 1) {
+      for (let i = 0; i < prefixLines.length; i++) {
+        if (i > 0) ensureSpace(size * 0.42);
+        doc.text(prefixLines[i], bx, y);
+        y += size * 0.42;
+      }
+      if (restClean) {
+        doc.setFont(undefined, "normal");
+        const wrapped = doc.splitTextToSize(restClean, availW);
+        for (const wl of wrapped) {
+          ensureSpace(size * 0.42);
+          doc.text(wl, bx, y);
+          y += size * 0.42;
+        }
+      }
+    } else {
+      const prefixW = prefixClean ? doc.getTextWidth(prefixClean + " ") : 0;
+      const wrapped = restClean ? doc.splitTextToSize(restClean, availW - prefixW) : [];
+      if (prefixClean) doc.text(prefixClean, bx, y);
+      doc.setFont(undefined, "normal");
+      if (wrapped[0]) doc.text(wrapped[0], bx + prefixW, y);
       y += size * 0.42;
+      for (let i = 1; i < wrapped.length; i++) {
+        ensureSpace(size * 0.42);
+        doc.text(wrapped[i], bx, y);
+        y += size * 0.42;
+      }
     }
     y += gapAfter;
   }
@@ -110,16 +135,12 @@ export async function downloadConcoursPdf(c) {
     y = doc.lastAutoTable.finalY + 4;
   }
 
-  doc.setFont(undefined, "bold");
-  doc.setFontSize(15);
-  doc.setTextColor(20, 20, 25);
-  doc.text(`${c.etablissement} — ${c.annee}`, marginX, y);
-  y += 7;
-  doc.setFont(undefined, "normal");
-  doc.setFontSize(10.5);
-  doc.setTextColor(90, 90, 100);
-  doc.text(`${c.master_reel || c.filiere} · ${c.ville}${c.difficulte ? " · Difficulté : " + c.difficulte : ""}`, marginX, y);
-  y += 5;
+  addWrappedLine(`${c.etablissement} — ${c.annee}`, { bold: true, size: 15, gapAfter: 2 });
+  addWrappedLine(`${c.master_reel || c.filiere} · ${c.ville}${c.difficulte ? " · Difficulté : " + c.difficulte : ""}`, {
+    size: 10.5,
+    color: [90, 90, 100],
+    gapAfter: 3,
+  });
   doc.setDrawColor(200, 200, 210);
   doc.line(marginX, y, pageW - marginX, y);
   y += 7;
