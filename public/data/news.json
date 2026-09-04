@@ -36,6 +36,54 @@
     "date_publication": "2026-09-04"
   },
   {
+    "id": "1d2277f7608e2969",
+    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
+    "date_publication": "2026-09-04"
+  },
+  {
+    "id": "a5c1460887cd66e3",
+    "titre": "Master Université Mohammed Premier Oujda 2026-2027",
+    "etablissement": null,
+    "ville": "Oujda",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2022/07/master-universite-mohammed-premier.html",
+    "date_publication": "2026-09-04"
+  },
+  {
+    "id": "10011395e9c42203",
+    "titre": "Master FSJES Oujda 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Oujda",
+    "filiere": null,
+    "date_limite": "2026-09-13",
+    "cloture": false,
+    "lien_inscription": "https://students.ump.ma/preinscription/ump/FSJESO",
+    "source": "https://www.almaster-maroc.com/2026/09/master-fsjes-oujda-2026-2027.html",
+    "date_publication": "2026-09-04"
+  },
+  {
+    "id": "1088a8ee0ea618ba",
+    "titre": "Résultats Présélection Master FST Settat 2026-2027",
+    "etablissement": "FST",
+    "ville": "Settat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://www.fsts.ac.ma/storage/83/mst-mte-liste-convoques-ecrit-2026-2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-Master-FST-Settat-2026-2027.html",
+    "date_publication": "2026-09-04"
+  },
+  {
     "id": "7e8caf26dd042424",
     "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
     "etablissement": "FST",
@@ -57,18 +105,6 @@
     "cloture": false,
     "lien_inscription": "https://fstbm.ac.ma/web/content/1495523/MST_NB_examen_2026.pdf",
     "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-FST-Beni-Mellal-2026-2027.html",
-    "date_publication": "2026-09-03"
-  },
-  {
-    "id": "1d2277f7608e2969",
-    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
     "date_publication": "2026-09-03"
   },
   {
@@ -792,18 +828,6 @@
     "date_publication": "2026-08-10"
   },
   {
-    "id": "a5c1460887cd66e3",
-    "titre": "Master Université Mohammed Premier Oujda 2026-2027",
-    "etablissement": null,
-    "ville": "Oujda",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2022/07/master-universite-mohammed-premier.html",
-    "date_publication": "2026-08-10"
-  },
-  {
     "id": "5c3f51b371527f25",
     "titre": "Master Université Moulay Ismail Meknès 2026-2027",
     "etablissement": null,
@@ -893,8 +917,8 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": "2026-09-02",
-    "cloture": true,
+    "date_limite": null,
+    "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/8",
     "source": "https://www.almaster-maroc.com/2026/08/master-flash-settat-2026-2027.html",
     "date_publication": "2026-08-09"
@@ -1413,30 +1437,6 @@
     "cloture": true,
     "lien_inscription": "https://preinscription.isic.ma/master/",
     "source": "https://www.almaster-maroc.com/2026/07/master-isic-rabat-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "916eb4159696273f",
-    "titre": "Master ENS Casablanca 2026-2027",
-    "etablissement": "ENS",
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": "2026-09-04",
-    "cloture": false,
-    "lien_inscription": "https://enscasa.ac.ma/preinscription-masters/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-ens-casablanca-2026-2027.html",
-    "date_publication": "2026-07-29"
-  },
-  {
-    "id": "3fee82eee5d0cf2b",
-    "titre": "Master FS Rabat 2026-2027",
-    "etablissement": null,
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://preins.um5.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fs-rabat-2026-2027.html",
     "date_publication": "2026-07-29"
   }
 ]
