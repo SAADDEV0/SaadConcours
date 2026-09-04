@@ -14,10 +14,5 @@ export default function ComposerPage() {
       .catch(() => setSettings({}));
   }, []);
 
-  return (
-    <div className="admin-card">
-      <h2 className="admin-section-title">📨 Composer un envoi</h2>
-      <DigestComposer settings={settings} />
-    </div>
-  );
+  return <DigestComposer settings={settings} />;
 }

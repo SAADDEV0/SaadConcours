@@ -2,24 +2,29 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { isUrgentNews } from "../../_lib/newsUtils";
+import EmptyState from "../ui/EmptyState";
+import Modal from "../ui/Modal";
 
 // One-off / test send, independent of the "Alertes automatiques" toggle and
-// its persisted subject/message/sender defaults above - those stay exactly
-// what the unattended daily cron uses. This composer pre-fills from them as
-// a starting point but never writes back to settings.json, so tweaking the
-// wording for a single campaign can't accidentally change what tomorrow's
-// automatic run sends.
+// its persisted subject/message/sender defaults in réglages - those stay
+// exactly what the unattended daily cron uses. This composer pre-fills from
+// them as a starting point but never writes back to settings.json, so
+// tweaking the wording for a single campaign can't accidentally change what
+// tomorrow's automatic run sends.
 export default function DigestComposer({ settings }) {
   const [news, setNews] = useState(null);
   const [subscribers, setSubscribers] = useState(null);
   const [selectedNews, setSelectedNews] = useState(() => new Set());
   const [selectedEmails, setSelectedEmails] = useState(() => new Set());
+  const [newsSearch, setNewsSearch] = useState("");
+  const [emailSearch, setEmailSearch] = useState("");
   const [maxRecipients, setMaxRecipients] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [fromName, setFromName] = useState("");
   const [testEmail, setTestEmail] = useState("");
   const [preview, setPreview] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
@@ -52,6 +57,20 @@ export default function DigestComposer({ settings }) {
     setTestEmail(settings.email || "");
   }, [settings]);
 
+  const filteredNews = useMemo(() => {
+    if (!news) return [];
+    const q = newsSearch.trim().toLowerCase();
+    if (!q) return news;
+    return news.filter((i) => [i.titre, i.etablissement, i.ville].filter(Boolean).join(" ").toLowerCase().includes(q));
+  }, [news, newsSearch]);
+
+  const filteredSubscribers = useMemo(() => {
+    if (!subscribers) return [];
+    const q = emailSearch.trim().toLowerCase();
+    if (!q) return subscribers;
+    return subscribers.filter((e) => e.toLowerCase().includes(q));
+  }, [subscribers, emailSearch]);
+
   function toggleNews(id) {
     setSelectedNews((prev) => {
       const next = new Set(prev);
@@ -59,7 +78,6 @@ export default function DigestComposer({ settings }) {
       else next.add(id);
       return next;
     });
-    setPreview(null);
     setResult(null);
   }
 
@@ -80,7 +98,8 @@ export default function DigestComposer({ settings }) {
     return list;
   }, [selectedEmails, maxRecipients]);
 
-  async function loadPreview() {
+  async function openPreview() {
+    setPreviewOpen(true);
     setPreviewLoading(true);
     setError("");
     try {
@@ -91,7 +110,7 @@ export default function DigestComposer({ settings }) {
       });
       setPreview(await res.json());
     } catch {
-      setError("Erreur lors du chargement de l'aperçu.");
+      setPreview(null);
     } finally {
       setPreviewLoading(false);
     }
@@ -141,41 +160,78 @@ export default function DigestComposer({ settings }) {
 
   return (
     <div>
-      <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-        Envoi ponctuel, indépendant de l'alerte automatique quotidienne ci-dessus — rien ici n'est enregistré dans
-        les réglages permanents.
+      <p className="admin-image-hint" style={{ margin: "-6px 0 18px" }}>
+        Envoi ponctuel, indépendant de l'alerte automatique quotidienne — rien ici n'est enregistré dans les
+        réglages permanents.
       </p>
 
-      <div className="admin-field">
+      <div className="admin-card">
         <div className="picker-toolbar">
-          <label style={{ margin: 0 }}>Concours à inclure</label>
+          <h2 className="admin-section-title" style={{ marginBottom: 0 }}>
+            1. Concours à inclure
+          </h2>
           <span className="picker-count">
             {selectedNews.size} / {news.length} sélectionné{selectedNews.size > 1 ? "s" : ""}
           </span>
         </div>
+
+        {news.length > 0 && (
+          <>
+            <div className="admin-toolbar" style={{ margin: "12px 0" }}>
+              <input
+                className="admin-search-input"
+                value={newsSearch}
+                onChange={(e) => setNewsSearch(e.target.value)}
+                placeholder="Rechercher un concours..."
+              />
+            </div>
+            <div className="picker-actions" style={{ marginBottom: 10 }}>
+              <button
+                type="button"
+                className="admin-link-btn"
+                onClick={() => setSelectedNews(new Set(news.filter(isUrgentNews).map((i) => i.id)))}
+              >
+                ⏰ Urgents (≤7j)
+              </button>
+              <button type="button" className="admin-link-btn" onClick={() => setSelectedNews(new Set(news.map((i) => i.id)))}>
+                Tout cocher
+              </button>
+              <button type="button" className="admin-link-btn" onClick={() => setSelectedNews(new Set())}>
+                Tout décocher
+              </button>
+            </div>
+          </>
+        )}
+
         {news.length ? (
-          <div className="picker-list">
-            {news.map((item) => (
-              <label className="picker-row" key={item.id}>
-                <input type="checkbox" checked={selectedNews.has(item.id)} onChange={() => toggleNews(item.id)} />
-                <span className="picker-row-main">
-                  <span className="picker-row-title">{item.titre}</span>
-                  <span className="picker-row-meta">
-                    {[item.etablissement, item.ville].filter(Boolean).join(" · ")}
+          filteredNews.length ? (
+            <div className="picker-list">
+              {filteredNews.map((item) => (
+                <label className="picker-row" key={item.id}>
+                  <input type="checkbox" checked={selectedNews.has(item.id)} onChange={() => toggleNews(item.id)} />
+                  <span className="picker-row-main">
+                    <span className="picker-row-title">{item.titre}</span>
+                    <span className="picker-row-meta">
+                      {[item.etablissement, item.ville].filter(Boolean).join(" · ")}
+                    </span>
                   </span>
-                </span>
-                <span className="picker-row-date">{item.date_limite || "—"}</span>
-              </label>
-            ))}
-          </div>
+                  <span className="picker-row-date">{item.date_limite || "—"}</span>
+                </label>
+              ))}
+            </div>
+          ) : (
+            <EmptyState icon="🔍" message="Aucun concours ne correspond à cette recherche." />
+          )
         ) : (
-          <div className="empty-state">Aucun concours ouvert pour l'instant.</div>
+          <EmptyState icon="📭" message="Aucun concours ouvert pour l'instant." />
         )}
       </div>
 
-      <div className="admin-field">
+      <div className="admin-card">
         <div className="picker-toolbar">
-          <label style={{ margin: 0 }}>Destinataires</label>
+          <h2 className="admin-section-title" style={{ marginBottom: 0 }}>
+            2. Destinataires
+          </h2>
           <span className="picker-actions">
             <button type="button" className="admin-link-btn" onClick={() => setSelectedEmails(new Set(subscribers))}>
               Tout cocher
@@ -185,101 +241,134 @@ export default function DigestComposer({ settings }) {
             </button>
           </span>
         </div>
-        {subscribers.length ? (
-          <div className="picker-list">
-            {subscribers.map((email) => (
-              <label className="picker-row" key={email}>
-                <input type="checkbox" checked={selectedEmails.has(email)} onChange={() => toggleEmail(email)} />
-                <span className="picker-row-main" style={{ fontFamily: "monospace" }}>
-                  {email}
-                </span>
-              </label>
-            ))}
+
+        {subscribers.length > 0 && (
+          <div className="admin-toolbar" style={{ margin: "12px 0" }}>
+            <input
+              className="admin-search-input"
+              value={emailSearch}
+              onChange={(e) => setEmailSearch(e.target.value)}
+              placeholder="Rechercher un email..."
+            />
           </div>
+        )}
+
+        {subscribers.length ? (
+          filteredSubscribers.length ? (
+            <div className="picker-list">
+              {filteredSubscribers.map((email) => (
+                <label className="picker-row" key={email}>
+                  <input type="checkbox" checked={selectedEmails.has(email)} onChange={() => toggleEmail(email)} />
+                  <span className="picker-row-main" style={{ fontFamily: "monospace" }}>
+                    {email}
+                  </span>
+                </label>
+              ))}
+            </div>
+          ) : (
+            <EmptyState icon="🔍" message="Aucun abonné ne correspond à cette recherche." />
+          )
         ) : (
-          <div className="empty-state">Aucun abonné pour l'instant.</div>
+          <EmptyState icon="📭" message="Aucun abonné pour l'instant." />
+        )}
+
+        <div className="admin-form-grid" style={{ marginTop: 16 }}>
+          <div className="admin-field">
+            <label>Nombre maximum de destinataires (optionnel)</label>
+            <input
+              type="number"
+              min="1"
+              value={maxRecipients}
+              placeholder="ex: 5 pour un premier essai"
+              onChange={(e) => setMaxRecipients(e.target.value)}
+            />
+          </div>
+          <div className="admin-field">
+            <label>Email de test</label>
+            <input value={testEmail} placeholder="toi@exemple.com" onChange={(e) => setTestEmail(e.target.value)} />
+          </div>
+        </div>
+        <div className="admin-image-hint" style={{ marginTop: -8 }}>
+          {cappedEmails.length} destinataire{cappedEmails.length > 1 ? "s" : ""} recevront cet envoi
+          {maxRecipients && selectedEmails.size > cappedEmails.length
+            ? ` (plafonné, ${selectedEmails.size - cappedEmails.length} exclus)`
+            : ""}
+          .
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2 className="admin-section-title">3. Personnalisation</h2>
+        <div className="admin-field" style={{ marginTop: 16 }}>
+          <label>Objet de cet envoi</label>
+          <input value={subject} placeholder="Objet automatique si vide" onChange={(e) => setSubject(e.target.value)} />
+        </div>
+        <div className="admin-field">
+          <label>Message pour cet envoi</label>
+          <textarea style={{ minHeight: 80 }} value={message} onChange={(e) => setMessage(e.target.value)} />
+        </div>
+        <div className="admin-field" style={{ marginBottom: 0 }}>
+          <label>Nom de l'expéditeur</label>
+          <input value={fromName} onChange={(e) => setFromName(e.target.value)} />
+        </div>
+        <div className="admin-image-hint" style={{ marginTop: 8 }}>
+          Objet, message et nom ne modifient que cet envoi — pas les réglages permanents de l'alerte automatique.
+          L'adresse d'envoi elle-même reste toujours le compte Gmail configuré côté serveur.
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2 className="admin-section-title">4. Aperçu et envoi</h2>
+        <div className="admin-row-actions" style={{ margin: "16px 0 12px", flexWrap: "wrap" }}>
+          <button type="button" className="admin-btn secondary" onClick={openPreview} disabled={!selectedNews.size}>
+            👁 Aperçu
+          </button>
+          <button type="button" className="admin-btn secondary" onClick={() => send(true)} disabled={sending}>
+            Envoyer un test à moi-même
+          </button>
+          <button type="button" className="admin-btn" onClick={() => send(false)} disabled={sending}>
+            {sending ? "Envoi..." : `Envoyer maintenant (${cappedEmails.length})`}
+          </button>
+        </div>
+
+        {error && <div className="admin-error">{error}</div>}
+        {result && (
+          <div className={result.sent > 0 ? "admin-msg" : "admin-error"}>
+            {result.test
+              ? result.sent > 0
+                ? `Test envoyé à ${testEmail}.`
+                : `Échec de l'envoi du test à ${testEmail}.`
+              : `Envoyé à ${result.sent} / ${result.total} destinataire(s).${
+                  result.failed?.length ? ` Échecs : ${result.failed.join(", ")}.` : ""
+                }`}
+          </div>
         )}
       </div>
 
-      <div className="admin-form-grid">
-        <div className="admin-field">
-          <label>Nombre maximum de destinataires (optionnel)</label>
-          <input
-            type="number"
-            min="1"
-            value={maxRecipients}
-            placeholder="ex: 5 pour un premier essai"
-            onChange={(e) => setMaxRecipients(e.target.value)}
-          />
-        </div>
-        <div className="admin-field">
-          <label>Email de test</label>
-          <input value={testEmail} placeholder="toi@exemple.com" onChange={(e) => setTestEmail(e.target.value)} />
-        </div>
-      </div>
-      <div className="admin-image-hint" style={{ marginTop: -8, marginBottom: 16 }}>
-        {cappedEmails.length} destinataire{cappedEmails.length > 1 ? "s" : ""} recevront cet envoi
-        {maxRecipients && selectedEmails.size > cappedEmails.length
-          ? ` (plafonné, ${selectedEmails.size - cappedEmails.length} exclus)`
-          : ""}
-        .
-      </div>
-
-      <div className="admin-field">
-        <label>Objet de cet envoi</label>
-        <input value={subject} placeholder="Objet automatique si vide" onChange={(e) => setSubject(e.target.value)} />
-      </div>
-      <div className="admin-field">
-        <label>Message pour cet envoi</label>
-        <textarea style={{ minHeight: 80 }} value={message} onChange={(e) => setMessage(e.target.value)} />
-      </div>
-      <div className="admin-field">
-        <label>Nom de l'expéditeur</label>
-        <input value={fromName} onChange={(e) => setFromName(e.target.value)} />
-      </div>
-      <div className="admin-image-hint" style={{ marginBottom: 16 }}>
-        Objet, message et nom ne modifient que cet envoi — pas les réglages permanents de l'alerte automatique.
-        L'adresse d'envoi elle-même reste toujours le compte Gmail configuré côté serveur.
-      </div>
-
-      <div className="admin-row-actions" style={{ marginBottom: 12, flexWrap: "wrap" }}>
-        <button
-          type="button"
-          className="admin-btn secondary"
-          onClick={loadPreview}
-          disabled={previewLoading || !selectedNews.size}
-        >
-          {previewLoading ? "Chargement..." : "👁 Aperçu"}
-        </button>
-        <button type="button" className="admin-btn secondary" onClick={() => send(true)} disabled={sending}>
-          Envoyer un test à moi-même
-        </button>
-        <button type="button" className="admin-btn" onClick={() => send(false)} disabled={sending}>
-          {sending ? "Envoi..." : `Envoyer maintenant (${cappedEmails.length})`}
-        </button>
-      </div>
-
-      {error && <div className="admin-error">{error}</div>}
-      {result && (
-        <div className={result.sent > 0 ? "admin-msg" : "admin-error"}>
-          {result.test
-            ? result.sent > 0
-              ? `Test envoyé à ${testEmail}.`
-              : `Échec de l'envoi du test à ${testEmail}.`
-            : `Envoyé à ${result.sent} / ${result.total} destinataire(s).${
-                result.failed?.length ? ` Échecs : ${result.failed.join(", ")}.` : ""
-              }`}
-        </div>
-      )}
-
-      {preview && (
-        <div className="digest-preview">
-          <div className="digest-preview-bar">
-            Objet : <strong>{preview.subject}</strong> · {preview.itemCount} concours inclus
+      <Modal open={previewOpen} onClose={() => setPreviewOpen(false)} labelledBy="composer-preview-title">
+        <div className="email-preview-modal">
+          <h2 className="admin-modal-title" id="composer-preview-title">
+            👁 Aperçu de l'envoi
+          </h2>
+          {previewLoading ? (
+            <div className="admin-image-hint">Chargement de l'aperçu...</div>
+          ) : preview ? (
+            <div className="digest-preview">
+              <div className="digest-preview-bar">
+                Objet : <strong>{preview.subject}</strong> · {preview.itemCount} concours inclus
+              </div>
+              <div className="digest-preview-body" dangerouslySetInnerHTML={{ __html: preview.html }} />
+            </div>
+          ) : (
+            <div className="admin-error">Erreur lors du chargement de l'aperçu.</div>
+          )}
+          <div className="admin-modal-actions">
+            <button type="button" className="admin-btn secondary" onClick={() => setPreviewOpen(false)}>
+              Fermer
+            </button>
           </div>
-          <div className="digest-preview-body" dangerouslySetInnerHTML={{ __html: preview.html }} />
         </div>
-      )}
+      </Modal>
     </div>
   );
 }

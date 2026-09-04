@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useToast } from "../ui/ToastProvider";
+import Modal from "../ui/Modal";
+import { isUrgentNews } from "../../_lib/newsUtils";
 
 const OWN_KEYS = ["newsAlertsEnabled", "newsAlertsSubject", "newsAlertsMessage", "newsAlertsFromName"];
 
@@ -10,6 +13,10 @@ export default function EmailSettingsForm() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [emailConfigured, setEmailConfigured] = useState(null);
+  const [urgentNews, setUrgentNews] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -21,6 +28,10 @@ export default function EmailSettingsForm() {
       .then((r) => r.json())
       .then((data) => setEmailConfigured(data.configured))
       .catch(() => setEmailConfigured(null));
+    fetch("/api/news")
+      .then((r) => r.json())
+      .then((data) => setUrgentNews((data || []).filter(isUrgentNews)))
+      .catch(() => setUrgentNews([]));
   }, []);
 
   async function onSubmit(e) {
@@ -46,6 +57,30 @@ export default function EmailSettingsForm() {
     }
   }
 
+  async function openPreview() {
+    if (!urgentNews?.length) return;
+    setPreviewOpen(true);
+    setPreviewLoading(true);
+    try {
+      const res = await fetch("/api/admin/preview-digest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          newsIds: urgentNews.map((i) => i.id),
+          message: form.newsAlertsMessage,
+          subject: form.newsAlertsSubject,
+        }),
+      });
+      setPreview(await res.json());
+    } catch {
+      setPreview(null);
+    } finally {
+      setPreviewLoading(false);
+    }
+  }
+
+  const urgentCount = urgentNews?.length ?? null;
+
   if (!form) return <div className="admin-card">Chargement...</div>;
 
   return (
@@ -61,13 +96,17 @@ export default function EmailSettingsForm() {
 
       <form onSubmit={onSubmit}>
         <div className="admin-card">
-          <h2 className="admin-section-title">🔔 Alertes automatiques</h2>
+          <h2 className="admin-section-title">🔔 Alerte automatique quotidienne</h2>
           <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-            Envoie un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7 jours, via le
-            compte Gmail configuré côté serveur (GMAIL_USER / GMAIL_APP_PASSWORD) — sans ça, l'envoi ne fait rien.
+            Envoie chaque jour un email récapitulatif aux abonnés pour les concours ouverts qui ferment dans les 7
+            jours, via le compte Gmail configuré côté serveur — sans ça, l'envoi ne fait rien.
           </p>
+
           <label className="admin-switch-row">
-            <span className="admin-switch-row-label">Envoyer les alertes automatiques (à enregistrer avec le bouton ci-dessous)</span>
+            <span className="admin-switch-row-label">
+              Envoyer les alertes automatiques
+              <span className="admin-switch-row-hint">À enregistrer avec le bouton en bas de page pour prendre effet.</span>
+            </span>
             <span className="admin-switch">
               <input
                 type="checkbox"
@@ -78,7 +117,33 @@ export default function EmailSettingsForm() {
             </span>
           </label>
 
-          <div className="admin-field" style={{ marginTop: 16 }}>
+          <div className="email-live-hint">
+            {urgentCount === null ? (
+              "Vérification des concours qui ferment bientôt..."
+            ) : urgentCount > 0 ? (
+              <>
+                📅 <strong>{urgentCount} concours</strong> ferme{urgentCount > 1 ? "nt" : ""} d'ici 7 jours — c'est ce
+                que la prochaine alerte automatique enverrait aujourd'hui.
+              </>
+            ) : (
+              "📅 Aucun concours ne ferme dans les 7 prochains jours — l'alerte automatique n'enverrait rien aujourd'hui."
+            )}
+            {urgentCount > 0 && (
+              <button type="button" className="admin-link-btn" onClick={openPreview} style={{ marginLeft: 10 }}>
+                👁 Aperçu
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="admin-card">
+          <h2 className="admin-section-title">✏️ Contenu de l'email</h2>
+          <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+            Ces valeurs servent aussi de point de départ par défaut pour un envoi ponctuel depuis{" "}
+            <Link href="/admin/alertes/composer">Composer un envoi</Link>.
+          </p>
+
+          <div className="admin-field">
             <label>Objet de l'email</label>
             <input
               value={form.newsAlertsSubject || ""}
@@ -100,7 +165,7 @@ export default function EmailSettingsForm() {
             />
           </div>
 
-          <div className="admin-field">
+          <div className="admin-field" style={{ marginBottom: 0 }}>
             <label>Nom de l'expéditeur</label>
             <input
               value={form.newsAlertsFromName || ""}
@@ -121,6 +186,31 @@ export default function EmailSettingsForm() {
           {error && <div className="admin-error">{error}</div>}
         </div>
       </form>
+
+      <Modal open={previewOpen} onClose={() => setPreviewOpen(false)} labelledBy="settings-preview-title">
+        <div className="email-preview-modal">
+          <h2 className="admin-modal-title" id="settings-preview-title">
+            👁 Aperçu de l'alerte automatique
+          </h2>
+          {previewLoading ? (
+            <div className="admin-image-hint">Chargement de l'aperçu...</div>
+          ) : preview ? (
+            <div className="digest-preview">
+              <div className="digest-preview-bar">
+                Objet : <strong>{preview.subject}</strong> · {preview.itemCount} concours inclus
+              </div>
+              <div className="digest-preview-body" dangerouslySetInnerHTML={{ __html: preview.html }} />
+            </div>
+          ) : (
+            <div className="admin-error">Erreur lors du chargement de l'aperçu.</div>
+          )}
+          <div className="admin-modal-actions">
+            <button type="button" className="admin-btn secondary" onClick={() => setPreviewOpen(false)}>
+              Fermer
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }

@@ -134,9 +134,28 @@
 
 .subscriber-list{display:flex; flex-direction:column; gap:6px; max-height:340px; overflow-y:auto;}
 .subscriber-row{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  display:flex; align-items:center; gap:10px;
   padding:8px 12px; border:1px solid var(--border); border-radius:9px; background:var(--bg);
-  font-size:.85rem; font-family:monospace;
+  font-size:.85rem;
+}
+.subscriber-row input[type="checkbox"]{flex-shrink:0; width:16px; height:16px; accent-color:var(--accent); cursor:pointer; margin:0;}
+.subscriber-row-email{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:monospace;}
+.subscriber-row-badge{flex-shrink:0; font-size:.7rem; color:var(--text-faint); white-space:nowrap;}
+.subscriber-select-all{
+  display:flex; align-items:center; gap:8px; font-size:.78rem; color:var(--text-dim); font-weight:600;
+  margin-bottom:8px; cursor:pointer;
+}
+.subscriber-select-all input{accent-color:var(--accent); cursor:pointer; margin:0;}
+.subscriber-add-row{display:flex; gap:10px; flex-wrap:wrap;}
+.subscriber-add-row .admin-search-input{min-width:240px;}
+
+/* Live inline hint under a switch row — a piece of real, computed data
+ * ("3 concours ferment cette semaine") rather than a static description, so
+ * the admin can tell at a glance whether flipping the toggle now would
+ * actually send something today. */
+.email-live-hint{
+  display:flex; align-items:center; flex-wrap:wrap; gap:4px; font-size:.82rem; color:var(--text-dim);
+  background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:10px 14px; margin-top:14px;
 }
 
 .picker-toolbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;}
@@ -909,6 +928,11 @@
    panel) — a plain 420px confirm-dialog width was cramming ~19 widgets
    across 4 sections into an unscrollable box that overflowed the viewport. */
 .admin-modal:has(.customize-panel){max-width:560px;}
+/* Wider still for the email preview modal (réglages + composer) — it embeds
+   the actual rendered digest table, which needs real room to not wrap
+   awkwardly. */
+.admin-modal:has(.email-preview-modal){max-width:640px;}
+.email-preview-modal{overflow-y:auto;}
 @media (max-width:480px){
   .admin-modal-actions{flex-direction:column-reverse;}
   .admin-modal-actions .admin-btn{width:100%; justify-content:center; min-height:var(--admin-tap);}
