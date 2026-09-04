@@ -1,0 +1,31 @@
+> Corrigé avec calculs détaillés.
+
+Ce sujet est une épreuve de dissertation économique : il n'existe pas de « calcul » à proprement parler, mais des plans de réponse structurés et argumentés. Ci-dessous, une correction pour les cinq questions (le candidat doit en traiter quatre).
+
+**Question 1 — Le dilemme État/Marché**
+
+a. Mode de coordination : ni l'État seul, ni le marché seul ne suffisent — il faut une **coordination institutionnelle** où l'État joue un rôle d'« État développeur » (developmental state) qui oriente les marchés sans les remplacer : politique industrielle ciblée, protection temporaire des industries naissantes (argument de Friedrich List), incitations à l'exportation, investissement massif dans l'éducation et les infrastructures. Cas concrets : Corée du Sud et Taïwan (chaebols pilotés par l'État, crédit dirigé, exigences de performance à l'export), Chine (État planificateur + économie de marché). À l'inverse, les stratégies autocentrées (import-substitution en Amérique latine, autarcie de certains pays africains) ont souvent buté sur l'inefficacité des entreprises protégées, la corruption et le manque de discipline concurrentielle.
+
+b. Voies d'analyse dépassant la dualité État/Marché : l'approche institutionnaliste (Douglass North : importance des institutions, droits de propriété, règles du jeu) ; l'économie du développement en termes de capacités (Amartya Sen) ; les approches en termes de « gouvernance » et de partenariats public-privé ; l'économie de la proximité et des réseaux (clusters, écosystèmes d'innovation) qui articulent acteurs publics, privés et société civile.
+
+**Question 2 — Insertion dans l'économie mondiale et développement**
+
+Plan : (I) Les gains attendus de l'insertion internationale — théorie des avantages comparatifs (Ricardo), accès à des marchés plus larges, transferts de technologie et de savoir-faire via les IDE, économies d'échelle, discipline de la concurrence internationale. (II) Les limites et risques — détérioration des termes de l'échange pour les exportateurs de matières premières (thèse Prebisch-Singer), spécialisation dans des activités à faible valeur ajoutée, dépendance et vulnérabilité aux chocs externes, désindustrialisation dans certains cas. (III) Conclusion nuancée : l'insertion internationale n'est bénéfique que si elle s'accompagne de politiques nationales actives (montée en gamme, diversification productive, investissement dans le capital humain) — cf. trajectoires asiatiques versus certains pays d'Amérique latine ou d'Afrique restés spécialisés dans les matières premières.
+
+**Question 3 — Épargne, investissement et système financier**
+
+L'épargne n'est pas une condition suffisante ni strictement préalable à l'investissement au sens keynésien (l'investissement peut créer sa propre épargne via le multiplicateur et la création monétaire par les banques), mais elle demeure une **ressource nécessaire au financement à long terme** de l'économie, surtout dans les pays où l'accès aux capitaux extérieurs est limité. Le système financier (banques, marché financier) joue un rôle **d'intermédiation** essentiel : il collecte l'épargne dispersée des agents à capacité de financement et la canalise vers les agents à besoin de financement (entreprises, État), il transforme des échéances (épargne courte / crédits longs), il mutualise et diversifie les risques, et il oriente l'allocation des ressources vers les projets les plus productifs. Un système financier peu développé (sous-bancarisation, marché financier étroit) constitue donc un frein structurel au développement, comme le montre la littérature sur la « finance-croissance » (Levine, Schumpeter).
+
+**Question 4 — Croissance démographique : moteur ou frein**
+
+a. La croissance démographique est un moteur de croissance économique lorsque les conditions nécessaires (investissement productif suffisant, système éducatif performant, marché du travail capable d'absorber les nouveaux actifs) sont réunies : elle alimente alors le fameux « dividende démographique » (baisse du taux de dépendance quand la population active croît plus vite que les inactifs), comme observé dans les pays d'Asie de l'Est durant leur transition démographique. À l'inverse, si l'appareil productif et les infrastructures (santé, éducation, emploi) ne suivent pas, la croissance démographique se traduit par un chômage massif, une pression sur les ressources et un frein au développement (cas de certains pays d'Afrique subsaharienne).
+
+b. Autres conditions nécessaires à la croissance économique : accumulation de capital physique (investissement), progrès technique et innovation, qualité des institutions (stabilité politique, État de droit, droits de propriété), ouverture commerciale maîtrisée, stabilité macroéconomique, capital humain (éducation, santé), infrastructures.
+
+**Question 5 — Démocratisation scolaire, mobilité et reproduction sociale**
+
+Effet positif (mobilité sociale) : en élargissant l'accès à l'école à toutes les catégories sociales, la démocratisation scolaire permet aux enfants de milieux modestes d'acquérir des diplômes et des compétences leur donnant accès à des positions sociales supérieures à celles de leurs parents ; elle accroît le capital humain global et favorise la croissance économique (théorie du capital humain, Becker).
+
+Effet négatif (reproduction sociale) : selon Bourdieu et Passeron, si l'école valorise implicitement le « capital culturel » des classes favorisées (langage, codes, habitus), la démocratisation quantitative (plus d'accès) ne s'accompagne pas nécessairement d'une démocratisation qualitative (réussite égale) : les enfants de milieux favorisés continuent de s'orienter vers les filières les plus sélectives et prestigieuses, tandis que les enfants de milieux populaires se concentrent dans les filières courtes ou dévalorisées — l'école reproduit alors les inégalités sociales plutôt qu'elle ne les corrige.
+
+Importance pour le développement économique : la qualité et l'équité du système éducatif conditionnent la formation du capital humain, moteur de la productivité et de l'innovation ; un système qui ne fait que reproduire les inégalités gaspille une partie du potentiel productif de la population et freine la croissance de long terme.
