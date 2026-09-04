@@ -423,6 +423,10 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .blog-cat-comparatifs{background:var(--violet-dim); color:var(--violet);}
 .blog-cat-methode{background:color-mix(in srgb, var(--amber) 18%, transparent); color:var(--amber);}
 .blog-cat-chip.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+.blog-pagination{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:26px;}
+.blog-page-btn{min-width:36px; text-align:center;}
+.blog-page-btn:disabled{opacity:.4; cursor:not-allowed;}
+.blog-page-btn.active{background:var(--accent); border-color:var(--accent); color:#fff; cursor:default;}
 .eval-toolbar .reset-btn{width:auto; margin:0; padding:8px 14px;}
 .eval-chapter-chips{display:flex; gap:6px; flex-wrap:wrap; flex:1;}
 .eval-progress{font-size:.8rem; color:var(--text-dim); white-space:nowrap;}

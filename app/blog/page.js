@@ -62,7 +62,10 @@ export default async function BlogPage() {
 
       <div className="cd-view" style={{ maxWidth: 920 }}>
         <h1 className="eval-title">📰 Blog</h1>
-        <p className="eval-sub">Méthode, matières à préparer et conseils pour réussir ton concours d'accès au Master au Maroc.</p>
+        <p className="eval-sub">
+          Méthode, matières à préparer et conseils pour réussir ton concours d'accès au Master au Maroc — {posts.length} article
+          {posts.length > 1 ? "s" : ""} disponible{posts.length > 1 ? "s" : ""}.
+        </p>
 
         {categoryCounts.length > 0 && (
           <div className="blog-filter-bar">
@@ -92,7 +95,10 @@ export default async function BlogPage() {
         )}
 
         {posts.length ? (
-          <div className="grid" id="blogGrid" style={{ marginTop: 16 }} dangerouslySetInnerHTML={{ __html: posts.map(blogCardHtml).join("") }} />
+          <>
+            <div className="grid" id="blogGrid" style={{ marginTop: 16 }} dangerouslySetInnerHTML={{ __html: posts.map(blogCardHtml).join("") }} />
+            <div className="blog-pagination" id="blogPagination" />
+          </>
         ) : (
           <div className="empty-state">Aucun article publié pour l'instant.</div>
         )}
