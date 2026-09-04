@@ -123,6 +123,16 @@ export default async function EvaluationDetailPage({ params }) {
 
         <EvaluationDetailClient quiz={q} />
 
+        <div className="cd-actions">
+          <a
+            className="reset-btn"
+            style={{ width: "auto", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+            href="/evaluation"
+          >
+            ← Retour à toutes les évaluations
+          </a>
+        </div>
+
         {related.length > 0 && (
           <div className="cd-card cd-related">
             <h2>Autres QCM — {q.module}</h2>

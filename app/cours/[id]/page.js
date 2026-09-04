@@ -103,7 +103,16 @@ export default async function CoursDetailPage({ params }) {
         </div>
 
         <div className="cd-card">
-          <div className="enonce-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+          <div className="eval-toolbar" style={{ justifyContent: "flex-end", marginBottom: 14 }}>
+            <div className="cours-theme-picker" id="coursThemePicker">
+              <button className="cours-theme-btn" id="coursThemeBtn" type="button">🎨 Thème de lecture</button>
+              <div className="cours-theme-panel" id="coursThemePanel" style={{ display: "none" }}></div>
+            </div>
+          </div>
+          <div className="cours-reader" id="coursReader">
+            <aside className="cours-toc" id="coursToc"></aside>
+            <div className="cours-content" id="coursContent" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+          </div>
         </div>
 
         <CoursDetailClient cours={c} />
