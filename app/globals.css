@@ -400,6 +400,29 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .eval-module-desc{font-size:.85rem; color:var(--text-dim);}
 .eval-module-meta{font-size:.76rem; color:var(--accent); font-weight:600;}
 .eval-toolbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+
+/* ---------- Blog: filter bar + cards + category badges ---------- */
+.blog-filter-bar{margin:18px 0 4px; padding-bottom:14px; border-bottom:1px solid var(--border);}
+.blog-filter-controls{display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;}
+.blog-search-box{flex:1; min-width:220px;}
+.blog-filter-bar .results-count{margin-top:8px;}
+.blog-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:var(--shadow);
+  transition:transform .15s ease, border-color .15s ease; text-decoration:none; color:inherit;
+}
+.blog-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+.blog-card-top{display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;}
+.blog-read-time{font-size:.72rem; color:var(--text-faint); white-space:nowrap;}
+.blog-cat-badge{
+  font-size:.7rem; font-weight:700; padding:3px 10px; border-radius:999px; white-space:nowrap;
+  text-decoration:none; display:inline-flex; align-items:center; gap:4px; border:1px solid transparent;
+}
+.blog-cat-facultes{background:var(--accent-dim); color:var(--accent);}
+.blog-cat-matieres{background:var(--green-dim); color:var(--green);}
+.blog-cat-comparatifs{background:var(--violet-dim); color:var(--violet);}
+.blog-cat-methode{background:color-mix(in srgb, var(--amber) 18%, transparent); color:var(--amber);}
+.blog-cat-chip.active{background:var(--accent); border-color:var(--accent); color:#fff;}
 .eval-toolbar .reset-btn{width:auto; margin:0; padding:8px 14px;}
 .eval-chapter-chips{display:flex; gap:6px; flex-wrap:wrap; flex:1;}
 .eval-progress{font-size:.8rem; color:var(--text-dim); white-space:nowrap;}

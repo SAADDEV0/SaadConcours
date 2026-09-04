@@ -4,6 +4,8 @@ import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
+import { categoryInfo } from "../../../lib/blogTaxonomy";
+import { readingTimeMinutes } from "../../_shared/blogCard";
 import BlogDetailClient from "./BlogDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -13,8 +15,13 @@ async function findPost(id) {
   return { p: list.find((x) => x.id === id) || null, list };
 }
 
+// Same category first (most relevant to keep reading), then the rest,
+// most recent first — better internal linking than an arbitrary slice.
 function getRelatedPosts(list, current, limit = 4) {
-  return list.filter((x) => x.id !== current.id && x.available).slice(0, limit);
+  const others = list.filter((x) => x.id !== current.id && x.available);
+  const sameCategory = others.filter((x) => x.category === current.category);
+  const rest = others.filter((x) => x.category !== current.category);
+  return [...sameCategory, ...rest].slice(0, limit);
 }
 
 export async function generateMetadata({ params }) {
@@ -49,6 +56,8 @@ export default async function BlogDetailPage({ params }) {
   const url = `${SITE_URL}/blog/${p.id}`;
   const related = getRelatedPosts(list, p);
   const faqLd = faqJsonLd(extractFaqFromMarkdown(p.content));
+  const cat = categoryInfo(p.category);
+  const minutes = readingTimeMinutes(p.content);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -60,6 +69,7 @@ export default async function BlogDetailPage({ params }) {
     author: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
     publisher: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
     mainEntityOfPage: url,
+    ...(cat ? { articleSection: cat.label } : {}),
   };
 
   const breadcrumbJsonLd = {
@@ -101,7 +111,13 @@ export default async function BlogDetailPage({ params }) {
         <div className="cd-head">
           <h1>{p.title}</h1>
           <div className="cd-tags">
+            {cat && (
+              <a className={`blog-cat-badge blog-cat-${cat.code}`} href={`/blog?category=${cat.code}`}>
+                {cat.emoji} {cat.label}
+              </a>
+            )}
             <span className="info-tag">📅 {p.publishedAt}</span>
+            <span className="info-tag">⏱️ {minutes} min de lecture</span>
           </div>
         </div>
 
