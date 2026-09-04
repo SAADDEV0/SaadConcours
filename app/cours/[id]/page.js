@@ -90,7 +90,7 @@ export default async function CoursDetailPage({ params }) {
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
-      <div className="cd-view">
+      <div className="cd-view" style={{ maxWidth: 1100 }}>
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/cours">Cours</a> <span>/</span> <span>{c.title}</span>
         </nav>
@@ -102,17 +102,16 @@ export default async function CoursDetailPage({ params }) {
           </div>
         </div>
 
-        <div className="cd-card">
-          <div className="eval-toolbar" style={{ justifyContent: "flex-end", marginBottom: 14 }}>
-            <div className="cours-theme-picker" id="coursThemePicker">
-              <button className="cours-theme-btn" id="coursThemeBtn" type="button">🎨 Thème de lecture</button>
-              <div className="cours-theme-panel" id="coursThemePanel" style={{ display: "none" }}></div>
-            </div>
+        <div className="eval-toolbar" style={{ justifyContent: "flex-end" }}>
+          <div className="cours-theme-picker" id="coursThemePicker">
+            <button className="cours-theme-btn" id="coursThemeBtn" type="button">🎨 Thème de lecture</button>
+            <div className="cours-theme-panel" id="coursThemePanel" style={{ display: "none" }}></div>
           </div>
-          <div className="cours-reader" id="coursReader">
-            <aside className="cours-toc" id="coursToc"></aside>
-            <div className="cours-content" id="coursContent" dangerouslySetInnerHTML={{ __html: contentHtml }} />
-          </div>
+          <button className="dl-btn" id="coursPdfBtn">⬇ Télécharger en PDF</button>
+        </div>
+        <div className="cours-reader" id="coursReader">
+          <aside className="cours-toc" id="coursToc"></aside>
+          <div className="cours-content" id="coursContent" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </div>
 
         <CoursDetailClient cours={c} />

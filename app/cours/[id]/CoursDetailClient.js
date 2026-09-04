@@ -100,13 +100,19 @@ export default function CoursDetailClient({ cours }) {
         }
       });
     }
+
+    // The PDF button lives in the top toolbar (page.js), not here, so it's
+    // visible without scrolling — wire it up the same imperative way as the
+    // theme picker above instead of rendering it from this component.
+    const pdfBtn = document.getElementById("coursPdfBtn");
+    if (pdfBtn && pdfBtn.dataset.wired !== "1") {
+      pdfBtn.dataset.wired = "1";
+      pdfBtn.addEventListener("click", () => downloadCoursPdf(cours));
+    }
   }, [cours.id]);
 
   return (
     <div className="cd-actions">
-      <button className="dl-btn" onClick={() => downloadCoursPdf(cours)}>
-        ⬇ Télécharger en PDF
-      </button>
       <a className="reset-btn" style={{ width: "auto", textDecoration: "none", display: "inline-flex", alignItems: "center" }} href="/cours">
         ← Retour à tous les cours
       </a>
