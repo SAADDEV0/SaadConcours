@@ -60,6 +60,42 @@
     "date_publication": "2026-09-05"
   },
   {
+    "id": "1d2277f7608e2969",
+    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
+    "date_publication": "2026-09-05"
+  },
+  {
+    "id": "3c4a6079e73dc5e5",
+    "titre": "Résultats Présélection Master FST Béni Mellal 2026-2027",
+    "etablissement": "FST",
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fstbm.ac.ma/web/content/1495523/MST_NB_examen_2026.pdf",
+    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-FST-Beni-Mellal-2026-2027.html",
+    "date_publication": "2026-09-05"
+  },
+  {
+    "id": "fd5625e8a608c8ec",
+    "titre": "Master Université Sultan Moulay Slimane Béni Mellal 2026-2027",
+    "etablissement": null,
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2023/07/master-universite-sultan-moulay-slimane.html",
+    "date_publication": "2026-09-05"
+  },
+  {
     "id": "f09a739d4026a68f",
     "titre": "Résultats Présélection Master FS Ain Chock Casablanca 2026-2027",
     "etablissement": null,
@@ -84,18 +120,6 @@
     "date_publication": "2026-09-04"
   },
   {
-    "id": "1d2277f7608e2969",
-    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
-    "date_publication": "2026-09-04"
-  },
-  {
     "id": "10011395e9c42203",
     "titre": "Master FSJES Oujda 2026-2027",
     "etablissement": "FSJES",
@@ -117,18 +141,6 @@
     "cloture": false,
     "lien_inscription": "https://www.fsts.ac.ma/storage/83/mst-mte-liste-convoques-ecrit-2026-2027.pdf",
     "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-Master-FST-Settat-2026-2027.html",
-    "date_publication": "2026-09-04"
-  },
-  {
-    "id": "3c4a6079e73dc5e5",
-    "titre": "Résultats Présélection Master FST Béni Mellal 2026-2027",
-    "etablissement": "FST",
-    "ville": "Béni Mellal",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fstbm.ac.ma/web/content/1495523/MST_NB_examen_2026.pdf",
-    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-FST-Beni-Mellal-2026-2027.html",
     "date_publication": "2026-09-04"
   },
   {
@@ -384,24 +396,12 @@
     "date_publication": "2026-09-02"
   },
   {
-    "id": "fd5625e8a608c8ec",
-    "titre": "Master Université Sultan Moulay Slimane Béni Mellal 2026-2027",
-    "etablissement": null,
-    "ville": "Béni Mellal",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2023/07/master-universite-sultan-moulay-slimane.html",
-    "date_publication": "2026-09-02"
-  },
-  {
     "id": "c18965f1904d47b3",
     "titre": "Master ESEF Béni Mellal 2026-2027",
     "etablissement": null,
     "ville": "Béni Mellal",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-23",
     "cloture": false,
     "lien_inscription": "https://esefbm.usms.ac.ma/e-candidature-master/",
     "source": "https://www.almaster-maroc.com/2026/09/master-esef-beni-mellal-2026-2027.html",
@@ -1313,8 +1313,8 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-08-31",
-    "cloture": true,
+    "date_limite": null,
+    "cloture": false,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
