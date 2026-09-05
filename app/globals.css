@@ -492,15 +492,32 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .cours-content code{background:var(--bg); padding:1px 5px; border-radius:4px; font-size:.88em;}
 .cours-content pre code{background:none; padding:0;}
 .cours-content ul,.cours-content ol{padding-left:1.3em;}
+.cours-content a{color:var(--accent);}
+/* marked emits these from the fiches' markdown but nothing styled them, so
+   under a reading theme they fell back to the browser defaults (a bare
+   indent for quotes, a grey 3D rule) instead of the theme's palette. */
+.cours-content blockquote{
+  margin:14px 0; padding:8px 16px; border-left:3px solid var(--accent);
+  background:var(--bg); border-radius:0 6px 6px 0; color:var(--text-dim);
+}
+.cours-content blockquote > :first-child{margin-top:0;}
+.cours-content blockquote > :last-child{margin-bottom:0;}
+.cours-content hr{border:none; border-top:1px solid var(--border); margin:24px 0;}
+.cours-content img{max-width:100%; height:auto; border-radius:8px;}
 .cours-content .katex-display{overflow-x:auto; overflow-y:hidden; max-width:100%; padding:4px 0;}
 .cours-content .katex{white-space:normal;}
 
 /* ---------- Cours: reading themes (Obsidian-style) ----------
- * Only .cours-content is restyled - the chrome (header, TOC sidebar) stays
- * on the site's own light/dark theme, same as Obsidian only re-skinning the
- * note pane and not the app shell. Each theme just redeclares the CSS
- * variables .cours-content already reads from, so every existing rule
- * (headings, tables, code, katex) picks up the new palette for free.
+ * Declared on .cours-reader rather than .cours-content alone, so the
+ * sommaire is part of the same reading surface: with the palette on the
+ * note pane only, picking a light theme while the site was in dark mode
+ * left a cream page glued to a near-black sidebar (and vice versa).
+ * Each theme redeclares *every* token the reader reads - --bg-elev,
+ * --accent-dim and --shadow included - so nothing leaks in from the site
+ * palette when the header toggle flips it, and sets color-scheme so the
+ * scrollbars of wide tables/code blocks follow the reading theme instead
+ * of the site's. The chrome above and below (header, toolbar, footer)
+ * stays on the site theme, same as Obsidian only re-skinning the note.
  */
 .cours-theme-btn{
   display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:999px;
@@ -520,29 +537,58 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 }
 .cours-theme-opt:hover{border-color:var(--accent);}
 .cours-theme-opt.active{border-color:var(--accent); color:var(--text); background:var(--accent-dim);}
-.cours-theme-swatch{width:100%; height:30px; border-radius:5px; border:1px solid rgba(0,0,0,.12);}
+/* var(--border), not a black alpha: on the dark site palette a black hairline
+   is invisible, so the dark swatches (site/obsidian/nuit) had no edge at all. */
+.cours-theme-swatch{width:100%; height:30px; border-radius:5px; border:1px solid var(--border);}
 
-.cours-reader[data-md-theme="sepia"] .cours-content{
-  --bg-card:#f4ecd8; --bg:#ece0c2; --border:#d8c8a0;
-  --text:#3a2f1e; --text-dim:#6b5a3e; --text-faint:#8a7a5c; --accent:#a8763e;
-  font-family:Georgia,'Times New Roman',serif;
+/* Non-default themes get their own frame, so a light reading theme in dark
+   mode reads as a deliberate sheet of paper on the page instead of a bright
+   block floating against the site background. */
+.cours-reader:not([data-md-theme="default"]){
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow);
 }
-.cours-reader[data-md-theme="nord"] .cours-content{
-  --bg-card:#2e3440; --bg:#3b4252; --border:#4c566a;
-  --text:#eceff4; --text-dim:#d8dee9; --text-faint:#9aa5b8; --accent:#88c0d0;
+@media (max-width: 800px){ .cours-reader:not([data-md-theme="default"]){padding:12px;} }
+/* Selection followed the *site* accent inside the reader — dark navy over
+   sepia paper, unreadable — because no theme redeclared --accent-dim. */
+.cours-reader[data-md-theme] ::selection{background:var(--accent-dim); color:var(--text);}
+
+.cours-reader[data-md-theme="sepia"]{
+  color-scheme:light;
+  --bg-card:#f4ecd8; --bg-elev:#efe4ca; --bg:#e6d9b8; --border:#d6c49c;
+  --text:#3a2f1e; --text-dim:#6b5a3e; --text-faint:#8a7a5c;
+  --accent:#8a5a22; --accent-dim:#e0cfa6;
+  --shadow:0 4px 20px rgba(90,70,40,.15);
 }
-.cours-reader[data-md-theme="obsidian"] .cours-content{
-  --bg-card:#1e1e2e; --bg:#181825; --border:#313244;
-  --text:#cdd6f4; --text-dim:#a6adc8; --text-faint:#7f849c; --accent:#c9a7ff;
+.cours-reader[data-md-theme="sepia"] .cours-content{font-family:Georgia,'Times New Roman',serif;}
+.cours-reader[data-md-theme="nord"]{
+  color-scheme:dark;
+  --bg-card:#2e3440; --bg-elev:#343b48; --bg:#3b4252; --border:#4c566a;
+  --text:#eceff4; --text-dim:#d8dee9; --text-faint:#9aa5b8;
+  --accent:#88c0d0; --accent-dim:#4a6572;
+  --shadow:0 4px 20px rgba(0,0,0,.35);
 }
-.cours-reader[data-md-theme="contrast"] .cours-content{
-  --bg-card:#000000; --bg:#111111; --border:#f5c518;
-  --text:#ffffff; --text-dim:#eeeeee; --text-faint:#bbbbbb; --accent:#f5c518;
-  font-size:1.02rem;
+.cours-reader[data-md-theme="obsidian"]{
+  color-scheme:dark;
+  --bg-card:#1e1e2e; --bg-elev:#25253a; --bg:#181825; --border:#313244;
+  --text:#cdd6f4; --text-dim:#a6adc8; --text-faint:#7f849c;
+  --accent:#c9a7ff; --accent-dim:#453766;
+  --shadow:0 4px 20px rgba(0,0,0,.45);
 }
-.cours-reader[data-md-theme="night"] .cours-content{
-  --bg-card:#1a1512; --bg:#120e0c; --border:#3a2f26;
-  --text:#e8c9a0; --text-dim:#c2a480; --text-faint:#8f7860; --accent:#e0955c;
+.cours-reader[data-md-theme="contrast"]{
+  color-scheme:dark;
+  --bg-card:#000000; --bg-elev:#0a0a0a; --bg:#111111; --border:#f5c518;
+  --text:#ffffff; --text-dim:#eeeeee; --text-faint:#bbbbbb;
+  --accent:#f5c518; --accent-dim:#5c4700;
+  --shadow:0 4px 20px rgba(0,0,0,.6);
+}
+.cours-reader[data-md-theme="contrast"] .cours-content{font-size:1.02rem;}
+.cours-reader[data-md-theme="night"]{
+  color-scheme:dark;
+  --bg-card:#1a1512; --bg-elev:#221b16; --bg:#120e0c; --border:#3a2f26;
+  --text:#e8c9a0; --text-dim:#c2a480; --text-faint:#8f7860;
+  --accent:#e0955c; --accent-dim:#523423;
+  --shadow:0 4px 20px rgba(0,0,0,.45);
 }
 
 /* ---------- Concours ouverts (news) ---------- */

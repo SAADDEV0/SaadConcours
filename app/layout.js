@@ -80,8 +80,21 @@ export default async function RootLayout({ children }) {
   const adsEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   return (
-    <html lang="fr">
+    // suppressHydrationWarning: data-theme is stamped on by the pre-paint
+    // script below, so it is always an "extra" attribute at hydration time.
+    <html lang="fr" suppressHydrationWarning>
       <head>
+        {/* Applies the saved light/dark choice before the first paint.
+           chromeScript() also sets data-theme, but only from a useEffect
+           after hydration — so anyone reading in dark mode on a light OS got
+           a full-page white flash on every single navigation, and the cours
+           reader flashed the site palette before its reading theme landed. */}
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t);}catch(e){}`,
+          }}
+        />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger

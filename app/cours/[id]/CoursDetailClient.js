@@ -13,7 +13,9 @@ import { renderMathWhenReady } from "../../_shared/mathMarkdown";
 // SPA reader had, now living on the real per-fiche URL. Mirrors
 // ConcoursDetailClient.js / EvaluationDetailClient.js.
 const COURS_THEMES = [
-  { id: "default", label: "Thème du site", swatch: "linear-gradient(135deg,#1b1f2a,#4f8cff)" },
+  // Built from the live palette instead of hardcoded dark navy, so the
+  // "site theme" swatch actually previews the site theme in light mode too.
+  { id: "default", label: "Thème du site", swatch: "linear-gradient(135deg,var(--bg-card),var(--accent))" },
   { id: "sepia", label: "Sépia · Papier", swatch: "linear-gradient(135deg,#f4ecd8,#a8763e)" },
   { id: "nord", label: "Nord", swatch: "linear-gradient(135deg,#2e3440,#88c0d0)" },
   { id: "obsidian", label: "Obsidian", swatch: "linear-gradient(135deg,#1e1e2e,#c9a7ff)" },
@@ -59,7 +61,7 @@ export default function CoursDetailClient({ cours }) {
       if (!panel) return;
       panel.innerHTML = COURS_THEMES.map(
         (t) => `
-          <button type="button" class="cours-theme-opt${t.id === active ? " active" : ""}" data-theme-id="${t.id}">
+          <button type="button" class="cours-theme-opt${t.id === active ? " active" : ""}" data-theme-id="${t.id}" aria-pressed="${t.id === active}">
             <span class="cours-theme-swatch" style="background:${t.swatch}"></span>
             ${escapeHtml(t.label)}
           </button>

@@ -109,10 +109,24 @@ export default async function CoursDetailPage({ params }) {
           </div>
           <button className="dl-btn" id="coursPdfBtn">⬇ Télécharger en PDF</button>
         </div>
-        <div className="cours-reader" id="coursReader">
+        {/* suppressHydrationWarning: the inline script below sets data-md-theme
+            before React hydrates, which is an attribute the server never
+            rendered — expected, not a mismatch to fix. */}
+        <div className="cours-reader" id="coursReader" suppressHydrationWarning>
           <aside className="cours-toc" id="coursToc"></aside>
           <div className="cours-content" id="coursContent" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </div>
+        {/* Runs as soon as the reader is parsed, i.e. before it is painted —
+           CoursDetailClient sets data-md-theme too, but from a useEffect, so
+           the fiche visibly flipped from the site palette to the saved
+           reading theme on every load. Same trick as the data-theme script
+           in app/layout.js. */}
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: `try{var r=document.getElementById("coursReader");if(r)r.setAttribute("data-md-theme",localStorage.getItem("cours_md_theme")||"default");}catch(e){}`,
+          }}
+        />
 
         <CoursDetailClient cours={c} />
 
