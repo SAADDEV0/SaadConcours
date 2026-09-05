@@ -6,7 +6,7 @@ import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
 import { categoryInfo } from "../../../lib/blogTaxonomy";
 import { readingTimeMinutes } from "../../_shared/blogCard";
-import BlogDetailClient from "./BlogDetailClient";
+import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -109,7 +109,12 @@ export default async function BlogDetailPage({ params }) {
         </nav>
 
         <div className="cd-head">
-          <h1>{p.title}</h1>
+          <div className="cd-head-row">
+            <h1>{p.title}</h1>
+            <div className="cd-head-actions">
+              <ShareButton post={p} />
+            </div>
+          </div>
           <div className="cd-tags">
             {cat && (
               <a className={`blog-cat-badge blog-cat-${cat.code}`} href={`/blog?category=${cat.code}`}>
