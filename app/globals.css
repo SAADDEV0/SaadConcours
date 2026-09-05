@@ -156,6 +156,7 @@ header{
 .mobile-nav-link.active{color:var(--accent); background:var(--accent-dim);}
 
 @media (max-width: 860px){
+  .dua-banner{display:none;}
   header{padding:10px 14px;}
   .header-inner{gap:8px;}
   .brand{font-size:1rem; gap:8px;}
