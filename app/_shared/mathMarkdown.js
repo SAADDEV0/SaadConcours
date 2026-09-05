@@ -53,15 +53,25 @@ const KATEX_DELIMITERS = [
 // races it and silently renders nothing on a fair share of first loads
 // (most visits here land straight on an SEO page from search, so this isn't
 // a rare edge case). Poll briefly instead of checking once.
+//
+// Returns a promise so callers that need the math to actually be on the page
+// before proceeding (the PDF export snapshots this element) can await it —
+// existing fire-and-forget callers are unaffected since they just don't await.
 export function renderMathWhenReady(el) {
-  if (!el) return;
-  let attemptsLeft = 50; // ~5s at 100ms, generous for a CDN script on a slow connection
-  (function attempt() {
-    if (window.renderMathInElement) {
-      window.renderMathInElement(el, { delimiters: KATEX_DELIMITERS, throwOnError: false });
-      return;
-    }
-    if (attemptsLeft-- <= 0) return;
-    setTimeout(attempt, 100);
-  })();
+  if (!el) return Promise.resolve();
+  return new Promise((resolve) => {
+    let attemptsLeft = 50; // ~5s at 100ms, generous for a CDN script on a slow connection
+    (function attempt() {
+      if (window.renderMathInElement) {
+        window.renderMathInElement(el, { delimiters: KATEX_DELIMITERS, throwOnError: false });
+        resolve();
+        return;
+      }
+      if (attemptsLeft-- <= 0) {
+        resolve();
+        return;
+      }
+      setTimeout(attempt, 100);
+    })();
+  });
 }
