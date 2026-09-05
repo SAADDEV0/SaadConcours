@@ -2,735 +2,45 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useConfirm } from "../ui/ConfirmProvider";
+import { useToast } from "../ui/ToastProvider";
+import { useLocalStorage } from "../../_lib/useLocalStorage";
+import { CONTENT_TYPES, typeMetaFor, formatDateFr } from "./lib/contentTypes";
+import { buildHashtags } from "./lib/hashtags";
+import { buildText, VARIANTS } from "./lib/textVariants";
+import { FORMATS, drawCard } from "./lib/image";
+import { seoChecks } from "./lib/seo";
+import { HISTORY_KEY, addHistoryEntry, removeHistoryEntry, lastPublished } from "./lib/history";
+import { shareNative, whatsappWebUrl, instagramUrl } from "./lib/share";
+import PostPicker from "./PostPicker";
+import HistoryPanel from "./HistoryPanel";
+import ScheduleModal from "./ScheduleModal";
+import { FacebookPreview, InstagramPreview, WhatsAppPreview } from "./PlatformPreview";
 
 /* -------------------------------------------------------------------
- * V2 — Turns a concours, une actu "concours ouvert", un article de blog
- * ou une évaluation en un texte prêt à coller (Instagram/Facebook/
- * WhatsApp) + une image partageable, générés côté client sur un
- * <canvas> (pas de dépendance de génération d'image, pas d'aller-retour
- * serveur). Toujours "tu génères, tu postes toi-même" — pas d'API
- * Instagram/Facebook branchée ici, juste rendre chaque post manuel
- * 10 fois plus rapide qu'à l'écrire/designer à la main.
+ * V3 — Toujours "tu génères, tu postes toi-même" (pas d'API Instagram/
+ * Facebook de publication automatisée branchée en dehors de la Page FB),
+ * mais organisé en deux colonnes (sélection à gauche, résultat à droite en
+ * onglets internes) plutôt qu'en cartes empilées, avec : texte éditable +
+ * variantes de ton, hashtags ajustables à la main, un historique local
+ * (déjà publié ? déjà généré ?) et un partage natif (Web Share API) qui
+ * pousse l'image + le texte directement dans WhatsApp/toute app installée
+ * via la feuille de partage du système. Le détail de génération (texte,
+ * image canvas, hashtags, SEO) vit dans ./lib — ce fichier n'orchestre que
+ * l'état et l'UI.
  * ---------------------------------------------------------------- */
 
-const SITE_URL = "https://www.saadconcours.space";
-const MAX_HASHTAGS = 10;
-
-// Presets instead of raw width/height inputs — la vraie question c'est
-// "pour quelle plateforme/placement je poste", les pixels ne sont que ce
-// qui en découle. Chaque format redessine la même mise en page à une
-// taille de canvas différente (voir drawCard, tout est en unités
-// proportionnelles).
-const FORMATS = [
-  { key: "carre", label: "Carré", sub: "Post Instagram / Facebook", width: 1080, height: 1080 },
-  { key: "portrait", label: "Portrait", sub: "Post Instagram (recommandé)", width: 1080, height: 1350 },
-  { key: "story", label: "Story", sub: "Story IG/FB · Statut WhatsApp", width: 1080, height: 1920 },
-  { key: "paysage", label: "Paysage", sub: "Partage lien Facebook", width: 1200, height: 630 },
+const RIGHT_TABS = [
+  { key: "texte", icon: "📝", label: "Texte" },
+  { key: "image", icon: "🖼️", label: "Image" },
+  { key: "apercu", icon: "👀", label: "Aperçus" },
+  { key: "historique", icon: "🗂️", label: "Historique" },
 ];
 
-/* ------------------------------ Content types ------------------------------
- * Un seul générateur, quatre sources de contenu. Chaque type sait comment
- * se lister (recherche/tri), se lier (URL publique) et se raconter (texte +
- * image) — le reste du composant reste générique.
- * ---------------------------------------------------------------------- */
-
-const CONTENT_TYPES = [
-  {
-    key: "concours",
-    tabIcon: "📚",
-    tabLabel: "Concours",
-    endpoint: "/api/concours",
-    // getAllConcours() renvoie la liste dans l'ordre du fichier (ajout en
-    // fin de tableau) donc il faut inverser pour avoir le plus récent en
-    // premier.
-    reverseForRecent: true,
-    filterAvailable: (list) => list,
-    searchText: (i) => `${i.etablissement || ""} ${i.ville || ""} ${i.filiere || ""} ${i.annee || ""}`,
-    listTitle: (i) => i.etablissement || i.id,
-    listMeta: (i) => [i.ville, i.filiere, i.annee].filter(Boolean).join(" · "),
-    listRight: () => null,
-  },
-  {
-    key: "news",
-    tabIcon: "🆕",
-    tabLabel: "Concours ouverts",
-    endpoint: "/api/news",
-    // getAllNews() trie déjà par date_publication décroissante — inverser
-    // ici remettrait les plus anciens en premier (c'était un vrai bug côté
-    // v1 : le tri était annulé par un .reverse() en trop).
-    reverseForRecent: false,
-    filterAvailable: (list) => list.filter((n) => !n.cloture),
-    searchText: (i) => `${i.titre || ""} ${i.etablissement || ""} ${i.ville || ""} ${i.filiere || ""}`,
-    listTitle: (i) => i.titre,
-    listMeta: (i) => [i.etablissement, i.ville].filter(Boolean).join(" · "),
-    listRight: (i) => i.date_limite || "—",
-  },
-  {
-    key: "blog",
-    tabIcon: "📰",
-    tabLabel: "Blog",
-    endpoint: "/api/blog",
-    // getAllBlog() trie déjà par publishedAt décroissant — même raison que
-    // "news" ci-dessus, pas de .reverse() ici.
-    reverseForRecent: false,
-    // Seuls les articles publiés (available) ont une page publique — pas
-    // question de générer un post qui pointe vers un brouillon en 404.
-    filterAvailable: (list) => list.filter((b) => b.available),
-    searchText: (i) => `${i.title || ""} ${i.excerpt || ""}`,
-    listTitle: (i) => i.title,
-    listMeta: (i) => truncate(i.excerpt, 70),
-    listRight: (i) => i.publishedAt || "—",
-  },
-  {
-    key: "evaluation",
-    tabIcon: "📝",
-    tabLabel: "Évaluation",
-    endpoint: "/api/quiz",
-    // getAllQuiz() renvoie l'ordre brut du fichier, comme concours.
-    reverseForRecent: true,
-    // Même logique que blog : une évaluation non "available" n'est pas
-    // ouvrable sur /evaluation/[id].
-    filterAvailable: (list) => list.filter((q) => q.available),
-    searchText: (i) => `${i.title || ""} ${i.module || ""} ${i.description || ""}`,
-    listTitle: (i) => i.title || i.module,
-    listMeta: (i) => `${i.module || ""} · ${(i.questions || []).length} questions`,
-    listRight: () => null,
-  },
-];
-
-function typeMetaFor(key) {
-  return CONTENT_TYPES.find((t) => t.key === key);
-}
-
-function urlFor(kind, item) {
-  if (kind === "concours") return `${SITE_URL}/concours/${item.id}`;
-  if (kind === "news") return `${SITE_URL}/news/${item.id}`;
-  if (kind === "blog") return `${SITE_URL}/blog/${item.id}`;
-  return `${SITE_URL}/evaluation/${item.id}`;
-}
-
-function hasCorrige(item) {
-  // corrige_from_github est calculé côté API (/api/concours) quand un
-  // corrigé existe dans data/corriges/ sans être recopié dans le champ
-  // corrige_md — l'ignorer faisait dire "sujet sans corrigé" à tort.
-  return Boolean(item.corrige_md || item.corrige_from_github);
-}
-
-/* --------------------------------- Utils --------------------------------- */
-
-function daysUntil(dateStr) {
-  if (!dateStr) return null;
-  return Math.round((new Date(dateStr + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
-}
-
-function joinLoc(a, b) {
-  return [a, b].filter(Boolean).join(" — ");
-}
-
-function formatDateFr(dateStr) {
-  if (!dateStr) return null;
-  try {
-    return new Date(dateStr + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
-  } catch {
-    return dateStr;
-  }
-}
-
-function truncate(s, n) {
-  const str = String(s || "");
-  return str.length > n ? str.slice(0, n - 1).trimEnd() + "…" : str;
-}
-
-function difficultyStars(d) {
-  const m = String(d || "").match(/(\d+)\s*\/\s*(\d+)/);
-  if (!m) return null;
-  const total = parseInt(m[2], 10) || 5;
-  const n = Math.min(parseInt(m[1], 10) || 0, total);
-  return "★".repeat(n) + "☆".repeat(Math.max(0, total - n));
-}
-
-function estimateReadingTime(markdown) {
-  const words = String(markdown || "")
-    .replace(/[#*_>`|-]/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean).length;
-  return Math.max(1, Math.round(words / 200));
-}
-
-/* ------------------------------ SEO hashtags ------------------------------
- * Quelques tags précis et pertinents battent trente tags génériques (pour
- * le classement Instagram comme pour ne pas avoir l'air spammy) : un socle
- * de 3 tags de marque/catégorie par type de contenu, complété par ce qui
- * est spécifique à l'item (filière, établissement, ville, module...), puis
- * quelques tags de portée plus large tant qu'il reste de la place — total
- * plafonné à MAX_HASHTAGS.
- * ------------------------------------------------------------------------ */
-
-const HASHTAG_POOLS = {
-  concours: ["#ConcoursMaroc", "#MasterMaroc", "#EtudiantMaroc", "#EtudesMaroc", "#ConcoursAccesMaster"],
-  news: ["#ConcoursMaroc", "#InscriptionOuverte", "#MasterMaroc", "#EtudiantMaroc", "#OpportuniteEtudes"],
-  blog: ["#ConseilsEtudes", "#MethodeDeTravail", "#MasterMaroc", "#ConcoursMaroc", "#ReussiteEtudiante"],
-  evaluation: ["#QCM", "#RevisionMaster", "#EntrainementConcours", "#ConcoursMaroc", "#MasterMaroc"],
-};
-
-// Petits mots vides français exclus des hashtags — "AuditEtFiscale" lit
-// moins bien et n'apporte rien à la découvrabilité vs "AuditFiscale".
-const HASHTAG_STOPWORDS = new Set(["et", "de", "des", "du", "la", "le", "les", "en", "au", "aux", "d", "l"]);
-// Un hashtag composé de trop de mots (souvent un intitulé long recopié
-// tel quel, ex. master_reel) a l'air spammy et personne ne le cherche —
-// mieux vaut l'omettre que le générer.
-const HASHTAG_MAX_LEN = 28;
-
-function toHashtag(s) {
-  const cleaned = String(s || "")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-zA-Z0-9]+/g, " ")
-    .trim();
-  if (!cleaned) return null;
-  const tag =
-    "#" +
-    cleaned
-      .split(" ")
-      .filter(Boolean)
-      .filter((w) => !HASHTAG_STOPWORDS.has(w.toLowerCase()))
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-      .join("");
-  return tag.length > 1 && tag.length <= HASHTAG_MAX_LEN ? tag : null;
-}
-
-function buildHashtags(kind, item) {
-  const pool = HASHTAG_POOLS[kind];
-  const tags = new Set(pool.slice(0, 3));
-
-  function addSpecific(val, mapFn) {
-    if (tags.size >= MAX_HASHTAGS) return;
-    const t = mapFn ? mapFn(val) : toHashtag(val);
-    if (t) tags.add(t);
-  }
-
-  if (kind === "concours") {
-    addSpecific(item.filiere);
-    addSpecific(item.etablissement);
-    if (item.ville && tags.size < MAX_HASHTAGS) {
-      const v = toHashtag(item.ville);
-      if (v) tags.add("#Concours" + v.slice(1));
-    }
-    addSpecific(item.master_reel);
-  } else if (kind === "news") {
-    addSpecific(item.etablissement);
-    if (item.ville && tags.size < MAX_HASHTAGS) {
-      const v = toHashtag(item.ville);
-      if (v) tags.add("#Concours" + v.slice(1));
-    }
-    addSpecific(item.filiere);
-  } else if (kind === "evaluation") {
-    addSpecific(item.module);
-  }
-
-  for (const t of pool.slice(3)) {
-    if (tags.size >= MAX_HASHTAGS) break;
-    tags.add(t);
-  }
-  return [...tags].slice(0, MAX_HASHTAGS);
-}
-
-/* ------------------------------ Post text ------------------------------ */
-
-function buildText(kind, item) {
-  const hashtags = buildHashtags(kind, item).join(" ");
-  const url = urlFor(kind, item);
-
-  if (kind === "concours") {
-    const modulesLine = item.modules?.length ? `🧾 Matières : ${item.modules.slice(0, 3).join(" • ")}` : null;
-    const stars = difficultyStars(item.difficulte);
-    const lines = [
-      "📚 Nouveau sujet disponible sur SaadConcours",
-      "",
-      joinLoc(item.etablissement, item.ville),
-      item.filiere || null,
-      modulesLine,
-      item.annee ? `📅 Session ${item.annee}` : null,
-      stars ? `🎯 Difficulté : ${stars}` : null,
-      "",
-      hasCorrige(item) ? "✅ Corrigé indicatif inclus" : "📄 Sujet avec énoncé complet",
-      "",
-      `👉 ${url}`,
-      "",
-      "Gratuit, sans compte, sans pub.",
-      "",
-      hashtags,
-    ];
-    return lines.filter((l) => l !== null && l !== undefined).join("\n");
-  }
-
-  if (kind === "news") {
-    const days = daysUntil(item.date_limite);
-    const urgent = days !== null && days >= 0 && days <= 7;
-    // date_publication est la date où l'actu a été détectée (scraper ou
-    // ajout manuel) — le meilleur proxy réel et déjà disponible de "date
-    // d'ouverture des inscriptions", sans inventer un champ inexistant.
-    const openLine = item.date_publication ? `📅 Ouvert depuis le ${formatDateFr(item.date_publication)}` : null;
-    const limitLine = item.date_limite ? `⏰ Date limite : ${formatDateFr(item.date_limite)}` : null;
-
-    const lines = [
-      urgent ? `⏰ Ça ferme dans ${days} jour${days > 1 ? "s" : ""} !` : "🆕 Concours ouvert aux inscriptions",
-      "",
-      item.titre || "",
-      joinLoc(item.etablissement, item.ville),
-      item.filiere ? `🎓 ${item.filiere}` : null,
-      openLine,
-      limitLine,
-      item.lien_inscription ? `🔗 Inscription : ${item.lien_inscription}` : null,
-      "",
-      `👉 ${url}`,
-      "",
-      hashtags,
-    ];
-    return lines.filter((l) => l !== null && l !== undefined).join("\n");
-  }
-
-  if (kind === "blog") {
-    const readMin = estimateReadingTime(item.content);
-    const lines = [
-      "📰 Nouvel article sur le blog SaadConcours",
-      "",
-      item.title || "",
-      "",
-      item.excerpt || "",
-      "",
-      `⏱ ${readMin} min de lecture`,
-      "",
-      `👉 ${url}`,
-      "",
-      "Gratuit, sans compte, sans pub.",
-      "",
-      hashtags,
-    ];
-    return lines.filter((l) => l !== null && l !== undefined).join("\n");
-  }
-
-  // evaluation
-  const nbQ = (item.questions || []).length;
-  const nbCh = (item.chapters || []).length;
-  const lines = [
-    "📝 Nouvelle évaluation disponible",
-    "",
-    item.module || "",
-    item.title || "",
-    item.description || null,
-    "",
-    `🧠 ${nbQ} question${nbQ > 1 ? "s" : ""} QCM${nbCh ? ` • ${nbCh} chapitre${nbCh > 1 ? "s" : ""}` : ""}`,
-    "✅ Corrigé + score instantané",
-    "",
-    `👉 ${url}`,
-    "",
-    hashtags,
-  ];
-  return lines.filter((l) => l !== null && l !== undefined).join("\n");
-}
-
-function wrapLines(ctx, text, maxWidth) {
-  const words = String(text || "").split(" ");
-  const lines = [];
-  let line = "";
-  for (const word of words) {
-    const test = line ? line + " " + word : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = test;
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
-// ctx.roundRect() n'existe que depuis Chrome 99 / Safari 16.4 — on dessine
-// le chemin à la main pour que l'image se génère pareil sur n'importe quel
-// navigateur utilisé côté admin.
-function roundedRect(ctx, x, y, w, h, r) {
-  const rad = Math.max(0, Math.min(r, w / 2, h / 2));
-  ctx.beginPath();
-  ctx.moveTo(x + rad, y);
-  ctx.arcTo(x + w, y, x + w, y + h, rad);
-  ctx.arcTo(x + w, y + h, x, y + h, rad);
-  ctx.arcTo(x, y + h, x, y, rad);
-  ctx.arcTo(x, y, x + w, y, rad);
-  ctx.closePath();
-}
-
-// Même tracé que le logo du site (toque de diplômé + livre ouvert, voir
-// app/_shared/appIcon.js) redessiné en vecteur plutôt que chargé comme
-// image — pas de chargement asynchrone à attendre avant de dessiner le
-// canvas, et un rendu net à n'importe quelle résolution.
-function drawLogoMark(ctx, cx, cy, size, color, accentColor) {
-  const s = size / 64;
-  const ox = cx - size / 2;
-  const oy = cy - size / 2;
-  const pt = (x, y) => [ox + x * s, oy + y * s];
-  const poly = (points) => {
-    ctx.beginPath();
-    points.forEach(([x, y], i) => {
-      const [px, py] = pt(x, y);
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    });
-    ctx.closePath();
-    ctx.fill();
-  };
-
-  ctx.save();
-  ctx.fillStyle = color;
-
-  // Toque de diplômé
-  poly([
-    [32, 13],
-    [49, 21],
-    [32, 29],
-    [15, 21],
-  ]);
-
-  // Pompon
-  ctx.strokeStyle = color;
-  ctx.lineWidth = Math.max(1, 2 * s);
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  const [tx0, ty0] = pt(49, 21);
-  const [tx1, ty1] = pt(51, 31);
-  ctx.moveTo(tx0, ty0);
-  ctx.lineTo(tx1, ty1);
-  ctx.stroke();
-  ctx.fillStyle = accentColor;
-  const [bx, by] = pt(51, 32.5);
-  ctx.beginPath();
-  ctx.arc(bx, by, Math.max(1, 2 * s), 0, Math.PI * 2);
-  ctx.fill();
-
-  // Livre ouvert
-  ctx.fillStyle = color;
-  poly([
-    [32, 42],
-    [13, 37],
-    [13, 48],
-    [32, 54],
-  ]);
-  poly([
-    [32, 42],
-    [51, 37],
-    [51, 48],
-    [32, 54],
-  ]);
-  ctx.strokeStyle = accentColor;
-  ctx.lineWidth = Math.max(1, 1.2 * s);
-  ctx.beginPath();
-  const [sx0, sy0] = pt(32, 42);
-  const [sx1, sy1] = pt(32, 54);
-  ctx.moveTo(sx0, sy0);
-  ctx.lineTo(sx1, sy1);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
-/* --------------------------------- Image ---------------------------------
- * Chaque position/taille est une fraction de `unit` (le plus petit côté du
- * canvas) donc le même code de dessin produit un bon résultat en 1080x1080,
- * 1080x1920 (story) ou 1200x630 (paysage) sans branches par format. Un
- * dégradé + badge dédiés par type de contenu (concours/news/blog/
- * évaluation) pour que l'image donne d'un coup d'œil le type de post.
- * ------------------------------------------------------------------------ */
-
-const THEMES = {
-  concours: { grad: ["#4338ca", "#7c3aed", "#c026d3"], accent: "#a21caf" },
-  news: { grad: ["#c2410c", "#ea580c", "#f59e0b"], accent: "#9a3412" },
-  blog: { grad: ["#0e7490", "#0891b2", "#06b6d4"], accent: "#0e7490" },
-  evaluation: { grad: ["#15803d", "#16a34a", "#22c55e"], accent: "#065f46" },
-};
-
-function drawCard(canvas, kind, item) {
-  const ctx = canvas.getContext("2d");
-  const W = canvas.width;
-  const H = canvas.height;
-  const unit = Math.min(W, H);
-  const pad = Math.round(unit * 0.075);
-  // Format Story (1080x1920) : Instagram/WhatsApp couvrent le haut (avatar +
-  // bouton fermer) et le bas (barre de réponse) de l'interface — on réserve
-  // une "zone de sécurité" en plus du padding normal pour ces deux formats
-  // très allongés, quel que soit leur libellé exact.
-  const isTall = H / W >= 1.5;
-  const safeTop = isTall ? unit * 0.09 : 0;
-  const safeBottom = isTall ? unit * 0.1 : 0;
-  const theme = THEMES[kind];
-
-  const grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, theme.grad[0]);
-  grad.addColorStop(0.55, theme.grad[1]);
-  grad.addColorStop(1, theme.grad[2]);
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  // Deux cercles décoratifs discrets — volontairement minimal ("attractif
-  // mais simple" veut dire retenue, pas plus de formes).
-  ctx.fillStyle = "rgba(255,255,255,0.08)";
-  ctx.beginPath();
-  ctx.arc(W * 0.92, H * 0.05, unit * 0.24, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(W * 0.02, H, unit * 0.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Voile en bas pour garder le footer lisible quel que soit l'endroit où
-  // tombe le dégradé à cette hauteur.
-  const scrim = ctx.createLinearGradient(0, H * 0.8, 0, H);
-  scrim.addColorStop(0, "rgba(0,0,0,0)");
-  scrim.addColorStop(1, "rgba(0,0,0,0.32)");
-  ctx.fillStyle = scrim;
-  ctx.fillRect(0, H * 0.8, W, H * 0.2);
-
-  // Sceau de marque, coin haut-droit — repère visuel constant même quand le
-  // titre est long et pousse tout le reste vers le bas. Même logo que le
-  // favicon/l'icône PWA du site (toque + livre), pas une simple lettre.
-  const sealR = unit * 0.055;
-  const sealCx = W - pad - sealR;
-  const sealCy = pad + sealR + safeTop;
-  ctx.fillStyle = "rgba(255,255,255,0.16)";
-  ctx.beginPath();
-  ctx.arc(sealCx, sealCy, sealR, 0, Math.PI * 2);
-  ctx.fill();
-  drawLogoMark(ctx, sealCx, sealCy, sealR * 1.85, "#fff", "#fbbf24");
-
-  const days = kind === "news" ? daysUntil(item.date_limite) : null;
-  const urgent = days !== null && days >= 0 && days <= 7;
-
-  let y = pad + unit * 0.06 + safeTop;
-  ctx.textBaseline = "alphabetic";
-
-  // Badge en évidence
-  const BADGES = {
-    concours: "NOUVEAU SUJET",
-    news: urgent ? `FERME DANS ${days} J` : "CONCOURS OUVERT",
-    blog: "NOUVEL ARTICLE",
-    evaluation: "QCM GRATUIT",
-  };
-  const badgeText = BADGES[kind];
-  ctx.font = `700 ${Math.round(unit * 0.028)}px system-ui, sans-serif`;
-  const badgeH = unit * 0.052;
-  const badgeW = ctx.measureText(badgeText).width + unit * 0.05;
-  ctx.fillStyle = urgent ? "#fff" : "rgba(255,255,255,0.18)";
-  roundedRect(ctx, pad, y, badgeW, badgeH, badgeH / 2);
-  ctx.fill();
-  ctx.fillStyle = urgent ? theme.accent : "#fff";
-  ctx.fillText(badgeText, pad + unit * 0.025, y + badgeH * 0.65);
-  y += badgeH + unit * 0.06;
-
-  // Titre
-  ctx.fillStyle = "#fff";
-  ctx.font = `800 ${Math.round(unit * 0.066)}px system-ui, sans-serif`;
-  ctx.shadowColor = "rgba(0,0,0,0.18)";
-  ctx.shadowBlur = unit * 0.012;
-  const TITLES = {
-    concours: item.etablissement || item.id,
-    news: item.titre || "",
-    blog: item.title || "",
-    evaluation: item.title || item.module || "",
-  };
-  const titleLines = wrapLines(ctx, TITLES[kind], W - pad * 2).slice(0, 3);
-  const titleLH = unit * 0.08;
-  titleLines.forEach((line) => {
-    y += titleLH;
-    ctx.fillText(line, pad, y);
-  });
-  ctx.shadowBlur = 0;
-  y += unit * 0.02;
-
-  // Pastilles méta
-  const nbQ = (item.questions || []).length;
-  const nbCh = (item.chapters || []).length;
-  const PILLS = {
-    concours: [item.filiere, item.ville, item.annee].filter(Boolean),
-    news: [item.etablissement, item.ville].filter(Boolean),
-    blog: [`⏱ ${estimateReadingTime(item.content)} min`, item.publishedAt ? formatDateFr(item.publishedAt) : null].filter(Boolean),
-    evaluation: [item.module, nbQ ? `${nbQ} questions` : null, nbCh ? `${nbCh} chapitres` : null].filter(Boolean),
-  };
-  const pillItems = PILLS[kind];
-  if (pillItems.length) {
-    y += unit * 0.045;
-    ctx.font = `600 ${Math.round(unit * 0.032)}px system-ui, sans-serif`;
-    let x = pad;
-    const pillH = unit * 0.052;
-    pillItems.slice(0, 3).forEach((txt) => {
-      const w = ctx.measureText(txt).width + unit * 0.045;
-      if (x + w > W - pad) return;
-      ctx.fillStyle = "rgba(255,255,255,0.16)";
-      roundedRect(ctx, x, y, w, pillH, pillH / 2);
-      ctx.fill();
-      ctx.fillStyle = "#fff";
-      ctx.fillText(txt, x + unit * 0.022, y + pillH * 0.66);
-      x += w + unit * 0.02;
-    });
-    y += pillH;
-  }
-
-  // Bloc additionnel, spécifique au type de contenu.
-  if (kind === "news") {
-    const openStr = item.date_publication ? formatDateFr(item.date_publication) : null;
-    const limitStr = item.date_limite ? formatDateFr(item.date_limite) : null;
-    ctx.font = `700 ${Math.round(unit * 0.038)}px system-ui, sans-serif`;
-    if (openStr) {
-      y += unit * 0.07;
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.fillText(`📅 Ouvert depuis le ${openStr}`, pad, y);
-    }
-    if (limitStr) {
-      y += unit * 0.055;
-      ctx.fillStyle = urgent ? "#ffe28a" : "#fff";
-      ctx.fillText(`⏰ Date limite : ${limitStr}`, pad, y);
-    }
-  } else if (kind === "blog" && item.excerpt) {
-    y += unit * 0.06;
-    ctx.font = `500 ${Math.round(unit * 0.034)}px system-ui, sans-serif`;
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    const excerptLines = wrapLines(ctx, item.excerpt, W - pad * 2).slice(0, isTall ? 6 : 3);
-    excerptLines.forEach((line) => {
-      y += unit * 0.048;
-      ctx.fillText(line, pad, y);
-    });
-  } else if (kind === "evaluation") {
-    y += unit * 0.07;
-    ctx.font = `700 ${Math.round(unit * 0.038)}px system-ui, sans-serif`;
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    ctx.fillText("✅ Corrigé + score instantané", pad, y);
-  } else if (kind === "concours") {
-    y += unit * 0.07;
-    ctx.font = `700 ${Math.round(unit * 0.038)}px system-ui, sans-serif`;
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    ctx.fillText(hasCorrige(item) ? "✅ Corrigé indicatif inclus" : "📄 Énoncé complet disponible", pad, y);
-  }
-
-  // Footer, toujours ancré en bas quelle que soit la hauteur du canvas
-  // (le format story a beaucoup d'espace vide au-dessus, volontairement).
-  const footerY = H - pad - unit * 0.01 - safeBottom;
-  ctx.font = `800 ${Math.round(unit * 0.042)}px system-ui, sans-serif`;
-  ctx.fillStyle = "#fff";
-  ctx.fillText("SaadConcours", pad, footerY - unit * 0.045);
-  ctx.font = `500 ${Math.round(unit * 0.028)}px system-ui, sans-serif`;
-  ctx.fillStyle = "rgba(255,255,255,0.82)";
-  ctx.fillText("saadconcours.space — gratuit, sans compte", pad, footerY);
-}
-
-/* --------------------------- Vérification SEO/format --------------------------- */
-
-function seoChecks(text, hashtagCount) {
-  const chars = text.trim().length;
-  const hasLink = text.includes(SITE_URL);
-  return [
-    {
-      ok: chars > 0 && chars <= 2200,
-      label: `${chars} caractères`,
-      hint:
-        chars > 2200
-          ? "Dépasse la limite d'un caption Instagram (2200 caractères) — le texte sera coupé."
-          : chars < 60
-          ? "Un peu court : ajoute un peu de contexte pour donner envie de cliquer."
-          : "Longueur adaptée à Instagram/Facebook.",
-    },
-    {
-      ok: hashtagCount >= 5 && hashtagCount <= MAX_HASHTAGS,
-      label: `${hashtagCount} hashtags`,
-      hint:
-        hashtagCount < 5
-          ? "Ajoute quelques hashtags pertinents pour gagner en portée."
-          : "Bon équilibre entre portée et pertinence.",
-    },
-    {
-      ok: hasLink,
-      label: "Lien inclus",
-      hint: hasLink ? "Le lien vers la page est bien présent dans le texte." : "Aucun lien détecté — vérifie le texte généré.",
-    },
-  ];
-}
-
-/* ------------------------------ Aperçu plateformes ------------------------------
- * Chaque appli tronque les captions différemment — on reproduit
- * approximativement ces seuils pour que l'aperçu ressemble à ce que verra
- * réellement un visiteur avant de cliquer sur "... voir plus".
- * ------------------------------------------------------------------------ */
-
-function truncateCaption(text, limit) {
-  const clean = text.trim();
-  if (clean.length <= limit) return { shown: clean, truncated: false };
-  let cut = clean.slice(0, limit);
-  const lastBreak = Math.max(cut.lastIndexOf("\n"), cut.lastIndexOf(" "));
-  if (lastBreak > limit * 0.6) cut = cut.slice(0, lastBreak);
-  return { shown: cut, truncated: true };
-}
-
-function FacebookPreview({ imgSrc, text }) {
-  const { shown, truncated } = truncateCaption(text, 477);
+function EmptyPrompt() {
   return (
-    <div className="pf-mock pf-mock-fb">
-      <div className="pf-mock-head">
-        <div className="pf-mock-avatar">S</div>
-        <div>
-          <div className="pf-mock-name">SaadConcours</div>
-          <div className="pf-mock-time">à l'instant · 🌐</div>
-        </div>
-      </div>
-      <div className="pf-mock-caption">
-        {shown}
-        {truncated && <span className="pf-mock-truncate"> … Voir plus</span>}
-      </div>
-      {imgSrc && <img className="pf-mock-image" src={imgSrc} alt="" />}
-      <div className="pf-mock-actions">
-        <span>👍 J'aime</span>
-        <span>💬 Commenter</span>
-        <span>↗ Partager</span>
-      </div>
-    </div>
-  );
-}
-
-function InstagramPreview({ imgSrc, text }) {
-  const { shown, truncated } = truncateCaption(text, 125);
-  return (
-    <div className="pf-mock pf-mock-ig">
-      <div className="pf-mock-head">
-        <div className="pf-mock-avatar">S</div>
-        <div>
-          <div className="pf-mock-name">saadconcours.space</div>
-        </div>
-        <div className="pf-mock-more">•••</div>
-      </div>
-      {imgSrc && <img className="pf-mock-image square" src={imgSrc} alt="" />}
-      <div className="pf-mock-icons">
-        <span>♡</span>
-        <span>💬</span>
-        <span>➤</span>
-        <span className="pf-mock-icons-save">🔖</span>
-      </div>
-      <div className="pf-mock-caption">
-        <strong>saadconcours.space</strong> {shown}
-        {truncated && <span className="pf-mock-truncate"> … plus</span>}
-      </div>
-    </div>
-  );
-}
-
-function WhatsAppPreview({ imgSrc, text }) {
-  const { shown, truncated } = truncateCaption(text, 320);
-  return (
-    <div className="pf-mock pf-mock-wa">
-      <div className="pf-mock-wa-bubble">
-        {imgSrc && <img className="pf-mock-image" src={imgSrc} alt="" />}
-        <div className="pf-mock-wa-caption">
-          {shown}
-          {truncated && <span className="pf-mock-truncate">…</span>}
-        </div>
-        <div className="pf-mock-wa-meta">14:32 ✓✓</div>
-      </div>
+    <div className="empty-state">
+      <div className="empty-state-icon">👈</div>
+      Choisis un concours, une actu, un article ou une évaluation dans la liste à gauche.
     </div>
   );
 }
@@ -741,12 +51,21 @@ export default function SocialGeneratorPanel() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(null);
   const [format, setFormat] = useState(FORMATS[0]);
+  const [variant, setVariant] = useState(0);
+  const [hashtags, setHashtags] = useState([]);
+  const [hashtagInput, setHashtagInput] = useState("");
+  const [textOverride, setTextOverride] = useState(null);
+  const [rightTab, setRightTab] = useState("texte");
   const [imgSrc, setImgSrc] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [publishResult, setPublishResult] = useState(null); // { ok, url, error }
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [history, setHistory] = useLocalStorage(HISTORY_KEY, []);
   const canvasRef = useRef(null);
   const confirm = useConfirm();
+  const toast = useToast();
 
   useEffect(() => {
     CONTENT_TYPES.forEach((t) => {
@@ -769,9 +88,12 @@ export default function SocialGeneratorPanel() {
     return src.filter((i) => meta.searchText(i).toLowerCase().includes(q)).slice(0, 25);
   }, [list, query, meta]);
 
-  const text = selected ? buildText(tab, selected) : "";
-  const hashtagCount = selected ? buildHashtags(tab, selected).length : 0;
-  const checks = selected ? seoChecks(text, hashtagCount) : [];
+  const generatedText = useMemo(
+    () => (selected ? buildText(tab, selected, { variant, hashtags: hashtags.join(" ") }) : ""),
+    [tab, selected, variant, hashtags]
+  );
+  const text = textOverride ?? generatedText;
+  const checks = selected ? seoChecks(text, hashtags.length) : [];
 
   useEffect(() => {
     if (!selected || !canvasRef.current) return;
@@ -786,6 +108,9 @@ export default function SocialGeneratorPanel() {
   function switchTab(key) {
     setTab(key);
     setSelected(null);
+    setHashtags([]);
+    setVariant(0);
+    setTextOverride(null);
     setQuery("");
     setCopied(false);
     setPublishResult(null);
@@ -793,8 +118,50 @@ export default function SocialGeneratorPanel() {
 
   function pick(item) {
     setSelected(item);
+    setVariant(0);
+    setHashtags(buildHashtags(tab, item));
+    setTextOverride(null);
     setCopied(false);
     setPublishResult(null);
+  }
+
+  function selectVariant(idx) {
+    setVariant(idx);
+    setTextOverride(null);
+  }
+
+  function addHashtag() {
+    const rawTag = hashtagInput.trim();
+    if (!rawTag) return;
+    let t = rawTag.startsWith("#") ? rawTag : "#" + rawTag;
+    t = t.replace(/\s+/g, "");
+    if (t.length > 1 && !hashtags.includes(t)) setHashtags((prev) => [...prev, t]);
+    setHashtagInput("");
+  }
+
+  function removeHashtag(t) {
+    setHashtags((prev) => prev.filter((h) => h !== t));
+  }
+
+  function badgeFor(item) {
+    const dup = lastPublished(history, tab, item.id);
+    return dup ? `Déjà publié le ${formatDateFr(dup.createdAt?.slice(0, 10))}` : null;
+  }
+
+  function pushHistory(status, extra) {
+    if (!selected) return;
+    setHistory((prev) =>
+      addHistoryEntry(prev, {
+        kind: tab,
+        itemId: selected.id,
+        itemLabel: meta.listTitle(selected),
+        formatKey: format.key,
+        formatLabel: format.label,
+        variant,
+        status,
+        ...extra,
+      })
+    );
   }
 
   async function copyText() {
@@ -802,29 +169,86 @@ export default function SocialGeneratorPanel() {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      pushHistory("copie");
     } catch {
       // API clipboard indisponible (non-HTTPS/local) — le textarea reste
       // sélectionnable/copiable à la main en secours.
     }
   }
 
-  function downloadImage() {
-    if (!canvasRef.current) return;
+  function triggerDownload() {
+    if (!canvasRef.current || !selected) return;
     const link = document.createElement("a");
-    link.download = `saadconcours-${tab}-${format.key}-${selected?.id || "post"}.png`;
+    link.download = `saadconcours-${tab}-${format.key}-${selected.id}.png`;
     link.href = canvasRef.current.toDataURL("image/png");
     link.click();
+  }
+
+  function downloadImage() {
+    triggerDownload();
+    pushHistory("telecharge");
+  }
+
+  // Ouvre la feuille de partage native (mobile ou desktop récent) avec
+  // l'image + le texte déjà attachés — WhatsApp y apparaît comme cible
+  // dès que l'app/l'extension est installée, il ne reste qu'à choisir le
+  // contact. Se rabat automatiquement sur le mode "copier + télécharger +
+  // ouvrir WhatsApp Web" quand le navigateur ne supporte pas le partage de
+  // fichiers (voir lib/share.js pour le pourquoi il n'existe pas de mieux).
+  async function handleShare() {
+    if (!canvasRef.current || !selected || sharing) return;
+    setSharing(true);
+    try {
+      const filename = `saadconcours-${tab}-${format.key}-${selected.id}.png`;
+      const result = await shareNative({ canvas: canvasRef.current, text, filename });
+      if (result === "shared") {
+        pushHistory("partage");
+        toast.success("Partagé.");
+      } else if (result === "unsupported") {
+        await handleWhatsappFallback();
+      }
+    } finally {
+      setSharing(false);
+    }
+  }
+
+  async function handleWhatsappFallback() {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // pas grave — le texte reste visible/copiable depuis l'onglet Texte
+    }
+    triggerDownload();
+    pushHistory("partage");
+    window.open(whatsappWebUrl(text), "_blank", "noopener,noreferrer");
+    toast.info("Texte copié et image téléchargée — ajoute l'image en pièce jointe dans WhatsApp.");
+  }
+
+  async function handleInstagram() {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // idem
+    }
+    triggerDownload();
+    pushHistory("telecharge");
+    window.open(instagramUrl(), "_blank", "noopener,noreferrer");
+    toast.info("Texte copié et image téléchargée — colle-les dans un nouveau post Instagram.");
   }
 
   // Publie directement sur la Page Facebook (API Graph côté serveur — voir
   // app/api/admin/publish-facebook/route.js). Action publique et
   // irréversible une fois envoyée, donc confirmation explicite avant l'appel
-  // réseau plutôt qu'un simple clic.
+  // réseau plutôt qu'un simple clic — et un avertissement en plus si ce
+  // même contenu a déjà été publié une fois (voir lib/history.js).
   async function publishToFacebook() {
-    if (!imgSrc || !text || publishing) return;
+    if (!imgSrc || !text || publishing || !selected) return;
+    const dup = lastPublished(history, tab, selected.id);
     const ok = await confirm({
       title: "Publier sur Facebook ?",
-      body: "Ce post sera immédiatement visible sur la Page Facebook de SaadConcours.",
+      body: dup
+        ? `⚠️ Ce contenu a déjà été publié le ${formatDateFr(dup.createdAt?.slice(0, 10))}. Publier quand même ? Le post sera immédiatement visible sur la Page Facebook de SaadConcours.`
+        : "Ce post sera immédiatement visible sur la Page Facebook de SaadConcours.",
       confirmLabel: "Publier",
     });
     if (!ok) return;
@@ -841,6 +265,7 @@ export default function SocialGeneratorPanel() {
         setPublishResult({ ok: false, error: data.error || "Échec de la publication." });
       } else {
         setPublishResult({ ok: true, url: data.url });
+        pushHistory("publie", { url: data.url || null });
       }
     } catch {
       setPublishResult({ ok: false, error: "Impossible de joindre le serveur." });
@@ -849,150 +274,258 @@ export default function SocialGeneratorPanel() {
     }
   }
 
+  function confirmSchedule(iso) {
+    pushHistory("programme", { scheduledFor: iso });
+    setScheduleOpen(false);
+    toast.success("Programmé — retrouve-le dans l'onglet Historique.");
+  }
+
+  function reopenFromHistory(entry) {
+    const items = raw[entry.kind];
+    const item = (items || []).find((i) => i.id === entry.itemId);
+    if (!item) {
+      toast.error("Ce contenu n'existe plus (supprimé depuis).");
+      return;
+    }
+    setTab(entry.kind);
+    setQuery("");
+    setSelected(item);
+    setVariant(entry.variant ?? 0);
+    setHashtags(buildHashtags(entry.kind, item));
+    setTextOverride(null);
+    const fmt = FORMATS.find((f) => f.key === entry.formatKey) || FORMATS[0];
+    setFormat(fmt);
+    setCopied(false);
+    setPublishResult(null);
+    setRightTab("texte");
+  }
+
   return (
-    <div>
-      <div className="admin-card">
-        <h2 className="admin-section-title">📣 Générateur de post</h2>
-        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-          Choisis un concours, une actu "concours ouvert", un article de blog ou une évaluation : récupère un texte
-          prêt à coller (avec hashtags ciblés SEO) et une image générée automatiquement — pour Instagram, Facebook ou
-          le canal WhatsApp.
-        </p>
-
-        <div className="admin-view-toggle social-gen-tabs" style={{ marginBottom: 14 }}>
-          {CONTENT_TYPES.map((t) => (
-            <button
-              type="button"
-              key={t.key}
-              className={"admin-view-toggle-btn" + (tab === t.key ? " active" : "")}
-              style={tab === t.key ? { background: THEMES[t.key].grad[1] } : undefined}
-              onClick={() => switchTab(t.key)}
-            >
-              {t.tabIcon} {t.tabLabel}
-            </button>
-          ))}
-        </div>
-
-        <input
-          className="admin-search-input"
-          style={{ width: "100%", marginBottom: 10 }}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher..."
+    <div className="social-gen-layout">
+      <div className="social-gen-sidebar">
+        <PostPicker
+          tab={tab}
+          onSwitchTab={switchTab}
+          query={query}
+          onQueryChange={setQuery}
+          filtered={filtered}
+          meta={meta}
+          selectedId={selected?.id}
+          onPick={pick}
+          badgeFor={badgeFor}
         />
+      </div>
 
-        <div className="picker-list">
-          {filtered === null && <div className="empty-state">Chargement...</div>}
-          {filtered !== null &&
-            filtered.map((item) => (
-              <label className="picker-row" key={item.id} onClick={() => pick(item)}>
-                <span className="picker-row-main">
-                  <span className="picker-row-title">{meta.listTitle(item)}</span>
-                  <span className="picker-row-meta">{meta.listMeta(item)}</span>
-                </span>
-                {meta.listRight(item) && <span className="picker-row-date">{meta.listRight(item)}</span>}
-              </label>
+      <div className="social-gen-main">
+        <div className="admin-card">
+          <div className="admin-view-toggle social-gen-tabs">
+            {RIGHT_TABS.map((t) => (
+              <button
+                type="button"
+                key={t.key}
+                className={"admin-view-toggle-btn" + (rightTab === t.key ? " active" : "")}
+                onClick={() => setRightTab(t.key)}
+              >
+                {t.icon} {t.label}
+                {t.key === "historique" && history.length > 0 ? ` (${history.length})` : ""}
+              </button>
             ))}
-          {filtered !== null && !filtered.length && <div className="empty-state">Aucun résultat.</div>}
+          </div>
+
+          {/* Les 4 panneaux restent montés en permanence (juste masqués en CSS)
+              plutôt que démontés par onglet — le <canvas> a besoin d'exister
+              dans le DOM dès qu'un contenu est sélectionné pour que l'effet
+              de dessin (qui ne dépend que de selected/tab/format, pas de
+              rightTab) puisse toujours l'atteindre, même si l'onglet actif
+              au moment de la sélection n'est pas "Image". */}
+          <div style={{ display: rightTab === "texte" ? "" : "none" }}>
+            {selected ? (
+              <div className="social-gen-pane">
+                <div className="social-variant-row">
+                  {VARIANTS.map((v, i) => (
+                    <button
+                      type="button"
+                      key={v.key}
+                      className={"social-variant-btn" + (variant === i ? " active" : "")}
+                      onClick={() => selectVariant(i)}
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  className="social-gen-textarea"
+                  style={{ minHeight: 240, fontFamily: "monospace", fontSize: ".85rem" }}
+                  value={text}
+                  onChange={(e) => setTextOverride(e.target.value)}
+                />
+
+                <div className="social-hashtag-editor">
+                  {hashtags.map((h) => (
+                    <span className="social-hashtag-chip" key={h}>
+                      {h}
+                      <button type="button" onClick={() => removeHashtag(h)} aria-label={`Retirer ${h}`}>
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    className="social-hashtag-input"
+                    placeholder="+ ajouter un tag"
+                    value={hashtagInput}
+                    onChange={(e) => setHashtagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        addHashtag();
+                      }
+                    }}
+                    onBlur={addHashtag}
+                  />
+                </div>
+
+                <div className="seo-checks">
+                  {checks.map((c) => (
+                    <span key={c.label} className={"seo-check-chip" + (c.ok ? " ok" : " warn")} title={c.hint}>
+                      {c.ok ? "✅" : "⚠️"} {c.label}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="admin-row-actions" style={{ marginTop: 10 }}>
+                  <button type="button" className="admin-btn" onClick={copyText}>
+                    {copied ? "✓ Copié" : "Copier le texte"}
+                  </button>
+                  {textOverride !== null && (
+                    <button type="button" className="admin-btn secondary" onClick={() => setTextOverride(null)}>
+                      ↺ Réinitialiser
+                    </button>
+                  )}
+                  <button type="button" className="admin-btn secondary" onClick={() => setScheduleOpen(true)}>
+                    🕒 Programmer
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <EmptyPrompt />
+            )}
+          </div>
+
+          <div style={{ display: rightTab === "image" ? "" : "none" }}>
+            {selected ? (
+              <div className="social-gen-pane">
+                <h3 className="social-pane-subtitle">
+                  Image ({format.width}×{format.height})
+                </h3>
+                <div className="format-picker">
+                  {FORMATS.map((f) => (
+                    <button
+                      type="button"
+                      key={f.key}
+                      className={"format-picker-btn" + (f.key === format.key ? " active" : "")}
+                      onClick={() => setFormat(f)}
+                    >
+                      <strong>{f.label}</strong>
+                      <span>{f.sub}</span>
+                    </button>
+                  ))}
+                </div>
+                <canvas
+                  ref={canvasRef}
+                  width={format.width}
+                  height={format.height}
+                  className="social-gen-canvas"
+                  style={{ aspectRatio: `${format.width} / ${format.height}` }}
+                />
+                <div className="admin-row-actions" style={{ marginTop: 10 }}>
+                  <button type="button" className="admin-btn" onClick={downloadImage}>
+                    ⬇ Télécharger l'image
+                  </button>
+                  <button type="button" className="admin-btn share-btn" onClick={handleShare} disabled={sharing}>
+                    {sharing ? "Partage..." : "📤 Partager"}
+                  </button>
+                  <button type="button" className="admin-btn wa-btn" onClick={handleWhatsappFallback}>
+                    🟢 WhatsApp
+                  </button>
+                  <button type="button" className="admin-btn ig-btn" onClick={handleInstagram}>
+                    📸 Instagram
+                  </button>
+                  <button type="button" className="admin-btn fb-publish-btn" onClick={publishToFacebook} disabled={publishing}>
+                    {publishing ? "Publication..." : "📘 Publier sur Facebook"}
+                  </button>
+                </div>
+                <p className="admin-image-hint" style={{ marginTop: 8 }}>
+                  « Partager » ouvre le sélecteur natif (WhatsApp, Messages...) avec l'image et le texte déjà attachés
+                  quand le navigateur le permet. Sinon, texte copié + image téléchargée automatiquement : il ne reste
+                  qu'à joindre l'image dans la conversation.
+                </p>
+                {publishResult && (
+                  <p className={"fb-publish-result" + (publishResult.ok ? " ok" : " error")}>
+                    {publishResult.ok ? (
+                      <>
+                        ✅ Publié sur la Page Facebook.{" "}
+                        {publishResult.url && (
+                          <a href={publishResult.url} target="_blank" rel="noopener noreferrer">
+                            Voir le post ↗
+                          </a>
+                        )}
+                      </>
+                    ) : (
+                      <>⚠️ {publishResult.error}</>
+                    )}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <EmptyPrompt />
+            )}
+          </div>
+
+          <div style={{ display: rightTab === "apercu" ? "" : "none" }}>
+            {selected ? (
+              <div className="social-gen-pane">
+                <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+                  Rendu approximatif (troncature de la légende incluse) — la mise en page réelle varie légèrement selon
+                  l'app et l'appareil.
+                </p>
+                <div className="social-preview-grid">
+                  <div className="social-preview-col">
+                    <div className="social-preview-label">Facebook</div>
+                    <FacebookPreview imgSrc={imgSrc} text={text} />
+                  </div>
+                  <div className="social-preview-col">
+                    <div className="social-preview-label">Instagram</div>
+                    <InstagramPreview imgSrc={imgSrc} text={text} />
+                  </div>
+                  <div className="social-preview-col">
+                    <div className="social-preview-label">WhatsApp</div>
+                    <WhatsAppPreview imgSrc={imgSrc} text={text} />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <EmptyPrompt />
+            )}
+          </div>
+
+          <div style={{ display: rightTab === "historique" ? "" : "none" }}>
+            <HistoryPanel
+              history={history}
+              onReopen={reopenFromHistory}
+              onRemove={(id) => setHistory((prev) => removeHistoryEntry(prev, id))}
+              onCancelSchedule={(id) => setHistory((prev) => removeHistoryEntry(prev, id))}
+            />
+          </div>
         </div>
       </div>
 
-      {selected && (
-        <>
-          <div className="social-gen-result">
-            <div className="admin-card">
-              <h2 className="admin-section-title">Texte (avec tags SEO)</h2>
-              <textarea readOnly style={{ minHeight: 240, fontFamily: "monospace", fontSize: ".85rem" }} value={text} />
-
-              <div className="seo-checks">
-                {checks.map((c) => (
-                  <span key={c.label} className={"seo-check-chip" + (c.ok ? " ok" : " warn")} title={c.hint}>
-                    {c.ok ? "✅" : "⚠️"} {c.label}
-                  </span>
-                ))}
-              </div>
-
-              <div className="admin-row-actions" style={{ marginTop: 10 }}>
-                <button type="button" className="admin-btn" onClick={copyText}>
-                  {copied ? "✓ Copié" : "Copier le texte"}
-                </button>
-              </div>
-            </div>
-
-            <div className="admin-card">
-              <h2 className="admin-section-title">
-                Image ({format.width}×{format.height})
-              </h2>
-              <div className="format-picker">
-                {FORMATS.map((f) => (
-                  <button
-                    type="button"
-                    key={f.key}
-                    className={"format-picker-btn" + (f.key === format.key ? " active" : "")}
-                    onClick={() => setFormat(f)}
-                  >
-                    <strong>{f.label}</strong>
-                    <span>{f.sub}</span>
-                  </button>
-                ))}
-              </div>
-              <canvas
-                ref={canvasRef}
-                width={format.width}
-                height={format.height}
-                className="social-gen-canvas"
-                style={{ aspectRatio: `${format.width} / ${format.height}` }}
-              />
-              <div className="admin-row-actions" style={{ marginTop: 10 }}>
-                <button type="button" className="admin-btn" onClick={downloadImage}>
-                  ⬇ Télécharger l'image
-                </button>
-                <button type="button" className="admin-btn fb-publish-btn" onClick={publishToFacebook} disabled={publishing}>
-                  {publishing ? "Publication..." : "📘 Publier sur Facebook"}
-                </button>
-              </div>
-              {publishResult && (
-                <p className={"fb-publish-result" + (publishResult.ok ? " ok" : " error")}>
-                  {publishResult.ok ? (
-                    <>
-                      ✅ Publié sur la Page Facebook.{" "}
-                      {publishResult.url && (
-                        <a href={publishResult.url} target="_blank" rel="noopener noreferrer">
-                          Voir le post ↗
-                        </a>
-                      )}
-                    </>
-                  ) : (
-                    <>⚠️ {publishResult.error}</>
-                  )}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="admin-card" style={{ marginTop: 18 }}>
-            <h2 className="admin-section-title">Aperçu sur les réseaux</h2>
-            <p className="admin-image-hint" style={{ marginBottom: 16 }}>
-              Rendu approximatif (troncature de la légende incluse) — la mise en page réelle varie légèrement selon
-              l'app et l'appareil.
-            </p>
-            <div className="social-preview-grid">
-              <div className="social-preview-col">
-                <div className="social-preview-label">Facebook</div>
-                <FacebookPreview imgSrc={imgSrc} text={text} />
-              </div>
-              <div className="social-preview-col">
-                <div className="social-preview-label">Instagram</div>
-                <InstagramPreview imgSrc={imgSrc} text={text} />
-              </div>
-              <div className="social-preview-col">
-                <div className="social-preview-label">WhatsApp</div>
-                <WhatsAppPreview imgSrc={imgSrc} text={text} />
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      <ScheduleModal
+        open={scheduleOpen}
+        onClose={() => setScheduleOpen(false)}
+        onConfirm={confirmSchedule}
+        itemLabel={selected ? meta.listTitle(selected) : ""}
+      />
     </div>
   );
 }

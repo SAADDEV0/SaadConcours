@@ -172,6 +172,8 @@
 .picker-row-title{font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .picker-row-meta{font-size:.74rem; color:var(--text-faint); margin-top:1px;}
 .picker-row-date{font-size:.76rem; font-weight:700; color:var(--red); white-space:nowrap; flex-shrink:0;}
+.picker-row.active{border-color:var(--accent); background:var(--accent-dim);}
+.picker-row-badge{margin-left:5px; font-size:.76rem; cursor:help;}
 
 .digest-preview{border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-top:14px;}
 .digest-preview-bar{padding:9px 14px; background:var(--bg-card); border-bottom:1px solid var(--border); font-size:.8rem; color:var(--text-dim);}
@@ -829,13 +831,79 @@
 .taxonomy-cat-total{font-size:.78rem; color:var(--text-dim);}
 .taxonomy-cat .taxonomy-row{padding:8px 4px;}
 
-/* Social post generator */
+/* Social post generator — deux colonnes : sélection (sticky) à gauche,
+   résultat en onglets internes à droite. */
+.social-gen-layout{display:grid; grid-template-columns:minmax(280px,360px) 1fr; gap:18px; align-items:start;}
+.social-gen-sidebar{position:sticky; top:18px;}
+.social-gen-main{min-width:0;}
 .social-gen-tabs{flex-wrap:wrap; height:auto;}
 .social-gen-tabs .admin-view-toggle-btn.active{color:#fff;}
-.social-gen-result{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px;}
+.social-gen-pane{margin-top:16px;}
+.social-pane-subtitle{font-size:.95rem; font-weight:700; color:var(--text); margin:0 0 12px;}
 .social-gen-canvas{width:100%; height:auto; max-height:620px; object-fit:contain; border-radius:14px; border:1px solid var(--border); display:block; background:var(--bg-card);}
+
+/* Sélecteur de ton (variantes de texte) */
+.social-variant-row{display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+.social-variant-btn{
+  padding:6px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card);
+  color:var(--text-dim); font-size:.78rem; font-weight:600; cursor:pointer; transition:all .12s ease;
+}
+.social-variant-btn:hover{border-color:var(--accent); color:var(--text);}
+.social-variant-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+.social-gen-textarea{
+  width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid var(--border);
+  background:var(--bg); color:var(--text); line-height:1.55; resize:vertical; outline:none;
+  transition:border-color .12s ease, box-shadow .12s ease;
+}
+.social-gen-textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim);}
+
+/* Hashtags éditables : puces avec retrait + champ d'ajout inline */
+.social-hashtag-editor{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; align-items:center;}
+.social-hashtag-chip{
+  display:inline-flex; align-items:center; gap:2px; padding:4px 6px 4px 11px; border-radius:999px;
+  background:var(--accent-dim); color:var(--accent); font-size:.76rem; font-weight:700;
+}
+.social-hashtag-chip button{
+  border:none; background:transparent; color:inherit; cursor:pointer; font-size:1rem; line-height:1;
+  padding:2px 6px; opacity:.65;
+}
+.social-hashtag-chip button:hover{opacity:1;}
+.social-hashtag-input{
+  border:1.5px dashed var(--border); background:transparent; border-radius:999px; padding:5px 13px;
+  font-size:.76rem; color:var(--text-dim); min-width:130px; outline:none;
+}
+.social-hashtag-input:focus{border-color:var(--accent); border-style:solid; color:var(--text);}
+
+/* Partage natif / raccourcis plateforme, sur fond image */
+.share-btn{background:var(--accent) !important; color:#fff !important;}
+.share-btn:hover{filter:brightness(1.12);}
+.wa-btn{background:#25d366 !important; color:#fff !important;}
+.wa-btn:hover{filter:brightness(1.08);}
+.ig-btn{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4) !important; color:#fff !important;}
+.ig-btn:hover{filter:brightness(1.1);}
+
+/* Historique local (généré/copié/téléchargé/partagé/publié + rappels programmés) */
+.social-history{display:flex; flex-direction:column; gap:22px;}
+.social-history-heading{font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); margin:0 0 8px;}
+.social-history-list{display:flex; flex-direction:column; gap:6px;}
+.social-history-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--bg-card);
+}
+.social-history-row.scheduled{
+  border-color:color-mix(in srgb, var(--amber) 45%, var(--border));
+  background:color-mix(in srgb, var(--amber) 8%, var(--bg-card));
+}
+.social-history-row-main{flex:1; min-width:0; cursor:pointer; display:flex; flex-direction:column; gap:2px;}
+.social-history-row-title{font-weight:600; font-size:.86rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.social-history-row-meta{font-size:.74rem; color:var(--text-faint);}
+.social-history-row-meta a{color:var(--accent); font-weight:700;}
+.social-history-row-actions{display:flex; gap:4px; flex-shrink:0;}
+
 @media (max-width: 900px){
-  .social-gen-result{grid-template-columns:1fr;}
+  .social-gen-layout{grid-template-columns:1fr;}
+  .social-gen-sidebar{position:static;}
   .pipeline-board{
     grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:82%;
     overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 14px;
