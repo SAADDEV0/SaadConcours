@@ -37,9 +37,17 @@ export async function middleware(req) {
   try {
     const { pathname } = req.nextUrl;
     const expected = process.env.ADMIN_PASSWORD;
+    const expectedHash = expected ? await sha256Hex(expected) : null;
     const cookie = req.cookies.get("sc_admin")?.value;
+    // The mobile admin app has no place for an httpOnly cookie, so it
+    // authenticates with the same hash as a Bearer token instead (see
+    // app/api/admin/login/route.js, which returns it alongside the cookie).
+    const authHeader = req.headers.get("authorization") || "";
+    const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
     const authorized =
-      Boolean(expected) && Boolean(cookie) && constantTimeEqual(cookie, await sha256Hex(expected));
+      Boolean(expectedHash) &&
+      ((Boolean(cookie) && constantTimeEqual(cookie, expectedHash)) ||
+        (Boolean(bearerToken) && constantTimeEqual(bearerToken, expectedHash)));
 
     if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
       if (!authorized) {

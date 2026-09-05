@@ -34,8 +34,13 @@ export async function POST(req) {
 
   await clearLoginAttempts(ip);
 
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set("sc_admin", await sha256Hex(expected), {
+  // Same hash used for the cookie, also returned in the body: the web panel
+  // relies on the httpOnly cookie, but the mobile admin app has no cookie
+  // jar to rely on, so it stores this and sends it back as a Bearer token
+  // (see middleware.js).
+  const token = await sha256Hex(expected);
+  const res = NextResponse.json({ ok: true, token });
+  res.cookies.set("sc_admin", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
