@@ -411,12 +411,34 @@
 .admin-search-result.active{background:var(--accent-dim);}
 
 /* Topbar: notification bell */
+.admin-bell-menu{position:relative;}
 .admin-bell{position:relative;}
 .admin-bell-dot{
   position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; padding:0 3px; border-radius:999px;
   background:var(--red); color:#fff; font-size:.6rem; font-weight:800; display:flex; align-items:center; justify-content:center;
   border:2px solid var(--bg-elev);
 }
+.admin-bell-dropdown{
+  position:absolute; top:calc(100% + 10px); right:0; z-index:var(--z-dropdown); width:280px; max-width:80vw;
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:6px;
+  display:flex; flex-direction:column; gap:2px;
+}
+.admin-bell-dropdown-title{font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); padding:8px 10px 4px;}
+.admin-bell-item{
+  display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; border-radius:8px; border:none;
+  background:none; color:var(--text); font-family:var(--font); text-align:left; cursor:pointer;
+}
+.admin-bell-item:hover{background:var(--bg-card);}
+.admin-bell-item-text{display:flex; flex-direction:column; min-width:0;}
+.admin-bell-item-title{font-size:.83rem; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.admin-bell-item-sub{font-size:.72rem; color:var(--text-faint); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.admin-bell-item-due{font-size:.68rem; font-weight:700; color:var(--red); flex-shrink:0; white-space:nowrap;}
+.admin-bell-dropdown-footer{
+  border:none; background:none; color:var(--accent); font-family:var(--font); font-size:.8rem; font-weight:600;
+  text-align:center; padding:8px 10px; border-radius:8px; cursor:pointer;
+}
+.admin-bell-dropdown-footer:hover{background:var(--bg-card);}
+.admin-bell-empty{padding:10px; font-size:.8rem; color:var(--text-faint); text-align:center;}
 
 /* Topbar: avatar dropdown */
 .admin-avatar-menu{position:relative;}
