@@ -42,21 +42,21 @@
   "adsConcoursMidSlot": "",
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
-  "pdfMarginMm": 22,
+  "pdfMarginMm": 27,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
   "pdfBorderWidth": 0.5,
   "pdfBorderInset": 6,
   "pdfCoverBackgroundColor": "",
-  "pdfCoverAccentBar": false,
+  "pdfCoverAccentBar": true,
   "pdfCoverShowDescription": true,
   "pdfCoverShowDate": false,
   "pdfCoverTagline": "SaadConcours",
   "pdfHeadings": {},
   "pdfLayout": {
     "logo": {
-      "xPct": 20.48,
-      "yPct": 6.15
+      "xPct": 13.3,
+      "yPct": 4.32
     },
     "pageNumber": {
       "xPct": 89.52,
