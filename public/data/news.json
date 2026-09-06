@@ -1313,8 +1313,8 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
-    "cloture": false,
+    "date_limite": "2026-08-31",
+    "cloture": true,
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
