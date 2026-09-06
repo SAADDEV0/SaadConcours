@@ -1,5 +1,65 @@
 [
   {
+    "id": "1d2277f7608e2969",
+    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
+    "date_publication": "2026-09-06"
+  },
+  {
+    "id": "3c4a6079e73dc5e5",
+    "titre": "Résultats Présélection Master FST Béni Mellal 2026-2027",
+    "etablissement": "FST",
+    "ville": "Béni Mellal",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fstbm.ac.ma/web/content/1495523/MST_NB_examen_2026.pdf",
+    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-FST-Beni-Mellal-2026-2027.html",
+    "date_publication": "2026-09-06"
+  },
+  {
+    "id": "f09a739d4026a68f",
+    "titre": "Résultats Présélection Master FS Ain Chock Casablanca 2026-2027",
+    "etablissement": null,
+    "ville": "Casablanca",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsac.univh2c.ma/Docs/attachments/1229/Liste%20des%20candidats-De%CC%81po%CC%82t-Dossier-master-CSNM-%202026-2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/05/Resultats-Preselection-Master-FS-Ain-Chock-Casablanca-2026-2027.html",
+    "date_publication": "2026-09-06"
+  },
+  {
+    "id": "5c3f51b371527f25",
+    "titre": "Master Université Moulay Ismail Meknès 2026-2027",
+    "etablissement": null,
+    "ville": "Meknès",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2023/07/master-universite-moulay-ismail-meknes.html",
+    "date_publication": "2026-09-06"
+  },
+  {
+    "id": "919c6fe4b79b8e82",
+    "titre": "Master Université Chouaib Doukkali El Jadida 2026-2027",
+    "etablissement": null,
+    "ville": "El Jadida",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2023/07/master-universite-chouaib-doukkali-el.html",
+    "date_publication": "2026-09-06"
+  },
+  {
     "id": "54e509ee3b4297b7",
     "titre": "Master Université Ibn Tofail Kénitra 2026-2027",
     "etablissement": null,
@@ -60,30 +120,6 @@
     "date_publication": "2026-09-05"
   },
   {
-    "id": "1d2277f7608e2969",
-    "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
-    "date_publication": "2026-09-05"
-  },
-  {
-    "id": "3c4a6079e73dc5e5",
-    "titre": "Résultats Présélection Master FST Béni Mellal 2026-2027",
-    "etablissement": "FST",
-    "ville": "Béni Mellal",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fstbm.ac.ma/web/content/1495523/MST_NB_examen_2026.pdf",
-    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-FST-Beni-Mellal-2026-2027.html",
-    "date_publication": "2026-09-05"
-  },
-  {
     "id": "fd5625e8a608c8ec",
     "titre": "Master Université Sultan Moulay Slimane Béni Mellal 2026-2027",
     "etablissement": null,
@@ -94,18 +130,6 @@
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2023/07/master-universite-sultan-moulay-slimane.html",
     "date_publication": "2026-09-05"
-  },
-  {
-    "id": "f09a739d4026a68f",
-    "titre": "Résultats Présélection Master FS Ain Chock Casablanca 2026-2027",
-    "etablissement": null,
-    "ville": "Casablanca",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fsac.univh2c.ma/Docs/attachments/1229/Liste%20des%20candidats-De%CC%81po%CC%82t-Dossier-master-CSNM-%202026-2027.pdf",
-    "source": "https://www.almaster-maroc.com/2026/05/Resultats-Preselection-Master-FS-Ain-Chock-Casablanca-2026-2027.html",
-    "date_publication": "2026-09-04"
   },
   {
     "id": "e4226a41b86fe947",
@@ -401,7 +425,7 @@
     "etablissement": null,
     "ville": "Béni Mellal",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-23",
     "cloture": false,
     "lien_inscription": "https://esefbm.usms.ac.ma/e-candidature-master/",
     "source": "https://www.almaster-maroc.com/2026/09/master-esef-beni-mellal-2026-2027.html",
@@ -521,7 +545,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-11",
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
@@ -960,18 +984,6 @@
     "date_publication": "2026-08-10"
   },
   {
-    "id": "5c3f51b371527f25",
-    "titre": "Master Université Moulay Ismail Meknès 2026-2027",
-    "etablissement": null,
-    "ville": "Meknès",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2023/07/master-universite-moulay-ismail-meknes.html",
-    "date_publication": "2026-08-10"
-  },
-  {
     "id": "44edff76fc9d7cf9",
     "titre": "Master Université Mohammed-V Rabat 2026-2027",
     "etablissement": null,
@@ -981,18 +993,6 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2024/08/Master-Universite-Mohammed-V-Rabat.html",
-    "date_publication": "2026-08-10"
-  },
-  {
-    "id": "919c6fe4b79b8e82",
-    "titre": "Master Université Chouaib Doukkali El Jadida 2026-2027",
-    "etablissement": null,
-    "ville": "El Jadida",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2023/07/master-universite-chouaib-doukkali-el.html",
     "date_publication": "2026-08-10"
   },
   {
@@ -1049,8 +1049,8 @@
     "etablissement": "ENSAM",
     "ville": "Meknès",
     "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": false,
+    "date_limite": "2026-09-03",
+    "cloture": true,
     "lien_inscription": "https://candidature.umi.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-ensam-meknes-2026-2027.html",
     "date_publication": "2026-08-09"
@@ -1205,8 +1205,8 @@
     "etablissement": "FSJES",
     "ville": "Meknès",
     "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": false,
+    "date_limite": "2026-09-03",
+    "cloture": true,
     "lien_inscription": "https://candidature.umi.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-meknes-2026-2027.html",
     "date_publication": "2026-08-05"
@@ -1241,8 +1241,8 @@
     "etablissement": "ENS",
     "ville": "Meknès",
     "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": false,
+    "date_limite": "2026-09-03",
+    "cloture": true,
     "lien_inscription": "https://candidature.umi.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ens-meknes-2026-2027.html",
     "date_publication": "2026-08-05"
