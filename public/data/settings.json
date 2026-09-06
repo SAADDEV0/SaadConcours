@@ -29,9 +29,9 @@
   "pdfCoverPageEnabled": true,
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
-  "pdfWatermarkOpacity": 0.05,
-  "pdfWatermarkStyle": "brand",
-  "pdfWatermarkRotation": 45,
+  "pdfWatermarkOpacity": 0.02,
+  "pdfWatermarkStyle": "tiled",
+  "pdfWatermarkRotation": -55,
   "pdfFooterText": "",
   "pdfShowSocialFooter": true,
   "adsEnabled": true,
@@ -62,8 +62,16 @@
   },
   "pdfLayout": {
     "logo": {
-      "xPct": 13.452380952380953,
-      "yPct": 4.07723063973064
+      "xPct": 13.89,
+      "yPct": 4.08
+    },
+    "footer": {
+      "xPct": 50,
+      "yPct": 95.71
+    },
+    "pageNumber": {
+      "xPct": 89.52,
+      "yPct": 94.44
     }
   }
 }
