@@ -36,6 +36,17 @@
 .pdfx-bar-spacer{flex:1 1 auto; min-width:0;}
 .pdfx-bar-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
 
+/* Undo / redo pair — grouped as one segmented control so they read as a
+   single history widget rather than two loose icons among the actions. */
+.pdfx-history{display:flex; gap:2px; padding:3px; border-radius:10px; background:var(--bg-card); border:1px solid var(--border);}
+.pdfx-history .pdfx-icon-btn{width:32px; height:30px; border:none; background:none; font-size:1rem;}
+.pdfx-history .pdfx-icon-btn:not(:disabled):hover{background:var(--bg-elev); color:var(--accent);}
+.pdfx-icon-btn:disabled{opacity:.32; cursor:not-allowed;}
+@media (max-width:640px){
+  .pdfx-history{order:-1;}
+  .pdfx-history .pdfx-icon-btn{width:44px; height:38px;}
+}
+
 .pdfx-pill{
   display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:999px;
   font-size:.72rem; font-weight:700; border:1px solid var(--border); background:var(--bg-card); color:var(--text-dim);
