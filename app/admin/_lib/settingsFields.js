@@ -18,3 +18,39 @@ export const NEWS_ETABLISSEMENTS = [
 ];
 
 export const MAX_LOGO_BYTES = 400 * 1024;
+
+export const PDF_FONT_OPTIONS = [
+  { value: "helvetica", label: "Helvetica (par défaut)" },
+  { value: "times", label: "Times" },
+  { value: "courier", label: "Courier (machine à écrire)" },
+];
+
+export const PDF_WATERMARK_STYLE_OPTIONS = [
+  { value: "brand", label: "Logo + texte, centré" },
+  { value: "diagonal", label: "Texte en diagonale, centré" },
+  { value: "tiled", label: "Texte répété en quadrillage" },
+];
+
+export const PDF_FONT_SIZE_OPTIONS = [
+  { value: "small", label: "Petite" },
+  { value: "normal", label: "Normale" },
+  { value: "large", label: "Grande" },
+];
+
+export const PDF_LINE_SPACING_OPTIONS = [
+  { value: "compact", label: "Compact" },
+  { value: "normal", label: "Normal" },
+  { value: "relaxed", label: "Aéré" },
+];
+
+export const PDF_HEADING_SIZE_OPTIONS = [
+  { value: "small", label: "Petite" },
+  { value: "normal", label: "Normale" },
+  { value: "large", label: "Grande" },
+];
+
+export const PDF_HEADING_LEVEL_LABELS = [
+  { key: "h1", label: "Titre H1" },
+  { key: "h2", label: "Titre H2" },
+  { key: "h3", label: "Titre H3" },
+];

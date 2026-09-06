@@ -6,7 +6,7 @@
 // that knows how to lay this out instead of two copies drifting apart.
 
 import { pub, trackPdfDownload } from "./chrome";
-import { addWatermark, addSiteHeader, addFooterSocial, resolvePdfBranding } from "./pdfWatermark";
+import { addWatermark, addSiteHeader, addFooter, addPageBorder, resolvePdfBranding } from "./pdfWatermark";
 
 function stripInlineMd(s) {
   return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
@@ -33,44 +33,60 @@ function getImageDimensions(dataUrl) {
 }
 
 export async function downloadConcoursPdf(c) {
+  let settings = {};
+  try {
+    settings = await (await fetch("/api/settings")).json();
+  } catch {
+    // best-effort: fall back to the default vector logo/watermark, no socials
+  }
+  const branding = await resolvePdfBranding(settings);
+
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const marginX = 18;
+  const bodyFont = branding.fontFamily || "helvetica";
+  doc.setFont(bodyFont, "normal"); // ambient default — every doc.setFont(undefined, style) call below keeps this family
+  const baseFontSize = branding.fontSize || 10.5;
+  const fontScale = baseFontSize / 10.5;
+  const lineSpacing = branding.lineSpacing || 1;
+  const marginX = branding.marginX ?? 18;
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const maxWidth = pageW - marginX * 2;
-  const bottomLimit = pageH - 20;
-  let y = 26;
+  const topY = marginX + 8;
+  const bottomLimit = pageH - marginX - 2;
+  let y = topY;
 
   function ensureSpace(need) {
     if (y + need > bottomLimit) {
       doc.addPage();
-      y = 26;
+      y = topY;
     }
   }
 
   function addWrappedLine(text, opts = {}) {
-    const { bold = false, size = 10.5, indent = 0, gapAfter = 1.6, color = [20, 20, 25] } = opts;
-    doc.setFont(undefined, bold ? "bold" : "normal");
+    const { bold = false, size = baseFontSize, indent = 0, gapAfter = 1.6, color = branding.textColor, font } = opts;
+    doc.setFont(font || undefined, bold ? "bold" : "normal");
     doc.setFontSize(size);
     doc.setTextColor(...color);
     const clean = stripInlineMd(text);
     if (!clean) {
-      y += 2;
+      y += 2 * lineSpacing;
       return;
     }
     const wrapped = doc.splitTextToSize(clean, maxWidth - indent);
     for (const wl of wrapped) {
-      ensureSpace(size * 0.42);
+      ensureSpace(size * 0.42 * lineSpacing);
       doc.text(wl, marginX + indent, y);
-      y += size * 0.42;
+      y += size * 0.42 * lineSpacing;
     }
-    y += gapAfter;
+    y += gapAfter * lineSpacing;
   }
 
   function addPrefixedLine(prefix, rest, opts = {}) {
-    const { indent = 0, bullet = false, size = 10.5, gapAfter = 1.8 } = opts;
+    const { indent = 0, bullet = false, size = baseFontSize, gapAfter = 1.8 } = opts;
+    const lineStep = size * 0.42 * lineSpacing;
     doc.setFontSize(size);
+    doc.setTextColor(...branding.textColor);
     const bx = marginX + indent + (bullet ? 4 : 0);
     const availW = maxWidth - indent - (bullet ? 4 : 0);
     const prefixClean = stripInlineMd(prefix);
@@ -82,7 +98,7 @@ export async function downloadConcoursPdf(c) {
     // it too instead of drawing it as a single unbroken doc.text() call.
     const prefixLines = prefixClean ? doc.splitTextToSize(prefixClean, availW) : [];
 
-    ensureSpace(size * 0.42);
+    ensureSpace(lineStep);
     if (bullet) {
       doc.setFont(undefined, "normal");
       doc.text("•", marginX + indent, y);
@@ -91,17 +107,17 @@ export async function downloadConcoursPdf(c) {
 
     if (prefixLines.length > 1) {
       for (let i = 0; i < prefixLines.length; i++) {
-        if (i > 0) ensureSpace(size * 0.42);
+        if (i > 0) ensureSpace(lineStep);
         doc.text(prefixLines[i], bx, y);
-        y += size * 0.42;
+        y += lineStep;
       }
       if (restClean) {
         doc.setFont(undefined, "normal");
         const wrapped = doc.splitTextToSize(restClean, availW);
         for (const wl of wrapped) {
-          ensureSpace(size * 0.42);
+          ensureSpace(lineStep);
           doc.text(wl, bx, y);
-          y += size * 0.42;
+          y += lineStep;
         }
       }
     } else {
@@ -110,14 +126,14 @@ export async function downloadConcoursPdf(c) {
       if (prefixClean) doc.text(prefixClean, bx, y);
       doc.setFont(undefined, "normal");
       if (wrapped[0]) doc.text(wrapped[0], bx + prefixW, y);
-      y += size * 0.42;
+      y += lineStep;
       for (let i = 1; i < wrapped.length; i++) {
-        ensureSpace(size * 0.42);
+        ensureSpace(lineStep);
         doc.text(wrapped[i], bx, y);
-        y += size * 0.42;
+        y += lineStep;
       }
     }
-    y += gapAfter;
+    y += gapAfter * lineSpacing;
   }
 
   function addTable(rows) {
@@ -128,16 +144,16 @@ export async function downloadConcoursPdf(c) {
       margin: { left: marginX, right: marginX },
       head: [cleanRows[0]],
       body: cleanRows.slice(1),
-      styles: { fontSize: 8.5, cellPadding: 2, overflow: "linebreak" },
-      headStyles: { fillColor: [79, 140, 255], textColor: 255 },
+      styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor },
+      headStyles: { fillColor: branding.accentColor, textColor: 255 },
       theme: "grid",
     });
     y = doc.lastAutoTable.finalY + 4;
   }
 
-  addWrappedLine(`${c.etablissement} — ${c.annee}`, { bold: true, size: 15, gapAfter: 2 });
+  addWrappedLine(`${c.etablissement} — ${c.annee}`, { bold: true, size: 15 * fontScale, gapAfter: 2 });
   addWrappedLine(`${c.master_reel || c.filiere} · ${c.ville}${c.difficulte ? " · Difficulté : " + c.difficulte : ""}`, {
-    size: 10.5,
+    size: baseFontSize,
     color: [90, 90, 100],
     gapAfter: 3,
   });
@@ -158,7 +174,7 @@ export async function downloadConcoursPdf(c) {
       }
 
       if (/^>/.test(line.trim())) {
-        addWrappedLine(line.replace(/^>\s*/, ""), { size: 9.5, color: [150, 110, 30], gapAfter: 2.5 });
+        addWrappedLine(line.replace(/^>\s*/, ""), { size: 9.5 * fontScale, color: [150, 110, 30], gapAfter: 2.5 });
         i++;
         continue;
       }
@@ -181,7 +197,18 @@ export async function downloadConcoursPdf(c) {
       const headingM = line.match(/^(#{2,4})\s+(.*)$/);
       if (headingM) {
         y += 2;
-        addWrappedLine(headingM[2], { bold: true, size: 12, gapAfter: 2.5 });
+        // This markdown dialect only ever uses "##" through "####" (no H1),
+        // so depth 2 maps to the admin's "H2" style, 3 to "H3"; a stray "####"
+        // (depth 4) has no configured level and just uses the plain default.
+        const headingStyle = branding.headings[`h${headingM[1].length}`];
+        const size = (headingStyle ? 12 * headingStyle.sizeScale : 12) * fontScale;
+        addWrappedLine(headingM[2], {
+          bold: true,
+          size,
+          color: headingStyle ? headingStyle.color : branding.textColor,
+          font: headingStyle ? headingStyle.fontFamily : undefined,
+          gapAfter: 2.5,
+        });
         i++;
         continue;
       }
@@ -202,7 +229,7 @@ export async function downloadConcoursPdf(c) {
       const stemM = line.match(/^\*\*([^*]+)\*\*\s*(.*)$/);
       if (stemM) {
         y += 1.5;
-        addPrefixedLine(stemM[1], stemM[2], { size: 10.5, gapAfter: 2 });
+        addPrefixedLine(stemM[1], stemM[2], { size: baseFontSize, gapAfter: 2 });
         i++;
         continue;
       }
@@ -219,8 +246,8 @@ export async function downloadConcoursPdf(c) {
   doc.setDrawColor(200, 200, 210);
   doc.line(marginX, y, pageW - marginX, y);
   y += 6;
-  addWrappedLine("Source", { bold: true, size: 10 });
-  addWrappedLine(c.source || "non précisée", { size: 9, color: [110, 110, 120] });
+  addWrappedLine("Source", { bold: true, size: 10 * fontScale });
+  addWrappedLine(c.source || "non précisée", { size: 9 * fontScale, color: [110, 110, 120] });
 
   // c.corrige_md is empty when the corrigé exists only as a raw file in the
   // repo's data/corriges/ folder (see lib/store.js getCorrigeFile) — fetch
@@ -237,14 +264,14 @@ export async function downloadConcoursPdf(c) {
 
   if (corrigeMd) {
     doc.addPage();
-    y = 26;
+    y = topY;
     doc.setFont(undefined, "bold");
-    doc.setFontSize(14);
-    doc.setTextColor(20, 20, 25);
+    doc.setFontSize(14 * fontScale);
+    doc.setTextColor(...branding.textColor);
     doc.text("Corrigé", marginX, y);
     y += 6;
     addWrappedLine("Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier.", {
-      size: 8.5,
+      size: 8.5 * fontScale,
       color: [180, 120, 20],
       gapAfter: 3,
     });
@@ -276,17 +303,10 @@ export async function downloadConcoursPdf(c) {
     }
   }
 
-  let branding = {};
-  try {
-    const settings = await (await fetch("/api/settings")).json();
-    branding = await resolvePdfBranding(settings);
-  } catch {
-    // best-effort: fall back to the default vector logo/watermark, no socials
-  }
-
   addWatermark(doc, branding);
+  addPageBorder(doc, branding);
   addSiteHeader(doc, branding);
-  addFooterSocial(doc, branding);
+  addFooter(doc, branding);
   doc.save(`${c.id}.pdf`);
   trackPdfDownload("concours", c.id);
 }

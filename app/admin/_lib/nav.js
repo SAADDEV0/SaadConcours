@@ -56,11 +56,14 @@ export const SECTIONS = [
         label: "Réglages",
         children: [
           { key: "reglages-general", href: "/admin/reglages", label: "Général", exact: true },
-          { key: "reglages-pdf", href: "/admin/reglages/pdf", label: "PDF" },
           { key: "reglages-publicite", href: "/admin/reglages/publicite", label: "Publicité" },
         ],
       },
     ],
+  },
+  {
+    label: "Édition",
+    items: [{ key: "pdf-editor", href: "/admin/pdf-editor", icon: "🎨", label: "Éditeur PDF" }],
   },
 ];
 

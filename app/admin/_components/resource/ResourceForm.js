@@ -3,6 +3,7 @@
 import QuestionsEditor from "../fields/QuestionsEditor";
 import ImageListEditor from "../fields/ImageListEditor";
 import MarkdownEditor from "../fields/MarkdownEditor";
+import CoursPdfPreviewButton from "./CoursPdfPreviewButton";
 
 export default function ResourceForm({
   formRef,
@@ -138,6 +139,7 @@ export default function ResourceForm({
               Annuler
             </button>
           )}
+          {config.key === "cours" && <CoursPdfPreviewButton form={form} />}
         </div>
         {error && <div className="admin-error">{error}</div>}
         {info && <div className="admin-info">{info}</div>}

@@ -22,7 +22,7 @@
 // plain text only (autotable doesn't have a clean spot to draw an inline
 // SVG per cell).
 import { trackPdfDownload } from "./chrome";
-import { addWatermark, addSiteHeader, addFooterSocial, resolvePdfBranding } from "./pdfWatermark";
+import { addWatermark, addSiteHeader, addFooter, addPageBorder, resolvePdfBranding, drawLogoMark } from "./pdfWatermark";
 
 const MATH_OPEN = "";
 const MATH_CLOSE = "";
@@ -305,16 +305,106 @@ function runsToPlainText(runs) {
   return runs.map((r) => r.text).join("");
 }
 
-export async function downloadCoursPdf(cours) {
+// Builds the fiche-de-cours jsPDF document without saving it — shared by
+// downloadCoursPdf (the public "download" button) and the admin's own PDF
+// preview button, which renders the *same* document into an iframe instead
+// of triggering a file download. `brandingOverride`, when given, skips the
+// /api/settings fetch entirely — used by the admin's PDF settings page to
+// preview its own unsaved form state instead of what's currently persisted.
+export async function buildCoursPdf(cours, brandingOverride) {
+  let branding = brandingOverride;
+  if (!branding) {
+    let settings = {};
+    try {
+      settings = await (await fetch("/api/settings")).json();
+    } catch {
+      // best-effort: fall back to the default vector logo/watermark, no socials
+    }
+    branding = await resolvePdfBranding(settings);
+  }
+
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const marginX = 18;
+  const bodyFont = branding.fontFamily || "helvetica";
+  const baseFontSize = branding.fontSize || 10.5;
+  const fontScale = baseFontSize / 10.5; // headings/tables/code scale proportionally to the chosen body size
+  const lineSpacing = branding.lineSpacing || 1;
+  const marginX = branding.marginX ?? 18;
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const maxWidth = pageW - marginX * 2;
-  const topY = 26;
-  const bottomLimit = pageH - 18;
+  const topY = marginX + 8;
+  const bottomLimit = pageH - marginX;
   let y = topY;
+
+  // Title/module cover page, drawn on the document's first page before any
+  // content — the main fiche then starts fresh on page 2.
+  if (branding.coverPageEnabled) {
+    const cover = branding.cover || {};
+
+    if (cover.backgroundColor) {
+      doc.setFillColor(...cover.backgroundColor);
+      doc.rect(0, 0, pageW, pageH, "F");
+    }
+    if (cover.accentBar) {
+      doc.setFillColor(...branding.accentColor);
+      doc.rect(0, 0, pageW, 10, "F");
+    }
+
+    const markSize = 30;
+    if (branding.logo) {
+      const w = markSize;
+      const h = (branding.logo.height / branding.logo.width) * w;
+      doc.addImage(branding.logo.dataUrl, branding.logo.format, pageW / 2 - w / 2, 70, w, h);
+    } else {
+      drawLogoMark(doc, pageW / 2 - markSize / 2, 70, markSize, branding.accentColor);
+    }
+
+    doc.setFont(bodyFont, "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(...branding.accentColor);
+    doc.text((cours.module || "").toUpperCase(), pageW / 2, 118, { align: "center" });
+
+    doc.setFont(bodyFont, "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(...branding.textColor);
+    let ty = 132;
+    doc.splitTextToSize(cours.title || "", pageW - marginX * 2 - 20).forEach((line) => {
+      doc.text(line, pageW / 2, ty, { align: "center" });
+      ty += 9;
+    });
+
+    if (cover.showDescription && cours.description) {
+      doc.setFont(bodyFont, "normal");
+      doc.setFontSize(11);
+      doc.setTextColor(100, 104, 116);
+      doc.splitTextToSize(cours.description, pageW - marginX * 2 - 30).forEach((line) => {
+        ty += 7;
+        doc.text(line, pageW / 2, ty, { align: "center" });
+      });
+    }
+
+    if (cover.showDate) {
+      ty += 10;
+      doc.setFont(bodyFont, "normal");
+      doc.setFontSize(9.5);
+      doc.setTextColor(140, 144, 155);
+      const dateStr = new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
+      doc.text(dateStr, pageW / 2, ty, { align: "center" });
+    }
+
+    doc.setDrawColor(...branding.accentColor);
+    doc.setLineWidth(0.6);
+    doc.line(pageW / 2 - 20, ty + 10, pageW / 2 + 20, ty + 10);
+
+    doc.setFont(bodyFont, "normal");
+    doc.setFontSize(9.5);
+    doc.setTextColor(150, 154, 165);
+    doc.text(cover.tagline, pageW / 2, pageH - 30, { align: "center" });
+
+    doc.addPage();
+    y = topY;
+  }
 
   function ensureSpace(need) {
     if (y + need > bottomLimit) {
@@ -334,14 +424,14 @@ export async function downloadCoursPdf(cours) {
   // getTextWidth is still used for wrap *decisions* — worst case a line
   // wraps a hair early/late, which is harmless next to visibly fused words.
   async function writeRuns(runs, opts = {}) {
-    const { size = 10.5, indent = 0, color = [26, 29, 39], gapAfter = 3 } = opts;
+    const { size = baseFontSize, indent = 0, color = branding.textColor, gapAfter = 3, font = bodyFont } = opts;
     const x0 = marginX + indent;
     const usableWidth = maxWidth - indent;
-    const lineHeight = size * 0.42 + 1.3;
+    const lineHeight = (size * 0.42 + 1.3) * lineSpacing;
 
     const setStyle = (w) => {
       const style = w.bold && w.italic ? "bolditalic" : w.bold ? "bold" : w.italic ? "italic" : "normal";
-      doc.setFont(w.code ? "courier" : "helvetica", style);
+      doc.setFont(w.code ? "courier" : font, style);
       doc.setFontSize(size);
     };
     const sameStyle = (a, b) => a.bold === b.bold && a.italic === b.italic && a.code === b.code;
@@ -368,7 +458,7 @@ export async function downloadCoursPdf(cours) {
     });
     if (!words.length) return;
 
-    doc.setFont("helvetica", "normal");
+    doc.setFont(font, "normal");
     doc.setFontSize(size);
     const spaceW = doc.getTextWidth(" ");
 
@@ -436,7 +526,7 @@ export async function downloadCoursPdf(cours) {
       lineWidth += (line.length > 1 ? spaceW : 0) + wWidth;
     }
     await flushLine();
-    y += gapAfter;
+    y += gapAfter * lineSpacing;
   }
 
   function addTable(table, indent = 0) {
@@ -452,8 +542,8 @@ export async function downloadCoursPdf(cours) {
       margin: { left: marginX + indent, right: marginX },
       head,
       body,
-      styles: { fontSize: 8.5, cellPadding: 2, overflow: "linebreak" },
-      headStyles: { fillColor: [79, 140, 255], textColor: 255 },
+      styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor },
+      headStyles: { fillColor: branding.accentColor, textColor: 255 },
       columnStyles,
       theme: "grid",
     });
@@ -462,12 +552,14 @@ export async function downloadCoursPdf(cours) {
 
   async function renderBlock(token, ctx = {}) {
     const indent = ctx.indent || 0;
-    const color = ctx.color || [26, 29, 39];
+    const color = ctx.color || branding.textColor;
     switch (token.type) {
       case "heading": {
         const runs = flattenInline(getInlineTokens(token), {}, ctx.store, []).map((r) => ({ ...r, bold: true }));
-        const sizes = { 1: 15, 2: 13, 3: 11.5 };
-        const size = sizes[token.depth] || 11;
+        const headingStyle = branding.headings[`h${token.depth}`];
+        const baseSizes = { 1: 15, 2: 13, 3: 11.5 };
+        const baseSize = baseSizes[token.depth] || 11;
+        const size = baseSize * fontScale * (headingStyle ? headingStyle.sizeScale : 1);
         if (token.depth === 2) {
           y += 2;
           ensureSpace(11);
@@ -477,7 +569,13 @@ export async function downloadCoursPdf(cours) {
         } else {
           ensureSpace(size * 0.6);
         }
-        await writeRuns(runs, { size, indent, color: [20, 20, 25], gapAfter: token.depth === 1 ? 3 : 2.2 });
+        await writeRuns(runs, {
+          size,
+          indent,
+          color: headingStyle ? headingStyle.color : branding.textColor,
+          font: headingStyle ? headingStyle.fontFamily : bodyFont,
+          gapAfter: token.depth === 1 ? 3 : 2.2,
+        });
         break;
       }
       case "paragraph": {
@@ -496,13 +594,14 @@ export async function downloadCoursPdf(cours) {
           }
           ensureSpace(14);
           y += 1.5;
-          doc.setFont("helvetica", "italic");
-          doc.setFontSize(12);
-          doc.setTextColor(20, 20, 25);
+          const displaySize = 12 * fontScale;
+          doc.setFont(bodyFont, "italic");
+          doc.setFontSize(displaySize);
+          doc.setTextColor(...branding.textColor);
           const w = doc.getTextWidth(runs[0].text);
           if (w <= availWidth) {
             doc.text(runs[0].text, marginX + indent + availWidth / 2, y, { align: "center" });
-            y += 12 * 0.42 + 4;
+            y += (displaySize * 0.42 + 4) * lineSpacing;
             break;
           }
         }
@@ -536,9 +635,10 @@ export async function downloadCoursPdf(cours) {
       }
       case "code": {
         ensureSpace(10);
-        const lineH = 9 * 0.42 + 1.2;
+        const codeSize = 9 * fontScale;
+        const lineH = (codeSize * 0.42 + 1.2) * lineSpacing;
         doc.setFont("courier", "normal");
-        doc.setFontSize(9);
+        doc.setFontSize(codeSize);
         doc.setTextColor(70, 74, 84);
         unescapeEntities(token.text || "").split("\n").forEach((line) => {
           const wrapped = doc.splitTextToSize(line || " ", maxWidth - indent);
@@ -571,17 +671,15 @@ export async function downloadCoursPdf(cours) {
     await renderBlock(t, { store });
   }
 
-  let branding = {};
-  try {
-    const settings = await (await fetch("/api/settings")).json();
-    branding = await resolvePdfBranding(settings);
-  } catch {
-    // best-effort: fall back to the default vector logo/watermark, no socials
-  }
-
   addWatermark(doc, branding);
+  addPageBorder(doc, branding);
   addSiteHeader(doc, branding);
-  addFooterSocial(doc, branding);
+  addFooter(doc, branding);
+  return doc;
+}
+
+export async function downloadCoursPdf(cours) {
+  const doc = await buildCoursPdf(cours);
   doc.save(`${cours.id}.pdf`);
   trackPdfDownload("cours", cours.id);
 }
