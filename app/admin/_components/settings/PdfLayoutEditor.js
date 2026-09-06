@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import PdfPreviewModal from "../ui/PdfPreviewModal";
 import { useToast } from "../ui/ToastProvider";
+import { useConfirm } from "../ui/ConfirmProvider";
 import { PDF_MARGIN_PRESETS, PDF_MARGIN_MM_RANGE, PDF_BORDER_WIDTH_RANGE, PDF_BORDER_INSET_RANGE } from "@/app/_shared/pdfWatermark";
 import BrandLogo from "@/app/_shared/BrandLogo";
 import {
@@ -71,6 +72,39 @@ const OWN_KEYS = [
   "pdfShowSocialFooter",
   "pdfHeadings",
 ];
+
+// What "Réinitialiser" restores — mirrors every `?? fallback` already used
+// below so the reset result is exactly what a brand-new install looks like,
+// not some other arbitrary state.
+const DEFAULT_FORM_VALUES = {
+  pdfLogoDataUrl: "",
+  pdfLogoPosition: "left",
+  pdfAccentColor: "#4f46e5",
+  pdfTextColor: "#1a1d27",
+  pdfFontFamily: "helvetica",
+  pdfFontSize: "normal",
+  pdfLineSpacing: "normal",
+  pdfMarginMm: PDF_MARGIN_PRESETS.normal,
+  pdfBorderEnabled: false,
+  pdfBorderColor: "#4f46e5",
+  pdfBorderWidth: PDF_BORDER_WIDTH_RANGE.default,
+  pdfBorderInset: PDF_BORDER_INSET_RANGE.default,
+  pdfShowPageNumbers: false,
+  pdfCoverPageEnabled: false,
+  pdfCoverBackgroundColor: "",
+  pdfCoverAccentBar: false,
+  pdfCoverShowDescription: true,
+  pdfCoverShowDate: false,
+  pdfCoverTagline: "",
+  pdfWatermarkEnabled: true,
+  pdfWatermarkText: "SaadConcours",
+  pdfWatermarkOpacity: 0.05,
+  pdfWatermarkStyle: "brand",
+  pdfWatermarkRotation: 45,
+  pdfFooterText: "",
+  pdfShowSocialFooter: true,
+  pdfHeadings: {},
+};
 
 const SAMPLE_COURS = {
   id: "apercu-editeur-pdf",
@@ -143,6 +177,7 @@ export default function PdfLayoutEditor() {
   const pageRef = useRef(null);
   const dragKeyRef = useRef(null);
   const toast = useToast();
+  const confirm = useConfirm();
 
   useEffect(() => {
     fetch("/api/settings")
@@ -239,6 +274,24 @@ export default function PdfLayoutEditor() {
     });
   }
 
+  // Restores every field this page owns to its out-of-the-box default —
+  // logo position, colors, fonts, watermark, border, cover page, headings —
+  // and clears every dragged position. Only touches unsaved state; nothing
+  // is persisted until "Enregistrer" is clicked afterwards, so this is easy
+  // to back out of by just reloading the page.
+  async function handleResetAll() {
+    const ok = await confirm({
+      title: "Réinitialiser tous les réglages PDF ?",
+      body: "Logo, couleurs, polices, filigrane, bordure, page de garde, titres et positions glissées reviennent à leurs valeurs par défaut. Rien n'est encore enregistré — tu peux encore annuler en rechargeant la page, ou enregistrer pour confirmer.",
+      confirmLabel: "Réinitialiser",
+      tone: "danger",
+    });
+    if (!ok) return;
+    setForm((prev) => ({ ...prev, ...DEFAULT_FORM_VALUES }));
+    setLayout({});
+    toast.success("Réglages réinitialisés — pense à Enregistrer pour confirmer.");
+  }
+
   async function handleLogoUpload(file) {
     setLogoError("");
     if (!file) return;
@@ -321,11 +374,14 @@ export default function PdfLayoutEditor() {
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <p className="admin-image-hint pdf-layout-hint" style={{ margin: 0 }}>
             Compose ici l'apparence de tous les PDF générés par le site (fiches de cours, énoncés et corrigés de
-            concours) : glisse le logo, le filigrane, le pied de page et le numéro de page sur la page, puis règle
-            couleurs, polices, filigrane et mise en page. Le contenu lui-même reste en Markdown — seule l'habillage
-            est personnalisable ici.
+            concours, PDF d'évaluation) : glisse le logo, le filigrane, le pied de page et le numéro de page sur la
+            page, puis règle couleurs, polices, filigrane et mise en page. Le contenu lui-même reste en Markdown —
+            seule l'habillage est personnalisable ici.
           </p>
           <div className="pdf-layout-toolbar-actions">
+            <button type="button" className="admin-btn secondary" onClick={handleResetAll}>
+              ↺ Réinitialiser
+            </button>
             <button type="button" className="admin-btn secondary" onClick={handlePreview} disabled={previewLoading}>
               {previewLoading ? "Génération..." : "👁 Aperçu"}
             </button>
@@ -698,7 +754,7 @@ export default function PdfLayoutEditor() {
         <h2 className="admin-section-title">Page de garde</h2>
 
         <label className="admin-switch-row">
-          <span className="admin-switch-row-label">Ajouter une page de garde (titre + module) aux fiches de cours</span>
+          <span className="admin-switch-row-label">Ajouter une page de garde aux fiches de cours, énoncés/corrigés de concours et PDF d'évaluation</span>
           <span className="admin-switch">
             <input
               type="checkbox"

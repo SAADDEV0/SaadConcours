@@ -249,7 +249,7 @@ export async function resolvePdfBranding(settings = {}) {
     accentBar: settings.pdfCoverAccentBar === true,
     showDescription: settings.pdfCoverShowDescription !== false,
     showDate: settings.pdfCoverShowDate === true,
-    tagline: (settings.pdfCoverTagline || "Fiche de cours — SaadConcours").trim() || "Fiche de cours — SaadConcours",
+    tagline: (settings.pdfCoverTagline || "SaadConcours").trim() || "SaadConcours",
   };
 
   // Per-level (H1/H2/H3) overrides — unset fields fall back to the document's

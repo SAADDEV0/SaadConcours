@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { chromeScript, trackPdfDownload } from "../../_shared/chrome";
-import { addWatermark, addSiteHeader } from "../../_shared/pdfWatermark";
+import { addWatermark, addSiteHeader, addFooter, addPageBorder, resolvePdfBranding, drawLogoMark } from "../../_shared/pdfWatermark";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -156,49 +156,131 @@ export default function EvaluationDetailClient({ quiz }) {
       $("#evalPdfBtn").style.display = "inline-block";
     }
 
-    function downloadEvalPDF() {
+    async function downloadEvalPDF() {
       const qs = currentQuestions();
+
+      let settings = {};
+      try {
+        settings = await (await fetch("/api/settings")).json();
+      } catch {
+        // best-effort: fall back to the default vector logo/watermark, no socials
+      }
+      const branding = await resolvePdfBranding(settings);
+
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ unit: "mm", format: "a4" });
-      const marginX = 16;
+      const bodyFont = branding.fontFamily || "helvetica";
+      doc.setFont(bodyFont, "normal"); // ambient default — every doc.setFont(undefined, style) call below keeps this family
+      const baseFontSize = branding.fontSize || 10.5;
+      const fontScale = baseFontSize / 10.5;
+      const lineSpacing = branding.lineSpacing || 1;
+      const marginX = branding.marginX ?? 16;
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
       const maxWidth = pageW - marginX * 2;
-      const bottomLimit = pageH - 18;
-      let y = 26;
+      const topY = marginX + 8;
+      const bottomLimit = pageH - marginX;
+      let y = topY;
+
+      // Title cover page, drawn on the document's first page before the
+      // questions — mirrors buildCoursPdf's/downloadConcoursPdf's cover page.
+      if (branding.coverPageEnabled) {
+        const cover = branding.cover || {};
+
+        if (cover.backgroundColor) {
+          doc.setFillColor(...cover.backgroundColor);
+          doc.rect(0, 0, pageW, pageH, "F");
+        }
+        if (cover.accentBar) {
+          doc.setFillColor(...branding.accentColor);
+          doc.rect(0, 0, pageW, 10, "F");
+        }
+
+        const markSize = 30;
+        if (branding.logo) {
+          const w = markSize;
+          const h = (branding.logo.height / branding.logo.width) * w;
+          doc.addImage(branding.logo.dataUrl, branding.logo.format, pageW / 2 - w / 2, 70, w, h);
+        } else {
+          drawLogoMark(doc, pageW / 2 - markSize / 2, 70, markSize, branding.accentColor);
+        }
+
+        doc.setFont(bodyFont, "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(...branding.accentColor);
+        doc.text((quiz.module || "ÉVALUATION").toUpperCase(), pageW / 2, 118, { align: "center" });
+
+        doc.setFont(bodyFont, "bold");
+        doc.setFontSize(22);
+        doc.setTextColor(...branding.textColor);
+        let ty = 132;
+        doc.splitTextToSize(quiz.title || "", pageW - marginX * 2 - 20).forEach((line) => {
+          doc.text(line, pageW / 2, ty, { align: "center" });
+          ty += 9;
+        });
+
+        if (cover.showDescription) {
+          doc.setFont(bodyFont, "normal");
+          doc.setFontSize(11);
+          doc.setTextColor(100, 104, 116);
+          const infoLine = `${currentChapter} — ${qs.length} question${qs.length > 1 ? "s" : ""}`;
+          [quiz.description, infoLine].filter(Boolean).forEach((text) => {
+            doc.splitTextToSize(text, pageW - marginX * 2 - 30).forEach((line) => {
+              ty += 7;
+              doc.text(line, pageW / 2, ty, { align: "center" });
+            });
+          });
+        }
+
+        if (cover.showDate) {
+          ty += 10;
+          doc.setFont(bodyFont, "normal");
+          doc.setFontSize(9.5);
+          doc.setTextColor(140, 144, 155);
+          const dateStr = new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
+          doc.text(dateStr, pageW / 2, ty, { align: "center" });
+        }
+
+        doc.setDrawColor(...branding.accentColor);
+        doc.setLineWidth(0.6);
+        doc.line(pageW / 2 - 20, ty + 10, pageW / 2 + 20, ty + 10);
+
+        doc.setFont(bodyFont, "normal");
+        doc.setFontSize(9.5);
+        doc.setTextColor(150, 154, 165);
+        doc.text(cover.tagline, pageW / 2, pageH - 30, { align: "center" });
+
+        doc.addPage();
+        y = topY;
+      }
 
       function ensureSpace(need) {
         if (y + need > bottomLimit) {
           doc.addPage();
-          y = 26;
+          y = topY;
         }
       }
 
-      function wrapText(text, size, bold, indent, color) {
-        doc.setFont(undefined, bold ? "bold" : "normal");
+      function wrapText(text, size, bold, indent, color, font) {
+        doc.setFont(font || undefined, bold ? "bold" : "normal");
         doc.setFontSize(size);
         doc.setTextColor(...color);
         const wrapped = doc.splitTextToSize(text, maxWidth - indent);
         for (const wl of wrapped) {
-          ensureSpace(size * 0.42);
+          ensureSpace(size * 0.42 * lineSpacing);
           doc.text(wl, marginX + indent, y);
-          y += size * 0.42;
+          y += size * 0.42 * lineSpacing;
         }
       }
 
-      doc.setFont(undefined, "bold");
-      doc.setFontSize(15);
-      doc.setTextColor(20, 20, 25);
-      wrapText(quiz.title, 15, true, 0, [20, 20, 25]);
+      wrapText(quiz.title, 15 * fontScale, true, 0, branding.textColor);
       y += 1;
       doc.setDrawColor(200, 200, 210);
       doc.line(marginX, y, pageW - marginX, y);
       y += 6;
-      doc.setFontSize(9);
-      doc.setTextColor(120, 120, 130);
       wrapText(
         `Module : ${quiz.module} — ${currentChapter} — ${qs.length} questions — Généré depuis SaadConcours`,
-        9,
+        9 * fontScale,
         false,
         0,
         [120, 120, 130]
@@ -207,19 +289,19 @@ export default function EvaluationDetailClient({ quiz }) {
 
       qs.forEach((q, idx) => {
         ensureSpace(14);
-        wrapText(`Q${idx + 1}. ${q.question}`, 11, true, 0, [20, 20, 25]);
+        wrapText(`Q${idx + 1}. ${q.question}`, 11 * fontScale, true, 0, branding.textColor);
         y += 1.5;
         q.options.forEach((o) => {
           const isCorrect = q.correct.includes(o.letter);
           ensureSpace(9);
-          wrapText(`${o.letter}. ${o.text}`, 9.5, false, 5, isCorrect ? [30, 140, 90] : [70, 70, 80]);
+          wrapText(`${o.letter}. ${o.text}`, 9.5 * fontScale, false, 5, isCorrect ? [30, 140, 90] : [70, 70, 80]);
         });
         y += 1;
         ensureSpace(9);
         const correctLetters = q.correct.join(", ").toUpperCase();
         wrapText(
           `Réponse(s) correcte(s) : ${correctLetters}${q.justification ? " — " + q.justification : ""}`,
-          9,
+          9 * fontScale,
           true,
           0,
           [30, 140, 90]
@@ -227,8 +309,10 @@ export default function EvaluationDetailClient({ quiz }) {
         y += 5;
       });
 
-      addWatermark(doc);
-      addSiteHeader(doc);
+      addWatermark(doc, branding);
+      addPageBorder(doc, branding);
+      addSiteHeader(doc, branding);
+      addFooter(doc, branding);
       doc.save(`${quiz.id}_${currentChapter.replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 30)}.pdf`);
       trackPdfDownload("evaluation", quiz.id);
     }
