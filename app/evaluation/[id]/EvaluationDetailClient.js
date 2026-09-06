@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { chromeScript, trackPdfDownload } from "../../_shared/chrome";
-import { addPageFurniture, resolvePdfBranding } from "../../_shared/pdfTheme";
+import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "../../_shared/pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "../../_shared/pdfCover";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
@@ -179,8 +179,7 @@ export default function EvaluationDetailClient({ quiz }) {
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
       const maxWidth = pageW - marginX * 2;
-      const topY = marginX + 8;
-      const bottomLimit = pageH - marginX;
+      const { top: topY, bottom: bottomLimit } = contentBounds(branding, pageH);
       let y = topY;
 
       // Title cover page, drawn on the document's first page before the
@@ -203,11 +202,15 @@ export default function EvaluationDetailClient({ quiz }) {
         }
       }
 
+      // Questions and answers come straight from the quiz JSON, which uses
+      // real minus signs, arrows and Greek letters — sanitizePdfText keeps a
+      // single one of them from flipping its line into UTF-16 (spaced-out
+      // characters, twice as wide as measured, spilling off the page).
       function wrapText(text, size, bold, indent, color, font) {
         doc.setFont(font || undefined, bold ? "bold" : "normal");
         doc.setFontSize(size);
         doc.setTextColor(...color);
-        const wrapped = doc.splitTextToSize(text, maxWidth - indent);
+        const wrapped = doc.splitTextToSize(sanitizePdfText(text), maxWidth - indent);
         for (const wl of wrapped) {
           ensureSpace(size * 0.42 * lineSpacing);
           doc.text(wl, marginX + indent, y);

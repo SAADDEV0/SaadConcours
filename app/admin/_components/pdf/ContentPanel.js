@@ -14,6 +14,7 @@ import {
   PDF_LINE_SPACING_OPTIONS,
   PDF_LOGO_POSITION_OPTIONS,
   PDF_MARGIN_MM_RANGE,
+  PDF_WATERMARK_OPACITY_RANGE,
   PDF_WATERMARK_STYLE_OPTIONS,
 } from "@/app/_shared/pdfTheme";
 import { marginMmOf } from "./PdfCanvas";
@@ -225,11 +226,11 @@ export default function ContentPanel({ settings, set, setHeading, onLogoUpload, 
               )}
               <SliderField
                 label="Opacité"
-                hint="L'aperçu écran renforce légèrement le filigrane pour qu'il reste visible à cette taille."
-                value={settings.pdfWatermarkOpacity ?? 0.05}
-                min={0.02}
-                max={0.3}
-                step={0.01}
+                hint="L'aperçu montre l'opacité réelle : en dessous de 5 %, le filigrane est quasi invisible une fois imprimé."
+                value={settings.pdfWatermarkOpacity ?? PDF_WATERMARK_OPACITY_RANGE.default}
+                min={PDF_WATERMARK_OPACITY_RANGE.min}
+                max={PDF_WATERMARK_OPACITY_RANGE.max}
+                step={PDF_WATERMARK_OPACITY_RANGE.step}
                 format={(v) => `${Math.round(v * 100)} %`}
                 onChange={(v) => set("pdfWatermarkOpacity", v)}
               />

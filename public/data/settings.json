@@ -29,7 +29,7 @@
   "pdfCoverPageEnabled": true,
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
-  "pdfWatermarkOpacity": 0.02,
+  "pdfWatermarkOpacity": 0.08,
   "pdfWatermarkStyle": "tiled",
   "pdfWatermarkRotation": 45,
   "pdfFooterText": "",

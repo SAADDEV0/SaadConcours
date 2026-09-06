@@ -13,7 +13,7 @@
 // (its horizontal center when centered, its left edge when left-aligned) and
 // `yPct` is the *top* of the block, not the first baseline.
 
-import { drawLogoMark, PDF_COVER_DEFAULT_POSITIONS } from "./pdfTheme";
+import { drawLogoMark, PDF_COVER_DEFAULT_POSITIONS, sanitizePdfText } from "./pdfTheme";
 
 const PT_TO_MM = 0.3528;
 // Distance from the top of a line box down to its baseline, and from one
@@ -65,7 +65,9 @@ export function drawCoverPage(doc, branding, content = {}) {
   // Text is drawn from the block's top edge: convert to the baseline jsPDF
   // wants, then step one line height per wrapped line.
   const drawText = (key, lines, { size, bold = false, color, italic = false }) => {
-    const list = (Array.isArray(lines) ? lines : [lines]).filter((l) => String(l || "").trim());
+    // Cover titles come from the content (a module name, a concours title),
+    // so they get the same UTF-16 protection as body text.
+    const list = (Array.isArray(lines) ? lines : [lines]).map(sanitizePdfText).filter((l) => l.trim());
     if (!list.length) return;
     doc.setFont(font, bold ? "bold" : italic ? "italic" : "normal");
     doc.setFontSize(size);
@@ -76,7 +78,7 @@ export function drawCoverPage(doc, branding, content = {}) {
     const avail = align === "left" ? Math.max(30, pageW - marginX - x) : Math.max(30, Math.min(x - marginX, pageW - marginX - x) * 2);
     let y = yOf(key) + coverAscentMM(size);
     for (const line of list) {
-      for (const wrapped of doc.splitTextToSize(String(line), Math.min(avail, maxWidth))) {
+      for (const wrapped of doc.splitTextToSize(line, Math.min(avail, maxWidth))) {
         doc.text(wrapped, x, y, { align });
         y += coverLineHeightMM(size);
       }

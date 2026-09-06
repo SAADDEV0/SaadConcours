@@ -17,6 +17,7 @@ import {
   PDF_COVER_RULE_WIDTH_RANGE,
   PDF_COVER_TITLE_SIZE_RANGE,
   PDF_MARGIN_MM_RANGE,
+  PDF_WATERMARK_OPACITY_RANGE,
 } from "./pdfTheme";
 
 // Every key the studio edits, with the value a brand-new install has. Also
@@ -49,7 +50,7 @@ export const DEFAULT_PDF_SETTINGS = {
   // Filigrane
   pdfWatermarkEnabled: true,
   pdfWatermarkText: "SaadConcours",
-  pdfWatermarkOpacity: 0.05,
+  pdfWatermarkOpacity: PDF_WATERMARK_OPACITY_RANGE.default,
   pdfWatermarkStyle: "brand",
   pdfWatermarkRotation: 45,
   // Pied de page
@@ -98,7 +99,7 @@ export const BUILT_IN_PDF_TEMPLATES = [
     pdfShowPageNumbers: true,
     pdfCoverPageEnabled: true,
     pdfCoverAccentBar: true,
-    pdfWatermarkOpacity: 0.05,
+    pdfWatermarkOpacity: 0.08,
   }),
   template("academique", "Académique", "Times, marges larges, cadre fin — un rendu de mémoire universitaire.", {
     pdfAccentColor: "#1e3a8a",
@@ -111,7 +112,7 @@ export const BUILT_IN_PDF_TEMPLATES = [
     pdfBorderWidth: 0.4,
     pdfBorderInset: 8,
     pdfWatermarkStyle: "diagonal",
-    pdfWatermarkOpacity: 0.04,
+    pdfWatermarkOpacity: 0.07,
     pdfCoverPageEnabled: true,
     pdfCoverTitleSize: 24,
     pdfCoverRuleWidth: 60,
@@ -120,7 +121,7 @@ export const BUILT_IN_PDF_TEMPLATES = [
     pdfAccentColor: "#0f766e",
     pdfShowPageNumbers: true,
     pdfWatermarkStyle: "tiled",
-    pdfWatermarkOpacity: 0.04,
+    pdfWatermarkOpacity: 0.07,
     pdfCoverPageEnabled: true,
     pdfCoverBackgroundColor: "#0f766e",
     pdfCoverTitleColor: "#ffffff",
@@ -134,7 +135,7 @@ export const BUILT_IN_PDF_TEMPLATES = [
   template("nuit", "Nuit", "Couverture sombre et contrastée, contenu clair et lisible.", {
     pdfAccentColor: "#6366f1",
     pdfShowPageNumbers: true,
-    pdfWatermarkOpacity: 0.04,
+    pdfWatermarkOpacity: 0.07,
     pdfCoverPageEnabled: true,
     pdfCoverBackgroundColor: "#0f172a",
     pdfCoverTitleColor: "#f8fafc",

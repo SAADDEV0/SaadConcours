@@ -326,7 +326,13 @@ export default function PdfStudio() {
     () => [...BUILT_IN_PDF_TEMPLATES, ...normalizeCustomTemplates(form?.pdfTemplates)],
     [form?.pdfTemplates]
   );
-  const activeTemplateId = useMemo(() => (form ? templates.find((t) => templateMatches(t, form))?.id : null), [templates, form]);
+  // Only computed on the gallery tab: templateMatches JSON-compares ~50 keys
+  // per template, and running that for a dozen templates on every pointermove
+  // made dragging an element on the canvas visibly stutter.
+  const activeTemplateId = useMemo(
+    () => (form && tab === "templates" ? templates.find((t) => templateMatches(t, form))?.id : null),
+    [templates, form, tab]
+  );
 
   function applyTemplate(tpl) {
     record(`template:${Date.now()}`, `Modèle « ${tpl.name} »`);

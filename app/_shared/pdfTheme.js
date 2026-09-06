@@ -99,6 +99,13 @@ export const PDF_COVER_LOGO_SIZE_RANGE = { min: 8, max: 70, default: 30 };
 export const PDF_COVER_TITLE_SIZE_RANGE = { min: 12, max: 40, default: 22 };
 export const PDF_COVER_ACCENT_BAR_RANGE = { min: 2, max: 40, default: 10 };
 export const PDF_COVER_RULE_WIDTH_RANGE = { min: 10, max: 150, default: 40 };
+// The old range (0.02–0.3, default 0.05) could only produce watermarks
+// somewhere between faint and invisible — and since the studio's preview
+// used to *inflate* the opacity to keep it visible on screen, a setting of
+// 2% looked fine in the editor and printed as nothing at all. The floor is
+// now 4% (enabled has to mean visible) and the ceiling 60% for anyone who
+// wants an unmistakable one.
+export const PDF_WATERMARK_OPACITY_RANGE = { min: 0.04, max: 0.6, step: 0.01, default: 0.08 };
 export const PDF_COVER_TEXT_SCALE_RANGE = { min: 0.8, max: 1.5, step: 0.05, default: 1 };
 
 // Base body-text point size — everything else (headings, table cells) scales
@@ -152,6 +159,68 @@ export const PDF_COVER_DEFAULT_POSITIONS = {
   rule: { xPct: 50, yPct: 62 },
   tagline: { xPct: 50, yPct: 88.9 },
 };
+
+// ---- text safety ------------------------------------------------------
+
+// jsPDF's built-in fonts (Helvetica/Times/Courier) can only encode WinAnsi
+// (CP1252). Handed a single character outside it, jsPDF re-encodes the
+// *whole* string as UTF-16 — and the standard fonts then draw it byte by
+// byte. A line like "VNA = 1 750 000 − 1 312 500" (that's U+2212, the real
+// minus sign the content actually uses) comes out as spaced-out characters
+// with the minus showing as a quote (U+2212 = 0x22 0x12 → '"' + a control
+// byte), and since every character now takes two glyphs the line renders
+// about twice as wide as splitTextToSize measured it — so it also runs off
+// the right margin. Both symptoms, one cause.
+//
+// Hence: every string that reaches doc.text() goes through
+// sanitizePdfText() first. Characters with a sensible ASCII/Latin-1
+// equivalent are transliterated (a minus stays a minus, an arrow becomes
+// "->"), the rest are dropped rather than left to corrupt their line.
+const PDF_TEXT_REPLACEMENTS = {
+  // Arrows and relations — by far the most common offenders in the corrigés.
+  "−": "-", "‐": "-", "‑": "-", "−": "-", "﹘": "-",
+  "→": "->", "➜": "->", "➔": "->", "⇒": "=>", "⟹": "=>", "⟶": "->",
+  "←": "<-", "⟵": "<-", "↔": "<->", "⇔": "<=>", "↑": "^", "↓": "v",
+  "≈": "~=", "≃": "~=", "≅": "~=", "≤": "<=", "⩽": "<=", "≥": ">=", "⩾": ">=",
+  "≠": "!=", "≡": "==", "∝": "prop. a",
+  // Maths
+  "∞": "infini", "√": "racine", "∑": "somme", "∏": "produit", "∫": "integrale",
+  "∈": " dans ", "∉": " hors de ", "∀": "pour tout", "∃": "il existe", "∅": "vide",
+  "∂": "d", "∆": "Delta", "·": "·", "⋅": "·", "∙": "·", "•": "•", "‰": "‰",
+  // Greek — spelled out, the way coursPdf.js already renders \alpha & co.
+  "α": "alpha", "β": "beta", "γ": "gamma", "Γ": "Gamma", "δ": "delta", "Δ": "Delta",
+  "ε": "epsilon", "ζ": "zeta", "η": "eta", "θ": "theta", "Θ": "Theta", "ι": "iota",
+  "κ": "kappa", "λ": "lambda", "Λ": "Lambda", "μ": "mu", "ν": "nu", "ξ": "xi",
+  "π": "pi", "Π": "Pi", "ρ": "rho", "σ": "sigma", "Σ": "Sigma", "τ": "tau",
+  "υ": "upsilon", "φ": "phi", "Φ": "Phi", "χ": "chi", "ψ": "psi", "ω": "omega", "Ω": "Omega",
+  // Sub/superscripts (¹²³ and ° are already CP1252 and pass through).
+  "₀": "_0", "₁": "_1", "₂": "_2", "₃": "_3", "₄": "_4", "₅": "_5", "₆": "_6",
+  "₇": "_7", "₈": "_8", "₉": "_9", "ₙ": "_n", "ₜ": "_t", "ᵢ": "_i", "ⱼ": "_j", "ₖ": "_k",
+  "⁰": "^0", "⁴": "^4", "⁵": "^5", "⁶": "^6", "⁷": "^7", "⁸": "^8", "⁹": "^9",
+  "ᵉ": "e", "ᵗ": "t", "ⁿ": "n",
+  // Boxes and marks used as bullets in the quiz/cours content.
+  "☐": "[ ]", "☑": "[x]", "☒": "[x]", "✓": "v", "✔": "v", "✗": "x", "✘": "x",
+  // Spacing oddities that would otherwise trip the UTF-16 switch.
+  " ": " ", " ": " ", " ": " ", " ": " ", "​": "", "️": "",
+  "̄": "", "́": "", "̀": "",
+};
+
+const PDF_TEXT_REPLACE_RE = new RegExp(`[${Object.keys(PDF_TEXT_REPLACEMENTS).join("")}]`, "gu");
+// What survives untouched: printable ASCII, the Latin-1 supplement, and the
+// CP1252 extras (curly quotes, dashes, œ/Œ, €, …) jsPDF encodes natively.
+const CP1252_EXTRAS = "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ";
+const PDF_TEXT_ALLOWED_RE = new RegExp(`[^\\n\\x20-\\x7E\\xA0-\\xFF${CP1252_EXTRAS}]`, "gu");
+
+// Makes any string safe to hand to doc.text(). Also collapses the runs of
+// blanks a dropped emoji leaves behind, so removing decoration doesn't
+// leave a visible gap mid-sentence.
+export function sanitizePdfText(input) {
+  if (input === null || input === undefined) return "";
+  return String(input)
+    .replace(PDF_TEXT_REPLACE_RE, (ch) => PDF_TEXT_REPLACEMENTS[ch] ?? "")
+    .replace(PDF_TEXT_ALLOWED_RE, "")
+    .replace(/[ \t]{2,}/g, " ");
+}
 
 // ---- small helpers ----------------------------------------------------
 
@@ -313,10 +382,13 @@ export async function resolvePdfBranding(settings = {}) {
     showHeader: settings.pdfShowHeader !== false,
     headerRule: settings.pdfHeaderRule !== false,
     coverPageEnabled: settings.pdfCoverPageEnabled === true,
-    footerText: String(settings.pdfFooterText || "").trim(),
+    // Admin-typed strings get the same treatment as document content — an
+    // em-dash or an arrow pasted into the footer would corrupt its line the
+    // same way (see sanitizePdfText).
+    footerText: sanitizePdfText(settings.pdfFooterText).trim(),
     watermarkEnabled: settings.pdfWatermarkEnabled !== false,
-    watermarkText: (settings.pdfWatermarkText || "SaadConcours").trim() || "SaadConcours",
-    watermarkOpacity: clamp(settings.pdfWatermarkOpacity, 0.02, 0.3, 0.05),
+    watermarkText: sanitizePdfText(settings.pdfWatermarkText || "SaadConcours").trim() || "SaadConcours",
+    watermarkOpacity: clamp(settings.pdfWatermarkOpacity, PDF_WATERMARK_OPACITY_RANGE.min, PDF_WATERMARK_OPACITY_RANGE.max, PDF_WATERMARK_OPACITY_RANGE.default),
     watermarkStyle: pickOption(PDF_WATERMARK_STYLE_OPTIONS, settings.pdfWatermarkStyle, "brand"),
     watermarkRotation: clamp(settings.pdfWatermarkRotation, -90, 90, 45),
     showSocialFooter: settings.pdfShowSocialFooter !== false,
@@ -359,7 +431,7 @@ export async function resolvePdfBranding(settings = {}) {
     showRule: settings.pdfCoverShowRule !== false,
     ruleWidth: clamp(settings.pdfCoverRuleWidth, PDF_COVER_RULE_WIDTH_RANGE.min, PDF_COVER_RULE_WIDTH_RANGE.max, PDF_COVER_RULE_WIDTH_RANGE.default),
     showTagline: settings.pdfCoverShowTagline !== false,
-    tagline: (settings.pdfCoverTagline || "SaadConcours").trim() || "SaadConcours",
+    tagline: sanitizePdfText(settings.pdfCoverTagline || "SaadConcours").trim() || "SaadConcours",
     taglineColor: hexToRgb(settings.pdfCoverTaglineColor, [150, 154, 165]),
     taglineColorHex: isHex(settings.pdfCoverTaglineColor) ? settings.pdfCoverTaglineColor : "#969aa5",
     // One knob for every secondary line (sur-titre, description, date,
@@ -398,6 +470,25 @@ export async function resolvePdfBranding(settings = {}) {
   }
 
   return branding;
+}
+
+// The vertical band flowing text may occupy. Horizontally the content area
+// is simply `marginX` on both sides; vertically it's the same margin, except
+// where the running header or footer strip sits at its default spot and
+// would otherwise be written over. Before this, every builder hardcoded
+// `marginX + 8` for the top and `pageH - marginX` for the bottom, which both
+// wasted 8mm at large margins and — at the small end of the slider — let the
+// first line collide with the header rule at 16.5mm and the last line run
+// under the footer.
+export function contentBounds(branding, pageH) {
+  const marginX = branding.marginX ?? 18;
+  const headerInPlace = branding.showHeader !== false && !branding.positions?.logo;
+  const footerInPlace =
+    (branding.showSocialFooter !== false || branding.footerText || branding.showPageNumbers) && !branding.positions?.footer;
+  return {
+    top: Math.max(marginX, headerInPlace ? 20 : 0),
+    bottom: pageH - Math.max(marginX, footerInPlace ? 16 : 0),
+  };
 }
 
 // First page the running header/footer/watermark/border apply to: page 2

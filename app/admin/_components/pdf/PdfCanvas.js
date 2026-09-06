@@ -29,6 +29,7 @@ import {
   PDF_HEADING_SIZE_PRESETS,
   PDF_LINE_SPACING_PRESETS,
   PDF_MARGIN_PRESETS,
+  PDF_WATERMARK_OPACITY_RANGE,
   isHex,
 } from "@/app/_shared/pdfTheme";
 import { COVER_BASE_SIZES, COVER_LINE_RATIO } from "@/app/_shared/pdfCover";
@@ -406,11 +407,12 @@ function renderContent({ settings, mm, pt, pctX, pctY, marginMm, accent, text, f
   const watermarkOn = settings.pdfWatermarkEnabled !== false;
   const wmStyle = settings.pdfWatermarkStyle || "brand";
   const wmText = settings.pdfWatermarkText || "SaadConcours";
-  const wmOpacity = settings.pdfWatermarkOpacity ?? 0.05;
-  // The watermark is drawn very faint on paper; at screen size that reads as
-  // "missing", so the preview floors it just enough to stay visible while
-  // still tracking the slider.
-  const wmScreenOpacity = Math.min(0.85, Math.max(0.12, wmOpacity * 3.4));
+  // Shown at its true value, deliberately: an earlier version boosted it so
+  // the watermark stayed visible in the editor, which meant a watermark set
+  // to 2% looked fine here and came out invisible in the PDF. If it can't be
+  // seen on this page, it can't be seen on paper either.
+  const wmOpacity = settings.pdfWatermarkOpacity ?? PDF_WATERMARK_OPACITY_RANGE.default;
+  const wmScreenOpacity = wmOpacity;
 
   const footerParts = ["saadconcours.space", settings.facebook && "Facebook", settings.instagram && "Instagram", settings.whatsapp && "WhatsApp"].filter(Boolean);
 

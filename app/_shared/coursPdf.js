@@ -22,7 +22,7 @@
 // plain text only (autotable doesn't have a clean spot to draw an inline
 // SVG per cell).
 import { trackPdfDownload } from "./chrome";
-import { addPageFurniture, resolvePdfBranding } from "./pdfTheme";
+import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 
 const MATH_OPEN = "";
@@ -148,12 +148,12 @@ const SYMBOLS = {
   "\\{": "{", "\\}": "}", "\\[": "[", "\\]": "]",
 };
 
-// Strips anything outside WinAnsi (plus a few common curly-quote/dash
-// punctuation marks jsPDF also renders fine) — mainly the markdown source's
-// decorative emoji (📐💡🗺️✏️✅), which would otherwise show up as tofu boxes.
-function stripUnsupportedGlyphs(s) {
-  return s.replace(/[^ -ÿ‘’“”–—…]/gu, "").replace(/[ \t]+/g, " ");
-}
+// Transliterates/strips everything jsPDF's built-in fonts can't encode —
+// the source's decorative emoji (📐💡🗺️✏️✅), but also the real minus signs
+// and arrows the corrigés are full of, which used to flip whole lines into
+// UTF-16 (see sanitizePdfText in pdfTheme.js). Kept as a thin alias so the
+// call sites below still read as "make this drawable".
+const stripUnsupportedGlyphs = sanitizePdfText;
 
 const HTML_ENTITIES = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&nbsp;": " " };
 function unescapeEntities(s) {
@@ -343,8 +343,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const maxWidth = pageW - marginX * 2;
-  const topY = marginX + 8;
-  const bottomLimit = pageH - marginX;
+  const { top: topY, bottom: bottomLimit } = contentBounds(branding, pageH);
   let y = topY;
 
   // Title/module cover page, drawn on the document's first page before any
@@ -416,7 +415,6 @@ export async function buildCoursPdf(cours, brandingOverride) {
     doc.setFontSize(size);
     const spaceW = doc.getTextWidth(" ");
 
-    ensureSpace(lineHeight);
     let line = [];
     let lineWidth = 0;
 
@@ -428,6 +426,12 @@ export async function buildCoursPdf(cours, brandingOverride) {
       // it just extends further above it.
       const svgHeights = line.filter((w) => w.isSvg).map((w) => w.svg.hMM);
       const effLineHeight = svgHeights.length ? Math.max(lineHeight, ...svgHeights) + 0.8 : lineHeight;
+      // Checked here rather than at the call sites: the *last* line of a
+      // paragraph used to be flushed without any space check, so a paragraph
+      // ending near the bottom of a page drew its final line into the
+      // margin, over the footer. Doing it once, right before the line is
+      // actually drawn, also covers the taller-than-usual formula lines.
+      ensureSpace(effLineHeight);
       doc.setTextColor(...color);
       let x = x0;
       let i = 0;
@@ -463,6 +467,13 @@ export async function buildCoursPdf(cours, brandingOverride) {
       lineWidth = 0;
     }
 
+    // Gap actually consumed to the left of `w` when the line is drawn —
+    // including the anti-drift padding flushLine adds after each segment.
+    // Measuring without it is what let a full line end up a couple of
+    // millimetres past the right margin: the wrap decision thought the line
+    // fit, then drawing spread it wider than measured.
+    const gapBefore = (wWidth) => spaceW + wWidth * 0.015 + 0.15;
+
     for (const w of words) {
       let wWidth;
       if (w.isSvg) {
@@ -471,13 +482,11 @@ export async function buildCoursPdf(cours, brandingOverride) {
         setStyle(w);
         wWidth = doc.getTextWidth(w.text);
       }
-      const addW = wWidth + (line.length ? spaceW : 0);
-      if (lineWidth + addW > usableWidth && line.length) {
+      if (line.length && lineWidth + gapBefore(wWidth) + wWidth > usableWidth) {
         await flushLine();
-        ensureSpace(lineHeight);
       }
+      lineWidth += (line.length ? gapBefore(wWidth) : 0) + wWidth;
       line.push(w);
-      lineWidth += (line.length > 1 ? spaceW : 0) + wWidth;
     }
     await flushLine();
     y += gapAfter * lineSpacing;
@@ -493,7 +502,10 @@ export async function buildCoursPdf(cours, brandingOverride) {
     ensureSpace(20);
     doc.autoTable({
       startY: y,
-      margin: { left: marginX + indent, right: marginX },
+      // top/bottom matter for a table long enough to break across pages:
+      // autotable's own default is 40mm, so a continued table used to start
+      // and stop at a completely different margin than the text around it.
+      margin: { left: marginX + indent, right: marginX, top: topY, bottom: pageH - bottomLimit },
       head,
       body,
       styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor },
@@ -602,7 +614,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
         doc.setFontSize(codeSize);
         doc.setTextColor(70, 74, 84);
         unescapeEntities(token.text || "").split("\n").forEach((line) => {
-          const wrapped = doc.splitTextToSize(line || " ", maxWidth - indent);
+          const wrapped = doc.splitTextToSize(sanitizePdfText(line) || " ", maxWidth - indent);
           wrapped.forEach((wl) => {
             ensureSpace(lineH);
             doc.text(wl, marginX + indent, y);

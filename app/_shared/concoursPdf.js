@@ -6,11 +6,16 @@
 // that knows how to lay this out instead of two copies drifting apart.
 
 import { pub, trackPdfDownload } from "./chrome";
-import { addPageFurniture, resolvePdfBranding } from "./pdfTheme";
+import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 
+// Every line drawn by this file goes through here, so sanitizePdfText is
+// applied at the same time as the markdown stripping: the énoncés and
+// corrigés are full of real minus signs (−) and arrows (→), and a single one
+// of them used to flip its whole line into UTF-16 — rendering as spaced-out
+// characters, roughly twice as wide as measured, running off the page.
 function stripInlineMd(s) {
-  return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
+  return sanitizePdfText(String(s ?? "").replace(/\*\*/g, "").replace(/\$\$?/g, "")).trim();
 }
 
 async function loadImageAsDataURL(src) {
@@ -53,8 +58,7 @@ export async function downloadConcoursPdf(c) {
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const maxWidth = pageW - marginX * 2;
-  const topY = marginX + 8;
-  const bottomLimit = pageH - marginX - 2;
+  const { top: topY, bottom: bottomLimit } = contentBounds(branding, pageH);
   let y = topY;
 
   // Title cover page, drawn on the document's first page before the énoncé
@@ -155,7 +159,9 @@ export async function downloadConcoursPdf(c) {
     ensureSpace(20);
     doc.autoTable({
       startY: y,
-      margin: { left: marginX, right: marginX },
+      // top/bottom keep a table that breaks across pages inside the same
+      // content area as the text (autotable defaults to a 40mm margin).
+      margin: { left: marginX, right: marginX, top: topY, bottom: pageH - bottomLimit },
       head: [cleanRows[0]],
       body: cleanRows.slice(1),
       styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor },
