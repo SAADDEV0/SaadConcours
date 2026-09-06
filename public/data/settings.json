@@ -31,7 +31,7 @@
   "pdfWatermarkText": "SaadConcours",
   "pdfWatermarkOpacity": 0.02,
   "pdfWatermarkStyle": "tiled",
-  "pdfWatermarkRotation": -55,
+  "pdfWatermarkRotation": 45,
   "pdfFooterText": "",
   "pdfShowSocialFooter": true,
   "adsEnabled": true,
@@ -48,34 +48,23 @@
   "pdfBorderWidth": 0.5,
   "pdfBorderInset": 6,
   "pdfCoverBackgroundColor": "",
-  "pdfCoverAccentBar": true,
+  "pdfCoverAccentBar": false,
   "pdfCoverShowDescription": true,
   "pdfCoverShowDate": false,
-  "pdfCoverTagline": "",
-  "pdfHeadings": {
-    "h1": {
-      "color": "#000000"
-    },
-    "h2": {
-      "color": "#000000"
-    }
-  },
+  "pdfCoverTagline": "SaadConcours",
+  "pdfHeadings": {},
   "pdfLayout": {
     "logo": {
-      "xPct": 13.89,
-      "yPct": 4.08
-    },
-    "footer": {
-      "xPct": 50,
-      "yPct": 95.71
+      "xPct": 20.48,
+      "yPct": 6.15
     },
     "pageNumber": {
       "xPct": 89.52,
-      "yPct": 94.44
+      "yPct": 94.6
     }
   },
-  "pdfCoverTitleSize": 16,
-  "pdfCoverTextScale": 1.3,
+  "pdfCoverTitleSize": 22,
+  "pdfCoverTextScale": 1,
   "pdfTemplates": [
     {
       "id": "perso-mtps3vvx",
@@ -131,5 +120,22 @@
         "pdfCoverLayout": {}
       }
     }
-  ]
+  ],
+  "pdfHeadingRule": false,
+  "pdfShowHeader": true,
+  "pdfHeaderRule": true,
+  "pdfCoverAlign": "center",
+  "pdfCoverCleanPage": true,
+  "pdfCoverAccentBarHeight": 10,
+  "pdfCoverShowLogo": true,
+  "pdfCoverLogoSize": 30,
+  "pdfCoverShowEyebrow": true,
+  "pdfCoverEyebrowColor": "",
+  "pdfCoverTitleColor": "",
+  "pdfCoverSubtitleColor": "",
+  "pdfCoverShowRule": true,
+  "pdfCoverRuleWidth": 40,
+  "pdfCoverShowTagline": true,
+  "pdfCoverTaglineColor": "",
+  "pdfCoverLayout": {}
 }
