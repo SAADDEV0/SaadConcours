@@ -1,6 +1,7 @@
 import "./globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSettings } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -123,6 +124,7 @@ export default async function RootLayout({ children }) {
       <body>
         {children}
         <Analytics />
+        <SpeedInsights />
         {/* afterInteractive (Next's managed equivalent of `defer`) instead of
            raw <script defer> tags in <head> — same load timing, but Next
            dedupes/schedules them instead of the browser blindly fetching
