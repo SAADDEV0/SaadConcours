@@ -216,6 +216,15 @@ function stripMathDelimiters(raw) {
 // "none" makes every glyph a fully inline path, larger but reliable.
 async function renderMathToSvg(raw, display) {
   if (!window.MathJax?.tex2svgPromise) return null;
+  // svg2pdf.js (loaded via a separate <Script> tag) patches jsPDF.API.svg —
+  // it can still be mid-load even once MathJax itself is ready, since script
+  // tags with strategy="afterInteractive" don't guarantee any particular
+  // load order relative to each other. Without this check, prerendering
+  // would succeed here but the later doc.svg(...) draw call would throw
+  // "doc.svg is not a function" and abort the whole PDF. Bailing out to
+  // null here instead routes this formula through the existing plain-text
+  // fallback, same as any other MathJax failure.
+  if (typeof window.jspdf?.jsPDF?.API?.svg !== "function") return null;
   try {
     const node = await window.MathJax.tex2svgPromise(stripMathDelimiters(raw), { display });
     const svg = node.querySelector("svg");
