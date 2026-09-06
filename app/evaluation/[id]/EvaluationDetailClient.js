@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { chromeScript, trackPdfDownload } from "../../_shared/chrome";
-import { addWatermark, addSiteHeader, addFooter, addPageBorder, resolvePdfBranding, drawLogoMark } from "../../_shared/pdfWatermark";
+import { addPageFurniture, resolvePdfBranding } from "../../_shared/pdfTheme";
+import { coverDateString, maybeDrawCoverPage } from "../../_shared/pdfCover";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -183,74 +184,15 @@ export default function EvaluationDetailClient({ quiz }) {
       let y = topY;
 
       // Title cover page, drawn on the document's first page before the
-      // questions — mirrors buildCoursPdf's/downloadConcoursPdf's cover page.
-      if (branding.coverPageEnabled) {
-        const cover = branding.cover || {};
-
-        if (cover.backgroundColor) {
-          doc.setFillColor(...cover.backgroundColor);
-          doc.rect(0, 0, pageW, pageH, "F");
-        }
-        if (cover.accentBar) {
-          doc.setFillColor(...branding.accentColor);
-          doc.rect(0, 0, pageW, 10, "F");
-        }
-
-        const markSize = 30;
-        if (branding.logo) {
-          const w = markSize;
-          const h = (branding.logo.height / branding.logo.width) * w;
-          doc.addImage(branding.logo.dataUrl, branding.logo.format, pageW / 2 - w / 2, 70, w, h);
-        } else {
-          drawLogoMark(doc, pageW / 2 - markSize / 2, 70, markSize, branding.accentColor);
-        }
-
-        doc.setFont(bodyFont, "bold");
-        doc.setFontSize(11);
-        doc.setTextColor(...branding.accentColor);
-        doc.text((quiz.module || "ÉVALUATION").toUpperCase(), pageW / 2, 118, { align: "center" });
-
-        doc.setFont(bodyFont, "bold");
-        doc.setFontSize(22);
-        doc.setTextColor(...branding.textColor);
-        let ty = 132;
-        doc.splitTextToSize(quiz.title || "", pageW - marginX * 2 - 20).forEach((line) => {
-          doc.text(line, pageW / 2, ty, { align: "center" });
-          ty += 9;
-        });
-
-        if (cover.showDescription) {
-          doc.setFont(bodyFont, "normal");
-          doc.setFontSize(11);
-          doc.setTextColor(100, 104, 116);
-          const infoLine = `${currentChapter} — ${qs.length} question${qs.length > 1 ? "s" : ""}`;
-          [quiz.description, infoLine].filter(Boolean).forEach((text) => {
-            doc.splitTextToSize(text, pageW - marginX * 2 - 30).forEach((line) => {
-              ty += 7;
-              doc.text(line, pageW / 2, ty, { align: "center" });
-            });
-          });
-        }
-
-        if (cover.showDate) {
-          ty += 10;
-          doc.setFont(bodyFont, "normal");
-          doc.setFontSize(9.5);
-          doc.setTextColor(140, 144, 155);
-          const dateStr = new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
-          doc.text(dateStr, pageW / 2, ty, { align: "center" });
-        }
-
-        doc.setDrawColor(...branding.accentColor);
-        doc.setLineWidth(0.6);
-        doc.line(pageW / 2 - 20, ty + 10, pageW / 2 + 20, ty + 10);
-
-        doc.setFont(bodyFont, "normal");
-        doc.setFontSize(9.5);
-        doc.setTextColor(150, 154, 165);
-        doc.text(cover.tagline, pageW / 2, pageH - 30, { align: "center" });
-
-        doc.addPage();
+      // questions (see pdfCover.js).
+      if (
+        maybeDrawCoverPage(doc, branding, {
+          eyebrow: quiz.module || "Évaluation",
+          title: quiz.title,
+          subtitle: [quiz.description, `${currentChapter} — ${qs.length} question${qs.length > 1 ? "s" : ""}`],
+          date: coverDateString(),
+        })
+      ) {
         y = topY;
       }
 
@@ -309,10 +251,7 @@ export default function EvaluationDetailClient({ quiz }) {
         y += 5;
       });
 
-      addWatermark(doc, branding);
-      addPageBorder(doc, branding);
-      addSiteHeader(doc, branding);
-      addFooter(doc, branding);
+      addPageFurniture(doc, branding);
       doc.save(`${quiz.id}_${currentChapter.replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 30)}.pdf`);
       trackPdfDownload("evaluation", quiz.id);
     }

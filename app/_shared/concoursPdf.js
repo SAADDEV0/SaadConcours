@@ -6,7 +6,8 @@
 // that knows how to lay this out instead of two copies drifting apart.
 
 import { pub, trackPdfDownload } from "./chrome";
-import { addWatermark, addSiteHeader, addFooter, addPageBorder, resolvePdfBranding, drawLogoMark } from "./pdfWatermark";
+import { addPageFurniture, resolvePdfBranding } from "./pdfTheme";
+import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 
 function stripInlineMd(s) {
   return s.replace(/\*\*/g, "").replace(/\$\$?/g, "").trim();
@@ -56,75 +57,16 @@ export async function downloadConcoursPdf(c) {
   const bottomLimit = pageH - marginX - 2;
   let y = topY;
 
-  // Title cover page, drawn on the document's first page before the
-  // énoncé — the main content then starts fresh on page 2. Mirrors
-  // buildCoursPdf's cover page but with concours fields instead of a
-  // module/title.
-  if (branding.coverPageEnabled) {
-    const cover = branding.cover || {};
-
-    if (cover.backgroundColor) {
-      doc.setFillColor(...cover.backgroundColor);
-      doc.rect(0, 0, pageW, pageH, "F");
-    }
-    if (cover.accentBar) {
-      doc.setFillColor(...branding.accentColor);
-      doc.rect(0, 0, pageW, 10, "F");
-    }
-
-    const markSize = 30;
-    if (branding.logo) {
-      const w = markSize;
-      const h = (branding.logo.height / branding.logo.width) * w;
-      doc.addImage(branding.logo.dataUrl, branding.logo.format, pageW / 2 - w / 2, 70, w, h);
-    } else {
-      drawLogoMark(doc, pageW / 2 - markSize / 2, 70, markSize, branding.accentColor);
-    }
-
-    doc.setFont(bodyFont, "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(...branding.accentColor);
-    doc.text("CONCOURS", pageW / 2, 118, { align: "center" });
-
-    doc.setFont(bodyFont, "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(...branding.textColor);
-    let ty = 132;
-    doc.splitTextToSize(`${c.etablissement} — ${c.annee}`, pageW - marginX * 2 - 20).forEach((line) => {
-      doc.text(line, pageW / 2, ty, { align: "center" });
-      ty += 9;
-    });
-
-    const coverSubtitle = `${c.master_reel || c.filiere || ""}${c.ville ? " · " + c.ville : ""}`.trim();
-    if (cover.showDescription && coverSubtitle) {
-      doc.setFont(bodyFont, "normal");
-      doc.setFontSize(11);
-      doc.setTextColor(100, 104, 116);
-      doc.splitTextToSize(coverSubtitle, pageW - marginX * 2 - 30).forEach((line) => {
-        ty += 7;
-        doc.text(line, pageW / 2, ty, { align: "center" });
-      });
-    }
-
-    if (cover.showDate) {
-      ty += 10;
-      doc.setFont(bodyFont, "normal");
-      doc.setFontSize(9.5);
-      doc.setTextColor(140, 144, 155);
-      const dateStr = new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
-      doc.text(dateStr, pageW / 2, ty, { align: "center" });
-    }
-
-    doc.setDrawColor(...branding.accentColor);
-    doc.setLineWidth(0.6);
-    doc.line(pageW / 2 - 20, ty + 10, pageW / 2 + 20, ty + 10);
-
-    doc.setFont(bodyFont, "normal");
-    doc.setFontSize(9.5);
-    doc.setTextColor(150, 154, 165);
-    doc.text(cover.tagline, pageW / 2, pageH - 30, { align: "center" });
-
-    doc.addPage();
+  // Title cover page, drawn on the document's first page before the énoncé
+  // (see pdfCover.js) — the main content then starts fresh on page 2.
+  if (
+    maybeDrawCoverPage(doc, branding, {
+      eyebrow: "Concours",
+      title: `${c.etablissement} — ${c.annee}`,
+      subtitle: [`${c.master_reel || c.filiere || ""}${c.ville ? " · " + c.ville : ""}`.trim()],
+      date: coverDateString(),
+    })
+  ) {
     y = topY;
   }
 
@@ -375,10 +317,7 @@ export async function downloadConcoursPdf(c) {
     }
   }
 
-  addWatermark(doc, branding);
-  addPageBorder(doc, branding);
-  addSiteHeader(doc, branding);
-  addFooter(doc, branding);
+  addPageFurniture(doc, branding);
   doc.save(`${c.id}.pdf`);
   trackPdfDownload("concours", c.id);
 }
