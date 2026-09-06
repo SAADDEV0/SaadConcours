@@ -25,11 +25,11 @@
   "pdfFontSize": "normal",
   "pdfLineSpacing": "normal",
   "pdfMargins": "normal",
-  "pdfShowPageNumbers": false,
-  "pdfCoverPageEnabled": false,
+  "pdfShowPageNumbers": true,
+  "pdfCoverPageEnabled": true,
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
-  "pdfWatermarkOpacity": 0.09,
+  "pdfWatermarkOpacity": 0.05,
   "pdfWatermarkStyle": "brand",
   "pdfWatermarkRotation": 45,
   "pdfFooterText": "",
@@ -41,5 +41,29 @@
   "adsConcoursMidEnabled": false,
   "adsConcoursMidSlot": "",
   "adsConcoursBottomEnabled": false,
-  "adsConcoursBottomSlot": ""
+  "adsConcoursBottomSlot": "",
+  "pdfMarginMm": 22,
+  "pdfBorderEnabled": false,
+  "pdfBorderColor": "#4f46e5",
+  "pdfBorderWidth": 0.5,
+  "pdfBorderInset": 6,
+  "pdfCoverBackgroundColor": "",
+  "pdfCoverAccentBar": false,
+  "pdfCoverShowDescription": true,
+  "pdfCoverShowDate": false,
+  "pdfCoverTagline": "",
+  "pdfHeadings": {
+    "h1": {
+      "color": "#000000"
+    },
+    "h2": {
+      "color": "#000000"
+    }
+  },
+  "pdfLayout": {
+    "logo": {
+      "xPct": 13.452380952380953,
+      "yPct": 4.07723063973064
+    }
+  }
 }
