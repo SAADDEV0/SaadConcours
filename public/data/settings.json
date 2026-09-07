@@ -43,7 +43,30 @@
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
   "partnerAdsEnabled": true,
-  "partnerAds": [],
+  "partnerAds": [
+    {
+      "id": "pa_mtr8a5wtwmob",
+      "name": "hkjl,m",
+      "contact": "",
+      "image": "images/partenaires/logo.png",
+      "link": "",
+      "alt": "",
+      "title": "",
+      "description": "",
+      "cta": "",
+      "placements": [
+        "header",
+        "sidebar",
+        "footer"
+      ],
+      "active": true,
+      "startDate": "",
+      "endDate": "",
+      "note": "",
+      "w": "",
+      "h": ""
+    }
+  ],
   "pdfMarginMm": 35,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
