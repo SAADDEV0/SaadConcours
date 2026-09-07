@@ -380,49 +380,25 @@ a.pa-banner:hover{border-color:var(--accent);}
   .pa-banner-text{padding:14px 12px 12px;}
 }
 
-/* Colonne latérale, hôte n°1 : la colonne gauche de /concours, dans une cellule
- * de grille à elle sous le panneau de filtres. Faire passer <main> sur les deux
- * rangées est ce qui libère cette cellule — sans ça, la rangée 2 commence
- * après les 17 000 px de la liste de résultats et la bannière atterrit tout en
- * bas de la page. Masquée à 900px, là où la grille se replie sur une colonne
- * (et où la règle grid-row ci-dessous ferait chevaucher filtres et contenu). */
-.pa-side{margin-top:16px;}
-.pa-side img{max-height:600px; object-fit:contain;}
-/* Les trois cellules sont fixées explicitement : donner une grid-row au seul
- * <main> suffit à le faire placer avant les éléments auto, il rafle alors la
- * colonne 1 et renvoie les filtres à droite. */
-@media (min-width: 901px){
-  /* max-content 1fr : sans ça, la hauteur de <main> (des dizaines de milliers
-   * de pixels de résultats) est répartie à parts égales entre les deux rangées
-   * qu'il traverse, et la bannière démarre au milieu de la page. */
-  .layout.has-pa-side{grid-template-rows:max-content 1fr;}
-  .layout.has-pa-side > .filters{grid-column:1; grid-row:1;}
-  .layout.has-pa-side > main{grid-column:2; grid-row:1 / span 2;}
-  .layout.has-pa-side > .pa-side{grid-column:1; grid-row:2; align-self:start;}
-}
-@media (max-width: 900px){ .pa-side{display:none;} }
-
-/* Colonne latérale, hôte n°2 : rail flottant, sur les pages sans colonne de
- * filtres. Révélé uniquement au-delà de 1640px : les pages concernées font au
- * plus 1200px de large (.cours-view, .nw-view), ce qui laisse à ce seuil ~44px
- * d'air entre le contenu et un rail de 160px posé à 16px du bord. En dessous
- * il chevaucherait le contenu — alors il n'existe pas, plutôt que de décaler
- * le site pour lui faire de la place.
+/* Rails gauche/droite — accueil et fiches individuelles (concours, cours,
+ * article) seulement, jamais les pages de liste : voir le paramètre `rails`
+ * de chromeHtml() dans _shared/chrome.js, qui pose le marqueur que ce module
+ * lit avant de créer quoi que ce soit.
  *
- * top:96px le fait démarrer sous le header collant (~61px, max-width 1400 donc
- * plus large que le contenu), et le sélecteur de garde le neutralise si une
- * page en .layout (1400px) venait un jour à ne plus avoir de .filters et donc
- * à tomber sur ce rail. Pas de scroll interne : la hauteur est plafonnée sur
- * l'image, sinon un conteneur de hauteur nulle empêche l'image de charger. */
-.pa-rail{display:none;}
-@media (min-width: 1640px){
-  .pa-rail{
-    position:fixed; top:96px; right:16px; z-index:5; width:160px;
-    display:flex; flex-direction:column; gap:14px;
-  }
-  .layout ~ .pa-rail{display:none;}
-  .pa-rail img{max-height:calc(100vh - 140px); object-fit:contain;}
+ * display:none par défaut : createRail() dans chrome.js les crée toujours
+ * (pour pouvoir les révéler après un redimensionnement) mais ne les rend
+ * visibles (display:flex + `left` posé) qu'une fois la marge à côté du
+ * contenu réellement mesurée comme suffisante — pas de seuil fixe, la largeur
+ * de la page (820 à 1100px selon le gabarit) est lue en direct plutôt que
+ * devinée. Sans annonceur sur l'un des deux côtés, l'élément n'est même pas
+ * créé : un site sans partenaire ne porte aucune trace de ce mécanisme.
+ * Pas de scroll interne : la hauteur est plafonnée sur l'image, sinon un
+ * conteneur de hauteur nulle empêche l'image de charger. */
+.pa-rail{
+  display:none; position:fixed; top:96px; z-index:5;
+  flex-direction:column; gap:14px;
 }
+.pa-rail img{max-height:calc(100vh - 140px); object-fit:contain;}
 @media (prefers-reduced-motion: reduce){ .pa-banner{transition:none;} }
 
 .faq-item{border-bottom:1px solid var(--border); padding:14px 0;}

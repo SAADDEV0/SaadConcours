@@ -42,7 +42,7 @@ const ACTIONS = [
 ];
 
 const MARKUP = `
-${chromeHtml({ active: "home", showSearch: false })}
+${chromeHtml({ active: "home", showSearch: false, rails: true })}
 
 <div class="home-view">
   <section class="home-hero">

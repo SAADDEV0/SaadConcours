@@ -88,7 +88,7 @@ export default async function CoursDetailPage({ params }) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false, rails: true }) }} />
 
       <div className="cd-view" style={{ maxWidth: 1100 }}>
         <nav className="cd-breadcrumb">

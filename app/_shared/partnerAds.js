@@ -12,6 +12,9 @@
 // `contact` et `note` sont privés — /api/settings les retire avant de
 // répondre au site public (voir app/api/settings/route.js).
 
+// Pages sur lesquelles les rails gauche/droite peuvent apparaître — voir
+// PAGES_SANS_RAIL ci-dessous. Le bandeau haut/bas, lui, reste partout : ce
+// n'est que le rail qui est restreint à un sous-ensemble de pages.
 export const PARTNER_PLACEMENTS = [
   {
     key: "header",
@@ -19,11 +22,17 @@ export const PARTNER_PLACEMENTS = [
     desc: "Bandeau sous le menu, sur toutes les pages. Format 970×120 (hauteur limitée à 110 px, 70 px sur mobile).",
   },
   {
-    key: "sidebar",
-    label: "Colonne latérale",
+    key: "rail_left",
+    label: "Colonne gauche",
     desc:
-      "Sous les filtres de la page Concours, et en rail flottant à droite sur les grands écrans " +
-      "(≥ 1600 px), là où la marge est réellement libre. Format 160×600 ou 300×600.",
+      "Rail flottant dans la marge gauche — accueil, et fiches concours / cours / article individuelles " +
+      "uniquement (pas les pages de liste). Apparaît seulement quand cette marge est assez large pour " +
+      "l'accueillir sans toucher au contenu. Format 160×600.",
+  },
+  {
+    key: "rail_right",
+    label: "Colonne droite",
+    desc: "Comme la colonne gauche, côté droit. Les deux peuvent être utilisées en même temps.",
   },
   {
     key: "footer",
@@ -131,7 +140,7 @@ export function partnerAdHtml(ad, placement) {
   //    is the one thing an ad can do to wreck a Core Web Vitals score.
   //  - fetchpriority="low" keeps a banner from competing with the page's own
   //    LCP image or fonts. An ad is never the reason someone came here.
-  //  - lazy only below the fold. The header banner and the sidebar are visible
+  //  - lazy only below the fold. The header banner and the rails are visible
   //    on arrival, so deferring them just makes them pop in late.
   const dims = ad.w && ad.h ? ` width="${Number(ad.w)}" height="${Number(ad.h)}"` : "";
   const loading = placement === "footer" ? "lazy" : "eager";

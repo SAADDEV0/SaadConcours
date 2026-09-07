@@ -17,9 +17,14 @@ const NAV_ITEMS = [
 // most navigation here is a plain <a href> full page load (not Next <Link>
 // client transitions), this is the only loading feedback we can actually
 // show before the browser tears the page down to fetch the next one.
-export function chromeHtml({ active, showSearch }) {
+// `rails` opts a page into the left/right partner-ad columns — accueil and
+// the three individual-item detail pages (concours, cours, article de blog)
+// only. Every listing page (/concours, /cours, /blog, /evaluation, /news,
+// /faq) omits it: it's the request that scoped rails to "une page sélectionnée"
+// and explicitly not "la page initiale" of any section.
+export function chromeHtml({ active, showSearch, rails = false }) {
   return `
-<div id="topProgressBar"></div>
+<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}"></div>
 <div class="dua-banner">
   <div class="dua-inner">
     <span class="dua-deco">✦</span>
@@ -219,9 +224,10 @@ export const chromeScript = function initChrome() {
   // advertisers can share the same slot instead of competing for it.
   //
   // Every zone lives in the normal document flow — no overlay is ever allowed
-  // to push, shrink or cover the site. The one exception is the wide-screen
-  // rail below, which only exists at viewport widths where the margin beside
-  // the content is genuinely empty.
+  // to push, shrink or cover the site. The one exception is the left/right
+  // rail pair below, which only exists where the margin beside the content is
+  // genuinely empty, measured against the real page rather than guessed from
+  // a fixed breakpoint.
   function renderPartnerAds(settings) {
     // The header/footer zones are already in the markup and collapse on their
     // own when left empty (.pa-zone:empty), so they only need filling.
@@ -230,40 +236,68 @@ export const chromeScript = function initChrome() {
       const ads = el && adsForPlacement(settings, placement);
       if (ads && ads.length) mountAdZone(el, ads, placement);
     }
-    // The sidebar host doesn't exist in the markup — it's only built when an
-    // advertiser actually targets the slot, so a site without one carries no
-    // trace of it at all.
-    const sidebarAds = adsForPlacement(settings, "sidebar");
-    if (sidebarAds.length) mountAdZone(createSidebarHost(), sidebarAds, "sidebar");
+
+    const railsAllowed = document.getElementById("topProgressBar")?.dataset.paRails === "1";
+    if (!railsAllowed) return;
+    const leftAds = adsForPlacement(settings, "rail_left");
+    const rightAds = adsForPlacement(settings, "rail_right");
+    if (leftAds.length) {
+      const { el, isVisible } = createRail("left");
+      mountAdZone(el, leftAds, "rail_left", isVisible);
+    }
+    if (rightAds.length) {
+      const { el, isVisible } = createRail("right");
+      mountAdZone(el, rightAds, "rail_right", isVisible);
+    }
   }
 
-  // Two hosts, in preference order:
-  //  1. The left column of /concours, as a grid cell underneath the filters.
-  //     Appending it *inside* .filters was the wrong move: that panel is a
-  //     sticky, max-height, overflow-y:auto box, so a 600px banner ended up
-  //     two thirds clipped. Making <main> span both rows instead leaves the
-  //     banner its own cell below the panel, outside its scrollport.
-  //  2. Anywhere else, a fixed rail — revealed by CSS only above 1760px, the
-  //     width at which the empty margin beside even the widest page (.layout,
-  //     1400px) is enough to hold it without touching the content.
-  function createSidebarHost() {
-    const column = document.querySelector(".filters");
-    const layout = column && column.closest(".layout");
-    if (layout) {
-      const slot = document.createElement("div");
-      slot.className = "pa-side";
-      layout.appendChild(slot); // last child → row 2 of the filters column
-      layout.classList.add("has-pa-side");
-      return slot;
-    }
+  const RAIL_WIDTH = 160;
+  const RAIL_MARGIN = 16;
+
+  // Fixed-position rail, hidden by default. Its `left` is computed — not
+  // guessed from a viewport breakpoint — from the actual rendered width of
+  // whichever content wrapper the current page uses (.home-view is 1100px,
+  // .cd-view is 820px on concours/blog and 1100px on cours — see its inline
+  // style there — so a single breakpoint could never fit all of them
+  // correctly). The rail only appears once that measured gutter is wide
+  // enough to hold it without touching the content, and re-measures on
+  // resize so rotating a phone or resizing a window never leaves it
+  // overlapping text.
+  function createRail(side) {
     const rail = document.createElement("aside");
     rail.className = "pa-rail";
+    rail.style.width = RAIL_WIDTH + "px";
     rail.setAttribute("aria-label", "Publicité partenaire");
     document.body.appendChild(rail);
-    return rail;
+
+    function reposition() {
+      const content = document.querySelector(".home-view, .cd-view");
+      if (!content) return (rail.style.display = "none");
+      const box = content.getBoundingClientRect();
+      const gutter = side === "left" ? box.left : window.innerWidth - box.right;
+      if (gutter < RAIL_WIDTH + RAIL_MARGIN * 2) {
+        rail.style.display = "none";
+        return;
+      }
+      rail.style.display = "flex";
+      rail.style.left = side === "left" ? `${box.left - RAIL_MARGIN - RAIL_WIDTH}px` : `${box.right + RAIL_MARGIN}px`;
+    }
+
+    reposition();
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(reposition, 150);
+    });
+
+    return { el: rail, isVisible: () => rail.style.display !== "none" };
   }
 
-  function mountAdZone(el, ads, placement) {
+  // `isVisible` defaults to true (header/footer are only ever mounted once
+  // they're already going to render). The rail passes its own check: it's
+  // created unconditionally so a resize can reveal it later, but must not
+  // bill an advertiser for an impression that happened while display:none.
+  function mountAdZone(el, ads, placement, isVisible = () => true) {
     // Random start index so the same advertiser isn't always the one seen by
     // visitors who bounce before the first rotation.
     let idx = Math.floor(Math.random() * ads.length);
@@ -282,13 +316,13 @@ export const chromeScript = function initChrome() {
 
       const img = banner.querySelector("img");
       if (!img) {
-        trackAdEvent(ad.id, "view");
+        if (isVisible()) trackAdEvent(ad.id, "view");
         return;
       }
       // An impression is only counted once the visual is actually on screen —
       // an advertiser shouldn't be shown a number that includes the times his
-      // banner failed to load.
-      img.addEventListener("load", () => trackAdEvent(ad.id, "view"));
+      // banner failed to load, or a rail that never had room to appear.
+      img.addEventListener("load", () => isVisible() && trackAdEvent(ad.id, "view"));
       // A visual that 404s (typically one uploaded seconds ago, before the
       // deploy carrying it has landed) must leave no trace: a broken-image box
       // labelled "Sponsorisé" reads as the site itself being broken. Hand the

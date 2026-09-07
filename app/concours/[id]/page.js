@@ -193,7 +193,7 @@ export default async function ConcoursDetailPage({ params }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       )}
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false, rails: true }) }} />
 
       <div className="cd-view">
         <nav className="cd-breadcrumb">
