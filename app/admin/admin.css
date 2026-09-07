@@ -844,9 +844,14 @@
 }
 
 
-/* ---------- Admin: toasts, confirm modal, empty states, skeletons ---------- */
+/* ---------- Admin: toasts, confirm modal, empty states, skeletons ----------
+   Toasts et modales sont montés dans <body> par un portail React, donc EN
+   DEHORS de .admin-shell où vivent les tokens --z-* : sans valeur de repli,
+   var(--z-toast) / var(--z-modal) ne résolvent rien et z-index retombe sur
+   `auto`, si bien que n'importe quel élément positionné de la page (une barre
+   collante, par exemple) se dessine par-dessus la modale. */
 .toast-viewport{
-  position:fixed; bottom:calc(16px + env(safe-area-inset-bottom)); right:16px; z-index:var(--z-toast);
+  position:fixed; bottom:calc(16px + env(safe-area-inset-bottom)); right:16px; z-index:var(--z-toast, 200);
   display:flex; flex-direction:column; gap:8px; width:340px; max-width:calc(100vw - 32px);
 }
 @media (max-width:560px){ .toast-viewport{left:16px; right:16px; width:auto;} }
@@ -864,9 +869,10 @@
 .toast-close{background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:.9rem; padding:0 0 0 4px; flex-shrink:0;}
 
 .admin-modal-overlay{
-  position:fixed; inset:0; z-index:var(--z-modal); background:rgba(9,9,18,.5);
+  position:fixed; inset:0; z-index:var(--z-modal, 150); background:rgba(9,9,18,.5);
   display:flex; align-items:center; justify-content:center; padding:20px;
 }
+@media (max-width:520px){ .admin-modal-overlay{padding:10px;} }
 .admin-modal{
   background:var(--bg-elev); border:1px solid var(--border); border-radius:16px; box-shadow:var(--admin-e3);
   padding:22px; max-width:420px; width:100%;

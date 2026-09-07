@@ -26,9 +26,16 @@ export const PLATFORMS = [
     key: "facebook",
     label: "Facebook",
     color: "#1877F2",
-    // Le composeur Facebook n'accepte ni texte ni image pré-remplis depuis
-    // une URL (sharer.php ne partage qu'un lien nu). On ouvre donc l'accueil,
-    // où le champ « Exprimez-vous » accepte un Ctrl+V d'image et de texte.
+    // Aucune URL Facebook n'accepte un fichier — mais sharer.php accepte un
+    // *lien*, et Facebook va alors chercher tout seul l'og:image de la page
+    // (chaque page du site en génère une, voir app/_shared/ogImage.js). C'est
+    // donc le seul chemin « un clic, image comprise » sans API : on le
+    // privilégie, et l'image du studio reste disponible en second choix pour
+    // qui veut ce visuel-là précisément.
+    linkShare: true,
+    linkUrl: ({ url, text }) =>
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`,
+    linkHint: "Facebook ajoute lui-même l'image d'aperçu de la page.",
     openUrl: () => "https://www.facebook.com/",
     prefill: false,
     hint: "Colle le texte, puis l'image (ou glisse le fichier téléchargé).",

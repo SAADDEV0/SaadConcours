@@ -30,10 +30,24 @@ import { formatDateFr } from "./lib/contentTypes";
  * foi d'un clic qui a pu être abandonné en route.
  * ------------------------------------------------------------------------ */
 
+// En mode « partage de lien », le lien est déjà attaché par Facebook : le
+// laisser aussi dans la légende afficherait deux fois la même URL sous le
+// post. On retire donc la ligne d'appel à l'action, et elle seule.
+function textWithoutLink(text, url) {
+  if (!url) return text;
+  return text
+    .split("\n")
+    .filter((line) => !line.includes(url))
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 export default function ShareSheet({ open, onClose, blob, filename, text, url, itemLabel, published, onPublish, onTrack }) {
   const [mode, setMode] = useState("auto"); // "auto" (natif si dispo) | "manuel"
   const [step, setStep] = useState("choose");
   const [platformKey, setPlatformKey] = useState(null);
+  const [flow, setFlow] = useState("carte"); // "lien" (aperçu auto) | "carte" (image du studio)
   const [prep, setPrep] = useState(null);
   const [confirmKey, setConfirmKey] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -50,6 +64,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
     if (!open) return;
     setStep("choose");
     setPlatformKey(null);
+    setFlow("carte");
     setPrep(null);
     setConfirmKey(null);
     setCopied(null);
@@ -61,19 +76,25 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
   const platform = platformKey ? platformFor(platformKey) : null;
   const useNative = mode === "auto" && nativeReady;
 
-  async function start(p) {
+  // `forced` permet de rejouer la même plateforme dans l'autre parcours
+  // ("lien" ↔ "carte") depuis l'écran de résultat, sans repasser par la
+  // confirmation de doublon ni par le partage natif.
+  async function start(p, forced) {
     if (busy || !blob) return;
     // Doublon : un premier clic demande confirmation, le second (sur
     // « Republier ») exécute — ça garde aussi le geste utilisateur intact
     // pour navigator.share, qu'une boîte de dialogue asynchrone perdrait.
-    if (published?.[p.key] && confirmKey !== p.key) {
+    if (!forced && published?.[p.key] && confirmKey !== p.key) {
       setConfirmKey(p.key);
       return;
     }
     setConfirmKey(null);
     setPlatformKey(p.key);
 
-    if (useNative && p.key !== "autre") {
+    // Le partage natif reste le meilleur chemin quand il existe : il envoie
+    // l'image du studio *et* la légende d'un coup. Le partage de lien n'est
+    // qu'un pis-aller pour les navigateurs qui ne l'ont pas.
+    if (!forced && useNative && p.key !== "autre") {
       setBusy(true);
       const result = await shareBundle({
         blob,
@@ -90,22 +111,34 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
         setPlatformKey(null);
         return;
       }
-      // "unsupported" → on bascule sur la préparation manuelle plutôt que de
+      // "unsupported" → on enchaîne sur un parcours manuel plutôt que de
       // laisser l'admin sans rien.
     }
 
+    const useLink = forced ? forced === "lien" : Boolean(p.linkShare);
     setBusy(true);
-    const done = await prepareBundle({ blob, filename, text, imageMode: p.prefill ? "clipboard" : "text" });
-    setBusy(false);
-    setPrep(done);
-    setCopied(done.imageCopied ? "image" : done.textCopied ? "texte" : null);
+    if (useLink) {
+      // Rien à télécharger : c'est Facebook qui ira chercher l'og:image de la
+      // page. Seule la légende reste à coller.
+      const ok = await copyText(textWithoutLink(text, url));
+      setBusy(false);
+      setFlow("lien");
+      setPrep({ downloaded: false, imageCopied: false, textCopied: ok });
+      setCopied(ok ? "texte" : null);
+    } else {
+      const done = await prepareBundle({ blob, filename, text, imageMode: p.prefill ? "clipboard" : "text" });
+      setBusy(false);
+      setFlow("carte");
+      setPrep(done);
+      setCopied(done.imageCopied ? "image" : done.textCopied ? "texte" : null);
+    }
     setStep("ready");
     onTrack("prepare", p.key);
   }
 
   async function recopy(what) {
     if (what === "texte") {
-      const ok = await copyText(text);
+      const ok = await copyText(flow === "lien" ? textWithoutLink(text, url) : text);
       setCopied(ok ? "texte" : null);
       if (ok) onTrack("copie", platformKey);
     } else {
@@ -115,7 +148,14 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
     }
   }
 
-  const openHref = platform ? platform.openUrl({ text, url }) : null;
+  const isLink = flow === "lien" && platform?.linkUrl;
+  // Même texte allégé que celui mis dans le presse-papiers : le lien est déjà
+  // porté par le paramètre `u`, le répéter dans la légende ferait doublon.
+  const openHref = platform
+    ? isLink
+      ? platform.linkUrl({ text: textWithoutLink(text, url), url })
+      : platform.openUrl({ text, url })
+    : null;
 
   return (
     <Modal open={open} onClose={onClose} labelledBy="sgx-share-title">
@@ -187,19 +227,29 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
         {step === "ready" && platform && (
           <div className="sgx-ready">
             <ol className="sgx-steps">
-              <li className={prep?.downloaded ? "ok" : "warn"}>
-                <span className="sgx-step-n">1</span>
-                <div>
-                  <strong>{prep?.downloaded ? "Image téléchargée" : "Téléchargement bloqué"}</strong>
-                  <p>{filename}</p>
-                </div>
-                <button type="button" className="admin-btn secondary" onClick={() => downloadBlob(blob, filename)}>
-                  ⬇ Encore
-                </button>
-              </li>
+              {isLink ? (
+                <li className="ok">
+                  <span className="sgx-step-n">🖼</span>
+                  <div>
+                    <strong>Image ajoutée automatiquement</strong>
+                    <p>{platform.linkHint} Rien à télécharger ni à téléverser.</p>
+                  </div>
+                </li>
+              ) : (
+                <li className={prep?.downloaded ? "ok" : "warn"}>
+                  <span className="sgx-step-n">1</span>
+                  <div>
+                    <strong>{prep?.downloaded ? "Image téléchargée" : "Téléchargement bloqué"}</strong>
+                    <p>{filename}</p>
+                  </div>
+                  <button type="button" className="admin-btn secondary" onClick={() => downloadBlob(blob, filename)}>
+                    ⬇ Encore
+                  </button>
+                </li>
+              )}
 
               <li className={copied ? "ok" : "warn"}>
-                <span className="sgx-step-n">2</span>
+                <span className="sgx-step-n">{isLink ? "1" : "2"}</span>
                 <div>
                   <strong>
                     {copied === "image"
@@ -209,7 +259,9 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
                       : "Presse-papiers indisponible"}
                   </strong>
                   <p>
-                    {platform.prefill
+                    {isLink
+                      ? "Le lien est déjà joint : la légende copiée n'en contient pas de second."
+                      : platform.prefill
                       ? "Le texte est déjà dans le lien ci-dessous."
                       : "Le presse-papiers ne garde qu'une chose : colle, puis reviens copier l'autre."}
                   </p>
@@ -218,7 +270,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
                   <button type="button" className="admin-btn secondary" onClick={() => recopy("texte")}>
                     Texte
                   </button>
-                  {canCopyImage() && (
+                  {!isLink && canCopyImage() && (
                     <button type="button" className="admin-btn secondary" onClick={() => recopy("image")}>
                       Image
                     </button>
@@ -227,10 +279,10 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
               </li>
 
               <li className="ok">
-                <span className="sgx-step-n">3</span>
+                <span className="sgx-step-n">{isLink ? "2" : "3"}</span>
                 <div>
                   <strong>Publier sur {platform.label}</strong>
-                  <p>{platform.hint}</p>
+                  <p>{isLink ? "La fenêtre de partage s'ouvre avec l'aperçu déjà prêt." : platform.hint}</p>
                 </div>
                 {openHref && (
                   <a
@@ -246,17 +298,37 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
               </li>
             </ol>
 
+            {platform.linkShare && (
+              <p className="sgx-share-note">
+                {isLink ? (
+                  <>
+                    L&apos;aperçu vient de la page (1200×630), pas de la carte du studio.{" "}
+                    <button type="button" className="sgx-linkbtn" onClick={() => start(platform, "carte")}>
+                      Publier plutôt l&apos;image du studio →
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Tu peux éviter le téléchargement : Facebook sait récupérer l&apos;aperçu tout seul.{" "}
+                    <button type="button" className="sgx-linkbtn" onClick={() => start(platform, "lien")}>
+                      Repasser au partage de lien →
+                    </button>
+                  </>
+                )}
+              </p>
+            )}
+
             <div className="sgx-ready-actions">
               <button type="button" className="admin-btn secondary" onClick={() => setStep("choose")}>
                 ← Autre réseau
               </button>
               <button type="button" className="admin-btn sgx-btn-done" onClick={() => onPublish(platform.key)}>
-                ✅ J'ai publié sur {platform.label}
+                ✅ J&apos;ai publié sur {platform.label}
               </button>
             </div>
             <p className="sgx-share-note">
-              « J'ai publié » enregistre le post dans l'historique — c'est ce qui déclenche l'avertissement anti-doublon
-              la prochaine fois.
+              « J&apos;ai publié » enregistre le post dans l&apos;historique — c&apos;est ce qui déclenche
+              l&apos;avertissement anti-doublon la prochaine fois.
             </p>
           </div>
         )}

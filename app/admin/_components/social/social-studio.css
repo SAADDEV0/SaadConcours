@@ -186,7 +186,7 @@
 .sgx-dots{display:inline-flex; gap:3px;}
 
 /* ---------- aperçus ---------- */
-.sgx-previews{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:20px;}
+.sgx-previews{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px, 100%),1fr)); gap:20px;}
 .sgx-preview-label{
   font-size:.72rem; font-weight:800; color:var(--text-dim); text-transform:uppercase;
   letter-spacing:.05em; margin-bottom:8px;
@@ -248,7 +248,10 @@
 /* ==========================================================================
    Sélecteur de contenu (palette plein écran)
    ========================================================================== */
-.admin-modal:has(.sgx-picker){max-width:760px; width:94vw; height:min(82vh, 760px); max-height:82vh; padding:18px;}
+/* Pas de `width:94vw` ici : .admin-modal est déjà en width:100% dans un
+   overlay qui porte le padding d'écran. Fixer une largeur en vw s'ajouterait
+   à ce padding et ferait déborder la modale sur petit écran. */
+.admin-modal:has(.sgx-picker){max-width:760px; height:min(82vh, 760px); max-height:82vh; padding:18px;}
 .sgx-picker{display:flex; flex-direction:column; height:100%; min-height:0; gap:12px;}
 .sgx-picker-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
 .sgx-picker-head .admin-modal-title{margin:0;}
@@ -303,7 +306,7 @@
 /* ==========================================================================
    Feuille de partage
    ========================================================================== */
-.admin-modal:has(.sgx-share){max-width:620px; width:94vw; padding:20px;}
+.admin-modal:has(.sgx-share){max-width:620px; padding:20px;}
 .sgx-share{display:flex; flex-direction:column; gap:14px; min-height:0;}
 .sgx-share-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
 .sgx-share-head .admin-modal-title{margin:0;}
@@ -311,7 +314,7 @@
 .sgx-share-lead{margin:0; font-size:.83rem; color:var(--text-dim); line-height:1.5;}
 .sgx-share-note{font-size:.74rem; color:var(--text-faint); line-height:1.5; margin:0;}
 
-.sgx-share-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;}
+.sgx-share-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(140px, 100%),1fr)); gap:10px;}
 .sgx-share-tile{
   display:flex; flex-direction:column; align-items:flex-start; gap:4px;
   padding:13px 14px; border-radius:14px; border:1.5px solid var(--border); background:var(--bg-card);
@@ -403,6 +406,9 @@
   .sgx-canvas{max-height:380px;}
 }
 @media (max-width:720px){
+  /* La barre de titre cesse d'être collante : sur un écran court, deux barres
+     fixes (celle-ci + la barre d'action) mangeraient l'essentiel de la
+     hauteur utile. */
   .sgx-bar{position:static;}
   .sgx-bar-actions{width:100%; justify-content:space-between;}
   .sgx-views{flex:1;}
@@ -416,4 +422,22 @@
   .sgx-btn-share{grid-column:1 / -1;}
   .sgx-steps li{flex-wrap:wrap;}
   .sgx-steps li > div{flex-basis:100%; order:-1;}
+  .sgx-step-actions{margin-left:auto;}
+  .admin-modal:has(.sgx-picker){height:min(88vh, 760px); max-height:88vh; padding:14px;}
+  .admin-modal:has(.sgx-share){padding:16px;}
+}
+
+@media (max-width:520px){
+  .sgx{--sgx-gap:12px; padding-bottom:130px;}
+  .sgx-panel{padding:14px;}
+  .sgx-bar-title p{display:none;}
+  .sgx-target-empty{padding:18px 14px; gap:12px;}
+  .sgx-target-empty em{display:none;}
+  /* Aperçus des raccourcis clavier inutiles sans clavier physique. */
+  .sgx-picker-foot kbd, .sgx-picker-foot span:first-child{display:none;}
+  .sgx-picker-foot{justify-content:flex-end;}
+  .sgx-textarea{min-height:220px;}
+  .sgx-canvas{max-height:300px;}
+  .sgx-ready-actions{flex-direction:column-reverse;}
+  .sgx-ready-actions .admin-btn{width:100%; justify-content:center;}
 }
