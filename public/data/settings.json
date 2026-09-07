@@ -43,7 +43,27 @@
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
   "partnerAdsEnabled": true,
-  "partnerAds": [],
+  "partnerAds": [
+    {
+      "id": "pa_mtr7b80fzq3l",
+      "name": "vcb",
+      "contact": "",
+      "image": "images/partenaires/bnn.png",
+      "link": "",
+      "alt": "",
+      "title": "",
+      "description": "",
+      "cta": "",
+      "placements": [
+        "header",
+        "sidebar"
+      ],
+      "active": true,
+      "startDate": "",
+      "endDate": "",
+      "note": ""
+    }
+  ],
   "pdfMarginMm": 35,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
