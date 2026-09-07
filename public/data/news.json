@@ -60,13 +60,25 @@
     "date_publication": "2026-09-06"
   },
   {
+    "id": "7e8caf26dd042424",
+    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
+    "etablissement": "FST",
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsth.ma/documents/ouvrir.php?t=fcb50009c38eaf189b3b225e500319649f5dd99393c0df823170511f1dd44813",
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
+    "date_publication": "2026-09-06"
+  },
+  {
     "id": "54e509ee3b4297b7",
     "titre": "Master Université Ibn Tofail Kénitra 2026-2027",
     "etablissement": null,
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2024/08/Master-Universite-Ibn-Tofail-Kenitra.html",
     "date_publication": "2026-09-05"
@@ -336,18 +348,6 @@
     "date_publication": "2026-09-04"
   },
   {
-    "id": "7e8caf26dd042424",
-    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
-    "etablissement": "FST",
-    "ville": null,
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fsth.ma/documents/ouvrir.php?t=fcb50009c38eaf189b3b225e500319649f5dd99393c0df823170511f1dd44813",
-    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
-    "date_publication": "2026-09-03"
-  },
-  {
     "id": "723246f5bda614cc",
     "titre": "Master FLSH Mohammedia 2026-2027",
     "etablissement": "FLSH",
@@ -414,7 +414,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-kenitra-2026-2027.html",
     "date_publication": "2026-09-02"
@@ -594,7 +594,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-kenitra-2026-2027.html",
     "date_publication": "2026-08-26"
@@ -1122,7 +1122,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-feg-kenitra-2026-2027.html",
     "date_publication": "2026-08-06"
@@ -1146,7 +1146,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-ims-kenitra-2026-2027.html",
     "date_publication": "2026-08-06"
@@ -1158,7 +1158,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-flla-kenitra-2026-2027.html",
     "date_publication": "2026-08-06"
@@ -1170,7 +1170,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-esef-kenitra-2026-2027.html",
     "date_publication": "2026-08-06"
@@ -1182,7 +1182,7 @@
     "ville": "Kénitra",
     "filiere": null,
     "date_limite": "2026-09-06",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-fshs-kenitra-2026-2027.html",
     "date_publication": "2026-08-06"
