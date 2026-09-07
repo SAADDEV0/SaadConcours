@@ -42,8 +42,31 @@
   "adsConcoursMidSlot": "",
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
-  "partnerAdsEnabled": false,
-  "partnerAds": [],
+  "partnerAdsEnabled": true,
+  "partnerAds": [
+    {
+      "id": "pa_mtrfcvbkk70f",
+      "name": "",
+      "contact": "",
+      "image": "images/partenaires/saadconcours-concours-carre-2023_Rabat_FSJESSouissi_AEM.png",
+      "link": "",
+      "alt": "",
+      "title": "",
+      "description": "",
+      "cta": "",
+      "placements": [
+        "header",
+        "rail_left",
+        "rail_right"
+      ],
+      "active": true,
+      "startDate": "",
+      "endDate": "",
+      "note": "",
+      "w": "",
+      "h": ""
+    }
+  ],
   "pdfMarginMm": 35,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
