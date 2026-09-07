@@ -502,14 +502,8 @@ function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, 
           </label>
 
           <div className="admin-field">
-            <label>Aperçu</label>
-            <div
-              className="pa-admin-preview"
-              // Même fonction de rendu que le site public, pour que l'aperçu ne
-              // puisse pas diverger de ce que verront les visiteurs.
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: partnerAdHtml(ad, placements[0] || "header") }}
-            />
+            <label>Aperçu sur le site</label>
+            <AdSitePreview ad={ad} placements={placements} />
           </div>
 
           <div className="admin-row-actions">
@@ -522,6 +516,69 @@ function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, 
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Maquette du site (en-tête, rails gauche/droite, pied de page) affichant la
+// bannière dans chaque emplacement coché en une seule vue, avec le même
+// rendu HTML que le site public (partnerAdHtml) pour qu'il n'y ait jamais
+// d'écart entre ce que Saad voit ici et ce que verront les visiteurs. Les
+// emplacements non cochés restent visibles mais vides, pour rappeler où la
+// bannière n'apparaîtra pas.
+function AdSitePreview({ ad, placements }) {
+  function zone(key, label) {
+    if (!placements.includes(key)) {
+      return (
+        <div className="pa-site-mock-empty">{label} — non coché</div>
+      );
+    }
+    return (
+      <div
+        className="pa-admin-preview"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: partnerAdHtml(ad, key) }}
+      />
+    );
+  }
+
+  return (
+    <div className="pa-site-mock">
+      <div className="pa-site-mock-topbar">
+        <span className="pa-site-mock-dot" />
+        <span className="pa-site-mock-dot" />
+        <span className="pa-site-mock-dot" />
+        <span className="pa-site-mock-nav" />
+      </div>
+
+      <div className="pa-site-mock-zone">
+        <div className="pa-site-mock-zone-label">Haut de page</div>
+        {zone("header", "Haut de page")}
+      </div>
+
+      <div className="pa-site-mock-body">
+        <div className="pa-site-mock-rail">
+          <div className="pa-site-mock-zone-label">Colonne gauche</div>
+          {zone("rail_left", "Colonne gauche")}
+        </div>
+
+        <div className="pa-site-mock-content">
+          <div className="pa-site-mock-content-line" />
+          <div className="pa-site-mock-content-line short" />
+          <div className="pa-site-mock-card" />
+          <div className="pa-site-mock-card" />
+        </div>
+
+        <div className="pa-site-mock-rail">
+          <div className="pa-site-mock-zone-label">Colonne droite</div>
+          {zone("rail_right", "Colonne droite")}
+        </div>
+      </div>
+
+      <div className="pa-site-mock-zone">
+        <div className="pa-site-mock-zone-label">Bas de page</div>
+        {zone("footer", "Bas de page")}
+      </div>
     </div>
   );
 }
