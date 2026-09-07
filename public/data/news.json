@@ -60,6 +60,42 @@
     "date_publication": "2026-09-07"
   },
   {
+    "id": "7e8caf26dd042424",
+    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
+    "etablissement": "FST",
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsth.ma/documents/ouvrir.php?t=fcb50009c38eaf189b3b225e500319649f5dd99393c0df823170511f1dd44813",
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
+    "date_publication": "2026-09-07"
+  },
+  {
+    "id": "e25f1399ec3e52db",
+    "titre": "Résultats Définitifs Master Institut Mohammed VI des Lectures et Etudes Coraniques 2026-2027",
+    "etablissement": null,
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/09/resultats-definitifs-master-institut.html",
+    "date_publication": "2026-09-07"
+  },
+  {
+    "id": "75590d708bcfced8",
+    "titre": "Résultats Définitifs Master FLSH Rabat 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Definitifs-Master-FLSH-Rabat-2026-2027.html",
+    "date_publication": "2026-09-07"
+  },
+  {
     "id": "3c4a6079e73dc5e5",
     "titre": "Résultats Présélection Master FST Béni Mellal 2026-2027",
     "etablissement": "FST",
@@ -93,18 +129,6 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2023/07/master-universite-chouaib-doukkali-el.html",
-    "date_publication": "2026-09-06"
-  },
-  {
-    "id": "7e8caf26dd042424",
-    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
-    "etablissement": "FST",
-    "ville": null,
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fsth.ma/documents/ouvrir.php?t=fcb50009c38eaf189b3b225e500319649f5dd99393c0df823170511f1dd44813",
-    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
     "date_publication": "2026-09-06"
   },
   {
@@ -461,7 +485,7 @@
     "etablissement": null,
     "ville": "Béni Mellal",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-23",
     "cloture": false,
     "lien_inscription": "https://esefbm.usms.ac.ma/e-candidature-master/",
     "source": "https://www.almaster-maroc.com/2026/09/master-esef-beni-mellal-2026-2027.html",
@@ -1413,30 +1437,6 @@
     "cloture": true,
     "lien_inscription": "http://ensak.usms.ac.ma/PreinscriptionMaster/",
     "source": "https://www.almaster-maroc.com/2026/07/master-ensa-khouribga-2026-2027.html",
-    "date_publication": "2026-08-01"
-  },
-  {
-    "id": "d0d2c60bc05b8cb6",
-    "titre": "Master ENSA Safi 2026-2027",
-    "etablissement": "ENSA",
-    "ville": "Safi",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://ensas.uca.ma/Home/FormationContinue",
-    "source": "https://www.almaster-maroc.com/2026/08/master-ensa-safi-2026-2027.html",
-    "date_publication": "2026-08-01"
-  },
-  {
-    "id": "75e3789f23cd2a26",
-    "titre": "Résultats Définitifs Master FST Settat 2026-2027",
-    "etablissement": "FST",
-    "ville": "Settat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://www.fsts.ac.ma/storage/78/inscription-mst-documents-a-fournir-01-08-2026vf.pdf",
-    "source": "https://www.almaster-maroc.com/2026/05/resultats-definitifs-master-fst-settat-2026-2027.html",
     "date_publication": "2026-08-01"
   }
 ]
