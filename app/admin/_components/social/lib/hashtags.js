@@ -5,7 +5,7 @@
  * spécifique à l'item (filière, établissement, ville, module...), puis
  * quelques tags de portée plus large tant qu'il reste de la place — total
  * plafonné à MAX_HASHTAGS. L'admin peut ensuite retirer/ajouter des tags à
- * la main (voir SocialGeneratorPanel) ; ceci ne fournit que la proposition
+ * la main (voir SocialStudio) ; ceci ne fournit que la proposition
  * de départ.
  * ------------------------------------------------------------------------ */
 

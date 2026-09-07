@@ -831,79 +831,8 @@
 .taxonomy-cat-total{font-size:.78rem; color:var(--text-dim);}
 .taxonomy-cat .taxonomy-row{padding:8px 4px;}
 
-/* Social post generator — deux colonnes : sélection (sticky) à gauche,
-   résultat en onglets internes à droite. */
-.social-gen-layout{display:grid; grid-template-columns:minmax(280px,360px) 1fr; gap:18px; align-items:start;}
-.social-gen-sidebar{position:sticky; top:18px;}
-.social-gen-main{min-width:0;}
-.social-gen-tabs{flex-wrap:wrap; height:auto;}
-.social-gen-tabs .admin-view-toggle-btn.active{color:#fff;}
-.social-gen-pane{margin-top:16px;}
-.social-pane-subtitle{font-size:.95rem; font-weight:700; color:var(--text); margin:0 0 12px;}
-.social-gen-canvas{width:100%; height:auto; max-height:620px; object-fit:contain; border-radius:14px; border:1px solid var(--border); display:block; background:var(--bg-card);}
-
-/* Sélecteur de ton (variantes de texte) */
-.social-variant-row{display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
-.social-variant-btn{
-  padding:6px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card);
-  color:var(--text-dim); font-size:.78rem; font-weight:600; cursor:pointer; transition:all .12s ease;
-}
-.social-variant-btn:hover{border-color:var(--accent); color:var(--text);}
-.social-variant-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
-
-.social-gen-textarea{
-  width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid var(--border);
-  background:var(--bg); color:var(--text); line-height:1.55; resize:vertical; outline:none;
-  transition:border-color .12s ease, box-shadow .12s ease;
-}
-.social-gen-textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim);}
-
-/* Hashtags éditables : puces avec retrait + champ d'ajout inline */
-.social-hashtag-editor{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; align-items:center;}
-.social-hashtag-chip{
-  display:inline-flex; align-items:center; gap:2px; padding:4px 6px 4px 11px; border-radius:999px;
-  background:var(--accent-dim); color:var(--accent); font-size:.76rem; font-weight:700;
-}
-.social-hashtag-chip button{
-  border:none; background:transparent; color:inherit; cursor:pointer; font-size:1rem; line-height:1;
-  padding:2px 6px; opacity:.65;
-}
-.social-hashtag-chip button:hover{opacity:1;}
-.social-hashtag-input{
-  border:1.5px dashed var(--border); background:transparent; border-radius:999px; padding:5px 13px;
-  font-size:.76rem; color:var(--text-dim); min-width:130px; outline:none;
-}
-.social-hashtag-input:focus{border-color:var(--accent); border-style:solid; color:var(--text);}
-
-/* Partage natif / raccourcis plateforme, sur fond image */
-.share-btn{background:var(--accent) !important; color:#fff !important;}
-.share-btn:hover{filter:brightness(1.12);}
-.wa-btn{background:#25d366 !important; color:#fff !important;}
-.wa-btn:hover{filter:brightness(1.08);}
-.ig-btn{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4) !important; color:#fff !important;}
-.ig-btn:hover{filter:brightness(1.1);}
-
-/* Historique local (généré/copié/téléchargé/partagé/publié + rappels programmés) */
-.social-history{display:flex; flex-direction:column; gap:22px;}
-.social-history-heading{font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); margin:0 0 8px;}
-.social-history-list{display:flex; flex-direction:column; gap:6px;}
-.social-history-row{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--bg-card);
-}
-.social-history-row.scheduled{
-  border-color:color-mix(in srgb, var(--amber) 45%, var(--border));
-  background:color-mix(in srgb, var(--amber) 8%, var(--bg-card));
-}
-.social-history-row-main{flex:1; min-width:0; cursor:pointer; display:flex; flex-direction:column; gap:2px;}
-.social-history-row-title{font-weight:600; font-size:.86rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-.social-history-row-meta{font-size:.74rem; color:var(--text-faint);}
-.social-history-row-meta a{color:var(--accent); font-weight:700;}
-.social-history-row-actions{display:flex; gap:4px; flex-shrink:0;}
-
+/* Pipeline « concours » — colonnes défilables horizontalement sur mobile. */
 @media (max-width: 900px){
-  .social-gen-layout{grid-template-columns:1fr;}
-  .social-gen-sidebar{position:static;}
   .pipeline-board{
     grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:82%;
     overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 14px;
@@ -914,76 +843,6 @@
   .pipeline-board{grid-auto-columns:88%;}
 }
 
-/* Facebook direct-publish button + result message */
-.fb-publish-btn{background:#1877f2 !important; color:#fff !important;}
-.fb-publish-btn:hover{filter:brightness(1.1);}
-.fb-publish-result{margin:10px 0 0; font-size:.82rem; padding:8px 10px; border-radius:8px;}
-.fb-publish-result.ok{background:var(--green-dim); color:var(--green);}
-.fb-publish-result.error{background:color-mix(in srgb, var(--red) 14%, transparent); color:var(--red);}
-.fb-publish-result a{color:inherit; font-weight:700; text-decoration:underline;}
-
-/* SEO / format quality checks under the generated text */
-.seo-checks{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
-.seo-check-chip{
-  font-size:.74rem; font-weight:600; padding:5px 10px; border-radius:999px; cursor:default;
-  border:1px solid var(--border); background:var(--bg-card); color:var(--text-dim);
-}
-.seo-check-chip.ok{border-color:color-mix(in srgb, var(--green) 45%, var(--border)); color:var(--green);}
-.seo-check-chip.warn{border-color:color-mix(in srgb, var(--amber) 55%, var(--border)); color:var(--amber);}
-
-/* Format picker (post/story/landscape presets) */
-.format-picker{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:8px; margin-bottom:14px;}
-.format-picker-btn{
-  display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;
-  padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); cursor:pointer;
-}
-.format-picker-btn:hover{border-color:var(--accent);}
-.format-picker-btn.active{border-color:var(--accent); background:var(--accent-dim);}
-.format-picker-btn strong{font-size:.85rem; color:var(--text);}
-.format-picker-btn span{font-size:.7rem; color:var(--text-faint);}
-
-/* Platform preview mockups — intentionally hardcode each platform's own
-   look (not the admin's light/dark theme) since these represent external
-   apps, not this site. Sized like an actual phone screen (~380px) rather
-   than shrinking to fit a grid column, so the generated image and text are
-   actually legible in the preview. */
-.social-preview-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:20px;}
-.social-preview-col{display:flex; flex-direction:column; gap:8px;}
-.social-preview-label{font-size:.76rem; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:.03em;}
-
-.pf-mock{
-  border-radius:14px; overflow:hidden; font-family:system-ui,-apple-system,sans-serif; font-size:.86rem;
-  box-shadow:0 10px 26px -12px rgba(0,0,0,.45); max-width:380px; margin:0 auto; width:100%;
-}
-.pf-mock-head{display:flex; align-items:center; gap:8px; padding:11px 13px;}
-.pf-mock-avatar{
-  width:36px; height:36px; border-radius:50%; flex-shrink:0;
-  background:linear-gradient(135deg,#4338ca,#c026d3); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.9rem;
-}
-.pf-mock-name{font-weight:700;}
-.pf-mock-time{font-size:.72rem; opacity:.65;}
-.pf-mock-image{width:100%; display:block; object-fit:cover; max-height:380px;}
-.pf-mock-image.square{aspect-ratio:1/1; object-fit:cover; max-height:none;}
-.pf-mock-caption{white-space:pre-line;}
-.pf-mock-truncate{opacity:.6; font-weight:600;}
-
-.pf-mock-fb{background:#fff; color:#050505;}
-.pf-mock-fb .pf-mock-caption{padding:0 13px 11px; line-height:1.45;}
-.pf-mock-fb .pf-mock-actions{display:flex; justify-content:space-around; padding:9px 4px; border-top:1px solid #eee; font-size:.78rem; color:#65676b; font-weight:600;}
-
-.pf-mock-ig{background:#fff; color:#000;}
-.pf-mock-ig .pf-mock-head{border-bottom:1px solid #efefef;}
-.pf-mock-ig .pf-mock-more{margin-left:auto; font-weight:800; letter-spacing:1px;}
-.pf-mock-ig .pf-mock-icons{display:flex; gap:15px; padding:11px 13px 4px; font-size:1.2rem;}
-.pf-mock-ig .pf-mock-icons-save{margin-left:auto;}
-.pf-mock-ig .pf-mock-caption{padding:3px 13px 13px; line-height:1.45;}
-
-.pf-mock-wa{background:#e5ddd5; padding:16px; display:flex; justify-content:flex-end;}
-.pf-mock-wa-bubble{background:#dcf8c6; border-radius:10px; padding:6px; max-width:100%; box-shadow:0 1px 1px rgba(0,0,0,.1);}
-.pf-mock-wa-bubble .pf-mock-image{border-radius:6px; max-height:320px;}
-.pf-mock-wa-caption{padding:6px 4px 2px; color:#111; line-height:1.4; white-space:pre-line;}
-.pf-mock-wa-meta{text-align:right; font-size:.7rem; color:#667781; padding:0 4px 2px;}
 
 /* ---------- Admin: toasts, confirm modal, empty states, skeletons ---------- */
 .toast-viewport{

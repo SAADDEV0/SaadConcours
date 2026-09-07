@@ -1,13 +1,9 @@
-import SocialGeneratorPanel from "@/app/admin/_components/social/SocialGeneratorPanel";
-import PageHeader from "@/app/admin/_components/shell/PageHeader";
+import SocialStudio from "@/app/admin/_components/social/SocialStudio";
 
 export const metadata = { title: "Réseaux sociaux" };
 
+// Pas de <PageHeader> ici : le studio a sa propre barre de titre collante
+// (voir SocialStudio), un second bandeau ferait doublon.
 export default function ReseauxPage() {
-  return (
-    <>
-      <PageHeader icon="📣" title="Réseaux sociaux" />
-      <SocialGeneratorPanel />
-    </>
-  );
+  return <SocialStudio />;
 }

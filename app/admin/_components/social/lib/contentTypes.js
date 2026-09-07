@@ -88,6 +88,28 @@ export function hasCorrige(item) {
   return Boolean(item.corrige_md || item.corrige_from_github);
 }
 
+/* --------------------------------- Recherche ---------------------------------
+ * Le sélecteur doit rester utilisable avec plusieurs centaines de contenus :
+ * la recherche ignore accents et casse (« evaluation » trouve « Évaluation »)
+ * et exige que *tous* les mots tapés soient présents, dans n'importe quel
+ * ordre — « fsjes 2023 » trouve « … FSJES … Session 2023 ».
+ * ------------------------------------------------------------------------ */
+
+export function normalizeText(s) {
+  return String(s || "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
+
+export function queryTerms(query) {
+  return normalizeText(query).split(/\s+/).filter(Boolean);
+}
+
+export function matchesTerms(normalizedHaystack, terms) {
+  return terms.every((t) => normalizedHaystack.includes(t));
+}
+
 /* --------------------------------- Utils --------------------------------- */
 
 export function daysUntil(dateStr) {
