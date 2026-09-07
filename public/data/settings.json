@@ -43,26 +43,7 @@
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
   "partnerAdsEnabled": true,
-  "partnerAds": [
-    {
-      "id": "pa_mtr5bn1lxclg",
-      "name": "uhvuv",
-      "contact": "",
-      "image": "images/partenaires/saadconcours-concours-carre-2017_Settat_Fsjes_MarketingEtActionCommerciales.png",
-      "link": "",
-      "alt": "",
-      "title": "",
-      "description": "",
-      "cta": "",
-      "placements": [
-        "header"
-      ],
-      "active": true,
-      "startDate": "",
-      "endDate": "",
-      "note": ""
-    }
-  ],
+  "partnerAds": [],
   "pdfMarginMm": 35,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
