@@ -56,7 +56,8 @@ export const SECTIONS = [
         label: "Réglages",
         children: [
           { key: "reglages-general", href: "/admin/reglages", label: "Général", exact: true },
-          { key: "reglages-publicite", href: "/admin/reglages/publicite", label: "Publicité" },
+          { key: "reglages-publicite", href: "/admin/reglages/publicite", label: "Publicité (AdSense)" },
+          { key: "reglages-partenaires", href: "/admin/reglages/partenaires", label: "Bannières partenaires" },
         ],
       },
     ],

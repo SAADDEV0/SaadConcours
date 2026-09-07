@@ -995,3 +995,46 @@
 }
 @keyframes skeleton-pulse{ 0%{background-position:100% 50%;} 100%{background-position:0 50%;} }
 @media (prefers-reduced-motion: reduce){ .skeleton-line{animation:none;} }
+
+/* Régie partenaires (/admin/reglages/partenaires) — liste de bannières
+ * repliables : l'en-tête suffit pour voir l'état et les chiffres de chaque
+ * annonceur, le détail ne s'ouvre que pour celle qu'on édite. */
+.pa-admin-list{display:flex; flex-direction:column; gap:10px;}
+.pa-admin-item{border:1px solid var(--border); border-radius:12px; background:var(--bg-card); overflow:hidden;}
+.pa-admin-item.open{border-color:var(--accent);}
+.pa-admin-toggle{
+  width:100%; display:flex; align-items:center; gap:12px; padding:10px 14px; text-align:left;
+  background:none; border:none; color:var(--text); cursor:pointer; font-family:var(--font); font-size:.9rem;
+}
+.pa-admin-toggle:hover{background:var(--bg-elev);}
+.pa-admin-thumb{
+  width:56px; height:38px; flex-shrink:0; border-radius:8px; overflow:hidden; background:var(--bg-elev);
+  border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1rem;
+}
+.pa-admin-thumb img{width:100%; height:100%; object-fit:cover;}
+.pa-admin-head-text{flex:1; min-width:0;}
+.pa-admin-name{display:block; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.pa-admin-meta{display:block; font-size:.76rem; color:var(--text-faint); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.pa-admin-status{
+  flex-shrink:0; padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:600;
+  background:var(--bg-elev); border:1px solid var(--border); color:var(--text-dim);
+}
+.pa-admin-status.on{color:var(--green); border-color:var(--green); background:var(--green-dim);}
+.pa-admin-status.warn{color:var(--amber); border-color:var(--amber);}
+.pa-admin-stat{flex-shrink:0; font-size:.76rem; color:var(--text-faint); white-space:nowrap;}
+.pa-admin-chevron{flex-shrink:0; font-size:.6rem; color:var(--text-faint);}
+.pa-admin-body{padding:16px 14px 14px; border-top:1px solid var(--border);}
+.pa-admin-upload{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.pa-admin-placements{display:flex; flex-direction:column; gap:8px;}
+.pa-admin-placement{
+  display:flex; align-items:flex-start; gap:10px; padding:10px 12px; cursor:pointer;
+  border:1px solid var(--border); border-radius:10px; background:var(--bg); font-size:.85rem;
+}
+.pa-admin-placement:hover{border-color:var(--accent);}
+.pa-admin-placement input[type="checkbox"]{margin:2px 0 0; width:auto; flex-shrink:0;}
+.pa-admin-placement strong{display:block; font-weight:600;}
+.pa-admin-preview{padding:14px; border:1px dashed var(--border); border-radius:10px; background:var(--bg);}
+.pa-admin-preview .pa-banner{max-width:100%;}
+@media (max-width:720px){
+  .pa-admin-stat, .pa-admin-thumb{display:none;}
+}

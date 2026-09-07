@@ -22,6 +22,8 @@ const PROTECTED_API_ALWAYS = [
   "/api/admin/email-status",
   "/api/admin/import-concours",
   "/api/admin/taxonomy",
+  "/api/admin/ad-stats",
+  "/api/admin/settings",
 ];
 
 function isProtectedApiWrite(pathname, method) {
@@ -94,6 +96,8 @@ export const config = {
     "/api/admin/email-status",
     "/api/admin/import-concours",
     "/api/admin/taxonomy",
+    "/api/admin/ad-stats",
+    "/api/admin/settings",
     "/api/settings/:path*",
   ],
 };

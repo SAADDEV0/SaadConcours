@@ -8,7 +8,10 @@ function safeSegment(s) {
   return String(s || "")
     .trim()
     .replace(/[\\/]/g, "-")
-    .replace(/\s+/g, "_");
+    .replace(/\s+/g, "_")
+    // A segment of "." or ".." would climb out of images/ once joined into
+    // the repo path handed to the Contents API.
+    .replace(/^\.+/, "");
 }
 
 // Write access is gated by middleware.js (admin cookie required).
@@ -18,8 +21,11 @@ export async function POST(req) {
   }
 
   const body = await req.json();
-  const { ville, concoursId, filename, dataBase64 } = body || {};
-  if (!ville || !concoursId || !filename || !dataBase64) {
+  const { ville, concoursId, folder, filename, dataBase64 } = body || {};
+  // Two shapes: the original concours upload (images/<ville>/<id>/<file>) and
+  // a flat images/<folder>/<file> used by anything not attached to a concours
+  // — today the partner ad banners (images/partenaires/...).
+  if (!filename || !dataBase64 || (!folder && (!ville || !concoursId))) {
     return NextResponse.json({ error: "Champs manquants." }, { status: 400 });
   }
 
@@ -33,10 +39,10 @@ export async function POST(req) {
     return NextResponse.json({ error: "Image trop volumineuse (8 Mo max)." }, { status: 400 });
   }
 
-  const villeSeg = safeSegment(ville);
-  const idSeg = safeSegment(concoursId);
   const nameSeg = safeSegment(filename);
-  const repoRelPath = `images/${villeSeg}/${idSeg}/${nameSeg}`;
+  const repoRelPath = folder
+    ? `images/${safeSegment(folder)}/${nameSeg}`
+    : `images/${safeSegment(ville)}/${safeSegment(concoursId)}/${nameSeg}`;
 
   await writeGithubBinaryFile(repoRelPath, dataBase64, `Add image: ${repoRelPath}`);
 

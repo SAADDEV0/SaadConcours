@@ -2,6 +2,8 @@
 // reused verbatim across every page since they're separate routes now
 // instead of one single-page app.
 
+import { adsForPlacement, partnerAdHtml } from "./partnerAds";
+
 const NAV_ITEMS = [
   { key: "home", href: "/", label: "Accueil" },
   { key: "concours", href: "/concours", label: "Concours" },
@@ -74,6 +76,8 @@ export function chromeHtml({ active, showSearch }) {
     ).join("")}
   </div>
 </header>
+
+<div class="pa-zone pa-zone-header" id="paHeader"></div>
 `;
 }
 
@@ -94,6 +98,7 @@ export function spinnerHtml(label) {
 // for that network, so an unconfigured link never flashes then disappears.
 export function footerHtml() {
   return `
+<div class="pa-zone pa-zone-footer" id="paFooter"></div>
 <footer>
   <div class="footer-text">Base de données de sujets de concours réels — corrigés indicatifs quand disponibles, sources publiques citées sur chaque fiche.</div>
   <div class="footer-social" id="footerSocial"></div>
@@ -179,24 +184,111 @@ export const chromeScript = function initChrome() {
     window.addEventListener("pageshow", () => bar.classList.remove("loading"));
   })();
 
-  (function initSocialLinks() {
-    const el = document.getElementById("footerSocial");
-    if (!el) return;
+  // One /api/settings round-trip feeds both the footer's social row and the
+  // partner ad zones — they used to be two separate fetches of the same
+  // document on every page load.
+  (function initSettingsChrome() {
+    if (document.__scSettingsChromeWired) return;
+    document.__scSettingsChromeWired = true;
+
     fetch("/api/settings")
       .then((r) => r.json())
       .then((settings) => {
-        const links = SOCIAL_NETWORKS.filter((n) => settings && settings[n.key]);
-        if (!links.length) return;
-        el.innerHTML = links
-          .map((n) => {
-            const raw = settings[n.key];
-            const href = n.hrefPrefix ? n.hrefPrefix + raw : raw;
-            return `<a class="footer-social-link" href="${href}" target="_blank" rel="noopener noreferrer" title="${n.label}" aria-label="${n.label}">${n.icon}</a>`;
-          })
-          .join("");
+        renderSocialLinks(settings);
+        renderPartnerAds(settings);
       })
       .catch(() => {});
   })();
+
+  function renderSocialLinks(settings) {
+    const el = document.getElementById("footerSocial");
+    if (!el) return;
+    const links = SOCIAL_NETWORKS.filter((n) => settings && settings[n.key]);
+    if (!links.length) return;
+    el.innerHTML = links
+      .map((n) => {
+        const raw = settings[n.key];
+        const href = n.hrefPrefix ? n.hrefPrefix + raw : raw;
+        return `<a class="footer-social-link" href="${href}" target="_blank" rel="noopener noreferrer" title="${n.label}" aria-label="${n.label}">${n.icon}</a>`;
+      })
+      .join("");
+  }
+
+  // Own-inventory banners (see _shared/partnerAds.js). Each zone shows one
+  // banner at a time and cycles through the others every 12s, so several
+  // advertisers can share the same slot instead of competing for it.
+  function renderPartnerAds(settings) {
+    const zones = [
+      { placement: "header", el: document.getElementById("paHeader") },
+      { placement: "footer", el: document.getElementById("paFooter") },
+      { placement: "sidebar", el: ensureAdRail() },
+    ];
+
+    let railUsed = false;
+    for (const zone of zones) {
+      if (!zone.el) continue;
+      const ads = adsForPlacement(settings, zone.placement);
+      if (!ads.length) continue;
+      if (zone.placement === "sidebar") railUsed = true;
+      mountAdZone(zone.el, ads, zone.placement);
+    }
+
+    // The rail is an overlay, so the body reserves its width instead of
+    // letting it sit on top of the content (see .pa-rail in globals.css).
+    if (railUsed) document.body.classList.add("has-pa-rail");
+    else document.getElementById("paRail")?.remove();
+  }
+
+  function ensureAdRail() {
+    let rail = document.getElementById("paRail");
+    if (!rail) {
+      rail = document.createElement("aside");
+      rail.id = "paRail";
+      rail.className = "pa-rail";
+      rail.setAttribute("aria-label", "Publicités partenaires");
+      document.body.appendChild(rail);
+    }
+    return rail;
+  }
+
+  function mountAdZone(el, ads, placement) {
+    // Random start index so the same advertiser isn't always the one seen by
+    // visitors who bounce before the first rotation.
+    let idx = Math.floor(Math.random() * ads.length);
+
+    function show() {
+      const ad = ads[idx];
+      el.innerHTML = partnerAdHtml(ad, placement);
+      trackAdEvent(ad.id, "view");
+      const banner = el.firstElementChild;
+      if (banner && banner.tagName === "A") {
+        banner.addEventListener("click", () => trackAdEvent(ad.id, "click"));
+      }
+    }
+
+    show();
+    if (ads.length > 1) {
+      setInterval(() => {
+        idx = (idx + 1) % ads.length;
+        show();
+      }, 12000);
+    }
+  }
+
+  // Same fire-and-forget contract as the other counters below: never awaited,
+  // never allowed to throw, and a blocked/failed request must not affect the
+  // banner the visitor is looking at.
+  function trackAdEvent(id, type) {
+    if (!id) return;
+    try {
+      fetch("/api/track/ad", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, type }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch {}
+  }
 
   // First-party visit tracking, replacing the old public visitor-counter
   // widget — no longer shown on the site, but every unique browser still
