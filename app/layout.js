@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSettings } from "@/lib/store";
+import { adsForPlacement, reservationCss } from "./_shared/partnerAds";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
@@ -79,6 +80,12 @@ const WEBSITE_JSON_LD = {
 export default async function RootLayout({ children }) {
   const settings = await getSettings().catch(() => null);
   const adsEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
+  // Réservation d'espace pour les bannières partenaires (voir reservationCss).
+  // Ne cible que le haut et le bas de page : la colonne latérale est posée dans
+  // sa propre cellule ou en flottant, elle ne pousse rien.
+  const partnerAdReservation = ["header", "footer"]
+    .map((placement) => reservationCss(placement, adsForPlacement(settings, placement)))
+    .join("");
 
   return (
     // suppressHydrationWarning: data-theme is stamped on by the pre-paint
@@ -109,6 +116,12 @@ export default async function RootLayout({ children }) {
         {/* katex.min.css is injected client-side by chromeScript() instead of
            linked here — a render-blocking stylesheet on every single page
            (most of which show no math at all) was hurting LCP site-wide. */}
+        {partnerAdReservation && (
+          <style
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: partnerAdReservation }}
+          />
+        )}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet" />

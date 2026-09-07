@@ -42,6 +42,19 @@ function newAd() {
   };
 }
 
+// Les dimensions réelles du visuel sont stockées avec la bannière pour que le
+// site puisse poser width/height sur le <img> : le navigateur réserve alors la
+// place avant même de télécharger l'image, et rien ne saute au chargement.
+function probeDimensions(src) {
+  return new Promise((resolve) => {
+    if (!src) return resolve(null);
+    const img = new Image();
+    img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => resolve(null);
+    img.src = adImageSrc(src);
+  });
+}
+
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -101,8 +114,15 @@ export default function PartnerAdsManager() {
     setDirty(true);
   }
 
+  // Toujours en forme fonctionnelle : uploadImage() enchaîne plusieurs patchs
+  // autour d'un await, et repartir de `form` capturé au rendu écraserait ce
+  // qui a été saisi entre-temps.
   function patchAd(id, changes) {
-    patch({ partnerAds: form.partnerAds.map((ad) => (ad.id === id ? { ...ad, ...changes } : ad)) });
+    setForm((prev) => ({
+      ...prev,
+      partnerAds: prev.partnerAds.map((ad) => (ad.id === id ? { ...ad, ...changes } : ad)),
+    }));
+    setDirty(true);
   }
 
   function addAd() {
@@ -140,10 +160,21 @@ export default function PartnerAdsManager() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Échec de l'envoi.");
-      patchAd(ad.id, { image: data.path, _uploading: false });
+      // Mesuré sur le fichier local : l'image vient d'être commitée sur GitHub
+      // et n'est pas encore servie par le site tant que le déploiement n'a pas
+      // eu lieu, donc la sonder par son URL échouerait ici.
+      const dims = await probeDimensions(URL.createObjectURL(file));
+      patchAd(ad.id, { image: data.path, w: dims?.w || "", h: dims?.h || "", _uploading: false });
     } catch (e) {
       patchAd(ad.id, { _uploading: false, _uploadError: e.message || "Échec de l'envoi." });
     }
+  }
+
+  // Saisie manuelle d'une URL : on mesure au blur plutôt qu'à chaque frappe.
+  async function measureImage(ad) {
+    if (!ad.image) return patchAd(ad.id, { w: "", h: "" });
+    const dims = await probeDimensions(ad.image);
+    patchAd(ad.id, { w: dims?.w || "", h: dims?.h || "" });
   }
 
   async function onSubmit(e) {
@@ -187,9 +218,9 @@ export default function PartnerAdsManager() {
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           Tes propres publicités — celles des annonceurs qui te contactent directement. Aucun rapport avec
           AdSense (onglet « Publicité ») : pas de script Google, tu mets ton image, ton lien et tes dates.
-          Chaque bannière s'affiche dans les emplacements que tu coches, sur toutes les pages du site.
           Quand plusieurs bannières visent le même emplacement, elles tournent l'une après l'autre toutes
-          les 12 secondes.
+          les 12 secondes. Les emplacements restent dans le flux de la page : ils ne recouvrent rien, ne
+          décalent pas le site, et la place du visuel est réservée avant son chargement.
         </p>
 
         <label className="admin-switch-row">
@@ -237,6 +268,7 @@ export default function PartnerAdsManager() {
                 onToggle={() => setOpenId(openId === ad.id ? null : ad.id)}
                 onChange={(changes) => patchAd(ad.id, changes)}
                 onUpload={(file) => uploadImage(ad, file)}
+                onMeasure={() => measureImage(ad)}
                 onDelete={() => removeAd(ad)}
                 onDuplicate={() => duplicateAd(ad)}
               />
@@ -262,7 +294,7 @@ export default function PartnerAdsManager() {
   );
 }
 
-function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, onDelete, onDuplicate }) {
+function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, onMeasure, onDelete, onDuplicate }) {
   const placements = ad.placements || [];
   const ctr = views ? Math.round((clicks / views) * 1000) / 10 : 0;
   const linkWarning = ad.link && !safeAdLink(ad.link);
@@ -345,7 +377,7 @@ function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, 
                 onChange={(e) => onUpload(e.target.files?.[0])}
               />
               {ad.image && (
-                <button type="button" className="admin-link-btn" onClick={() => onChange({ image: "" })}>
+                <button type="button" className="admin-link-btn" onClick={() => onChange({ image: "", w: "", h: "" })}>
                   Retirer l'image
                 </button>
               )}
@@ -355,13 +387,32 @@ function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, 
               value={ad.image || ""}
               placeholder="…ou colle l'URL d'une image hébergée par l'annonceur"
               onChange={(e) => onChange({ image: e.target.value })}
+              onBlur={onMeasure}
             />
             {ad._uploading && <div className="admin-image-hint">Envoi en cours...</div>}
             {ad._uploadError && <div className="admin-error">{ad._uploadError}</div>}
             <div className="admin-image-hint">
-              Format conseillé : 970×120 px pour le haut et le bas de page, 300×600 px pour la colonne
-              latérale. Sans image, c'est l'encart texte ci-dessous qui s'affiche.
+              Format conseillé : <strong>970×120 px</strong> pour le haut et le bas de page (la hauteur
+              est plafonnée à 110 px, 70 px sur mobile), <strong>160×600</strong> ou{" "}
+              <strong>300×600 px</strong> pour la colonne latérale. Sans image, c'est l'encart texte
+              ci-dessous qui s'affiche.
+              {ad.w && ad.h ? (
+                <>
+                  {" "}
+                  Visuel mesuré : {ad.w}×{ad.h} px — la place est réservée à l'avance, la page ne
+                  bougera pas au chargement.
+                </>
+              ) : ad.image ? (
+                " Dimensions non mesurées — sors du champ pour les relever."
+              ) : null}
             </div>
+            {ad.image && !/^https?:/i.test(ad.image) && (
+              <div className="admin-image-hint">
+                Une image envoyée à l'instant n'apparaît sur le site qu'une fois le déploiement terminé
+                (environ une minute). En attendant, la bannière se masque d'elle-même au lieu d'afficher
+                une image cassée.
+              </div>
+            )}
           </div>
 
           <div className="admin-field">

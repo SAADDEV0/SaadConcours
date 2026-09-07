@@ -217,37 +217,49 @@ export const chromeScript = function initChrome() {
   // Own-inventory banners (see _shared/partnerAds.js). Each zone shows one
   // banner at a time and cycles through the others every 12s, so several
   // advertisers can share the same slot instead of competing for it.
+  //
+  // Every zone lives in the normal document flow — no overlay is ever allowed
+  // to push, shrink or cover the site. The one exception is the wide-screen
+  // rail below, which only exists at viewport widths where the margin beside
+  // the content is genuinely empty.
   function renderPartnerAds(settings) {
-    const zones = [
-      { placement: "header", el: document.getElementById("paHeader") },
-      { placement: "footer", el: document.getElementById("paFooter") },
-      { placement: "sidebar", el: ensureAdRail() },
-    ];
-
-    let railUsed = false;
-    for (const zone of zones) {
-      if (!zone.el) continue;
-      const ads = adsForPlacement(settings, zone.placement);
-      if (!ads.length) continue;
-      if (zone.placement === "sidebar") railUsed = true;
-      mountAdZone(zone.el, ads, zone.placement);
+    // The header/footer zones are already in the markup and collapse on their
+    // own when left empty (.pa-zone:empty), so they only need filling.
+    for (const placement of ["header", "footer"]) {
+      const el = document.getElementById(placement === "header" ? "paHeader" : "paFooter");
+      const ads = el && adsForPlacement(settings, placement);
+      if (ads && ads.length) mountAdZone(el, ads, placement);
     }
-
-    // The rail is an overlay, so the body reserves its width instead of
-    // letting it sit on top of the content (see .pa-rail in globals.css).
-    if (railUsed) document.body.classList.add("has-pa-rail");
-    else document.getElementById("paRail")?.remove();
+    // The sidebar host doesn't exist in the markup — it's only built when an
+    // advertiser actually targets the slot, so a site without one carries no
+    // trace of it at all.
+    const sidebarAds = adsForPlacement(settings, "sidebar");
+    if (sidebarAds.length) mountAdZone(createSidebarHost(), sidebarAds, "sidebar");
   }
 
-  function ensureAdRail() {
-    let rail = document.getElementById("paRail");
-    if (!rail) {
-      rail = document.createElement("aside");
-      rail.id = "paRail";
-      rail.className = "pa-rail";
-      rail.setAttribute("aria-label", "Publicités partenaires");
-      document.body.appendChild(rail);
+  // Two hosts, in preference order:
+  //  1. The left column of /concours, as a grid cell underneath the filters.
+  //     Appending it *inside* .filters was the wrong move: that panel is a
+  //     sticky, max-height, overflow-y:auto box, so a 600px banner ended up
+  //     two thirds clipped. Making <main> span both rows instead leaves the
+  //     banner its own cell below the panel, outside its scrollport.
+  //  2. Anywhere else, a fixed rail — revealed by CSS only above 1760px, the
+  //     width at which the empty margin beside even the widest page (.layout,
+  //     1400px) is enough to hold it without touching the content.
+  function createSidebarHost() {
+    const column = document.querySelector(".filters");
+    const layout = column && column.closest(".layout");
+    if (layout) {
+      const slot = document.createElement("div");
+      slot.className = "pa-side";
+      layout.appendChild(slot); // last child → row 2 of the filters column
+      layout.classList.add("has-pa-side");
+      return slot;
     }
+    const rail = document.createElement("aside");
+    rail.className = "pa-rail";
+    rail.setAttribute("aria-label", "Publicité partenaire");
+    document.body.appendChild(rail);
     return rail;
   }
 
@@ -255,24 +267,61 @@ export const chromeScript = function initChrome() {
     // Random start index so the same advertiser isn't always the one seen by
     // visitors who bounce before the first rotation.
     let idx = Math.floor(Math.random() * ads.length);
+    let timer = null;
 
-    function show() {
+    // `tried` guards the failover below from looping when every visual in the
+    // zone is broken.
+    function show(tried = 0) {
       const ad = ads[idx];
       el.innerHTML = partnerAdHtml(ad, placement);
-      trackAdEvent(ad.id, "view");
       const banner = el.firstElementChild;
-      if (banner && banner.tagName === "A") {
+      if (!banner) return;
+      if (banner.tagName === "A") {
         banner.addEventListener("click", () => trackAdEvent(ad.id, "click"));
       }
+
+      const img = banner.querySelector("img");
+      if (!img) {
+        trackAdEvent(ad.id, "view");
+        return;
+      }
+      // An impression is only counted once the visual is actually on screen —
+      // an advertiser shouldn't be shown a number that includes the times his
+      // banner failed to load.
+      img.addEventListener("load", () => trackAdEvent(ad.id, "view"));
+      // A visual that 404s (typically one uploaded seconds ago, before the
+      // deploy carrying it has landed) must leave no trace: a broken-image box
+      // labelled "Sponsorisé" reads as the site itself being broken. Hand the
+      // slot to the next advertiser instead of leaving a hole.
+      img.addEventListener("error", () => {
+        banner.remove();
+        if (tried < ads.length - 1) {
+          idx = (idx + 1) % ads.length;
+          show(tried + 1);
+        }
+      });
     }
 
     show();
-    if (ads.length > 1) {
-      setInterval(() => {
-        idx = (idx + 1) % ads.length;
-        show();
-      }, 12000);
+    if (ads.length <= 1) return;
+
+    // Rotation stops while the tab is in the background: no timers, no
+    // redraws, and above all no impressions billed for a banner nobody could
+    // have seen.
+    function start() {
+      if (!timer) timer = setInterval(next, 12000);
     }
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+    }
+    function next() {
+      idx = (idx + 1) % ads.length;
+      show();
+    }
+
+    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+    if (!document.hidden) start();
   }
 
   // Same fire-and-forget contract as the other counters below: never awaited,

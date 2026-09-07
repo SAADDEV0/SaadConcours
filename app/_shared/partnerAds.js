@@ -16,17 +16,19 @@ export const PARTNER_PLACEMENTS = [
   {
     key: "header",
     label: "Haut de page",
-    desc: "Bannière large juste sous le menu, sur toutes les pages du site.",
+    desc: "Bandeau sous le menu, sur toutes les pages. Format 970×120 (hauteur limitée à 110 px, 70 px sur mobile).",
   },
   {
     key: "sidebar",
     label: "Colonne latérale",
-    desc: "Encart vertical collé à droite. Visible uniquement sur grands écrans (≥ 1280 px).",
+    desc:
+      "Sous les filtres de la page Concours, et en rail flottant à droite sur les grands écrans " +
+      "(≥ 1600 px), là où la marge est réellement libre. Format 160×600 ou 300×600.",
   },
   {
     key: "footer",
     label: "Bas de page",
-    desc: "Bannière large juste avant le pied de page, sur toutes les pages du site.",
+    desc: "Bandeau avant le pied de page, sur toutes les pages. Format 970×120. Chargé en différé.",
   },
 ];
 
@@ -65,6 +67,34 @@ export function adImageSrc(image) {
   return image.startsWith("/") ? image : "/" + image;
 }
 
+// Les zones arrivent vides dans le HTML et ne sont remplies qu'une fois
+// /api/settings revenu : sans rien, l'insertion de la bannière pousse toute la
+// page vers le bas — un décalage de mise en page bien réel, et c'est là le seul
+// vrai risque de performance d'une publicité (CLS, qui compte pour le
+// référencement).
+//
+// D'où ce CSS émis côté serveur, dans le HTML initial, uniquement quand un
+// annonceur cible effectivement la zone : un ::before réserve exactement la
+// boîte que la bannière viendra occuper (même largeur max, même ratio, mêmes
+// plafonds de hauteur), et le :empty le fait disparaître à l'instant précis où
+// la bannière est insérée. Zéro réservation quand il n'y a pas d'annonceur.
+export function reservationCss(placement, ads) {
+  if (!ads.length) return "";
+  const sized = ads.find((a) => a.image && a.w && a.h);
+  const ratio = sized ? `${Number(sized.w)}/${Number(sized.h)}` : "970/120";
+  // .pa-zone.pa-zone-x l'emporte sur le .pa-zone:empty{display:none} de
+  // globals.css sans dépendre de l'ordre d'injection des feuilles par Next.
+  const zone = `.pa-zone.pa-zone-${placement}:empty`;
+  // Le padding doit être réservé lui aussi, sinon la zone passe de 112 à
+  // 126px au remplissage et on a rétabli 14px de décalage.
+  const padding = placement === "header" ? "14px 20px 0" : "0 20px";
+  return (
+    `${zone}{display:block;padding:${padding};}` +
+    `${zone}::before{content:"";display:block;max-width:970px;margin:0 auto;aspect-ratio:${ratio};max-height:112px;}` +
+    `@media (max-width:700px){${zone}::before{max-height:72px;}}`
+  );
+}
+
 function esc(s) {
   return String(s ?? "").replace(
     /[&<>"']/g,
@@ -95,15 +125,19 @@ export function partnerAdHtml(ad, placement) {
   const src = adImageSrc(ad.image);
   const alt = esc(ad.alt || ad.name || "Publicité");
 
-  // Lazy-loading only in the footer zone. The sidebar rail is a
-  // max-height/overflow-y scroll container, so a lazy image there deadlocks:
-  // the rail has no height until the image loads, and the image never loads
-  // because a 0-height scrollport never intersects it. Header and sidebar are
-  // both above the fold anyway.
+  // Perf, in order of what actually costs something:
+  //  - width/height (captured by the admin when the visual is chosen) let the
+  //    browser reserve the box before the bytes arrive — no layout shift, which
+  //    is the one thing an ad can do to wreck a Core Web Vitals score.
+  //  - fetchpriority="low" keeps a banner from competing with the page's own
+  //    LCP image or fonts. An ad is never the reason someone came here.
+  //  - lazy only below the fold. The header banner and the sidebar are visible
+  //    on arrival, so deferring them just makes them pop in late.
+  const dims = ad.w && ad.h ? ` width="${Number(ad.w)}" height="${Number(ad.h)}"` : "";
   const loading = placement === "footer" ? "lazy" : "eager";
 
   const body = src
-    ? `<img src="${esc(src)}" alt="${alt}" loading="${loading}">`
+    ? `<img src="${esc(src)}" alt="${alt}"${dims} loading="${loading}" decoding="async" fetchpriority="low">`
     : `<span class="pa-text">
         <span class="pa-text-title">${esc(ad.title || ad.name)}</span>
         ${ad.description ? `<span class="pa-text-desc">${esc(ad.description)}</span>` : ""}
