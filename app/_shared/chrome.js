@@ -411,6 +411,19 @@ export const chromeScript = function initChrome() {
     }).catch(() => {});
   })();
 
+  // Per-page view counter — unlike initVisitorTracking above (once per
+  // browser, ever), this pings on every single page load so the admin
+  // dashboard can show a view count for each individual page, not just
+  // concours detail pages (already covered by trackConcoursView).
+  (function initPathTracking() {
+    fetch("/api/track/page-path", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: location.pathname }),
+      keepalive: true,
+    }).catch(() => {});
+  })();
+
   (function initDua() {
     const DUAS = [
       { ar: "اللهم يسر ولا تعسر", fr: "Ô Allah, facilite et ne rends pas difficile." },

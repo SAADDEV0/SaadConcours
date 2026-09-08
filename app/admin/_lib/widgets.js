@@ -8,6 +8,7 @@
 export const DASHBOARD_SECTIONS = [
   { id: "overview", label: "Vue d'ensemble", icon: "📊" },
   { id: "audience", label: "Audience & croissance", icon: "📈" },
+  { id: "content", label: "Contenu & catalogue", icon: "🗂️" },
   { id: "todo", label: "Concours à traiter", icon: "✅" },
   { id: "performance", label: "Performance", icon: "🏆" },
 ];
@@ -21,13 +22,20 @@ export const DASHBOARD_WIDGETS = [
   { id: "kpi.concours", section: "overview", label: "Concours", size: "kpi", default: true },
   { id: "kpi.cours", section: "overview", label: "Fiches de cours", size: "kpi", default: true },
   { id: "kpi.quiz", section: "overview", label: "Évaluations", size: "kpi", default: true },
+  { id: "kpi.blog", section: "overview", label: "Articles de blog", size: "kpi", default: false },
   { id: "kpi.newsOpen", section: "overview", label: "Concours ouverts (news)", size: "kpi", default: true },
+  { id: "kpi.filieres", section: "overview", label: "Filières couvertes", size: "kpi", default: true },
 
   { id: "chart.subscriberGrowth", section: "audience", label: "Croissance des abonnés", size: "half", default: true },
   { id: "list.newSubscribers", section: "audience", label: "Derniers abonnés", size: "half", default: true },
+  { id: "chart.visits7d", section: "audience", label: "Visiteurs (7 jours)", size: "half", default: true },
   { id: "chart.pdf7d", section: "audience", label: "Téléchargements (7 jours)", size: "half", default: true },
   { id: "chart.pdfKind", section: "audience", label: "Répartition par type", size: "half", default: true },
   { id: "chart.visitSources", section: "audience", label: "Sources de visiteurs", size: "half", default: true },
+  { id: "list.topPages", section: "audience", label: "Vues par page", size: "half", default: true },
+
+  { id: "chart.concoursByCategorie", section: "content", label: "Concours par filière", size: "half", default: true },
+  { id: "chart.concoursGrowth", section: "content", label: "Croissance du catalogue (6 mois)", size: "half", default: true },
 
   { id: "list.todo", section: "todo", label: "À faire", size: "full", default: true },
   { id: "list.sansCorrige", section: "todo", label: "Concours sans corrigé", size: "half", default: true },
@@ -35,6 +43,7 @@ export const DASHBOARD_WIDGETS = [
 
   { id: "list.topConcours", section: "performance", label: "Concours les plus consultés", size: "half", default: true },
   { id: "list.recent", section: "performance", label: "Derniers concours ajoutés", size: "half", default: true },
+  { id: "list.topAds", section: "performance", label: "Performance des bannières partenaires", size: "half", default: true },
 ];
 
 export const DEFAULT_HIDDEN = DASHBOARD_WIDGETS.filter((w) => !w.default).map((w) => w.id);
