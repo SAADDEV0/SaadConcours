@@ -1,5 +1,29 @@
 [
   {
+    "id": "dae356e183842653",
+    "titre": "Résultats Présélection Master FST Mohammedia 2026-2027",
+    "etablissement": "FST",
+    "ville": "Mohammedia",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://www.fstm.ac.ma/formation_initiale/files/master_ta/concours_2026_2027/ecrit/listeCandidats_AISC_TempsAmenage.pdf",
+    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-fst-Mohammedia-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
+    "id": "4e95f0148d0d9d02",
+    "titre": "Résultats Présélection Master FSJES Souissi Rabat 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Souissi-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
     "id": "1d2277f7608e2969",
     "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
     "etablissement": "FLSH",
@@ -240,18 +264,6 @@
     "date_publication": "2026-09-04"
   },
   {
-    "id": "dae356e183842653",
-    "titre": "Résultats Présélection Master FST Mohammedia 2026-2027",
-    "etablissement": "FST",
-    "ville": "Mohammedia",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/04/resultats-preselection-master-fst-Mohammedia-2026-2027.html",
-    "date_publication": "2026-09-04"
-  },
-  {
     "id": "8862da27ac61edb3",
     "titre": "Master FSJP Tanger 2026-2027",
     "etablissement": null,
@@ -462,7 +474,7 @@
     "ville": "Mohammedia",
     "filiere": null,
     "date_limite": "2026-09-07",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4WhyphenhyphenLcaXWTmFPX7d8U_2uMpScwNBT6wvGc0pahjbKNEB-nzaziV9NZC9owAcBipBSYhRskX9KEt5G0UycInSKhP_CC70jjdtBst65BVzOkyUCRU3FcFkYGC9qSM5TBmnNiTUlvNSAwfANL1cjY2QnyhwoAtH9nxvXe5IfAmfyMvkFRhEf2U6OkRNsuov7/s1755/AVIS-DOUVERTURE-DES-PRE-CANDIDATURES-EN-LIGNE-MASTERS-Temps-Normal-%E2%80%93-Temps-Amenage_page-0001.jpg",
     "source": "https://www.almaster-maroc.com/2026/07/master-fsjes-mohammedia-2026-2027.html",
     "date_publication": "2026-09-02"
@@ -593,7 +605,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": "2026-09-11",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
@@ -834,7 +846,7 @@
     "ville": "Fès",
     "filiere": null,
     "date_limite": "2026-09-07",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/08/master-encg-fes-2026-2027.html",
     "date_publication": "2026-08-11"
@@ -881,7 +893,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-09-28",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
@@ -1182,7 +1194,7 @@
     "ville": "Khouribga",
     "filiere": null,
     "date_limite": "2026-09-07",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "http://www.fpk.ac.ma/preinscription/#master",
     "source": "https://www.almaster-maroc.com/2026/08/master-fp-khouribga-2026-2027.html",
     "date_publication": "2026-08-06"
@@ -1426,17 +1438,5 @@
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/6",
     "source": "https://www.almaster-maroc.com/2026/07/master-i2s-settat-2026-2027.html",
     "date_publication": "2026-08-03"
-  },
-  {
-    "id": "bdca6dab942c0b78",
-    "titre": "Master ENSA Khouribga 2026-2027",
-    "etablissement": "ENSA",
-    "ville": "Khouribga",
-    "filiere": null,
-    "date_limite": "2026-08-28",
-    "cloture": true,
-    "lien_inscription": "http://ensak.usms.ac.ma/PreinscriptionMaster/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-ensa-khouribga-2026-2027.html",
-    "date_publication": "2026-08-01"
   }
 ]
