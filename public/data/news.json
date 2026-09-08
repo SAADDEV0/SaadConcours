@@ -55,7 +55,7 @@
     "filiere": null,
     "date_limite": null,
     "cloture": false,
-    "lien_inscription": "https://fsbm.ma/events?id=a4fe83b5-fb38-4be8-a18f-cc517d250aea&fbclid",
+    "lien_inscription": "https://www.fsbm.ma/events?id=c5e4e841-5027-4ea5-a738-4a68582e1905&fbclid",
     "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FS-Ben-MSik-Casa-2026-2027.html",
     "date_publication": "2026-09-08"
   },
@@ -93,7 +93,67 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/06/Preselection-Master-FLSH-Rabat-2026-2027.html",
-    "date_publication": "2026-09-07"
+    "date_publication": "2026-09-08"
+  },
+  {
+    "id": "8e2eab4a908f9213",
+    "titre": "Résultats Présélection Master I3S Settat 2026-2027",
+    "etablissement": null,
+    "ville": "Settat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/resultats-preselection-master-isss-Settat-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
+    "id": "c7af021fbf0e7fd6",
+    "titre": "Résultats Présélection Master FSJES Salé 2026-2027",
+    "etablissement": "FSJES",
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Sale-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
+    "id": "eef035b94fc46116",
+    "titre": "Résultats Présélection Master FSJES Agdal Rabat 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsjes-agdal.um5.ac.ma/sites/default/files/2026-09/Liste%20Test%20Ecrit%20Master%20MFB%20-%202026-2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Agdal-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
+    "id": "12ce81a703301737",
+    "titre": "Résultats Présélection Master FST Marrakech 2026-2027",
+    "etablissement": "FST",
+    "ville": "Marrakech",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://e-candidature.uca.ma/master.fst/testecrit/liste-candidats-concours-MODASIM-12-09-26.pdf",
+    "source": "https://www.almaster-maroc.com/2026/04/Resultats-Preselection-Master-FST-Marrakech-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
+    "id": "160a64bf81491021",
+    "titre": "Résultats Présélection Master FSJP Marrakech 2026-2027",
+    "etablissement": null,
+    "ville": "Marrakech",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://e-candidature.uca.ma/master.fsjpm/testecrit/SCS/%D9%82%D8%A7%D9%8A%D9%94%D9%85%D8%A9%20%D8%A8%D8%A7%D8%B3%D9%85%D8%A7%D8%A1%20%D8%A7%D9%84%D8%B7%D9%84%D8%A8%D8%A9%20%D8%A7%D9%84%D9%85%D9%82%D8%A8%D9%88%D9%84%D9%8A%D9%86%20%D9%84%D8%A7%D8%AC%D8%AA%D9%8A%D8%A7%D8%B2%20%D8%A7%D9%84%D8%A7%D8%AE%D8%AA%D8%A8%D8%A7%D8%B1%20%D8%A7%D9%84%D9%83%D8%AA%D8%A7%D8%A8%D9%8A%20%D9%84%D9%88%D9%84%D9%88%D8%AC%20%D9%85%D8%A7%D8%B3%D8%AA%D8%B1%20%D8%A7%D9%84%D8%B9%D9%84%D9%88%D9%85%20%D8%A7%D9%84%D8%AC%D9%86%D8%A7%D9%8A%D9%94%D9%8A%D8%A9%20%D9%88%D8%A7%D9%84%D8%A7%D9%94%D9%85%D9%86%D9%8A%D8%A9.pdf",
+    "source": "https://www.almaster-maroc.com/2026/07/resultats-preselection-master-fsjp-Marrakech-2026-2027.html",
+    "date_publication": "2026-09-08"
   },
   {
     "id": "443e7f36b70745bd",
@@ -1378,65 +1438,5 @@
     "lien_inscription": "https://www.fsdm.usmba.ac.ma/register",
     "source": "https://www.almaster-maroc.com/2026/08/master-fs-dhar-el-mahraz-fes-2026-2027.html",
     "date_publication": "2026-08-04"
-  },
-  {
-    "id": "5de207d9cd58aae6",
-    "titre": "Master FST Béni Mellal 2026-2027",
-    "etablissement": "FST",
-    "ville": "Béni Mellal",
-    "filiere": null,
-    "date_limite": "2026-08-25",
-    "cloture": true,
-    "lien_inscription": "https://fstbm.ac.ma/web/content/1495299/MSTAIDC26-27.pdf",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fst-beni-mellal-2026-2027.html",
-    "date_publication": "2026-08-04"
-  },
-  {
-    "id": "f2ed720895c99263",
-    "titre": "Master FLSH Marrakech 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Marrakech",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.flsh/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/06/master-flsh-marrakech-2026-2027.html",
-    "date_publication": "2026-08-04"
-  },
-  {
-    "id": "06b02b5858c562a0",
-    "titre": "Résultats Définitifs Master FLSH Marrakech 2026-2027",
-    "etablissement": "FLSH",
-    "ville": "Marrakech",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Definitifs-Master-FLSH-Marrakech-2026-2027.html",
-    "date_publication": "2026-08-03"
-  },
-  {
-    "id": "8e2eab4a908f9213",
-    "titre": "Résultats Présélection Master I3S Settat 2026-2027",
-    "etablissement": null,
-    "ville": "Settat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": null,
-    "source": "https://www.almaster-maroc.com/2026/06/resultats-preselection-master-isss-Settat-2026-2027.html",
-    "date_publication": "2026-08-03"
-  },
-  {
-    "id": "1e1417efc871cd1f",
-    "titre": "Master I3S Settat 2026-2027",
-    "etablissement": null,
-    "ville": "Settat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "http://www-i3s.uh1.ac.ma/wp-content/uploads/2026/07/I3S_Avis_Preinscription_Master_Physique-Medicale_26_27.pdf",
-    "source": "https://www.almaster-maroc.com/2026/07/master-isss-settat-2026-2027.html",
-    "date_publication": "2026-08-03"
   }
 ]
