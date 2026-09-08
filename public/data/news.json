@@ -24,6 +24,18 @@
     "date_publication": "2026-09-08"
   },
   {
+    "id": "7e8caf26dd042424",
+    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
+    "etablissement": "FST",
+    "ville": null,
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsth.ma/documents/fichier/2b9c6e44da58bef15df679c0c0ccd6345f08a99f2ed2cee8010b0f98204233b2/",
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
+    "date_publication": "2026-09-08"
+  },
+  {
     "id": "1d2277f7608e2969",
     "titre": "Résultats Présélection Master FLSH Rabat 2026-2027",
     "etablissement": "FLSH",
@@ -81,18 +93,6 @@
     "cloture": false,
     "lien_inscription": "https://www.fsbm.ma/events?id=7c384b2d-fb24-4d3e-bc24-9e4a5d09529f",
     "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FS-Ben-MSik-Casa-2026-2027.html",
-    "date_publication": "2026-09-07"
-  },
-  {
-    "id": "7e8caf26dd042424",
-    "titre": "Résultats Présélection Master FST Al Hoceima 2026-2027",
-    "etablissement": "FST",
-    "ville": null,
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fsth.ma/documents/ouvrir.php?t=fcb50009c38eaf189b3b225e500319649f5dd99393c0df823170511f1dd44813",
-    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Master-FST-Al-Hoceima-2026-2027.html",
     "date_publication": "2026-09-07"
   },
   {
@@ -497,7 +497,7 @@
     "etablissement": null,
     "ville": "Béni Mellal",
     "filiere": null,
-    "date_limite": "2026-09-23",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://esefbm.usms.ac.ma/e-candidature-master/",
     "source": "https://www.almaster-maroc.com/2026/09/master-esef-beni-mellal-2026-2027.html",
@@ -605,7 +605,7 @@
     "etablissement": null,
     "ville": "Settat",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-11",
     "cloture": false,
     "lien_inscription": "https://pre-inscription.uh1.ac.ma/master/1",
     "source": "https://www.almaster-maroc.com/2026/08/master-fsjp-settat-2026-2027.html",
@@ -893,7 +893,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-28",
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
