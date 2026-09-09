@@ -12,6 +12,8 @@
 // Placeholders use Unicode Private Use Area code points, which Markdown
 // has no syntax for and which pass through marked.parse() as plain text.
 
+import { wrapAccentedMathWords } from "./latexPlainText";
+
 const OPEN = "";
 const CLOSE = "";
 const PLACEHOLDER_RE = new RegExp(`${OPEN}(\\d+)${CLOSE}`, "g");
@@ -24,7 +26,12 @@ export function protectMath(md) {
   if (!md) return { text: md, restore: (html) => html };
 
   const store = [];
-  const stash = (raw) => `${OPEN}${store.push(raw) - 1}${CLOSE}`;
+  // Content authors sometimes write a French word straight into a bare
+  // subscript/superscript ("V_n^{début}") instead of "V_n^{\text{début}}" —
+  // KaTeX has no accented-glyph support in math mode and renders every
+  // letter as its own spaced-out italic variable, so fix it up before KaTeX
+  // ever sees the source rather than after it's mis-typeset.
+  const stash = (raw) => `${OPEN}${store.push(wrapAccentedMathWords(raw)) - 1}${CLOSE}`;
 
   let text = md.replace(/\$\$[\s\S]+?\$\$/g, (m) => stash(m));
   // Inline math never spans a blank line (that's a new Markdown paragraph),

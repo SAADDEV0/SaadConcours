@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { chromeScript, trackPdfDownload } from "../../_shared/chrome";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "../../_shared/pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "../../_shared/pdfCover";
+import { convertMathSpansToPlainText } from "../../_shared/latexPlainText";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -206,11 +207,21 @@ export default function EvaluationDetailClient({ quiz }) {
       // real minus signs, arrows and Greek letters — sanitizePdfText keeps a
       // single one of them from flipping its line into UTF-16 (spaced-out
       // characters, twice as wide as measured, spilling off the page).
+      //
+      // Some questions/options/justifications also carry **bold** markdown
+      // and $...$ LaTeX (see mdLiteInline, used for the on-page HTML) — this
+      // used to reach doc.text() completely unprocessed, so a formula showed
+      // up as literal "$\dfrac{C \times t \times n}{100}$" in the PDF.
+      // convertMathSpansToPlainText gives it the same readable-plain-text
+      // fallback coursPdf.js uses; bold is stripped rather than rendered
+      // (this PDF draws each line as a single run, same simplification
+      // concoursPdf.js's plain body text uses).
       function wrapText(text, size, bold, indent, color, font) {
         doc.setFont(font || undefined, bold ? "bold" : "normal");
         doc.setFontSize(size);
         doc.setTextColor(...color);
-        const wrapped = doc.splitTextToSize(sanitizePdfText(text), maxWidth - indent);
+        const clean = convertMathSpansToPlainText(text).replace(/\*\*/g, "");
+        const wrapped = doc.splitTextToSize(sanitizePdfText(clean), maxWidth - indent);
         for (const wl of wrapped) {
           ensureSpace(size * 0.42 * lineSpacing);
           doc.text(wl, marginX + indent, y);

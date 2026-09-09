@@ -8,14 +8,21 @@
 import { pub, trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
+import { convertMathSpansToPlainText } from "./latexPlainText";
 
 // Every line drawn by this file goes through here, so sanitizePdfText is
 // applied at the same time as the markdown stripping: the énoncés and
 // corrigés are full of real minus signs (−) and arrows (→), and a single one
 // of them used to flip its whole line into UTF-16 — rendering as spaced-out
 // characters, roughly twice as wide as measured, running off the page.
+// $...$ / $$...$$ formulas used to just have their dollar signs deleted here,
+// leaving the raw LaTeX ("\dfrac{C \times t \times n}{100}") as literal text
+// in the PDF -- this file never got the readable-plain-text conversion
+// coursPdf.js has, even though the enonces/corriges are full of the same
+// \frac/\sqrt/\sum formulas. convertMathSpansToPlainText runs each span
+// through the same latexToPlainText() coursPdf.js falls back to.
 function stripInlineMd(s) {
-  return sanitizePdfText(String(s ?? "").replace(/\*\*/g, "").replace(/\$\$?/g, "")).trim();
+  return sanitizePdfText(convertMathSpansToPlainText(String(s ?? "")).replace(/\*\*/g, "")).trim();
 }
 
 async function loadImageAsDataURL(src) {

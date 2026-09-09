@@ -24,6 +24,7 @@
 import { trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
+import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
 
 const MATH_OPEN = "";
 const MATH_CLOSE = "";
@@ -48,7 +49,12 @@ function stripEmojiFromSource(md) {
 
 function stashMath(md) {
   const store = [];
-  const stash = (raw, display) => `${MATH_OPEN}${store.push({ raw, display }) - 1}${MATH_CLOSE}`;
+  // Content authors sometimes write a French word straight into a bare
+  // subscript/superscript ("V_n^{début}") instead of "V_n^{\text{début}}" —
+  // wrapAccentedMathWords fixes that up front so both the MathJax SVG below
+  // and the plain-text fallback (latexToPlainText, which just unwraps
+  // \text{} either way) see the corrected source.
+  const stash = (raw, display) => `${MATH_OPEN}${store.push({ raw: wrapAccentedMathWords(raw), display }) - 1}${MATH_CLOSE}`;
   // Display blocks get forced onto their own blank-line-separated paragraph:
   // the source sometimes has two $$...$$ back to back with only a single
   // newline between them (or text right after), and without the blank
@@ -58,95 +64,6 @@ function stashMath(md) {
   text = text.replace(/\$(?:\\\$|[^$])+?\$/g, (m) => (m.includes("\n\n") ? m : stash(m, false)));
   return { text, store };
 }
-
-// ---- LaTeX -> readable plain text -----------------------------------
-// Not a typesetter: no real fraction bars or radicals. But it keeps the
-// text selectable/copyable/searchable, which matters more for a fiche
-// students copy formulas out of than pixel-perfect math layout.
-
-function extractBraceArg(str, i) {
-  let depth = 0;
-  for (let j = i; j < str.length; j++) {
-    if (str[j] === "{") depth++;
-    else if (str[j] === "}") {
-      depth--;
-      if (depth === 0) return [str.slice(i + 1, j), j + 1];
-    }
-  }
-  return [str.slice(i + 1), str.length];
-}
-
-function replaceCommand(str, cmd, argCount, build) {
-  const needle = "\\" + cmd;
-  let out = "";
-  let i = 0;
-  while (i < str.length) {
-    const nextLetter = str[i + needle.length] || "";
-    if (str.startsWith(needle, i) && !/[a-zA-Z]/.test(nextLetter)) {
-      let j = i + needle.length;
-      const args = [];
-      for (let k = 0; k < argCount; k++) {
-        while (str[j] === " ") j++;
-        if (str[j] === "{") {
-          const [arg, next] = extractBraceArg(str, j);
-          args.push(arg);
-          j = next;
-        } else if (/[a-zA-Z0-9]/.test(str[j] || "")) {
-          args.push(str[j]);
-          j++;
-        } else {
-          args.push("");
-        }
-      }
-      out += build(args.map((a) => latexToPlainText(a, true)));
-      i = j;
-    } else {
-      out += str[i];
-      i++;
-    }
-  }
-  return out;
-}
-
-function isSimpleToken(s) {
-  return /^[A-Za-z0-9]+$/.test(s);
-}
-function formatFraction(a, b) {
-  const A = isSimpleToken(a) ? a : `(${a})`;
-  const B = isSimpleToken(b) ? b : `(${b})`;
-  return `${A}/${B}`;
-}
-
-// jsPDF's built-in fonts (Helvetica/Times/Courier) only cover WinAnsi —
-// essentially ASCII plus the Latin-1 supplement. Anything outside that
-// (Greek letters, ≤/≥/≠, →, √, superscript/subscript block characters)
-// renders as a missing-glyph box instead of the intended symbol, which
-// looks worse than not having "pretty" math at all. Everything below is
-// deliberately spelled out or given an ASCII-safe fallback instead of
-// reaching for the "correct" Unicode symbol.
-function wrapIfComplex(g) {
-  return isSimpleToken(g) ? g : `(${g})`;
-}
-function replaceSupSub(s) {
-  s = s.replace(/\^\{([^{}]*)\}/g, (m, g) => `^${wrapIfComplex(g)}`);
-  s = s.replace(/\^([A-Za-z0-9])/g, (m, g) => `^${g}`);
-  s = s.replace(/_\{([^{}]*)\}/g, (m, g) => `_${wrapIfComplex(g)}`);
-  s = s.replace(/_([A-Za-z0-9])/g, (m, g) => `_${g}`);
-  return s;
-}
-
-const SYMBOLS = {
-  // × ÷ ± · are in Latin-1, safe to keep as real symbols.
-  "\\times": "×", "\\cdot": "·", "\\div": "÷", "\\pm": "±", "\\mp": "-+",
-  "\\leq": "<=", "\\geq": ">=", "\\neq": "!=", "\\approx": "~=", "\\equiv": "==", "\\infty": "l'infini",
-  "\\rightarrow": "->", "\\to": "->", "\\Rightarrow": "=>", "\\leftrightarrow": "<->",
-  "\\alpha": "alpha", "\\beta": "beta", "\\gamma": "gamma", "\\Gamma": "Gamma", "\\delta": "delta", "\\Delta": "Delta",
-  "\\epsilon": "epsilon", "\\theta": "theta", "\\lambda": "lambda", "\\mu": "mu", "\\pi": "pi", "\\sigma": "sigma",
-  "\\Sigma": "Sigma", "\\tau": "tau", "\\phi": "phi", "\\varphi": "phi", "\\omega": "omega", "\\Omega": "Omega",
-  "\\%": "%", "\\$": "$", "\\_": "_", "\\&": "&", "\\#": "#",
-  "\\quad": "  ", "\\qquad": "    ", "\\,": " ", "\\;": " ", "\\!": "", "\\ ": " ",
-  "\\{": "{", "\\}": "}", "\\[": "[", "\\]": "]",
-};
 
 // Transliterates/strips everything jsPDF's built-in fonts can't encode —
 // the source's decorative emoji (📐💡🗺️✏️✅), but also the real minus signs
@@ -158,33 +75,6 @@ const stripUnsupportedGlyphs = sanitizePdfText;
 const HTML_ENTITIES = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&nbsp;": " " };
 function unescapeEntities(s) {
   return s.replace(/&(amp|lt|gt|quot|#39|apos|nbsp);/g, (m) => HTML_ENTITIES[m] || m);
-}
-
-function latexToPlainText(raw, inner = false) {
-  let s = raw;
-  if (!inner) {
-    s = s.trim();
-    if (s.startsWith("$$") && s.endsWith("$$")) s = s.slice(2, -2);
-    else if (s.startsWith("$") && s.endsWith("$")) s = s.slice(1, -1);
-  }
-  s = s.replace(/\\left/g, "").replace(/\\right/g, "");
-  s = replaceCommand(s, "dfrac", 2, ([a, b]) => formatFraction(a, b));
-  s = replaceCommand(s, "tfrac", 2, ([a, b]) => formatFraction(a, b));
-  s = replaceCommand(s, "frac", 2, ([a, b]) => formatFraction(a, b));
-  s = s.replace(/\\sqrt\[([^\]]+)\]/g, (m, n) => `racine ${n}-ieme de `); // nth root marker, resolved right before the sqrt{...} below
-  s = replaceCommand(s, "sqrt", 1, ([a]) => `sqrt(${a})`);
-  s = replaceCommand(s, "text", 1, ([a]) => a);
-  s = replaceCommand(s, "mathrm", 1, ([a]) => a);
-  s = replaceCommand(s, "mathbf", 1, ([a]) => a);
-  s = replaceCommand(s, "overline", 1, ([a]) => a);
-  s = replaceCommand(s, "boxed", 1, ([a]) => a);
-  for (const [k, v] of Object.entries(SYMBOLS)) s = s.split(k).join(v);
-  s = replaceSupSub(s);
-  s = s.replace(/\\([a-zA-Z]+)(?![a-zA-Z])(?=[0-9])/g, "$1 "); // unrecognized command glued to a following digit: keep a separating space
-  s = s.replace(/\\([a-zA-Z]+)/g, "$1"); // unrecognized commands: drop the backslash, keep the name
-  s = s.replace(/[{}]/g, "");
-  s = s.replace(/[ \t]+/g, " ").trim();
-  return s;
 }
 
 // ---- LaTeX -> real vector typesetting (MathJax SVG + svg2pdf.js) --------
