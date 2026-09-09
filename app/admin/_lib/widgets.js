@@ -42,6 +42,7 @@ export const DASHBOARD_WIDGETS = [
   { id: "list.expiring", section: "todo", label: "Concours qui ferment bientôt", size: "half", default: true },
 
   { id: "list.topConcours", section: "performance", label: "Concours les plus consultés", size: "half", default: true },
+  { id: "list.topPdf", section: "performance", label: "PDF les plus téléchargés", size: "half", default: true },
   { id: "list.recent", section: "performance", label: "Derniers concours ajoutés", size: "half", default: true },
   { id: "list.topAds", section: "performance", label: "Performance des bannières partenaires", size: "half", default: true },
 ];

@@ -138,6 +138,27 @@ export async function GET() {
   }
   const topPages = topPaths.map(({ member, score }) => ({ path: member, views: score, label: labelForPath(member) }));
 
+  // Most-downloaded PDFs (see trackPdfDownload in lib/analytics.js, keyed
+  // as "<kind>:<id>" in the analytics:pdf:byitem sorted set) — resolved
+  // against each kind's store the same way topPages resolves a tracked
+  // path, so the dashboard shows a real title instead of a bare id.
+  const KIND_ICON = { concours: "📚", cours: "📖", evaluation: "📝" };
+  const topPdf = (stats.pdfByItem || []).map(({ member, score }) => {
+    const sep = member.indexOf(":");
+    const kind = sep === -1 ? "" : member.slice(0, sep);
+    const id = sep === -1 ? member : member.slice(sep + 1);
+    let label = id;
+    if (kind === "concours" && concoursById[id]) {
+      const c = concoursById[id];
+      label = `${c.etablissement} — ${c.ville} (${c.annee})`;
+    } else if (kind === "cours" && coursById[id]) {
+      label = coursById[id].module || id;
+    } else if (kind === "evaluation" && quizById[id]) {
+      label = quizById[id].module || id;
+    }
+    return { id, kind, label: `${KIND_ICON[kind] || ""} ${label}`.trim(), downloads: score };
+  });
+
   return NextResponse.json({
     ...stats,
     topConcours,
@@ -149,6 +170,7 @@ export async function GET() {
     concoursGrowth,
     topAds,
     topPages,
+    topPdf,
     counts: {
       concours: concours.length,
       cours: cours.length,

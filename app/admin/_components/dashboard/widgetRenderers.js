@@ -280,6 +280,27 @@ export function renderWidget(id, ctx, onDismiss) {
           )}
         </WidgetCard>
       );
+    case "list.topPdf": {
+      const items = stats.topPdf || [];
+      return (
+        <WidgetCard key={id} title="PDF les plus téléchargés" onDismiss={onDismiss}>
+          {items.length ? (
+            <ol className="stat-rank-list">
+              {items.map((p) => (
+                <li key={`${p.kind}:${p.id}`}>
+                  <span>{p.label}</span>
+                  <strong>
+                    {p.downloads} téléchargement{p.downloads > 1 ? "s" : ""}
+                  </strong>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="empty-state">Pas encore de données — reviens après quelques téléchargements de PDF.</div>
+          )}
+        </WidgetCard>
+      );
+    }
     case "list.sansCorrige":
       return (
         <WidgetCard key={id} title="⚠️ Concours sans corrigé" href="/admin/concours" onDismiss={onDismiss}>
