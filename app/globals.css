@@ -480,6 +480,8 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .blog-search-box{flex:1; min-width:220px;}
 .blog-filter-bar .results-count{margin-top:8px;}
 .cours-filter-bar{margin:18px 0 4px; padding-bottom:14px; border-bottom:1px solid var(--border);}
+.cours-filter-controls{display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;}
+.cours-search-box{flex:1; min-width:220px;}
 .cours-filter-bar .results-count{margin-top:8px;}
 .blog-card{
   background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);

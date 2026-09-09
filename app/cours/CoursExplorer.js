@@ -20,8 +20,17 @@ export default function CoursExplorer({ initialData }) {
 
     const $ = (sel) => document.querySelector(sel);
 
-    function renderGrid() {
-      const filtered = activeCategory ? ALL.filter((m) => m.category === activeCategory) : ALL;
+    function applyFilters() {
+      const q = ($("#coursSearchInput")?.value || "").trim().toLowerCase();
+
+      const filtered = ALL.filter((m) => {
+        if (activeCategory && m.category !== activeCategory) return false;
+        if (q) {
+          const hay = [m.module, m.title, m.description].join(" ").toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
 
       const countEl = $("#coursResultsCount");
       if (countEl) countEl.textContent = `${filtered.length} module${filtered.length > 1 ? "s" : ""}`;
@@ -29,7 +38,7 @@ export default function CoursExplorer({ initialData }) {
       const grid = $("#coursModuleGrid");
       if (!grid) return;
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Aucun cours ne correspond à ce filtre.</div>`;
+        grid.innerHTML = `<div class="empty-state">Aucun cours ne correspond à ces filtres.</div>`;
         return;
       }
       grid.innerHTML = filtered.map(coursCardHtml).join("");
@@ -45,18 +54,35 @@ export default function CoursExplorer({ initialData }) {
       chip.addEventListener("click", () => {
         activeCategory = chip.dataset.category || "";
         setActiveChip(activeCategory);
-        renderGrid();
+        applyFilters();
       });
     });
 
-    // Prefills from ?category= so a direct link (e.g. an internal link from
-    // an article) lands on the filtered view instead of the full list.
-    const categoryParam = new URLSearchParams(window.location.search).get("category");
+    $("#coursSearchInput")?.addEventListener("input", applyFilters);
+
+    $("#coursResetBtn")?.addEventListener("click", () => {
+      activeCategory = "";
+      setActiveChip("");
+      const input = $("#coursSearchInput");
+      if (input) input.value = "";
+      applyFilters();
+    });
+
+    // Prefills from ?category= and/or ?q= so a direct link (e.g. an internal
+    // link from an article) lands on the filtered view instead of the full
+    // list.
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get("category");
+    const qParam = params.get("q");
     if (categoryParam) {
       activeCategory = categoryParam;
       setActiveChip(categoryParam);
-      renderGrid();
     }
+    if (qParam) {
+      const input = $("#coursSearchInput");
+      if (input) input.value = qParam;
+    }
+    if (categoryParam || qParam) applyFilters();
   }, [initialData]);
 
   return null;

@@ -28,8 +28,8 @@ export default async function CoursPage() {
         <h1 className="eval-title">📖 Cours par module</h1>
         <p className="eval-sub">Fiches de cours synthétiques : définitions, formules et points clés à retenir, par module.</p>
 
-        {categoryCounts.length > 0 && (
-          <div className="cours-filter-bar">
+        <div className="cours-filter-bar">
+          {categoryCounts.length > 0 && (
             <div className="chip-list" id="coursCategoryChips">
               <button type="button" className="chip cours-cat-chip active" data-category="">
                 Tous ({cours.length})
@@ -40,11 +40,23 @@ export default async function CoursPage() {
                 </button>
               ))}
             </div>
-            <div className="results-count" id="coursResultsCount">
-              {cours.length} module{cours.length > 1 ? "s" : ""}
+          )}
+          <div className="cours-filter-controls">
+            <div className="search-box cours-search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input type="text" id="coursSearchInput" placeholder="Rechercher un module, une notion..." />
             </div>
+            <button type="button" className="reset-btn" id="coursResetBtn" style={{ width: "auto" }}>
+              Réinitialiser
+            </button>
           </div>
-        )}
+          <div className="results-count" id="coursResultsCount">
+            {cours.length} module{cours.length > 1 ? "s" : ""}
+          </div>
+        </div>
 
         <div
           className="grid"
