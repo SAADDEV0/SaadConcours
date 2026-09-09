@@ -7,7 +7,7 @@
     "filiere": null,
     "date_limite": null,
     "cloture": false,
-    "lien_inscription": "https://fsjes-agdal.um5.ac.ma/sites/default/files/2026-09/Avis%20test%20e%CC%81crit%20GFCF%20-%20TA-%2026%2027.pdf",
+    "lien_inscription": "https://fsjes-agdal.um5.ac.ma/sites/default/files/2026-09/MFPF_TAM_Epreuves_Orales_2026-2027.pdf",
     "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Agdal-2026-2027.html",
     "date_publication": "2026-09-09"
   },
@@ -33,6 +33,66 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/05/resultats-preselection-master-ensam-rabat-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "22e88eed8fd70472",
+    "titre": "Master ENS Meknès 2026-2027",
+    "etablissement": "ENS",
+    "ville": "Meknès",
+    "filiere": null,
+    "date_limite": "2026-09-12",
+    "cloture": false,
+    "lien_inscription": "https://candidature.umi.ac.ma/",
+    "source": "https://www.almaster-maroc.com/2026/07/master-ens-meknes-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "f482a37541c5f529",
+    "titre": "Résultats Définitifs Master INPT Rabat 2026-2027",
+    "etablissement": null,
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/03/resultats-definitifs-master-inpt-rabat-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "46aa799f0147c995",
+    "titre": "Résultats Présélection Master ENS Fès 2026-2027",
+    "etablissement": "ENS",
+    "ville": "Fès",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/resultats-preselection-master-ens-fes-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "95331909546e177f",
+    "titre": "Résultats Présélection Master ISIC Rabat 2026-2027",
+    "etablissement": null,
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://isic.ac.ma/wp-content/uploads/2026/09/Liste-candidats-preselectionnes-%D8%A7%D9%84%D8%B5%D8%AD%D8%A7%D9%81%D8%A9-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9-2026-2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/05/Resultats-Preselection-Master-ISIC-Rabat-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "9281e109eeeeb226",
+    "titre": "Résultats Définitifs Master ENS Marrakech 2026-2027",
+    "etablissement": "ENS",
+    "ville": "Marrakech",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Definitifs-Master-ENS-Marrakech-2026-2027.html",
     "date_publication": "2026-09-09"
   },
   {
@@ -1013,7 +1073,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-28",
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
@@ -1378,65 +1438,5 @@
     "lien_inscription": "https://candidature.umi.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-fst-errachidia-2026-2027.html",
     "date_publication": "2026-08-06"
-  },
-  {
-    "id": "80cd9d9d117dc446",
-    "titre": "Master FEG Errachidia 2026-2027",
-    "etablissement": "FEG",
-    "ville": "Errachidia",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-feg-errachidia-2026-2027.html",
-    "date_publication": "2026-08-05"
-  },
-  {
-    "id": "06fe301b46762884",
-    "titre": "Master FS Meknès 2026-2027",
-    "etablissement": null,
-    "ville": "Meknès",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fs-meknes-2026-2027.html",
-    "date_publication": "2026-08-05"
-  },
-  {
-    "id": "22e88eed8fd70472",
-    "titre": "Master ENS Meknès 2026-2027",
-    "etablissement": "ENS",
-    "ville": "Meknès",
-    "filiere": null,
-    "date_limite": "2026-09-03",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-ens-meknes-2026-2027.html",
-    "date_publication": "2026-08-05"
-  },
-  {
-    "id": "c20b43dad270b8dc",
-    "titre": "Master FSJP Errachidia 2026-2027",
-    "etablissement": null,
-    "ville": "Errachidia",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fsjp-errachidia-2026-2027.html",
-    "date_publication": "2026-08-05"
-  },
-  {
-    "id": "b613b0f4a0acf593",
-    "titre": "Master FSHS Errachidia 2026-2027",
-    "etablissement": null,
-    "ville": "Errachidia",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-fshs-errachidia-2026-2027.html",
-    "date_publication": "2026-08-05"
   }
 ]
