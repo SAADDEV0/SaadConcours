@@ -96,6 +96,18 @@
     "date_publication": "2026-09-09"
   },
   {
+    "id": "594f0b9bf5806591",
+    "titre": "Résultats Présélection Master FLSH Marrakech 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Marrakech",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FLSH-Marrakech-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
     "id": "dae356e183842653",
     "titre": "Résultats Présélection Master FST Mohammedia 2026-2027",
     "etablissement": "FST",
@@ -1425,18 +1437,6 @@
     "cloture": true,
     "lien_inscription": "https://preinscritmaster.uit.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/08/master-fshs-kenitra-2026-2027.html",
-    "date_publication": "2026-08-06"
-  },
-  {
-    "id": "205afc05c7359c0d",
-    "titre": "Master FST Errachidia 2026-2027",
-    "etablissement": "FST",
-    "ville": "Errachidia",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/08/master-fst-errachidia-2026-2027.html",
     "date_publication": "2026-08-06"
   }
 ]
