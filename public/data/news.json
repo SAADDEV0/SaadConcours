@@ -1,5 +1,41 @@
 [
   {
+    "id": "eef035b94fc46116",
+    "titre": "Résultats Présélection Master FSJES Agdal Rabat 2026-2027",
+    "etablissement": "FSJES",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": "https://fsjes-agdal.um5.ac.ma/sites/default/files/2026-09/Avis%20test%20e%CC%81crit%20GFCF%20-%20TA-%2026%2027.pdf",
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Agdal-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "1c6838baa5ac7312",
+    "titre": "Résultats Présélection Master FLSH Mohammedia 2026-2027",
+    "etablissement": "FLSH",
+    "ville": "Mohammedia",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FLSH-Mohammedia-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
+    "id": "99befe6fc2f935bc",
+    "titre": "Résultats Présélection Master ENSAM Rabat 2026-2027",
+    "etablissement": "ENSAM",
+    "ville": "Rabat",
+    "filiere": null,
+    "date_limite": null,
+    "cloture": false,
+    "lien_inscription": null,
+    "source": "https://www.almaster-maroc.com/2026/05/resultats-preselection-master-ensam-rabat-2026-2027.html",
+    "date_publication": "2026-09-09"
+  },
+  {
     "id": "dae356e183842653",
     "titre": "Résultats Présélection Master FST Mohammedia 2026-2027",
     "etablissement": "FST",
@@ -117,18 +153,6 @@
     "cloture": false,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Sale-2026-2027.html",
-    "date_publication": "2026-09-08"
-  },
-  {
-    "id": "eef035b94fc46116",
-    "titre": "Résultats Présélection Master FSJES Agdal Rabat 2026-2027",
-    "etablissement": "FSJES",
-    "ville": "Rabat",
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://fsjes-agdal.um5.ac.ma/sites/default/files/2026-09/Liste%20des%20candidats%20Salari%C3%A9s%20en%20Master%20FPGI_IGF%202026%202027-2.pdf",
-    "source": "https://www.almaster-maroc.com/2026/06/Resultats-Preselection-Master-FSJES-Agdal-2026-2027.html",
     "date_publication": "2026-09-08"
   },
   {
@@ -593,7 +617,7 @@
     "etablissement": null,
     "ville": "Béni Mellal",
     "filiere": null,
-    "date_limite": null,
+    "date_limite": "2026-09-23",
     "cloture": false,
     "lien_inscription": "https://esefbm.usms.ac.ma/e-candidature-master/",
     "source": "https://www.almaster-maroc.com/2026/09/master-esef-beni-mellal-2026-2027.html",
@@ -989,7 +1013,7 @@
     "etablissement": null,
     "ville": "Fès",
     "filiere": null,
-    "date_limite": "2026-09-28",
+    "date_limite": null,
     "cloture": false,
     "lien_inscription": "https://iss.usmba.ac.ma/?q=node/423",
     "source": "https://www.almaster-maroc.com/2026/08/master-iss-fes-2026-2027.html",
@@ -1414,29 +1438,5 @@
     "lien_inscription": "https://candidature.umi.ac.ma/",
     "source": "https://www.almaster-maroc.com/2026/07/master-fshs-errachidia-2026-2027.html",
     "date_publication": "2026-08-05"
-  },
-  {
-    "id": "b4ea7446f9664967",
-    "titre": "Master FLLA Errachidia 2026-2027",
-    "etablissement": null,
-    "ville": "Errachidia",
-    "filiere": null,
-    "date_limite": "2026-09-08",
-    "cloture": true,
-    "lien_inscription": "https://candidature.umi.ac.ma/",
-    "source": "https://www.almaster-maroc.com/2026/07/master-flla-errachidia-2026-2027.html",
-    "date_publication": "2026-08-05"
-  },
-  {
-    "id": "f1ebf584bff69c69",
-    "titre": "Master FEG Kelaa Sraghna 2026-2027",
-    "etablissement": "FEG",
-    "ville": null,
-    "filiere": null,
-    "date_limite": null,
-    "cloture": false,
-    "lien_inscription": "https://e-candidature.uca.ma/master.fegk/form/index.php",
-    "source": "https://www.almaster-maroc.com/2026/08/master-feg-kelaa-sraghna-2026-2027.html",
-    "date_publication": "2026-08-04"
   }
 ]
