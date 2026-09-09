@@ -479,6 +479,8 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .blog-filter-controls{display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;}
 .blog-search-box{flex:1; min-width:220px;}
 .blog-filter-bar .results-count{margin-top:8px;}
+.cours-filter-bar{margin:18px 0 4px; padding-bottom:14px; border-bottom:1px solid var(--border);}
+.cours-filter-bar .results-count{margin-top:8px;}
 .blog-card{
   background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
   padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:var(--shadow);

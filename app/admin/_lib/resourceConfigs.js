@@ -1,4 +1,5 @@
 import { categoryOptions, subFiliereOptions, categoryLabel } from "@/lib/taxonomy";
+import { coursCategoryOptions, coursCategoryLabel } from "@/lib/coursTaxonomy";
 import { STATUT_OPTIONS, statutLabel } from "./statut";
 
 /* -------------------------------------------------------------------
@@ -81,6 +82,7 @@ export const COURS_CONFIG = {
     { key: "module", label: "Module", required: true, placeholder: "ex: Analyse Financière" },
     { key: "title", label: "Titre de la fiche", required: true, placeholder: "ex: Bilan fonctionnel, SIG et ratios" },
     { key: "description", label: "Description" },
+    { key: "category", label: "Catégorie", type: "select", options: coursCategoryOptions() },
     { key: "content", label: "Contenu (Markdown)", type: "textarea", required: true, markdown: true },
     { key: "available", label: "Disponible", type: "checkbox" },
   ],
@@ -88,6 +90,7 @@ export const COURS_CONFIG = {
     { key: "id", label: "ID", mono: true },
     { key: "module", label: "Module" },
     { key: "title", label: "Titre" },
+    { key: "category", label: "Catégorie", render: (i) => coursCategoryLabel(i.category) || "—" },
     { key: "available", label: "Disponible", render: (i) => (i.available ? "✅" : "—") },
   ],
 };
