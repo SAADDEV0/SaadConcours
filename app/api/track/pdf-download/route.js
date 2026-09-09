@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { trackPdfDownload, checkRateLimit, getClientIp } from "@/lib/analytics";
+import { trackPdfDownload, checkRateLimit, getClientIp, getClientGeo } from "@/lib/analytics";
 
 const ALLOWED_KINDS = ["concours", "cours", "evaluation"];
 
@@ -11,13 +11,14 @@ const ALLOWED_KINDS = ["concours", "cours", "evaluation"];
 // batch-downloading a whole module's worth of concours.
 export async function POST(req) {
   try {
-    const allowed = await checkRateLimit(`pdf:${getClientIp(req)}`, 30, 60);
+    const ip = getClientIp(req);
+    const allowed = await checkRateLimit(`pdf:${ip}`, 30, 60);
     if (!allowed) return NextResponse.json({ ok: true }); // silently drop, don't reveal the limiter to a caller probing it
     const { kind, id } = await req.json().catch(() => ({}));
     if (!ALLOWED_KINDS.includes(kind)) {
       return NextResponse.json({ error: "kind invalide" }, { status: 400 });
     }
-    await trackPdfDownload(kind, id);
+    await trackPdfDownload(kind, id, { ip, ...getClientGeo(req) });
   } catch (err) {
     console.error("track pdf-download error", err);
   }

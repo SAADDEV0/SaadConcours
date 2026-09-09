@@ -190,6 +190,104 @@ export function renderWidget(id, ctx, onDismiss) {
       );
     }
 
+    case "chart.visitCities": {
+      const cities = stats.visitCities || [];
+      return (
+        <WidgetCard key={id} title="Villes des visiteurs" sub="D'après la géolocalisation IP (Vercel), en production uniquement" onDismiss={onDismiss}>
+          {cities.length ? (
+            <BarList items={cities.map((c) => ({ label: c.city, value: c.visits, color: "var(--accent)" }))} formatValue={(v) => `${v} visite${v > 1 ? "s" : ""}`} />
+          ) : (
+            <EmptyState icon="🗺️" message="Pas encore de données de ville — actif seulement une fois le site déployé sur Vercel." />
+          )}
+        </WidgetCard>
+      );
+    }
+
+    case "chart.pdfCities": {
+      const cities = stats.pdfCities || [];
+      return (
+        <WidgetCard key={id} title="Villes des téléchargements PDF" sub="D'après la géolocalisation IP (Vercel), en production uniquement" onDismiss={onDismiss}>
+          {cities.length ? (
+            <BarList items={cities.map((c) => ({ label: c.city, value: c.downloads, color: "var(--green)" }))} formatValue={(v) => `${v} téléchargement${v > 1 ? "s" : ""}`} />
+          ) : (
+            <EmptyState icon="🗺️" message="Pas encore de données de ville — actif seulement une fois le site déployé sur Vercel." />
+          )}
+        </WidgetCard>
+      );
+    }
+
+    case "list.recentVisits": {
+      const rows = stats.recentVisits || [];
+      return (
+        <WidgetCard key={id} title="Derniers visiteurs" sub="Adresse IP et ville par visite, 30 dernières" onDismiss={onDismiss}>
+          {rows.length ? (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Heure</th>
+                    <th>Ville</th>
+                    <th>IP</th>
+                    <th>Page</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r, i) => (
+                    <tr key={i}>
+                      <td data-label="Heure">{timeAgoFr(new Date(r.at).getTime())}</td>
+                      <td data-label="Ville">{r.city || "—"}</td>
+                      <td data-label="IP">
+                        <span className="admin-id-chip">{r.ip || "—"}</span>
+                      </td>
+                      <td data-label="Page">{r.label || r.path}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState icon="🕵️" message="Pas encore de visite suivie." />
+          )}
+        </WidgetCard>
+      );
+    }
+
+    case "list.recentPdfDownloads": {
+      const rows = stats.recentPdfDownloads || [];
+      return (
+        <WidgetCard key={id} title="Derniers téléchargements PDF" sub="Adresse IP et ville par téléchargement, 30 derniers" onDismiss={onDismiss}>
+          {rows.length ? (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Heure</th>
+                    <th>Ville</th>
+                    <th>IP</th>
+                    <th>PDF</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r, i) => (
+                    <tr key={i}>
+                      <td data-label="Heure">{timeAgoFr(new Date(r.at).getTime())}</td>
+                      <td data-label="Ville">{r.city || "—"}</td>
+                      <td data-label="IP">
+                        <span className="admin-id-chip">{r.ip || "—"}</span>
+                      </td>
+                      <td data-label="PDF">{r.label}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState icon="🕵️" message="Pas encore de téléchargement suivi." />
+          )}
+        </WidgetCard>
+      );
+    }
+
     case "list.topPages": {
       const pages = stats.topPages || [];
       return (

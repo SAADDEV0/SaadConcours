@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { trackPathView, checkRateLimit, getClientIp } from "@/lib/analytics";
+import { trackPathView, checkRateLimit, getClientIp, getClientGeo } from "@/lib/analytics";
 
 // Only a bare pathname (no origin, no query/hash, no exotic characters) is
 // accepted — matches the slug shapes lib/store.js actually generates
@@ -20,11 +20,12 @@ function sanitizePath(raw) {
 // of these per minute just browsing normally.
 export async function POST(req) {
   try {
-    const allowed = await checkRateLimit(`pagepath:${getClientIp(req)}`, 60, 60);
+    const ip = getClientIp(req);
+    const allowed = await checkRateLimit(`pagepath:${ip}`, 60, 60);
     if (!allowed) return NextResponse.json({ ok: true });
     const body = await req.json().catch(() => null);
     const path = sanitizePath(body?.path);
-    if (path) await trackPathView(path);
+    if (path) await trackPathView(path, { ip, ...getClientGeo(req) });
   } catch (err) {
     console.error("track page-path error", err);
   }

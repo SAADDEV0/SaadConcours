@@ -32,7 +32,9 @@ export const DASHBOARD_WIDGETS = [
   { id: "chart.pdf7d", section: "audience", label: "Téléchargements (7 jours)", size: "half", default: true },
   { id: "chart.pdfKind", section: "audience", label: "Répartition par type", size: "half", default: true },
   { id: "chart.visitSources", section: "audience", label: "Sources de visiteurs", size: "half", default: true },
+  { id: "chart.visitCities", section: "audience", label: "Villes des visiteurs", size: "half", default: true },
   { id: "list.topPages", section: "audience", label: "Vues par page", size: "half", default: true },
+  { id: "list.recentVisits", section: "audience", label: "Derniers visiteurs (IP)", size: "full", default: true },
 
   { id: "chart.concoursByCategorie", section: "content", label: "Concours par filière", size: "half", default: true },
   { id: "chart.concoursGrowth", section: "content", label: "Croissance du catalogue (6 mois)", size: "half", default: true },
@@ -43,6 +45,8 @@ export const DASHBOARD_WIDGETS = [
 
   { id: "list.topConcours", section: "performance", label: "Concours les plus consultés", size: "half", default: true },
   { id: "list.topPdf", section: "performance", label: "PDF les plus téléchargés", size: "half", default: true },
+  { id: "chart.pdfCities", section: "performance", label: "Villes des téléchargements PDF", size: "half", default: true },
+  { id: "list.recentPdfDownloads", section: "performance", label: "Derniers téléchargements PDF (IP)", size: "full", default: true },
   { id: "list.recent", section: "performance", label: "Derniers concours ajoutés", size: "half", default: true },
   { id: "list.topAds", section: "performance", label: "Performance des bannières partenaires", size: "half", default: true },
 ];

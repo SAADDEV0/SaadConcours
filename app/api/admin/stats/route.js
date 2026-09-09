@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getStats, getAdStats, getTopPaths } from "@/lib/analytics";
+import { getStats, getAdStats, getTopPaths, getVisitCities, getPdfCities, getRecentVisits, getRecentPdfDownloads } from "@/lib/analytics";
 import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getAllBlog, getCorrigeIds, getTaxonomyCoverage, getSettings } from "@/lib/store";
 import { FILIERE_CATEGORIES } from "@/lib/taxonomy";
 
@@ -13,19 +13,24 @@ export const dynamic = "force-dynamic";
 // only reads, but still sits behind the admin cookie (see middleware.js)
 // since it exposes usage numbers not meant to be public.
 export async function GET() {
-  const [stats, concours, cours, quiz, news, blog, corrigeIds, taxonomyCoverage, settings, adStats, topPaths] = await Promise.all([
-    getStats(),
-    getAllConcours(),
-    getAllCours(),
-    getAllQuiz(),
-    getAllNews(),
-    getAllBlog(),
-    getCorrigeIds(),
-    getTaxonomyCoverage(),
-    getSettings(),
-    getAdStats(),
-    getTopPaths(15),
-  ]);
+  const [stats, concours, cours, quiz, news, blog, corrigeIds, taxonomyCoverage, settings, adStats, topPaths, visitCities, pdfCities, recentVisits, recentPdfDownloads] =
+    await Promise.all([
+      getStats(),
+      getAllConcours(),
+      getAllCours(),
+      getAllQuiz(),
+      getAllNews(),
+      getAllBlog(),
+      getCorrigeIds(),
+      getTaxonomyCoverage(),
+      getSettings(),
+      getAdStats(),
+      getTopPaths(15),
+      getVisitCities(12),
+      getPdfCities(12),
+      getRecentVisits(30),
+      getRecentPdfDownloads(30),
+    ]);
 
   // A concours counts as "having a corrigé" whether it's the reviewed
   // corrige_md field or a file already committed to data/corriges/ that
@@ -141,12 +146,11 @@ export async function GET() {
   // Most-downloaded PDFs (see trackPdfDownload in lib/analytics.js, keyed
   // as "<kind>:<id>" in the analytics:pdf:byitem sorted set) — resolved
   // against each kind's store the same way topPages resolves a tracked
-  // path, so the dashboard shows a real title instead of a bare id.
+  // path, so the dashboard shows a real title instead of a bare id. Shared
+  // with the recent-downloads log below (kind+id resolve the same way,
+  // whether it's a ranked total or a single logged event).
   const KIND_ICON = { concours: "📚", cours: "📖", evaluation: "📝" };
-  const topPdf = (stats.pdfByItem || []).map(({ member, score }) => {
-    const sep = member.indexOf(":");
-    const kind = sep === -1 ? "" : member.slice(0, sep);
-    const id = sep === -1 ? member : member.slice(sep + 1);
+  function labelForPdfItem(kind, id) {
     let label = id;
     if (kind === "concours" && concoursById[id]) {
       const c = concoursById[id];
@@ -156,8 +160,23 @@ export async function GET() {
     } else if (kind === "evaluation" && quizById[id]) {
       label = quizById[id].module || id;
     }
-    return { id, kind, label: `${KIND_ICON[kind] || ""} ${label}`.trim(), downloads: score };
+    return `${KIND_ICON[kind] || ""} ${label}`.trim();
+  }
+  const topPdf = (stats.pdfByItem || []).map(({ member, score }) => {
+    const sep = member.indexOf(":");
+    const kind = sep === -1 ? "" : member.slice(0, sep);
+    const id = sep === -1 ? member : member.slice(sep + 1);
+    return { id, kind, label: labelForPdfItem(kind, id), downloads: score };
   });
+
+  // Who's actually visiting and downloading — city aggregates (only
+  // populated once deployed on Vercel, see getClientGeo) plus a rolling
+  // window of the most recent individual events with IP attached, for the
+  // admin who wants to see exactly who/where, not just a ranked total.
+  const visitCityStats = visitCities.map(({ member, score }) => ({ city: member, visits: score }));
+  const pdfCityStats = pdfCities.map(({ member, score }) => ({ city: member, downloads: score }));
+  const recentVisitLog = recentVisits.map((v) => ({ ...v, label: labelForPath(v.path) }));
+  const recentPdfLog = recentPdfDownloads.map((d) => ({ ...d, label: labelForPdfItem(d.kind, d.id) }));
 
   return NextResponse.json({
     ...stats,
@@ -171,6 +190,10 @@ export async function GET() {
     topAds,
     topPages,
     topPdf,
+    visitCities: visitCityStats,
+    pdfCities: pdfCityStats,
+    recentVisits: recentVisitLog,
+    recentPdfDownloads: recentPdfLog,
     counts: {
       concours: concours.length,
       cours: cours.length,
