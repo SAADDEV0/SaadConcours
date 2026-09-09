@@ -14,7 +14,7 @@
   ],
   "newsAlertsEnabled": true,
   "newsAlertsMessage": "",
-  "newsAlertsSubject": "",
+  "newsAlertsSubject": "⏰ Ces concours ferment bientôt",
   "newsAlertsFromName": "SaadConcours",
   "newsAlertsFromEmail": "alerts@saadconcours.space",
   "pdfLogoDataUrl": "",
