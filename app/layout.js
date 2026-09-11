@@ -137,7 +137,7 @@ export default async function RootLayout({ children }) {
       <body>
         {children}
         <Analytics />
-        <SpeedInsights />
+        <SpeedInsights sampleRate={0.3} />
         {/* afterInteractive (Next's managed equivalent of `defer`) instead of
            raw <script defer> tags in <head> — same load timing, but Next
            dedupes/schedules them instead of the browser blindly fetching
