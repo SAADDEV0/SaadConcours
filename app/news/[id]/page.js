@@ -53,6 +53,12 @@ export async function generateMetadata({ params }) {
     title,
     description,
     alternates: { canonical: url },
+    // Each of these is a thin, largely boilerplate re-post of an external
+    // announcement (title + 1-2 templated FAQ lines + outbound link) —
+    // flagged as low-value/scraped content in AdSense review. The listing
+    // page (/news) already aggregates the same info with more context, so
+    // these stay reachable for users but are excluded from indexing.
+    robots: { index: false, follow: true },
     openGraph: { type: "article", title, description, url },
     twitter: { card: "summary_large_image", title, description },
   };

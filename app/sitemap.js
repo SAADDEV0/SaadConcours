@@ -1,4 +1,4 @@
-import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getAllBlog } from "@/lib/store";
+import { getAllConcours, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -50,21 +50,11 @@ export default async function sitemap() {
     // same fallback as concoursRoutes above
   }
 
-  // Cloturé entries are excluded — they lose their search intent once
-  // registrations close and risk 404ing once the scraper prunes them.
-  let newsRoutes = [];
-  try {
-    const news = await getAllNews();
-    newsRoutes = news
-      .filter((n) => !n.cloture)
-      .map((n) => ({
-        url: `${SITE_URL}/news/${n.id}`,
-        changeFrequency: "daily",
-        priority: 0.5,
-      }));
-  } catch {
-    // same fallback as concoursRoutes above
-  }
+  // Individual news pages are excluded from the sitemap: they're thin,
+  // largely boilerplate re-posts of external announcements (flagged as
+  // low-value/scraped content in AdSense review) and are noindex'd in
+  // app/news/[id]/page.js — the /news listing above is the indexable
+  // surface for this content.
 
   let blogRoutes = [];
   try {
@@ -80,5 +70,5 @@ export default async function sitemap() {
     // same fallback as concoursRoutes above
   }
 
-  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...newsRoutes, ...blogRoutes];
+  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes];
 }
