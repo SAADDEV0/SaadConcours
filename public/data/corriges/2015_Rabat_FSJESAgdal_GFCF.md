@@ -72,10 +72,12 @@ Le résultat net recalculé (585 en 2011, 520 en 2012) rejoint exactement les «
 
 ### CAF (méthode additive, à partir du résultat net)
 
-CAF = Résultat net + Dotations d'exploitation et financières + VNA des immob. cédées - Reprises d'exploitation et financières - Produits de cessions d'immob.
+CAF = Résultat net + Dotations d'exploitation et financières relatives aux éléments stables + VNA des immob. cédées - Reprises d'exploitation et financières relatives aux éléments stables - Produits de cessions d'immob.
 
-- **CAF 2011** = 585 + 768 + 35 + 240 - 79 - 49 - 240 = **1 260** (milliers de DH)
-- **CAF 2012** = 520 + 694 + 46 + 175 - 135 - 65 - 180 = **1 055** (milliers de DH)
+*Important : seule la fraction des dotations/reprises relative aux « éléments stables » entre dans le calcul de la CAF — celle relative aux « éléments circulants » (créances, stocks...) est exclue, car elle est déjà absorbée par le besoin en fonds de roulement et ne doit pas être neutralisée deux fois. Le tableau des dotations/reprises fourni distingue précisément les deux, il faut donc l'utiliser plutôt que les totaux bruts du CPC.*
+
+- **CAF 2011** = 585 + (503+0) + 240 - (2+3) - 240 = 585 + 503 - 5 - 240 + 240 = **1 083** (milliers de DH)
+- **CAF 2012** = 520 + (488+7) + 175 - (47+2) - 180 = 520 + 495 - 49 - 180 + 175 = **961** (milliers de DH)
 
 ### Interprétation (ratios d'activité et de rentabilité)
 
@@ -85,7 +87,7 @@ CAF = Résultat net + Dotations d'exploitation et financières + VNA des immob. 
 - **Taux de marge d'EBE** (EBE / CA) : 16,6% (2011) → 20,3% (2012) : nette amélioration de la rentabilité d'exploitation avant charges calculées.
 - **Poids des charges de personnel dans la VA** : 30,7% (2011) → 28,4% (2012) : légère amélioration de la productivité apparente du travail.
 - **Taux de marge nette** (résultat net / CA) : 17,5% (2011) → 13,1% (2012) : recul malgré l'amélioration de l'EBE, expliqué par (i) l'alourdissement du résultat financier négatif (charges d'intérêt en hausse, passage de -234 à -316) et (ii) un résultat non courant beaucoup plus faible en 2012 (235 contre 670 en 2011, l'exercice 2011 ayant bénéficié d'« autres produits non courants » exceptionnellement élevés).
-- **CAF** : recul de 1 260 à 1 055 (milliers de DH), cohérent avec le recul du résultat net malgré la progression de l'activité — la capacité de la société à s'autofinancer se dégrade légèrement, à surveiller si la tendance se confirme sur les exercices suivants.
+- **CAF** : recul de 1 083 à 961 (milliers de DH), cohérent avec le recul du résultat net malgré la progression de l'activité — la capacité de la société à s'autofinancer se dégrade légèrement, à surveiller si la tendance se confirme sur les exercices suivants.
 
 En synthèse : la société AYA voit son chiffre d'affaires et sa rentabilité d'exploitation progresser sensiblement en 2012, mais cette amélioration opérationnelle est plus que compensée par la dégradation de la marge commerciale, l'alourdissement du coût de la dette et la baisse des produits non courants, d'où un recul du résultat net et de la CAF.
 
