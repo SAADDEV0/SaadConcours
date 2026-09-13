@@ -15,7 +15,25 @@ export default function DashboardPage() {
   const [extra, setExtra] = useState({ settings: null, emailConfigured: null, filiereCounts: null });
   const [subscribers, setSubscribers] = useState(null);
   const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [clock, setClock] = useState("");
   const layout = useDashboardLayout();
+
+  // Client-only (locale/timezone-dependent) — computed after mount to avoid
+  // a server/client render mismatch, same pattern as Topbar's date label.
+  useEffect(() => {
+    const tick = () => setClock(new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }));
+    tick();
+    const id = setInterval(tick, 30000);
+    return () => clearInterval(id);
+  }, []);
+
+  // Academic year runs Sept→Aug — derived from today's date, not stored
+  // anywhere, so it's always correct without a settings field to maintain.
+  const academicYear = (() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    return now.getMonth() >= 8 ? `${y}/${y + 1}` : `${y - 1}/${y}`;
+  })();
 
   useEffect(() => {
     fetch("/api/admin/stats")
@@ -85,6 +103,11 @@ export default function DashboardPage() {
         <>
           <div className="dash-hero">
             <div>
+              {clock && (
+                <div className="dash-hero-session">
+                  <span className="dash-hero-session-dot" /> Session {academicYear} · Actualisé à {clock}
+                </div>
+              )}
               <div className="dash-hero-greeting">
                 {greeting} 👋 — voici l'état du site {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}.
               </div>

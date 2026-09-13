@@ -601,6 +601,11 @@
     var(--bg-elev);
   border:1px solid var(--border); box-shadow:var(--admin-e2);
 }
+.dash-hero-session{
+  display:inline-flex; align-items:center; gap:7px; font-size:.74rem; font-weight:700; color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; position:relative;
+}
+.dash-hero-session-dot{width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px var(--green-dim); flex-shrink:0;}
 .dash-hero-greeting{font-size:1.4rem; font-weight:800; color:var(--text); letter-spacing:-.02em; position:relative;}
 .dash-quick-actions{display:flex; gap:8px; flex-wrap:wrap; position:relative;}
 
