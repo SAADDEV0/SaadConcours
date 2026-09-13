@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { SOCIAL_FIELDS, NEWS_ETABLISSEMENTS } from "../../_lib/settingsFields";
 import { useToast } from "../ui/ToastProvider";
 
-const OWN_KEYS = [...SOCIAL_FIELDS.map((f) => f.key), "newsEtablissementsVisibles"];
+const OWN_KEYS = [...SOCIAL_FIELDS.map((f) => f.key), "newsEtablissementsVisibles", "newsScraperEnabled"];
 
 export default function GeneralSettingsForm() {
   const [form, setForm] = useState(null);
@@ -94,6 +94,25 @@ export default function GeneralSettingsForm() {
           Le scraper récupère désormais toutes les publications almaster-maroc.com. Choisis ici quels
           établissements apparaissent sur la page publique "Concours ouverts" — aucune case cochée = tout afficher.
         </p>
+
+        <label className="admin-switch-row" style={{ marginBottom: 16 }}>
+          <span className="admin-switch-row-label">
+            Scraping automatique almaster-maroc.com
+            <span className="admin-switch-row-hint">
+              Désactive le job planifié (GitHub Actions) qui va chercher les nouveaux concours toutes les 48h.
+              Les concours déjà récupérés restent affichés.
+            </span>
+          </span>
+          <span className="admin-switch">
+            <input
+              type="checkbox"
+              checked={form.newsScraperEnabled !== false}
+              onChange={(e) => setForm({ ...form, newsScraperEnabled: e.target.checked })}
+            />
+            <span className="admin-switch-thumb" aria-hidden="true" />
+          </span>
+        </label>
+
         <div className="settings-chip-grid">
           {NEWS_ETABLISSEMENTS.map((sigle) => (
             <label className="settings-chip" key={sigle}>

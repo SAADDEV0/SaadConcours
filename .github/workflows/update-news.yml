@@ -24,10 +24,21 @@ jobs:
       - name: Installer les dépendances
         run: pip install -r scripts/requirements.txt
 
+      - name: Vérifier si le scraping est activé (réglage admin)
+        id: gate
+        run: |
+          enabled=$(curl -fsSL https://saadconcours.space/api/settings | jq -r '.newsScraperEnabled // true' 2>/dev/null || echo true)
+          echo "enabled=$enabled" >> "$GITHUB_OUTPUT"
+          if [ "$enabled" = "false" ]; then
+            echo "Scraping désactivé depuis l'admin (Réglages), on s'arrête ici."
+          fi
+
       - name: Récupérer les nouveautés almaster
+        if: steps.gate.outputs.enabled != 'false'
         run: python3 scripts/fetch_almaster.py
 
       - name: Committer si public/data/news.json a changé
+        if: steps.gate.outputs.enabled != 'false'
         run: |
           if git diff --quiet -- public/data/news.json; then
             echo "Aucun changement, rien à committer."

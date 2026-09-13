@@ -788,3 +788,35 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .home-action-title{font-weight:700; font-size:1.05rem;}
 .home-action-desc{color:var(--text-dim); font-size:.85rem; line-height:1.5; flex:1;}
 .home-action-go{color:var(--accent); font-size:.82rem; font-weight:600;}
+
+/* First-visit email prompt (EmailGateModal) — fully optional, dismissible
+   via "Passer", never blocks the content underneath. */
+.egm-backdrop{
+  position:fixed; inset:0; z-index:1000; background:rgba(10,12,20,.6);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  backdrop-filter:blur(2px);
+}
+.egm-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow); padding:26px 24px; max-width:420px; width:100%;
+  text-align:center;
+}
+.egm-title{font-size:1.15rem; font-weight:700; margin:0 0 8px; color:var(--text);}
+.egm-subtitle{font-size:.88rem; color:var(--text-dim); line-height:1.5; margin:0 0 18px;}
+.egm-form{display:flex; gap:8px; flex-wrap:wrap;}
+.egm-input{
+  flex:1; min-width:0; padding:10px 14px; border-radius:999px; border:1px solid var(--border);
+  background:var(--bg); color:var(--text); font-size:.9rem; outline:none;
+}
+.egm-input:focus{border-color:var(--accent);}
+.egm-submit{
+  padding:10px 18px; border-radius:999px; border:none; background:var(--brand-grad);
+  color:#fff; font-weight:600; font-size:.9rem; cursor:pointer; white-space:nowrap;
+}
+.egm-submit:disabled{opacity:.6; cursor:default;}
+.egm-error{color:var(--red); font-size:.82rem; margin-top:10px;}
+.egm-skip{
+  display:block; margin:16px auto 0; background:none; border:none; color:var(--text-faint);
+  font-size:.82rem; text-decoration:underline; cursor:pointer; padding:4px;
+}
+.egm-skip:hover{color:var(--text-dim);}

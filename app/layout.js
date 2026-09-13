@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, reservationCss } from "./_shared/partnerAds";
+import EmailGateModal from "./_shared/EmailGateModal";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
@@ -136,6 +137,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        <EmailGateModal />
         <Analytics />
         <SpeedInsights sampleRate={0.3} />
         {/* afterInteractive (Next's managed equivalent of `defer`) instead of
