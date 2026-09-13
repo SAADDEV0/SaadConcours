@@ -5,33 +5,41 @@
    outside the (panel) route group but still uses .admin-card/.admin-btn/…).
    ========================================================================== */
 
-/* Admin-only: "Zenith" dashboard palette - flat neutral page background,
- * pure-white cards/sidebar, tight neutral borders, indigo accent. Scoped to
- * .admin-shell only so the public site keeps its own theme untouched. */
+/* Admin-only: "Nebula" dashboard palette - deep navy/indigo background,
+ * raised near-black cards, indigo-violet accent gradient, cyan/teal for
+ * secondary data series. The admin panel always renders in this dark theme
+ * regardless of the public-site light/dark toggle, matching the product's
+ * own brand surface. Scoped to .admin-shell only so the public site keeps
+ * its own theme untouched. */
+.admin-shell,
+:root[data-theme="light"] .admin-shell,
+:root[data-theme="dark"] .admin-shell{
+  --bg:#090b12; --bg-elev:#12141f; --bg-card:#171a27; --border:#242838;
+  --text:#eef0f8; --text-dim:#9298b3; --text-faint:#5d6380;
+  --accent:#7c6cf6; --accent-dim:rgba(124,108,246,.16);
+  --violet:#a389ff; --violet-dim:rgba(163,137,255,.16);
+  --green:#34d399; --green-dim:rgba(52,211,153,.15);
+  --amber:#f5ab2c; --red:#f2495c; --cyan:#38d4dc;
+  --brand-grad:linear-gradient(135deg,#7c6cf6,#5b8cff);
+  --shadow:0 2px 6px rgba(4,5,10,.4), 0 20px 44px -20px rgba(4,5,10,.6);
+}
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]) .admin-shell{
-    --bg:#f4f5fb; --bg-elev:#ffffff; --bg-card:#f8f9fc; --border:#edeef5;
-    --text:#1b1d29; --text-dim:#6b7280; --text-faint:#9a9fb0;
-    --accent:#4f46e5; --accent-dim:#eef0ff;
-    --shadow:0 1px 2px rgba(20,20,43,.04), 0 10px 26px -14px rgba(20,20,43,.14);
+    --bg:#090b12; --bg-elev:#12141f; --bg-card:#171a27; --border:#242838;
+    --text:#eef0f8; --text-dim:#9298b3; --text-faint:#5d6380;
+    --accent:#7c6cf6; --accent-dim:rgba(124,108,246,.16);
+    --shadow:0 2px 6px rgba(4,5,10,.4), 0 20px 44px -20px rgba(4,5,10,.6);
   }
 }
-:root[data-theme="light"] .admin-shell{
-  --bg:#f4f5fb; --bg-elev:#ffffff; --bg-card:#f8f9fc; --border:#edeef5;
-  --text:#1b1d29; --text-dim:#6b7280; --text-faint:#9a9fb0;
-  --accent:#4f46e5; --accent-dim:#eef0ff;
-  --shadow:0 1px 2px rgba(20,20,43,.04), 0 10px 26px -14px rgba(20,20,43,.14);
-}
-:root[data-theme="dark"] .admin-shell{ --bg:#0b0d13; --bg-card:#181c26; }
 
 /* ---------- Admin v3 tokens ---------- */
 .admin-shell{
-  --admin-sidebar-w:256px; --admin-rail-w:72px; --admin-topbar-h:60px;
-  --admin-content-max:1280px; --admin-gutter:26px; --admin-tap:44px;
+  --admin-sidebar-w:264px; --admin-rail-w:72px; --admin-topbar-h:60px;
+  --admin-content-max:1320px; --admin-gutter:26px; --admin-tap:44px;
   --admin-r-sm:8px; --admin-r-md:12px; --admin-r-lg:16px; --admin-r-xl:20px;
-  --admin-e1:0 1px 2px rgba(20,20,43,.06);
-  --admin-e2:0 4px 14px -6px rgba(20,20,43,.14);
-  --admin-e3:0 18px 40px -20px rgba(20,20,43,.28);
+  --admin-e1:0 1px 0 rgba(255,255,255,.03) inset, 0 2px 8px -4px rgba(0,0,0,.5);
+  --admin-e2:0 1px 0 rgba(255,255,255,.03) inset, 0 10px 26px -10px rgba(0,0,0,.55);
+  --admin-e3:0 1px 0 rgba(255,255,255,.03) inset, 0 24px 54px -22px rgba(0,0,0,.65);
   --admin-s1:4px; --admin-s2:8px; --admin-s3:12px; --admin-s4:16px; --admin-s5:24px; --admin-s6:32px;
   --z-topbar:20; --z-dropdown:30; --z-scrim:80; --z-drawer:90; --z-modal:150; --z-toast:200;
 }
@@ -54,7 +62,7 @@
 .admin-login-wrap{max-width:380px; margin:80px auto; padding:0 20px;}
 .admin-login-topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
 .admin-login-brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.05rem; text-decoration:none;}
-.admin-login-logo{width:32px; height:32px; border-radius:9px; flex-shrink:0; box-shadow:0 2px 8px rgba(79,70,229,.35);}
+.admin-login-logo{width:32px; height:32px; border-radius:9px; flex-shrink:0; box-shadow:0 2px 8px color-mix(in srgb, var(--accent) 45%, transparent);}
 .admin-card{
   background:var(--bg-elev); border:1px solid var(--border); border-radius:16px; padding:24px;
   box-shadow:var(--shadow);
@@ -181,14 +189,11 @@
 
 .admin-btn{
   display:inline-flex; align-items:center; gap:6px; padding:9px 18px; border-radius:10px; border:none;
-  background:var(--admin-btn-bg, var(--text)); color:var(--admin-btn-fg, #fff); cursor:pointer; font-size:.86rem; font-weight:600;
-  box-shadow:0 2px 6px -2px rgba(20,20,43,.25);
+  background:var(--brand-grad); color:#fff; cursor:pointer; font-size:.86rem; font-weight:600;
+  box-shadow:0 4px 16px -4px color-mix(in srgb, var(--accent) 65%, transparent);
   transition:filter .15s ease, transform .1s ease, box-shadow .15s ease;
 }
-.admin-shell .admin-btn{ --admin-btn-bg:#16181f; --admin-btn-fg:#fff; }
-:root[data-theme="dark"] .admin-shell .admin-btn{ --admin-btn-bg:var(--accent); }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .admin-shell .admin-btn{ --admin-btn-bg:var(--accent); } }
-.admin-btn:hover{filter:brightness(1.15); transform:translateY(-1px); box-shadow:0 5px 14px -2px rgba(20,20,43,.3);}
+.admin-btn:hover{filter:brightness(1.1); transform:translateY(-1px); box-shadow:0 8px 22px -4px color-mix(in srgb, var(--accent) 70%, transparent);}
 .admin-btn:active{transform:translateY(0); filter:brightness(.98);}
 .admin-btn:disabled{opacity:.4; cursor:not-allowed; filter:none; transform:none; box-shadow:none;}
 .admin-btn.secondary{background:var(--bg-card); color:var(--text-dim); border:1px solid var(--border); box-shadow:none;}
@@ -232,7 +237,7 @@
 .admin-checklist code{background:var(--bg-card); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-size:.8em;}
 
 .admin-brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.05rem; text-decoration:none;}
-.admin-brand-logo{width:32px; height:32px; border-radius:9px; flex-shrink:0; box-shadow:0 3px 10px rgba(79,70,229,.4);}
+.admin-brand-logo{width:32px; height:32px; border-radius:9px; flex-shrink:0; box-shadow:0 3px 10px color-mix(in srgb, var(--accent) 50%, transparent);}
 .admin-brand-tag{
   font-size:.64rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--accent);
   background:var(--accent-dim); padding:2px 8px; border-radius:999px;
@@ -330,8 +335,7 @@
 }
 .admin-nav-btn:hover:not(.active){background:var(--bg-card); color:var(--text);}
 .admin-nav-btn.active{background:var(--accent-dim); color:var(--accent);}
-.admin-nav-btn.active .admin-nav-icon{background:#fff; box-shadow:0 1px 3px rgba(20,20,43,.12);}
-:root[data-theme="dark"] .admin-nav-btn.active .admin-nav-icon{background:color-mix(in srgb, var(--accent) 25%, transparent); box-shadow:none;}
+.admin-nav-btn.active .admin-nav-icon{background:color-mix(in srgb, var(--accent) 28%, transparent); box-shadow:none;}
 
 /* Sidebar sub-nav (accordion, only expanded for the active section) */
 .admin-nav-children{display:flex; flex-direction:column; gap:1px; margin:2px 0 4px 30px; border-left:1px solid var(--border); padding-left:10px;}
@@ -573,6 +577,12 @@
   .admin-topbar-date, .admin-search{display:none;}
   .admin-topbar{gap:8px;}
 }
+
+.admin-shell *{scrollbar-color: var(--border) transparent; scrollbar-width: thin;}
+.admin-shell *::-webkit-scrollbar{width:10px; height:10px;}
+.admin-shell *::-webkit-scrollbar-track{background:transparent;}
+.admin-shell *::-webkit-scrollbar-thumb{background:var(--border); border-radius:999px; border:2px solid transparent; background-clip:padding-box;}
+.admin-shell *::-webkit-scrollbar-thumb:hover{background:var(--text-faint); background-clip:padding-box;}
 
 @media (prefers-reduced-motion: reduce){
   .admin-shell *, .admin-shell *::before, .admin-shell *::after{
