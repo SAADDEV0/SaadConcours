@@ -14,7 +14,9 @@ export const DASHBOARD_SECTIONS = [
 ];
 
 export const DASHBOARD_WIDGETS = [
-  { id: "kpi.pdfToday", section: "overview", label: "PDF téléchargés aujourd'hui", size: "kpi", default: true },
+  // The headline metric of the whole panel: rendered as a full-width hero
+  // block above the KPI strip (size "hero"), not as one tile among twelve.
+  { id: "kpi.pdfToday", section: "overview", label: "PDF téléchargés aujourd'hui", size: "hero", default: true },
   { id: "kpi.pdfWeek", section: "overview", label: "PDF cette semaine", size: "kpi", default: true },
   { id: "kpi.pdfTotal", section: "overview", label: "PDF au total", size: "kpi", default: true },
   { id: "kpi.visitsToday", section: "overview", label: "Visiteurs aujourd'hui", size: "kpi", default: false },

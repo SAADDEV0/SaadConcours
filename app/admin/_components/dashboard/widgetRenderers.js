@@ -1,5 +1,6 @@
 import Link from "next/link";
 import StatCard from "./StatCard";
+import HeroStat from "./HeroStat";
 import WidgetCard from "./WidgetCard";
 import AreaChart from "./AreaChart";
 import DonutChart from "./DonutChart";
@@ -154,19 +155,29 @@ export function renderWidget(id, ctx, onDismiss) {
   const pdfThisWeek = stats.pdfLast7Days.reduce((sum, [, n]) => sum + n, 0);
 
   switch (id) {
-    case "kpi.pdfToday":
+    // Headline metric — rendered as the hero slab, not a tile. See HeroStat.
+    case "kpi.pdfToday": {
+      const best = pdfSeries.length ? Math.max(...pdfSeries) : 0;
+      const avg = pdfSeries.length ? Math.round(pdfSeries.reduce((a, b) => a + b, 0) / pdfSeries.length) : 0;
       return (
-        <StatCard
+        <HeroStat
           key={id}
-          icon="📄"
-          tone="indigo"
+          kicker="Indicateur principal · aujourd'hui"
           label="PDF téléchargés aujourd'hui"
           value={stats.pdfToday}
-          spark={pdfSeries}
           trend={trendFromSeries(pdfSeries)}
+          series={pdfSeries}
+          seriesLabels={stats.pdfLast7Days.map(([day]) => dayLabelShort(day))}
+          footer={[
+            { label: "Cette semaine", value: pdfThisWeek },
+            { label: "Moyenne / jour", value: avg },
+            { label: "Meilleur jour (7j)", value: best },
+            { label: "Total cumulé", value: stats.pdfTotal },
+          ]}
           onDismiss={onDismiss}
         />
       );
+    }
     case "kpi.pdfWeek":
       return <StatCard key={id} icon="📈" tone="violet" label="PDF cette semaine" value={pdfThisWeek} spark={pdfSeries} onDismiss={onDismiss} />;
     case "kpi.pdfTotal":

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import PageHeader from "@/app/admin/_components/shell/PageHeader";
 import WidgetGrid from "@/app/admin/_components/dashboard/WidgetGrid";
 import CustomizePanel from "@/app/admin/_components/dashboard/CustomizePanel";
 import Skeleton from "@/app/admin/_components/ui/Skeleton";
@@ -85,32 +84,25 @@ export default function DashboardPage() {
 
   return (
     <>
-      <PageHeader
-        icon="📊"
-        title="Tableau de bord"
-        actions={
-          <button type="button" className="admin-btn secondary" onClick={() => setCustomizeOpen(true)}>
-            ⚙️ Personnaliser
-          </button>
-        }
-      />
-
       {!stats ? (
         <div className="admin-card">
           <Skeleton lines={5} />
         </div>
       ) : (
         <>
+          {/* v4 masthead: no boxed hero and no separate <PageHeader> — the
+              greeting IS the page title, with the actions as a toolbar rule
+              under it. */}
           <div className="dash-hero">
             <div>
-              {clock && (
-                <div className="dash-hero-session">
-                  <span className="dash-hero-session-dot" /> Session {academicYear} · Actualisé à {clock}
-                </div>
-              )}
-              <div className="dash-hero-greeting">
-                {greeting} 👋 — voici l'état du site {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}.
+              <div className="dash-hero-session">
+                <span className="dash-hero-session-dot" /> Session {academicYear}
+                {clock && ` · Actualisé à ${clock}`}
               </div>
+              <h1 className="dash-hero-greeting">
+                {greeting} 👋 <em>voici l&apos;état du site</em> au{" "}
+                {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}.
+              </h1>
               {visibleSections.length > 1 && (
                 <nav className="dash-quicknav" aria-label="Sections du tableau de bord">
                   {visibleSections.map((s) => (
@@ -135,14 +127,17 @@ export default function DashboardPage() {
                 + News
               </Link>
               <a className="admin-btn secondary" href="/api/admin/export?format=json">
-                ⬇ Export JSON
+                ⬇ JSON
               </a>
               <a className="admin-btn secondary" href="/api/admin/export?format=csv">
-                ⬇ Export CSV
+                ⬇ CSV
               </a>
               <a className="admin-btn secondary" href="/api/admin/export-content">
-                ⬇ Export contenu (JSON)
+                ⬇ Contenu
               </a>
+              <button type="button" className="admin-btn secondary" onClick={() => setCustomizeOpen(true)}>
+                ⚙️ Personnaliser
+              </button>
             </div>
           </div>
 
