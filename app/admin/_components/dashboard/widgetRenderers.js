@@ -324,7 +324,14 @@ export function renderWidget(id, ctx, onDismiss) {
     case "list.recentVisits": {
       const rows = stats.recentVisits || [];
       return (
-        <WidgetCard key={id} title="Derniers visiteurs" sub="Adresse IP et ville par visite, 30 dernières" onDismiss={onDismiss}>
+        <WidgetCard
+          key={id}
+          title="Derniers visiteurs"
+          sub="Adresse IP et ville par visite, 30 dernières"
+          collapsible
+          count={rows.length}
+          onDismiss={onDismiss}
+        >
           {rows.length ? (
             <div className="admin-table-wrap">
               <table className="admin-table">
@@ -360,7 +367,14 @@ export function renderWidget(id, ctx, onDismiss) {
     case "list.recentPdfDownloads": {
       const rows = stats.recentPdfDownloads || [];
       return (
-        <WidgetCard key={id} title="Derniers téléchargements PDF" sub="Adresse IP et ville par téléchargement, 30 derniers" onDismiss={onDismiss}>
+        <WidgetCard
+          key={id}
+          title="Derniers téléchargements PDF"
+          sub="Adresse IP et ville par téléchargement, 30 derniers"
+          collapsible
+          count={rows.length}
+          onDismiss={onDismiss}
+        >
           {rows.length ? (
             <div className="admin-table-wrap">
               <table className="admin-table">

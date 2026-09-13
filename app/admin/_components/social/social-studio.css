@@ -242,8 +242,8 @@
 .sgx-actionbar-info{display:flex; align-items:center; gap:8px; font-size:.8rem; color:var(--text-dim); font-weight:600;}
 .sgx-actionbar-btns{display:flex; gap:8px; flex-wrap:wrap;}
 .sgx-warn-dot{width:8px; height:8px; border-radius:50%; background:var(--amber); flex-shrink:0;}
-.sgx-btn-share{background:var(--accent) !important; color:#04120e !important;}
-.sgx-btn-done{background:var(--green) !important; color:#04120e !important;}
+.sgx-btn-share{background:var(--accent) !important; color:var(--on-accent) !important;}
+.sgx-btn-done{background:var(--green) !important; color:var(--on-accent) !important;}
 
 /* ==========================================================================
    Sélecteur de contenu (palette plein écran)
