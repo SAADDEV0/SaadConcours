@@ -34,6 +34,7 @@
 .sgx-bar-title h1{margin:0; font-size:1.02rem; font-weight:800; color:var(--text); letter-spacing:-.01em;}
 .sgx-bar-title p{margin:1px 0 0; font-size:.76rem; color:var(--text-faint);}
 .sgx-bar-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.sgx-summary{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
 
 .sgx-views{display:flex; gap:2px; background:var(--bg-card); border:1px solid var(--border); border-radius:11px; padding:3px;}
 .sgx-view-btn{

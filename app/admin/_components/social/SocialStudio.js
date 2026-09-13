@@ -54,6 +54,7 @@ const VIEWS = [
 export default function SocialStudio() {
   const [raw, setRaw] = useState(null); // { concours: [], news: [], … }
   const [loading, setLoading] = useState(true);
+  const [subscriberCount, setSubscriberCount] = useState(null);
   const [selected, setSelected] = useState(null); // { kind, item }
   const [format, setFormat] = useState(FORMATS[0]);
   const [variant, setVariant] = useState(0);
@@ -91,6 +92,16 @@ export default function SocialStudio() {
   }, []);
 
   useEffect(load, [load]);
+
+  // Real subscriber count (email alerts, not a social follower count that
+  // doesn't exist here) — surfaced in the summary bar instead of a metric
+  // this studio has no way to actually track.
+  useEffect(() => {
+    fetch("/api/admin/subscribers")
+      .then((r) => r.json())
+      .then((d) => setSubscriberCount(typeof d?.count === "number" ? d.count : 0))
+      .catch(() => setSubscriberCount(0));
+  }, []);
 
   // Reprise de l'historique v1 (avant le passage à une entrée par réseau) —
   // une seule fois, et seulement si la v2 est encore vide, pour ne jamais
@@ -269,6 +280,13 @@ export default function SocialStudio() {
 
   const dueCount = reminders.filter((r) => new Date(r.dueAt).getTime() <= Date.now()).length;
 
+  // Real, derived summary metrics — no invented analytics. "Contenus
+  // publiés" and "Taux de couverture" come straight out of the local
+  // publication history; "Abonnés" is the real email-alert subscriber
+  // count already used on the dashboard.
+  const publishedItemCount = Object.keys(pubIndex).length;
+  const coverageRate = entries.length ? Math.round((publishedItemCount / entries.length) * 100) : 0;
+
   return (
     <div className="sgx">
       <header className="sgx-bar">
@@ -277,6 +295,20 @@ export default function SocialStudio() {
           <div>
             <h1>Studio de publication</h1>
             <p>Image + texte prêts à poster — publication manuelle, historique par réseau.</p>
+          </div>
+        </div>
+        <div className="sgx-summary">
+          <div className="sgx-stat sgx-stat-total">
+            <strong>{subscriberCount ?? "…"}</strong>
+            <span>Abonnés (alertes email)</span>
+          </div>
+          <div className="sgx-stat">
+            <strong>{coverageRate}%</strong>
+            <span>Contenus déjà publiés</span>
+          </div>
+          <div className="sgx-stat">
+            <strong>{reminders.length}</strong>
+            <span>Rappel{reminders.length > 1 ? "s" : ""} programmé{reminders.length > 1 ? "s" : ""}</span>
           </div>
         </div>
         <div className="sgx-bar-actions">

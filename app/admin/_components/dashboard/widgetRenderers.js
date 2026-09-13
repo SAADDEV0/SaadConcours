@@ -6,6 +6,7 @@ import DonutChart from "./DonutChart";
 import BarList from "./BarList";
 import TodoCard from "./TodoCard";
 import EmptyState from "../ui/EmptyState";
+import Skeleton from "../ui/Skeleton";
 import { trendFromSeries, dayLabelShort, dayLabelMed, timeAgoFr } from "../../_lib/format";
 import { buildTodoItems } from "../../_lib/todo";
 
@@ -48,6 +49,99 @@ export function renderWidget(id, ctx, onDismiss) {
           </ul>
         ) : (
           <EmptyState icon="📭" message="Aucun nouvel abonné suivi pour l'instant." />
+        )}
+      </WidgetCard>
+    );
+  }
+
+  // Stands in for the mockup's "server status" panel — this project has no
+  // infra to monitor, so instead it surfaces the real operational signals
+  // an admin actually has: is email sending configured, are ads/banners on,
+  // how many alert subscribers exist. All read straight from /api/settings,
+  // /api/admin/email-status and /api/admin/subscribers (already fetched by
+  // the dashboard page), nothing invented.
+  if (id === "state.system") {
+    const settings = extra?.settings;
+    const activePartnerAds = (settings?.partnerAds || []).length;
+    const rows = [
+      {
+        label: "Alertes email",
+        ok: extra?.emailConfigured === true,
+        detail: extra?.emailConfigured === true ? "Configurées" : "Non configurées",
+      },
+      {
+        label: "Abonnés aux alertes",
+        ok: (subscribers?.count || 0) > 0,
+        detail: `${subscribers?.count ?? "…"} abonné${(subscribers?.count || 0) > 1 ? "s" : ""}`,
+      },
+      {
+        label: "Bannières AdSense",
+        ok: settings?.adsEnabled !== false,
+        detail: settings?.adsEnabled !== false ? "Activées" : "Désactivées",
+      },
+      {
+        label: "Bannières partenaires",
+        ok: settings?.partnerAdsEnabled !== false && activePartnerAds > 0,
+        detail: `${activePartnerAds} configurée${activePartnerAds > 1 ? "s" : ""}${settings?.partnerAdsEnabled === false ? " (désactivées)" : ""}`,
+      },
+    ];
+    return (
+      <WidgetCard key={id} title="État du système" sub="Signaux réels du site — pas de simulation" onDismiss={onDismiss}>
+        {settings ? (
+          <ul className="state-list">
+            {rows.map((r) => (
+              <li className="state-row" key={r.label}>
+                <span className={"state-dot" + (r.ok ? " ok" : " warn")} />
+                <span className="state-row-label">{r.label}</span>
+                <span className="state-row-detail">{r.detail}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Skeleton lines={4} />
+        )}
+      </WidgetCard>
+    );
+  }
+
+  // A single real chronological feed merged from independent event streams
+  // (PDF downloads, new alert subscribers) — each already timestamped by
+  // its own store, just interleaved here instead of shown in two widgets.
+  if (id === "list.activityFeed") {
+    const pdfEvents = (stats?.recentPdfDownloads || []).map((d) => ({
+      at: d.at,
+      icon: "📄",
+      color: "var(--accent)",
+      text: `PDF téléchargé — ${d.label}`,
+    }));
+    const subEvents = (subscribers?.recent || []).map((r) => ({
+      at: r.subscribedAt,
+      icon: "🎉",
+      color: "var(--green)",
+      text: `Nouvel abonné — ${r.email}`,
+    }));
+    const feed = [...pdfEvents, ...subEvents]
+      .filter((e) => e.at)
+      .sort((a, b) => new Date(b.at) - new Date(a.at))
+      .slice(0, 8);
+    return (
+      <WidgetCard key={id} title="Flux d'activité récent" sub="Téléchargements PDF et nouveaux abonnés, mélangés par horodatage" onDismiss={onDismiss}>
+        {stats ? (
+          feed.length ? (
+            <ul className="activity-feed">
+              {feed.map((e, i) => (
+                <li key={i} className="activity-feed-row">
+                  <span className="activity-feed-dot" style={{ background: e.color }} />
+                  <span className="activity-feed-text">{e.text}</span>
+                  <span className="activity-feed-time">{timeAgoFr(new Date(e.at).getTime())}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState icon="🕓" message="Pas encore d'activité suivie (actif surtout une fois déployé en production)." />
+          )
+        ) : (
+          <Skeleton lines={4} />
         )}
       </WidgetCard>
     );
@@ -313,11 +407,11 @@ export function renderWidget(id, ctx, onDismiss) {
     case "chart.concoursByCategorie": {
       const rows = stats.concoursByCategorie || [];
       return (
-        <WidgetCard key={id} title="Concours par filière" sub="Répartition du catalogue par catégorie" href="/admin/concours/filieres" onDismiss={onDismiss}>
+        <WidgetCard key={id} title="Répartition par domaine" sub="Part du catalogue par catégorie de concours" href="/admin/concours/filieres" onDismiss={onDismiss}>
           {rows.length ? (
-            <BarList
-              items={rows.map((r, i) => ({ label: r.label, value: r.count, color: CATEGORIE_COLORS[i % CATEGORIE_COLORS.length] }))}
-              formatValue={(v) => `${v} concours`}
+            <DonutChart
+              segments={rows.map((r, i) => ({ label: r.label, value: r.count, color: CATEGORIE_COLORS[i % CATEGORIE_COLORS.length] }))}
+              centerLabel="concours"
             />
           ) : (
             <EmptyState icon="🗂️" message="Aucun concours pour l'instant." />
