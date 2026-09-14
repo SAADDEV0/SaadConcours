@@ -1,5 +1,14 @@
 import { categoryOptions, subFiliereOptions, categoryLabel } from "@/lib/taxonomy";
-import { coursCategoryOptions, coursCategoryLabel } from "@/lib/coursTaxonomy";
+import {
+  coursCategoryOptions,
+  coursCategoryLabel,
+  licenceParcoursOptions,
+  licenceParcoursLabel,
+  licenceSemestreOptions,
+  licenceSemestreLabel,
+  licenceFiliereOptions,
+  licenceFiliereLabel,
+} from "@/lib/coursTaxonomy";
 import { STATUT_OPTIONS, statutLabel } from "./statut";
 
 /* -------------------------------------------------------------------
@@ -83,6 +92,15 @@ export const COURS_CONFIG = {
     { key: "title", label: "Titre de la fiche", required: true, placeholder: "ex: Bilan fonctionnel, SIG et ratios" },
     { key: "description", label: "Description" },
     { key: "category", label: "Catégorie", type: "select", options: coursCategoryOptions() },
+    { key: "parcours", label: "Parcours (Licence)", type: "select", options: licenceParcoursOptions() },
+    { key: "semestre", label: "Semestre (Licence)", type: "select", options: licenceSemestreOptions() },
+    {
+      key: "filiere",
+      label: "Filière (S5-S6 uniquement)",
+      type: "select",
+      dependsOn: "parcours",
+      optionsFor: (parcours) => licenceFiliereOptions(parcours),
+    },
     { key: "content", label: "Contenu (Markdown)", type: "textarea", required: true, markdown: true },
     { key: "available", label: "Disponible", type: "checkbox" },
   ],
@@ -91,6 +109,9 @@ export const COURS_CONFIG = {
     { key: "module", label: "Module" },
     { key: "title", label: "Titre" },
     { key: "category", label: "Catégorie", render: (i) => coursCategoryLabel(i.category) || "—" },
+    { key: "parcours", label: "Parcours", render: (i) => (i.parcours ? licenceParcoursLabel(i.parcours) : "Commun") },
+    { key: "semestre", label: "Semestre", render: (i) => licenceSemestreLabel(i.semestre) || "—" },
+    { key: "filiere", label: "Filière", render: (i) => (i.filiere ? licenceFiliereLabel(i.filiere) : "—") },
     { key: "available", label: "Disponible", render: (i) => (i.available ? "✅" : "—") },
   ],
 };
