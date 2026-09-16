@@ -127,8 +127,8 @@ export default function DigestComposer({ settings }) {
       setError("Sélectionne au moins un destinataire.");
       return;
     }
-    if (!selectedNews.size) {
-      setError("Sélectionne au moins un concours à inclure.");
+    if (!selectedNews.size && !message.trim()) {
+      setError("Ajoute un message ou sélectionne au moins un concours à inclure.");
       return;
     }
     setSending(true);
@@ -168,12 +168,16 @@ export default function DigestComposer({ settings }) {
       <div className="admin-card">
         <div className="picker-toolbar">
           <h2 className="admin-section-title" style={{ marginBottom: 0 }}>
-            1. Concours à inclure
+            1. Concours à inclure (optionnel)
           </h2>
           <span className="picker-count">
             {selectedNews.size} / {news.length} sélectionné{selectedNews.size > 1 ? "s" : ""}
           </span>
         </div>
+        <p className="admin-image-hint" style={{ margin: "-4px 0 12px" }}>
+          Rien coché = email 100% libre : le message de l'étape 3 devient le corps entier (utile pour une annonce
+          personnalisée, ex. un nouvel ancien concours ajouté pour un master).
+        </p>
 
         {news.length > 0 && (
           <>
@@ -305,7 +309,16 @@ export default function DigestComposer({ settings }) {
         </div>
         <div className="admin-field">
           <label>Message pour cet envoi</label>
-          <textarea style={{ minHeight: 80 }} value={message} onChange={(e) => setMessage(e.target.value)} />
+          <textarea
+            style={{ minHeight: 80 }}
+            value={message}
+            placeholder={
+              selectedNews.size
+                ? "Affiché en haut de l'email, avant la liste des concours."
+                : "Aucun concours sélectionné : ce texte devient le corps entier de l'email."
+            }
+            onChange={(e) => setMessage(e.target.value)}
+          />
         </div>
         <div className="admin-field" style={{ marginBottom: 0 }}>
           <label>Nom de l'expéditeur</label>
@@ -320,7 +333,7 @@ export default function DigestComposer({ settings }) {
       <div className="admin-card">
         <h2 className="admin-section-title">4. Aperçu et envoi</h2>
         <div className="admin-row-actions" style={{ margin: "16px 0 12px", flexWrap: "wrap" }}>
-          <button type="button" className="admin-btn secondary" onClick={openPreview} disabled={!selectedNews.size}>
+          <button type="button" className="admin-btn secondary" onClick={openPreview} disabled={!selectedNews.size && !message.trim()}>
             👁 Aperçu
           </button>
           <button type="button" className="admin-btn secondary" onClick={() => send(true)} disabled={sending}>
@@ -355,7 +368,8 @@ export default function DigestComposer({ settings }) {
           ) : preview ? (
             <div className="digest-preview">
               <div className="digest-preview-bar">
-                Objet : <strong>{preview.subject}</strong> · {preview.itemCount} concours inclus
+                Objet : <strong>{preview.subject}</strong> ·{" "}
+                {preview.itemCount ? `${preview.itemCount} concours inclus` : "email libre (aucun concours)"}
               </div>
               <div className="digest-preview-body" dangerouslySetInnerHTML={{ __html: preview.html }} />
             </div>

@@ -8,6 +8,9 @@ import { buildFromHeader, defaultSubject, emailConfigured, sendDigestEmail } fro
 // which open concours to include and which subscribers to send to,
 // independently of the persisted settings.json defaults (so a one-off
 // tweak here never silently changes what tomorrow's automatic digest sends).
+// newsIds may be empty — that's a fully free-form personalized email (e.g.
+// announcing a newly-added past concours for a master), where `message` is
+// the entire body instead of an intro above a concours table.
 export const dynamic = "force-dynamic";
 
 // Defensive upper bound - this project's subscriber list is small, so
@@ -30,8 +33,11 @@ export async function POST(req) {
   const newsIds = Array.isArray(body.newsIds) ? body.newsIds : [];
   const news = await getAllNews();
   const items = news.filter((i) => newsIds.includes(i.id));
-  if (!items.length) {
-    return NextResponse.json({ error: "Sélectionne au moins un concours à inclure." }, { status: 400 });
+  if (!items.length && !String(body.message || "").trim()) {
+    return NextResponse.json(
+      { error: "Ajoute un message ou sélectionne au moins un concours à inclure." },
+      { status: 400 }
+    );
   }
 
   // testEmail short-circuits the recipient list to just that address,
