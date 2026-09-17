@@ -1,6 +1,8 @@
 import { getAllConcours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { concoursCardHtml } from "../_shared/concoursCard";
+import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
+import JsonLd from "../_shared/JsonLd";
 import ConcoursExplorer from "./ConcoursExplorer";
 
 // Server-rendered on first load (unlike the old client-only SPA version) so
@@ -14,6 +16,21 @@ export default async function ConcoursPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: "Concours", path: "/concours" }]),
+          collectionJsonLd({
+            name: "Sujets de concours d'accès aux Masters au Maroc",
+            description:
+              "Sujets de concours réellement tombés aux Masters économie-gestion des universités marocaines (FSJES, ENCG), avec énoncés complets et corrigés indicatifs.",
+            path: "/concours",
+            items: concours.map((c) => ({
+              name: `${c.master_reel || c.filiere || "Concours"} — ${c.etablissement} ${c.annee}`,
+              path: `/concours/${encodeURIComponent(c.id)}`,
+            })),
+          }),
+        ]}
+      />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: true }) }} />
 
       <div className="layout" id="viewConcours">
@@ -48,6 +65,17 @@ export default async function ConcoursPage() {
 
         <main>
           <h1 className="concours-h1">Concours d'accès aux Masters — sujets réels</h1>
+          {/* The only listing page that had no text at all under its H1 —
+             just a count and a grid of cards — while /cours, /evaluation and
+             /news all carry an .eval-sub intro. That left the page targeting
+             the site's main query ("concours master maroc") with almost no
+             indexable prose to rank on. */}
+          <p className="eval-sub">
+            {concours.length} sujets de concours d'accès aux Masters économie-gestion réellement tombés dans les
+            universités marocaines (FSJES, ENCG, facultés privées), classés par ville, établissement, filière et
+            année. Chaque fiche donne l'énoncé complet, les scans du sujet original quand ils existent, un corrigé
+            indicatif lorsqu'il est disponible, et un export PDF gratuit — sans inscription.
+          </p>
           <div className="results-header">
             <div className="results-count" id="resultsCount">
               {concours.length} résultat{concours.length > 1 ? "s" : ""}

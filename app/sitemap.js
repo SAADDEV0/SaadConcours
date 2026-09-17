@@ -1,59 +1,82 @@
-import { getAllConcours, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
+import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
 
+// Every date field in the datasets is a plain ISO "YYYY-MM-DD" string, so the
+// newest one is just the lexicographic max — no Date parsing needed.
+function latestDate(items, field) {
+  let max = null;
+  for (const item of items) {
+    const value = item?.[field];
+    if (value && (!max || value > max)) max = value;
+  }
+  return max;
+}
+
 export default async function sitemap() {
-  const staticRoutes = ["", "/concours", "/cours", "/evaluation", "/news", "/blog", "/faq"].map((path) => ({
+  // Fetched up front because the listing routes below now carry a real
+  // lastModified derived from the freshest item they actually list — same
+  // rule as the per-item entries: only emit a date when it's true.
+  const [concours, cours, quiz, blog, news] = await Promise.all([
+    getAllConcours().catch(() => []),
+    getAllCours().catch(() => []),
+    getAllQuiz().catch(() => []),
+    getAllBlog().catch(() => []),
+    getAllNews().catch(() => []),
+  ]);
+
+  const concoursUpdated = latestDate(concours, "date_ajout");
+  const blogUpdated = latestDate(blog, "publishedAt");
+  const newsUpdated = latestDate(news, "date_publication");
+  // The homepage surfaces the latest concours, the latest open concours and
+  // the blog, so it is as fresh as the freshest of the three.
+  const homeUpdated = [concoursUpdated, blogUpdated, newsUpdated].filter(Boolean).sort().pop() || null;
+
+  // /cours, /evaluation, /faq and /confidentialite carry no lastModified on
+  // purpose: their datasets have no date field (and the two legal/info pages
+  // are hand-edited), so any value here would be invented.
+  const staticRoutes = [
+    { path: "", changeFrequency: "daily", priority: 1, lastModified: homeUpdated },
+    { path: "/concours", changeFrequency: "weekly", priority: 0.9, lastModified: concoursUpdated },
+    { path: "/news", changeFrequency: "daily", priority: 0.8, lastModified: newsUpdated },
+    { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
+    { path: "/cours", changeFrequency: "weekly", priority: 0.8 },
+    { path: "/evaluation", changeFrequency: "weekly", priority: 0.8 },
+    { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
+    { path: "/confidentialite", changeFrequency: "yearly", priority: 0.2 },
+  ].map(({ path, changeFrequency, priority, lastModified }) => ({
     url: `${SITE_URL}${path}`,
-    changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1 : 0.8,
+    changeFrequency,
+    priority,
+    ...(lastModified ? { lastModified } : {}),
   }));
 
-  let concoursRoutes = [];
-  try {
-    const concours = await getAllConcours();
-    concoursRoutes = concours.map((c) => ({
-      url: `${SITE_URL}/concours/${c.id}`,
+  const concoursRoutes = concours.map((c) => ({
+    url: `${SITE_URL}/concours/${c.id}`,
+    changeFrequency: "monthly",
+    priority: 0.6,
+    // Only ~2/3 of entries carry date_ajout (backfilled later, not present
+    // on the earliest imports) — omitting it for the rest rather than
+    // guessing keeps every lastModified we do emit actually true, which
+    // matters more to Google than covering every URL.
+    ...(c.date_ajout ? { lastModified: c.date_ajout } : {}),
+  }));
+
+  const coursRoutes = cours
+    .filter((c) => c.available)
+    .map((c) => ({
+      url: `${SITE_URL}/cours/${c.id}`,
       changeFrequency: "monthly",
       priority: 0.6,
-      // Only ~2/3 of entries carry date_ajout (backfilled later, not present
-      // on the earliest imports) — omitting it for the rest rather than
-      // guessing keeps every lastModified we do emit actually true, which
-      // matters more to Google than covering every URL.
-      ...(c.date_ajout ? { lastModified: c.date_ajout } : {}),
     }));
-  } catch {
-    // Sitemap generation shouldn't 500 the whole thing if the data source
-    // is briefly unavailable — ship what we have (the static routes).
-  }
 
-  let coursRoutes = [];
-  try {
-    const cours = await getAllCours();
-    coursRoutes = cours
-      .filter((c) => c.available)
-      .map((c) => ({
-        url: `${SITE_URL}/cours/${c.id}`,
-        changeFrequency: "monthly",
-        priority: 0.6,
-      }));
-  } catch {
-    // same fallback as concoursRoutes above
-  }
-
-  let quizRoutes = [];
-  try {
-    const quiz = await getAllQuiz();
-    quizRoutes = quiz
-      .filter((q) => q.available)
-      .map((q) => ({
-        url: `${SITE_URL}/evaluation/${q.id}`,
-        changeFrequency: "monthly",
-        priority: 0.6,
-      }));
-  } catch {
-    // same fallback as concoursRoutes above
-  }
+  const quizRoutes = quiz
+    .filter((q) => q.available)
+    .map((q) => ({
+      url: `${SITE_URL}/evaluation/${q.id}`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    }));
 
   // Individual news pages are excluded from the sitemap: they're thin,
   // largely boilerplate re-posts of external announcements (flagged as
@@ -61,20 +84,14 @@ export default async function sitemap() {
   // app/news/[id]/page.js — the /news listing above is the indexable
   // surface for this content.
 
-  let blogRoutes = [];
-  try {
-    const blog = await getAllBlog();
-    blogRoutes = blog
-      .filter((p) => p.available)
-      .map((p) => ({
-        url: `${SITE_URL}/blog/${p.id}`,
-        changeFrequency: "monthly",
-        priority: 0.6,
-        ...(p.publishedAt ? { lastModified: p.publishedAt } : {}),
-      }));
-  } catch {
-    // same fallback as concoursRoutes above
-  }
+  const blogRoutes = blog
+    .filter((p) => p.available)
+    .map((p) => ({
+      url: `${SITE_URL}/blog/${p.id}`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+      ...(p.publishedAt ? { lastModified: p.publishedAt } : {}),
+    }));
 
   return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes];
 }

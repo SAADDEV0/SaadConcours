@@ -1,6 +1,8 @@
 import { getAllNews, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { newsCardHtml, sortNewsByUrgency, urgency, visibleNews } from "../_shared/newsCard";
+import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
+import JsonLd from "../_shared/JsonLd";
 import NewsExplorer from "./NewsExplorer";
 
 const ETAB_GROUPS = ["Tous", "FSJES", "ENCG", "FEG/FSEG", "Autre"];
@@ -24,6 +26,17 @@ export default async function NewsPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: "Concours ouverts", path: "/news" }]),
+          collectionJsonLd({
+            name: "Concours d'accès aux Masters actuellement ouverts au Maroc",
+            description:
+              "Liste à jour des concours d'accès aux Masters ouverts aux inscriptions au Maroc, avec dates limites et liens d'inscription.",
+            path: "/news",
+          }),
+        ]}
+      />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "news", showSearch: false }) }} />
 
       <div className="nw-view">

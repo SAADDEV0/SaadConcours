@@ -1,6 +1,8 @@
 import { getAllQuiz } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { evalCardHtml } from "../_shared/evalCard";
+import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
+import JsonLd from "../_shared/JsonLd";
 import EvaluationExplorer from "./EvaluationExplorer";
 
 // Server-rendered on first load (mirrors app/concours/page.js and
@@ -14,6 +16,20 @@ export default async function EvaluationPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: "Évaluation", path: "/evaluation" }]),
+          collectionJsonLd({
+            name: "QCM d'auto-évaluation — Concours Master Maroc",
+            description:
+              "QCM d'entraînement corrigés par module pour s'auto-évaluer en conditions concours avant les épreuves d'accès aux Masters marocains.",
+            path: "/evaluation",
+            items: quiz
+              .filter((q) => q.available)
+              .map((q) => ({ name: q.title, path: `/evaluation/${encodeURIComponent(q.id)}` })),
+          }),
+        ]}
+      />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval", showSearch: false }) }} />
 
       <div className="eval-view" id="viewEval">

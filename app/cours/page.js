@@ -2,6 +2,8 @@ import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { coursCardHtml } from "../_shared/coursCard";
 import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator } from "../../lib/coursTaxonomy";
+import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
+import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
 
 // Server-rendered on first load (mirrors app/concours/page.js) so every
@@ -16,6 +18,22 @@ export default async function CoursPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([{ name: "Cours", path: "/cours" }]),
+          collectionJsonLd({
+            name: "Fiches de cours par module — Master Maroc",
+            description:
+              "Fiches de cours synthétiques par module (comptabilité, analyse financière, management, marketing, macroéconomie...) pour réviser les concours d'accès aux Masters marocains.",
+            path: "/cours",
+            // Only the published fiches: the others have no page to link to
+            // (generateStaticParams and the sitemap filter on `available` too).
+            items: cours
+              .filter((c) => c.available)
+              .map((c) => ({ name: c.title, path: `/cours/${encodeURIComponent(c.id)}` })),
+          }),
+        ]}
+      />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
       <div className="layout" id="viewCours">
