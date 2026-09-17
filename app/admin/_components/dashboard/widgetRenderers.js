@@ -6,6 +6,7 @@ import AreaChart from "./AreaChart";
 import DonutChart from "./DonutChart";
 import BarList from "./BarList";
 import TodoCard from "./TodoCard";
+import TimelineCard from "./TimelineCard";
 import EmptyState from "../ui/EmptyState";
 import Skeleton from "../ui/Skeleton";
 import { trendFromSeries, dayLabelShort, dayLabelMed, timeAgoFr } from "../../_lib/format";
@@ -229,6 +230,9 @@ export function renderWidget(id, ctx, onDismiss) {
         />
       );
 
+    case "chart.timeline":
+      return stats.timeline ? <TimelineCard key={id} timeline={stats.timeline} onDismiss={onDismiss} /> : null;
+
     case "chart.pdf7d":
       return (
         <WidgetCard key={id} title="Téléchargements" sub="Nombre de PDF téléchargés, 7 derniers jours" onDismiss={onDismiss}>
@@ -364,6 +368,78 @@ export function renderWidget(id, ctx, onDismiss) {
       );
     }
 
+    case "list.digestLog": {
+      const rows = stats.digestLog || [];
+      const TYPE_LABEL = { auto: "🤖 Auto (cron)", manuel: "✍️ Manuel", test: "🧪 Test" };
+      const STATUS_LABEL = { sent: "✅ Envoyé", partial: "⚠️ Partiel", failed: "❌ Échec", skipped: "⏭️ Ignoré" };
+      return (
+        <WidgetCard
+          key={id}
+          title="Journal des envois d'email"
+          sub="Composeur manuel, test, et cron quotidien — 20 derniers envois/tentatives"
+          collapsible
+          count={rows.length}
+          onDismiss={onDismiss}
+        >
+          {rows.length ? (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Heure</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                    <th>Destinataires</th>
+                    <th>Détail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r, i) => (
+                    <tr key={i}>
+                      <td data-label="Heure">{timeAgoFr(new Date(r.at).getTime())}</td>
+                      <td data-label="Type">{TYPE_LABEL[r.type] || r.type}</td>
+                      <td data-label="Statut">{STATUS_LABEL[r.status] || r.status}</td>
+                      <td data-label="Destinataires">{r.status === "skipped" ? "—" : `${r.sent}/${r.total}`}</td>
+                      <td data-label="Détail">{r.reason || r.subject || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState icon="📬" message="Pas encore d'envoi suivi — le prochain envoi (manuel ou cron) apparaîtra ici." />
+          )}
+        </WidgetCard>
+      );
+    }
+
+    case "list.searchMisses": {
+      const rows = stats.searchMisses || [];
+      return (
+        <WidgetCard
+          key={id}
+          title="🔍 Recherches sans résultat"
+          sub="Termes tapés dans la recherche /concours qui n'ont rien trouvé"
+          onDismiss={onDismiss}
+        >
+          {rows.length ? (
+            <ol className="stat-rank-list">
+              {rows.map((r) => (
+                <li key={r.query}>
+                  <span>« {r.query} »</span>
+                  <strong>
+                    {r.count} recherche{r.count > 1 ? "s" : ""}
+                  </strong>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <EmptyState icon="🔍" message="Aucune recherche infructueuse suivie pour l'instant." />
+          )}
+        </WidgetCard>
+      );
+    }
+
     case "list.recentPdfDownloads": {
       const rows = stats.recentPdfDownloads || [];
       return (
@@ -470,7 +546,10 @@ export function renderWidget(id, ctx, onDismiss) {
           onDismiss={onDismiss}
         >
           {ads.length ? (
-            <BarList items={ads.map((a) => ({ label: a.label, value: a.views, color: "var(--accent)" }))} formatValue={(v) => `${v} vues`} />
+            <BarList
+              items={ads.map((a) => ({ label: a.label, value: a.views, ctr: a.ctr, color: "var(--accent)" }))}
+              formatValue={(v, it) => `${v} vue${v > 1 ? "s" : ""} · ${it.ctr}% CTR`}
+            />
           ) : (
             <EmptyState icon="📣" message="Aucune bannière partenaire suivie pour l'instant." />
           )}

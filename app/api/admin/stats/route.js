@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getStats, getAdStats, getTopPaths, getVisitCities, getPdfCities, getRecentVisits, getRecentPdfDownloads } from "@/lib/analytics";
+import { getStats, getAdStats, getTopPaths, getVisitCities, getPdfCities, getRecentVisits, getRecentPdfDownloads, getTimeline, getDigestLog, getTopSearchMisses } from "@/lib/analytics";
 import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getAllBlog, getCorrigeIds, getTaxonomyCoverage, getSettings } from "@/lib/store";
 import { FILIERE_CATEGORIES } from "@/lib/taxonomy";
 
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 // only reads, but still sits behind the admin cookie (see middleware.js)
 // since it exposes usage numbers not meant to be public.
 export async function GET() {
-  const [stats, concours, cours, quiz, news, blog, corrigeIds, taxonomyCoverage, settings, adStats, topPaths, visitCities, pdfCities, recentVisits, recentPdfDownloads] =
+  const [stats, concours, cours, quiz, news, blog, corrigeIds, taxonomyCoverage, settings, adStats, topPaths, visitCities, pdfCities, recentVisits, recentPdfDownloads, timeline, digestLog, searchMisses] =
     await Promise.all([
       getStats(),
       getAllConcours(),
@@ -30,6 +30,9 @@ export async function GET() {
       getPdfCities(12),
       getRecentVisits(30),
       getRecentPdfDownloads(30),
+      getTimeline(),
+      getDigestLog(20),
+      getTopSearchMisses(15),
     ]);
 
   // A concours counts as "having a corrigé" whether it's the reviewed
@@ -182,6 +185,9 @@ export async function GET() {
     ...stats,
     topConcours,
     totalVisits: stats.visitsTotal,
+    timeline,
+    digestLog,
+    searchMisses: searchMisses.map(({ member, score }) => ({ query: member, count: score })),
     recentConcours,
     concoursSansCorrige,
     newsExpiringSoon,

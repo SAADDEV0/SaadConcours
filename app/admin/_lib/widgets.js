@@ -27,6 +27,7 @@ export const DASHBOARD_WIDGETS = [
   { id: "kpi.blog", section: "overview", label: "Articles de blog", size: "kpi", default: false },
   { id: "kpi.newsOpen", section: "overview", label: "Concours ouverts (news)", size: "kpi", default: true },
   { id: "kpi.filieres", section: "overview", label: "Filières couvertes", size: "kpi", default: true },
+  { id: "chart.timeline", section: "overview", label: "Chronologie (hier / semaine / mois / année)", size: "full", default: true },
   { id: "state.system", section: "overview", label: "État du système", size: "half", default: true },
   { id: "list.activityFeed", section: "overview", label: "Flux d'activité récent", size: "half", default: true },
 
@@ -41,6 +42,10 @@ export const DASHBOARD_WIDGETS = [
   // Raw logs: shown by default now that they render as closed disclosures
   // (one header line), not as 30-row tables permanently open.
   { id: "list.recentVisits", section: "audience", label: "Derniers visiteurs (IP)", size: "full", default: true },
+  // The only place a manual/test send AND the unattended daily cron both
+  // leave a trace — see lib/analytics.js trackDigestSend. Default-on since
+  // the cron path has no other admin-facing visibility at all.
+  { id: "list.digestLog", section: "audience", label: "Journal des envois d'email (digest)", size: "full", default: true },
 
   { id: "chart.concoursByCategorie", section: "content", label: "Concours par filière", size: "half", default: true },
   { id: "chart.concoursGrowth", section: "content", label: "Croissance du catalogue (6 mois)", size: "half", default: true },
@@ -48,6 +53,7 @@ export const DASHBOARD_WIDGETS = [
   { id: "list.todo", section: "todo", label: "À faire", size: "full", default: true },
   { id: "list.sansCorrige", section: "todo", label: "Concours sans corrigé", size: "half", default: true },
   { id: "list.expiring", section: "todo", label: "Concours qui ferment bientôt", size: "half", default: true },
+  { id: "list.searchMisses", section: "todo", label: "Recherches sans résultat", size: "half", default: true },
 
   { id: "list.topConcours", section: "performance", label: "Concours les plus consultés", size: "half", default: false },
   { id: "list.topPdf", section: "performance", label: "PDF les plus téléchargés", size: "half", default: false },

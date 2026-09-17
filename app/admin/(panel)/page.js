@@ -17,15 +17,6 @@ export default function DashboardPage() {
   const [clock, setClock] = useState("");
   const layout = useDashboardLayout();
 
-  // Client-only (locale/timezone-dependent) — computed after mount to avoid
-  // a server/client render mismatch, same pattern as Topbar's date label.
-  useEffect(() => {
-    const tick = () => setClock(new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }));
-    tick();
-    const id = setInterval(tick, 30000);
-    return () => clearInterval(id);
-  }, []);
-
   // Academic year runs Sept→Aug — derived from today's date, not stored
   // anywhere, so it's always correct without a settings field to maintain.
   const academicYear = (() => {
@@ -34,15 +25,35 @@ export default function DashboardPage() {
     return now.getMonth() >= 8 ? `${y}/${y + 1}` : `${y - 1}/${y}`;
   })();
 
+  // "Actualisé à HH:MM" used to be a clock ticking on its own while the
+  // stats were only ever fetched once on mount — it looked like a live
+  // dashboard but wasn't. Now the label is stamped from an actual refetch
+  // (every 60s), so it always reflects when the numbers on screen were
+  // really last pulled from KV/GitHub, not just the current time.
   useEffect(() => {
-    fetch("/api/admin/stats")
-      .then((res) => {
-        if (!res.ok) throw new Error("Erreur lors du chargement des statistiques.");
-        return res.json();
-      })
-      .then(setStats)
-      .catch((e) => setError(e.message));
+    let cancelled = false;
+    function loadStats() {
+      fetch("/api/admin/stats")
+        .then((res) => {
+          if (!res.ok) throw new Error("Erreur lors du chargement des statistiques.");
+          return res.json();
+        })
+        .then((data) => {
+          if (cancelled) return;
+          setStats(data);
+          setClock(new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }));
+        })
+        .catch((e) => !cancelled && setError(e.message));
+    }
+    loadStats();
+    const id = setInterval(loadStats, 60000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
 
+  useEffect(() => {
     fetch("/api/admin/subscribers")
       .then((r) => r.json())
       .then(setSubscribers)
@@ -114,27 +125,6 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="dash-quick-actions">
-              <Link className="admin-btn" href="/admin/concours">
-                + Concours
-              </Link>
-              <Link className="admin-btn secondary" href="/admin/cours">
-                + Cours
-              </Link>
-              <Link className="admin-btn secondary" href="/admin/evaluation">
-                + Évaluation
-              </Link>
-              <Link className="admin-btn secondary" href="/admin/concours-ouverts">
-                + News
-              </Link>
-              <a className="admin-btn secondary" href="/api/admin/export?format=json">
-                ⬇ JSON
-              </a>
-              <a className="admin-btn secondary" href="/api/admin/export?format=csv">
-                ⬇ CSV
-              </a>
-              <a className="admin-btn secondary" href="/api/admin/export-content">
-                ⬇ Contenu
-              </a>
               <button type="button" className="admin-btn secondary" onClick={() => setCustomizeOpen(true)}>
                 ⚙️ Personnaliser
               </button>

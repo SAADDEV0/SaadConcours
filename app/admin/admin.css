@@ -1068,6 +1068,22 @@
 .dash-grid-2 > *{min-width:0;}
 @media (max-width: 760px){ .dash-grid-2{grid-template-columns:1fr;} }
 
+/* Timeline widget: 4 rolling-window periods (hier / 7j / 30j / 12 mois),
+ * each period a hairline-split column, same split-slab pattern as .stat-grid. */
+.timeline-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px,100%), 1fr)); gap:1px;
+  background:var(--bg-elev); border:1px solid var(--border-soft); border-radius:var(--admin-r-lg); overflow:hidden;
+}
+.timeline-period{background:var(--bg-elev); box-shadow:0 0 0 1px var(--border-soft); padding:16px 18px;}
+.timeline-period-head{display:flex; flex-direction:column; gap:2px; margin-bottom:12px;}
+.timeline-period-label{font-family:var(--admin-mono); font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text);}
+.timeline-period-sub{font-size:.68rem; color:var(--text-faint);}
+.timeline-period-rows{display:flex; flex-direction:column; gap:10px;}
+.timeline-period-row{display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;}
+.timeline-period-metric{font-size:.76rem; color:var(--text-faint);}
+.timeline-period-value{font-size:1.15rem; font-weight:700; color:var(--text); font-variant-numeric:tabular-nums; margin-right:auto; padding-left:8px;}
+.timeline-period-conversion{font-size:.68rem; color:var(--text-faint); margin-top:2px; padding-top:8px; border-top:1px dashed var(--border-soft);}
+
 .dash-card{border-radius:var(--admin-r-lg); position:relative;}
 .dash-card-head{
   display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; gap:10px;

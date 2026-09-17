@@ -19,6 +19,23 @@ export default function ConcoursExplorer({ initialData }) {
 
     const $ = (sel) => document.querySelector(sel);
 
+    // Debounced: only reports a search term once the visitor has paused
+    // typing (~1s), so a term is tallied once per real search, not once per
+    // keystroke while it's still being composed. See lib/analytics.js
+    // trackSearchMiss — this is the dashboard's only signal for "content
+    // visitors are looking for but the catalogue doesn't have".
+    let searchMissTimer = null;
+    function reportSearchMissDebounced(query) {
+      clearTimeout(searchMissTimer);
+      searchMissTimer = setTimeout(() => {
+        fetch("/api/track/search-miss", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }).catch(() => {});
+      }, 900);
+    }
+
     function uniq(arr) {
       return [...new Set(arr)].filter(Boolean).sort();
     }
@@ -178,6 +195,9 @@ export default function ConcoursExplorer({ initialData }) {
       });
 
       renderGrid();
+
+      if (q.length >= 2 && filtered.length === 0) reportSearchMissDebounced(q);
+      else clearTimeout(searchMissTimer);
     }
 
     function initFilters() {

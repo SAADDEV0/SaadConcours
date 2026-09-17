@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAllNews } from "@/lib/store";
 import { isValidEmail, normalizeEmail } from "@/lib/subscribers";
 import { buildFromHeader, defaultSubject, emailConfigured, sendDigestEmail } from "@/lib/emailDigest";
+import { trackDigestSend } from "@/lib/analytics";
 
 // Manual/test send from the admin composer - distinct from
 // /api/cron/news-digest (unattended, always-full-list). Lets the admin pick
@@ -75,6 +76,16 @@ export async function POST(req) {
     if (result.ok) sent++;
     else failed.push(email);
   }
+
+  const status = sent === emails.length ? "sent" : sent > 0 ? "partial" : "failed";
+  await trackDigestSend({
+    type: body.testEmail ? "test" : "manuel",
+    status,
+    sent,
+    total: emails.length,
+    itemCount: items.length,
+    subject,
+  });
 
   return NextResponse.json({ sent, total: emails.length, failed, itemCount: items.length, test: Boolean(body.testEmail) });
 }

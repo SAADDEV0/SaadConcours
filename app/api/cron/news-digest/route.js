@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAllNews, getSettings } from "@/lib/store";
 import { getSubscribers } from "@/lib/subscribers";
 import { computeUrgentNews, defaultSubject, buildFromHeader, emailConfigured, sendDigestEmail } from "@/lib/emailDigest";
+import { trackDigestSend } from "@/lib/analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +28,15 @@ export async function POST(req) {
 
   const settings = await getSettings();
   if (!settings.newsAlertsEnabled) {
-    return NextResponse.json({ sent: 0, reason: "Alertes désactivées dans les réglages admin." });
+    const reason = "Alertes désactivées dans les réglages admin.";
+    await trackDigestSend({ type: "auto", status: "skipped", sent: 0, total: 0, reason });
+    return NextResponse.json({ sent: 0, reason });
   }
 
   if (!emailConfigured()) {
-    return NextResponse.json({ sent: 0, reason: "GMAIL_USER / GMAIL_APP_PASSWORD non configurés." });
+    const reason = "GMAIL_USER / GMAIL_APP_PASSWORD non configurés.";
+    await trackDigestSend({ type: "auto", status: "skipped", sent: 0, total: 0, reason });
+    return NextResponse.json({ sent: 0, reason });
   }
 
   const news = await getAllNews();
@@ -43,12 +48,16 @@ export async function POST(req) {
   const visibleNews = visibles.length ? news.filter((i) => visibles.includes(i.etablissement)) : news;
   const urgent = computeUrgentNews(visibleNews);
   if (!urgent.length) {
-    return NextResponse.json({ sent: 0, reason: "Aucun concours ne ferme dans les prochains jours." });
+    const reason = "Aucun concours ne ferme dans les prochains jours.";
+    await trackDigestSend({ type: "auto", status: "skipped", sent: 0, total: 0, reason });
+    return NextResponse.json({ sent: 0, reason });
   }
 
   const subscribers = await getSubscribers();
   if (!subscribers.length) {
-    return NextResponse.json({ sent: 0, reason: "Aucun abonné." });
+    const reason = "Aucun abonné.";
+    await trackDigestSend({ type: "auto", status: "skipped", sent: 0, total: 0, reason });
+    return NextResponse.json({ sent: 0, reason });
   }
 
   const fromHeader = buildFromHeader(settings.newsAlertsFromName);
@@ -65,6 +74,9 @@ export async function POST(req) {
     });
     if (result.ok) sent++;
   }
+
+  const status = sent === subscribers.length ? "sent" : sent > 0 ? "partial" : "failed";
+  await trackDigestSend({ type: "auto", status, sent, total: subscribers.length, itemCount: urgent.length, subject });
 
   return NextResponse.json({ sent, total: subscribers.length, urgentCount: urgent.length });
 }

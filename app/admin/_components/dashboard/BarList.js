@@ -9,7 +9,7 @@ export default function BarList({ items, formatValue, color = "var(--accent)" })
         <li key={it.label} className="bar-list-row">
           <div className="bar-list-head">
             <span className="bar-list-label">{it.label}</span>
-            <span className="bar-list-value">{formatValue ? formatValue(it.value) : it.value}</span>
+            <span className="bar-list-value">{formatValue ? formatValue(it.value, it) : it.value}</span>
           </div>
           <div className="bar-list-track">
             <div
