@@ -81,6 +81,7 @@ const WEBSITE_JSON_LD = {
 export default async function RootLayout({ children }) {
   const settings = await getSettings().catch(() => null);
   const adsEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
+  const gaEnabled = Boolean(settings?.gaEnabled && settings?.gaMeasurementId);
   // Réservation d'espace pour les bannières partenaires (voir reservationCss).
   // Ne cible que le haut et le bas de page : la colonne latérale est posée dans
   // sa propre cellule ou en flottant, elle ne pousse rien.
@@ -133,6 +134,21 @@ export default async function RootLayout({ children }) {
             crossOrigin="anonymous"
             strategy="afterInteractive"
           />
+        )}
+        {gaEnabled && (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${settings.gaMeasurementId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-gtag" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${settings.gaMeasurementId}');`}
+            </Script>
+          </>
         )}
       </head>
       <body>

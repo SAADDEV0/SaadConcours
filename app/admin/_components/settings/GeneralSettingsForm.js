@@ -4,7 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import { SOCIAL_FIELDS, NEWS_ETABLISSEMENTS } from "../../_lib/settingsFields";
 import { useToast } from "../ui/ToastProvider";
 
-const OWN_KEYS = [...SOCIAL_FIELDS.map((f) => f.key), "newsEtablissementsVisibles", "newsScraperEnabled"];
+const OWN_KEYS = [
+  ...SOCIAL_FIELDS.map((f) => f.key),
+  "newsEtablissementsVisibles",
+  "newsScraperEnabled",
+  "gaEnabled",
+  "gaMeasurementId",
+];
 
 export default function GeneralSettingsForm() {
   const [form, setForm] = useState(null);
@@ -86,6 +92,39 @@ export default function GeneralSettingsForm() {
             />
           </div>
         ))}
+      </div>
+
+      <div className="admin-card" style={{ marginTop: 18 }}>
+        <h2 className="admin-section-title">Google Analytics</h2>
+        <p className="admin-image-hint" style={{ marginBottom: 16 }}>
+          Charge le tag Google Analytics (gtag.js) sur tout le site pour suivre les visites. Crée ta propriété sur{" "}
+          <a href="https://analytics.google.com" target="_blank" rel="noreferrer">
+            analytics.google.com
+          </a>{" "}
+          pour obtenir l'ID de mesure (format G-XXXXXXX).
+        </p>
+
+        <label className="admin-switch-row" style={{ marginBottom: 16 }}>
+          <span className="admin-switch-row-label">Activer Google Analytics</span>
+          <span className="admin-switch">
+            <input
+              type="checkbox"
+              checked={Boolean(form.gaEnabled)}
+              onChange={(e) => setForm({ ...form, gaEnabled: e.target.checked })}
+            />
+            <span className="admin-switch-thumb" aria-hidden="true" />
+          </span>
+        </label>
+
+        <div className="admin-field" style={{ marginBottom: 0 }}>
+          <label>ID de mesure (G-XXXXXXX)</label>
+          <input
+            value={form.gaMeasurementId || ""}
+            placeholder="G-XXXXXXXXXX"
+            disabled={!form.gaEnabled}
+            onChange={(e) => setForm({ ...form, gaMeasurementId: e.target.value })}
+          />
+        </div>
       </div>
 
       <div className="admin-card" style={{ marginTop: 18 }}>
