@@ -1,7 +1,9 @@
 export const metadata = {
-  title: "Concours ouverts — Masters accessibles maintenant au Maroc",
+  // See app/concours/layout.js for why this is kept short — the root
+  // template appends " | SaadConcours" on top of whatever's here.
+  title: "Concours Ouverts — Masters Maroc",
   description:
-    "Liste à jour des concours d'accès aux Masters actuellement ouverts aux inscriptions dans les universités marocaines, avec dates limites et liens d'inscription directs.",
+    "Liste à jour des concours d'accès aux Masters ouverts aux inscriptions au Maroc, avec dates limites et liens d'inscription directs.",
   alternates: { canonical: "/news" },
   openGraph: { title: "Concours ouverts — SaadConcours", url: "/news" },
 };

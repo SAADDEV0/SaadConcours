@@ -4,6 +4,7 @@ import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import CoursDetailClient from "./CoursDetailClient";
+import MathScripts from "../../_shared/MathScripts";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -78,6 +79,7 @@ export default async function CoursDetailPage({ params }) {
 
   return (
     <>
+      <MathScripts />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger

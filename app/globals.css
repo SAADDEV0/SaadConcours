@@ -411,7 +411,11 @@ a.pa-banner:hover{border-color:var(--accent);}
 .faq-question{margin:0; font-size:.95rem; font-weight:600;}
 .faq-answer{color:var(--text-dim); margin:8px 0 0; line-height:1.6; font-size:.9rem;}
 .cd-images{display:flex; flex-direction:column; gap:14px;}
-.cd-images img{width:100%; border-radius:8px; border:1px solid var(--border);}
+/* aspect-ratio reserves layout space before the (lazy-loaded) scan
+   downloads — these are admin-uploaded with no known intrinsic size, so this
+   is an approximation (typical scanned-page ratio) rather than exact, but it
+   bounds the reflow instead of leaving it at zero height until load. */
+.cd-images img{width:100%; aspect-ratio:3/4; object-fit:contain; background:var(--bg-alt, rgba(127,127,127,.08)); border-radius:8px; border:1px solid var(--border);}
 .cd-source{font-size:.85rem; color:var(--text-dim); word-break:break-all; margin-bottom:24px;}
 .cd-source a{color:var(--accent);}
 .cd-related{margin-top:18px;}

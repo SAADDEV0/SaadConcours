@@ -5,6 +5,7 @@ import { chromeScript, trackPdfDownload } from "../../_shared/chrome";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "../../_shared/pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "../../_shared/pdfCover";
 import { convertMathSpansToPlainText } from "../../_shared/latexPlainText";
+import { ensureEvaluationPdfScripts } from "../../_shared/pdfScripts";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -162,11 +163,16 @@ export default function EvaluationDetailClient({ quiz }) {
       const qs = currentQuestions();
 
       let settings = {};
-      try {
-        settings = await (await fetch("/api/settings")).json();
-      } catch {
-        // best-effort: fall back to the default vector logo/watermark, no socials
-      }
+      await Promise.all([
+        ensureEvaluationPdfScripts(),
+        (async () => {
+          try {
+            settings = await (await fetch("/api/settings")).json();
+          } catch {
+            // best-effort: fall back to the default vector logo/watermark, no socials
+          }
+        })(),
+      ]);
       const branding = await resolvePdfBranding(settings);
 
       const { jsPDF } = window.jspdf;

@@ -1,272 +1,105 @@
-"use client";
+import { getAllNews, getSettings } from "@/lib/store";
+import { chromeHtml, footerHtml } from "../_shared/chrome";
+import { newsCardHtml, sortNewsByUrgency, urgency, visibleNews } from "../_shared/newsCard";
+import NewsExplorer from "./NewsExplorer";
 
-import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "../_shared/chrome";
+const ETAB_GROUPS = ["Tous", "FSJES", "ENCG", "FEG/FSEG", "Autre"];
 
-const MARKUP = `
-${chromeHtml({ active: "news", showSearch: false })}
+// Server-rendered on first load (mirrors app/concours/page.js, app/cours/page.js,
+// app/evaluation/page.js) — this used to be a pure client SPA reader (fetch
+// in useEffect, empty grid until JS ran), so every "concours ouvert" here
+// was invisible to crawlers and the page had nothing to paint until the
+// round trip to /api/news finished. The search box / établissement chips /
+// "afficher les clôturés" toggle are a client-side filter (NewsExplorer)
+// layered on top — the full open list below is what the server sends on
+// the very first response, filters or no filters, JS or no JS.
+export default async function NewsPage() {
+  const [rawNews, settings] = await Promise.all([
+    getAllNews().catch(() => []),
+    getSettings().catch(() => null),
+  ]);
+  const newsItems = sortNewsByUrgency(visibleNews(rawNews, settings));
+  const open = newsItems.filter((i) => !i.cloture);
+  const urgent = open.filter((i) => urgency(i) === "urgent");
 
-<div class="nw-view">
-  <h1 class="eval-title">🆕 Concours ouverts</h1>
-  <p class="eval-sub">Masters actuellement ouverts, mis à jour automatiquement depuis <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les ~6 heures.</p>
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "news", showSearch: false }) }} />
 
-  <section class="urgent-alert" id="urgentAlert" style="display:none;">
-    <div class="urgent-alert-head">
-      <span class="urgent-alert-title">⏰ <strong id="urgentCount"></strong> concours ferment bientôt</span>
-    </div>
-    <div class="urgent-alert-list" id="urgentAlertList"></div>
-    <form class="alert-subscribe-form" id="alertForm">
-      <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required>
-      <button type="submit">🔔 M'alerter</button>
-    </form>
-    <div class="alert-form-msg" id="alertFormMsg"></div>
-  </section>
+      <div className="nw-view">
+        <h1 className="eval-title">🆕 Concours ouverts</h1>
+        <p className="eval-sub">
+          Masters actuellement ouverts, mis à jour automatiquement depuis{" "}
+          <a href="https://www.almaster-maroc.com/" target="_blank" rel="noopener">almaster-maroc.com</a> toutes les
+          ~6 heures.
+        </p>
 
-  <div class="nw-toolbar">
-    <div class="nw-search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="nwSearch" placeholder="Rechercher (établissement, ville, titre...)">
-    </div>
-    <div class="nw-chip-row" id="nwEtabChips"></div>
-    <label class="nw-toggle">
-      <input type="checkbox" id="nwShowClosed">
-      Afficher les clôturés
-    </label>
-  </div>
+        {urgent.length > 0 && (
+          <section className="urgent-alert" id="urgentAlert">
+            <div className="urgent-alert-head">
+              <span className="urgent-alert-title">
+                ⏰ <strong id="urgentCount">{urgent.length}</strong> concours ferment bientôt
+              </span>
+            </div>
+            <div
+              className="urgent-alert-list"
+              id="urgentAlertList"
+              dangerouslySetInnerHTML={{
+                __html: urgent
+                  .slice(0, 5)
+                  .map(
+                    (item) => `
+              <div class="urgent-alert-item">
+                <span>${item.titre}${item.ville ? " · " + item.ville : ""}</span>
+                <span class="urgent-alert-date">${item.date_limite}</span>
+              </div>`
+                  )
+                  .join(""),
+              }}
+            />
+            <form className="alert-subscribe-form" id="alertForm">
+              <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required />
+              <button type="submit">🔔 M'alerter</button>
+            </form>
+            <div className="alert-form-msg" id="alertFormMsg" />
+          </section>
+        )}
 
-  <div class="nw-stats" id="nwStats"></div>
-
-  <div class="nw-grid" id="nwGrid">${spinnerHtml("Chargement des concours ouverts...")}</div>
-</div>
-
-${footerHtml()}
-`;
-
-const NEWS_SOON_DAYS = 21;
-
-export default function NewsPage() {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    chromeScript();
-
-    const root = containerRef.current;
-    const $ = (sel) => root.querySelector(sel);
-
-    function escapeHtml(s) {
-      return String(s ?? "").replace(
-        /[&<>"']/g,
-        (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
-      );
-    }
-
-    let newsItems = [];
-    let etabFilter = "Tous";
-    let showClosed = false;
-
-    function daysUntil(dateStr) {
-      if (!dateStr) return null;
-      const diffMs = new Date(dateStr + "T00:00:00") - new Date(new Date().toDateString());
-      return Math.round(diffMs / 86400000);
-    }
-
-    function urgency(item) {
-      if (!item.date_limite) return "none";
-      const d = daysUntil(item.date_limite);
-      if (d < 0) return "closed";
-      if (d <= 7) return "urgent";
-      if (d <= NEWS_SOON_DAYS) return "soon";
-      return "ok";
-    }
-
-    function etabGroup(etab) {
-      if (etab === "FSJES") return "FSJES";
-      if (etab === "ENCG") return "ENCG";
-      if (etab === "FEG" || etab === "FSEG") return "FEG/FSEG";
-      return "Autre";
-    }
-
-    function etabColorClass(etab) {
-      const g = etabGroup(etab);
-      if (g === "FSJES") return "blue";
-      if (g === "ENCG") return "violet";
-      if (g === "FEG/FSEG") return "green";
-      return "neutral";
-    }
-
-    function loadNews() {
-      Promise.all([
-        fetch("/api/news").then((r) => r.json()),
-        fetch("/api/settings")
-          .then((r) => r.json())
-          .catch(() => null),
-      ])
-        .then(([data, settings]) => {
-          const visibles = settings?.newsEtablissementsVisibles || [];
-          // The scraper now pulls in everything from almaster-maroc.com —
-          // which établissements actually show here is an admin-side
-          // choice (Réglages → "Concours ouverts affichés"), not baked
-          // into the scrape itself. Empty selection means no restriction.
-          newsItems = visibles.length ? data.filter((i) => visibles.includes(i.etablissement)) : data;
-          renderChips();
-          render();
-          renderUrgentBanner();
-        })
-        .catch(() => {
-          $("#nwGrid").innerHTML = `<div class="empty-state">Impossible de charger les concours ouverts.</div>`;
-        });
-    }
-
-    function renderUrgentBanner() {
-      const urgent = newsItems
-        .filter((i) => !i.cloture && urgency(i) === "urgent")
-        .sort((a, b) => daysUntil(a.date_limite) - daysUntil(b.date_limite));
-      if (!urgent.length) return;
-      $("#urgentCount").textContent = urgent.length;
-      const list = $("#urgentAlertList");
-      list.innerHTML = "";
-      urgent.slice(0, 5).forEach((item) => {
-        const row = document.createElement("div");
-        row.className = "urgent-alert-item";
-        row.innerHTML = `
-          <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
-          <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
-        `;
-        list.appendChild(row);
-      });
-      $("#urgentAlert").style.display = "block";
-    }
-
-    function renderChips() {
-      const groups = ["Tous", "FSJES", "ENCG", "FEG/FSEG", "Autre"];
-      const wrap = $("#nwEtabChips");
-      wrap.innerHTML = "";
-      groups.forEach((g) => {
-        const chip = document.createElement("span");
-        chip.className = "chip" + (g === etabFilter ? " active" : "");
-        chip.textContent = g;
-        chip.addEventListener("click", () => {
-          etabFilter = g;
-          renderChips();
-          render();
-        });
-        wrap.appendChild(chip);
-      });
-    }
-
-    function urgencyLabel(item) {
-      const u = urgency(item);
-      if (u === "none") return `<span class="nw-badge">📅 Date limite non précisée</span>`;
-      const label = `📅 ${escapeHtml(item.date_limite)}`;
-      const d = daysUntil(item.date_limite);
-      if (u === "closed") return `<span class="nw-badge nw-closed">${label} (clôturé)</span>`;
-      if (u === "urgent") return `<span class="nw-badge nw-urgent">${label} — J-${d}</span>`;
-      if (u === "soon") return `<span class="nw-badge nw-soon">${label} — J-${d}</span>`;
-      return `<span class="nw-badge nw-ok">${label}</span>`;
-    }
-
-    function newsCard(item) {
-      const card = document.createElement("div");
-      card.className = `nw-card nw-u-${urgency(item)} etab-${etabColorClass(item.etablissement)}`;
-      card.innerHTML = `
-        <div class="nw-card-head">
-          <span class="news-etab-chip">${escapeHtml(item.etablissement || "Autre")}</span>
-          ${item.ville ? `<span class="news-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
-          ${item.filiere ? `<span class="news-filiere-chip">${escapeHtml(item.filiere)}</span>` : ""}
-        </div>
-        <div class="news-card-title">${escapeHtml(item.titre)} <a class="card-dl" href="/news/${encodeURIComponent(item.id)}" title="Ouvrir la page dédiée" style="text-decoration:none; display:inline-flex; vertical-align:middle;">🔗</a></div>
-        <div class="nw-card-bottom">
-          ${urgencyLabel(item)}
-          <div class="nw-card-actions">
-            <a class="dl-btn" style="text-decoration:none;" href="${escapeHtml(item.lien_inscription || item.source)}" target="_blank" rel="noopener">S'inscrire</a>
-            <a class="reset-btn" style="width:auto; text-decoration:none; display:inline-flex; align-items:center;" href="${escapeHtml(item.source)}" target="_blank" rel="noopener">🔗 Source</a>
+        <div className="nw-toolbar">
+          <div className="nw-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            <input type="text" id="nwSearch" placeholder="Rechercher (établissement, ville, titre...)" />
           </div>
+          <div className="nw-chip-row" id="nwEtabChips">
+            {ETAB_GROUPS.map((g) => (
+              <span key={g} className={`chip${g === "Tous" ? " active" : ""}`} data-group={g}>
+                {g}
+              </span>
+            ))}
+          </div>
+          <label className="nw-toggle">
+            <input type="checkbox" id="nwShowClosed" />
+            Afficher les clôturés
+          </label>
         </div>
-      `;
-      return card;
-    }
 
-    function render() {
-      const q = $("#nwSearch").value.trim().toLowerCase();
-      const grid = $("#nwGrid");
-      const statsWrap = $("#nwStats");
+        <div className="nw-stats" id="nwStats">
+          <span className="stat-pill">
+            {open.length} concours ouvert{open.length > 1 ? "s" : ""}
+          </span>
+          {urgent.length > 0 && (
+            <span className="stat-pill nw-stat-urgent">
+              🔥 {urgent.length} clôture{urgent.length > 1 ? "nt" : ""} sous 7 jours
+            </span>
+          )}
+        </div>
 
-      let items = newsItems.filter((i) => showClosed || !i.cloture);
-      if (etabFilter !== "Tous") items = items.filter((i) => etabGroup(i.etablissement) === etabFilter);
-      if (q) {
-        items = items.filter((i) =>
-          [i.titre, i.etablissement, i.ville, i.filiere].join(" ").toLowerCase().includes(q)
-        );
-      }
+        <div className="nw-grid" id="nwGrid" dangerouslySetInnerHTML={{ __html: open.map(newsCardHtml).join("") || `<div class="empty-state">Aucun concours ouvert pour le moment.</div>` }} />
+      </div>
 
-      const urgencyOrder = { urgent: 0, soon: 1, ok: 2, none: 3, closed: 4 };
-      items = [...items].sort((a, b) => {
-        const ua = urgencyOrder[urgency(a)];
-        const ub = urgencyOrder[urgency(b)];
-        if (ua !== ub) return ua - ub;
-        if (ua <= 1) return daysUntil(a.date_limite) - daysUntil(b.date_limite);
-        return (b.date_publication || "").localeCompare(a.date_publication || "");
-      });
+      <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
 
-      const open = newsItems.filter((i) => !i.cloture);
-      const urgentCount = open.filter((i) => urgency(i) === "urgent").length;
-      statsWrap.innerHTML = `
-        <span class="stat-pill">${open.length} concours ouvert${open.length > 1 ? "s" : ""}</span>
-        ${urgentCount ? `<span class="stat-pill nw-stat-urgent">🔥 ${urgentCount} clôture${urgentCount > 1 ? "nt" : ""} sous 7 jours</span>` : ""}
-      `;
-
-      grid.innerHTML = "";
-      if (!items.length) {
-        grid.innerHTML = `<div class="empty-state">Aucun concours ne correspond à ces filtres.</div>`;
-        return;
-      }
-      items.forEach((item) => grid.appendChild(newsCard(item)));
-    }
-
-    $("#nwSearch").addEventListener("input", render);
-    $("#nwShowClosed").addEventListener("change", (e) => {
-      showClosed = e.target.checked;
-      render();
-    });
-
-    const alertForm = $("#alertForm");
-    // Guard against React StrictMode's dev-only double effect invoke
-    // double-registering this listener - a submit would fire the subscribe
-    // request twice otherwise (same fix as the cours reading-theme picker).
-    if (alertForm && alertForm.dataset.wired !== "1") {
-      alertForm.dataset.wired = "1";
-      alertForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = $("#alertEmail").value.trim();
-        const msg = $("#alertFormMsg");
-        fetch("/api/alerts/subscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        })
-          .then((r) => r.json().then((data) => ({ ok: r.ok, data })))
-          .then(({ ok, data }) => {
-            msg.textContent = ok ? "✅ Inscrit ! Tu recevras un email avant la clôture." : data.error || "Erreur.";
-            msg.className = "alert-form-msg" + (ok ? " ok" : " error");
-            if (ok) alertForm.reset();
-          })
-          .catch(() => {
-            msg.textContent = "Erreur réseau, réessaie.";
-            msg.className = "alert-form-msg error";
-          });
-      });
-    }
-
-    if (new URLSearchParams(window.location.search).get("desabonne") === "1") {
-      const msg = $("#alertFormMsg");
-      if (msg) {
-        msg.textContent = "Tu as bien été désabonné des alertes.";
-        msg.className = "alert-form-msg ok";
-      }
-    }
-
-    loadNews();
-  }, []);
-
-  return <div ref={containerRef} dangerouslySetInnerHTML={{ __html: MARKUP }} />;
+      <NewsExplorer initialData={newsItems} />
+    </>
+  );
 }

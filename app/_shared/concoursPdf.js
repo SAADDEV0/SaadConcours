@@ -9,6 +9,7 @@ import { pub, trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { convertMathSpansToPlainText } from "./latexPlainText";
+import { ensureConcoursPdfScripts } from "./pdfScripts";
 
 // Every line drawn by this file goes through here, so sanitizePdfText is
 // applied at the same time as the markdown stripping: the énoncés and
@@ -47,11 +48,16 @@ function getImageDimensions(dataUrl) {
 
 export async function downloadConcoursPdf(c) {
   let settings = {};
-  try {
-    settings = await (await fetch("/api/settings")).json();
-  } catch {
-    // best-effort: fall back to the default vector logo/watermark, no socials
-  }
+  await Promise.all([
+    ensureConcoursPdfScripts(),
+    (async () => {
+      try {
+        settings = await (await fetch("/api/settings")).json();
+      } catch {
+        // best-effort: fall back to the default vector logo/watermark, no socials
+      }
+    })(),
+  ]);
   const branding = await resolvePdfBranding(settings);
 
   const { jsPDF } = window.jspdf;

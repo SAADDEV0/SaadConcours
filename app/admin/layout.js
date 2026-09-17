@@ -1,5 +1,6 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./admin.css";
+import MathScripts from "../_shared/MathScripts";
 
 // The panel gets its own typography instead of the public site's system
 // stack: Inter for UI (designed for dense interface text — real tabular
@@ -29,6 +30,7 @@ export default function AdminLayout({ children }) {
   // layout (custom properties inherit through it normally).
   return (
     <div className={`${inter.variable} ${jetbrains.variable}`} style={{ display: "contents" }}>
+      <MathScripts />
       {children}
     </div>
   );

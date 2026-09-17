@@ -1,7 +1,8 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { chromeHtml, chromeScript, footerHtml, spinnerHtml } from "./_shared/chrome";
+import { getAllConcours, getAllNews, getSettings } from "@/lib/store";
+import { chromeHtml, footerHtml } from "./_shared/chrome";
+import { escapeHtml } from "./_shared/concoursCard";
+import { daysUntil, urgency, visibleNews } from "./_shared/newsCard";
+import HomeClient from "./HomeClient";
 
 const ACTIONS = [
   {
@@ -41,221 +42,158 @@ const ACTIONS = [
   },
 ];
 
-const MARKUP = `
-${chromeHtml({ active: "home", showSearch: false, rails: true })}
+// Server-rendered on first load (mirrors app/concours/page.js, app/news/page.js)
+// — this used to be a pure client SPA reader: the hero text was the only
+// thing in the raw HTML, and the action cards, "concours récemment ouverts"
+// and "derniers concours ajoutés" sections were all built by DOM
+// manipulation inside a useEffect after a round trip to /api/news and
+// /api/concours. That meant the homepage — the page most likely to earn
+// backlinks and get crawled first — shipped an almost-empty document.
+// HomeClient only wires the alert subscribe form and the partner banner ad,
+// both of which need no SSR (a form has nothing to crawl; an ad slot has
+// nothing worth indexing).
+export default async function HomePage() {
+  const [allConcours, rawNews, settings] = await Promise.all([
+    getAllConcours().catch(() => []),
+    getAllNews().catch(() => []),
+    getSettings().catch(() => null),
+  ]);
 
-<div class="home-view">
-  <section class="home-hero">
-    <h1 class="home-hero-title">Prépare ton concours d'accès au Master 🎓</h1>
-    <p class="home-hero-sub">
-      Sujets réels, fiches de cours et QCM d'auto-évaluation pour les Masters économie-gestion
-      (Finance & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie)
-      des universités marocaines.
-    </p>
-  </section>
+  // Storage appends new entries to the end of the array (see lib/store.js
+  // addItem) - same "tail = most recent" logic as the admin dashboard's
+  // "Derniers concours ajoutés" widget.
+  const recentConcours = allConcours.slice(-4).reverse();
 
-  <div id="homeBannerAd"></div>
+  const newsItems = visibleNews(rawNews, settings);
+  const open = newsItems.filter((i) => !i.cloture);
+  const urgent = open
+    .filter((i) => i.date_limite && daysUntil(i.date_limite) >= 0 && daysUntil(i.date_limite) <= 7)
+    .sort((a, b) => daysUntil(a.date_limite) - daysUntil(b.date_limite));
+  const recentOpen = [...open]
+    .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
+    .slice(0, 3);
 
-  <section class="urgent-alert" id="urgentAlert" style="display:none;">
-    <div class="urgent-alert-head">
-      <span class="urgent-alert-title">⏰ <strong id="urgentCount"></strong> concours ferment bientôt</span>
-      <a class="home-alert-link" href="/news">Voir tout →</a>
-    </div>
-    <div class="urgent-alert-list" id="urgentAlertList"></div>
-    <form class="alert-subscribe-form" id="alertForm">
-      <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required>
-      <button type="submit">🔔 M'alerter</button>
-    </form>
-    <div class="alert-form-msg" id="alertFormMsg"></div>
-  </section>
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "home", showSearch: false, rails: true }) }} />
 
-  <section class="home-alert" id="homeAlert">
-    <div class="home-alert-head">
-      <span class="home-alert-title">🔔 Concours récemment ouverts</span>
-      <a class="home-alert-link" href="/news">Voir tout →</a>
-    </div>
-    <div class="home-alert-list" id="homeAlertList">${spinnerHtml("Chargement des concours ouverts...")}</div>
-  </section>
+      <div className="home-view">
+        <section className="home-hero">
+          <h1 className="home-hero-title">Prépare ton concours d'accès au Master 🎓</h1>
+          <p className="home-hero-sub">
+            Sujets réels, fiches de cours et QCM d'auto-évaluation pour les Masters économie-gestion
+            (Finance & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie)
+            des universités marocaines.
+          </p>
+        </section>
 
-  <section class="home-actions">
-    <h2 class="home-section-title">Que veux-tu faire ?</h2>
-    <div class="home-actions-grid" id="homeActionsGrid"></div>
-  </section>
+        <div id="homeBannerAd" />
 
-  <section class="home-recent" id="homeRecent" style="display:none;">
-    <div class="home-recent-head">
-      <h2 class="home-section-title">🆕 Derniers concours ajoutés</h2>
-      <a class="home-alert-link" href="/concours">Voir tout →</a>
-    </div>
-    <div class="cd-related-grid" id="homeRecentGrid"></div>
-  </section>
-</div>
-
-${footerHtml()}
-`;
-
-export default function HomePage() {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    chromeScript();
-
-    const root = containerRef.current;
-    const $ = (sel) => root.querySelector(sel);
-
-    function escapeHtml(s) {
-      return String(s ?? "").replace(
-        /[&<>"']/g,
-        (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
-      );
-    }
-
-    const grid = $("#homeActionsGrid");
-    ACTIONS.forEach((a) => {
-      const card = document.createElement("a");
-      card.href = a.href;
-      card.className = `home-action-card color-${a.color}`;
-      card.innerHTML = `
-        <div class="home-action-icon">${a.icon}</div>
-        <div class="home-action-title">${a.title}</div>
-        <div class="home-action-desc">${a.desc}</div>
-        <div class="home-action-go">Ouvrir →</div>
-      `;
-      grid.appendChild(card);
-    });
-
-    function daysUntil(dateStr) {
-      if (!dateStr) return null;
-      const diffMs = new Date(dateStr + "T00:00:00") - new Date(new Date().toDateString());
-      return Math.round(diffMs / 86400000);
-    }
-
-    fetch("/api/concours")
-      .then((r) => r.json())
-      .then((concours) => {
-        // Storage appends new entries to the end of the array (see
-        // lib/store.js addItem) - same "tail = most recent" logic as the
-        // admin dashboard's "Derniers concours ajoutés" widget.
-        const recentConcours = concours.slice(-4).reverse();
-        if (!recentConcours.length) return;
-        const grid = $("#homeRecentGrid");
-        grid.innerHTML = "";
-        recentConcours.forEach((c) => {
-          const a = document.createElement("a");
-          a.className = "cd-related-item";
-          a.href = `/concours/${encodeURIComponent(c.id)}`;
-          a.innerHTML = `
-            <div class="cd-related-title">${escapeHtml(c.etablissement)} — ${escapeHtml(c.ville)} — ${escapeHtml(String(c.annee))}</div>
-            <div class="cd-related-sub">${escapeHtml(c.master_reel || c.filiere || "")}</div>
-            ${c.date_ajout ? `<div class="cd-related-date">🗓️ Ajouté le ${escapeHtml(c.date_ajout)}</div>` : ""}
-          `;
-          grid.appendChild(a);
-        });
-        $("#homeRecent").style.display = "block";
-      })
-      .catch(() => {});
-
-    Promise.all([
-      fetch("/api/news").then((r) => r.json()),
-      fetch("/api/settings")
-        .then((r) => r.json())
-        .catch(() => null),
-    ])
-      .then(([rawData, settings]) => {
-        if (settings?.adsEnabled && settings?.adsHomeBannerEnabled && settings?.adsPublisherId && settings?.adsHomeBannerSlot) {
-          const holder = $("#homeBannerAd");
-          holder.innerHTML = `
-            <div class="ad-slot" aria-label="Publicité">
-              <span class="ad-slot-label">Publicité</span>
-              <ins class="adsbygoogle" style="display:block" data-ad-client="${settings.adsPublisherId}" data-ad-slot="${settings.adsHomeBannerSlot}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        {urgent.length > 0 && (
+          <section className="urgent-alert" id="urgentAlert">
+            <div className="urgent-alert-head">
+              <span className="urgent-alert-title">
+                ⏰ <strong id="urgentCount">{urgent.length}</strong> concours ferment bientôt
+              </span>
+              <a className="home-alert-link" href="/news">Voir tout →</a>
             </div>
-          `;
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        }
+            <div
+              className="urgent-alert-list"
+              id="urgentAlertList"
+              dangerouslySetInnerHTML={{
+                __html: urgent
+                  .slice(0, 5)
+                  .map(
+                    (item) => `
+              <div class="urgent-alert-item">
+                <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
+                <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
+              </div>`
+                  )
+                  .join(""),
+              }}
+            />
+            <form className="alert-subscribe-form" id="alertForm">
+              <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required />
+              <button type="submit">🔔 M'alerter</button>
+            </form>
+            <div className="alert-form-msg" id="alertFormMsg" />
+          </section>
+        )}
 
-        // Same établissement visibility filter as /news, so the "closing
-        // soon" count here always matches what students actually see when
-        // they click through - showing 11 here and 3 there would look broken.
-        const visibles = settings?.newsEtablissementsVisibles || [];
-        const data = visibles.length ? rawData.filter((i) => visibles.includes(i.etablissement)) : rawData;
-        const open = data.filter((i) => !i.cloture);
+        {recentOpen.length > 0 && (
+          <section className="home-alert" id="homeAlert">
+            <div className="home-alert-head">
+              <span className="home-alert-title">🔔 Concours récemment ouverts</span>
+              <a className="home-alert-link" href="/news">Voir tout →</a>
+            </div>
+            <div
+              className="home-alert-list"
+              id="homeAlertList"
+              dangerouslySetInnerHTML={{
+                __html: recentOpen
+                  .map(
+                    (item) => `
+              <a class="home-alert-item" href="${escapeHtml(item.lien_inscription || item.source || "/news")}" target="_blank" rel="noopener">
+                <span class="home-alert-etab">${escapeHtml(item.etablissement || "Autre")}</span>
+                <span class="home-alert-titre">${escapeHtml(item.titre)}</span>
+                ${item.ville ? `<span class="home-alert-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
+              </a>`
+                  )
+                  .join(""),
+              }}
+            />
+          </section>
+        )}
 
-        const urgent = open
-          .filter((i) => i.date_limite && daysUntil(i.date_limite) >= 0 && daysUntil(i.date_limite) <= 7)
-          .sort((a, b) => daysUntil(a.date_limite) - daysUntil(b.date_limite));
-        if (urgent.length) {
-          $("#urgentCount").textContent = urgent.length;
-          const uList = $("#urgentAlertList");
-          uList.innerHTML = "";
-          urgent.slice(0, 5).forEach((item) => {
-            const row = document.createElement("div");
-            row.className = "urgent-alert-item";
-            row.innerHTML = `
-              <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
-              <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
-            `;
-            uList.appendChild(row);
-          });
-          $("#urgentAlert").style.display = "block";
-        }
+        <section className="home-actions">
+          <h2 className="home-section-title">Que veux-tu faire ?</h2>
+          <div
+            className="home-actions-grid"
+            id="homeActionsGrid"
+            dangerouslySetInnerHTML={{
+              __html: ACTIONS.map(
+                (a) => `
+              <a href="${a.href}" class="home-action-card color-${a.color}">
+                <div class="home-action-icon">${a.icon}</div>
+                <div class="home-action-title">${escapeHtml(a.title)}</div>
+                <div class="home-action-desc">${escapeHtml(a.desc)}</div>
+                <div class="home-action-go">Ouvrir →</div>
+              </a>`
+              ).join(""),
+            }}
+          />
+        </section>
 
-        const recent = [...open]
-          .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
-          .slice(0, 3);
-        if (!recent.length) {
-          $("#homeAlert").style.display = "none";
-          return;
-        }
+        {recentConcours.length > 0 && (
+          <section className="home-recent" id="homeRecent">
+            <div className="home-recent-head">
+              <h2 className="home-section-title">🆕 Derniers concours ajoutés</h2>
+              <a className="home-alert-link" href="/concours">Voir tout →</a>
+            </div>
+            <div
+              className="cd-related-grid"
+              id="homeRecentGrid"
+              dangerouslySetInnerHTML={{
+                __html: recentConcours
+                  .map(
+                    (c) => `
+              <a class="cd-related-item" href="/concours/${encodeURIComponent(c.id)}">
+                <div class="cd-related-title">${escapeHtml(c.etablissement)} — ${escapeHtml(c.ville)} — ${escapeHtml(String(c.annee))}</div>
+                <div class="cd-related-sub">${escapeHtml(c.master_reel || c.filiere || "")}</div>
+                ${c.date_ajout ? `<div class="cd-related-date">🗓️ Ajouté le ${escapeHtml(c.date_ajout)}</div>` : ""}
+              </a>`
+                  )
+                  .join(""),
+              }}
+            />
+          </section>
+        )}
+      </div>
 
-        const list = $("#homeAlertList");
-        list.innerHTML = "";
-        recent.forEach((item) => {
-          const row = document.createElement("a");
-          row.className = "home-alert-item";
-          row.href = item.lien_inscription || item.source || "/news";
-          row.target = "_blank";
-          row.rel = "noopener";
-          row.innerHTML = `
-            <span class="home-alert-etab">${escapeHtml(item.etablissement || "Autre")}</span>
-            <span class="home-alert-titre">${escapeHtml(item.titre)}</span>
-            ${item.ville ? `<span class="home-alert-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
-          `;
-          list.appendChild(row);
-        });
-      })
-      .catch(() => {
-        $("#homeAlert").style.display = "none";
-      });
+      <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
 
-    const alertForm = $("#alertForm");
-    // Guard against React StrictMode's dev-only double effect invoke
-    // double-registering this submit listener (same fix as the cours
-    // reading-theme picker) - a toggle would silently break, and a submit
-    // listener firing twice would submit the subscribe request twice.
-    if (alertForm && alertForm.dataset.wired !== "1") {
-      alertForm.dataset.wired = "1";
-      alertForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = $("#alertEmail").value.trim();
-        const msg = $("#alertFormMsg");
-        fetch("/api/alerts/subscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        })
-          .then((r) => r.json().then((data) => ({ ok: r.ok, data })))
-          .then(({ ok, data }) => {
-            msg.textContent = ok ? "✅ Inscrit ! Tu recevras un email avant la clôture." : data.error || "Erreur.";
-            msg.className = "alert-form-msg" + (ok ? " ok" : " error");
-            if (ok) alertForm.reset();
-          })
-          .catch(() => {
-            msg.textContent = "Erreur réseau, réessaie.";
-            msg.className = "alert-form-msg error";
-          });
-      });
-    }
-  }, []);
-
-  return <div ref={containerRef} dangerouslySetInnerHTML={{ __html: MARKUP }} />;
+      <HomeClient settings={settings} />
+    </>
+  );
 }

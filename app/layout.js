@@ -156,34 +156,19 @@ export default async function RootLayout({ children }) {
         <EmailGateModal />
         <Analytics />
         <SpeedInsights sampleRate={0.3} />
-        {/* afterInteractive (Next's managed equivalent of `defer`) instead of
-           raw <script defer> tags in <head> — same load timing, but Next
-           dedupes/schedules them instead of the browser blindly fetching
-           4 external bundles on every route regardless of whether it uses them. */}
-        <Script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" strategy="afterInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" strategy="afterInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" strategy="afterInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" strategy="afterInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js" strategy="afterInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.3/dist/svg2pdf.umd.min.js" strategy="afterInteractive" />
-        {/* Used only by the cours PDF export to typeset formulas as real
-           vector paths (see app/_shared/coursPdf.js) — KaTeX (above) stays
-           the on-page renderer. fontCache must be "none": with caching on
-           ("local" or the "global"/default mode), repeated glyphs are
-           defined once in a <defs> and referenced via <use>, and svg2pdf.js
-           fails to resolve that reference for a formula's SVG that was
-           never attached to a live document (which ours never is —
-           tex2svgPromise's result is handed to svg2pdf.js directly) —
-           confirmed both modes silently draw broken/blank glyphs even when
-           briefly attached to the DOM first. "none" makes every glyph a
-           fully inline path with no <use> involved, at the cost of a
-           larger PDF (no glyph reuse) — the only mode that's actually
-           reliable here. This config script must run before mathjax itself
-           parses it, hence beforeInteractive. */}
-        <Script id="mathjax-config" strategy="beforeInteractive">
-          {`window.MathJax = { svg: { fontCache: "none" }, startup: { typeset: false } };`}
-        </Script>
-        <Script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" strategy="afterInteractive" />
+        {/* marked/jsPDF/jsPDF-AutoTable/svg2pdf.js/MathJax used to load here
+           unconditionally on every route — ~250KB+ of PDF-export/typesetting
+           JS paid for by every listing page, the blog, /news, /faq and all
+           of /admin, even though none of it runs until a "Télécharger PDF" /
+           "Aperçu PDF" click. They now load on demand from that click
+           instead, see app/_shared/pdfScripts.js (which also owns the
+           MathJax fontCache config previously set here) — the admin PDF
+           buttons already had a defensive `if (!window.jspdf) "réessaie
+           dans quelques secondes"` check, proof the eager load never
+           actually guaranteed availability by the time it was needed, just
+           usually won the race. KaTeX (page-display math, separate from
+           this PDF-typesetting MathJax) moved the same way, see
+           app/_shared/MathScripts.js. */}
       </body>
     </html>
   );
