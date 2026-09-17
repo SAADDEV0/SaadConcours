@@ -24,6 +24,7 @@ import { useConfirm } from "../ui/ConfirmProvider";
 import { MAX_LOGO_BYTES } from "../../_lib/settingsFields";
 import { PDF_CONTENT_ELEMENTS, PDF_COVER_ELEMENTS } from "@/app/_shared/pdfTheme";
 import { coverDateString } from "@/app/_shared/pdfCover";
+import { ensureCoursPdfScripts } from "@/app/_shared/pdfScripts";
 import {
   BUILT_IN_PDF_TEMPLATES,
   DEFAULT_PDF_SETTINGS,
@@ -456,19 +457,12 @@ export default function PdfStudio() {
   // real effect before committing to "Enregistrer".
   async function handlePreview() {
     setPreviewError("");
-    // jsPDF/marked/MathJax load via <Script strategy="afterInteractive"> in
-    // the root layout — right after first paint they can still be mid-load,
-    // and buildCoursPdf throws destructuring window.jspdf. Catching that up
-    // front gives an actionable message instead of a generic failure.
-    if (!window.jspdf || !window.marked) {
-      setPreviewError("Les bibliothèques PDF sont encore en cours de chargement — réessaie dans quelques secondes.");
-      return;
-    }
     setPreviewLoading(true);
     try {
       const [{ buildCoursPdf }, { resolvePdfBranding }] = await Promise.all([
         import("@/app/_shared/coursPdf"),
         import("@/app/_shared/pdfTheme"),
+        ensureCoursPdfScripts(),
       ]);
       const branding = await resolvePdfBranding(form);
       const doc = await buildCoursPdf(SAMPLE_COURS, branding);

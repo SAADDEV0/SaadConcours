@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PdfPreviewModal from "../ui/PdfPreviewModal";
+import { ensureCoursPdfScripts } from "@/app/_shared/pdfScripts";
 
 // Generates the *actual* fiche-de-cours PDF (same buildCoursPdf() the public
 // download button uses, including the currently-saved branding — logo,
@@ -24,16 +25,9 @@ export default function CoursPdfPreviewButton({ form }) {
       setErr("Ajoute du contenu au cours avant de générer un aperçu.");
       return;
     }
-    // jsPDF/marked load via <Script strategy="afterInteractive"> in the root
-    // layout — right after first paint they can still be mid-load, and
-    // buildCoursPdf throws immediately trying to destructure window.jspdf.
-    if (!window.jspdf || !window.marked) {
-      setErr("Les bibliothèques PDF sont encore en cours de chargement — réessaie dans quelques secondes.");
-      return;
-    }
     setLoading(true);
     try {
-      const { buildCoursPdf } = await import("@/app/_shared/coursPdf");
+      const [{ buildCoursPdf }] = await Promise.all([import("@/app/_shared/coursPdf"), ensureCoursPdfScripts()]);
       const doc = await buildCoursPdf({ ...form, id: form.id || "apercu" });
       setBlobUrl(doc.output("bloburl"));
     } catch (error) {

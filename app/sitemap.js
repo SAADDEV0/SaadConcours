@@ -16,6 +16,11 @@ export default async function sitemap() {
       url: `${SITE_URL}/concours/${c.id}`,
       changeFrequency: "monthly",
       priority: 0.6,
+      // Only ~2/3 of entries carry date_ajout (backfilled later, not present
+      // on the earliest imports) — omitting it for the rest rather than
+      // guessing keeps every lastModified we do emit actually true, which
+      // matters more to Google than covering every URL.
+      ...(c.date_ajout ? { lastModified: c.date_ajout } : {}),
     }));
   } catch {
     // Sitemap generation shouldn't 500 the whole thing if the data source
@@ -65,6 +70,7 @@ export default async function sitemap() {
         url: `${SITE_URL}/blog/${p.id}`,
         changeFrequency: "monthly",
         priority: 0.6,
+        ...(p.publishedAt ? { lastModified: p.publishedAt } : {}),
       }));
   } catch {
     // same fallback as concoursRoutes above

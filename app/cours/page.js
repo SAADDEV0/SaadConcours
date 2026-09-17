@@ -1,7 +1,7 @@
 import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { coursCardHtml } from "../_shared/coursCard";
-import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES } from "../../lib/coursTaxonomy";
+import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator } from "../../lib/coursTaxonomy";
 import CoursExplorer from "./CoursExplorer";
 
 // Server-rendered on first load (mirrors app/concours/page.js) so every
@@ -12,7 +12,7 @@ import CoursExplorer from "./CoursExplorer";
 // (CoursExplorer) layered on top — the full list below is what the server
 // sends on the very first response, filters or no filters, JS or no JS.
 export default async function CoursPage() {
-  const cours = await getAllCours().catch(() => []);
+  const cours = (await getAllCours().catch(() => [])).sort(coursSortComparator);
 
   return (
     <>

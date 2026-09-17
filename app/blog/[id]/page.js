@@ -7,6 +7,7 @@ import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
 import { categoryInfo } from "../../../lib/blogTaxonomy";
 import { readingTimeMinutes } from "../../_shared/blogCard";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
+import MathScripts from "../../_shared/MathScripts";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -84,6 +85,7 @@ export default async function BlogDetailPage({ params }) {
 
   return (
     <>
+      <MathScripts />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger

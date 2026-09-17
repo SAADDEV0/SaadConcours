@@ -1,5 +1,7 @@
 export const metadata = {
-  title: "Blog — Conseils et méthode pour les concours de Master au Maroc",
+  // See app/concours/layout.js for why this is kept short — the root
+  // template appends " | SaadConcours" on top of whatever's here.
+  title: "Blog — Méthode & Conseils Concours Master",
   description:
     "Articles pratiques pour préparer ton concours d'accès au Master au Maroc : matières à réviser, méthode, erreurs à éviter, par module et par filière.",
   alternates: { canonical: "/blog" },

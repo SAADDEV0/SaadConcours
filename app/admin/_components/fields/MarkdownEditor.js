@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { protectMath, renderMathWhenReady } from "@/app/_shared/mathMarkdown";
 import { ensureKatexCss } from "@/app/_shared/chrome";
+import { ensureMarkedScript } from "@/app/_shared/pdfScripts";
 
 /* -------------------------------------------------------------------
  * Rich-ish Markdown editor for admin content fields (cours, énoncés,
@@ -196,6 +197,22 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
   const [mode, setMode] = useState("split"); // "write" | "split" | "preview"
   const taRef = useRef(null);
   const previewRef = useRef(null);
+  // marked no longer loads globally (see app/_shared/pdfScripts.js) — this
+  // editor is one of the few places that needs it outside a PDF click, so it
+  // warms it up on mount instead. previewHtml below already degrades to
+  // plain text with no `window.marked` yet; this flag just forces one
+  // re-render once it lands, instead of the preview staying plain text until
+  // the next keystroke happens to trigger one anyway.
+  const [markedReady, setMarkedReady] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    ensureMarkedScript().then(() => {
+      if (!cancelled) setMarkedReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function setValueWithCursor(newValue, cursorPos) {
     onChange(newValue);
@@ -322,7 +339,7 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
   }
 
   const previewHtml = (() => {
-    if (typeof window === "undefined" || !window.marked) return String(value || "");
+    if (typeof window === "undefined" || !markedReady || !window.marked) return String(value || "");
     const { text, restore } = protectMath(value || "");
     return restore(window.marked.parse(text));
   })();

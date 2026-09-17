@@ -17,8 +17,11 @@ import { coursCardHtml } from "../_shared/coursCard";
 // semestre (S1..S6, each its own dropdown line) and filière (relevant for
 // S5/S6, scoped to the active parcours like #filterFiliere depends on
 // #filterCategorie in ConcoursExplorer.js — always clickable, never
-// disabled, it just naturally has no match outside S5/S6 since that's where
-// the data lives), plus the pre-existing matière (category).
+// disabled), plus the pre-existing matière (category). Like parcours, a
+// course with no filière is "commun" and matches every filière of its
+// parcours (needed for S5/S6 modules shared across several filières, e.g.
+// "Management Stratégique" taught in both MRH et Marketing & Actions
+// Commerciales per the official FSJESJ programme).
 export default function CoursExplorer({ initialData }) {
   useEffect(() => {
     chromeScript();
@@ -64,11 +67,15 @@ export default function CoursExplorer({ initialData }) {
       const q = ($("#coursSearchInput")?.value || "").trim().toLowerCase();
 
       filtered = ALL.filter((m) => {
-        // A course with no parcours is "commun" — always matches, whichever
-        // parcours (Gestion/Économie) is currently active.
+        // A course with no parcours/filière is "commun" — always matches,
+        // whichever parcours or filière is currently selected (mirrors the
+        // parcours guard: a S5/S6 module shared by several filières, e.g.
+        // "Management Stratégique" in both MRH et MAC, is tagged filiere: ""
+        // rather than arbitrarily picked to one — it must stay visible under
+        // every filière filter of its parcours, not just when none is set).
         if (parcours && m.parcours && m.parcours !== parcours) return false;
         if (semestre && m.semestre !== semestre) return false;
-        if (filiere && m.filiere !== filiere) return false;
+        if (filiere && m.filiere && m.filiere !== filiere) return false;
         if (categorie && m.category !== categorie) return false;
         if (q) {
           const hay = [m.module, m.title, m.description].join(" ").toLowerCase();

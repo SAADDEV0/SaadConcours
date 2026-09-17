@@ -25,6 +25,7 @@ import { trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
+import { ensureCoursPdfScripts } from "./pdfScripts";
 
 const MATH_OPEN = "";
 const MATH_CLOSE = "";
@@ -213,6 +214,7 @@ function runsToPlainText(runs) {
 // preview its own unsaved form state instead of what's currently persisted.
 export async function buildCoursPdf(cours, brandingOverride) {
   let branding = brandingOverride;
+  const scriptsReady = ensureCoursPdfScripts();
   if (!branding) {
     let settings = {};
     try {
@@ -222,6 +224,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
     }
     branding = await resolvePdfBranding(settings);
   }
+  await scriptsReady;
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
