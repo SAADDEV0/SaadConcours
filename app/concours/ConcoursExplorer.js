@@ -75,13 +75,38 @@ export default function ConcoursExplorer({ initialData }) {
       });
     }
 
-    function normalizeModuleKey(s) {
+    function stripDiacritics(s) {
       return String(s || "")
         .normalize("NFD")
-        .replace(/[̀-ͯ]/g, "")
+        .replace(/[̀-ͯ]/g, "");
+    }
+
+    function normalizeModuleKey(s) {
+      return stripDiacritics(s)
         .toLowerCase()
         .trim()
         .replace(/\s+/g, " ");
+    }
+
+    // French stopwords dropped from search tokens: without this, typing
+    // "management de commerce" never matches a title stored as "Management
+    // du Commerce..." because "de" isn't a substring of "du".
+    const SEARCH_STOPWORDS = new Set(["de", "du", "des", "le", "la", "les", "et", "un", "une", "au", "aux", "en"]);
+
+    function searchNormalize(s) {
+      return stripDiacritics(s).toLowerCase();
+    }
+
+    // Splits the query into significant words so "rabat agdal" matches a
+    // record where "Rabat" (ville) and "Agdal" (etablissement) are stored in
+    // separate fields, not just adjacent in one string.
+    function searchTokens(q) {
+      const tokens = searchNormalize(q)
+        .split(/[^a-z0-9]+/)
+        .filter((t) => t.length >= 2 && !SEARCH_STOPWORDS.has(t));
+      if (tokens.length) return tokens;
+      const fallback = searchNormalize(q).trim();
+      return fallback ? [fallback] : [];
     }
 
     function fillModuleSelect() {
@@ -186,10 +211,11 @@ export default function ConcoursExplorer({ initialData }) {
           if (!(c.modules || []).some((m) => normalizeModuleKey(m) === key)) return false;
         }
         if (q) {
-          const hay = [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")]
-            .join(" ")
-            .toLowerCase();
-          if (!hay.includes(q)) return false;
+          const hay = searchNormalize(
+            [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")].join(" ")
+          );
+          const tokens = searchTokens(q);
+          if (!tokens.every((t) => hay.includes(t))) return false;
         }
         return true;
       });
