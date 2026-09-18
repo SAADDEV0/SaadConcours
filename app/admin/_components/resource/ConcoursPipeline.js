@@ -1,6 +1,7 @@
 "use client";
 
 import { STATUT_OPTIONS, statutValue } from "../../_lib/statut";
+import Icon from "../ui/Icon";
 
 /* A concours moves brouillon -> sujet_publie -> corrige_en_cours -> pret as
  * it's worked on, tracked in a plain "statut" field on the concours object
@@ -43,7 +44,7 @@ export default function ConcoursPipeline({ list, onEdit, onDelete, onChangeStatu
                         ))}
                       </select>
                       <button type="button" className="admin-icon-btn danger" title="Supprimer" onClick={() => onDelete(item.id)}>
-                        🗑️
+                        <Icon name="x" size={13} />
                       </button>
                     </div>
                   </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Icon from "../ui/Icon";
 
 // Filière is a fixed 2-level taxonomy now (lib/taxonomy.js: 5 catégories ×
 // 3-4 sous-filières each) — the concours form's cascading select only lets
@@ -71,7 +72,7 @@ export default function TaxonomyPanel() {
   return (
     <div>
       <div className="admin-card">
-        <h2 className="admin-section-title">🏷️ Couverture des filières</h2>
+        <h2 className="admin-section-title"><Icon name="target" size={16} /> Couverture des filières</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           {grandTotal} concours répartis sur les 5 catégories de la taxonomie. Une sous-filière avec moins de{" "}
           {LOW_COVERAGE_THRESHOLD} concours (y compris 0) est signalée en orange — c'est le plan de collecte pour
@@ -89,7 +90,8 @@ export default function TaxonomyPanel() {
                   <div className="taxonomy-row" key={s.label}>
                     <span className="taxonomy-name">{s.label}</span>
                     <span className={"taxonomy-count" + (s.count < LOW_COVERAGE_THRESHOLD ? " taxonomy-gap" : "")}>
-                      {s.count} concours{s.count < LOW_COVERAGE_THRESHOLD ? " ⚠️" : ""}
+                      {s.count} concours
+    {s.count < LOW_COVERAGE_THRESHOLD && <Icon name="alertTriangle" size={12} title="Couverture faible" />}
                     </span>
                   </div>
                 ))}
@@ -127,7 +129,8 @@ export default function TaxonomyPanel() {
                     <>
                       <span className="taxonomy-name">{name}</span>
                       <span className={"taxonomy-count" + (count < LOW_COVERAGE_THRESHOLD ? " taxonomy-gap" : "")}>
-                        {count} concours{count < LOW_COVERAGE_THRESHOLD ? " ⚠️" : ""}
+                        {count} concours
+        {count < LOW_COVERAGE_THRESHOLD && <Icon name="alertTriangle" size={12} title="Couverture faible" />}
                       </span>
                       <button type="button" className="admin-link-btn" onClick={() => startRename(name)}>
                         Renommer / fusionner

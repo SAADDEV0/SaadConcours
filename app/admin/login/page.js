@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import ThemeToggle from "../../_shared/ThemeToggle";
 import BrandLogo from "../../_shared/BrandLogo";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Middleware records where the admin was headed when it bounced them here,
+  // so a deep link survives the login instead of always landing on /admin.
+  const nextPath = searchParams.get("next");
+  const target = nextPath && nextPath.startsWith("/admin") ? nextPath : "/admin";
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +31,7 @@ export default function AdminLoginPage() {
         setError(data.error || "Erreur de connexion.");
         return;
       }
-      router.push("/admin");
+      router.push(target);
       router.refresh();
     } finally {
       setLoading(false);
@@ -69,8 +74,17 @@ export default function AdminLoginPage() {
             {error && <div className="admin-error">{error}</div>}
           </form>
         </div>
-        <div className="admin-gate-foot ad-kicker">SaadConcours · Console v4</div>
+        <div className="admin-gate-foot ad-kicker">SaadConcours · Console v5</div>
       </div>
     </div>
+  );
+}
+
+// useSearchParams forces a suspense boundary in the App Router.
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<div className="admin-shell admin-gate" />}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }

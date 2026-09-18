@@ -36,7 +36,7 @@ export default function SubscriberAlerts() {
         const newer = recent.filter((r) => r.subscribedAt > lastSeen).sort((a, b) => a.subscribedAt - b.subscribedAt);
         if (newer.length && !cancelled) {
           newer.forEach((r) => {
-            toast.success(`🎉 Nouvel abonné aux alertes : ${r.email}`, { duration: 7000 });
+            toast.success(`Nouvel abonné aux alertes : ${r.email}`, { duration: 7000 });
           });
           window.localStorage.setItem(STORAGE_KEY, String(newer[newer.length - 1].subscribedAt));
         }

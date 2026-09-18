@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { findActiveTrail } from "../../_lib/nav";
+import Icon from "../ui/Icon";
 
 // v4 page header: a mono eyebrow (icon + section) over a large display title.
 // The breadcrumb that used to sit here moved into the topbar, so the page
@@ -16,7 +17,11 @@ export default function PageHeader({ icon, title, subtitle, actions, kicker }) {
     <div className="admin-page-head">
       <div className="admin-page-head-main">
         <div className="admin-page-eyebrow">
-          {icon && <span aria-hidden="true">{icon}</span>}
+          {icon && (
+            <span aria-hidden="true" className="admin-page-eyebrow-icon">
+              <Icon name={icon} size={14} />
+            </span>
+          )}
           <span className="ad-kicker">{kicker || section?.label || "Pilotage"}</span>
         </div>
         <h1 className="admin-page-title">{title}</h1>

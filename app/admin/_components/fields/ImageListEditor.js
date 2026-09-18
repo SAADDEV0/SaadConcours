@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { pub } from "@/app/_shared/chrome";
+import Icon from "../ui/Icon";
 
 /* Uploads go straight to GitHub via /api/admin/upload-image, under
  * images/<ville>/<concoursId>/<filename> — same convention as the
@@ -64,7 +65,7 @@ export default function ImageListEditor({ value, onChange, concoursId, ville }) 
             <div className="admin-image-chip" key={path + idx}>
               <img src={pub(path)} alt="" loading="lazy" />
               <button type="button" className="admin-image-remove" onClick={() => removeAt(idx)} title="Retirer">
-                ✕
+                <Icon name="x" size={12} />
               </button>
             </div>
           ))}

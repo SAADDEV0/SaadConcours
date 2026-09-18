@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import { colorOr } from "./PdfCanvas";
+import Icon from "../ui/Icon";
 
 function Sheet({ values, kind }) {
   const accent = colorOr(values.pdfAccentColor, "#4f46e5");
@@ -124,7 +125,7 @@ export default function TemplateGallery({ templates, activeId, onApply, onSave, 
                 </button>
                 {activeId === tpl.id && (
                   <span className="pdfx-tpl-check" aria-hidden="true">
-                    ✓
+                    <Icon name="check" size={13} />
                   </span>
                 )}
                 <div className="pdfx-tpl-body">
@@ -140,7 +141,7 @@ export default function TemplateGallery({ templates, activeId, onApply, onSave, 
                   </button>
                   {!tpl.builtIn && (
                     <button type="button" className="admin-btn secondary" onClick={() => onDelete(tpl)} title="Supprimer ce modèle">
-                      🗑
+                      <Icon name="x" size={13} />
                     </button>
                   )}
                 </div>

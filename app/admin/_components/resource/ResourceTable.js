@@ -1,6 +1,7 @@
 "use client";
 
 import EmptyState from "../ui/EmptyState";
+import Icon from "../ui/Icon";
 
 export default function ResourceTable({
   columns,
@@ -15,7 +16,7 @@ export default function ResourceTable({
   remaining,
 }) {
   if (!items.length) {
-    return <EmptyState icon="🗂️" title="Aucun résultat" message="Essaie une autre recherche, ou ajoute-en un depuis le formulaire ci-dessus." />;
+    return <EmptyState icon="inbox" title="Aucun résultat" message="Essaie une autre recherche, ou ajoute-en un depuis le formulaire ci-dessus." />;
   }
 
   return (
@@ -51,11 +52,11 @@ export default function ResourceTable({
                   <div className="admin-row-actions">
                     {allowEdit && (
                       <button className="admin-icon-btn" title="Modifier" type="button" onClick={() => onEdit(item)}>
-                        ✏️
+                        <Icon name="pen" size={14} />
                       </button>
                     )}
                     <button className="admin-icon-btn danger" title="Supprimer" type="button" onClick={() => onDelete(item.id)}>
-                      🗑️
+                      <Icon name="x" size={14} />
                     </button>
                   </div>
                 </td>

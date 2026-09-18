@@ -6,10 +6,10 @@
  * "brouillon" (see addConcours/addConcoursBulk in lib/store.js). */
 
 export const STATUT_OPTIONS = [
-  { value: "brouillon", label: "📝 Brouillon" },
-  { value: "sujet_publie", label: "📄 Sujet publié" },
-  { value: "corrige_en_cours", label: "✍️ Corrigé en cours" },
-  { value: "pret", label: "✅ Prêt" },
+  { value: "brouillon", label: "Brouillon" },
+  { value: "sujet_publie", label: "Sujet publié" },
+  { value: "corrige_en_cours", label: "Corrigé en cours" },
+  { value: "pret", label: "Prêt" },
 ];
 
 export function statutValue(item) {
@@ -17,5 +17,5 @@ export function statutValue(item) {
 }
 
 export function statutLabel(item) {
-  return STATUT_OPTIONS.find((o) => o.value === statutValue(item))?.label || "✅ Prêt";
+  return STATUT_OPTIONS.find((o) => o.value === statutValue(item))?.label || "Prêt";
 }

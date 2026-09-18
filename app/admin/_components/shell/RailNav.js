@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Icon from "../ui/Icon";
 import { SECTIONS, isItemActive } from "../../_lib/nav";
 
 // v4 rail — every destination in the panel as a single icon column, with a
@@ -27,7 +28,7 @@ export default function RailNav({ onNavigate }) {
                 aria-current={active ? "page" : undefined}
                 aria-label={item.label}
               >
-                <span aria-hidden="true">{item.icon}</span>
+                <Icon name={item.icon} size={19} />
                 <span className="ad-rail-tip">{item.label}</span>
               </Link>
             );

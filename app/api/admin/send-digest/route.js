@@ -3,6 +3,7 @@ import { getAllNews } from "@/lib/store";
 import { isValidEmail, normalizeEmail } from "@/lib/subscribers";
 import { buildFromHeader, defaultSubject, emailConfigured, sendDigestEmail } from "@/lib/emailDigest";
 import { trackDigestSend } from "@/lib/analytics";
+import { recordAudit } from "@/lib/auditLog";
 
 // Manual/test send from the admin composer - distinct from
 // /api/cron/news-digest (unattended, always-full-list). Lets the admin pick
@@ -85,6 +86,13 @@ export async function POST(req) {
     total: emails.length,
     itemCount: items.length,
     subject,
+  });
+
+  recordAudit({
+    action: "send",
+    resource: "digest",
+    label: subject,
+    detail: `${sent}/${emails.length} destinataire${emails.length > 1 ? "s" : ""} · ${status}`,
   });
 
   return NextResponse.json({ sent, total: emails.length, failed, itemCount: items.length, test: Boolean(body.testEmail) });

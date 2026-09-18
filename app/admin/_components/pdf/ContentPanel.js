@@ -39,7 +39,7 @@ export default function ContentPanel({ settings, set, setHeading, onLogoUpload, 
         </div>
       </div>
       <div className="pdfx-panel-body">
-        <Section icon="🎨" title="Marque et couleurs" defaultOpen>
+        <Section icon="palette" title="Marque et couleurs" defaultOpen>
           <div className="pdfx-upload">
             <div className="pdfx-upload-preview">
               {settings.pdfLogoDataUrl ? <img src={settings.pdfLogoDataUrl} alt="Logo PDF" /> : <BrandLogo gradientId="pdfxPanelLogo" />}
@@ -84,7 +84,7 @@ export default function ContentPanel({ settings, set, setHeading, onLogoUpload, 
           <span className="pdfx-help">L'accent colore le logo vectoriel, le filigrane, les en-têtes de tableau et le trait de la page de garde.</span>
         </Section>
 
-        <Section icon="🔤" title="Texte">
+        <Section icon="pen" title="Texte">
           <SelectField
             label="Police"
             value={settings.pdfFontFamily || "helvetica"}
@@ -147,7 +147,7 @@ export default function ContentPanel({ settings, set, setHeading, onLogoUpload, 
           />
         </Section>
 
-        <Section icon="📐" title="Mise en page">
+        <Section icon="sliders" title="Mise en page">
           <SliderField
             label="Marge du texte"
             hint="Distance entre le bord de la page et le texte — visible comme la zone pointillée sur l'aperçu."
@@ -193,7 +193,7 @@ export default function ContentPanel({ settings, set, setHeading, onLogoUpload, 
           )}
         </Section>
 
-        <Section icon="💧" title="Filigrane">
+        <Section icon="files" title="Filigrane">
           <SwitchField
             label="Filigrane sur les pages"
             checked={watermarkOn}
@@ -238,7 +238,7 @@ export default function ContentPanel({ settings, set, setHeading, onLogoUpload, 
           )}
         </Section>
 
-        <Section icon="📎" title="En-tête et pied de page">
+        <Section icon="file" title="En-tête et pied de page">
           <SwitchField
             label="En-tête de marque"
             hint="Logo + wordmark + adresse du site, en haut de chaque page de contenu."

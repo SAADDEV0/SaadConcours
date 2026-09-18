@@ -15,6 +15,7 @@ import {
   shareBundle,
 } from "./lib/share";
 import { formatDateFr } from "./lib/contentTypes";
+import Icon from "../ui/Icon";
 
 /* ------------------------------ Feuille de partage ------------------------------
  * Le geste demandé : « je clique sur Partager, je choisis le réseau, et le
@@ -168,7 +169,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
             <p className="sgx-share-sub">{itemLabel}</p>
           </div>
           <button type="button" className="admin-icon-btn" onClick={onClose} aria-label="Fermer">
-            ✕
+            <Icon name="x" size={14} />
           </button>
         </div>
 
@@ -200,7 +201,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
                     {asking ? (
                       <span className="sgx-share-tile-warn">Déjà publié — republier ?</span>
                     ) : at ? (
-                      <span className="sgx-share-tile-state">✓ publié le {formatDateFr(at.slice(0, 10))}</span>
+                      <span className="sgx-share-tile-state">publié le {formatDateFr(at.slice(0, 10))}</span>
                     ) : (
                       <span className="sgx-share-tile-state muted">jamais publié</span>
                     )}
@@ -229,7 +230,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
             <ol className="sgx-steps">
               {isLink ? (
                 <li className="ok">
-                  <span className="sgx-step-n">🖼</span>
+                  <span className="sgx-step-n"><Icon name="file" size={13} /></span>
                   <div>
                     <strong>Image ajoutée automatiquement</strong>
                     <p>{platform.linkHint} Rien à télécharger ni à téléverser.</p>
@@ -243,7 +244,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
                     <p>{filename}</p>
                   </div>
                   <button type="button" className="admin-btn secondary" onClick={() => downloadBlob(blob, filename)}>
-                    ⬇ Encore
+                    <Icon name="download" size={13} /> Encore
                   </button>
                 </li>
               )}
@@ -323,7 +324,7 @@ export default function ShareSheet({ open, onClose, blob, filename, text, url, i
                 ← Autre réseau
               </button>
               <button type="button" className="admin-btn sgx-btn-done" onClick={() => onPublish(platform.key)}>
-                ✅ J&apos;ai publié sur {platform.label}
+                <Icon name="check" size={14} /> J&apos;ai publié sur {platform.label}
               </button>
             </div>
             <p className="sgx-share-note">

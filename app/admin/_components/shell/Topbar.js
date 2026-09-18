@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import ThemeToggle from "@/app/_shared/ThemeToggle";
+import Icon from "../ui/Icon";
 import GlobalSearch from "./GlobalSearch";
 import NotificationBell from "./NotificationBell";
 import AvatarMenu from "./AvatarMenu";
@@ -85,7 +86,7 @@ export default function Topbar({ onOpenDrawer }) {
         aria-expanded={false}
         onClick={onOpenDrawer}
       >
-        ☰
+        <Icon name="menu" size={18} />
       </button>
 
       <Suspense fallback={<div className="ad-crumbs" />}>

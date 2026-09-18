@@ -6,7 +6,7 @@ export const metadata = { title: "Cours" };
 export default function CoursPage() {
   return (
     <>
-      <PageHeader icon="📖" title="Cours" subtitle="Gère les fiches de cours publiées sur le site." />
+      <PageHeader icon="notebook" title="Cours" subtitle="Gère les fiches de cours publiées sur le site." />
       <ResourcePanel resourceKey="cours" />
     </>
   );

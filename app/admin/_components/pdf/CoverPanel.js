@@ -1,5 +1,7 @@
 "use client";
 
+import Icon from "../ui/Icon";
+
 // Inspector for the "Page de garde" tab. The cover is a separate document
 // surface with its own rules — every block is freely positioned, nothing
 // flows — so it gets its own canvas and its own settings rather than a
@@ -45,7 +47,7 @@ export default function CoverPanel({ settings, set, onResetLayout, movedCount })
           </div>
         ) : (
           <>
-            <Section icon="🧭" title="Disposition" defaultOpen>
+            <Section icon="dashboard" title="Disposition" defaultOpen>
               <SegmentedField
                 label="Alignement"
                 hint="Change le point d'ancrage de chaque bloc : son centre, ou son bord gauche."
@@ -61,12 +63,12 @@ export default function CoverPanel({ settings, set, onResetLayout, movedCount })
               />
               {movedCount > 0 && (
                 <button type="button" className="admin-btn secondary" onClick={onResetLayout}>
-                  ↺ Replacer les {movedCount} bloc(s) déplacé(s)
+                  <Icon name="refresh" size={13} /> Replacer les {movedCount} bloc(s) déplacé(s)
                 </button>
               )}
             </Section>
 
-            <Section icon="🎨" title="Fond et bandeau">
+            <Section icon="palette" title="Fond et bandeau">
               <ColorField
                 label="Couleur de fond"
                 hint="Vide = page blanche. Pense à éclaircir les textes si tu choisis un fond sombre."
@@ -92,7 +94,7 @@ export default function CoverPanel({ settings, set, onResetLayout, movedCount })
               )}
             </Section>
 
-            <Section icon="🏷️" title="Logo">
+            <Section icon="target" title="Logo">
               <SwitchField
                 label="Afficher le logo"
                 checked={settings.pdfCoverShowLogo !== false}
@@ -110,7 +112,7 @@ export default function CoverPanel({ settings, set, onResetLayout, movedCount })
               )}
             </Section>
 
-            <Section icon="✍️" title="Textes" defaultOpen>
+            <Section icon="pen" title="Textes" defaultOpen>
               <SliderField
                 label="Taille du titre"
                 value={settings.pdfCoverTitleSize ?? PDF_COVER_TITLE_SIZE_RANGE.default}
@@ -175,7 +177,7 @@ export default function CoverPanel({ settings, set, onResetLayout, movedCount })
               />
             </Section>
 
-            <Section icon="➖" title="Trait et mention">
+            <Section icon="list" title="Trait et mention">
               <SwitchField label="Trait décoratif" checked={settings.pdfCoverShowRule !== false} onChange={(v) => set("pdfCoverShowRule", v)} />
               {settings.pdfCoverShowRule !== false && (
                 <SliderField

@@ -12,6 +12,7 @@ import {
 import EmptyState from "../ui/EmptyState";
 import { useConfirm } from "../ui/ConfirmProvider";
 import { useToast } from "../ui/ToastProvider";
+import Icon from "../ui/Icon";
 
 /* Régie publicitaire maison : les bannières des annonceurs qui contactent
  * Saad directement, à ne pas confondre avec AdSense (onglet "Publicité").
@@ -246,11 +247,11 @@ export default function PartnerAdsManager() {
       <div className="admin-card">
         <div className="picker-toolbar" style={{ marginBottom: 14 }}>
           <h2 className="admin-section-title" style={{ marginBottom: 0 }}>
-            📢 {form.partnerAds.length} bannière{form.partnerAds.length > 1 ? "s" : ""}
+            <Icon name="megaphone" size={15} /> {form.partnerAds.length} bannière{form.partnerAds.length > 1 ? "s" : ""}
           </h2>
           <span className="picker-actions">
             <button type="button" className="admin-btn secondary" onClick={addAd}>
-              ➕ Nouvelle bannière
+              <Icon name="plus" size={14} /> Nouvelle bannière
             </button>
           </span>
         </div>
@@ -276,7 +277,7 @@ export default function PartnerAdsManager() {
           </div>
         ) : (
           <EmptyState
-            icon="📢"
+            icon="megaphone"
             title="Aucune bannière partenaire"
             message="Ajoute la première quand un annonceur te contacte : son visuel, son lien, ses dates."
           />
@@ -310,7 +311,7 @@ function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, 
       <div className="pa-admin-head">
         <button type="button" className="pa-admin-toggle" onClick={onToggle} aria-expanded={open}>
           <span className="pa-admin-thumb">
-            {ad.image ? <img src={adImageSrc(ad.image)} alt="" /> : <span>📢</span>}
+            {ad.image ? <img src={adImageSrc(ad.image)} alt="" /> : <span><Icon name="megaphone" size={18} /></span>}
           </span>
           <span className="pa-admin-head-text">
             <span className="pa-admin-name">{ad.name || "Bannière sans nom"}</span>
@@ -322,7 +323,7 @@ function AdRow({ ad, open, status, views, clicks, onToggle, onChange, onUpload, 
           </span>
           <span className={`pa-admin-status ${status.tone}`}>{status.label}</span>
           <span className="pa-admin-stat" title="Affichages · clics · taux de clic">
-            👁️ {views} · 🖱️ {clicks}
+            <Icon name="eye" size={13} /> {views} · <Icon name="target" size={13} /> {clicks}
             {views > 0 && <> · {ctr}%</>}
           </span>
           <span className="pa-admin-chevron" aria-hidden="true">

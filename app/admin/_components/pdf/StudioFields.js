@@ -6,6 +6,7 @@
 
 import { useId, useState } from "react";
 import { isHex } from "@/app/_shared/pdfTheme";
+import Icon from "../ui/Icon";
 
 export function Field({ label, value, hint, children }) {
   return (
@@ -106,7 +107,7 @@ export function ColorField({ label, hint, value, fallback = "#4f46e5", clearable
         />
         {clearable && value ? (
           <button type="button" className="pdfx-color-clear" onClick={() => onChange("")} title="Revenir à la couleur par défaut">
-            ✕
+            <Icon name="x" size={12} />
           </button>
         ) : null}
       </div>
@@ -138,12 +139,12 @@ export function Section({ icon, title, badge, defaultOpen = false, children }) {
     <div className={"pdfx-sec" + (open ? " open" : "")}>
       <button type="button" className="pdfx-sec-head" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls={id}>
         <span className="pdfx-sec-icon" aria-hidden="true">
-          {icon}
+          <Icon name={icon} size={14} />
         </span>
         {title}
         {badge && <span className="pdfx-sec-count">{badge}</span>}
         <span className="pdfx-sec-chevron" aria-hidden="true">
-          ▶
+          <Icon name="chevronRight" size={13} />
         </span>
       </button>
       {open && (

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSettings, updateSettings } from "@/lib/store";
+import { recordAudit } from "@/lib/auditLog";
 
 // Without this, GET has no request-specific data or uncached fetch to key
 // off, so Next statically optimizes it — freezing the footer's social
@@ -32,5 +33,13 @@ export async function PUT(req) {
     return NextResponse.json({ error: "Corps invalide" }, { status: 400 });
   }
   const updated = await updateSettings(body);
+  // Settings are the one resource with no GitHub commit history behind them,
+  // so without this line a change here left no trace anywhere at all.
+  recordAudit({
+    action: "settings",
+    resource: "settings",
+    label: "Réglages du site",
+    detail: Object.keys(body).slice(0, 8).join(", "),
+  });
   return NextResponse.json(updated);
 }

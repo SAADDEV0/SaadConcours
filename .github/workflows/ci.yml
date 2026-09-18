@@ -1,0 +1,35 @@
+name: Qualité (lint + build)
+
+# The repo's only workflows were scheduled content jobs — nothing checked
+# that a push still compiled. This runs the same two commands a deploy does,
+# so a broken build is caught on the branch instead of in production.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+        env:
+          # The build only needs these to exist — no real secret is required
+          # to compile, and nothing here reaches a deployed environment.
+          ADMIN_PASSWORD: ci-placeholder
+          ADMIN_SESSION_SECRET: ci-placeholder

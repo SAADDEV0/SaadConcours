@@ -158,7 +158,7 @@ export default function GeneralSettingsForm() {
             Encarts concours sur la page d'accueil
             <span className="admin-switch-row-hint">
               Affiche sur l'accueil les deux encarts alimentés par les concours ouverts : « ⏰ X concours ferment
-              bientôt » et « 🔔 Concours récemment ouverts ». Désactive pour les masquer — la page /news et le reste
+              bientôt » et « Concours récemment ouverts ». Désactive pour les masquer — la page /news et le reste
               du site ne changent pas.
             </span>
           </span>

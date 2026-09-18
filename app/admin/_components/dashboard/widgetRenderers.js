@@ -3,14 +3,16 @@ import StatCard from "./StatCard";
 import HeroStat from "./HeroStat";
 import WidgetCard from "./WidgetCard";
 import AreaChart from "./AreaChart";
+import TimeSeriesChart from "./TimeSeriesChart";
 import DonutChart from "./DonutChart";
 import BarList from "./BarList";
 import TodoCard from "./TodoCard";
-import TimelineCard from "./TimelineCard";
 import EmptyState from "../ui/EmptyState";
 import Skeleton from "../ui/Skeleton";
-import { trendFromSeries, dayLabelShort, dayLabelMed, timeAgoFr, dateTimeFr } from "../../_lib/format";
+import Icon from "../ui/Icon";
+import { timeAgoFr, dateTimeFr, formatNumber, countLabel } from "../../_lib/format";
 import { buildTodoItems } from "../../_lib/todo";
+import { widgetById } from "../../_lib/widgets";
 
 const CATEGORIE_COLORS = ["var(--accent)", "var(--green)", "var(--amber)", "var(--violet)", "var(--red)", "var(--text-faint)"];
 
@@ -27,257 +29,375 @@ function searchMissTimesTitle(r) {
   return lines.join("\n");
 }
 
-// Renders one dashboard widget by id, given the shared fetch context. Kept
-// separate from the (serializable) registry in _lib/widgets.js so that file
-// can stay a plain data list reusable by the "Personnaliser" panel.
+/* --------------------------------------------------------------------------
+ * Renders one dashboard widget by id, given the shared fetch context. Kept
+ * separate from the (serializable) registry in _lib/widgets.js so that file
+ * can stay a plain data list reusable by the "Personnaliser" panel.
+ *
+ * `ctx` is { range, groups, extra, subscribers, isInitialLoading } — data
+ * arrives per API group now, so each widget reads only its own group and
+ * shows a skeleton while just that group is still in flight, instead of the
+ * whole page waiting on one monolithic payload.
+ * ------------------------------------------------------------------------ */
 export function renderWidget(id, ctx, onDismiss) {
-  const { stats, extra, subscribers } = ctx;
+  const { range, groups = {}, extra, subscribers } = ctx;
+  const meta = widgetById(id);
+  const group = meta?.group;
 
-  // The two subscriber widgets only need `subscribers`, not `stats` (which
-  // can still be loading) — render them independently so the audience
-  // section isn't blocked on the (separate) stats fetch.
-  if (id === "chart.subscriberGrowth") {
-    if (!subscribers) return null;
-    const hasHistory = subscribers.history?.some((p) => p.count > 0);
-    return (
-      <WidgetCard key={id} title="Croissance des abonnés" sub="Total d'abonnés aux alertes, 14 derniers jours" href="/admin/alertes/abonnes" onDismiss={onDismiss}>
-        {hasHistory ? (
-          <AreaChart points={subscribers.history.map((p) => ({ label: dayLabelMed(p.date), value: p.count }))} formatValue={(v) => `${v} abonnés`} />
-        ) : (
-          <EmptyState icon="📈" message="Pas encore assez de données pour tracer une courbe." />
-        )}
+  // Group still loading and nothing cached to show: a skeleton in this
+  // widget's own slab, not a page-wide spinner.
+  if (group && !groups[group]) {
+    return ctx.isInitialLoading?.(group) ? (
+      <WidgetCard key={id} title={meta.label} stale>
+        <Skeleton lines={4} />
       </WidgetCard>
-    );
-  }
-  if (id === "list.newSubscribers") {
-    if (!subscribers) return null;
-    return (
-      <WidgetCard key={id} title="🎉 Derniers abonnés" sub={`${subscribers.count} abonné${subscribers.count > 1 ? "s" : ""} au total`} href="/admin/alertes/abonnes" onDismiss={onDismiss}>
-        {subscribers.recent?.length ? (
-          <ul className="dash-list">
-            {subscribers.recent.map((r) => (
-              <li key={r.email} className="dash-list-subscriber">
-                <span className="dash-list-subscriber-email">{r.email}</span>
-                <span className="dash-list-date">{timeAgoFr(r.subscribedAt)}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <EmptyState icon="📭" message="Aucun nouvel abonné suivi pour l'instant." />
-        )}
-      </WidgetCard>
-    );
+    ) : null;
   }
 
-  // Stands in for the mockup's "server status" panel — this project has no
-  // infra to monitor, so instead it surfaces the real operational signals
-  // an admin actually has: is email sending configured, are ads/banners on,
-  // how many alert subscribers exist. All read straight from /api/settings,
-  // /api/admin/email-status and /api/admin/subscribers (already fetched by
-  // the dashboard page), nothing invented.
-  if (id === "state.system") {
-    const settings = extra?.settings;
-    const activePartnerAds = (settings?.partnerAds || []).length;
-    const rows = [
-      {
-        label: "Alertes email",
-        ok: extra?.emailConfigured === true,
-        detail: extra?.emailConfigured === true ? "Configurées" : "Non configurées",
-      },
-      {
-        label: "Abonnés aux alertes",
-        ok: (subscribers?.count || 0) > 0,
-        detail: `${subscribers?.count ?? "…"} abonné${(subscribers?.count || 0) > 1 ? "s" : ""}`,
-      },
-      {
-        label: "Bannières AdSense",
-        ok: settings?.adsEnabled !== false,
-        detail: settings?.adsEnabled !== false ? "Activées" : "Désactivées",
-      },
-      {
-        label: "Bannières partenaires",
-        ok: settings?.partnerAdsEnabled !== false && activePartnerAds > 0,
-        detail: `${activePartnerAds} configurée${activePartnerAds > 1 ? "s" : ""}${settings?.partnerAdsEnabled === false ? " (désactivées)" : ""}`,
-      },
-    ];
-    return (
-      <WidgetCard key={id} title="État du système" sub="Signaux réels du site — pas de simulation" onDismiss={onDismiss}>
-        {settings ? (
-          <ul className="state-list">
-            {rows.map((r) => (
-              <li className="state-row" key={r.label}>
-                <span className={"state-dot" + (r.ok ? " ok" : " warn")} />
-                <span className="state-row-label">{r.label}</span>
-                <span className="state-row-detail">{r.detail}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <Skeleton lines={4} />
-        )}
-      </WidgetCard>
-    );
-  }
+  const kpis = groups.kpis;
+  const metrics = kpis?.metrics;
+  const audience = groups.audience;
+  const content = groups.content;
+  const todo = groups.todo;
+  const perf = groups.perf;
+  const logs = groups.logs;
+  const stale = group ? Boolean(ctx.isPending?.(group)) : false;
+  const periodLabel = range?.label ? range.label.toLowerCase() : "la période";
+  const vsPrev = "vs période précédente de même longueur";
 
-  // A single real chronological feed merged from independent event streams
-  // (PDF downloads, new alert subscribers) — each already timestamped by
-  // its own store, just interleaved here instead of shown in two widgets.
-  if (id === "list.activityFeed") {
-    const pdfEvents = (stats?.recentPdfDownloads || []).map((d) => ({
-      at: d.at,
-      icon: "📄",
-      color: "var(--accent)",
-      text: `PDF téléchargé — ${d.label}`,
-    }));
-    const subEvents = (subscribers?.recent || []).map((r) => ({
-      at: r.subscribedAt,
-      icon: "🎉",
-      color: "var(--green)",
-      text: `Nouvel abonné — ${r.email}`,
-    }));
-    const feed = [...pdfEvents, ...subEvents]
-      .filter((e) => e.at)
-      .sort((a, b) => new Date(b.at) - new Date(a.at))
-      .slice(0, 8);
-    return (
-      <WidgetCard key={id} title="Flux d'activité récent" sub="Téléchargements PDF et nouveaux abonnés, mélangés par horodatage" onDismiss={onDismiss}>
-        {stats ? (
-          feed.length ? (
+  switch (id) {
+    /* ----------------------------- Vue d'ensemble ------------------------ */
+    case "kpi.pdf": {
+      if (!metrics) return null;
+      const m = metrics.pdf;
+      return (
+        <HeroStat
+          key={id}
+          kicker={`Indicateur principal · ${periodLabel}`}
+          label="Téléchargements PDF"
+          value={m.total}
+          trend={m.deltaPct}
+          trendLabel={`${formatNumber(m.prev)} sur la période précédente`}
+          points={m.points}
+          formatValue={(v) => countLabel(v, "PDF", "PDF")}
+          footer={[
+            { label: "Moyenne / jour", value: m.perDay },
+            { label: "Meilleur jour", value: m.best },
+            { label: "Visites", value: metrics.visits.total },
+            { label: "Total cumulé", value: kpis.totals.pdfTotal },
+          ]}
+          emptyMessage="Aucun téléchargement sur la période sélectionnée."
+          onDismiss={onDismiss}
+        />
+      );
+    }
+    case "kpi.visits":
+      return metrics ? (
+        <StatCard
+          key={id}
+          icon="eye"
+          tone="violet"
+          label="Visiteurs"
+          value={metrics.visits.total}
+          sub={`${formatNumber(metrics.visits.perDay)} / jour en moyenne`}
+          trend={metrics.visits.deltaPct}
+          trendLabel={vsPrev}
+          spark={metrics.visits.daily.map(([, n]) => n)}
+          onDismiss={onDismiss}
+        />
+      ) : null;
+    case "kpi.conversion":
+      return metrics ? (
+        <StatCard
+          key={id}
+          icon="target"
+          tone="accent"
+          label="Taux visites → PDF"
+          value={`${formatNumber(metrics.conversionPct)} %`}
+          sub={`${formatNumber(metrics.prevConversionPct)} % sur la période précédente`}
+          onDismiss={onDismiss}
+        />
+      ) : null;
+    case "kpi.pdfTotal":
+      return kpis ? (
+        <StatCard key={id} icon="files" tone="indigo" label="PDF au total" value={kpis.totals.pdfTotal} sub="depuis le lancement" onDismiss={onDismiss} />
+      ) : null;
+    case "kpi.visitsTotal":
+      return kpis ? (
+        <StatCard key={id} icon="globe" tone="amber" label="Visiteurs (tout temps)" value={kpis.totals.visitsTotal} onDismiss={onDismiss} />
+      ) : null;
+    case "kpi.concours":
+      return kpis ? (
+        <StatCard
+          key={id}
+          icon="book"
+          tone="green"
+          label="Concours"
+          value={kpis.counts.concours}
+          sub={`${formatNumber(kpis.counts.concoursAvecCorrige)} avec corrigé`}
+          href={meta.href}
+          onDismiss={onDismiss}
+        />
+      ) : null;
+    case "kpi.cours":
+      return kpis ? (
+        <StatCard key={id} icon="notebook" tone="green" label="Fiches de cours" value={kpis.counts.cours} href={meta.href} onDismiss={onDismiss} />
+      ) : null;
+    case "kpi.quiz":
+      return kpis ? (
+        <StatCard key={id} icon="clipboard" tone="green" label="Évaluations" value={kpis.counts.quiz} href={meta.href} onDismiss={onDismiss} />
+      ) : null;
+    case "kpi.blog":
+      return kpis ? (
+        <StatCard key={id} icon="newspaper" tone="violet" label="Articles de blog" value={kpis.counts.blog} href={meta.href} onDismiss={onDismiss} />
+      ) : null;
+    case "kpi.sansCorrige":
+      return kpis ? (
+        <StatCard
+          key={id}
+          icon="alertTriangle"
+          tone={kpis.counts.concoursSansCorrige > 0 ? "amber" : "green"}
+          label="Concours sans corrigé"
+          value={kpis.counts.concoursSansCorrige}
+          sub={
+            kpis.counts.concours
+              ? `${Math.round((kpis.counts.concoursSansCorrige / kpis.counts.concours) * 100)} % du catalogue`
+              : undefined
+          }
+          href={meta.href}
+          onDismiss={onDismiss}
+        />
+      ) : null;
+    case "kpi.filieres":
+      return kpis ? (
+        <StatCard
+          key={id}
+          icon="target"
+          tone="violet"
+          label="Filières couvertes"
+          value={`${formatNumber(kpis.counts.filieresCouvertes)}/${formatNumber(kpis.counts.filieresTotal)}`}
+          sub="Sous-filières avec au moins un concours"
+          href={meta.href}
+          onDismiss={onDismiss}
+        />
+      ) : null;
+    case "kpi.newsOpen":
+      return kpis ? (
+        <StatCard
+          key={id}
+          icon="sparkles"
+          tone="amber"
+          label="Concours ouverts"
+          value={kpis.counts.newsOuvertes}
+          sub={`${formatNumber(kpis.counts.news)} au total`}
+          href={meta.href}
+          onDismiss={onDismiss}
+        />
+      ) : null;
+
+    case "chart.traffic": {
+      if (!metrics) return null;
+      // Two series on one axis rather than two cards side by side: the whole
+      // question is whether downloads track traffic, and that's unanswerable
+      // when the curves live in separate boxes with separate scales.
+      return (
+        <WidgetCard
+          key={id}
+          title="Trafic et téléchargements"
+          icon="activity"
+          sub={`${range.label} — ${
+            metrics.granularity === "day" ? "par jour" : metrics.granularity === "week" ? "par semaine" : "par mois"
+          }`}
+          stale={stale}
+          onDismiss={onDismiss}
+        >
+          <TimeSeriesChart
+            series={[
+              { key: "visits", label: "Visites", color: "var(--cyan)", points: metrics.visits.points },
+              { key: "pdf", label: "PDF", color: "var(--accent)", points: metrics.pdf.points },
+            ]}
+            height={240}
+            emptyMessage="Aucune visite ni téléchargement suivi sur cette période."
+          />
+        </WidgetCard>
+      );
+    }
+
+    case "state.system": {
+      const settings = extra?.settings;
+      const activePartnerAds = (settings?.partnerAds || []).length;
+      const rows = [
+        {
+          label: "Alertes email",
+          ok: extra?.emailConfigured === true,
+          detail: extra?.emailConfigured === true ? "Configurées" : "Non configurées",
+          href: "/admin/alertes",
+        },
+        {
+          label: "Abonnés aux alertes",
+          ok: (subscribers?.count || 0) > 0,
+          detail: subscribers ? countLabel(subscribers.count, "abonné") : "…",
+          href: "/admin/alertes/abonnes",
+        },
+        {
+          label: "Bannières AdSense",
+          ok: settings?.adsEnabled !== false,
+          detail: settings?.adsEnabled !== false ? "Activées" : "Désactivées",
+          href: "/admin/reglages/publicite",
+        },
+        {
+          label: "Bannières partenaires",
+          ok: settings?.partnerAdsEnabled !== false && activePartnerAds > 0,
+          detail: `${formatNumber(activePartnerAds)} configurée${activePartnerAds > 1 ? "s" : ""}${
+            settings?.partnerAdsEnabled === false ? " (désactivées)" : ""
+          }`,
+          href: "/admin/reglages/partenaires",
+        },
+      ];
+      return (
+        <WidgetCard key={id} title="État du système" icon="shield" sub="Signaux réels du site — pas de simulation" onDismiss={onDismiss}>
+          {settings ? (
+            <ul className="state-list">
+              {rows.map((r) => (
+                <li className="state-row" key={r.label}>
+                  <span className={"state-dot" + (r.ok ? " ok" : " warn")} aria-hidden="true" />
+                  <Link className="state-row-label" href={r.href}>
+                    {r.label}
+                  </Link>
+                  {/* The dot is decorative; the state has to survive in text
+                      for anyone who can't see the colour. */}
+                  <span className="state-row-detail">
+                    <span className="sr-only">{r.ok ? "État correct : " : "À vérifier : "}</span>
+                    {r.detail}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Skeleton lines={4} />
+          )}
+        </WidgetCard>
+      );
+    }
+
+    case "list.activityFeed": {
+      // A single real chronological feed merged from independent event
+      // streams (PDF downloads, new alert subscribers, admin edits) — each
+      // already timestamped by its own store, just interleaved here.
+      const pdfEvents = (logs?.recentPdfDownloads || []).map((d) => ({
+        at: d.at,
+        icon: "download",
+        color: "var(--accent)",
+        text: `PDF téléchargé — ${d.label}`,
+      }));
+      const subEvents = (subscribers?.recent || []).map((r) => ({
+        at: r.subscribedAt,
+        icon: "userPlus",
+        color: "var(--green)",
+        text: `Nouvel abonné — ${r.email}`,
+      }));
+      const auditEvents = (logs?.auditLog || []).map((a) => ({
+        at: a.at,
+        icon: "pen",
+        color: "var(--violet)",
+        text: `${a.actionLabel} — ${a.resourceLabel}${a.label ? ` : ${a.label}` : ""}`,
+      }));
+      const feed = [...pdfEvents, ...subEvents, ...auditEvents]
+        .filter((e) => e.at)
+        .sort((a, b) => new Date(b.at) - new Date(a.at))
+        .slice(0, 9);
+      return (
+        <WidgetCard
+          key={id}
+          title="Flux d'activité récent"
+          icon="activity"
+          sub="Téléchargements, abonnements et modifications, mélangés par horodatage"
+          stale={stale}
+          onDismiss={onDismiss}
+        >
+          {feed.length ? (
             <ul className="activity-feed">
               {feed.map((e, i) => (
                 <li key={i} className="activity-feed-row">
-                  <span className="activity-feed-dot" style={{ background: e.color }} />
+                  <span className="activity-feed-icon" style={{ color: e.color }} aria-hidden="true">
+                    <Icon name={e.icon} size={14} />
+                  </span>
                   <span className="activity-feed-text">{e.text}</span>
                   <span className="activity-feed-time">{timeAgoFr(new Date(e.at).getTime())}</span>
                 </li>
               ))}
             </ul>
           ) : (
-            <EmptyState icon="🕓" message="Pas encore d'activité suivie (actif surtout une fois déployé en production)." />
-          )
-        ) : (
-          <Skeleton lines={4} />
-        )}
-      </WidgetCard>
-    );
-  }
-
-  if (!stats) return null;
-
-  const pdfSeries = stats.pdfLast7Days.map(([, n]) => n);
-  const pdfChartPoints = stats.pdfLast7Days.map(([day, n]) => ({ label: dayLabelShort(day), value: n }));
-  const pdfThisWeek = stats.pdfLast7Days.reduce((sum, [, n]) => sum + n, 0);
-
-  switch (id) {
-    // Headline metric — rendered as the hero slab, not a tile. See HeroStat.
-    case "kpi.pdfToday": {
-      const best = pdfSeries.length ? Math.max(...pdfSeries) : 0;
-      const avg = pdfSeries.length ? Math.round(pdfSeries.reduce((a, b) => a + b, 0) / pdfSeries.length) : 0;
-      return (
-        <HeroStat
-          key={id}
-          kicker="Indicateur principal · aujourd'hui"
-          label="PDF téléchargés aujourd'hui"
-          value={stats.pdfToday}
-          trend={trendFromSeries(pdfSeries)}
-          series={pdfSeries}
-          seriesLabels={stats.pdfLast7Days.map(([day]) => dayLabelShort(day))}
-          footer={[
-            { label: "Cette semaine", value: pdfThisWeek },
-            { label: "Moyenne / jour", value: avg },
-            { label: "Meilleur jour (7j)", value: best },
-            { label: "Total cumulé", value: stats.pdfTotal },
-          ]}
-          onDismiss={onDismiss}
-        />
-      );
-    }
-    case "kpi.pdfWeek":
-      return <StatCard key={id} icon="📈" tone="violet" label="PDF cette semaine" value={pdfThisWeek} spark={pdfSeries} onDismiss={onDismiss} />;
-    case "kpi.pdfTotal":
-      return <StatCard key={id} icon="🗂️" tone="indigo" label="PDF au total" value={stats.pdfTotal} onDismiss={onDismiss} />;
-    case "kpi.visitsToday":
-      return <StatCard key={id} icon="👁️" tone="amber" label="Visiteurs aujourd'hui" value={stats.visitsToday ?? 0} onDismiss={onDismiss} />;
-    case "kpi.visitsTotal":
-      return <StatCard key={id} icon="🌍" tone="amber" label="Visiteurs (total)" value={stats.totalVisits ?? "—"} onDismiss={onDismiss} />;
-    case "kpi.concours":
-      return (
-        <StatCard
-          key={id}
-          icon="📚"
-          tone="green"
-          label="Concours"
-          value={stats.counts.concours}
-          sub={`${stats.counts.concoursAvecCorrige} avec corrigé`}
-          onDismiss={onDismiss}
-        />
-      );
-    case "kpi.cours":
-      return <StatCard key={id} icon="📖" tone="green" label="Fiches de cours" value={stats.counts.cours} onDismiss={onDismiss} />;
-    case "kpi.quiz":
-      return <StatCard key={id} icon="📝" tone="green" label="Évaluations" value={stats.counts.quiz} onDismiss={onDismiss} />;
-    case "kpi.blog":
-      return <StatCard key={id} icon="✍️" tone="violet" label="Articles de blog" value={stats.counts.blog} onDismiss={onDismiss} />;
-    case "kpi.filieres":
-      return (
-        <StatCard
-          key={id}
-          icon="🎯"
-          tone="violet"
-          label="Filières couvertes"
-          value={`${stats.counts.filieresCouvertes}/${stats.counts.filieresTotal}`}
-          sub="Sous-filières avec au moins un concours"
-          onDismiss={onDismiss}
-        />
-      );
-    case "kpi.newsOpen":
-      return (
-        <StatCard
-          key={id}
-          icon="🆕"
-          tone="amber"
-          label="Concours ouverts (news)"
-          value={stats.counts.newsOuvertes}
-          sub={`${stats.counts.news} au total`}
-          onDismiss={onDismiss}
-        />
-      );
-
-    case "chart.timeline":
-      return stats.timeline ? <TimelineCard key={id} timeline={stats.timeline} onDismiss={onDismiss} /> : null;
-
-    case "chart.pdf7d":
-      return (
-        <WidgetCard key={id} title="Téléchargements" sub="Nombre de PDF téléchargés, 7 derniers jours" onDismiss={onDismiss}>
-          <AreaChart points={pdfChartPoints} formatValue={(v) => `${v} PDF`} />
+            <EmptyState icon="clock" message="Pas encore d'activité suivie (actif surtout une fois déployé en production)." />
+          )}
         </WidgetCard>
       );
-    case "chart.visits7d": {
-      const visitsPoints = (stats.visitsLast7Days || []).map(([day, n]) => ({ label: dayLabelShort(day), value: n }));
-      const hasVisits = visitsPoints.some((p) => p.value > 0);
+    }
+
+    /* -------------------------------- Audience --------------------------- */
+    case "chart.subscriberGrowth": {
+      if (!subscribers) return null;
+      const hasHistory = subscribers.history?.some((p) => p.count > 0);
       return (
-        <WidgetCard key={id} title="Visiteurs" sub="Pages vues, 7 derniers jours" onDismiss={onDismiss}>
-          {hasVisits ? (
-            <AreaChart points={visitsPoints} formatValue={(v) => `${v} visite${v > 1 ? "s" : ""}`} />
+        <WidgetCard
+          key={id}
+          title="Croissance des abonnés"
+          icon="trendingUp"
+          sub="Total d'abonnés aux alertes, 14 derniers jours"
+          href="/admin/alertes/abonnes"
+          onDismiss={onDismiss}
+        >
+          {hasHistory ? (
+            <AreaChart
+              label="Abonnés"
+              points={subscribers.history.map((p) => ({ label: p.date.slice(8) + "/" + p.date.slice(5, 7), full: p.date, value: p.count }))}
+              formatValue={(v) => countLabel(v, "abonné")}
+            />
           ) : (
-            <EmptyState icon="👁️" message="Pas encore assez de visites suivies pour tracer une courbe." />
+            <EmptyState icon="trendingUp" message="Pas encore assez de données pour tracer une courbe." />
+          )}
+        </WidgetCard>
+      );
+    }
+    case "list.newSubscribers": {
+      if (!subscribers) return null;
+      return (
+        <WidgetCard
+          key={id}
+          title="Derniers abonnés"
+          icon="userPlus"
+          sub={countLabel(subscribers.count, "abonné") + " au total"}
+          href="/admin/alertes/abonnes"
+          onDismiss={onDismiss}
+        >
+          {subscribers.recent?.length ? (
+            <ul className="dash-list">
+              {subscribers.recent.map((r) => (
+                <li key={r.email} className="dash-list-subscriber">
+                  <span className="dash-list-subscriber-email">{r.email}</span>
+                  <span className="dash-list-date">{timeAgoFr(r.subscribedAt)}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState icon="inbox" message="Aucun nouvel abonné suivi pour l'instant." />
           )}
         </WidgetCard>
       );
     }
     case "chart.pdfKind":
-      return (
-        <WidgetCard key={id} title="Répartition des téléchargements" sub="Par type de contenu" onDismiss={onDismiss}>
+      return kpis ? (
+        <WidgetCard key={id} title="Répartition des téléchargements" icon="pieChart" sub="Par type de contenu, depuis le lancement" stale={stale} onDismiss={onDismiss}>
           <DonutChart
             segments={[
-              { label: "Concours", value: stats.pdfByKind.concours || 0, color: "var(--accent)" },
-              { label: "Cours", value: stats.pdfByKind.cours || 0, color: "var(--green)" },
-              { label: "Évaluation", value: stats.pdfByKind.evaluation || 0, color: "var(--amber)" },
+              { label: "Concours", value: kpis.pdfByKind.concours || 0, color: "var(--accent)" },
+              { label: "Cours", value: kpis.pdfByKind.cours || 0, color: "var(--green)" },
+              { label: "Évaluation", value: kpis.pdfByKind.evaluation || 0, color: "var(--amber)" },
             ]}
             centerLabel="PDF"
           />
         </WidgetCard>
-      );
+      ) : null;
 
     case "chart.visitSources": {
       const labels = {
@@ -292,10 +412,10 @@ export function renderWidget(id, ctx, onDismiss) {
         bing: "Bing",
         autre: "Autre",
       };
-      const colors = ["var(--accent)", "var(--green)", "var(--amber)", "var(--red, #ef4444)", "var(--violet, #8b5cf6)", "var(--border)"];
-      const sources = stats.visitSources || [];
+      const colors = ["var(--accent)", "var(--green)", "var(--amber)", "var(--red)", "var(--violet)", "var(--cyan)"];
+      const sources = audience?.visitSources || [];
       return (
-        <WidgetCard key={id} title="Sources de visiteurs" sub="D'où viennent les visiteurs (referrer / utm_source)" onDismiss={onDismiss}>
+        <WidgetCard key={id} title="Sources de visiteurs" icon="globe" sub="D'où viennent les visiteurs (referrer / utm_source)" stale={stale} onDismiss={onDismiss}>
           {sources.length ? (
             <DonutChart
               segments={sources.map(({ member, score }, i) => ({
@@ -306,47 +426,49 @@ export function renderWidget(id, ctx, onDismiss) {
               centerLabel="visites"
             />
           ) : (
-            <EmptyState icon="🌐" message="Pas encore assez de données sur les sources de visiteurs." />
+            <EmptyState icon="globe" message="Pas encore assez de données sur les sources de visiteurs." />
           )}
         </WidgetCard>
       );
     }
 
     case "chart.visitCities": {
-      const cities = stats.visitCities || [];
+      const cities = audience?.visitCities || [];
       return (
-        <WidgetCard key={id} title="Villes des visiteurs" sub="D'après la géolocalisation IP (Vercel), en production uniquement" onDismiss={onDismiss}>
+        <WidgetCard key={id} title="Villes des visiteurs" icon="mapPin" sub="Géolocalisation IP (Vercel), en production uniquement" stale={stale} onDismiss={onDismiss}>
           {cities.length ? (
-            <BarList items={cities.map((c) => ({ label: c.city, value: c.visits, color: "var(--accent)" }))} formatValue={(v) => `${v} visite${v > 1 ? "s" : ""}`} />
+            <BarList items={cities.map((c) => ({ label: c.city, value: c.visits }))} formatValue={(v) => countLabel(v, "visite")} />
           ) : (
-            <EmptyState icon="🗺️" message="Pas encore de données de ville — actif seulement une fois le site déployé sur Vercel." />
+            <EmptyState icon="mapPin" message="Pas encore de données de ville — actif seulement une fois le site déployé sur Vercel." />
           )}
         </WidgetCard>
       );
     }
 
-    case "chart.pdfCities": {
-      const cities = stats.pdfCities || [];
+    case "list.topPages": {
+      const pages = audience?.topPages || [];
       return (
-        <WidgetCard key={id} title="Villes des téléchargements PDF" sub="D'après la géolocalisation IP (Vercel), en production uniquement" onDismiss={onDismiss}>
-          {cities.length ? (
-            <BarList items={cities.map((c) => ({ label: c.city, value: c.downloads, color: "var(--green)" }))} formatValue={(v) => `${v} téléchargement${v > 1 ? "s" : ""}`} />
+        <WidgetCard key={id} title="Vues par page" icon="list" sub="Nombre de visites, page par page" stale={stale} onDismiss={onDismiss}>
+          {pages.length ? (
+            <BarList items={pages.map((p) => ({ label: p.label, value: p.views }))} formatValue={(v) => countLabel(v, "vue")} />
           ) : (
-            <EmptyState icon="🗺️" message="Pas encore de données de ville — actif seulement une fois le site déployé sur Vercel." />
+            <EmptyState icon="file" message="Pas encore de données — reviens après quelques visites sur le site." />
           )}
         </WidgetCard>
       );
     }
 
     case "list.recentVisits": {
-      const rows = stats.recentVisits || [];
+      const rows = logs?.recentVisits || [];
       return (
         <WidgetCard
           key={id}
           title="Derniers visiteurs"
-          sub="Adresse IP et ville par visite, 30 dernières"
+          icon="users"
+          sub="IP anonymisée et ville par visite, 30 dernières"
           collapsible
           count={rows.length}
+          stale={stale}
           onDismiss={onDismiss}
         >
           {rows.length ? (
@@ -356,7 +478,7 @@ export function renderWidget(id, ctx, onDismiss) {
                   <tr>
                     <th>Heure</th>
                     <th>Ville</th>
-                    <th>IP</th>
+                    <th>IP (anonymisée)</th>
                     <th>Page</th>
                   </tr>
                 </thead>
@@ -375,23 +497,30 @@ export function renderWidget(id, ctx, onDismiss) {
               </table>
             </div>
           ) : (
-            <EmptyState icon="🕵️" message="Pas encore de visite suivie." />
+            <EmptyState icon="users" message="Pas encore de visite suivie." />
           )}
         </WidgetCard>
       );
     }
 
     case "list.digestLog": {
-      const rows = stats.digestLog || [];
-      const TYPE_LABEL = { auto: "🤖 Auto (cron)", manuel: "✍️ Manuel", test: "🧪 Test" };
-      const STATUS_LABEL = { sent: "✅ Envoyé", partial: "⚠️ Partiel", failed: "❌ Échec", skipped: "⏭️ Ignoré" };
+      const rows = logs?.digestLog || [];
+      const TYPE = { auto: { icon: "robot", label: "Auto (cron)" }, manuel: { icon: "pen", label: "Manuel" }, test: { icon: "flask", label: "Test" } };
+      const STATUS = {
+        sent: { icon: "check", label: "Envoyé", tone: "ok" },
+        partial: { icon: "alertTriangle", label: "Partiel", tone: "warn" },
+        failed: { icon: "x", label: "Échec", tone: "bad" },
+        skipped: { icon: "skip", label: "Ignoré", tone: "muted" },
+      };
       return (
         <WidgetCard
           key={id}
           title="Journal des envois d'email"
+          icon="mail"
           sub="Composeur manuel, test, et cron quotidien — 20 derniers envois/tentatives"
           collapsible
           count={rows.length}
+          stale={stale}
           onDismiss={onDismiss}
         >
           {rows.length ? (
@@ -407,32 +536,128 @@ export function renderWidget(id, ctx, onDismiss) {
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((r, i) => (
-                    <tr key={i}>
-                      <td data-label="Heure">{timeAgoFr(new Date(r.at).getTime())}</td>
-                      <td data-label="Type">{TYPE_LABEL[r.type] || r.type}</td>
-                      <td data-label="Statut">{STATUS_LABEL[r.status] || r.status}</td>
-                      <td data-label="Destinataires">{r.status === "skipped" ? "—" : `${r.sent}/${r.total}`}</td>
-                      <td data-label="Détail">{r.reason || r.subject || "—"}</td>
-                    </tr>
-                  ))}
+                  {rows.map((r, i) => {
+                    const t = TYPE[r.type];
+                    const s = STATUS[r.status];
+                    return (
+                      <tr key={i}>
+                        <td data-label="Heure">{timeAgoFr(new Date(r.at).getTime())}</td>
+                        <td data-label="Type">
+                          <span className="admin-inline-icon">
+                            {t && <Icon name={t.icon} size={13} />}
+                            {t?.label || r.type}
+                          </span>
+                        </td>
+                        <td data-label="Statut">
+                          <span className={"admin-status-chip " + (s?.tone || "muted")}>
+                            {s && <Icon name={s.icon} size={12} />}
+                            {s?.label || r.status}
+                          </span>
+                        </td>
+                        <td data-label="Destinataires">
+                          {r.status === "skipped" ? "—" : `${formatNumber(r.sent)}/${formatNumber(r.total)}`}
+                        </td>
+                        <td data-label="Détail">{r.reason || r.subject || "—"}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
           ) : (
-            <EmptyState icon="📬" message="Pas encore d'envoi suivi — le prochain envoi (manuel ou cron) apparaîtra ici." />
+            <EmptyState icon="mail" message="Pas encore d'envoi suivi — le prochain envoi (manuel ou cron) apparaîtra ici." />
           )}
         </WidgetCard>
       );
     }
 
-    case "list.searchMisses": {
-      const rows = stats.searchMisses || [];
+    /* --------------------------------- Contenu --------------------------- */
+    case "chart.concoursByCategorie": {
+      const rows = content?.concoursByCategorie || [];
+      return (
+        <WidgetCard key={id} title="Répartition par domaine" icon="pieChart" sub="Part du catalogue par catégorie de concours" href={meta.href} stale={stale} onDismiss={onDismiss}>
+          {rows.length ? (
+            <DonutChart
+              segments={rows.map((r, i) => ({ label: r.label, value: r.count, color: CATEGORIE_COLORS[i % CATEGORIE_COLORS.length] }))}
+              centerLabel="concours"
+            />
+          ) : (
+            <EmptyState icon="folders" message="Aucun concours pour l'instant." />
+          )}
+        </WidgetCard>
+      );
+    }
+    case "chart.concoursGrowth": {
+      const points = content?.concoursGrowth || [];
       return (
         <WidgetCard
           key={id}
-          title="🔍 Recherches sans résultat"
+          title="Croissance du catalogue"
+          icon="trendingUp"
+          sub={`Concours ajoutés — ${range.label.toLowerCase()} (${formatNumber(content?.addedInRange || 0)} au total)`}
+          stale={stale}
+          onDismiss={onDismiss}
+        >
+          <AreaChart
+            label="Concours ajoutés"
+            color="var(--green)"
+            points={points}
+            formatValue={(v) => countLabel(v, "concours", "concours")}
+            emptyMessage="Aucun concours ajouté sur cette période."
+          />
+        </WidgetCard>
+      );
+    }
+
+    /* -------------------------------- À traiter -------------------------- */
+    case "list.todo": {
+      const items = buildTodoItems(extra);
+      return items.length ? <TodoCard key={id} items={items} onDismiss={onDismiss} /> : null;
+    }
+    case "list.sansCorrige":
+      return todo ? (
+        <WidgetCard key={id} title="Concours sans corrigé" icon="alertTriangle" href={meta.href} stale={stale} onDismiss={onDismiss}>
+          {todo.concoursSansCorrige.length ? (
+            <ul className="dash-list">
+              {todo.concoursSansCorrige.map((c) => (
+                <li key={c.id}>
+                  <Link href={`/admin/concours?edit=${encodeURIComponent(c.id)}`}>{c.label}</Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState icon="checkCircle" message="Tous les concours ont un corrigé." />
+          )}
+        </WidgetCard>
+      ) : null;
+    case "list.expiring":
+      return todo ? (
+        <WidgetCard key={id} title="Concours ouverts qui ferment bientôt" icon="calendarClock" href={meta.href} stale={stale} onDismiss={onDismiss}>
+          {todo.newsExpiringSoon.length ? (
+            <ul className="dash-list">
+              {todo.newsExpiringSoon.map((n) => (
+                <li key={n.id}>
+                  <Link href={`/admin/concours-ouverts?edit=${encodeURIComponent(n.id)}`}>
+                    {n.titre} {n.ville ? `— ${n.ville}` : ""}
+                  </Link>{" "}
+                  <span className="dash-list-date">({n.date_limite})</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState icon="checkCircle" message="Rien ne ferme dans les 14 prochains jours." />
+          )}
+        </WidgetCard>
+      ) : null;
+    case "list.searchMisses": {
+      const rows = todo?.searchMisses || [];
+      return (
+        <WidgetCard
+          key={id}
+          title="Recherches sans résultat"
+          icon="search"
           sub="Termes tapés dans la recherche /concours qui n'ont rien trouvé"
+          stale={stale}
           onDismiss={onDismiss}
         >
           {rows.length ? (
@@ -445,28 +670,115 @@ export function renderWidget(id, ctx, onDismiss) {
                       {r.lastAt ? `dernière ${timeAgoFr(new Date(r.lastAt).getTime())}` : "date non suivie"}
                     </span>
                   </span>
-                  <strong>
-                    {r.count} recherche{r.count > 1 ? "s" : ""}
-                  </strong>
+                  <strong>{countLabel(r.count, "recherche")}</strong>
                 </li>
               ))}
             </ol>
           ) : (
-            <EmptyState icon="🔍" message="Aucune recherche infructueuse suivie pour l'instant." />
+            <EmptyState icon="search" message="Aucune recherche infructueuse suivie pour l'instant." />
           )}
         </WidgetCard>
       );
     }
 
+    /* ------------------------------- Performance ------------------------- */
+    case "list.topConcours": {
+      const rows = perf?.topConcours || [];
+      return (
+        <WidgetCard key={id} title="Concours les plus consultés" icon="trophy" sub="Vues cumulées, depuis le lancement" stale={stale} onDismiss={onDismiss}>
+          {rows.length ? (
+            <BarList items={rows.map((c) => ({ label: c.label, value: c.views }))} formatValue={(v) => countLabel(v, "vue")} />
+          ) : (
+            <EmptyState icon="trophy" message="Pas encore de données — reviens après quelques visites sur le site." />
+          )}
+        </WidgetCard>
+      );
+    }
+    case "list.topPdf": {
+      const items = perf?.topPdf || [];
+      const ICONS = { concours: "book", cours: "notebook", evaluation: "clipboard" };
+      return (
+        <WidgetCard key={id} title="PDF les plus téléchargés" icon="download" sub="Téléchargements cumulés, depuis le lancement" stale={stale} onDismiss={onDismiss}>
+          {items.length ? (
+            <ol className="stat-rank-list">
+              {items.map((p) => (
+                <li key={`${p.kind}:${p.id}`}>
+                  <span className="admin-inline-icon">
+                    <Icon name={ICONS[p.kind] || "file"} size={14} />
+                    {p.label}
+                  </span>
+                  <strong>{countLabel(p.downloads, "téléchargement")}</strong>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <EmptyState icon="download" message="Pas encore de données — reviens après quelques téléchargements de PDF." />
+          )}
+        </WidgetCard>
+      );
+    }
+    case "chart.pdfCities": {
+      const cities = perf?.pdfCities || [];
+      return (
+        <WidgetCard key={id} title="Villes des téléchargements PDF" icon="mapPin" sub="Géolocalisation IP (Vercel), en production uniquement" stale={stale} onDismiss={onDismiss}>
+          {cities.length ? (
+            <BarList
+              items={cities.map((c) => ({ label: c.city, value: c.downloads, color: "var(--green)" }))}
+              formatValue={(v) => countLabel(v, "téléchargement")}
+            />
+          ) : (
+            <EmptyState icon="mapPin" message="Pas encore de données de ville — actif seulement une fois le site déployé sur Vercel." />
+          )}
+        </WidgetCard>
+      );
+    }
+    case "list.recent":
+      return perf ? (
+        <WidgetCard key={id} title="Derniers concours ajoutés" icon="history" href={meta.href} stale={stale} onDismiss={onDismiss}>
+          {perf.recentConcours.length ? (
+            <ul className="dash-list">
+              {perf.recentConcours.map((c) => (
+                <li key={c.id}>
+                  <Link href={`/admin/concours?edit=${encodeURIComponent(c.id)}`}>{c.label}</Link>
+                  {c.hasCorrige && (
+                    <span className="dash-list-flag" title="Corrigé disponible">
+                      <Icon name="checkCircle" size={13} />
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState icon="folders" message="Aucun concours pour l'instant." />
+          )}
+        </WidgetCard>
+      ) : null;
+    case "list.topAds": {
+      const ads = perf?.topAds || [];
+      return (
+        <WidgetCard key={id} title="Performance des bannières partenaires" icon="megaphone" sub="Vues et clics par bannière" href={meta.href} stale={stale} onDismiss={onDismiss}>
+          {ads.length ? (
+            <BarList
+              items={ads.map((a) => ({ label: a.label, value: a.views, ctr: a.ctr, clicks: a.clicks }))}
+              formatValue={(v, it) => `${countLabel(v, "vue")} · ${formatNumber(it.ctr)} % CTR`}
+            />
+          ) : (
+            <EmptyState icon="megaphone" message="Aucune bannière partenaire suivie pour l'instant." />
+          )}
+        </WidgetCard>
+      );
+    }
     case "list.recentPdfDownloads": {
-      const rows = stats.recentPdfDownloads || [];
+      const rows = logs?.recentPdfDownloads || [];
       return (
         <WidgetCard
           key={id}
           title="Derniers téléchargements PDF"
-          sub="Adresse IP et ville par téléchargement, 30 derniers"
+          icon="download"
+          sub="IP anonymisée et ville par téléchargement, 30 derniers"
           collapsible
           count={rows.length}
+          stale={stale}
           onDismiss={onDismiss}
         >
           {rows.length ? (
@@ -476,7 +788,7 @@ export function renderWidget(id, ctx, onDismiss) {
                   <tr>
                     <th>Heure</th>
                     <th>Ville</th>
-                    <th>IP</th>
+                    <th>IP (anonymisée)</th>
                     <th>PDF</th>
                   </tr>
                 </thead>
@@ -495,176 +807,63 @@ export function renderWidget(id, ctx, onDismiss) {
               </table>
             </div>
           ) : (
-            <EmptyState icon="🕵️" message="Pas encore de téléchargement suivi." />
+            <EmptyState icon="download" message="Pas encore de téléchargement suivi." />
           )}
         </WidgetCard>
       );
     }
-
-    case "list.topPages": {
-      const pages = stats.topPages || [];
-      return (
-        <WidgetCard key={id} title="Vues par page" sub="Nombre de visites, page par page" onDismiss={onDismiss}>
-          {pages.length ? (
-            <ol className="stat-rank-list">
-              {pages.map((p) => (
-                <li key={p.path}>
-                  <span>{p.label}</span>
-                  <strong>
-                    {p.views} vue{p.views > 1 ? "s" : ""}
-                  </strong>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <EmptyState icon="📄" message="Pas encore de données — reviens après quelques visites sur le site." />
-          )}
-        </WidgetCard>
-      );
-    }
-
-    case "chart.concoursByCategorie": {
-      const rows = stats.concoursByCategorie || [];
-      return (
-        <WidgetCard key={id} title="Répartition par domaine" sub="Part du catalogue par catégorie de concours" href="/admin/concours/filieres" onDismiss={onDismiss}>
-          {rows.length ? (
-            <DonutChart
-              segments={rows.map((r, i) => ({ label: r.label, value: r.count, color: CATEGORIE_COLORS[i % CATEGORIE_COLORS.length] }))}
-              centerLabel="concours"
-            />
-          ) : (
-            <EmptyState icon="🗂️" message="Aucun concours pour l'instant." />
-          )}
-        </WidgetCard>
-      );
-    }
-    case "chart.concoursGrowth": {
-      const rows = stats.concoursGrowth || [];
-      const points = rows.map((r) => ({ label: r.label, value: r.count }));
-      const hasGrowth = points.some((p) => p.value > 0);
-      return (
-        <WidgetCard key={id} title="Croissance du catalogue" sub="Concours ajoutés par mois, 6 derniers mois" onDismiss={onDismiss}>
-          {hasGrowth ? (
-            <AreaChart points={points} formatValue={(v) => `${v} concours ajouté${v > 1 ? "s" : ""}`} />
-          ) : (
-            <EmptyState icon="📈" message="Pas encore de concours ajoutés sur cette période." />
-          )}
-        </WidgetCard>
-      );
-    }
-
-    case "list.topAds": {
-      const ads = stats.topAds || [];
+    case "list.audit": {
+      const rows = logs?.auditLog || [];
       return (
         <WidgetCard
           key={id}
-          title="Performance des bannières partenaires"
-          sub="Vues et clics par bannière"
-          href="/admin/reglages/partenaires"
+          title="Journal des modifications"
+          icon="history"
+          sub="Créations, modifications et suppressions faites depuis le panneau"
+          collapsible
+          count={rows.length}
+          stale={stale}
           onDismiss={onDismiss}
         >
-          {ads.length ? (
-            <BarList
-              items={ads.map((a) => ({ label: a.label, value: a.views, ctr: a.ctr, color: "var(--accent)" }))}
-              formatValue={(v, it) => `${v} vue${v > 1 ? "s" : ""} · ${it.ctr}% CTR`}
-            />
+          {rows.length ? (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Quand</th>
+                    <th>Action</th>
+                    <th>Type</th>
+                    <th>Élément</th>
+                    <th>Détail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r, i) => (
+                    <tr key={i}>
+                      <td data-label="Quand" title={dateTimeFr(new Date(r.at).getTime())}>
+                        {timeAgoFr(new Date(r.at).getTime())}
+                      </td>
+                      <td data-label="Action">
+                        <span className={"admin-status-chip tone-" + r.actionTone}>{r.actionLabel}</span>
+                      </td>
+                      <td data-label="Type">{r.resourceLabel}</td>
+                      <td data-label="Élément">{r.label || <span className="admin-id-chip">{r.id || "—"}</span>}</td>
+                      <td data-label="Détail">{r.detail || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <EmptyState icon="📣" message="Aucune bannière partenaire suivie pour l'instant." />
+            <EmptyState
+              icon="history"
+              message="Aucune modification enregistrée pour l'instant — la prochaine action faite depuis le panneau apparaîtra ici."
+            />
           )}
         </WidgetCard>
       );
     }
 
-    case "list.topConcours":
-      return (
-        <WidgetCard key={id} title="Concours les plus consultés" onDismiss={onDismiss}>
-          {stats.topConcours.length ? (
-            <ol className="stat-rank-list">
-              {stats.topConcours.map((c) => (
-                <li key={c.id}>
-                  <span>{c.label}</span>
-                  <strong>
-                    {c.views} vue{c.views > 1 ? "s" : ""}
-                  </strong>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <div className="empty-state">Pas encore de données — reviens après quelques visites sur le site.</div>
-          )}
-        </WidgetCard>
-      );
-    case "list.topPdf": {
-      const items = stats.topPdf || [];
-      return (
-        <WidgetCard key={id} title="PDF les plus téléchargés" onDismiss={onDismiss}>
-          {items.length ? (
-            <ol className="stat-rank-list">
-              {items.map((p) => (
-                <li key={`${p.kind}:${p.id}`}>
-                  <span>{p.label}</span>
-                  <strong>
-                    {p.downloads} téléchargement{p.downloads > 1 ? "s" : ""}
-                  </strong>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <div className="empty-state">Pas encore de données — reviens après quelques téléchargements de PDF.</div>
-          )}
-        </WidgetCard>
-      );
-    }
-    case "list.sansCorrige":
-      return (
-        <WidgetCard key={id} title="⚠️ Concours sans corrigé" href="/admin/concours" onDismiss={onDismiss}>
-          {stats.concoursSansCorrige.length ? (
-            <ul className="dash-list">
-              {stats.concoursSansCorrige.map((c) => (
-                <li key={c.id}>{c.label}</li>
-              ))}
-            </ul>
-          ) : (
-            <div className="empty-state">Tous les concours ont un corrigé. 🎉</div>
-          )}
-        </WidgetCard>
-      );
-    case "list.expiring":
-      return (
-        <WidgetCard key={id} title="⏰ Concours ouverts qui ferment bientôt" href="/admin/concours-ouverts" onDismiss={onDismiss}>
-          {stats.newsExpiringSoon.length ? (
-            <ul className="dash-list">
-              {stats.newsExpiringSoon.map((n) => (
-                <li key={n.id}>
-                  {n.titre} {n.ville ? `— ${n.ville}` : ""} <span className="dash-list-date">({n.date_limite})</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="empty-state">Rien ne ferme dans les 14 prochains jours.</div>
-          )}
-        </WidgetCard>
-      );
-    case "list.recent":
-      return (
-        <WidgetCard key={id} title="🕓 Derniers concours ajoutés" href="/admin/concours" onDismiss={onDismiss}>
-          {stats.recentConcours.length ? (
-            <ul className="dash-list">
-              {stats.recentConcours.map((c) => (
-                <li key={c.id}>
-                  {c.label} {c.hasCorrige ? "✅" : ""}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="empty-state">Aucun concours pour l'instant.</div>
-          )}
-        </WidgetCard>
-      );
-    case "list.todo": {
-      const items = buildTodoItems(extra);
-      return items.length ? <TodoCard key={id} items={items} onDismiss={onDismiss} /> : null;
-    }
     default:
       return null;
   }

@@ -5,6 +5,7 @@ import Modal from "../ui/Modal";
 import { CONTENT_TYPES, queryTerms, matchesTerms } from "./lib/contentTypes";
 import { publishedOn } from "./lib/history";
 import { PLATFORMS, PlatformIcon, platformFor } from "./lib/platforms";
+import Icon from "../ui/Icon";
 
 /* --------------------------- Sélecteur de contenu ---------------------------
  * L'ancienne version affichait 25 résultats dans une liste haute de 280px,
@@ -125,12 +126,12 @@ export default function ContentPicker({ open, onClose, entries, loading, pubInde
             Choisir un contenu à publier
           </h2>
           <button type="button" className="admin-icon-btn" onClick={onClose} aria-label="Fermer">
-            ✕
+            <Icon name="x" size={13} />
           </button>
         </div>
 
         <div className="sgx-picker-search">
-          <span aria-hidden="true">🔎</span>
+          <span aria-hidden="true"><Icon name="search" size={14} /></span>
           <input
             ref={inputRef}
             value={query}
@@ -140,7 +141,7 @@ export default function ContentPicker({ open, onClose, entries, loading, pubInde
           />
           {query && (
             <button type="button" className="sgx-picker-clear" onClick={() => setQuery("")} aria-label="Effacer">
-              ✕
+              <Icon name="x" size={13} />
             </button>
           )}
         </div>
@@ -177,7 +178,7 @@ export default function ContentPicker({ open, onClose, entries, loading, pubInde
           {loading && <div className="empty-state">Chargement des contenus…</div>}
           {!loading && !flat.length && (
             <div className="empty-state">
-              <div className="empty-state-icon">🔍</div>
+              <div className="empty-state-icon"><Icon name="search" size={20} /></div>
               Aucun résultat{query ? ` pour « ${query} »` : ""}.
             </div>
           )}

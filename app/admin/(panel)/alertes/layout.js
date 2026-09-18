@@ -8,7 +8,7 @@ const alertesItem = SECTIONS.flatMap((s) => s.items).find((i) => i.key === "aler
 export default function AlertesLayout({ children }) {
   return (
     <>
-      <PageHeader icon="🔔" title="Alertes email" subtitle="Alerte automatique, envoi ponctuel et gestion des abonnés." />
+      <PageHeader icon="bell" title="Alertes email" subtitle="Alerte automatique, envoi ponctuel et gestion des abonnés." />
       <AlertesStatusBar />
       <SubNav items={alertesItem.children} />
       {children}

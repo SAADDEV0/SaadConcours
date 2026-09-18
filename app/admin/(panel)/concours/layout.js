@@ -8,7 +8,7 @@ const concoursItem = SECTIONS.flatMap((s) => s.items).find((i) => i.key === "con
 export default function ConcoursLayout({ children }) {
   return (
     <>
-      <PageHeader icon="📚" title="Concours" subtitle="Gère les concours publiés sur le site." />
+      <PageHeader icon="book" title="Concours" subtitle="Gère les concours publiés sur le site." />
       <ConcoursStatsRow />
       <SubNav items={concoursItem.children} />
       {children}

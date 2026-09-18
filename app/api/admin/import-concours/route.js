@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addConcoursBulk } from "@/lib/store";
+import { recordAudit } from "@/lib/auditLog";
 
 // Bulk import for the admin "Import groupé" screen — one commit for the
 // whole batch (see lib/store.js addConcoursBulk) instead of one per row,
@@ -30,5 +31,13 @@ export async function POST(req) {
   }
 
   const created = await addConcoursBulk(entries);
+  // One audit entry for the batch, not one per row — 200 identical lines in
+  // the log would drown everything else in the rolling window.
+  recordAudit({
+    action: "import",
+    resource: "concours",
+    label: `${created.length} concours importé${created.length > 1 ? "s" : ""}`,
+    detail: created.slice(0, 3).map((c) => c.id).join(", ") + (created.length > 3 ? "…" : ""),
+  });
   return NextResponse.json({ created: created.length, ids: created.map((c) => c.id) }, { status: 201 });
 }

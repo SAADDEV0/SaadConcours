@@ -8,7 +8,7 @@ const reglagesItem = SECTIONS.flatMap((s) => s.items).find((i) => i.key === "reg
 export default function ReglagesLayout({ children }) {
   return (
     <>
-      <PageHeader icon="⚙️" title="Réglages" />
+      <PageHeader icon="settings" title="Réglages" />
       <SystemHealthCard />
       <SubNav items={reglagesItem.children} />
       {children}

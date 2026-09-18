@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "check": "next lint && next build"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -15,5 +17,9 @@
     "nodemailer": "^9.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35"
   }
 }

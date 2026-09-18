@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ACTIONS, isDue } from "./lib/history";
 import { PLATFORMS, PlatformIcon, platformFor } from "./lib/platforms";
 import { CONTENT_TYPES } from "./lib/contentTypes";
+import Icon from "../ui/Icon";
 
 /* --------------------------------- Historique ---------------------------------
  * Sert à répondre à « qu'est-ce qui est déjà sorti, et où ? » sans avoir à se
@@ -109,11 +110,11 @@ export default function HistoryPanel({ history, reminders, onReopen, onRemove, o
 
       {reminders.length > 0 && (
         <div className="sgx-history-block">
-          <h3 className="sgx-history-heading">🕒 Rappels</h3>
+          <h3 className="sgx-history-heading"><Icon name="clock" size={14} /> Rappels</h3>
           {reminders.map((e) => (
             <div className={"sgx-history-row reminder" + (isDue(e) ? " due" : "")} key={e.id}>
               <span className="sgx-history-chip" style={{ background: "var(--amber)" }}>
-                🕒
+                <Icon name="clock" size={14} />
               </span>
               <button type="button" className="sgx-history-main" onClick={() => onReopen(e)}>
                 <span className="sgx-history-title">{e.itemLabel}</span>
@@ -127,7 +128,7 @@ export default function HistoryPanel({ history, reminders, onReopen, onRemove, o
                   ↻
                 </button>
                 <button type="button" className="admin-icon-btn" title="Marquer comme fait" onClick={() => onDoneReminder(e.id)}>
-                  ✓
+                  <Icon name="check" size={13} />
                 </button>
               </div>
             </div>
@@ -166,7 +167,7 @@ export default function HistoryPanel({ history, reminders, onReopen, onRemove, o
 
       {!days.length && (
         <div className="empty-state">
-          <div className="empty-state-icon">🗂️</div>
+          <div className="empty-state-icon"><Icon name="history" size={20} /></div>
           {history.length
             ? "Rien avec ce filtre."
             : "Aucun post enregistré pour l'instant. Partage un contenu et confirme « J'ai publié »."}
@@ -188,7 +189,7 @@ export default function HistoryPanel({ history, reminders, onReopen, onRemove, o
                 <button type="button" className="sgx-history-main" onClick={() => onReopen(e)}>
                   <span className="sgx-history-title">{e.itemLabel}</span>
                   <span className="sgx-history-meta">
-                    {action.icon} {action.label} · {p.label} · {timeLabel(e.at)}
+                    <Icon name={action.icon} size={13} /> {action.label} · {p.label} · {timeLabel(e.at)}
                     {type ? ` · ${type.tabLabel}` : ""}
                   </span>
                 </button>
@@ -202,7 +203,7 @@ export default function HistoryPanel({ history, reminders, onReopen, onRemove, o
                     title="Retirer de l'historique"
                     onClick={() => onRemove(e.id)}
                   >
-                    🗑
+                    <Icon name="x" size={13} />
                   </button>
                 </div>
               </div>

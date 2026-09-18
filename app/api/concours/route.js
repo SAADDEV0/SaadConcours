@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAllConcours, addConcours, getCorrigeIds } from "@/lib/store";
+import { recordAudit, auditLabel } from "@/lib/auditLog";
 
 export async function GET() {
   const [list, corrigeIds] = await Promise.all([getAllConcours(), getCorrigeIds()]);
@@ -17,5 +18,8 @@ export async function POST(req) {
     return NextResponse.json({ error: "Corps invalide" }, { status: 400 });
   }
   const created = await addConcours(body);
+  // Fire-and-forget: an audit write must never turn a successful save into
+  // a failed request (recordAudit swallows its own errors).
+  recordAudit({ action: "create", resource: "concours", id: created?.id, label: auditLabel("concours", created) });
   return NextResponse.json(created, { status: 201 });
 }

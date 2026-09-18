@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { allSousFilieres } from "@/lib/taxonomy";
+import Icon from "../ui/Icon";
 
 /* -------------------------------------------------------------------
  * Bulk import for concours — the bottleneck standing between "66 concours"
@@ -203,10 +204,10 @@ export default function BulkImportPanel() {
   return (
     <div>
       <div className="admin-card">
-        <h2 className="admin-section-title">⬆️ Import groupé de concours</h2>
+        <h2 className="admin-section-title"><Icon name="plus" size={16} /> Import groupé de concours</h2>
         <p className="admin-image-hint" style={{ marginBottom: 16 }}>
           Colle plusieurs concours d'un coup (JSON ou CSV) au lieu de les ajouter un par un. Tout le lot est écrit en
-          un seul commit GitHub. Chaque entrée importée démarre au statut <strong>📝 Brouillon</strong> dans le
+          un seul commit GitHub. Chaque entrée importée démarre au statut <strong>Brouillon</strong> dans le
           pipeline (onglet Concours → vue Pipeline) — à faire avancer ensuite au fil de la relecture.
         </p>
 
@@ -279,13 +280,13 @@ export default function BulkImportPanel() {
                     <td data-label="Année">{r.entry.annee || "—"}</td>
                     <td data-label="Statut">
                       {r.errors.length ? (
-                        <span style={{ color: "var(--red)" }}>⚠ {r.errors.join(", ")} manquant(s)</span>
+                        <span style={{ color: "var(--red)" }}><Icon name="alertTriangle" size={12} /> {r.errors.join(", ")} manquant(s)</span>
                       ) : r.unknownFiliere ? (
-                        <span style={{ color: "var(--amber)" }}>⚠ filière hors taxonomie (importé quand même, sans catégorie)</span>
+                        <span style={{ color: "var(--amber)" }}><Icon name="alertTriangle" size={12} /> filière hors taxonomie (importé quand même, sans catégorie)</span>
                       ) : r.duplicate ? (
-                        <span style={{ color: "var(--amber)" }}>⚠ doublon probable (importé quand même)</span>
+                        <span style={{ color: "var(--amber)" }}><Icon name="alertTriangle" size={12} /> doublon probable (importé quand même)</span>
                       ) : (
-                        <span style={{ color: "var(--green)" }}>✓ prêt</span>
+                        <span style={{ color: "var(--green)" }}><Icon name="check" size={12} /> prêt</span>
                       )}
                     </td>
                   </tr>
@@ -304,7 +305,7 @@ export default function BulkImportPanel() {
       {result && (
         <div className="admin-card" style={{ marginTop: 18 }}>
           {result.ok ? (
-            <div className="admin-msg">✅ {result.created} concours importé{result.created > 1 ? "s" : ""}.</div>
+            <div className="admin-msg"><Icon name="checkCircle" size={14} /> {result.created} concours importé{result.created > 1 ? "s" : ""}.</div>
           ) : (
             <div className="admin-error">
               {result.error}

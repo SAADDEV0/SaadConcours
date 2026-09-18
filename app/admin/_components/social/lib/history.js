@@ -17,11 +17,11 @@ const MAX_ENTRIES = 400;
 // Seul "publie" compte comme « ce post est sorti » (badge de doublon).
 // Les autres tracent l'activité sans bloquer quoi que ce soit.
 export const ACTIONS = {
-  publie: { label: "Publié", icon: "✅" },
-  prepare: { label: "Préparé", icon: "🧰" },
-  telecharge: { label: "Image téléchargée", icon: "⬇️" },
-  copie: { label: "Texte copié", icon: "📋" },
-  rappel: { label: "Rappel", icon: "🕒" },
+  publie: { label: "Publié", icon: "check" },
+  prepare: { label: "Préparé", icon: "sliders" },
+  telecharge: { label: "Image téléchargée", icon: "download" },
+  copie: { label: "Texte copié", icon: "files" },
+  rappel: { label: "Rappel", icon: "clock" },
 };
 
 let seq = 0;

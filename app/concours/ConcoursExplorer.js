@@ -197,7 +197,10 @@ export default function ConcoursExplorer({ initialData }) {
       const filiere = $("#filterFiliere").value;
       const etab = $("#filterEtab").value;
       const annee = $("#filterAnnee").value;
-      const module = $("#filterModule").value;
+      // Named moduleFilter, not `module`: a bare `module` binding collides
+      // with the CommonJS free variable the bundler injects, which webpack
+      // flags (@next/next/no-assign-module-variable) as a real hazard.
+      const moduleFilter = $("#filterModule").value;
       const q = $("#searchInput").value.trim().toLowerCase();
 
       filtered = ALL.filter((c) => {
@@ -206,8 +209,8 @@ export default function ConcoursExplorer({ initialData }) {
         if (filiere && c.filiere !== filiere) return false;
         if (etab && c.etablissement !== etab) return false;
         if (annee && String(c.annee) !== annee) return false;
-        if (module) {
-          const key = normalizeModuleKey(module);
+        if (moduleFilter) {
+          const key = normalizeModuleKey(moduleFilter);
           if (!(c.modules || []).some((m) => normalizeModuleKey(m) === key)) return false;
         }
         if (q) {

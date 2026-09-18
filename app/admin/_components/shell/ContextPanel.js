@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Icon from "../ui/Icon";
 import { SECTIONS, isItemActive, isChildActive, findActiveTrail } from "../../_lib/nav";
 
 // Academic year runs Sept→Aug. Derived, never stored, so the badge is right
@@ -51,7 +52,7 @@ function ContextPanelInner({ onNavigate }) {
                   aria-current={active ? "page" : undefined}
                 >
                   <span className="ad-context-link-icon" aria-hidden="true">
-                    {item.icon}
+                    <Icon name={item.icon} size={15} />
                   </span>
                   <span className="u-truncate">{item.label}</span>
                 </Link>
@@ -101,7 +102,9 @@ function ContextPanelInner({ onNavigate }) {
           <span className="admin-avatar">A</span>
           <span className="admin-profile-text">
             <strong>Admin</strong>
-            <span>Voir le site ↗</span>
+            <span>
+              Voir le site <Icon name="externalLink" size={11} />
+            </span>
           </span>
         </a>
       </div>

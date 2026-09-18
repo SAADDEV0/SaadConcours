@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
-import { sha256Hex, constantTimeEqual } from "../../../../lib/security";
+import { constantTimeEqual } from "@/lib/security";
+import { createSessionToken, SESSION_COOKIE } from "@/lib/session";
+import { recordAudit } from "@/lib/auditLog";
 import {
   checkLoginRateLimit,
   recordFailedLogin,
   clearLoginAttempts,
   clientIp,
-} from "../../../../lib/loginRateLimit";
+} from "@/lib/loginRateLimit";
+import { anonymizeIp } from "@/lib/analytics";
 
 export async function POST(req) {
   const { password } = await req.json().catch(() => ({}));
@@ -34,18 +37,30 @@ export async function POST(req) {
 
   await clearLoginAttempts(ip);
 
-  // Same hash used for the cookie, also returned in the body: the web panel
-  // relies on the httpOnly cookie, but the mobile admin app has no cookie
-  // jar to rely on, so it stores this and sends it back as a Bearer token
-  // (see middleware.js).
-  const token = await sha256Hex(expected);
-  const res = NextResponse.json({ ok: true, token });
-  res.cookies.set("sc_admin", token, {
+  // A signed, expiring session rather than the old constant
+  // sha256(ADMIN_PASSWORD) — see lib/session.js. Still returned in the body
+  // as well as the cookie: the mobile admin app has no cookie jar and sends
+  // it back as a Bearer token (see middleware.js).
+  const session = await createSessionToken();
+  if (!session) {
+    return NextResponse.json({ error: "Session impossible à créer sur le serveur." }, { status: 500 });
+  }
+
+  recordAudit({
+    action: "login",
+    resource: "session",
+    id: session.payload.jti,
+    label: "Connexion au panneau",
+    ip: anonymizeIp(ip),
+  });
+
+  const res = NextResponse.json({ ok: true, token: session.token, expiresAt: session.payload.exp });
+  res.cookies.set(SESSION_COOKIE, session.token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: session.maxAge,
   });
   return res;
 }

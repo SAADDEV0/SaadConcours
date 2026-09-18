@@ -30,7 +30,7 @@ export default function AlertesStatusBar() {
   return (
     <div className="stat-grid" style={{ marginBottom: 18 }}>
       <StatCard
-        icon="📬"
+        icon="mail"
         tone="violet"
         label="Abonnés aux alertes"
         value={subscribers.count ?? 0}
@@ -38,14 +38,14 @@ export default function AlertesStatusBar() {
         spark={spark}
       />
       <StatCard
-        icon={settings.newsAlertsEnabled ? "🔔" : "🔕"}
+        icon={settings.newsAlertsEnabled ? "bell" : "bellOff"}
         tone={settings.newsAlertsEnabled ? "green" : "amber"}
         label="Alerte automatique"
         value={settings.newsAlertsEnabled ? "Activée" : "Désactivée"}
         sub="Envoi quotidien des concours qui ferment bientôt"
       />
       <StatCard
-        icon={status.configured ? "✅" : "⚠️"}
+        icon={status.configured ? "checkCircle" : "alertTriangle"}
         tone={status.configured ? "green" : "amber"}
         label="Envoi d'email"
         value={status.configured ? "Configuré" : "Non configuré"}

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { emptyOption, nextQuestionId } from "../../_lib/resourceForm";
 import { useConfirm } from "../ui/ConfirmProvider";
+import Icon from "../ui/Icon";
 
 const QUESTIONS_PAGE_SIZE = 40;
 
@@ -158,7 +159,7 @@ export default function QuestionsEditor({ value, onChange }) {
                     />
                   </div>
                   <div className="admin-field">
-                    <label>Options — clique sur ✓ pour marquer la ou les bonnes réponses</label>
+                    <label>Options — coche pour marquer la ou les bonnes réponses</label>
                     <div className="qz-options">
                       {(q.options || []).map((o, oIdx) => {
                         const isCorrect = (q.correct || []).includes(o.letter);
@@ -171,7 +172,7 @@ export default function QuestionsEditor({ value, onChange }) {
                               title={isCorrect ? "Bonne réponse" : "Marquer comme bonne réponse"}
                               aria-pressed={isCorrect}
                             >
-                              {isCorrect ? "✓" : ""}
+                              {isCorrect ? <Icon name="check" size={13} /> : null}
                             </button>
                             <input
                               className="qz-option-letter"
@@ -192,7 +193,7 @@ export default function QuestionsEditor({ value, onChange }) {
                               title="Retirer cette option"
                               onClick={() => removeOption(idx, oIdx)}
                             >
-                              ✕
+                              <Icon name="x" size={12} />
                             </button>
                           </div>
                         );
@@ -222,7 +223,7 @@ export default function QuestionsEditor({ value, onChange }) {
                       </button>
                     </div>
                     <button type="button" className="admin-btn danger" onClick={() => removeQuestion(idx)}>
-                      🗑️ Supprimer la question
+                      <Icon name="x" size={13} /> Supprimer la question
                     </button>
                   </div>
                 </div>

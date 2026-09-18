@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Icon from "../ui/Icon";
 import { isUrgentNews } from "../../_lib/newsUtils";
 
 function daysLeft(item) {
@@ -59,7 +60,7 @@ export default function NotificationBell() {
         aria-expanded={open}
         title="Concours qui ferment dans les 7 jours"
       >
-        🔔
+        <Icon name="bell" size={17} />
         {Boolean(count) && <span className="admin-bell-dot">{count > 9 ? "9+" : count}</span>}
       </button>
       {open && (
@@ -91,7 +92,7 @@ export default function NotificationBell() {
                   setOpen(false);
                 }}
               >
-                Voir tout →
+                Voir tout
               </button>
             </>
           ) : (

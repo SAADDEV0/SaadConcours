@@ -10,6 +10,8 @@ import SubscriberAlerts from "./SubscriberAlerts";
 import { ToastProvider } from "../ui/ToastProvider";
 import { ConfirmProvider } from "../ui/ConfirmProvider";
 import { useLocalStorage } from "../../_lib/useLocalStorage";
+import { useDashboardLayout } from "../../_lib/useDashboardLayout";
+import Icon from "../ui/Icon";
 
 // Admin v4 shell — icon rail + contextual panel + a transparent sticky
 // header over the content column. On phones/tablets the rail and the panel
@@ -22,6 +24,9 @@ export default function AdminShell({ children }) {
   // Persisted per browser, and only applied once read from storage so the
   // server and first client render agree.
   const [collapsed, setCollapsed, collapsedReady] = useLocalStorage("sc_admin_context_collapsed", false);
+  // Density is a panel-wide setting chosen in the dashboard's "Personnaliser"
+  // modal; applied here so it reaches every page, not just the dashboard.
+  const { density } = useDashboardLayout();
   useMobileDrawer(navOpen, setNavOpen);
   const closeNav = () => setNavOpen(false);
 
@@ -44,7 +49,16 @@ export default function AdminShell({ children }) {
     <ToastProvider>
       <ConfirmProvider>
         <SubscriberAlerts />
-        <div className={"admin-shell" + (collapsedReady && collapsed ? " context-collapsed" : "")}>
+        <div
+          className={"admin-shell" + (collapsedReady && collapsed ? " context-collapsed" : "")}
+          data-density={density}
+        >
+          {/* First focusable thing on the page: the rail is 10 links deep and
+              tabbing past it on every navigation is the kind of friction only
+              keyboard users pay. */}
+          <a className="admin-skip-link" href="#admin-content">
+            Aller au contenu
+          </a>
           <Scrim open={navOpen} onClose={closeNav} />
 
           <div className={"admin-drawer" + (navOpen ? " open" : "")}>
@@ -61,7 +75,7 @@ export default function AdminShell({ children }) {
                   aria-label={collapsed ? "Afficher le panneau" : "Masquer le panneau"}
                   aria-pressed={collapsed}
                 >
-                  <span aria-hidden="true">{collapsed ? "»" : "«"}</span>
+                  <Icon name={collapsed ? "chevronRight" : "chevronLeft"} size={16} />
                   <span className="ad-rail-tip">
                     {collapsed ? "Afficher le panneau" : "Masquer le panneau"}
                     <b className="ad-rail-tip-kbd">Ctrl B</b>
@@ -73,7 +87,7 @@ export default function AdminShell({ children }) {
                   onClick={closeNav}
                   aria-label="Fermer le menu"
                 >
-                  ✕
+                  <Icon name="x" size={16} />
                 </button>
               </div>
             </nav>
@@ -85,7 +99,9 @@ export default function AdminShell({ children }) {
 
           <main className="admin-main">
             <Topbar onOpenDrawer={() => setNavOpen(true)} />
-            <div className="admin-content">{children}</div>
+            <div className="admin-content" id="admin-content" tabIndex={-1}>
+              {children}
+            </div>
           </main>
         </div>
       </ConfirmProvider>

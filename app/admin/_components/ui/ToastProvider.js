@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Icon from "./Icon";
 
 const ToastContext = createContext(null);
 let idSeq = 0;
@@ -65,7 +66,7 @@ export function ToastProvider({ children }) {
                   </button>
                 )}
                 <button type="button" className="toast-close" aria-label="Fermer" onClick={() => dismiss(t.id)}>
-                  ✕
+                  <Icon name="x" size={13} />
                 </button>
               </div>
             ))}

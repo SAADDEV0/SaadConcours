@@ -6,7 +6,7 @@
 export const SECTIONS = [
   {
     label: null,
-    items: [{ key: "dashboard", href: "/admin", icon: "📊", label: "Tableau de bord", exact: true }],
+    items: [{ key: "dashboard", href: "/admin", icon: "dashboard", label: "Tableau de bord", exact: true }],
   },
   {
     label: "Contenu",
@@ -14,7 +14,7 @@ export const SECTIONS = [
       {
         key: "concours",
         href: "/admin/concours",
-        icon: "📚",
+        icon: "book",
         label: "Concours",
         children: [
           { key: "concours-liste", href: "/admin/concours", label: "Liste", exact: true },
@@ -23,20 +23,20 @@ export const SECTIONS = [
           { key: "concours-filieres", href: "/admin/concours/filieres", label: "Filières" },
         ],
       },
-      { key: "cours", href: "/admin/cours", icon: "📖", label: "Cours" },
-      { key: "evaluation", href: "/admin/evaluation", icon: "📝", label: "Évaluation" },
-      { key: "blog", href: "/admin/blog", icon: "📰", label: "Blog" },
+      { key: "cours", href: "/admin/cours", icon: "notebook", label: "Cours" },
+      { key: "evaluation", href: "/admin/evaluation", icon: "clipboard", label: "Évaluation" },
+      { key: "blog", href: "/admin/blog", icon: "newspaper", label: "Blog" },
     ],
   },
   {
     label: "Diffusion",
     items: [
-      { key: "concours-ouverts", href: "/admin/concours-ouverts", icon: "🆕", label: "Concours ouverts" },
-      { key: "reseaux", href: "/admin/reseaux", icon: "📣", label: "Réseaux sociaux" },
+      { key: "concours-ouverts", href: "/admin/concours-ouverts", icon: "sparkles", label: "Concours ouverts" },
+      { key: "reseaux", href: "/admin/reseaux", icon: "megaphone", label: "Réseaux sociaux" },
       {
         key: "alertes",
         href: "/admin/alertes",
-        icon: "🔔",
+        icon: "bell",
         label: "Alertes email",
         children: [
           { key: "alertes-reglages", href: "/admin/alertes", label: "Réglages d'alerte", exact: true },
@@ -52,7 +52,7 @@ export const SECTIONS = [
       {
         key: "reglages",
         href: "/admin/reglages",
-        icon: "⚙️",
+        icon: "settings",
         label: "Réglages",
         children: [
           { key: "reglages-general", href: "/admin/reglages", label: "Général", exact: true },
@@ -64,7 +64,7 @@ export const SECTIONS = [
   },
   {
     label: "Édition",
-    items: [{ key: "pdf-editor", href: "/admin/pdf-editor", icon: "🎨", label: "Éditeur PDF" }],
+    items: [{ key: "pdf-editor", href: "/admin/pdf-editor", icon: "palette", label: "Éditeur PDF" }],
   },
 ];
 

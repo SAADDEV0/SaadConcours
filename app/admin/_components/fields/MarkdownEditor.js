@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { protectMath, renderMathWhenReady } from "@/app/_shared/mathMarkdown";
 import { ensureKatexCss } from "@/app/_shared/chrome";
 import { ensureMarkedScript } from "@/app/_shared/pdfScripts";
+import Icon from "../ui/Icon";
 
 /* -------------------------------------------------------------------
  * Rich-ish Markdown editor for admin content fields (cours, énoncés,
@@ -186,8 +187,8 @@ const TOOLBAR = [
   { label: "•", title: "Liste à puces", action: "linePrefix", arg: "- " },
   { label: "1.", title: "Liste numérotée", action: "orderedList" },
   { sep: true },
-  { label: "🔗", title: "Lien", action: "link" },
-  { label: "🖼", title: "Image", action: "image" },
+  { label: "lien", title: "Insérer un lien", action: "link" },
+  { label: "img", title: "Insérer une image", action: "image" },
   { label: "▦", title: "Tableau", action: "table" },
   { label: "{ }", title: "Bloc de code", action: "codeBlock" },
   { label: "―", title: "Ligne horizontale", action: "hr" },
@@ -375,13 +376,13 @@ export default function MarkdownEditor({ value, onChange, placeholder, required,
         </div>
         <div className="md-mode-switch">
           <button type="button" data-mode="write" className={mode === "write" ? "active" : ""} onClick={() => setMode("write")}>
-            ✏️ Écrire
+            <Icon name="pen" size={13} /> Écrire
           </button>
           <button type="button" data-mode="split" className={mode === "split" ? "active" : ""} onClick={() => setMode("split")}>
-            ⬍ Fractionné
+            <Icon name="sliders" size={13} /> Fractionné
           </button>
           <button type="button" data-mode="preview" className={mode === "preview" ? "active" : ""} onClick={() => setMode("preview")}>
-            👁 Aperçu
+            <Icon name="eye" size={13} /> Aperçu
           </button>
         </div>
       </div>

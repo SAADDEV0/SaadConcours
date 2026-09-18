@@ -6,6 +6,7 @@ import EmptyState from "../ui/EmptyState";
 import { dayLabelMed, timeAgoFr } from "../../_lib/format";
 import { useConfirm } from "../ui/ConfirmProvider";
 import { useToast } from "../ui/ToastProvider";
+import Icon from "../ui/Icon";
 
 export default function SubscribersManager() {
   const [emails, setEmails] = useState(null);
@@ -160,13 +161,13 @@ export default function SubscribersManager() {
     <div>
       {hasHistory && (
         <div className="admin-card" style={{ marginBottom: 18 }}>
-          <h2 className="admin-section-title">📈 Évolution sur 14 jours</h2>
+          <h2 className="admin-section-title"><Icon name="trendingUp" size={16} /> Évolution sur 14 jours</h2>
           <AreaChart points={history.map((p) => ({ label: dayLabelMed(p.date), value: p.count }))} formatValue={(v) => `${v} abonnés`} />
         </div>
       )}
 
       <div className="admin-card">
-        <h2 className="admin-section-title">➕ Ajouter un abonné</h2>
+        <h2 className="admin-section-title"><Icon name="userPlus" size={16} /> Ajouter un abonné</h2>
         <p className="admin-image-hint" style={{ marginBottom: 12 }}>
           Pour inscrire quelqu'un manuellement (ex : demande reçue par un autre canal).
         </p>
@@ -189,14 +190,14 @@ export default function SubscribersManager() {
       <div className="admin-card">
         <div className="picker-toolbar" style={{ marginBottom: 14 }}>
           <h2 className="admin-section-title" style={{ marginBottom: 0 }}>
-            📧 {emails.length} abonné{emails.length > 1 ? "s" : ""}
+            <Icon name="mail" size={14} /> {emails.length} abonné{emails.length > 1 ? "s" : ""}
           </h2>
           <span className="picker-actions">
             <button type="button" className="admin-link-btn" onClick={copyEmails} disabled={!filtered.length}>
-              📋 Copier
+              <Icon name="files" size={14} /> Copier
             </button>
             <button type="button" className="admin-link-btn" onClick={exportCsv} disabled={!filtered.length}>
-              ⬇️ Exporter .csv
+              <Icon name="download" size={14} /> Exporter .csv
             </button>
           </span>
         </div>
@@ -253,7 +254,7 @@ export default function SubscribersManager() {
                     disabled={busy === email}
                     onClick={() => onDelete(email)}
                   >
-                    🗑️
+                    <Icon name="x" size={14} />
                   </button>
                 </div>
               );
@@ -261,7 +262,7 @@ export default function SubscribersManager() {
           </div>
         ) : (
           <EmptyState
-            icon="📭"
+            icon="inbox"
             title={search.trim() ? "Aucun résultat" : "Aucun abonné pour l'instant"}
             message={search.trim() ? "Essaie un autre terme de recherche." : "Les inscriptions apparaîtront ici."}
           />

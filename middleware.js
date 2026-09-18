@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sha256Hex, constantTimeEqual } from "./lib/security";
+import { verifySessionToken, isSessionRevoked, SESSION_COOKIE } from "./lib/session";
 
 const PROTECTED_API_PREFIXES = [
   "/api/concours",
@@ -34,25 +34,39 @@ function isProtectedApiAlways(pathname) {
   return PROTECTED_API_ALWAYS.some((p) => pathname.startsWith(p));
 }
 
+// The session is a signed, expiring token now rather than a constant equal to
+// sha256(ADMIN_PASSWORD) — see lib/session.js for why that mattered. The
+// signature and expiry checks are pure CPU (Web Crypto, no I/O); the
+// revocation epoch behind them is read from KV at most once a minute per
+// runtime instance, so gating a request still costs no network round-trip.
+async function authorize(req) {
+  const cookie = req.cookies.get(SESSION_COOKIE)?.value;
+  // The mobile admin app has no place for an httpOnly cookie, so it sends
+  // the same token as a Bearer credential instead (see
+  // app/api/admin/login/route.js, which returns it alongside the cookie).
+  const authHeader = req.headers.get("authorization") || "";
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
+
+  for (const token of [cookie, bearer]) {
+    if (!token) continue;
+    const payload = await verifySessionToken(token);
+    if (payload && !(await isSessionRevoked(payload))) return true;
+  }
+  return false;
+}
+
 export async function middleware(req) {
+  const { pathname } = req.nextUrl;
   try {
-    const { pathname } = req.nextUrl;
-    const expected = process.env.ADMIN_PASSWORD;
-    const expectedHash = expected ? await sha256Hex(expected) : null;
-    const cookie = req.cookies.get("sc_admin")?.value;
-    // The mobile admin app has no place for an httpOnly cookie, so it
-    // authenticates with the same hash as a Bearer token instead (see
-    // app/api/admin/login/route.js, which returns it alongside the cookie).
-    const authHeader = req.headers.get("authorization") || "";
-    const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
-    const authorized =
-      Boolean(expectedHash) &&
-      ((Boolean(cookie) && constantTimeEqual(cookie, expectedHash)) ||
-        (Boolean(bearerToken) && constantTimeEqual(bearerToken, expectedHash)));
+    const authorized = await authorize(req);
 
     if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
       if (!authorized) {
-        return NextResponse.redirect(new URL("/admin/login", req.url));
+        const url = new URL("/admin/login", req.url);
+        // Come back to where they were trying to go once logged in, instead
+        // of always dumping them on the dashboard.
+        if (pathname !== "/admin") url.searchParams.set("next", pathname + req.nextUrl.search);
+        return NextResponse.redirect(url);
       }
     }
 
@@ -67,7 +81,6 @@ export async function middleware(req) {
     console.error("middleware error", err);
     // Fail closed on the protected surfaces instead of letting a bug in this
     // function crash the whole request or leave /admin unprotected.
-    const { pathname } = req.nextUrl;
     if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }

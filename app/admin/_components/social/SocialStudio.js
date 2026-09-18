@@ -27,6 +27,7 @@ import HistoryPanel from "./HistoryPanel";
 import ReminderModal from "./ReminderModal";
 import { FacebookPreview, InstagramPreview, WhatsAppPreview } from "./PlatformPreview";
 import "./social-studio.css";
+import Icon from "../ui/Icon";
 
 /* ------------------------------ Studio de publication ------------------------------
  * Réécriture complète du générateur. Trois partis pris :
@@ -46,9 +47,9 @@ import "./social-studio.css";
  * ------------------------------------------------------------------------ */
 
 const VIEWS = [
-  { key: "composer", icon: "✍️", label: "Composer" },
-  { key: "apercu", icon: "👀", label: "Aperçus" },
-  { key: "historique", icon: "🗂️", label: "Historique" },
+  { key: "composer", icon: "pen", label: "Composer" },
+  { key: "apercu", icon: "eye", label: "Aperçus" },
+  { key: "historique", icon: "history", label: "Historique" },
 ];
 
 export default function SocialStudio() {
@@ -291,7 +292,7 @@ export default function SocialStudio() {
     <div className="sgx">
       <header className="sgx-bar">
         <div className="sgx-bar-title">
-          <span className="sgx-bar-mark">📣</span>
+          <span className="sgx-bar-mark"><Icon name="megaphone" size={16} /></span>
           <div>
             <h1>Studio de publication</h1>
             <p>Image + texte prêts à poster — publication manuelle, historique par réseau.</p>
@@ -415,7 +416,7 @@ export default function SocialStudio() {
               {!item && <div className="sgx-canvas-placeholder">Aucun contenu sélectionné</div>}
             </div>
             <button type="button" className="admin-btn secondary sgx-full" onClick={handleDownload} disabled={!blob}>
-              ⬇ Télécharger l'image
+              <Icon name="download" size={14} /> Télécharger l'image
             </button>
           </section>
 
@@ -484,7 +485,7 @@ export default function SocialStudio() {
               <div className="sgx-checks">
                 {checks.map((c) => (
                   <span key={c.label} className={"sgx-check" + (c.ok ? " ok" : " warn")} title={c.hint}>
-                    {c.ok ? "✓" : "!"} {c.label}
+                    {c.ok ? <Icon name="check" size={12} /> : <Icon name="alertTriangle" size={12} />} {c.label}
                   </span>
                 ))}
               </div>
@@ -554,13 +555,13 @@ export default function SocialStudio() {
         </div>
         <div className="sgx-actionbar-btns">
           <button type="button" className="admin-btn secondary" onClick={() => setReminderOpen(true)} disabled={!item}>
-            🕒 Rappel
+            <Icon name="clock" size={14} /> Rappel
           </button>
           <button type="button" className="admin-btn secondary" onClick={handleCopyText} disabled={!item}>
-            {copied ? "✓ Copié" : "📋 Copier le texte"}
+            {copied ? "Copié" : "Copier le texte"}
           </button>
           <button type="button" className="admin-btn sgx-btn-share" onClick={() => setShareOpen(true)} disabled={!item || !blob}>
-            📤 Partager (image + texte)
+            <Icon name="externalLink" size={14} /> Partager (image + texte)
           </button>
         </div>
       </div>

@@ -38,6 +38,7 @@ import ContentPanel from "./ContentPanel";
 import CoverPanel from "./CoverPanel";
 import TemplateGallery from "./TemplateGallery";
 import "./pdf-studio.css";
+import Icon from "../ui/Icon";
 
 // Everything this screen may write back to /api/settings. `pdfLogoDataUrl`
 // and `pdfTemplates` sit outside PDF_TEMPLATE_KEYS on purpose: the uploaded
@@ -110,9 +111,9 @@ const ELEMENT_LABELS = Object.fromEntries(
 );
 
 const TABS = [
-  { key: "templates", icon: "✨", label: "Modèles" },
-  { key: "cover", icon: "🪄", label: "Page de garde" },
-  { key: "content", icon: "📄", label: "Contenu" },
+  { key: "templates", icon: "sparkles", label: "Modèles" },
+  { key: "cover", icon: "palette", label: "Page de garde" },
+  { key: "content", icon: "file", label: "Contenu" },
 ];
 
 const SAMPLE_COURS = {
@@ -497,14 +498,14 @@ export default function PdfStudio() {
       <div className="pdfx-bar">
         <div className="pdfx-bar-title">
           <span className="pdfx-bar-mark" aria-hidden="true">
-            🎨
+            <Icon name="palette" size={18} />
           </span>
           <div>
             <h1 className="pdfx-bar-heading">Éditeur PDF</h1>
             <div className="pdfx-bar-sub">Cours · Concours · Évaluation</div>
           </div>
         </div>
-        <span className={"pdfx-pill " + (dirty ? "is-dirty" : "is-saved")}>{dirty ? "● Modifications non enregistrées" : "✓ À jour"}</span>
+        <span className={"pdfx-pill " + (dirty ? "is-dirty" : "is-saved")}>{dirty ? "Modifications non enregistrées" : "À jour"}</span>
         <div className="pdfx-bar-spacer" />
         <div className="pdfx-bar-actions">
           <div className="pdfx-history">
@@ -533,7 +534,7 @@ export default function PdfStudio() {
             ↺ Réinitialiser
           </button>
           <button type="button" className="admin-btn secondary" onClick={handlePreview} disabled={previewLoading}>
-            {previewLoading ? "Génération…" : "👁 Aperçu PDF"}
+            {previewLoading ? "Génération…" : "Aperçu PDF"}
           </button>
           <button type="button" className="admin-btn" onClick={handleSave} disabled={saving || !dirty}>
             {saving ? "Enregistrement…" : "Enregistrer"}

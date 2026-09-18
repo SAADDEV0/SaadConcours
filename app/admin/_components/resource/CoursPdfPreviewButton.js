@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PdfPreviewModal from "../ui/PdfPreviewModal";
 import { ensureCoursPdfScripts } from "@/app/_shared/pdfScripts";
+import Icon from "../ui/Icon";
 
 // Generates the *actual* fiche-de-cours PDF (same buildCoursPdf() the public
 // download button uses, including the currently-saved branding — logo,
@@ -41,7 +42,7 @@ export default function CoursPdfPreviewButton({ form }) {
   return (
     <>
       <button type="button" className="admin-btn secondary" onClick={handlePreview} disabled={loading}>
-        {loading ? "Génération..." : "👁 Aperçu PDF"}
+        {loading ? "Génération…" : "Aperçu PDF"}
       </button>
       {err && <div className="admin-error">{err}</div>}
       <PdfPreviewModal url={blobUrl} title="Aperçu — fiche de cours" onClose={closePreview} />

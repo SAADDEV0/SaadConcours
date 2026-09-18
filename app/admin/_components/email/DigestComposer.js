@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { isUrgentNews } from "../../_lib/newsUtils";
 import EmptyState from "../ui/EmptyState";
 import Modal from "../ui/Modal";
+import Icon from "../ui/Icon";
 
 // One-off / test send, independent of the "Alertes automatiques" toggle and
 // its persisted subject/message/sender defaults in réglages - those stay
@@ -224,10 +225,10 @@ export default function DigestComposer({ settings }) {
               ))}
             </div>
           ) : (
-            <EmptyState icon="🔍" message="Aucun concours ne correspond à cette recherche." />
+            <EmptyState icon="search" message="Aucun concours ne correspond à cette recherche." />
           )
         ) : (
-          <EmptyState icon="📭" message="Aucun concours ouvert pour l'instant." />
+          <EmptyState icon="inbox" message="Aucun concours ouvert pour l'instant." />
         )}
       </div>
 
@@ -270,10 +271,10 @@ export default function DigestComposer({ settings }) {
               ))}
             </div>
           ) : (
-            <EmptyState icon="🔍" message="Aucun abonné ne correspond à cette recherche." />
+            <EmptyState icon="search" message="Aucun abonné ne correspond à cette recherche." />
           )
         ) : (
-          <EmptyState icon="📭" message="Aucun abonné pour l'instant." />
+          <EmptyState icon="inbox" message="Aucun abonné pour l'instant." />
         )}
 
         <div className="admin-form-grid" style={{ marginTop: 16 }}>
@@ -334,7 +335,7 @@ export default function DigestComposer({ settings }) {
         <h2 className="admin-section-title">4. Aperçu et envoi</h2>
         <div className="admin-row-actions" style={{ margin: "16px 0 12px", flexWrap: "wrap" }}>
           <button type="button" className="admin-btn secondary" onClick={openPreview} disabled={!selectedNews.size && !message.trim()}>
-            👁 Aperçu
+            <Icon name="eye" size={14} /> Aperçu
           </button>
           <button type="button" className="admin-btn secondary" onClick={() => send(true)} disabled={sending}>
             Envoyer un test à moi-même
@@ -361,7 +362,7 @@ export default function DigestComposer({ settings }) {
       <Modal open={previewOpen} onClose={() => setPreviewOpen(false)} labelledBy="composer-preview-title">
         <div className="email-preview-modal">
           <h2 className="admin-modal-title" id="composer-preview-title">
-            👁 Aperçu de l'envoi
+            <Icon name="eye" size={14} /> Aperçu de l'envoi
           </h2>
           {previewLoading ? (
             <div className="admin-image-hint">Chargement de l'aperçu...</div>

@@ -10,6 +10,7 @@ import {
   licenceFiliereLabel,
 } from "@/lib/coursTaxonomy";
 import { STATUT_OPTIONS, statutLabel } from "./statut";
+import Icon from "@/app/admin/_components/ui/Icon";
 
 /* -------------------------------------------------------------------
  * Field-driven CRUD panel. Each resource (concours/cours/quiz/news) is
@@ -71,12 +72,23 @@ export const CONCOURS_CONFIG = {
       // A concours counts as "having a corrigé" whether it's the reviewed
       // corrige_md field or a file already committed to data/corriges/ that
       // was never copied into it — both cases are already served to the
-      // public site (see getCorrigeFile in lib/store.js), so both show ✅;
+      // public site (see getCorrigeFile in lib/store.js), so both show a
+      // check;
       // only the file-only case gets a small superscript so it's still
       // possible to spot which ones haven't been copied into the field yet.
       key: "corrige",
       label: "Corrigé",
-      render: (i) => (i.corrige_md ? "✅" : i.corrige_from_github ? "✅ ᴳ" : "—"),
+      render: (i) =>
+        i.corrige_md ? (
+          <Icon name="checkCircle" size={15} title="Corrigé rédigé" />
+        ) : i.corrige_from_github ? (
+          <span className="admin-inline-icon">
+            <Icon name="checkCircle" size={15} title="Corrigé présent dans le dépôt" />
+            <sup>G</sup>
+          </span>
+        ) : (
+          "—"
+        ),
     },
     { key: "date_ajout", label: "Ajouté le", render: (i) => i.date_ajout || "—" },
   ],
@@ -112,7 +124,7 @@ export const COURS_CONFIG = {
     { key: "parcours", label: "Parcours", render: (i) => (i.parcours ? licenceParcoursLabel(i.parcours) : "Commun") },
     { key: "semestre", label: "Semestre", render: (i) => licenceSemestreLabel(i.semestre) || "—" },
     { key: "filiere", label: "Filière", render: (i) => (i.filiere ? licenceFiliereLabel(i.filiere) : "—") },
-    { key: "available", label: "Disponible", render: (i) => (i.available ? "✅" : "—") },
+    { key: "available", label: "Disponible", render: (i) => (i.available ? <Icon name="checkCircle" size={15} title="Disponible" /> : "—") },
   ],
 };
 
@@ -132,7 +144,7 @@ export const QUIZ_CONFIG = {
     { key: "module", label: "Module" },
     { key: "title", label: "Titre" },
     { key: "nb", label: "Questions", render: (i) => (i.questions || []).length },
-    { key: "available", label: "Disponible", render: (i) => (i.available ? "✅" : "—") },
+    { key: "available", label: "Disponible", render: (i) => (i.available ? <Icon name="checkCircle" size={15} title="Disponible" /> : "—") },
   ],
 };
 
@@ -157,7 +169,7 @@ export const NEWS_CONFIG = {
     { key: "etablissement", label: "Étab." },
     { key: "ville", label: "Ville" },
     { key: "date_limite", label: "Date limite" },
-    { key: "cloture", label: "Clôturé", render: (i) => (i.cloture ? "✅" : "—") },
+    { key: "cloture", label: "Clôturé", render: (i) => (i.cloture ? <Icon name="checkCircle" size={15} title="Clôturé" /> : "—") },
   ],
 };
 
@@ -184,7 +196,7 @@ export const BLOG_CONFIG = {
     { key: "id", label: "Slug", mono: true },
     { key: "title", label: "Titre" },
     { key: "publishedAt", label: "Publié le" },
-    { key: "available", label: "Publié", render: (i) => (i.available ? "✅" : "🕓 Brouillon") },
+    { key: "available", label: "Publié", render: (i) => (i.available ? <Icon name="checkCircle" size={15} title="Publié" /> : "Brouillon") },
   ],
   duplicateKeys: ["title"],
 };
