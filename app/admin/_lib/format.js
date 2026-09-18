@@ -33,3 +33,14 @@ export function timeAgoFr(timestampMs) {
   if (diffD < 30) return `il y a ${diffD} j`;
   return new Date(timestampMs).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 }
+
+// Exact date + hour, for the places where timeAgoFr's four coarse buckets
+// aren't enough — typically a tooltip listing every occurrence of an event.
+export function dateTimeFr(timestampMs) {
+  return new Date(timestampMs).toLocaleString("fr-FR", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

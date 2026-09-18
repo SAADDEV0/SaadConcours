@@ -9,10 +9,23 @@ import TodoCard from "./TodoCard";
 import TimelineCard from "./TimelineCard";
 import EmptyState from "../ui/EmptyState";
 import Skeleton from "../ui/Skeleton";
-import { trendFromSeries, dayLabelShort, dayLabelMed, timeAgoFr } from "../../_lib/format";
+import { trendFromSeries, dayLabelShort, dayLabelMed, timeAgoFr, dateTimeFr } from "../../_lib/format";
 import { buildTodoItems } from "../../_lib/todo";
 
 const CATEGORIE_COLORS = ["var(--accent)", "var(--green)", "var(--amber)", "var(--violet)", "var(--red)", "var(--text-faint)"];
+
+// Hover detail for a "recherche sans résultat" row: the exact date + hour of
+// every occurrence still inside the event log's rolling window (see
+// searchMissStats in /api/admin/stats). The tally on the right counts every
+// miss ever recorded, so it can exceed the number of dated lines — say so
+// explicitly instead of letting the two numbers silently disagree.
+function searchMissTimesTitle(r) {
+  if (!r.times?.length) return "Recherches comptées avant le suivi des dates — aucune date disponible.";
+  const lines = r.times.map((t) => `• ${dateTimeFr(new Date(t).getTime())}`);
+  const older = r.count - r.times.length;
+  if (older > 0) lines.push(`• + ${older} plus ancienne${older > 1 ? "s" : ""} (hors historique)`);
+  return lines.join("\n");
+}
 
 // Renders one dashboard widget by id, given the shared fetch context. Kept
 // separate from the (serializable) registry in _lib/widgets.js so that file
@@ -426,7 +439,12 @@ export function renderWidget(id, ctx, onDismiss) {
             <ol className="stat-rank-list">
               {rows.map((r) => (
                 <li key={r.query}>
-                  <span>« {r.query} »</span>
+                  <span className="search-miss-term">
+                    « {r.query} »
+                    <span className="search-miss-time" title={searchMissTimesTitle(r)}>
+                      {r.lastAt ? `dernière ${timeAgoFr(new Date(r.lastAt).getTime())}` : "date non suivie"}
+                    </span>
+                  </span>
                   <strong>
                     {r.count} recherche{r.count > 1 ? "s" : ""}
                   </strong>

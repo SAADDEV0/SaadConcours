@@ -1178,6 +1178,11 @@
 .stat-rank-list li::before{content:counter(rank) "."; color:var(--text-faint); margin-right:8px; font-weight:600;}
 .stat-rank-list li strong{color:var(--accent); white-space:nowrap;}
 
+/* "Recherches sans résultat": terme + date de la dernière occurrence, le
+   compteur restant aligné à droite comme dans les autres classements. */
+.search-miss-term{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.search-miss-time{color:var(--text-faint); font-size:.74rem; cursor:help;}
+
 /* ---------- Admin: dashboard "État du système" widget ---------- */
 .state-list{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:2px;}
 .state-row{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--border); font-size:.85rem;}

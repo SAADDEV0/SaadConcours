@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getStats, getAdStats, getTopPaths, getVisitCities, getPdfCities, getRecentVisits, getRecentPdfDownloads, getTimeline, getDigestLog, getTopSearchMisses } from "@/lib/analytics";
+import { getStats, getAdStats, getTopPaths, getVisitCities, getPdfCities, getRecentVisits, getRecentPdfDownloads, getTimeline, getDigestLog, getTopSearchMisses, getSearchMissLog } from "@/lib/analytics";
 import { getAllConcours, getAllCours, getAllQuiz, getAllNews, getAllBlog, getCorrigeIds, getTaxonomyCoverage, getSettings } from "@/lib/store";
 import { FILIERE_CATEGORIES } from "@/lib/taxonomy";
 
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 // only reads, but still sits behind the admin cookie (see middleware.js)
 // since it exposes usage numbers not meant to be public.
 export async function GET() {
-  const [stats, concours, cours, quiz, news, blog, corrigeIds, taxonomyCoverage, settings, adStats, topPaths, visitCities, pdfCities, recentVisits, recentPdfDownloads, timeline, digestLog, searchMisses] =
+  const [stats, concours, cours, quiz, news, blog, corrigeIds, taxonomyCoverage, settings, adStats, topPaths, visitCities, pdfCities, recentVisits, recentPdfDownloads, timeline, digestLog, searchMisses, searchMissLog] =
     await Promise.all([
       getStats(),
       getAllConcours(),
@@ -33,6 +33,7 @@ export async function GET() {
       getTimeline(),
       getDigestLog(20),
       getTopSearchMisses(15),
+      getSearchMissLog(),
     ]);
 
   // A concours counts as "having a corrigé" whether it's the reviewed
@@ -181,13 +182,36 @@ export async function GET() {
   const recentVisitLog = recentVisits.map((v) => ({ ...v, label: labelForPath(v.path) }));
   const recentPdfLog = recentPdfDownloads.map((d) => ({ ...d, label: labelForPdfItem(d.kind, d.id) }));
 
+  // The miss counter is a plain tally with no notion of time, so the "quand"
+  // of each term is reconstructed from the event log (newest first, see
+  // trackSearchMiss). A term whose occurrences have all scrolled out of that
+  // capped window keeps lastAt/times empty rather than borrowing a wrong
+  // date — so the count can legitimately be higher than times.length.
+  const missTimes = new Map();
+  for (const e of searchMissLog) {
+    if (!e?.query || !e?.at) continue;
+    const seen = missTimes.get(e.query);
+    if (seen) seen.push(e.at);
+    else missTimes.set(e.query, [e.at]);
+  }
+  const searchMissStats = searchMisses.map(({ member, score }) => {
+    const times = missTimes.get(member) || [];
+    return {
+      query: member,
+      count: score,
+      lastAt: times[0] || null,
+      firstAt: times.length ? times[times.length - 1] : null,
+      times: times.slice(0, 20),
+    };
+  });
+
   return NextResponse.json({
     ...stats,
     topConcours,
     totalVisits: stats.visitsTotal,
     timeline,
     digestLog,
-    searchMisses: searchMisses.map(({ member, score }) => ({ query: member, count: score })),
+    searchMisses: searchMissStats,
     recentConcours,
     concoursSansCorrige,
     newsExpiringSoon,
