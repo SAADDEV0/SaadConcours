@@ -13,7 +13,7 @@
     "ISCAE"
   ],
   "newsScraperEnabled": true,
-  "homeNewsBoxesEnabled": true,
+  "homeNewsBoxesEnabled": false,
   "newsAlertsEnabled": false,
   "newsAlertsMessage": "",
   "newsAlertsSubject": "⏰ Ces concours ferment bientôt",
