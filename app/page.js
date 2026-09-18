@@ -64,6 +64,11 @@ export default async function HomePage() {
   // "Derniers concours ajoutés" widget.
   const recentConcours = allConcours.slice(-4).reverse();
 
+  // Interrupteur des réglages (« Encarts concours sur la page d'accueil ») :
+  // masque les deux encarts alimentés par les concours ouverts sans toucher
+  // à /news. Absent = activé, comme newsScraperEnabled.
+  const showNewsBoxes = settings?.homeNewsBoxesEnabled !== false;
+
   const newsItems = visibleNews(rawNews, settings);
   const open = newsItems.filter((i) => !i.cloture);
   const urgent = open
@@ -89,7 +94,7 @@ export default async function HomePage() {
 
         <div id="homeBannerAd" />
 
-        {urgent.length > 0 && (
+        {showNewsBoxes && urgent.length > 0 && (
           <section className="urgent-alert" id="urgentAlert">
             <div className="urgent-alert-head">
               <span className="urgent-alert-title">
@@ -121,7 +126,7 @@ export default async function HomePage() {
           </section>
         )}
 
-        {recentOpen.length > 0 && (
+        {showNewsBoxes && recentOpen.length > 0 && (
           <section className="home-alert" id="homeAlert">
             <div className="home-alert-head">
               <span className="home-alert-title">🔔 Concours récemment ouverts</span>

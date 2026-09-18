@@ -8,6 +8,7 @@ const OWN_KEYS = [
   ...SOCIAL_FIELDS.map((f) => f.key),
   "newsEtablissementsVisibles",
   "newsScraperEnabled",
+  "homeNewsBoxesEnabled",
   "gaEnabled",
   "gaMeasurementId",
 ];
@@ -147,6 +148,25 @@ export default function GeneralSettingsForm() {
               type="checkbox"
               checked={form.newsScraperEnabled !== false}
               onChange={(e) => setForm({ ...form, newsScraperEnabled: e.target.checked })}
+            />
+            <span className="admin-switch-thumb" aria-hidden="true" />
+          </span>
+        </label>
+
+        <label className="admin-switch-row" style={{ marginBottom: 16 }}>
+          <span className="admin-switch-row-label">
+            Encarts concours sur la page d'accueil
+            <span className="admin-switch-row-hint">
+              Affiche sur l'accueil les deux encarts alimentés par les concours ouverts : « ⏰ X concours ferment
+              bientôt » et « 🔔 Concours récemment ouverts ». Désactive pour les masquer — la page /news et le reste
+              du site ne changent pas.
+            </span>
+          </span>
+          <span className="admin-switch">
+            <input
+              type="checkbox"
+              checked={form.homeNewsBoxesEnabled !== false}
+              onChange={(e) => setForm({ ...form, homeNewsBoxesEnabled: e.target.checked })}
             />
             <span className="admin-switch-thumb" aria-hidden="true" />
           </span>
