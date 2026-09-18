@@ -12,7 +12,7 @@
     "FEG",
     "ISCAE"
   ],
-  "newsScraperEnabled": true,
+  "newsScraperEnabled": false,
   "homeNewsBoxesEnabled": false,
   "newsAlertsEnabled": false,
   "newsAlertsMessage": "",
