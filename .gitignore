@@ -9,3 +9,16 @@ npm-debug.log*
 .env*.local
 .vercel
 .env*
+
+# Local-only working dirs. None of these are used by the website, so they stay
+# out of git entirely and therefore out of every deployment. Together they are
+# ~1.1GB; since Vercel keeps every deployment forever on Hobby, a single
+# `git add -A` would otherwise add that much to Deployment Storage per push.
+# (video/node_modules alone holds a 209MB chrome-headless-shell that GitHub
+# would reject outright, being over its 100MB per-file limit.)
+# NOTE: ignored means not backed up to GitHub — keep your own copy of these.
+video/
+mobile/
+docs/
+scripts/collecte/
+.claude/

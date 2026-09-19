@@ -155,7 +155,7 @@ export default async function RootLayout({ children }) {
         {children}
         <EmailGateModal />
         <Analytics />
-        <SpeedInsights sampleRate={0.3} />
+        <SpeedInsights sampleRate={0.05} />
         {/* marked/jsPDF/jsPDF-AutoTable/svg2pdf.js/MathJax used to load here
            unconditionally on every route — ~250KB+ of PDF-export/typesetting
            JS paid for by every listing page, the blog, /news, /faq and all
