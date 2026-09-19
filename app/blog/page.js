@@ -5,6 +5,20 @@ import BlogExplorer from "./BlogExplorer";
 import { blogCardHtml } from "../_shared/blogCard";
 import { BLOG_CATEGORIES } from "../../lib/blogTaxonomy";
 
+// Served as prerendered HTML revalidated hourly instead of rendered per
+// request. lib/github.js reads the data JSON with `cache: "no-store"` (
+// concours.json is 2.59MB, past Next's 2MB fetch-cache entry limit), and a
+// no-store fetch in the render path opts the whole route out of static
+// generation -- confirmed by building with and without GITHUB_TOKEN, where
+// these routes flip between `o` and `f`.
+//
+// The window is an hour, not minutes, on purpose: ISR only saves work when
+// requests arrive faster than the window, and these pages see a few views an
+// hour. Freshness does not depend on it either -- admin edits commit to
+// GitHub, which triggers a redeploy and rebuilds every page anyway.
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 const SITE_URL = "https://www.saadconcours.space";
 
 // Server-rendered (unlike /concours, /cours, /evaluation, /news which are

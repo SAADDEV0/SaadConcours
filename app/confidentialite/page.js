@@ -1,3 +1,10 @@
+// Fully static legal copy — no data source, no reason to render per request.
+// It was only dynamic because the shared chrome/footer pulls settings through
+// lib/github.js, which reads with `cache: "no-store"` and drags the whole
+// route out of static generation.
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export const metadata = {
   title: "Confidentialité",
   description: "Ce que SaadConcours collecte comme données et pourquoi.",
