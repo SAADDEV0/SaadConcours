@@ -15,6 +15,27 @@ const nextConfig = {
       ],
     },
   },
+
+  async headers() {
+    return [
+      {
+        // Without this, public/ is served as `max-age=0, must-revalidate`, so
+        // every returning visitor re-fetches the scans of every concours page
+        // they open — and image bytes are ~95% of this site's egress.
+        //
+        // The scans are archival: a file is named after the year, the ville,
+        // the école and the filière of the paper it reproduces, so a given
+        // path always means the same document. The cost of `immutable` is
+        // that replacing a scan in place (same path, better quality via
+        // /api/admin/upload-image) stays invisible to anyone who already
+        // loaded it — publish such a rescan under a new filename instead.
+        source: "/images/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
