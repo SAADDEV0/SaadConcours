@@ -491,9 +491,27 @@ export const chromeScript = function initChrome() {
 
 // A public asset path stored in JSON as "data/foo.json" or "images/x.png"
 // needs a leading slash now that pages live at nested routes (/cours, /admin, ...).
+//
+// The scans under images/ are ~80% of everything a deployment stores, and
+// Vercel keeps a copy per deployment forever, so they dominate Deployment
+// Storage growth. Setting NEXT_PUBLIC_IMAGE_CDN_URL serves them from external
+// object storage (Cloudflare R2) instead, without rewriting a single stored
+// path: concours.json still holds "images/Ville/x.webp" and only the origin
+// changes. Data files are deliberately excluded — they stay local.
+//
+// Unset, this behaves exactly as before, so deploying the change on its own
+// is a no-op. Segments are percent-encoded for the CDN because some folders
+// carry spaces and accents ("Béni Mellal"); the local branch is left byte
+// for byte as it was, since the browser already handles that case.
+const IMAGE_CDN = (process.env.NEXT_PUBLIC_IMAGE_CDN_URL || "").replace(/\/+$/, "");
+
 export function pub(path) {
   if (!path) return path;
-  return path.startsWith("/") ? path : "/" + path;
+  const clean = path.startsWith("/") ? path.slice(1) : path;
+  if (IMAGE_CDN && clean.startsWith("images/")) {
+    return IMAGE_CDN + "/" + clean.split("/").map(encodeURIComponent).join("/");
+  }
+  return "/" + clean;
 }
 
 /* ------------------------- Counter batching -------------------------------
