@@ -6,7 +6,7 @@ import {
   trackPathView,
   trackPdfDownload,
   trackSearchMiss,
-  checkRateLimit,
+  checkRateLimitBulk,
   getClientIp,
   getClientGeo,
 } from "@/lib/analytics";
@@ -91,23 +91,34 @@ export async function POST(req) {
     const ip = getClientIp(req);
     const ctx = { ip, ...getClientGeo(req) };
 
+    // Grouped by kind so the window can be charged once per kind instead of
+    // once per event. A visitor who opens five concours pages before the
+    // queue flushes used to spend five KV commands on the limiter alone,
+    // before a single counter moved; now that is one. The budget itself is
+    // untouched — see checkRateLimitBulk.
+    const byKind = new Map();
+    for (const event of events) {
+      if (!HANDLERS[event?.t]) continue;
+      if (!byKind.has(event.t)) byKind.set(event.t, []);
+      byKind.get(event.t).push(event);
+    }
+
     // Sequential on purpose: these are counter increments whose order does
     // not matter and whose latency nobody waits on (the client uses
     // sendBeacon and ignores the response), so there is no reason to fan out
     // and risk hammering KV with 25 concurrent connections.
-    for (const event of events) {
-      const handler = HANDLERS[event?.t];
-      if (!handler) continue;
-      const [prefix, max, windowSeconds] = handler.limit;
+    for (const [kind, group] of byKind) {
+      const [prefix, max, windowSeconds] = HANDLERS[kind].limit;
       // Per event, not per request: batching changes how events travel, not
       // how many a single IP is allowed to record.
-      const allowed = await checkRateLimit(`${prefix}:${ip}`, max, windowSeconds);
-      if (!allowed) continue;
-      try {
-        await handler.run(event, ctx);
-      } catch (err) {
-        // One bad event must not discard the rest of the batch.
-        console.error(`track batch: ${event.t} failed`, err);
+      const allowed = await checkRateLimitBulk(`${prefix}:${ip}`, group.length, max, windowSeconds);
+      for (const event of group.slice(0, allowed)) {
+        try {
+          await HANDLERS[kind].run(event, ctx);
+        } catch (err) {
+          // One bad event must not discard the rest of the batch.
+          console.error(`track batch: ${kind} failed`, err);
+        }
       }
     }
   } catch (err) {
