@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getAllConcours, getCorrigeFile, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
-import { formatQCM } from "../../_shared/concoursFormat";
+import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { faqJsonLd } from "../../_shared/faqSchema";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
@@ -96,6 +96,16 @@ function buildConcoursFaq(c, hasCorrige) {
   return faqs;
 }
 
+// breaks: true because an énoncé is a transcribed exam paper, not prose — its
+// line breaks are the layout (the header block, a question and its stem, a
+// "Travail à faire" list). Markdown's default would fold each run of lines
+// into one wrapped paragraph. Safe here specifically because formatQCM has
+// already pulled the answer choices out onto bullet lines, and nothing left in
+// the corpus is soft-wrapped mid-sentence.
+function renderEnonce(md) {
+  return markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
+}
+
 export async function generateMetadata({ params }) {
   const { c } = await findConcours(params.id);
   if (!c) return {};
@@ -152,9 +162,9 @@ export default async function ConcoursDetailPage({ params }) {
   const settings = await getSettings().catch(() => null);
   const adsGloballyEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
-  const enonceHtml = renderMarkdownWithMath(marked, formatQCM(c.enonce_md) || "*Énoncé non disponible.*");
+  const enonceHtml = renderEnonce(c.enonce_md || "*Énoncé non disponible.*");
   const corrigeMd = await resolveCorrigeMd(c);
-  const corrigeHtml = corrigeMd ? renderMarkdownWithMath(marked, formatQCM(corrigeMd)) : null;
+  const corrigeHtml = corrigeMd ? renderEnonce(corrigeMd) : null;
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);

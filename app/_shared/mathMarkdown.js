@@ -44,9 +44,9 @@ export function protectMath(md) {
   return { text, restore };
 }
 
-export function renderMarkdownWithMath(markedInstance, md) {
+export function renderMarkdownWithMath(markedInstance, md, options) {
   const { text, restore } = protectMath(md);
-  return restore(markedInstance.parse(text));
+  return restore(markedInstance.parse(text, options));
 }
 
 const KATEX_DELIMITERS = [

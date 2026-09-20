@@ -6,6 +6,7 @@
 // that knows how to lay this out instead of two copies drifting apart.
 
 import { pub, trackPdfDownload } from "./chrome";
+import { formatQCM } from "./concoursFormat";
 import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { convertMathSpansToPlainText } from "./latexPlainText";
@@ -272,7 +273,11 @@ export async function downloadConcoursPdf(c) {
     }
   }
 
-  renderMarkdown(c.enonce_md || "Énoncé non disponible.");
+  // formatQCM before renderMarkdown for the same reason the web page does it:
+  // the source crams answer choices onto one line, and renderMarkdown would
+  // wrap that into a paragraph. It emits "- " bullets, which the bulletPlainM
+  // branch above already lays out one per line.
+  renderMarkdown(formatQCM(c.enonce_md || "Énoncé non disponible."));
 
   y += 4;
   ensureSpace(14);
@@ -311,7 +316,7 @@ export async function downloadConcoursPdf(c) {
     doc.setDrawColor(200, 200, 210);
     doc.line(marginX, y, pageW - marginX, y);
     y += 6;
-    renderMarkdown(corrigeMd);
+    renderMarkdown(formatQCM(corrigeMd));
   }
 
   for (const imgPath of c.images || []) {

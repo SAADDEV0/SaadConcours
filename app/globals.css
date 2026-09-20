@@ -312,6 +312,22 @@ header{
 .enonce-content .katex{white-space:normal;}
 .enonce-content code{background:color-mix(in srgb, var(--text) 12%, var(--bg-elev)); padding:1px 5px; border-radius:4px; font-size:.88em;}
 .enonce-content blockquote{border-left:3px solid var(--accent); margin:10px 0; padding:2px 14px; color:var(--text-dim);}
+.enonce-content p{margin:10px 0; line-height:1.65;}
+.enonce-content h3,.enonce-content h4{margin:22px 0 10px;}
+.enonce-content ul,.enonce-content ol{margin:10px 0; padding-left:1.35em;}
+.enonce-content li{margin:5px 0; line-height:1.6;}
+/* QCM answer choices (tagged by markQcmOptions in app/_shared/concoursFormat.js).
+   Each option gets its own boxed row so a 4-option question reads as a list of
+   things to pick from instead of a paragraph. The ul keeps its default bullets
+   for every other list on the page, hence :has() rather than a blanket rule —
+   and where :has() is unsupported the li's `display:block` still suppresses the
+   marker, so the worst case is a slightly indented list, never stray bullets. */
+.enonce-content ul:has(> li.qcm-opt){list-style:none; padding-left:0; margin:10px 0 16px;}
+.enonce-content li.qcm-opt{position:relative; display:block; margin:6px 0; padding:8px 12px 8px 38px; border:1px solid var(--border); border-radius:8px; background:color-mix(in srgb, var(--text) 4%, var(--bg-elev));}
+.enonce-content li.qcm-opt > p{margin:0;}
+/* Out of the flow so a two-line option wraps under its own text rather than
+   back under the letter. */
+.enonce-content .qcm-letter{position:absolute; left:12px; top:8px; color:var(--accent); font-weight:700;}
 .image-gallery{display:flex; flex-direction:column; gap:14px;}
 .image-gallery img{width:100%; border-radius:8px; border:1px solid var(--border); cursor:zoom-in;}
 .no-images{color:var(--text-faint); font-size:.88rem; font-style:italic;}
