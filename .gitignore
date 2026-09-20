@@ -26,3 +26,10 @@ scripts/collecte/
 # Ledger written by scripts/upload-images-to-r2.sh so re-runs skip
 # objects already in R2. Local bookkeeping, not part of the site.
 scripts/.r2-uploaded
+
+# wrangler local secrets — never commit
+.dev.vars
+
+# OpenNext build output for Cloudflare
+.open-next/
+.wrangler/

@@ -1,0 +1,42 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "saad-concours",
+	"compatibility_date": "2026-09-01",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+	// Static output (.next/static, public/) is served straight from
+	// Cloudflare's edge, free and uncounted, so only genuinely dynamic
+	// requests reach the Worker. That matters here: the 8 public listing
+	// pages and every [id] page are prerendered, so most traffic never
+	// touches the request quota at all.
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+
+	// Required by the cache layer to revalidate itself; the service name
+	// must match "name" above.
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "saad-concours"
+		}
+	],
+
+	// ISR cache lives in Workers KV rather than R2, deliberately: R2 demands
+	// a payment method on file even for its free tier, and the whole point of
+	// this move is to stay at zero cost. KV's free allowance (100k reads and
+	// 1k writes a day) is far above this site's ISR usage, which ran roughly
+	// 16k reads and 3k writes a MONTH on Vercel.
+	//
+	// The namespace has to exist before the first deploy:
+	//   npx wrangler kv namespace create NEXT_INC_CACHE_KV
+	// then paste the returned id below.
+	"kv_namespaces": [
+		{
+			"binding": "NEXT_INC_CACHE_KV",
+			"id": "<PASTE_KV_NAMESPACE_ID_HERE>"
+		}
+	]
+}
