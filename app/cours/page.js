@@ -13,12 +13,12 @@ import CoursExplorer from "./CoursExplorer";
 // generation -- confirmed by building with and without GITHUB_TOKEN, where
 // these routes flip between `o` and `f`.
 //
-// The window is an hour, not minutes, on purpose: ISR only saves work when
-// requests arrive faster than the window, and these pages see a few views an
-// hour. Freshness does not depend on it either -- admin edits commit to
-// GitHub, which triggers a redeploy and rebuilds every page anyway.
+// No revalidation window at all: freshness comes from deploys, not ISR.
+// Every admin edit commits to GitHub, which triggers a redeploy that rebuilds
+// every page -- so an hourly revalidate was re-rendering pages that were
+// already current and billing Fluid CPU for it.
 export const dynamic = "force-static";
-export const revalidate = 3600;
+export const revalidate = false;
 
 // Server-rendered on first load (mirrors app/concours/page.js) so every
 // module already has a real <a href="/cours/[id]"> link — and the fiche's

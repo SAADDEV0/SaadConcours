@@ -1,9 +1,10 @@
 // Fully static legal copy — no data source, no reason to render per request.
 // It was only dynamic because the shared chrome/footer pulls settings through
 // lib/github.js, which reads with `cache: "no-store"` and drags the whole
-// route out of static generation.
+// route out of static generation. Legal copy only changes when the file
+// changes, which means a deploy — so there is nothing for ISR to revalidate.
 export const dynamic = "force-static";
-export const revalidate = 3600;
+export const revalidate = false;
 
 export const metadata = {
   title: "Confidentialité",

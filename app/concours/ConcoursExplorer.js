@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { chromeScript } from "../_shared/chrome";
+import { chromeScript, queueTrackEvent } from "../_shared/chrome";
 import { downloadConcoursPdf } from "../_shared/concoursPdf";
 import { FILIERE_CATEGORIES, categoryOptions, subFiliereOptions } from "../../lib/taxonomy";
 import { concoursCardHtml } from "../_shared/concoursCard";
@@ -28,11 +28,7 @@ export default function ConcoursExplorer({ initialData }) {
     function reportSearchMissDebounced(query) {
       clearTimeout(searchMissTimer);
       searchMissTimer = setTimeout(() => {
-        fetch("/api/track/search-miss", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
-        }).catch(() => {});
+        queueTrackEvent({ t: "search-miss", query });
       }, 900);
     }
 

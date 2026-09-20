@@ -117,6 +117,25 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// Prerendered at build time rather than server-rendered per request.
+//
+// generateStaticParams alone was not enough: lib/github.js reads the data
+// with `cache: "no-store"` (concours.json is past Next's 2MB fetch-cache
+// entry limit), and a no-store fetch anywhere in the render path opts the
+// whole route out of static generation. The listing pages already carry
+// these two lines for exactly that reason — see app/concours/page.js — but
+// the detail routes never got them, so production served every one of them
+// dynamically: `x-vercel-cache: MISS` with `no-store` on each visit, each
+// one re-fetching and re-parsing the full 2.5MB list twice (once in
+// generateMetadata, once here) before rendering.
+//
+// `revalidate = false` because freshness does not come from ISR here: every
+// admin edit commits to GitHub, which triggers a redeploy that rebuilds all
+// of these pages anyway. Hourly revalidation was rebuilding pages that were
+// already current.
+export const dynamic = "force-static";
+export const revalidate = false;
+
 export async function generateStaticParams() {
   try {
     const list = await getAllConcours();

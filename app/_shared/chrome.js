@@ -363,14 +363,7 @@ export const chromeScript = function initChrome() {
   // banner the visitor is looking at.
   function trackAdEvent(id, type) {
     if (!id) return;
-    try {
-      fetch("/api/track/ad", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, type }),
-        keepalive: true,
-      }).catch(() => {});
-    } catch {}
+    queueTrackEvent({ t: "ad", id, type });
   }
 
   // First-party visit tracking, replacing the old public visitor-counter
@@ -403,12 +396,7 @@ export const chromeScript = function initChrome() {
       }
     }
 
-    fetch("/api/track/pageview", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source: detectSource() }),
-      keepalive: true,
-    }).catch(() => {});
+    queueTrackEvent({ t: "pageview", source: detectSource() });
   })();
 
   // Per-page view counter — unlike initVisitorTracking above (once per
@@ -416,12 +404,7 @@ export const chromeScript = function initChrome() {
   // dashboard can show a view count for each individual page, not just
   // concours detail pages (already covered by trackConcoursView).
   (function initPathTracking() {
-    fetch("/api/track/page-path", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: location.pathname }),
-      keepalive: true,
-    }).catch(() => {});
+    queueTrackEvent({ t: "page-path", path: location.pathname });
   })();
 
   (function initDua() {
@@ -513,27 +496,102 @@ export function pub(path) {
   return path.startsWith("/") ? path : "/" + path;
 }
 
-// Fire-and-forget usage counters feeding the admin stats dashboard. Never
-// awaited by callers and never allowed to throw — a tracking hiccup must
-// not get in the way of someone's PDF download or a page loading.
-export function trackPdfDownload(kind, id) {
+/* ------------------------- Counter batching -------------------------------
+ * Fire-and-forget usage counters feeding the admin stats dashboard. Never
+ * awaited by callers and never allowed to throw — a tracking hiccup must not
+ * get in the way of someone's PDF download or a page loading.
+ *
+ * They used to POST one request each. That was the single biggest source of
+ * serverless invocations on the site: page-path fires on every load, and the
+ * rotating ad zones fire a "view" per rotation, so one visitor reading one
+ * page for a couple of minutes could open ~30 connections — 30 function
+ * invocations to record 30 integers.
+ *
+ * Now every counter goes into an in-memory queue that is flushed as a single
+ * POST to /api/track/batch: on a short timer, when the queue fills, and when
+ * the page goes away. That last case uses sendBeacon, which the browser
+ * delivers after teardown — a plain fetch would be cancelled mid-flight, so
+ * batching without it would silently lose the events of anyone who closes the
+ * tab quickly.
+ *
+ * The per-event single routes (/api/track/ad, .../pageview, ...) are kept:
+ * a visitor sitting on an already-cached page still posts to them until they
+ * reload, and dropping them would throw those events away.
+ * ------------------------------------------------------------------------ */
+
+const TRACK_BATCH_ENDPOINT = "/api/track/batch";
+// Long enough to collect a burst of ad rotations, short enough that a normal
+// read flushes while the visitor is still on the page.
+const TRACK_FLUSH_DELAY_MS = 4000;
+const TRACK_MAX_QUEUE = 25;
+
+let trackQueue = [];
+let trackFlushTimer = null;
+let trackLifecycleBound = false;
+
+function sendTrackBatch(events, useBeacon) {
+  if (!events.length) return;
+  const body = JSON.stringify({ events });
   try {
-    fetch("/api/track/pdf-download", {
+    if (useBeacon && typeof navigator !== "undefined" && navigator.sendBeacon) {
+      // Blob carries the content type through, so the route still parses JSON.
+      navigator.sendBeacon(TRACK_BATCH_ENDPOINT, new Blob([body], { type: "application/json" }));
+      return;
+    }
+    fetch(TRACK_BATCH_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind, id }),
+      body,
       keepalive: true,
     }).catch(() => {});
   } catch {}
 }
 
-export function trackConcoursView(id) {
+function flushTrackQueue(useBeacon) {
+  if (trackFlushTimer) {
+    clearTimeout(trackFlushTimer);
+    trackFlushTimer = null;
+  }
+  if (!trackQueue.length) return;
+  // Swap the array out before sending so events queued during the send land
+  // in the next batch rather than being dropped by the reset.
+  const events = trackQueue;
+  trackQueue = [];
+  sendTrackBatch(events, useBeacon);
+}
+
+// pagehide covers real unloads and bfcache; visibilitychange covers tab
+// switches and mobile app-switching, which is how most sessions actually end.
+function bindTrackLifecycle() {
+  if (trackLifecycleBound || typeof document === "undefined") return;
+  trackLifecycleBound = true;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) flushTrackQueue(true);
+  });
+  window.addEventListener("pagehide", () => flushTrackQueue(true));
+}
+
+// Exported so callers outside this module (ConcoursExplorer's search-miss
+// counter) share the same queue rather than opening their own connection.
+export function queueTrackEvent(event) {
   try {
-    fetch("/api/track/concours-view", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-      keepalive: true,
-    }).catch(() => {});
+    if (!event || !event.t) return;
+    bindTrackLifecycle();
+    trackQueue.push(event);
+    if (trackQueue.length >= TRACK_MAX_QUEUE) {
+      flushTrackQueue(false);
+      return;
+    }
+    if (!trackFlushTimer) {
+      trackFlushTimer = setTimeout(() => flushTrackQueue(false), TRACK_FLUSH_DELAY_MS);
+    }
   } catch {}
+}
+
+export function trackPdfDownload(kind, id) {
+  queueTrackEvent({ t: "pdf-download", kind, id });
+}
+
+export function trackConcoursView(id) {
+  queueTrackEvent({ t: "concours-view", id });
 }

@@ -64,6 +64,15 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// Prerendered at build time — see app/concours/[id]/page.js for why
+// generateStaticParams alone leaves the route dynamic (the no-store read in
+// lib/github.js) and why revalidate is false. News is the one collection
+// also written by a scheduled job (.github/workflows/update-news.yml), but
+// that job commits public/data/news.json, which triggers a deploy — so the
+// rebuild path is the same one admin edits already use.
+export const dynamic = "force-static";
+export const revalidate = false;
+
 export async function generateStaticParams() {
   try {
     const list = await getAllNews();

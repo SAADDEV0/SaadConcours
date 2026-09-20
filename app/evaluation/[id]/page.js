@@ -36,6 +36,12 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// Prerendered at build time — see app/concours/[id]/page.js for why
+// generateStaticParams alone leaves the route dynamic (the no-store read in
+// lib/github.js) and why revalidate is false (deploys rebuild everything).
+export const dynamic = "force-static";
+export const revalidate = false;
+
 export async function generateStaticParams() {
   try {
     const list = await getAllQuiz();
