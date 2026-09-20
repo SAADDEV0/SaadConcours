@@ -106,7 +106,8 @@ function renderEnonce(md) {
   return markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { c } = await findConcours(params.id);
   if (!c) return {};
 
@@ -155,7 +156,8 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function ConcoursDetailPage({ params }) {
+export default async function ConcoursDetailPage(props) {
+  const params = await props.params;
   const { c, list } = await findConcours(params.id);
   if (!c) notFound();
 

@@ -34,7 +34,8 @@ function getRelatedNews(list, current, limit = 4) {
   return related;
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { n } = await findNews(params.id);
   if (!n) return {};
 
@@ -82,7 +83,8 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function NewsDetailPage({ params }) {
+export default async function NewsDetailPage(props) {
+  const params = await props.params;
   const { n, list } = await findNews(params.id);
   if (!n) notFound();
 

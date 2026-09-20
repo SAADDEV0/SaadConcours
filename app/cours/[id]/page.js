@@ -20,7 +20,8 @@ function getRelatedCours(list, current, limit = 4) {
   return list.filter((x) => x.id !== current.id && x.module === current.module && x.available).slice(0, limit);
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { c } = await findCours(params.id);
   if (!c || !c.available) return {};
 
@@ -54,7 +55,8 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function CoursDetailPage({ params }) {
+export default async function CoursDetailPage(props) {
+  const params = await props.params;
   const { c, list } = await findCours(params.id);
   if (!c || !c.available) notFound();
 

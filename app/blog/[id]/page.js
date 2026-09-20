@@ -25,7 +25,8 @@ function getRelatedPosts(list, current, limit = 4) {
   return [...sameCategory, ...rest].slice(0, limit);
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { p } = await findPost(params.id);
   if (!p || !p.available) return {};
 
@@ -55,7 +56,8 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function BlogDetailPage({ params }) {
+export default async function BlogDetailPage(props) {
+  const params = await props.params;
   const { p, list } = await findPost(params.id);
   if (!p || !p.available) notFound();
 

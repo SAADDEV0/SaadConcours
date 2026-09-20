@@ -16,7 +16,8 @@ function getRelatedQuiz(list, current, limit = 4) {
   return list.filter((x) => x.id !== current.id && x.module === current.module && x.available).slice(0, limit);
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { q } = await findQuiz(params.id);
   if (!q || !q.available) return {};
 
@@ -51,7 +52,8 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function EvaluationDetailPage({ params }) {
+export default async function EvaluationDetailPage(props) {
+  const params = await props.params;
   const { q, list } = await findQuiz(params.id);
   if (!q || !q.available) notFound();
 

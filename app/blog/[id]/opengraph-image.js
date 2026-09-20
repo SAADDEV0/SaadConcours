@@ -5,7 +5,8 @@ export const size = ogImageSize;
 export const contentType = ogImageContentType;
 export const alt = "Article SaadConcours";
 
-export default async function Image({ params }) {
+export default async function Image(props) {
+  const params = await props.params;
   const list = await getAllBlog();
   const p = list.find((x) => x.id === params.id && x.available);
   if (!p) {
