@@ -226,5 +226,17 @@
     "content": "teeest",
     "available": false,
     "id": "tester_cours"
+  },
+  {
+    "module": "test",
+    "title": "tdst",
+    "description": "",
+    "category": "compta",
+    "parcours": "",
+    "semestre": "",
+    "filiere": "",
+    "content": "tester",
+    "available": true,
+    "id": "test_cours"
   }
 ]
