@@ -19,6 +19,22 @@
 		"binding": "ASSETS"
 	},
 
+	// Production hostname. Attaching it here makes Cloudflare replace the DNS
+	// record that previously pointed at Vercel (A 76.76.21.21, proxied) with
+	// a route to this Worker. To roll back: remove this block, redeploy, and
+	// recreate that A record for www — proxied, value 76.76.21.21.
+	//
+	// The apex is deliberately NOT listed. Its redirect to www is Vercel
+	// configuration rather than application code, so moving it here would
+	// drop the redirect and serve the site on both hostnames — duplicate
+	// content. It needs a Cloudflare Redirect Rule instead, which runs at the
+	// edge and costs no Worker invocation; putting the redirect in
+	// middleware.js would mean widening its matcher to every path, which is
+	// exactly the per-request cost this site was just optimised to avoid.
+	"routes": [
+		{ "pattern": "www.saadconcours.space", "custom_domain": true }
+	],
+
 	// Required by the cache layer to revalidate itself; the service name
 	// must match "name" above.
 	"services": [
