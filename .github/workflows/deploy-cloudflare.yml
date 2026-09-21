@@ -43,9 +43,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 22 and not 20: wrangler 4 refuses to run on anything below Node 22
+      # ("Wrangler requires at least Node.js v22.0.0"). The build and cache
+      # steps are happy on 20, so only the final deploy fails — which makes
+      # this look like a credentials problem when it is a runtime one.
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
