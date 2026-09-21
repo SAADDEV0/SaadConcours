@@ -131,19 +131,32 @@ jobs:
       # invisible en local (le Worker local n'a pas de limite CPU) et ne se
       # manifeste en production que sur une fraction des requêtes, ce qui la
       # rend très facile à ne pas voir.
+      #
+      # Les tentatives répétées ne sont pas de la complaisance : la mise à
+      # disposition des assets n'est pas instantanée sur tout le réseau après
+      # un déploiement, et concours.html pèse 3,6 Mo — c'est le plus gros, donc
+      # le dernier arrivé. Sans ce délai, l'étape échouait alors que le site
+      # était correct, et un garde-fou qui crie au loup à chaque déploiement
+      # finit désactivé. La règle reste stricte : au bout des essais, une page
+      # encore servie par le Worker fait échouer le déploiement.
       - name: Public pages must not invoke the Worker
         run: |
           set -e
           fail=0
           for path in "" "concours" "cours" "news" "blog" "faq" "evaluation"; do
-            hdr=$(curl -s -o /dev/null -D - --max-time 60 \
-              "https://www.saadconcours.space/$path" | tr -d '\r' \
-              | grep -i '^x-opennext:' || true)
-            if [ -n "$hdr" ]; then
-              echo "  /$path -> SERVI PAR LE WORKER ($hdr)"
+            ok=0
+            for attempt in 1 2 3 4 5 6; do
+              hdr=$(curl -s -o /dev/null -D - --max-time 60 \
+                "https://www.saadconcours.space/$path" | tr -d '\r' \
+                | grep -i '^x-opennext:' || true)
+              if [ -z "$hdr" ]; then ok=1; break; fi
+              sleep 10
+            done
+            if [ "$ok" = "0" ]; then
+              echo "  /$path -> SERVI PAR LE WORKER apres 6 essais ($hdr)"
               fail=1
             else
-              echo "  /$path -> asset statique, aucune invocation"
+              echo "  /$path -> asset statique, aucune invocation (essai $attempt)"
             fi
           done
           if [ "$fail" = "1" ]; then
