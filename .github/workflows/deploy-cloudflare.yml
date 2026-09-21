@@ -67,13 +67,38 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
 
+      # Fails the build early rather than deploying pages that look fine and
+      # are quietly wrong. Without a valid GH_CONTENT_TOKEN the build still
+      # succeeds, but settings.json cannot be read, so pages bake with no
+      # analytics tag and no établissement whitelist. Every such page still
+      # returns 200, so a status-code check alone would wave it through --
+      # which is exactly how this went unnoticed during the migration.
+      - name: Check the build baked real settings
+        run: |
+          set -e
+          page=$(find .next/server/app -maxdepth 1 -name "news.html" | head -1)
+          [ -n "$page" ] || { echo "news.html not found in build output"; exit 1; }
+          if ! grep -q "googletagmanager" "$page"; then
+            echo "FAILED: no analytics tag in the prerendered HTML."
+            echo "That means settings.json was unreadable at build time --"
+            echo "check that GH_CONTENT_TOKEN is set and still valid."
+            exit 1
+          fi
+          echo "  settings loaded at build time: analytics tag present"
+
       - name: Verify the deployed site responds
         run: |
           set -e
           sleep 10
           for path in "" "concours" "news" "sitemap.xml"; do
             code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 \
-              "https://saad-concours.saadconcours.workers.dev/$path")
+              "https://www.saadconcours.space/$path")
             echo "  /$path -> $code"
             [ "$code" = "200" ] || { echo "FAILED: /$path returned $code"; exit 1; }
           done
+          # The sitemap collapses to 8 static routes when the data fetch fails,
+          # so its size is a cheap proof that the deployed Worker can actually
+          # reach GitHub at runtime.
+          urls=$(curl -s --max-time 60 "https://www.saadconcours.space/sitemap.xml" | grep -c "<loc>")
+          echo "  sitemap urls -> $urls"
+          [ "$urls" -gt 50 ] || { echo "FAILED: sitemap has only $urls urls, runtime data fetch is broken"; exit 1; }
