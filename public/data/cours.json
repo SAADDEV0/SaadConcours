@@ -202,5 +202,17 @@
     "parcours": "gestion",
     "filiere": "",
     "semestre": "S3"
+  },
+  {
+    "module": "test",
+    "title": "test",
+    "description": "",
+    "category": "compta",
+    "parcours": "",
+    "semestre": "",
+    "filiere": "",
+    "content": "sdf",
+    "available": false,
+    "id": "test_cours"
   }
 ]
