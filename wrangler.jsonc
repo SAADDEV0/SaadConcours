@@ -19,20 +19,34 @@
 		"binding": "ASSETS"
 	},
 
-	// Production hostname. Attaching it here makes Cloudflare replace the DNS
-	// record that previously pointed at Vercel (A 76.76.21.21, proxied) with
-	// a route to this Worker. To roll back: remove this block, redeploy, and
-	// recreate that A record for www — proxied, value 76.76.21.21.
+	// Keeps saad-concours.saadconcours.workers.dev alive. Without this key
+	// wrangler disables it by default, which is what silently took the test
+	// URL down (404) on the first attempt at attaching the domain.
+	"workers_dev": true,
+
+	// Production hostname, attached as a ROUTE rather than a custom domain.
 	//
-	// The apex is deliberately NOT listed. Its redirect to www is Vercel
-	// configuration rather than application code, so moving it here would
-	// drop the redirect and serve the site on both hostnames — duplicate
-	// content. It needs a Cloudflare Redirect Rule instead, which runs at the
-	// edge and costs no Worker invocation; putting the redirect in
+	// custom_domain: true was the first attempt and Cloudflare refused it:
+	// "Hostname already has externally managed DNS records. Delete them
+	// first." Deleting the A record before the Worker could answer would have
+	// taken www offline in the gap — an outage on a site that lives on search
+	// traffic.
+	//
+	// A route needs no DNS change at all. The record stays exactly as it is
+	// (A 76.76.21.21, proxied at Cloudflare); because it is proxied, requests
+	// reach Cloudflare's edge first and this route intercepts them before
+	// they are ever forwarded to Vercel. Rollback is deleting these four
+	// lines and redeploying: traffic falls straight back through to the
+	// origin, with DNS never having been touched.
+	//
+	// The apex is deliberately absent. Its redirect to www is Vercel config,
+	// not application code, so routing it here would drop the redirect and
+	// serve the site on both hostnames — duplicate content. That belongs in a
+	// Cloudflare Redirect Rule, which runs at the edge for free; doing it in
 	// middleware.js would mean widening its matcher to every path, which is
-	// exactly the per-request cost this site was just optimised to avoid.
+	// precisely the per-request cost this site was just optimised to remove.
 	"routes": [
-		{ "pattern": "www.saadconcours.space", "custom_domain": true }
+		{ "pattern": "www.saadconcours.space/*", "zone_name": "saadconcours.space" }
 	],
 
 	// Required by the cache layer to revalidate itself; the service name
