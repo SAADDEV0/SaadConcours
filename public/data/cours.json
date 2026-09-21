@@ -202,17 +202,5 @@
     "parcours": "gestion",
     "filiere": "",
     "semestre": "S3"
-  },
-  {
-    "module": "tester",
-    "title": "tester",
-    "description": "",
-    "category": "compta",
-    "parcours": "",
-    "semestre": "",
-    "filiere": "",
-    "content": "teeest",
-    "available": false,
-    "id": "tester_cours"
   }
 ]
