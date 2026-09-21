@@ -60,6 +60,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
         run: npx opennextjs-cloudflare build
 
+      # Sort les pages publiques du chemin du Worker. Sans cette étape,
+      # OpenNext les sert depuis le cache incrémental, donc via le Worker,
+      # donc avec 10 ms de CPU pour un démarrage à froid qui en coûte 33 :
+      # 18 % des pages publiques rendaient une Error 1102. Voir l'en-tête de
+      # scripts/prerender-to-assets.mjs.
+      - name: Publish prerendered pages as static assets
+        run: node scripts/prerender-to-assets.mjs
+
       - name: Populate static asset cache
         env:
           GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
@@ -106,3 +114,45 @@ jobs:
           urls=$(curl -s --max-time 60 "https://www.saadconcours.space/sitemap.xml" | grep -c "<loc>")
           echo "  sitemap urls -> $urls"
           [ "$urls" -gt 50 ] || { echo "FAILED: sitemap has only $urls urls, runtime data fetch is broken"; exit 1; }
+
+      # LE GARDE-FOU QUI EMPÊCHE L'ERROR 1102 DE REVENIR
+      #
+      # Sur le plan gratuit, une invocation dispose de 10 ms de CPU et le seul
+      # démarrage de l'isolate en consomme 33 : toute page servie PAR LE WORKER
+      # rend une 1102 dès qu'elle tombe à froid. L'invariant du site public est
+      # donc « aucune invocation », et il se vérifie à un seul endroit : la
+      # réponse ne doit pas porter l'en-tête x-opennext, que seul le Worker
+      # pose.
+      #
+      # Ce test échoue si quelqu'un rend une page publique dynamique — cookies,
+      # headers(), searchParams, revalidate, force-dynamic — ou si l'étape de
+      # publication en assets casse. C'est volontairement un échec de
+      # déploiement et non un avertissement : la panne qu'il prévient est
+      # invisible en local (le Worker local n'a pas de limite CPU) et ne se
+      # manifeste en production que sur une fraction des requêtes, ce qui la
+      # rend très facile à ne pas voir.
+      - name: Public pages must not invoke the Worker
+        run: |
+          set -e
+          fail=0
+          for path in "" "concours" "cours" "news" "blog" "faq" "evaluation"; do
+            hdr=$(curl -s -o /dev/null -D - --max-time 60 \
+              "https://www.saadconcours.space/$path" | tr -d '\r' \
+              | grep -i '^x-opennext:' || true)
+            if [ -n "$hdr" ]; then
+              echo "  /$path -> SERVI PAR LE WORKER ($hdr)"
+              fail=1
+            else
+              echo "  /$path -> asset statique, aucune invocation"
+            fi
+          done
+          if [ "$fail" = "1" ]; then
+            echo ""
+            echo "FAILED: au moins une page publique repasse par le Worker."
+            echo "Elle rendra une Error 1102 sur chaque isolate froid."
+            echo "Cause probable : la page est devenue dynamique (cookies(),"
+            echo "headers(), searchParams, revalidate, force-dynamic), donc"
+            echo "next build ne l'a plus prérendue en .html et"
+            echo "scripts/prerender-to-assets.mjs n'avait rien à publier."
+            exit 1
+          fi

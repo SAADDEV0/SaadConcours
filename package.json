@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check": "next lint && next build"
+    "check": "next lint && next build",
+    "cf:assets": "node scripts/prerender-to-assets.mjs"
   },
   "dependencies": {
     "@vercel/kv": "^3.0.0",

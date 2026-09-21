@@ -29,6 +29,57 @@ npm run dev
 
 Puis ouvrir `http://localhost:3000`. Sans `GITHUB_TOKEN` configuré, l'API lit les fichiers `public/data/*.json` du checkout local (lecture seule : les écritures admin restent en mémoire pour la durée du process, sans toucher au disque ni à GitHub).
 
+## La règle à ne pas casser : une page publique n'invoque pas le Worker
+
+> Les sections « Vercel » ci-dessous datent d'avant la migration sur Cloudflare
+> Workers (21/09/2026) et ne décrivent plus l'hébergement réel.
+
+Le site tourne sur le **plan gratuit** de Cloudflare Workers, qui accorde
+**10 ms de CPU par invocation**. Démarrer un isolate froid en consomme à lui
+seul ~33 ms (chiffre affiché par wrangler au déploiement : `Worker Startup
+Time`). Conséquence directe : **toute requête servie par le Worker rend une
+`Error 1102` si elle tombe sur un isolate froid**, avant d'exécuter la moindre
+ligne de code applicatif. Ce n'est pas un bug à corriger dans le code, c'est le
+plafond du plan.
+
+La parade est structurelle : **le site public ne passe pas par le Worker.**
+`next build` prérend les pages en `.html`, et
+`scripts/prerender-to-assets.mjs` les publie dans les assets Cloudflare, servis
+au bord du réseau sans démarrer d'isolate — gratuit, illimité, et incapable par
+construction de rendre une 1102. Le Worker ne garde que `/admin`, `/api/*`, le
+sitemap et les 404.
+
+En pratique, quand tu touches à une page publique :
+
+- **Ne la rends pas dynamique.** `cookies()`, `headers()`, `searchParams`,
+  `export const dynamic = "force-dynamic"` ou un `revalidate` non nul retirent
+  la page du prérendu : elle repasse par le Worker et se remet à tomber en
+  1102. Ce qui dépend du visiteur se fait **côté client**, après hydratation.
+- **Vérifie d'un coup d'œil** qu'une page est bien servie en statique :
+
+  ```bash
+  curl -sI https://www.saadconcours.space/concours | grep -i x-opennext
+  ```
+
+  Une ligne `x-opennext: 1` signifie que le Worker a été invoqué, donc que la
+  page peut rendre une 1102. Aucune sortie = servie depuis les assets, tout va
+  bien.
+- **Le CI le vérifie à chaque déploiement** (étape *Public pages must not
+  invoke the Worker*) et refuse de laisser passer une régression. Le test
+  existe parce que la panne est invisible en local — le runtime de `next dev`
+  n'a aucune limite CPU — et ne frappe en production qu'une fraction des
+  requêtes.
+
+Le diagnostic quand une 1102 apparaît quand même :
+
+```bash
+npx wrangler tail saad-concours --format json --status error
+```
+
+`"outcome": "exceededCpu"` avec `"cpuTime": 10` confirme le plafond CPU. À ne
+pas confondre avec la 1102 de l'espace admin causée par une `KV_REST_API_URL`
+invalide, qui est systématique et non intermittente.
+
 ## Déploiement sur Vercel
 
 1. Importer le repo sur [vercel.com/new](https://vercel.com/new) (Next.js est détecté automatiquement, aucune configuration nécessaire).
