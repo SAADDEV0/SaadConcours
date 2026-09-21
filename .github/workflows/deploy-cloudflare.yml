@@ -1,0 +1,79 @@
+# Deploys the site to Cloudflare Workers on every push to main.
+#
+# WHY A BUILD-TIME GITHUB TOKEN IS REQUIRED
+#   Pages are prerendered at build time, and lib/store.js reads settings.json
+#   through GitHub's authenticated Contents API to do it. Without a valid
+#   token the build still succeeds, but it bakes pages with no settings — no
+#   analytics tag, and the news établissement whitelist silently unapplied.
+#   The secret cannot be called GITHUB_TOKEN (GitHub reserves that prefix for
+#   the automatic Actions token), so it is passed in under a different name
+#   and mapped to the variable the code expects.
+#
+# SECRETS TO ADD  (repo Settings > Secrets and variables > Actions)
+#   CLOUDFLARE_API_TOKEN   Cloudflare dashboard > My Profile > API Tokens >
+#                          Create Token > "Edit Cloudflare Workers" template
+#   GH_CONTENT_TOKEN       the same ghp_ token already set as a Worker secret
+#
+# The Cloudflare account id is not a secret and lives in wrangler.jsonc.
+#
+# NOTE ON COST
+#   populateCache writes into Workers static assets, not KV, so running this
+#   on every push costs nothing in quota. See open-next.config.ts.
+
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [main]
+  # Lets you trigger a deploy by hand from the Actions tab, which is useful
+  # for re-baking pages after changing settings in the admin without also
+  # having to make a code commit.
+  workflow_dispatch:
+
+# A push that lands while a deploy is running cancels it rather than racing:
+# two concurrent deploys of the same Worker would upload conflicting bundles.
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for Cloudflare
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
+        run: npx opennextjs-cloudflare build
+
+      - name: Populate static asset cache
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx opennextjs-cloudflare populateCache remote
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler deploy
+
+      - name: Verify the deployed site responds
+        run: |
+          set -e
+          sleep 10
+          for path in "" "concours" "news" "sitemap.xml"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 \
+              "https://saad-concours.saadconcours.workers.dev/$path")
+            echo "  /$path -> $code"
+            [ "$code" = "200" ] || { echo "FAILED: /$path returned $code"; exit 1; }
+          done

@@ -2,6 +2,10 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "saad-concours",
+
+	// Not a secret — an account identifier. Needed explicitly in CI, where
+	// there is no interactive login for wrangler to infer it from.
+	"account_id": "e38ffe4a64fbc0fd8f29348d0719ba71",
 	"compatibility_date": "2026-09-01",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 
