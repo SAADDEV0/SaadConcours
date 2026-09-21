@@ -12,8 +12,8 @@
     "FEG",
     "ISCAE"
   ],
-  "newsScraperEnabled": false,
-  "homeNewsBoxesEnabled": false,
+  "newsScraperEnabled": true,
+  "homeNewsBoxesEnabled": true,
   "newsAlertsEnabled": false,
   "newsAlertsMessage": "",
   "newsAlertsSubject": "⏰ Ces concours ferment bientôt",
