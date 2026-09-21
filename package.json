@@ -9,9 +9,7 @@
     "check": "next lint && next build"
   },
   "dependencies": {
-    "@vercel/analytics": "^2.0.1",
     "@vercel/kv": "^3.0.0",
-    "@vercel/speed-insights": "^2.0.0",
     "marked": "^18.0.10",
     "next": "^15.5.25",
     "nodemailer": "^9.0.6",

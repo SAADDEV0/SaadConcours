@@ -1,0 +1,70 @@
+# Fichier statique, et non app/robots.js, DÉLIBÉRÉMENT (2026-09-21).
+#
+# En route Next (app/robots.js), /robots.txt était rendu par le Worker à
+# chaque visite — vérifié en production : la réponse portait "x-opennext: 1".
+# Sur le plan gratuit, chaque invocation dispose de 10 ms de CPU, et une
+# requête qui tombe sur un isolate froid dépense ce budget rien qu'à évaluer
+# le bundle : elle meurt en Error 1102. C'est arrivé sur /robots.txt pendant
+# le diagnostic.
+#
+# Or ce contenu est entièrement statique : aucune donnée, aucun calcul. Servi
+# depuis public/, il part des assets Cloudflare — gratuit, illimité, jamais de
+# Worker, donc jamais de 1102. Ce qui compte ici parce que le site vise
+# justement d'être cité par ces crawlers : un robots.txt en erreur et ils se
+# désintéressent du domaine.
+#
+# À maintenir à la main. Si un jour les règles doivent dépendre des réglages
+# admin, il faudra repasser par une route — et accepter le Worker sur ce
+# chemin.
+
+User-Agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: Claude-Web
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: anthropic-ai
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://www.saadconcours.space/sitemap.xml

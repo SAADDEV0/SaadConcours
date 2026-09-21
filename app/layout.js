@@ -1,7 +1,5 @@
 import "./globals.css";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, reservationCss } from "./_shared/partnerAds";
 import EmailGateModal from "./_shared/EmailGateModal";
@@ -154,8 +152,13 @@ export default async function RootLayout({ children }) {
       <body>
         {children}
         <EmailGateModal />
-        <Analytics />
-        <SpeedInsights sampleRate={0.05} />
+        {/* <Analytics /> et <SpeedInsights /> retirés le 2026-09-21 : leurs
+           scripts vivent sous /_vercel/*, qui n'existe pas sur Cloudflare.
+           Ils partaient donc en 404 SERVIS PAR LE WORKER (x-opennext: 1) —
+           2 à 3 invocations gâchées par page vue, chacune pouvant tomber sur
+           un isolate froid et rendre une Error 1102. Coût réel, bénéfice nul.
+           L'audience est déjà mesurée par lib/analytics.js et, si un
+           gaMeasurementId est réglé, par le script GA ci-dessus. */}
         {/* marked/jsPDF/jsPDF-AutoTable/svg2pdf.js/MathJax used to load here
            unconditionally on every route — ~250KB+ of PDF-export/typesetting
            JS paid for by every listing page, the blog, /news, /faq and all
