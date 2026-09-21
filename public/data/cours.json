@@ -214,5 +214,17 @@
     "content": "sdf",
     "available": false,
     "id": "test_cours"
+  },
+  {
+    "module": "tester",
+    "title": "tester",
+    "description": "",
+    "category": "compta",
+    "parcours": "",
+    "semestre": "",
+    "filiere": "",
+    "content": "teeest",
+    "available": false,
+    "id": "tester_cours"
   }
 ]
