@@ -108,6 +108,7 @@ header{
   background:var(--bg); color:var(--text); font-size:.92rem; outline:none;
 }
 .search-box input:focus{border-color:var(--accent);}
+.search-box > svg{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.5; width:16px; height:16px; pointer-events:none;}
 .search-box-btn{
   position:absolute; left:8px; top:50%; transform:translateY(-50%); width:24px; height:24px;
   display:flex; align-items:center; justify-content:center; background:none; border:none;
