@@ -55,10 +55,12 @@ export function chromeHtml({ active, showSearch, rails = false }) {
     </a>
     ${
       showSearch
-        ? `<div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        ? `<form class="search-box" id="headerSearchForm" role="search">
+      <button type="submit" class="search-box-btn" aria-label="Rechercher">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
       <input type="text" id="searchInput" placeholder="Rechercher (établissement, ville, mot-clé de l'énoncé...)">
-    </div>`
+    </form>`
         : `<div class="search-box" style="flex:1;"></div>`
     }
     <nav class="view-nav">
@@ -456,6 +458,26 @@ export const chromeScript = function initChrome() {
       applyThemeButton();
     });
   }
+
+  // Header search box is shared markup (home, concours...) but only
+  // /concours has a live results grid to filter in place (ConcoursExplorer
+  // wires its own "input" listener for that). Everywhere else — starting
+  // with the homepage — Enter/submit sends the visitor to /concours?q=...,
+  // which ConcoursExplorer already reads on load to prefill and apply the
+  // filter (same param the old "voir tout" search-miss flow used).
+  (function initHeaderSearch() {
+    const form = document.getElementById("headerSearchForm");
+    const input = document.getElementById("searchInput");
+    if (!form || !input || form.dataset.wired === "1") return;
+    form.dataset.wired = "1";
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (window.location.pathname === "/concours") return;
+      const q = input.value.trim();
+      window.location.href = "/concours" + (q ? "?q=" + encodeURIComponent(q) : "");
+    });
+  })();
 
   (function initMobileNav() {
     const toggleBtn = document.getElementById("navToggleBtn");

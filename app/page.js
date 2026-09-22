@@ -94,7 +94,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "home", showSearch: false, rails: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "home", showSearch: true, rails: true }) }} />
 
       <div className="home-view">
         <section className="home-hero">
