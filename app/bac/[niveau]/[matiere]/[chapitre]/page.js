@@ -1,6 +1,12 @@
 import { notFound } from "next/navigation";
+import { marked } from "marked";
 import { chromeHtml, footerHtml } from "../../../../_shared/chrome";
+import { renderMarkdownWithMath } from "../../../../_shared/mathMarkdown";
+import MathScripts from "../../../../_shared/MathScripts";
+import BacQcm from "../../../BacQcm";
+import BacChapitreClient from "../../../BacChapitreClient";
 import { BAC_MATIERES, bacNiveauInfo, findBacMatiere, findBacChapitre, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../../lib/bacProgramme";
+import { bacChapitreContenu } from "../../../../../lib/bacContenu";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -22,11 +28,20 @@ export async function generateMetadata(props) {
   const found = m && findBacChapitre(m, chapitre);
   if (!found) return {};
   const niv = bacNiveauInfo(niveau);
+  const contenu = bacChapitreContenu(niveau, matiere, chapitre);
+  const title = `${found.chapitre.titre} — ${m.court} ${niv.label}`;
+  const description = `${m.nom} ${niv.label} : ${found.chapitre.titre}. Cours, exercices corrigés, résumé et QCM.`;
   return {
-    title: `${found.chapitre.titre} — ${m.court} ${niv.label}`,
-    // Pages encore vides : pas d'indexation tant que le contenu n'est pas publié.
-    robots: { index: false, follow: true },
+    title,
+    description,
+    alternates: { canonical: `/bac/${niveau}/${matiere}/${chapitre}` },
+    // Pas d'indexation tant que le chapitre est vide.
+    robots: contenu ? { index: true, follow: true } : { index: false, follow: true },
   };
+}
+
+function md(source) {
+  return renderMarkdownWithMath(marked, source);
 }
 
 export default async function BacChapitrePage(props) {
@@ -36,9 +51,12 @@ export default async function BacChapitrePage(props) {
   if (!found) notFound();
   const { chapitre: c, prev, next } = found;
   const niv = bacNiveauInfo(niveau);
+  const contenu = bacChapitreContenu(niveau, matiere, chapitre);
 
   return (
     <>
+      {contenu && <MathScripts />}
+      <BacChapitreClient />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
       <div className="bac-space" style={{ "--mat-h": m.hue }}>
@@ -92,15 +110,28 @@ export default async function BacChapitrePage(props) {
                     </label>
                   ))}
                 </div>
-                {ONGLETS.map((o) => (
-                  <section key={o.code} className={`bac-tab-panel bac-tab-panel-${o.code}`}>
-                    <div className="bac-empty">
-                      <div className="bac-empty-icon">{o.icon}</div>
-                      <div className="bac-empty-title">{o.label} en préparation</div>
-                      <p>{o.vide}</p>
-                    </div>
-                  </section>
-                ))}
+                {ONGLETS.map((o) => {
+                  const valeur = contenu?.[o.code];
+                  let corps;
+                  if (!valeur || (Array.isArray(valeur) && !valeur.length)) {
+                    corps = (
+                      <div className="bac-empty">
+                        <div className="bac-empty-icon">{o.icon}</div>
+                        <div className="bac-empty-title">{o.label} en préparation</div>
+                        <p>{o.vide}</p>
+                      </div>
+                    );
+                  } else if (o.code === "qcm") {
+                    corps = <BacQcm questions={valeur} lang={m.lang || "fr"} />;
+                  } else {
+                    corps = <div className="cours-content bac-md" {...bacTextDir(m)} dangerouslySetInnerHTML={{ __html: md(valeur) }} />;
+                  }
+                  return (
+                    <section key={o.code} className={`bac-tab-panel bac-tab-panel-${o.code}`}>
+                      {corps}
+                    </section>
+                  );
+                })}
               </div>
 
               <nav className="bac-pager">

@@ -24,6 +24,7 @@ export const SECTIONS = [
         ],
       },
       { key: "cours", href: "/admin/cours", icon: "notebook", label: "Cours" },
+      { key: "bac", href: "/admin/bac", icon: "folders", label: "Cours Bac" },
       { key: "evaluation", href: "/admin/evaluation", icon: "clipboard", label: "Évaluation" },
       { key: "blog", href: "/admin/blog", icon: "newspaper", label: "Blog" },
     ],

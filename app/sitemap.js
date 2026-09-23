@@ -1,4 +1,6 @@
 import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews } from "@/lib/store";
+import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
+import { bacMatiereContenu } from "@/lib/bacContenu";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -93,5 +95,20 @@ export default async function sitemap() {
       ...(p.publishedAt ? { lastModified: p.publishedAt } : {}),
     }));
 
-  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes];
+  // Espace Bac : niveaux et matières, plus les seuls chapitres rédigés (les
+  // chapitres vides sont en noindex, voir app/bac/[niveau]/[matiere]/[chapitre]).
+  const bacRoutes = BAC_NIVEAUX.filter((n) => n.available).flatMap((n) => [
+    { url: `${SITE_URL}/bac/${n.code}`, changeFrequency: "monthly", priority: 0.7 },
+    ...bacMatieres(n.code).flatMap((m) => {
+      const contenu = bacMatiereContenu(n.code, m.slug);
+      return [
+        { url: `${SITE_URL}${bacMatiereHref(m)}`, changeFrequency: "monthly", priority: 0.6 },
+        ...m.chapitres
+          .filter((c) => contenu[c.slug])
+          .map((c) => ({ url: `${SITE_URL}${bacChapitreHref(m, c)}`, changeFrequency: "monthly", priority: 0.5 })),
+      ];
+    }),
+  ]);
+
+  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes, ...bacRoutes];
 }

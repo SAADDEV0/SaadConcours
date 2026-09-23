@@ -24,6 +24,7 @@ import {
   getSettings,
 } from "@/lib/store";
 import { FILIERE_CATEGORIES } from "@/lib/taxonomy";
+import { bacPathLabel } from "@/lib/bacProgramme";
 import { resolveRange, dayKeysInRange, bucketGranularity, formatDayFr } from "@/lib/dateRange";
 
 // Nothing in this route's own code touches request-specific data beyond the
@@ -101,6 +102,7 @@ function makePathLabeller({ concoursById, coursById, quizById, newsById, blogByI
     if (section === "evaluation" && quizById[id]) return quizById[id].module || id;
     if (section === "news" && newsById[id]) return newsById[id].titre || id;
     if (section === "blog" && blogById[id]) return blogById[id].title || id;
+    if (section === "bac") return bacPathLabel(path) || path;
     return path;
   };
 }

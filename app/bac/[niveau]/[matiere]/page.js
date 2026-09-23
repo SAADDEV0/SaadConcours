@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
+import ChromeInit from "../../../_shared/ChromeInit";
+import { bacMatiereContenu } from "../../../../lib/bacContenu";
 import { BAC_MATIERES, bacNiveauInfo, findBacMatiere, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
 
 export const dynamic = "force-static";
@@ -28,9 +30,11 @@ export default async function BacMatierePage(props) {
   const m = findBacMatiere(niveau, matiere);
   if (!m) notFound();
   const niv = bacNiveauInfo(niveau);
+  const contenu = bacMatiereContenu(niveau, matiere);
 
   return (
     <>
+      <ChromeInit />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
       <div className="bac-space" style={{ "--mat-h": m.hue }}>
@@ -111,22 +115,25 @@ export default async function BacMatierePage(props) {
                         <h3>{u.titre}</h3>
                       </div>
                       <ol className="bac-chap-list">
-                        {u.chapitres.map((c) => (
-                          <li key={c.slug}>
-                            <a className="bac-chap-row" href={bacChapitreHref(m, c)}>
-                              <span className="bac-chap-num">{c.numero}</span>
-                              <span className="bac-chap-title">{c.titre}</span>
-                              <span className="bac-chap-res">
-                                {RESSOURCES.map((r) => (
-                                  <span key={r} className="bac-res-chip">
-                                    {r}
-                                  </span>
-                                ))}
-                              </span>
-                              <span className="bac-soon">Bientôt</span>
-                            </a>
-                          </li>
-                        ))}
+                        {u.chapitres.map((c) => {
+                          const dispo = Boolean(contenu[c.slug]);
+                          return (
+                            <li key={c.slug}>
+                              <a className="bac-chap-row" href={bacChapitreHref(m, c)}>
+                                <span className="bac-chap-num">{c.numero}</span>
+                                <span className="bac-chap-title">{c.titre}</span>
+                                <span className="bac-chap-res">
+                                  {RESSOURCES.map((r) => (
+                                    <span key={r} className={`bac-res-chip${dispo ? " on" : ""}`}>
+                                      {r}
+                                    </span>
+                                  ))}
+                                </span>
+                                {dispo ? <span className="bac-dispo">Disponible</span> : <span className="bac-soon">Bientôt</span>}
+                              </a>
+                            </li>
+                          );
+                        })}
                       </ol>
                     </div>
                   ))}

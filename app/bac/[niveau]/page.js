@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import NiveauSwitch from "../../_shared/NiveauSwitch";
+import ChromeInit from "../../_shared/ChromeInit";
 import { BAC_NIVEAUX, BAC_GROUPES, bacNiveauInfo, bacMatieres, bacMatiereHref, bacTextDir } from "../../../lib/bacProgramme";
 
 export const dynamic = "force-static";
@@ -57,6 +58,7 @@ export default async function BacNiveauPage(props) {
 
   return (
     <>
+      <ChromeInit />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
       <div className="bac-space">

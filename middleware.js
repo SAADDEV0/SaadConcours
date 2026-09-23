@@ -14,6 +14,7 @@ const PROTECTED_API_PREFIXES = [
 // data that shouldn't be public at all — auth is required on every method.
 const PROTECTED_API_ALWAYS = [
   "/api/admin/stats",
+  "/api/admin/bac-stats",
   "/api/admin/export",
   "/api/admin/export-content",
   "/api/admin/subscribers",
@@ -101,6 +102,7 @@ export const config = {
     "/api/blog/:path*",
     "/api/admin/upload-image",
     "/api/admin/stats",
+    "/api/admin/bac-stats",
     "/api/admin/export",
     "/api/admin/export-content",
     "/api/admin/subscribers",
