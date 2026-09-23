@@ -46,7 +46,7 @@
   "adsConcoursMidSlot": "",
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
-  "partnerAdsEnabled": true,
+  "partnerAdsEnabled": false,
   "partnerAds": [
     {
       "id": "pa_mubeqm3h1sz1",
