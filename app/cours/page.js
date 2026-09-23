@@ -5,6 +5,7 @@ import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
+import NiveauSwitch from "../_shared/NiveauSwitch";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
 // request. lib/github.js reads the data JSON with `cache: "no-store"` (
@@ -49,6 +50,10 @@ export default async function CoursPage() {
         ]}
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
+
+      <div className="niveau-switch-bar">
+        <NiveauSwitch active="fsjes" />
+      </div>
 
       <div className="layout" id="viewCours">
         <aside className="filters">

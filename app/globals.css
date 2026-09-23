@@ -483,6 +483,30 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .footer-social-link svg{width:16px; height:16px;}
 .footer-social-link:hover{color:var(--accent); border-color:var(--accent); transform:translateY(-2px);}
 
+/* ---------- Sélecteur de niveau (Licence FSJES / Bac) ---------- */
+.niveau-switch{
+  display:inline-flex; gap:4px; padding:4px; margin:0 0 20px; border-radius:14px;
+  background:var(--bg-elev); border:1px solid var(--border); max-width:100%;
+}
+.niveau-switch-bar{max-width:1400px; margin:0 auto; padding:22px 20px 0;}
+.niveau-switch-bar .niveau-switch{margin:0;}
+.niveau-switch-btn{
+  display:flex; align-items:center; gap:10px; padding:8px 16px 8px 12px; border-radius:10px;
+  text-decoration:none; color:var(--text-dim); min-width:0;
+}
+.niveau-switch-btn:hover{color:var(--text); background:var(--bg-card);}
+.niveau-switch-icon{font-size:1.25rem; line-height:1;}
+.niveau-switch-label{display:block; font-weight:700; font-size:.88rem; white-space:nowrap;}
+.niveau-switch-sub{display:block; font-size:.72rem; color:var(--text-faint);}
+.niveau-switch-btn.active[data-niveau="fsjes"]{background:var(--accent); color:#fff;}
+.niveau-switch-btn.active[data-niveau="bac"]{background:#0e9f6e; color:#fff;}
+.niveau-switch-btn.active .niveau-switch-sub{color:rgba(255,255,255,.8);}
+@media (max-width:480px){
+  .niveau-switch{display:flex;}
+  .niveau-switch-btn{flex:1; padding:8px 10px;}
+  .niveau-switch-label{font-size:.8rem; white-space:normal;}
+}
+
 /* ---------- Évaluation ---------- */
 .eval-view{max-width:1000px; margin:0 auto; padding:28px 20px 70px;}
 .eval-title{font-size:1.3rem; margin:0 0 6px;}
