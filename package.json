@@ -10,7 +10,7 @@
     "cf:assets": "node scripts/prerender-to-assets.mjs"
   },
   "dependencies": {
-    "@vercel/kv": "^3.0.0",
+    "@upstash/redis": "^1.39.0",
     "marked": "^18.0.10",
     "next": "^15.5.25",
     "nodemailer": "^9.0.6",
