@@ -1,4 +1,8 @@
 import "./globals.css";
+// Composants visuels communs à toutes les sections (espace Bac, cours FSJES,
+// concours, évaluation, blog, accueil).
+import "./bac/bac.css";
+import "./_shared/space.css";
 import Script from "next/script";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, reservationCss } from "./_shared/partnerAds";
@@ -6,17 +10,18 @@ import EmailGateModal from "./_shared/EmailGateModal";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
-const SITE_TITLE = "SaadConcours — Concours Masters Économie & Gestion au Maroc";
+const SITE_TITLE = "SaadConcours — Cours Bac, Licence FSJES et concours Master au Maroc";
 const SITE_DESCRIPTION =
-  "Base de données gratuite de sujets de concours réels d'accès aux Masters économie-gestion (Finance, Comptabilité & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie) dans les universités marocaines — énoncés, corrigés indicatifs, fiches de cours et QCM d'entraînement.";
+  "Cours gratuits du Bac Sciences Économiques et Gestion et de la Licence FSJES (S1 à S6), chapitre par chapitre avec exercices corrigés, résumés et QCM, et base de sujets réels de concours d'accès aux Masters économie-gestion au Maroc.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_TITLE, template: "%s | SaadConcours" },
   description: SITE_DESCRIPTION,
   keywords: [
-    "concours master maroc", "master économie gestion maroc", "master finance maroc", "master marketing maroc",
-    "master management maroc", "ENCG concours", "FSJES master", "concours accès master maroc", "épreuves concours master",
+    "cours bac sciences économiques", "2 bac sciences économiques et gestion", "cours comptabilité bac maroc", "exercices corrigés bac eco",
+    "cours fsjes", "licence économie gestion maroc", "cours s1 fsjes", "exercices corrigés fsjes",
+    "concours master maroc", "master économie gestion maroc", "concours accès master fsjes encg", "sujets concours master",
   ],
   alternates: { canonical: "/" },
   // Real favicon/apple-icon files (app/icon.js, app/apple-icon.js) replace

@@ -74,48 +74,53 @@ export default async function BlogPage() {
       <ChromeInit />
       <BlogExplorer initialData={posts} />
 
-      <div className="cd-view" style={{ maxWidth: 920 }}>
-        <h1 className="eval-title">📰 Blog</h1>
-        <p className="eval-sub">
-          Méthode, matières à préparer et conseils pour réussir ton concours d'accès au Master au Maroc — {posts.length} article
-          {posts.length > 1 ? "s" : ""} disponible{posts.length > 1 ? "s" : ""}.
-        </p>
-
-        {categoryCounts.length > 0 && (
-          <div className="blog-filter-bar">
-            <div className="chip-list" id="blogCategoryChips">
-              {categoryCounts.map((c) => (
-                <button key={c.code} type="button" className="chip blog-cat-chip" data-category={c.code}>
-                  {c.emoji} {c.label} ({c.count})
-                </button>
-              ))}
+      <div className="bac-space site-space">
+        <div className="bac-wrap">
+          <section className="bac-hero" style={{ "--hero-icon": '"📰"' }}>
+            <div className="bac-eyebrow">Blog · Méthode et orientation</div>
+            <h1>Le blog SaadConcours</h1>
+            <p>
+              Méthode, matières à préparer, guides des facultés et conseils pour réussir ton Bac, ta Licence et ton
+              concours d'accès au Master au Maroc.
+            </p>
+            <div className="bac-hero-stats">
+              <span className="bac-stat">
+                <strong>{posts.length}</strong> article{posts.length > 1 ? "s" : ""}
+              </span>
+              <span className="bac-stat">
+                <strong>{categoryCounts.length}</strong> rubriques
+              </span>
             </div>
-            <div className="blog-filter-controls">
-              <div className="search-box blog-search-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-                <input type="text" id="blogSearchInput" placeholder="Rechercher un article..." />
+          </section>
+
+          {categoryCounts.length > 0 && (
+            <div className="sp-filters">
+              <div className="bac-year-tabs" id="blogCategoryChips" role="group" aria-label="Rubriques">
+                {categoryCounts.map((c) => (
+                  <button key={c.code} type="button" className="bac-year-tab blog-cat-chip" data-category={c.code}>
+                    {c.emoji} {c.label} <em>{c.count}</em>
+                  </button>
+                ))}
               </div>
-              <button type="button" className="reset-btn" id="blogResetBtn" style={{ width: "auto" }}>
-                Réinitialiser
+              <input type="search" id="blogSearchInput" placeholder="Rechercher un article..." aria-label="Rechercher un article" />
+              <button type="button" className="sp-reset" id="blogResetBtn">
+                ✕ Réinitialiser
               </button>
+              <span className="sp-count" id="blogResultsCount">
+                {posts.length} article{posts.length > 1 ? "s" : ""}
+              </span>
             </div>
-            <div className="results-count" id="blogResultsCount">
-              {posts.length} article{posts.length > 1 ? "s" : ""}
-            </div>
-          </div>
-        )}
+          )}
 
-        {posts.length ? (
-          <>
-            <div className="grid" id="blogGrid" style={{ marginTop: 16 }} dangerouslySetInnerHTML={{ __html: posts.map(blogCardHtml).join("") }} />
-            <div className="blog-pagination" id="blogPagination" />
-          </>
-        ) : (
-          <div className="empty-state">Aucun article publié pour l'instant.</div>
-        )}
+          {posts.length ? (
+            <>
+              <div className="sp-card-grid" id="blogGrid" dangerouslySetInnerHTML={{ __html: posts.map(blogCardHtml).join("") }} />
+              <div className="sp-pagination" id="blogPagination" />
+            </>
+          ) : (
+            <div className="sp-empty">Aucun article publié pour l'instant.</div>
+          )}
+        </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

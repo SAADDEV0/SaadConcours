@@ -3,21 +3,34 @@ import { marked } from "marked";
 import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
-import CoursDetailClient from "./CoursDetailClient";
+import { breadcrumbJsonLd } from "../../_shared/listingSchema";
+import JsonLd from "../../_shared/JsonLd";
 import MathScripts from "../../_shared/MathScripts";
+import CoursDetailClient from "./CoursDetailClient";
+import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
+import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
 
 const SITE_URL = "https://www.saadconcours.space";
+const RESSOURCES = [
+  { code: "cours", label: "Cours" },
+  { code: "exercices", label: "Exercices" },
+  { code: "resume", label: "Résumé" },
+  { code: "qcm", label: "QCM" },
+];
 
 async function findCours(id) {
   const list = await getAllCours();
   return { c: list.find((x) => x.id === id) || null, list };
 }
 
-// Same module first (most relevant to keep revising), for internal linking
-// and to give crawlers more paths into fiches that have no other inbound
-// links — mirrors getRelatedConcours in app/concours/[id]/page.js.
+// Même semestre d'abord, puis même matière : maillage interne entre modules.
 function getRelatedCours(list, current, limit = 4) {
-  return list.filter((x) => x.id !== current.id && x.module === current.module && x.available).slice(0, limit);
+  const autres = list.filter((x) => x.id !== current.id && x.available);
+  const score = (x) => (x.semestre === current.semestre ? 2 : 0) + (x.category === current.category ? 1 : 0);
+  return autres
+    .filter((x) => score(x) > 0)
+    .sort((a, b) => score(b) - score(a))
+    .slice(0, limit);
 }
 
 export async function generateMetadata(props) {
@@ -25,10 +38,8 @@ export async function generateMetadata(props) {
   const { c } = await findCours(params.id);
   if (!c || !c.available) return {};
 
-  const title = `${c.title} — Fiche de cours ${c.module}`;
-  const description =
-    c.description ||
-    `Fiche de cours synthétique — ${c.module} : définitions, formules et points clés à retenir pour réviser les concours de Master au Maroc.`;
+  const title = `${c.module} — Cours ${c.semestre ? `${c.semestre} ` : ""}FSJES par chapitre`;
+  const description = `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}) : ${c.description || ""} Cours, exercices corrigés, résumé et QCM par chapitre.`.trim();
   const url = `${SITE_URL}/cours/${c.id}`;
 
   return {
@@ -55,106 +66,216 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function CoursDetailPage(props) {
+function groupesParPartie(chapitres) {
+  const groupes = [];
+  for (const ch of chapitres) {
+    const cle = ch.partie ? ch.partie.numero : 0;
+    let g = groupes.find((x) => x.cle === cle);
+    if (!g) {
+      g = { cle, partie: ch.partie, chapitres: [] };
+      groupes.push(g);
+    }
+    g.chapitres.push(ch);
+  }
+  return groupes;
+}
+
+export default async function CoursModulePage(props) {
   const params = await props.params;
   const { c, list } = await findCours(params.id);
   if (!c || !c.available) notFound();
 
-  const contentHtml = renderMarkdownWithMath(marked, c.content || "*Contenu non disponible.*");
+  const cat = coursCategoryInfo(c.category);
+  const { chapitres, annexe } = fsjesModule(c);
   const url = `${SITE_URL}/cours/${c.id}`;
   const related = getRelatedCours(list, c);
+  const nbExercices = chapitres.reduce((n, x) => n + x.nbExercices, 0);
+  const nbQcm = chapitres.reduce((n, x) => n + x.qcm.length, 0);
+  // Titres de l'annexe décalés d'un niveau quand elle commence en "# " : la
+  // section a déjà son propre h2.
+  const annexeMd = annexe.startsWith("# ") ? annexe.replace(/^## /gm, "### ").replace(/^# /gm, "## ") : annexe;
+  const annexeHtml = annexe ? renderMarkdownWithMath(marked, annexeMd) : "";
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "LearningResource",
-    name: c.title,
-    description: c.description || `Fiche de cours — ${c.module}`,
+    "@type": "Course",
+    name: c.module,
+    description: c.description || `Cours de ${c.module} — Licence FSJES`,
     url,
-    educationalLevel: "Master",
-    about: c.module,
+    educationalLevel: "Licence",
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Cours", item: `${SITE_URL}/cours` },
-      { "@type": "ListItem", position: 3, name: c.title, item: url },
-    ],
+    hasPart: chapitres.map((ch) => ({ "@type": "LearningResource", name: ch.titre, url: `${SITE_URL}${fsjesChapitreHref(c, ch)}` })),
   };
 
   return (
     <>
-      <MathScripts />
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false, rails: true }) }} />
+      {annexe && <MathScripts />}
+      <JsonLd data={[jsonLd, breadcrumbJsonLd([{ name: "Cours", path: "/cours" }, { name: c.module, path: `/cours/${c.id}` }])]} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
-      <div className="cd-view" style={{ maxWidth: 1100 }}>
-        <nav className="cd-breadcrumb">
-          <a href="/">Accueil</a> <span>/</span> <a href="/cours">Cours</a> <span>/</span> <span>{c.title}</span>
-        </nav>
+      <div className="bac-space site-space" style={{ "--mat-h": cat?.hue ?? 220 }}>
+        <div className="bac-wrap">
+          <nav className="cd-breadcrumb">
+            <a href="/">Accueil</a> <span>/</span> <a href="/cours">Cours FSJES</a> <span>/</span> <span>{c.module}</span>
+          </nav>
 
-        <div className="cd-head">
-          <h1>{c.title}</h1>
-          <div className="cd-tags">
-            <span className="info-tag">📖 {c.module}</span>
-          </div>
-        </div>
-
-        <div className="eval-toolbar" style={{ justifyContent: "flex-end" }}>
-          <div className="cours-theme-picker" id="coursThemePicker">
-            <button className="cours-theme-btn" id="coursThemeBtn" type="button">🎨 Thème de lecture</button>
-            <div className="cours-theme-panel" id="coursThemePanel" style={{ display: "none" }}></div>
-          </div>
-          <button className="dl-btn" id="coursPdfBtn">⬇ Télécharger en PDF</button>
-        </div>
-        {/* suppressHydrationWarning: the inline script below sets data-md-theme
-            before React hydrates, which is an attribute the server never
-            rendered — expected, not a mismatch to fix. */}
-        <div className="cours-reader" id="coursReader" suppressHydrationWarning>
-          <aside className="cours-toc" id="coursToc"></aside>
-          <div className="cours-content" id="coursContent" dangerouslySetInnerHTML={{ __html: contentHtml }} />
-        </div>
-        {/* Runs as soon as the reader is parsed, i.e. before it is painted —
-           CoursDetailClient sets data-md-theme too, but from a useEffect, so
-           the fiche visibly flipped from the site palette to the saved
-           reading theme on every load. Same trick as the data-theme script
-           in app/layout.js. */}
-        <script
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{
-            __html: `try{var r=document.getElementById("coursReader");if(r)r.setAttribute("data-md-theme",localStorage.getItem("cours_md_theme")||"default");}catch(e){}`,
-          }}
-        />
-
-        <CoursDetailClient cours={c} />
-
-        {related.length > 0 && (
-          <div className="cd-card cd-related">
-            <h2>Autres fiches — {c.module}</h2>
-            <div className="cd-related-grid">
-              {related.map((r) => (
-                <a key={r.id} className="cd-related-item" href={`/cours/${r.id}`}>
-                  <div className="cd-related-title">{r.title}</div>
-                  <div className="cd-related-sub">{r.module}</div>
-                </a>
-              ))}
+          <div className="bac-mat-hero">
+            <span className="bac-mat-hero-icon">{fsjesModuleIcon(c, cat?.emoji)}</span>
+            <div className="bac-mat-hero-body">
+              <div className="bac-eyebrow">
+                Licence FSJES{c.semestre ? ` · ${licenceSemestreLabel(c.semestre)}` : ""}
+                {c.parcours ? ` · Parcours ${licenceParcoursLabel(c.parcours)}` : " · Tronc commun"}
+              </div>
+              <h1>{c.module}</h1>
+              <p>{c.description}</p>
+              <div className="bac-hero-stats">
+                <span className="bac-stat">
+                  <strong>{chapitres.length}</strong> chapitres
+                </span>
+                <span className="bac-stat">
+                  <strong>{nbExercices}</strong> exercices corrigés
+                </span>
+                {nbQcm > 0 && (
+                  <span className="bac-stat">
+                    <strong>{nbQcm}</strong> questions de QCM
+                  </span>
+                )}
+              </div>
+              <div className="sp-hero-actions">
+                {chapitres[0] && (
+                  <a className="sp-btn primary" href={fsjesChapitreHref(c, chapitres[0])}>
+                    Commencer le chapitre 1 →
+                  </a>
+                )}
+                <button type="button" className="sp-btn" id="coursPdfBtn">
+                  ⬇ Cours complet en PDF
+                </button>
+              </div>
             </div>
           </div>
-        )}
+
+          <div className="bac-mat-layout">
+            <aside className="bac-side">
+              <div className="bac-side-card">
+                <div className="bac-side-title">Sommaire</div>
+                <a href="#chapitres" className="bac-side-link">
+                  Chapitres <span>{chapitres.length}</span>
+                </a>
+                {annexe && (
+                  <a href="#formulaire" className="bac-side-link">
+                    Formulaire & conseils <span>📐</span>
+                  </a>
+                )}
+              </div>
+              <div className="bac-side-card">
+                <div className="bac-side-title">Ce module</div>
+                {c.semestre && (
+                  <div className="sp-side-info">
+                    Semestre <strong>{c.semestre}</strong>
+                  </div>
+                )}
+                <div className="sp-side-info">
+                  Parcours <strong>{c.parcours ? licenceParcoursLabel(c.parcours) : "Commun"}</strong>
+                </div>
+                {c.filiere && (
+                  <div className="sp-side-info">
+                    Filière <strong>{licenceFiliereLabel(c.filiere)}</strong>
+                  </div>
+                )}
+                {cat && (
+                  <div className="sp-side-info">
+                    Matière <strong>{cat.label}</strong>
+                  </div>
+                )}
+              </div>
+            </aside>
+
+            <main className="bac-main">
+              <section id="chapitres" className="bac-semestre">
+                <h2 className="bac-semestre-title">
+                  <span className="bac-semestre-code">{c.semestre || "📖"}</span>
+                  Chapitres du module
+                </h2>
+                {groupesParPartie(chapitres).map((g) => (
+                  <div key={g.cle} className="bac-unite">
+                    <div className="bac-unite-head">
+                      {g.partie ? (
+                        <>
+                          <span className="bac-unite-num">Partie {g.partie.numero}</span>
+                          <h3>{g.partie.titre}</h3>
+                        </>
+                      ) : (
+                        <>
+                          <span className="bac-unite-num">{c.module}</span>
+                          <h3>Cours, exercices, résumé et QCM</h3>
+                        </>
+                      )}
+                    </div>
+                    <ol className="bac-chap-list">
+                      {g.chapitres.map((ch) => (
+                        <li key={ch.slug}>
+                          <a className="bac-chap-row" href={fsjesChapitreHref(c, ch)}>
+                            <span className="bac-chap-num">{ch.numero}</span>
+                            <span className="bac-chap-title">{ch.titre}</span>
+                            <span className="bac-chap-res">
+                              {RESSOURCES.map((r) => {
+                                const v = ch[r.code];
+                                const on = Array.isArray(v) ? v.length > 0 : Boolean(v);
+                                return (
+                                  <span key={r.code} className={`bac-res-chip${on ? " on" : ""}`}>
+                                    {r.label}
+                                  </span>
+                                );
+                              })}
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                ))}
+              </section>
+
+              {annexe && (
+                <section id="formulaire" className="bac-semestre">
+                  <h2 className="bac-semestre-title">
+                    <span className="bac-semestre-code">📐</span>
+                    Synthèse du module
+                  </h2>
+                  <div className="sp-annexe">
+                    <div className="cours-content bac-md" id="coursAnnexe" dangerouslySetInnerHTML={{ __html: annexeHtml }} />
+                  </div>
+                </section>
+              )}
+
+              {related.length > 0 && (
+                <section className="bac-semestre">
+                  <h2 className="bac-section-title">Autres modules</h2>
+                  <div className="sp-related">
+                    {related.map((r) => {
+                      const rc = coursCategoryInfo(r.category);
+                      return (
+                        <a key={r.id} className="bac-mat-card" href={`/cours/${r.id}`} style={{ "--mat-h": rc?.hue ?? 220 }}>
+                          <span className="bac-mat-icon">{fsjesModuleIcon(r, rc?.emoji)}</span>
+                          <span className="bac-mat-body">
+                            <span className="bac-mat-name">{r.module}</span>
+                            <span className="bac-mat-meta">
+                              {r.semestre && <span>{r.semestre}</span>}
+                              <span>{fsjesModule(r).chapitres.length} chapitres</span>
+                            </span>
+                          </span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
+            </main>
+          </div>
+        </div>
       </div>
 
+      <CoursDetailClient cours={c} />
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
     </>
   );

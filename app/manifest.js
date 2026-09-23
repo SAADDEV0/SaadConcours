@@ -1,9 +1,9 @@
 export default function manifest() {
   return {
-    name: "SaadConcours — Concours Masters Maroc",
+    name: "SaadConcours — Cours Bac, FSJES et concours Master",
     short_name: "SaadConcours",
     description:
-      "Sujets réels de concours d'accès aux Masters, fiches de cours et QCM d'entraînement pour les universités marocaines.",
+      "Cours du Bac Sciences Économiques et de la Licence FSJES chapitre par chapitre, exercices corrigés, QCM et sujets réels de concours Master au Maroc.",
     start_url: "/",
     display: "standalone",
     background_color: "#0f1115",

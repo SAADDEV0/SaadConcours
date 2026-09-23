@@ -2,12 +2,12 @@ import { buildOgImage, ogImageSize, ogImageContentType } from "./_shared/ogImage
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const alt = "SaadConcours — Concours Masters Maroc";
+export const alt = "SaadConcours — Cours Bac, Licence FSJES et concours Master au Maroc";
 
 export default async function Image() {
   return buildOgImage({
     eyebrow: "SaadConcours",
-    title: "Prépare ton concours d'accès au Master au Maroc",
-    subtitle: "Sujets réels, fiches de cours et QCM — Finance, Management, Marketing, Économie...",
+    title: "Cours Bac, Licence FSJES et concours Master",
+    subtitle: "Cours chapitre par chapitre, exercices corrigés, QCM et sujets réels de concours — économie et gestion au Maroc",
   });
 }

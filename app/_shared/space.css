@@ -1,0 +1,161 @@
+/* Espaces du site (Licence FSJES, concours, évaluation, blog, accueil) : mêmes composants que l'espace Bac (app/bac/bac.css,
+   classes bac-*), avec l'accent bleu du site à la place du vert. */
+.bac-space.site-space{
+  --accent:#4f8cff; --accent-dim:#2d4a8a;
+  --bac-grad:linear-gradient(135deg,#2f6fed,#7c5cff);
+}
+:root[data-theme="light"] .bac-space.site-space{--accent:#2f6fed; --accent-dim:#dce7ff;}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .bac-space.site-space{--accent:#2f6fed; --accent-dim:#dce7ff;}
+}
+:root[data-theme="dark"] .site-space .bac-dispo,
+:root[data-theme="dark"] .site-space .bac-badge,
+:root[data-theme="dark"] .site-space .bac-filiere-chip{color:#9dbcff;}
+
+.site-space .bac-hero{
+  background:linear-gradient(135deg, color-mix(in srgb,#4f8cff 16%, var(--bg-card)), var(--bg-card) 70%);
+  border-color:color-mix(in srgb,#4f8cff 30%, var(--border));
+}
+.site-space .bac-hero::after{content:var(--hero-icon,"🎓");}
+
+/* ---------- Index : filtres ---------- */
+.sp-filters{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:26px;}
+.sp-filters .bac-year-tabs{margin:0 6px 0 0;}
+.sp-filters .bac-year-tab{cursor:pointer; font-family:inherit; padding:7px 14px; font-size:.84rem;}
+.sp-filters select,
+.sp-filters input{
+  padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card);
+  color:var(--text); font:inherit; font-size:.85rem; min-width:0;
+}
+.sp-filters input{flex:1 1 180px;}
+.sp-filters select:focus, .sp-filters input:focus{outline:none; border-color:var(--accent);}
+.sp-reset{padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:none; color:var(--text-dim); font:inherit; font-size:.82rem; cursor:pointer;}
+.sp-reset:hover{color:var(--accent); border-color:var(--accent);}
+.sp-count{font-size:.8rem; color:var(--text-faint); margin-left:auto;}
+.sp-empty{padding:40px 20px; text-align:center; color:var(--text-dim); border:1px dashed var(--border); border-radius:var(--radius-lg);}
+.bac-group[hidden], .bac-mat-card[hidden]{display:none;}
+
+/* ---------- Page module ---------- */
+.sp-hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+.sp-btn{
+  display:inline-flex; align-items:center; gap:6px; padding:10px 18px; border-radius:10px; font-weight:700; font-size:.88rem;
+  text-decoration:none; cursor:pointer; border:1px solid var(--border); background:var(--bg-card); color:var(--text); font-family:inherit;
+}
+.sp-btn.primary{background:var(--bac-grad); color:#fff !important; border-color:transparent;}
+.sp-btn:hover{filter:brightness(1.06); border-color:var(--accent);}
+.sp-side-info{display:flex; justify-content:space-between; gap:10px; padding:6px 2px; font-size:.83rem; color:var(--text-dim);}
+.sp-side-info strong{color:var(--text); text-align:right; font-weight:600;}
+.sp-annexe{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:6px 22px 18px; margin-top:6px;}
+.sp-related{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); gap:10px;}
+.sp-related .bac-mat-card{padding:14px;}
+.sp-related .bac-mat-icon{width:38px; height:38px; font-size:1.15rem; border-radius:11px;}
+
+/* ---------- Listes (concours, évaluation, blog) ---------- */
+.sp-field{display:flex; flex-direction:column; gap:5px; margin-bottom:10px; font-size:.78rem; color:var(--text-dim); font-weight:600;}
+.sp-field select, .sp-field input{
+  width:100%; padding:8px 10px; border-radius:9px; border:1px solid var(--border); background:var(--bg);
+  color:var(--text); font:inherit; font-size:.85rem; font-weight:400;
+}
+.sp-field select:focus, .sp-field input:focus{outline:none; border-color:var(--accent);}
+.sp-reset-full{width:100%; margin-top:4px;}
+.sp-results-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
+.sp-results-head .bac-section-title{margin:0;}
+.sp-results-head .sp-count{margin-left:0;}
+.sp-card-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)); gap:12px;}
+.sp-card{position:relative;}
+.sp-card .bac-mat-meta{gap:8px;}
+.sp-card .bac-dispo, .sp-card .bac-soon{display:inline-block;}
+.sp-year{font-size:.82rem; font-weight:800; color:var(--mat-color);}
+.sp-chips{display:flex; flex-wrap:wrap; gap:4px;}
+.sp-card-dl{
+  flex-shrink:0; align-self:flex-start; width:34px; height:34px; border-radius:10px; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg); color:var(--text-dim); font-size:.95rem;
+}
+.sp-card-dl:hover{color:var(--accent); border-color:var(--accent);}
+.sp-card.disabled{opacity:.6; cursor:default;}
+.sp-card.disabled:hover{transform:none; border-color:var(--border);}
+.sp-pagination{display:flex; justify-content:center; flex-wrap:wrap; gap:6px; margin-top:18px;}
+
+@media (max-width:560px){
+  .sp-annexe{padding:4px 14px 14px;}
+  .sp-count{margin-left:0; width:100%;}
+}
+
+.sp-card-kicker{font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--mat-color);}
+.sp-filters .bac-year-tab em{font-style:normal; font-size:.72rem; opacity:.75; margin-left:4px;}
+.sp-pagination .bac-year-tab{cursor:pointer; font-family:inherit; padding:7px 14px; font-size:.84rem;}
+.sp-pagination .bac-year-tab:disabled{opacity:.45; cursor:not-allowed;}
+
+/* ---------- Accueil ---------- */
+.sp-home-hero{padding:26px 26px;}
+.sp-home-hero h1{font-size:clamp(1.5rem, 3.2vw, 2.1rem); max-width:760px; letter-spacing:-.01em;}
+.sp-home-hero p{max-width:760px; font-size:1rem;}
+.sp-home-hero p strong{color:var(--text);}
+.sp-piliers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+.sp-pilier{flex-direction:column; padding:22px;}
+.sp-pilier .bac-mat-icon{width:54px; height:54px; font-size:1.7rem;}
+.sp-pilier .bac-mat-name{font-size:1.08rem;}
+.sp-pilier .bac-mat-arrow{align-self:flex-end;}
+.sp-about{margin-top:10px; padding:22px 24px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border);}
+.sp-about h2{font-size:1.05rem; margin:0 0 8px;}
+.sp-about p{margin:0; color:var(--text-dim); line-height:1.65; font-size:.92rem;}
+.sp-about strong{color:var(--text);}
+.site-space .urgent-alert, .site-space .home-alert{margin-bottom:24px;}
+@media (max-width:860px){
+  .sp-piliers{grid-template-columns:1fr;}
+  .sp-pilier{flex-direction:row;}
+}
+@media (max-width:560px){
+  .sp-home-hero{padding:24px 18px;}
+  .sp-hero-actions .sp-btn{flex:1 1 auto; justify-content:center;}
+}
+
+/* ---------- Pages de détail (concours, évaluation, article) ---------- */
+.sp-detail{max-width:900px;}
+.sp-detail-hero h1{font-size:1.5rem; margin:0 0 12px;}
+.sp-detail-hero .bac-hero-stats{margin-bottom:4px;}
+.sp-detail-hero .bac-dispo{display:inline-flex; align-items:center; padding:5px 12px; font-size:.78rem;}
+.sp-detail .dl-btn{border-radius:10px; background:var(--bac-grad); padding:10px 18px; font-weight:700;}
+.sp-detail .share-btn{border-radius:10px; padding:10px 16px;}
+.sp-anchor-tabs{position:sticky; top:62px; z-index:5; padding:6px 0; margin-bottom:14px; background:color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter:blur(8px);}
+.sp-anchor-tabs .bac-tab-label{text-decoration:none;}
+.sp-anchor-tabs .bac-tab-label:hover{border-color:var(--accent);}
+.sp-detail .cd-card{
+  background:var(--bg-card); border-radius:var(--radius-lg); padding:22px 24px; box-shadow:none;
+  scroll-margin-top:130px;
+}
+.sp-detail .cd-card > h2{display:flex; align-items:center; gap:10px; font-size:1.1rem; margin:0 0 14px;}
+.sp-detail .cd-card > h2::before{content:""; width:4px; height:18px; border-radius:4px; background:var(--bac-grad);}
+.sp-detail .cd-actions{margin:6px 0 18px;}
+@media (max-width:560px){
+  .sp-detail .cd-card{padding:18px 16px;}
+  .sp-detail-hero h1{font-size:1.25rem;}
+  .sp-anchor-tabs{top:62px;}
+}
+
+/* ---------- Échelle générale ----------
+   Base à 15px (voir html dans globals.css) et espacements resserrés : à 16px
+   avec les marges d origine, le site paraissait zoomé sur les écrans
+   d ordinateur portable. */
+.bac-wrap{padding-top:18px;}
+.bac-hero{padding:22px 24px; margin-bottom:18px;}
+.bac-hero h1{font-size:1.5rem;}
+.bac-hero::after{font-size:5rem;}
+.bac-mat-hero{padding:20px 22px; margin-bottom:18px;}
+.bac-mat-hero-icon{width:56px; height:56px; font-size:1.75rem;}
+.bac-chap-hero{padding:18px 20px;}
+.bac-chap-hero h1{font-size:1.35rem;}
+.bac-mat-card{padding:14px 16px; gap:12px;}
+.bac-mat-icon{width:42px; height:42px; font-size:1.3rem; border-radius:12px;}
+.bac-group{margin-bottom:24px;}
+.sp-pilier{padding:18px;}
+.sp-pilier .bac-mat-icon{width:48px; height:48px; font-size:1.5rem;}
+@media (max-width:560px){
+  .bac-hero, .bac-mat-hero{padding:18px 16px;}
+  .bac-hero h1{font-size:1.25rem;}
+  .bac-chap-hero{padding:16px;}
+}
+
+/* L'année des cartes de concours : plus spécifique que .bac-mat-icon (règle
+   d'échelle ci-dessus) pour ne pas hériter de la taille des icônes emoji. */
+.bac-mat-icon.sp-year{font-size:.8rem; font-weight:800; letter-spacing:-.01em; line-height:1; font-variant-numeric:tabular-nums;}

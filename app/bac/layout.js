@@ -1,5 +1,3 @@
-import "./bac.css";
-
 export const metadata = {
   title: "Cours Bac Sciences Économiques & Gestion",
   description:

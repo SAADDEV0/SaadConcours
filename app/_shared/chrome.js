@@ -1,17 +1,32 @@
-// Shared header/banner markup + boilerplate script (theme, dua, visitor counter)
+// Shared header/banner markup + boilerplate script (theme, visitor counter)
 // reused verbatim across every page since they're separate routes now
 // instead of one single-page app.
 
 import { adsForPlacement, partnerAdHtml } from "./partnerAds";
 
+// Liens principaux du header. « Concours ouverts » n'y figure pas : c'est le
+// bouton mis en avant à droite (CTA_ITEM), et il reprend sa place dans le
+// menu mobile. `icon` ne sert qu'au menu mobile.
 const NAV_ITEMS = [
-  { key: "home", href: "/", label: "Accueil" },
-  { key: "concours", href: "/concours", label: "Concours" },
-  { key: "cours", href: "/cours", label: "Cours" },
-  { key: "eval", href: "/evaluation", label: "Évaluation" },
-  { key: "news", href: "/news", label: "Concours ouverts" },
-  { key: "blog", href: "/blog", label: "Blog" },
+  { key: "home", href: "/", icon: "🏠", label: "Accueil" },
+  {
+    key: "cours-menu",
+    label: "Cours",
+    // Menu déroulant : un espace de cours par public (lycée, université).
+    children: [
+      { key: "bac", href: "/bac/2bac", icon: "📘", label: "Cours Bac", desc: "Lycée · 2ᵉ Bac Sciences Économiques et Gestion" },
+      { key: "cours", href: "/cours", icon: "🎓", label: "Cours Licence FSJES", desc: "Université · modules du S1 au S6" },
+    ],
+  },
+  { key: "concours", href: "/concours", icon: "📚", label: "Concours" },
+  { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
+  { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
 ];
+
+// Liens à plat (menu mobile) : les entrées du menu déroulant y deviennent
+// des tuiles à part entière.
+const NAV_FLAT = NAV_ITEMS.flatMap((item) => item.children || [item]);
+const CTA_ITEM = { key: "news", href: "/news", icon: "🔔", label: "Concours ouverts" };
 
 // Fires on every internal link click (nav, cards, "voir tout"...) - since
 // most navigation here is a plain <a href> full page load (not Next <Link>
@@ -25,21 +40,11 @@ const NAV_ITEMS = [
 export function chromeHtml({ active, showSearch, rails = false }) {
   return `
 <div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}"></div>
-<div class="dua-banner">
-  <div class="dua-inner">
-    <span class="dua-deco">✦</span>
-    <span>
-      <span class="dua-text" id="duaText" dir="rtl" lang="ar"></span>
-      <span class="dua-fr" id="duaFr"></span>
-    </span>
-    <span class="dua-deco">✦</span>
-  </div>
-</div>
 
-<header>
+<header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="/" style="text-decoration:none;">
-      <svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <a class="brand" href="/" aria-label="SaadConcours, accueil">
+      <svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/>
         </linearGradient></defs>
@@ -51,36 +56,55 @@ export function chromeHtml({ active, showSearch, rails = false }) {
         <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
         <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
       </svg>
-      <span><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
+      <span class="brand-text">
+        <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
+        <span class="brand-tagline">Bac · Licence FSJES · Master</span>
+      </span>
     </a>
-    ${
-      showSearch
-        ? `<form class="search-box" id="headerSearchForm" role="search">
-      <button type="submit" class="search-box-btn" aria-label="Rechercher">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-      <input type="text" id="searchInput" placeholder="Rechercher (établissement, ville, mot-clé de l'énoncé...)">
-    </form>`
-        : `<div class="search-box" style="flex:1;"></div>`
-    }
-    <nav class="view-nav">
-      ${NAV_ITEMS.map(
-        (item) =>
-          `<a class="view-nav-btn${active === item.key ? " active" : ""}" href="${item.href}"><span class="view-nav-label">${item.label}</span></a>`
-      ).join("")}
+    <nav class="view-nav" aria-label="Navigation principale">
+      ${NAV_ITEMS.map((item) => {
+        if (!item.children) {
+          return `<a class="view-nav-btn${active === item.key ? " active" : ""}" href="${item.href}"${active === item.key ? ' aria-current="page"' : ""}>${item.label}</a>`;
+        }
+        const isActive = item.children.some((c) => c.key === active);
+        return `<div class="nav-dropdown">
+        <button type="button" class="view-nav-btn nav-dropdown-btn${isActive ? " active" : ""}" aria-haspopup="true" aria-expanded="false">${item.label}<svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-dropdown-menu" role="menu">
+          ${item.children
+            .map(
+              (c) =>
+                `<a class="nav-dropdown-item${active === c.key ? " active" : ""}" role="menuitem" href="${c.href}"${active === c.key ? ' aria-current="page"' : ""}><span class="nav-dropdown-icon" aria-hidden="true">${c.icon}</span><span><span class="nav-dropdown-label">${c.label}</span><span class="nav-dropdown-desc">${c.desc}</span></span></a>`
+            )
+            .join("")}
+        </div>
+      </div>`;
+      }).join("")}
     </nav>
-    ${active === "concours" ? `<div class="stat-pill" id="statPill">— concours</div>` : ""}
-    ${active === "blog" ? `<div class="stat-pill" id="statPill">— articles</div>` : ""}
-    <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
-    <button class="nav-toggle-btn" id="navToggleBtn" title="Menu" aria-label="Ouvrir le menu" aria-expanded="false">
-      <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
-    </button>
+    <div class="header-actions">
+      ${
+        showSearch
+          ? `<form class="search-box" id="headerSearchForm" role="search">
+        <button type="submit" class="search-box-btn" aria-label="Rechercher">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <input type="search" id="searchInput" placeholder="Rechercher un sujet…" aria-label="Rechercher un sujet de concours (établissement, ville, filière, mot-clé)">
+      </form>`
+          : ""
+      }
+      <a class="header-cta${active === CTA_ITEM.key ? " active" : ""}" href="${CTA_ITEM.href}"><span class="header-cta-dot" aria-hidden="true"></span>${CTA_ITEM.label}</a>
+      <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
+      <button class="nav-toggle-btn" id="navToggleBtn" title="Menu" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+      </button>
+    </div>
   </div>
   <div class="mobile-nav-panel" id="mobileNavPanel">
-    ${NAV_ITEMS.map(
-      (item) =>
-        `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}">${item.label}</a>`
-    ).join("")}
+    ${[...NAV_FLAT, CTA_ITEM]
+      .map(
+        (item) =>
+          `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}"><span class="mobile-nav-icon" aria-hidden="true">${item.icon}</span>${item.label}</a>`
+      )
+      .join("")}
   </div>
 </header>
 
@@ -107,7 +131,7 @@ export function footerHtml() {
   return `
 <div class="pa-zone pa-zone-footer" id="paFooter"></div>
 <footer>
-  <div class="footer-text">Base de données de sujets de concours réels — corrigés indicatifs quand disponibles, sources publiques citées sur chaque fiche.</div>
+  <div class="footer-text">Cours du Bac Sciences Économiques et de la Licence FSJES, sujets réels de concours Master — corrigés indicatifs, sources publiques citées sur chaque fiche.</div>
   <div class="footer-social" id="footerSocial"></div>
   <div class="footer-legal"><a href="/a-propos">À propos</a> · <a href="/contact">Contact</a> · <a href="/faq">FAQ</a> · <a href="/confidentialite">Confidentialité</a></div>
 </footer>
@@ -423,31 +447,6 @@ export const chromeScript = function initChrome() {
     queueTrackEvent({ t: "page-path", path: location.pathname, first });
   })();
 
-  (function initDua() {
-    const DUAS = [
-      { ar: "اللهم يسر ولا تعسر", fr: "Ô Allah, facilite et ne rends pas difficile." },
-      { ar: "سبحان الله وبحمده، سبحان الله العظيم", fr: "Gloire et louange à Allah, Gloire à Allah l'Immense." },
-      { ar: "حسبنا الله ونعم الوكيل", fr: "Allah nous suffit, Il est le meilleur garant." },
-      { ar: "رب اشرح لي صدري ويسر لي أمري", fr: "Seigneur, ouvre ma poitrine et facilite ma tâche." },
-      { ar: "لا حول ولا قوة إلا بالله", fr: "Il n'y a de force ni de puissance qu'en Allah." },
-      { ar: "اللهم إني أسألك العفو والعافية", fr: "Ô Allah, je Te demande le pardon et la santé." },
-      { ar: "سبحان الله والحمد لله ولا إله إلا الله والله أكبر", fr: "Gloire à Allah, louange à Lui, nul dieu qu'Lui, Allah est le plus Grand." },
-      { ar: "أستغفر الله العظيم وأتوب إليه", fr: "Je demande pardon à Allah l'Immense et me repens à Lui." },
-      { ar: "اللهم أعني على ذكرك وشكرك وحسن عبادتك", fr: "Ô Allah, aide-moi à T'évoquer, Te remercier et bien T'adorer." },
-      { ar: "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", fr: "Seigneur, accorde-nous le bien ici-bas et dans l'au-delà." },
-      { ar: "لا إله إلا الله وحده لا شريك له", fr: "Nul dieu qu'Allah, Seul, sans associé." },
-      { ar: "اللهم اجعل خير أعمالي خواتيمها", fr: "Ô Allah, fais que mes meilleures actions soient les dernières." },
-      { ar: "رضيت بالله ربا وبالإسلام دينا وبمحمد نبيا", fr: "J'agrée Allah comme Seigneur, l'Islam comme religion, Muhammad comme Prophète." },
-      { ar: "اللهم إنك عفو تحب العفو فاعف عني", fr: "Ô Allah, Tu es Pardonneur et aimes le pardon, pardonne-moi." },
-    ];
-    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    const pick = DUAS[dayOfYear % DUAS.length];
-    const elAr = document.getElementById("duaText");
-    const elFr = document.getElementById("duaFr");
-    if (elAr) elAr.textContent = pick.ar;
-    if (elFr) elFr.textContent = pick.fr;
-  })();
-
   (function initTheme() {
     const saved = localStorage.getItem("theme");
     const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
@@ -490,6 +489,31 @@ export const chromeScript = function initChrome() {
       if (window.location.pathname === "/concours") return;
       const q = input.value.trim();
       window.location.href = "/concours" + (q ? "?q=" + encodeURIComponent(q) : "");
+    });
+  })();
+
+  (function initNavDropdowns() {
+    document.querySelectorAll(".nav-dropdown").forEach((dd) => {
+      const btn = dd.querySelector(".nav-dropdown-btn");
+      if (!btn || btn.dataset.wired === "1") return;
+      btn.dataset.wired = "1";
+      const setOpen = (open) => {
+        dd.classList.toggle("open", open);
+        btn.setAttribute("aria-expanded", String(open));
+      };
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setOpen(!dd.classList.contains("open"));
+      });
+      dd.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          setOpen(false);
+          btn.focus();
+        }
+      });
+      document.addEventListener("click", (e) => {
+        if (!dd.contains(e.target)) setOpen(false);
+      });
     });
   })();
 

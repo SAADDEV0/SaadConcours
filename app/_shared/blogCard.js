@@ -16,17 +16,25 @@ export function readingTimeMinutes(content) {
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
+// Teinte par catégorie, pour garder le même code couleur que les cours.
+const BLOG_HUES = { facultes: 220, matieres: 152, comparatifs: 265, methode: 42 };
+
 export function blogCardHtml(post) {
   const cat = categoryInfo(post.category);
   const minutes = readingTimeMinutes(post.content);
+  const hue = BLOG_HUES[post.category] ?? 220;
   return `
-  <a class="blog-card" href="/blog/${encodeURIComponent(post.id)}" data-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || "")}">
-    <div class="blog-card-top">
-      ${cat ? `<span class="blog-cat-badge blog-cat-${escapeHtml(cat.code)}">${cat.emoji} ${escapeHtml(cat.label)}</span>` : ""}
-      <span class="blog-read-time">⏱️ ${minutes} min</span>
-    </div>
-    <div class="eval-module-name">${escapeHtml(post.title)}</div>
-    <div class="eval-module-desc">${escapeHtml(post.excerpt)}</div>
-    <time class="eval-module-meta" datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(post.publishedAt || "")}</time>
+  <a class="bac-mat-card sp-card" href="/blog/${encodeURIComponent(post.id)}" data-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || "")}" style="--mat-h:${hue}">
+    <span class="bac-mat-icon">${cat ? cat.emoji : "📰"}</span>
+    <span class="bac-mat-body">
+      ${cat ? `<span class="sp-card-kicker">${escapeHtml(cat.label)}</span>` : ""}
+      <span class="bac-mat-name">${escapeHtml(post.title)}</span>
+      <span class="bac-mat-desc">${escapeHtml(post.excerpt)}</span>
+      <span class="bac-mat-meta">
+        <time datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(post.publishedAt || "")}</time>
+        <span class="bac-dot">·</span>
+        <span>⏱️ ${minutes} min de lecture</span>
+      </span>
+    </span>
   </a>`;
 }

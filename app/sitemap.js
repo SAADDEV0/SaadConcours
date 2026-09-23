@@ -3,6 +3,7 @@ import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { bacNationauxMatiere, bacNationalHref } from "@/lib/bacNationaux";
+import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -68,13 +69,13 @@ export default async function sitemap() {
     ...(c.date_ajout ? { lastModified: c.date_ajout } : {}),
   }));
 
+  // Un module = sa page sommaire + une page par chapitre (lib/fsjesChapitres.js).
   const coursRoutes = cours
     .filter((c) => c.available)
-    .map((c) => ({
-      url: `${SITE_URL}/cours/${c.id}`,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    }));
+    .flatMap((c) => [
+      { url: `${SITE_URL}/cours/${c.id}`, changeFrequency: "monthly", priority: 0.6 },
+      ...fsjesModule(c).chapitres.map((ch) => ({ url: `${SITE_URL}${fsjesChapitreHref(c, ch)}`, changeFrequency: "monthly", priority: 0.5 })),
+    ]);
 
   const quizRoutes = quiz
     .filter((q) => q.available)

@@ -1,35 +1,96 @@
 import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
-import { coursCardHtml } from "../_shared/coursCard";
-import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator } from "../../lib/coursTaxonomy";
+import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator, coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel } from "../../lib/coursTaxonomy";
+import { fsjesModule, fsjesModuleIcon } from "../../lib/fsjesChapitres";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
 import NiveauSwitch from "../_shared/NiveauSwitch";
 
-// Served as prerendered HTML revalidated hourly instead of rendered per
-// request. lib/github.js reads the data JSON with `cache: "no-store"` (
-// concours.json is 2.59MB, past Next's 2MB fetch-cache entry limit), and a
-// no-store fetch in the render path opts the whole route out of static
-// generation -- confirmed by building with and without GITHUB_TOKEN, where
-// these routes flip between `o` and `f`.
+// Served as prerendered HTML instead of rendered per request. lib/github.js
+// reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
+// Next's 2MB fetch-cache entry limit), and a no-store fetch in the render
+// path opts the whole route out of static generation.
 //
 // No revalidation window at all: freshness comes from deploys, not ISR.
 // Every admin edit commits to GitHub, which triggers a redeploy that rebuilds
-// every page -- so an hourly revalidate was re-rendering pages that were
-// already current and billing Fluid CPU for it.
+// every page.
 export const dynamic = "force-static";
 export const revalidate = false;
 
-// Server-rendered on first load (mirrors app/concours/page.js) so every
-// module already has a real <a href="/cours/[id]"> link — and the fiche's
-// title/description text — in the raw HTML for crawlers. The sidebar
-// filters (same .layout/.filters pattern as /concours: a <select> per
-// dimension, cascading, reset button) are a client-side filter
-// (CoursExplorer) layered on top — the full list below is what the server
-// sends on the very first response, filters or no filters, JS or no JS.
+// Même présentation que l'espace Bac (app/bac/[niveau]/page.js) : une carte
+// par module, regroupées par semestre. Toutes les cartes sont dans le HTML
+// servi (liens réels pour les robots) ; CoursExplorer ne fait que les
+// masquer selon les filtres.
+// Seuls les champs affichés sont passés à la carte : le Markdown complet du
+// module n'a rien à faire dans les props sérialisées de la page.
+function carteModule(c) {
+  const cat = coursCategoryInfo(c.category);
+  const { chapitres } = fsjesModule(c);
+  return {
+    id: c.id,
+    module: c.module,
+    description: c.description,
+    available: c.available,
+    parcours: c.parcours,
+    semestre: c.semestre,
+    filiere: c.filiere,
+    category: c.category,
+    icon: fsjesModuleIcon(c, cat?.emoji),
+    hue: cat?.hue ?? 220,
+    nbChapitres: chapitres.length,
+    search: [c.module, c.title, c.description, ...chapitres.map((x) => x.titre)].join(" ").toLowerCase(),
+  };
+}
+
+function ModuleCard({ c }) {
+  const tag = c.filiere ? licenceFiliereLabel(c.filiere) : c.parcours ? `Parcours ${licenceParcoursLabel(c.parcours)}` : "Tronc commun";
+  const inner = (
+    <>
+      <span className="bac-mat-icon">{c.icon}</span>
+      <span className="bac-mat-body">
+        <span className="bac-mat-name">{c.module}</span>
+        <span className="bac-mat-desc">{c.description}</span>
+        <span className="bac-mat-meta">
+          {c.available ? <span>{c.nbChapitres} chapitres</span> : <span>Bientôt disponible</span>}
+          <span className="bac-dot">·</span>
+          <span>{tag}</span>
+          {c.semestre && <span className="bac-badge">{c.semestre}</span>}
+        </span>
+      </span>
+      <span className="bac-mat-arrow" aria-hidden="true">
+        →
+      </span>
+    </>
+  );
+  const props = {
+    className: "bac-mat-card",
+    style: { "--mat-h": c.hue },
+    "data-parcours": c.parcours || "",
+    "data-semestre": c.semestre || "",
+    "data-filiere": c.filiere || "",
+    "data-category": c.category || "",
+    "data-search": c.search,
+  };
+  return c.available ? (
+    <a href={`/cours/${encodeURIComponent(c.id)}`} {...props}>
+      {inner}
+    </a>
+  ) : (
+    <div {...props} aria-disabled="true">
+      {inner}
+    </div>
+  );
+}
+
 export default async function CoursPage() {
   const cours = (await getAllCours().catch(() => [])).sort(coursSortComparator);
+  const publies = cours.filter((c) => c.available);
+  const totalChapitres = publies.reduce((n, c) => n + fsjesModule(c).chapitres.length, 0);
+  const groupes = [
+    ...LICENCE_SEMESTRES.map((s) => ({ code: s.code, label: `${s.label}${s.specialisation ? " — Spécialisation" : ""}`, list: cours.filter((c) => c.semestre === s.code) })),
+    { code: "", label: "Autres modules", list: cours.filter((c) => !c.semestre) },
+  ].filter((g) => g.list.length);
 
   return (
     <>
@@ -37,53 +98,57 @@ export default async function CoursPage() {
         data={[
           breadcrumbJsonLd([{ name: "Cours", path: "/cours" }]),
           collectionJsonLd({
-            name: "Fiches de cours par module — Master Maroc",
+            name: "Cours de Licence FSJES par module et par chapitre",
             description:
-              "Fiches de cours synthétiques par module (comptabilité, analyse financière, management, marketing, macroéconomie...) pour réviser les concours d'accès aux Masters marocains.",
+              "Cours de Licence FSJES Économie & Gestion découpés en chapitres (comptabilité, analyse financière, management, marketing, macroéconomie...) : cours, exercices corrigés, résumé et QCM.",
             path: "/cours",
-            // Only the published fiches: the others have no page to link to
-            // (generateStaticParams and the sitemap filter on `available` too).
-            items: cours
-              .filter((c) => c.available)
-              .map((c) => ({ name: c.title, path: `/cours/${encodeURIComponent(c.id)}` })),
+            items: publies.map((c) => ({ name: c.module, path: `/cours/${encodeURIComponent(c.id)}` })),
           }),
         ]}
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
-      <div className="niveau-switch-bar">
-        <NiveauSwitch active="fsjes" />
-      </div>
+      <div className="bac-space site-space">
+        <div className="bac-wrap">
+          <NiveauSwitch active="fsjes" />
 
-      <div className="layout" id="viewCours">
-        <aside className="filters">
-          <h3>Filtrer</h3>
-          <div className="filter-group">
-            <label style={{ fontSize: ".8rem", color: "var(--text-dim)" }}>Parcours (Licence)</label>
-            <select id="filterParcours">
+          <section className="bac-hero">
+            <div className="bac-eyebrow">Université · Licence Fondamentale FSJES</div>
+            <h1>Cours Licence Économie & Gestion</h1>
+            <p>Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
+            <div className="bac-hero-stats">
+              <span className="bac-stat">
+                <strong>{publies.length}</strong> modules
+              </span>
+              <span className="bac-stat">
+                <strong>{totalChapitres}</strong> chapitres
+              </span>
+              <span className="bac-stat">
+                <strong>{LICENCE_SEMESTRES.length}</strong> semestres
+              </span>
+            </div>
+          </section>
+
+          <div className="sp-filters" id="coursFilters">
+            <div className="bac-year-tabs" role="group" aria-label="Semestre">
+              <button type="button" className="bac-year-tab active" data-semestre="">
+                Tous
+              </button>
+              {LICENCE_SEMESTRES.map((s) => (
+                <button key={s.code} type="button" className="bac-year-tab" data-semestre={s.code}>
+                  {s.code}
+                </button>
+              ))}
+            </div>
+            <select id="filterParcours" aria-label="Parcours">
               <option value="">Tous les parcours</option>
               {LICENCE_PARCOURS.map((p) => (
                 <option key={p.code} value={p.code}>
-                  {p.label}
+                  Parcours {p.label}
                 </option>
               ))}
             </select>
-          </div>
-          <div className="filter-group">
-            <label style={{ fontSize: ".8rem", color: "var(--text-dim)" }}>Semestre</label>
-            <select id="filterSemestre">
-              <option value="">Tous les semestres</option>
-              {LICENCE_SEMESTRES.map((s) => (
-                <option key={s.code} value={s.code}>
-                  {s.label}
-                  {s.specialisation ? " — Spécialisation" : ""}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label style={{ fontSize: ".8rem", color: "var(--text-dim)" }}>Filière (S5-S6)</label>
-            <select id="filterFiliere">
+            <select id="filterFiliere" aria-label="Filière (S5-S6)">
               <option value="">Toutes les filières</option>
               {LICENCE_FILIERES.map((f) => (
                 <option key={f.code} value={f.code} data-parcours={f.parcours}>
@@ -91,10 +156,7 @@ export default async function CoursPage() {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="filter-group">
-            <label style={{ fontSize: ".8rem", color: "var(--text-dim)" }}>Matière</label>
-            <select id="filterCategorie">
+            <select id="filterCategorie" aria-label="Matière">
               <option value="">Toutes les matières</option>
               {COURS_CATEGORIES.map((c) => (
                 <option key={c.code} value={c.code}>
@@ -102,33 +164,34 @@ export default async function CoursPage() {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="filter-group">
-            <label style={{ fontSize: ".8rem", color: "var(--text-dim)" }}>Recherche</label>
-            <input type="text" id="coursSearchInput" placeholder="Module, notion..." />
-          </div>
-          <button className="reset-btn" id="coursResetBtn">✕ Réinitialiser les filtres</button>
-        </aside>
-
-        <main>
-          <h1 className="eval-title">📖 Cours par module</h1>
-          <p className="eval-sub">Fiches de cours synthétiques : définitions, formules et points clés à retenir, par module.</p>
-          <div className="results-header">
-            <div className="results-count" id="coursResultsCount">
+            <input type="search" id="coursSearchInput" placeholder="Module, chapitre, notion..." aria-label="Rechercher" />
+            <button type="button" className="sp-reset" id="coursResetBtn">
+              ✕ Réinitialiser
+            </button>
+            <span className="sp-count" id="coursResultsCount">
               {cours.length} module{cours.length > 1 ? "s" : ""}
-            </div>
+            </span>
           </div>
-          <div
-            className="grid"
-            id="coursModuleGrid"
-            dangerouslySetInnerHTML={{ __html: cours.map(coursCardHtml).join("") }}
-          />
-        </main>
+
+          {groupes.map((g) => (
+            <section key={g.code || "autres"} className="bac-group" data-groupe={g.code}>
+              <h2 className="bac-section-title">{g.label}</h2>
+              <div className="bac-mat-grid">
+                {g.list.map((c) => (
+                  <ModuleCard key={c.id} c={carteModule(c)} />
+                ))}
+              </div>
+            </section>
+          ))}
+          <div className="sp-empty" id="coursEmpty" hidden>
+            Aucun module ne correspond à ces filtres.
+          </div>
+        </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
 
-      <CoursExplorer initialData={cours} />
+      <CoursExplorer />
     </>
   );
 }

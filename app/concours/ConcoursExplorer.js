@@ -162,7 +162,7 @@ export default function ConcoursExplorer({ initialData }) {
     }
 
     function wireDownloadButtons() {
-      document.querySelectorAll("#grid .card").forEach((card) => {
+      document.querySelectorAll("#grid [data-id]").forEach((card) => {
         const btn = card.querySelector(".card-dl");
         if (!btn || btn.dataset.wired === "1") return;
         btn.dataset.wired = "1";
@@ -180,7 +180,7 @@ export default function ConcoursExplorer({ initialData }) {
       $("#resultsCount").textContent = `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
       const grid = $("#grid");
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Aucun concours ne correspond à ces filtres.</div>`;
+        grid.innerHTML = `<div class="sp-empty">Aucun concours ne correspond à ces filtres.</div>`;
         return;
       }
       grid.innerHTML = filtered.map(concoursCardHtml).join("");

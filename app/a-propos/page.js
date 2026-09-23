@@ -1,4 +1,6 @@
 import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getCorrigeIds } from "@/lib/store";
+import { BAC_MATIERES } from "../../lib/bacProgramme";
+import { fsjesModule } from "../../lib/fsjesChapitres";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
 
@@ -13,7 +15,7 @@ const SITE_URL = "https://www.saadconcours.space";
 export const metadata = {
   title: "À propos",
   description:
-    "Qui fait SaadConcours, d'où viennent les sujets de concours Master, comment les corrigés sont rédigés et vérifiés, et comment le site est tenu à jour.",
+    "Qui fait SaadConcours, ce que couvrent les cours du Bac et de la Licence FSJES, d'où viennent les sujets de concours Master, comment les corrigés sont rédigés et comment le site est tenu à jour.",
   alternates: { canonical: "/a-propos" },
 };
 
@@ -41,6 +43,9 @@ async function getFigures() {
     anneeMin: annees.length ? Math.min(...annees) : null,
     anneeMax: annees.length ? Math.max(...annees) : null,
     cours: cours.filter((c) => c.available).length,
+    chapitresFsjes: cours.filter((c) => c.available).reduce((n, c) => n + fsjesModule(c).chapitres.length, 0),
+    matieresBac: BAC_MATIERES.filter((m) => m.niveau === "2bac").length,
+    chapitresBac: BAC_MATIERES.filter((m) => m.niveau === "2bac").reduce((n, m) => n + m.chapitres.length, 0),
     quiz: quiz.filter((q) => q.available).length,
     questions: quiz.filter((q) => q.available).reduce((n, q) => n + (q.questions?.length || 0), 0),
     articles: blog.filter((b) => b.available).length,
@@ -80,9 +85,10 @@ export default async function AProposPage() {
 
         <h1 style={{ fontSize: "1.5rem", marginBottom: 6 }}>À propos de SaadConcours</h1>
         <p style={P}>
-          SaadConcours est un site indépendant qui rassemble, au même endroit, les sujets réels des concours
-          d&apos;accès aux masters économie-gestion au Maroc — FSJES, ENCG, facultés polydisciplinaires — avec des
-          fiches de cours et des QCM pour s&apos;y préparer.
+          SaadConcours est un site indépendant consacré à l&apos;économie et à la gestion au Maroc, du lycée au
+          master : des cours du Bac Sciences Économiques et Gestion et de la Licence FSJES rédigés chapitre par
+          chapitre, avec exercices corrigés, résumés et QCM, et les sujets réels des concours d&apos;accès aux
+          masters — FSJES, ENCG, facultés polydisciplinaires — pour s&apos;y préparer.
         </p>
 
         <h2 style={H2}>Pourquoi ce site existe</h2>
@@ -105,8 +111,12 @@ export default async function AProposPage() {
           </li>
           <li>{f.corriges} corrigés détaillés, rédigés sujet par sujet ;</li>
           <li>
-            <a href="/cours">{f.cours} fiches de cours</a> sur les modules qui reviennent au concours (comptabilité,
-            finance, statistiques, économie, management…) ;
+            les <a href="/bac/2bac">cours du 2ᵉ Bac Sciences Économiques et Gestion</a> : {f.matieresBac} matières
+            et {f.chapitresBac} chapitres, avec cours, exercices, résumé et QCM ;
+          </li>
+          <li>
+            les <a href="/cours">cours de Licence FSJES</a> : {f.cours} modules du S1 au S6 découpés en{" "}
+            {f.chapitresFsjes} chapitres, chacun avec son cours, ses exercices corrigés, son résumé et son QCM ;
           </li>
           <li>
             <a href="/evaluation">{f.quiz} QCM d&apos;auto-évaluation</a> totalisant {f.questions} questions

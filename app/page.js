@@ -1,82 +1,55 @@
-import { getAllConcours, getAllNews, getSettings } from "@/lib/store";
+import { getAllConcours, getAllNews, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
-import { escapeHtml } from "./_shared/concoursCard";
-import { daysUntil, urgency, visibleNews } from "./_shared/newsCard";
+import { escapeHtml, CONCOURS_HUES } from "./_shared/concoursCard";
+import { daysUntil, visibleNews } from "./_shared/newsCard";
+import { categoryInfo } from "../lib/blogTaxonomy";
+import { BAC_MATIERES } from "../lib/bacProgramme";
+import { fsjesModule } from "../lib/fsjesChapitres";
 import HomeClient from "./HomeClient";
 
-// Served as prerendered HTML revalidated hourly instead of rendered per
-// request. lib/github.js reads the data JSON with `cache: "no-store"` (
-// concours.json is 2.59MB, past Next's 2MB fetch-cache entry limit), and a
-// no-store fetch in the render path opts the whole route out of static
-// generation -- confirmed by building with and without GITHUB_TOKEN, where
-// these routes flip between `o` and `f`.
+// Served as prerendered HTML instead of rendered per request. lib/github.js
+// reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
+// Next's 2MB fetch-cache entry limit), and a no-store fetch in the render
+// path opts the whole route out of static generation.
 //
 // No revalidation window at all: freshness comes from deploys, not ISR.
 // Every admin edit commits to GitHub, which triggers a redeploy that rebuilds
-// every page -- so an hourly revalidate was re-rendering pages that were
-// already current and billing Fluid CPU for it.
+// every page.
 export const dynamic = "force-static";
 export const revalidate = false;
 
-const ACTIONS = [
-  {
-    href: "/concours",
-    icon: "📚",
-    title: "Concours",
-    desc: "Sujets réels de concours d'accès aux Masters, filtrables par ville, filière, année.",
-    color: "blue",
-  },
-  {
-    href: "/cours",
-    icon: "📖",
-    title: "Cours",
-    desc: "Fiches synthétiques par module : définitions, formules, points clés à retenir.",
-    color: "violet",
-  },
-  {
-    href: "/evaluation",
-    icon: "📝",
-    title: "Évaluation",
-    desc: "QCM d'auto-évaluation par module, en conditions concours, avec correction.",
-    color: "green",
-  },
-  {
-    href: "/news",
-    icon: "🆕",
-    title: "Concours ouverts",
-    desc: "Masters économie-gestion actuellement ouverts, mis à jour automatiquement.",
-    color: "amber",
-  },
-  {
-    href: "/blog",
-    icon: "📰",
-    title: "Blog",
-    desc: "Méthode, matières à préparer et conseils pour réussir ton concours d'accès au Master.",
-    color: "red",
-  },
-];
-
-// Server-rendered on first load (mirrors app/concours/page.js, app/news/page.js)
-// — this used to be a pure client SPA reader: the hero text was the only
-// thing in the raw HTML, and the action cards, "concours récemment ouverts"
-// and "derniers concours ajoutés" sections were all built by DOM
-// manipulation inside a useEffect after a round trip to /api/news and
-// /api/concours. That meant the homepage — the page most likely to earn
-// backlinks and get crawled first — shipped an almost-empty document.
-// HomeClient only wires the alert subscribe form and the partner banner ad,
-// both of which need no SSR (a form has nothing to crawl; an ad slot has
-// nothing worth indexing).
+// Server-rendered (the homepage is the page most likely to earn backlinks and
+// get crawled first). HomeClient only wires the alert subscribe form and the
+// partner banner ad, which have nothing to crawl.
+//
+// Le site couvre trois publics — lycée (Bac), université (Licence FSJES) et
+// préparation des concours de Master — et la page d'accueil les présente à
+// égalité, avec le même design que les espaces de cours (classes bac-*).
 export default async function HomePage() {
-  const [allConcours, rawNews, settings] = await Promise.all([
+  const [allConcours, rawNews, settings, cours, quiz, blog] = await Promise.all([
     getAllConcours().catch(() => []),
     getAllNews().catch(() => []),
     getSettings().catch(() => null),
+    getAllCours().catch(() => []),
+    getAllQuiz().catch(() => []),
+    getAllBlog().catch(() => []),
   ]);
 
-  // Storage appends new entries to the end of the array (see lib/store.js
-  // addItem) - same "tail = most recent" logic as the admin dashboard's
-  // "Derniers concours ajoutés" widget.
+  const coursPublies = cours.filter((c) => c.available);
+  const chapitresFsjes = coursPublies.reduce((n, c) => n + fsjesModule(c).chapitres.length, 0);
+  const matieresBac = BAC_MATIERES.filter((m) => m.niveau === "2bac");
+  const chapitresBac = matieresBac.reduce((n, m) => n + m.chapitres.length, 0);
+  const questionsQcm =
+    quiz.filter((q) => q.available).reduce((n, q) => n + (q.questions || []).length, 0) +
+    coursPublies.reduce((n, c) => n + fsjesModule(c).chapitres.reduce((k, ch) => k + ch.qcm.length, 0), 0);
+
+  // Storage appends new entries to the end of the array (lib/store.js
+  // addItem): tail = most recent.
   const recentConcours = allConcours.slice(-4).reverse();
+  const recentPosts = blog
+    .filter((p) => p.available)
+    .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
+    .slice(0, 3);
 
   // Interrupteur des réglages (« Encarts concours sur la page d'accueil ») :
   // masque les deux encarts alimentés par les concours ouverts sans toucher
@@ -92,122 +65,246 @@ export default async function HomePage() {
     .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
     .slice(0, 3);
 
+  const PILIERS = [
+    {
+      href: "/bac/2bac",
+      icon: "📘",
+      hue: 152,
+      eyebrow: "Lycée",
+      title: "Cours Bac Sciences Économiques & Gestion",
+      desc: "Économie générale, comptabilité, EOAE, droit, maths, philosophie, anglais… chaque matière du 2ᵉ Bac découpée en chapitres, avec cours, exercices corrigés, résumé et QCM.",
+      stat: `${matieresBac.length} matières · ${chapitresBac} chapitres`,
+    },
+    {
+      href: "/cours",
+      icon: "🎓",
+      hue: 220,
+      eyebrow: "Université",
+      title: "Cours Licence FSJES Économie & Gestion",
+      desc: "Du S1 au S6 : comptabilité, analyse financière, macro et microéconomie, statistiques, droit, marketing, audit… chaque module découpé en chapitres corrigés.",
+      stat: `${coursPublies.length} modules · ${chapitresFsjes} chapitres`,
+    },
+    {
+      href: "/concours",
+      icon: "📚",
+      hue: 265,
+      eyebrow: "Master",
+      title: "Sujets de concours d'accès au Master",
+      desc: "Des sujets réellement tombés aux concours des FSJES et ENCG du Maroc, filtrables par ville, filière et année, avec corrigés indicatifs et export PDF.",
+      stat: `${allConcours.length} sujets réels`,
+    },
+  ];
+
+  const OUTILS = [
+    { href: "/evaluation", icon: "📝", hue: 22, title: "Évaluation", desc: "Concours blancs en QCM par module, corrigés." },
+    { href: "/news", icon: "🆕", hue: 42, title: "Concours ouverts", desc: "Les Masters actuellement ouverts et leurs dates limites." },
+    { href: "/blog", icon: "📰", hue: 330, title: "Blog", desc: "Méthode, orientation et conseils de révision." },
+  ];
+
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "home", showSearch: true, rails: true }) }} />
 
-      <div className="home-view">
-        <section className="home-hero">
-          <h1 className="home-hero-title">Prépare ton concours d'accès au Master 🎓</h1>
-          <p className="home-hero-sub">
-            Sujets réels, fiches de cours et QCM d'auto-évaluation pour les Masters économie-gestion
-            (Finance & Audit, Management & RH, Marketing & Commerce, Économie Appliquée, Data & Économétrie)
-            des universités marocaines.
-          </p>
-        </section>
-
-        <div id="homeBannerAd" />
-
-        {showNewsBoxes && urgent.length > 0 && (
-          <section className="urgent-alert" id="urgentAlert">
-            <div className="urgent-alert-head">
-              <span className="urgent-alert-title">
-                ⏰ <strong id="urgentCount">{urgent.length}</strong> concours ferment bientôt
+      <div className="bac-space site-space">
+        <div className="bac-wrap">
+          <section className="bac-hero sp-home-hero" style={{ "--hero-icon": '"🎓"' }}>
+            <div className="bac-eyebrow">Bac · Licence FSJES · Master</div>
+            <h1>Cours, exercices et concours en économie & gestion au Maroc</h1>
+            <p>
+              SaadConcours accompagne les élèves du <strong>Bac Sciences Économiques et Gestion</strong>, les étudiants
+              en <strong>Licence FSJES</strong> et les candidats aux <strong>concours d'accès au Master</strong> : cours
+              rédigés chapitre par chapitre, exercices corrigés, résumés, QCM et sujets réels de concours — gratuitement
+              et sans inscription.
+            </p>
+            <div className="bac-hero-stats">
+              <span className="bac-stat">
+                <strong>{chapitresBac + chapitresFsjes}</strong> chapitres de cours
               </span>
-              <a className="home-alert-link" href="/news">Voir tout →</a>
+              <span className="bac-stat">
+                <strong>{allConcours.length}</strong> sujets de concours
+              </span>
+              <span className="bac-stat">
+                <strong>{questionsQcm}</strong> questions de QCM
+              </span>
             </div>
-            <div
-              className="urgent-alert-list"
-              id="urgentAlertList"
-              dangerouslySetInnerHTML={{
-                __html: urgent
-                  .slice(0, 5)
-                  .map(
-                    (item) => `
+            <div className="sp-hero-actions">
+              <a className="sp-btn primary" href="/bac/2bac">
+                📘 Cours Bac
+              </a>
+              <a className="sp-btn primary" href="/cours">
+                🎓 Cours FSJES
+              </a>
+              <a className="sp-btn" href="/concours">
+                📚 Sujets de concours
+              </a>
+            </div>
+          </section>
+
+          <div id="homeBannerAd" />
+
+          {showNewsBoxes && urgent.length > 0 && (
+            <section className="urgent-alert" id="urgentAlert">
+              <div className="urgent-alert-head">
+                <span className="urgent-alert-title">
+                  ⏰ <strong id="urgentCount">{urgent.length}</strong> concours ferment bientôt
+                </span>
+                <a className="home-alert-link" href="/news">
+                  Voir tout →
+                </a>
+              </div>
+              <div
+                className="urgent-alert-list"
+                id="urgentAlertList"
+                dangerouslySetInnerHTML={{
+                  __html: urgent
+                    .slice(0, 5)
+                    .map(
+                      (item) => `
               <div class="urgent-alert-item">
                 <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
                 <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
               </div>`
-                  )
-                  .join(""),
-              }}
-            />
-            <form className="alert-subscribe-form" id="alertForm">
-              <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required />
-              <button type="submit">🔔 M'alerter</button>
-            </form>
-            <div className="alert-form-msg" id="alertFormMsg" />
-          </section>
-        )}
+                    )
+                    .join(""),
+                }}
+              />
+              <form className="alert-subscribe-form" id="alertForm">
+                <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required />
+                <button type="submit">🔔 M'alerter</button>
+              </form>
+              <div className="alert-form-msg" id="alertFormMsg" />
+            </section>
+          )}
 
-        {showNewsBoxes && recentOpen.length > 0 && (
-          <section className="home-alert" id="homeAlert">
-            <div className="home-alert-head">
-              <span className="home-alert-title">🔔 Concours récemment ouverts</span>
-              <a className="home-alert-link" href="/news">Voir tout →</a>
+          <section className="bac-group">
+            <h2 className="bac-section-title">Choisis ton niveau</h2>
+            <div className="sp-piliers">
+              {PILIERS.map((p) => (
+                <a key={p.href} className="bac-mat-card sp-pilier" href={p.href} style={{ "--mat-h": p.hue }}>
+                  <span className="bac-mat-icon">{p.icon}</span>
+                  <span className="bac-mat-body">
+                    <span className="sp-card-kicker">{p.eyebrow}</span>
+                    <span className="bac-mat-name">{p.title}</span>
+                    <span className="bac-mat-desc">{p.desc}</span>
+                    <span className="bac-mat-meta">
+                      <span className="bac-badge">{p.stat}</span>
+                    </span>
+                  </span>
+                  <span className="bac-mat-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              ))}
             </div>
-            <div
-              className="home-alert-list"
-              id="homeAlertList"
-              dangerouslySetInnerHTML={{
-                __html: recentOpen
-                  .map(
-                    (item) => `
+          </section>
+
+          {showNewsBoxes && recentOpen.length > 0 && (
+            <section className="home-alert" id="homeAlert">
+              <div className="home-alert-head">
+                <span className="home-alert-title">🔔 Concours récemment ouverts</span>
+                <a className="home-alert-link" href="/news">
+                  Voir tout →
+                </a>
+              </div>
+              <div
+                className="home-alert-list"
+                id="homeAlertList"
+                dangerouslySetInnerHTML={{
+                  __html: recentOpen
+                    .map(
+                      (item) => `
               <a class="home-alert-item" href="${escapeHtml(item.lien_inscription || item.source || "/news")}" target="_blank" rel="noopener">
                 <span class="home-alert-etab">${escapeHtml(item.etablissement || "Autre")}</span>
                 <span class="home-alert-titre">${escapeHtml(item.titre)}</span>
                 ${item.ville ? `<span class="home-alert-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
               </a>`
-                  )
-                  .join(""),
-              }}
-            />
-          </section>
-        )}
+                    )
+                    .join(""),
+                }}
+              />
+            </section>
+          )}
 
-        <section className="home-actions">
-          <h2 className="home-section-title">Que veux-tu faire ?</h2>
-          <div
-            className="home-actions-grid"
-            id="homeActionsGrid"
-            dangerouslySetInnerHTML={{
-              __html: ACTIONS.map(
-                (a) => `
-              <a href="${a.href}" class="home-action-card color-${a.color}">
-                <div class="home-action-icon">${a.icon}</div>
-                <div class="home-action-title">${escapeHtml(a.title)}</div>
-                <div class="home-action-desc">${escapeHtml(a.desc)}</div>
-                <div class="home-action-go">Ouvrir →</div>
-              </a>`
-              ).join(""),
-            }}
-          />
-        </section>
-
-        {recentConcours.length > 0 && (
-          <section className="home-recent" id="homeRecent">
-            <div className="home-recent-head">
-              <h2 className="home-section-title">🆕 Derniers concours ajoutés</h2>
-              <a className="home-alert-link" href="/concours">Voir tout →</a>
+          <section className="bac-group">
+            <h2 className="bac-section-title">S'entraîner et s'informer</h2>
+            <div className="bac-mat-grid">
+              {OUTILS.map((o) => (
+                <a key={o.href} className="bac-mat-card" href={o.href} style={{ "--mat-h": o.hue }}>
+                  <span className="bac-mat-icon">{o.icon}</span>
+                  <span className="bac-mat-body">
+                    <span className="bac-mat-name">{o.title}</span>
+                    <span className="bac-mat-desc">{o.desc}</span>
+                  </span>
+                  <span className="bac-mat-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              ))}
             </div>
-            <div
-              className="cd-related-grid"
-              id="homeRecentGrid"
-              dangerouslySetInnerHTML={{
-                __html: recentConcours
-                  .map(
-                    (c) => `
-              <a class="cd-related-item" href="/concours/${encodeURIComponent(c.id)}">
-                <div class="cd-related-title">${escapeHtml(c.etablissement)} — ${escapeHtml(c.ville)} — ${escapeHtml(String(c.annee))}</div>
-                <div class="cd-related-sub">${escapeHtml(c.master_reel || c.filiere || "")}</div>
-                ${c.date_ajout ? `<div class="cd-related-date">🗓️ Ajouté le ${escapeHtml(c.date_ajout)}</div>` : ""}
-              </a>`
-                  )
-                  .join(""),
-              }}
-            />
           </section>
-        )}
+
+          {recentConcours.length > 0 && (
+            <section className="bac-group" id="homeRecent">
+              <div className="sp-results-head">
+                <h2 className="bac-section-title">Derniers sujets de concours ajoutés</h2>
+                <a className="home-alert-link" href="/concours">
+                  Tous les sujets →
+                </a>
+              </div>
+              <div className="sp-card-grid">
+                {recentConcours.map((c) => (
+                  <a key={c.id} className="bac-mat-card sp-card" href={`/concours/${encodeURIComponent(c.id)}`} style={{ "--mat-h": CONCOURS_HUES[c.categorie] ?? 220 }}>
+                    <span className="bac-mat-icon sp-year">{c.annee}</span>
+                    <span className="bac-mat-body">
+                      <span className="bac-mat-name">{c.master_reel || c.filiere || c.etablissement}</span>
+                      <span className="bac-mat-desc">
+                        🏫 {c.etablissement} · 📍 {c.ville}
+                      </span>
+                      {c.date_ajout && <span className="bac-mat-meta">Ajouté le {c.date_ajout}</span>}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {recentPosts.length > 0 && (
+            <section className="bac-group">
+              <div className="sp-results-head">
+                <h2 className="bac-section-title">Derniers articles du blog</h2>
+                <a className="home-alert-link" href="/blog">
+                  Tout le blog →
+                </a>
+              </div>
+              <div className="sp-card-grid">
+                {recentPosts.map((p) => {
+                  const cat = categoryInfo(p.category);
+                  return (
+                    <a key={p.id} className="bac-mat-card sp-card" href={`/blog/${encodeURIComponent(p.id)}`} style={{ "--mat-h": 330 }}>
+                      <span className="bac-mat-icon">{cat?.emoji || "📰"}</span>
+                      <span className="bac-mat-body">
+                        {cat && <span className="sp-card-kicker">{cat.label}</span>}
+                        <span className="bac-mat-name">{p.title}</span>
+                        <span className="bac-mat-meta">{p.publishedAt}</span>
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          <section className="sp-about">
+            <h2>Une plateforme pour tout le parcours en économie et gestion</h2>
+            <p>
+              Au <strong>lycée</strong>, les cours du Bac Sciences Économiques et Sciences de Gestion Comptable suivent le
+              programme officiel marocain, matière par matière et chapitre par chapitre. À l'<strong>université</strong>,
+              les cours de Licence FSJES couvrent les modules du tronc commun (S1 à S4) et des filières de spécialisation
+              (S5-S6). Pour le <strong>Master</strong>, la base de sujets réels et les QCM permettent de préparer les
+              concours d'accès des FSJES et des ENCG en conditions réelles.
+            </p>
+          </section>
+        </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

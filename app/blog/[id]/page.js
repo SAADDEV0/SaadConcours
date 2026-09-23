@@ -118,26 +118,29 @@ export default async function BlogDetailPage(props) {
       )}
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", showSearch: false, rails: true }) }} />
 
-      <div className="cd-view">
+      <div className="bac-space site-space" style={{ "--mat-h": 330 }}>
+      <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/blog">Blog</a> <span>/</span> <span>{p.title}</span>
         </nav>
 
-        <div className="cd-head">
-          <div className="cd-head-row">
-            <h1>{p.title}</h1>
-            <div className="cd-head-actions">
-              <ShareButton post={p} />
-            </div>
-          </div>
-          <div className="cd-tags">
-            {cat && (
-              <a className={`blog-cat-badge blog-cat-${cat.code}`} href={`/blog?category=${cat.code}`}>
+        <div className="bac-chap-hero sp-detail-hero">
+          <div className="bac-eyebrow">
+            {cat ? (
+              <a href={`/blog?category=${cat.code}`}>
                 {cat.emoji} {cat.label}
               </a>
+            ) : (
+              "Blog"
             )}
-            <span className="info-tag">📅 {p.publishedAt}</span>
-            <span className="info-tag">⏱️ {minutes} min de lecture</span>
+          </div>
+          <h1>{p.title}</h1>
+          <div className="bac-hero-stats">
+            <span className="bac-stat">📅 {p.publishedAt}</span>
+            <span className="bac-stat">⏱️ {minutes} min de lecture</span>
+          </div>
+          <div className="sp-hero-actions cd-head-actions">
+            <ShareButton post={p} />
           </div>
         </div>
 
@@ -148,18 +151,22 @@ export default async function BlogDetailPage(props) {
         <BlogDetailClient post={p} />
 
         {related.length > 0 && (
-          <div className="cd-card cd-related">
-            <h2>À lire aussi</h2>
-            <div className="cd-related-grid">
+          <section className="bac-group">
+            <h2 className="bac-section-title">À lire aussi</h2>
+            <div className="sp-related">
               {related.map((r) => (
-                <a key={r.id} className="cd-related-item" href={`/blog/${r.id}`}>
-                  <div className="cd-related-title">{r.title}</div>
-                  <div className="cd-related-sub">{r.publishedAt}</div>
+                <a key={r.id} className="bac-mat-card" href={`/blog/${r.id}`}>
+                  <span className="bac-mat-icon">📰</span>
+                  <span className="bac-mat-body">
+                    <span className="bac-mat-name">{r.title}</span>
+                    <span className="bac-mat-meta">{r.publishedAt}</span>
+                  </span>
                 </a>
               ))}
             </div>
-          </div>
+          </section>
         )}
+      </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

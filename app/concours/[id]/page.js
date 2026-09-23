@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getAllConcours, getCorrigeFile, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
+import { CONCOURS_HUES } from "../../_shared/concoursCard";
 import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { faqJsonLd } from "../../_shared/faqSchema";
@@ -228,35 +229,36 @@ export default async function ConcoursDetailPage(props) {
       )}
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false, rails: true }) }} />
 
-      <div className="cd-view">
+      <div className="bac-space site-space" style={{ "--mat-h": CONCOURS_HUES[c.categorie] ?? 220 }}>
+      <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/concours">Concours</a> <span>/</span>{" "}
           <span>{c.etablissement} {c.annee}</span>
         </nav>
 
-        <div className="cd-head">
-          <div className="cd-head-row">
-            <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
-            <div className="cd-head-actions">
-              <DownloadPdfButton concours={fullConcours} />
-              <ShareButton concours={c} />
-            </div>
+        <div className="bac-chap-hero sp-detail-hero">
+          <div className="bac-eyebrow">
+            Concours d'accès au Master · {c.annee}
           </div>
-          <div className="cd-tags">
-            <span className="info-tag">🏫 {c.etablissement}</span>
-            {masterLabel && <span className="info-tag">🎓 {masterLabel}</span>}
-            <span className="info-tag">📍 {c.ville}</span>
-            <span className="info-tag">📅 {c.annee}</span>
-            {c.difficulte && <span className="info-tag">⭐ {c.difficulte}</span>}
-            {corrigeMd && <span className="corrige-badge">✅ corrigé disponible</span>}
+          <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
+          <div className="bac-hero-stats">
+            <span className="bac-stat">🏫 {c.etablissement}</span>
+            <span className="bac-stat">📍 {c.ville}</span>
+            <span className="bac-stat">📅 {c.annee}</span>
+            {c.difficulte && <span className="bac-stat">⭐ {c.difficulte}</span>}
+            {corrigeMd && <span className="bac-dispo">✅ Corrigé disponible</span>}
+          </div>
+          <div className="sp-hero-actions cd-head-actions">
+            <DownloadPdfButton concours={fullConcours} />
+            <ShareButton concours={c} />
           </div>
         </div>
 
-        <nav className="tab-bar cd-tabs">
-          <a className="tab-btn" href="#section-enonce">📝 Énoncé</a>
-          {corrigeHtml && <a className="tab-btn" href="#section-corrige">✅ Corrigé</a>}
-          {hasImages && <a className="tab-btn" href="#section-images">🖼️ Extraits</a>}
-          {hasSource && <a className="tab-btn" href="#section-source">🔗 Source</a>}
+        <nav className="bac-tab-labels sp-anchor-tabs" aria-label="Sections du sujet">
+          <a className="bac-tab-label" href="#section-enonce">📝 Énoncé</a>
+          {corrigeHtml && <a className="bac-tab-label" href="#section-corrige">✅ Corrigé</a>}
+          {hasImages && <a className="bac-tab-label" href="#section-images">🖼️ Extraits</a>}
+          {hasSource && <a className="bac-tab-label" href="#section-source">🔗 Source</a>}
         </nav>
 
         <div className="cd-card" id="section-enonce">
@@ -323,20 +325,24 @@ export default async function ConcoursDetailPage(props) {
         )}
 
         {related.length > 0 && (
-          <div className="cd-card cd-related">
-            <h2>Concours similaires</h2>
-            <div className="cd-related-grid">
+          <section className="bac-group">
+            <h2 className="bac-section-title">Concours similaires</h2>
+            <div className="sp-related">
               {related.map((r) => (
-                <a key={r.id} className="cd-related-item" href={`/concours/${r.id}`}>
-                  <div className="cd-related-title">
-                    {r.master_reel || r.filiere || `${r.etablissement} — ${r.ville} — ${r.annee}`}
-                  </div>
-                  <div className="cd-related-sub">{r.etablissement} — {r.ville} — {r.annee}</div>
+                <a key={r.id} className="bac-mat-card" href={`/concours/${r.id}`} style={{ "--mat-h": CONCOURS_HUES[r.categorie] ?? 220 }}>
+                  <span className="bac-mat-icon sp-year">{r.annee}</span>
+                  <span className="bac-mat-body">
+                    <span className="bac-mat-name">{r.master_reel || r.filiere || `${r.etablissement} — ${r.ville}`}</span>
+                    <span className="bac-mat-meta">
+                      {r.etablissement} · {r.ville}
+                    </span>
+                  </span>
                 </a>
               ))}
             </div>
-          </div>
+          </section>
         )}
+      </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

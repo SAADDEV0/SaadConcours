@@ -1,7 +1,8 @@
 // Card markup shared between the server-rendered initial grid
 // (app/concours/page.js, crawlable on first load) and the client-side
 // re-render on filter/search changes (ConcoursExplorer.js) — one place to
-// keep both in sync instead of two copies drifting apart.
+// keep both in sync instead of two copies drifting apart. Same card
+// component as the Bac / FSJES course spaces (bac-mat-card).
 
 export function escapeHtml(s) {
   return String(s ?? "").replace(
@@ -10,30 +11,35 @@ export function escapeHtml(s) {
   );
 }
 
+// Teinte de la carte par grande famille de filières (lib/taxonomy.js).
+export const CONCOURS_HUES = { FCA: 152, MRH: 22, MCL: 330, EAPP: 210, EDMQ: 265 };
+
 export function concoursCardHtml(c) {
   const hasImg = (c.images || []).length > 0;
   const hasCorrige = Boolean(c.corrige_md || c.corrige_from_github);
   const masterLabel = c.master_reel || c.filiere || `${c.etablissement} — ${c.ville} — ${c.annee}`;
+  const hue = CONCOURS_HUES[c.categorie] ?? 220;
+  const modules = c.modules || [];
   return `
-  <a class="card" href="/concours/${encodeURIComponent(c.id)}" data-id="${escapeHtml(c.id)}">
-    <div class="card-top">
-      <div class="card-title">${escapeHtml(masterLabel)}</div>
-      <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
-        <div class="card-year">${escapeHtml(String(c.annee))}</div>
-        <button type="button" class="card-dl" title="Télécharger l'énoncé (PDF)">⬇</button>
-      </div>
-    </div>
-    <div class="card-meta">🏫 ${escapeHtml(c.etablissement)} · 📍 ${escapeHtml(c.ville)}</div>
-    <div class="card-modules">${(c.modules || [])
-      .slice(0, 4)
-      .map((m) => `<span class="mod-tag">${escapeHtml(m)}</span>`)
-      .join("")}${(c.modules || []).length > 4 ? `<span class="mod-tag">+${c.modules.length - 4}</span>` : ""}</div>
-    <div class="card-bottom">
-      <span class="diff-badge">Difficulté : ${escapeHtml(c.difficulte || "?")}</span>
-      <span style="display:flex; gap:6px;">
-        ${hasCorrige ? '<span class="corrige-badge">✅ corrigé</span>' : ""}
-        ${hasImg ? '<span class="img-badge">🖼️ scan réel</span>' : ""}
+  <a class="bac-mat-card sp-card" href="/concours/${encodeURIComponent(c.id)}" data-id="${escapeHtml(c.id)}" style="--mat-h:${hue}">
+    <span class="bac-mat-icon sp-year">${escapeHtml(String(c.annee || "—"))}</span>
+    <span class="bac-mat-body">
+      <span class="bac-mat-name">${escapeHtml(masterLabel)}</span>
+      <span class="bac-mat-desc">🏫 ${escapeHtml(c.etablissement)} · 📍 ${escapeHtml(c.ville)}</span>
+      ${
+        modules.length
+          ? `<span class="sp-chips">${modules
+              .slice(0, 4)
+              .map((m) => `<span class="bac-res-chip on">${escapeHtml(m)}</span>`)
+              .join("")}${modules.length > 4 ? `<span class="bac-res-chip">+${modules.length - 4}</span>` : ""}</span>`
+          : ""
+      }
+      <span class="bac-mat-meta">
+        <span>Difficulté : ${escapeHtml(c.difficulte || "?")}</span>
+        ${hasCorrige ? '<span class="bac-dispo">✅ Corrigé</span>' : ""}
+        ${hasImg ? '<span class="bac-soon">🖼️ Scan réel</span>' : ""}
       </span>
-    </div>
+    </span>
+    <button type="button" class="card-dl sp-card-dl" title="Télécharger l'énoncé (PDF)" aria-label="Télécharger l'énoncé en PDF">⬇</button>
   </a>`;
 }

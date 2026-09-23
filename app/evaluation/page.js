@@ -27,6 +27,8 @@ export const revalidate = false;
 // — exactly like a concours/cours card navigates to its own page.
 export default async function EvaluationPage() {
   const quiz = await getAllQuiz().catch(() => []);
+  const disponibles = quiz.filter((q) => q.available);
+  const nbQuestions = disponibles.reduce((n, q) => n + (q.questions || []).length, 0);
 
   return (
     <>
@@ -46,14 +48,55 @@ export default async function EvaluationPage() {
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval", showSearch: false }) }} />
 
-      <div className="eval-view" id="viewEval">
-        <h1 className="eval-title">📝 Évaluation par module</h1>
-        <p className="eval-sub">Choisis un module pour t'auto-évaluer en conditions QCM. Ton score s'affiche à la fin.</p>
-        <div
-          className="grid"
-          id="evalModuleGrid"
-          dangerouslySetInnerHTML={{ __html: quiz.map(evalCardHtml).join("") }}
-        />
+      <div className="bac-space site-space">
+        <div className="bac-wrap">
+          <section className="bac-hero" style={{ "--hero-icon": '"📝"' }}>
+            <div className="bac-eyebrow">Entraînement · Concours blancs</div>
+            <h1>Évaluation par module</h1>
+            <p>
+              Des concours blancs sous forme de QCM, module par module, pour t'auto-évaluer en conditions de concours
+              d'accès au Master. Ton score et la correction détaillée s'affichent à la fin de chaque série.
+            </p>
+            <div className="bac-hero-stats">
+              <span className="bac-stat">
+                <strong>{disponibles.length}</strong> modules
+              </span>
+              <span className="bac-stat">
+                <strong>{nbQuestions}</strong> questions
+              </span>
+              <span className="bac-stat">
+                <strong>100 %</strong> corrigé
+              </span>
+            </div>
+          </section>
+
+          <section className="bac-group">
+            <h2 className="bac-section-title">Concours blancs par module</h2>
+            <div className="sp-card-grid" id="evalModuleGrid" dangerouslySetInnerHTML={{ __html: quiz.map(evalCardHtml).join("") }} />
+          </section>
+
+          <section className="bac-group">
+            <h2 className="bac-section-title">S'entraîner chapitre par chapitre</h2>
+            <div className="bac-mat-grid">
+              <a className="bac-mat-card" href="/cours" style={{ "--mat-h": 220 }}>
+                <span className="bac-mat-icon">🎓</span>
+                <span className="bac-mat-body">
+                  <span className="bac-mat-name">QCM des cours de Licence FSJES</span>
+                  <span className="bac-mat-desc">Un QCM corrigé à la fin de chaque chapitre, du S1 au S6 : comptabilité, finance, économie, gestion, droit.</span>
+                </span>
+                <span className="bac-mat-arrow" aria-hidden="true">→</span>
+              </a>
+              <a className="bac-mat-card" href="/bac/2bac" style={{ "--mat-h": 152 }}>
+                <span className="bac-mat-icon">📘</span>
+                <span className="bac-mat-body">
+                  <span className="bac-mat-name">QCM du Bac Sciences Économiques & Gestion</span>
+                  <span className="bac-mat-desc">Chaque chapitre du 2ᵉ Bac a son QCM corrigé, pour vérifier que la leçon est acquise.</span>
+                </span>
+                <span className="bac-mat-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </section>
+        </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

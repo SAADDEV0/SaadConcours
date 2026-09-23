@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getAllQuiz } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
+import { evalModuleStyle } from "../../_shared/evalCard";
 import EvaluationDetailClient from "./EvaluationDetailClient";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -22,6 +23,7 @@ export async function generateMetadata(props) {
   if (!q || !q.available) return {};
 
   const nb = (q.questions || []).length;
+
   const title = `${q.title} — QCM ${q.module} (${nb} questions)`;
   const description =
     q.description ||
@@ -58,6 +60,7 @@ export default async function EvaluationDetailPage(props) {
   if (!q || !q.available) notFound();
 
   const nb = (q.questions || []).length;
+  const style = evalModuleStyle(q);
   const url = `${SITE_URL}/evaluation/${q.id}`;
   const related = getRelatedQuiz(list, q);
 
@@ -96,16 +99,27 @@ export default async function EvaluationDetailPage(props) {
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval", showSearch: false }) }} />
 
-      <div className="cd-view">
+      <div className="bac-space site-space" style={{ "--mat-h": style.hue }}>
+      <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/evaluation">Évaluation</a> <span>/</span> <span>{q.title}</span>
         </nav>
 
-        <div className="cd-head">
+        <div className="bac-chap-hero sp-detail-hero">
+          <div className="bac-eyebrow">Évaluation · Concours blanc</div>
           <h1>{q.title}</h1>
-          <div className="cd-tags">
-            <span className="info-tag">📝 {q.module}</span>
-            <span className="info-tag">❓ {nb} questions</span>
+          <div className="bac-hero-stats">
+            <span className="bac-stat">
+              {style.icon} {q.module}
+            </span>
+            <span className="bac-stat">
+              <strong>{nb}</strong> questions
+            </span>
+            {q.chapters && q.chapters.length > 0 && (
+              <span className="bac-stat">
+                <strong>{q.chapters.length}</strong> chapitres
+              </span>
+            )}
           </div>
         </div>
 
@@ -118,9 +132,9 @@ export default async function EvaluationDetailPage(props) {
           {q.chapters && q.chapters.length > 0 && (
             <>
               <h2>Chapitres couverts</h2>
-              <div className="cd-tags">
+              <div className="sp-chips">
                 {q.chapters.map((ch) => (
-                  <span className="info-tag" key={ch}>
+                  <span className="bac-res-chip on" key={ch}>
                     {ch}
                   </span>
                 ))}
@@ -142,18 +156,22 @@ export default async function EvaluationDetailPage(props) {
         </div>
 
         {related.length > 0 && (
-          <div className="cd-card cd-related">
-            <h2>Autres QCM — {q.module}</h2>
-            <div className="cd-related-grid">
+          <section className="bac-group">
+            <h2 className="bac-section-title">Autres QCM — {q.module}</h2>
+            <div className="sp-related">
               {related.map((r) => (
-                <a key={r.id} className="cd-related-item" href={`/evaluation/${r.id}`}>
-                  <div className="cd-related-title">{r.title}</div>
-                  <div className="cd-related-sub">{r.module}</div>
+                <a key={r.id} className="bac-mat-card" href={`/evaluation/${r.id}`}>
+                  <span className="bac-mat-icon">{evalModuleStyle(r).icon}</span>
+                  <span className="bac-mat-body">
+                    <span className="bac-mat-name">{r.title}</span>
+                    <span className="bac-mat-meta">{r.module}</span>
+                  </span>
                 </a>
               ))}
             </div>
-          </div>
+          </section>
         )}
+      </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

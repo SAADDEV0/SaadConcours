@@ -32,7 +32,7 @@ export default function BlogExplorer({ initialData }) {
       }
 
       const pageBtn = (n, label, disabled, active) =>
-        `<button type="button" class="chip blog-page-btn${active ? " active" : ""}" data-page="${n}" ${disabled ? "disabled" : ""}>${label}</button>`;
+        `<button type="button" class="bac-year-tab blog-page-btn${active ? " active" : ""}" data-page="${n}" ${disabled ? "disabled" : ""}>${label}</button>`;
 
       let html = "";
       html += pageBtn(currentPage - 1, "← Précédent", currentPage <= 1, false);
@@ -60,7 +60,7 @@ export default function BlogExplorer({ initialData }) {
       const grid = $("#blogGrid");
       if (!grid) return;
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Aucun article ne correspond à ces filtres.</div>`;
+        grid.innerHTML = `<div class="sp-empty">Aucun article ne correspond à ces filtres.</div>`;
         renderPagination();
         return;
       }

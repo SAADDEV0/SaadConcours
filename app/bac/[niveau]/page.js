@@ -59,7 +59,7 @@ export default async function BacNiveauPage(props) {
   return (
     <>
       <ChromeInit />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac", showSearch: false }) }} />
 
       <div className="bac-space">
         <div className="bac-wrap">
