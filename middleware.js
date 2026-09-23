@@ -15,6 +15,7 @@ const PROTECTED_API_PREFIXES = [
 const PROTECTED_API_ALWAYS = [
   "/api/admin/stats",
   "/api/admin/bac-stats",
+  "/api/admin/bac-content",
   "/api/admin/export",
   "/api/admin/export-content",
   "/api/admin/subscribers",
@@ -103,6 +104,7 @@ export const config = {
     "/api/admin/upload-image",
     "/api/admin/stats",
     "/api/admin/bac-stats",
+    "/api/admin/bac-content",
     "/api/admin/export",
     "/api/admin/export-content",
     "/api/admin/subscribers",

@@ -30,6 +30,14 @@ export default function AdminShell({ children }) {
   useMobileDrawer(navOpen, setNavOpen);
   const closeNav = () => setNavOpen(false);
 
+  // Le navigateur de l'administrateur ne compte plus dans les statistiques
+  // publiques (lu par queueTrackEvent dans app/_shared/chrome.js).
+  useEffect(() => {
+    try {
+      localStorage.setItem("sc_no_track", "1");
+    } catch {}
+  }, []);
+
   // Ctrl/⌘+B — the shortcut every editor uses for this, so it needs no
   // discovery. Ignored while typing so it can't fight a text field.
   useEffect(() => {

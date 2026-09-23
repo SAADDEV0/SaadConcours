@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import ChromeInit from "../../../_shared/ChromeInit";
-import { bacMatiereContenu } from "../../../../lib/bacContenu";
+import { getBacMatiereEffectif } from "../../../../lib/bacContenuEffectif";
 import { BAC_MATIERES, bacNiveauInfo, findBacMatiere, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
 
 export const dynamic = "force-static";
@@ -30,7 +30,7 @@ export default async function BacMatierePage(props) {
   const m = findBacMatiere(niveau, matiere);
   if (!m) notFound();
   const niv = bacNiveauInfo(niveau);
-  const contenu = bacMatiereContenu(niveau, matiere);
+  const contenu = await getBacMatiereEffectif(niveau, matiere);
 
   return (
     <>

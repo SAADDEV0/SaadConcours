@@ -6,7 +6,7 @@ import MathScripts from "../../../../_shared/MathScripts";
 import BacQcm from "../../../BacQcm";
 import BacChapitreClient from "../../../BacChapitreClient";
 import { BAC_MATIERES, bacNiveauInfo, findBacMatiere, findBacChapitre, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../../lib/bacProgramme";
-import { bacChapitreContenu } from "../../../../../lib/bacContenu";
+import { getBacChapitreEffectif } from "../../../../../lib/bacContenuEffectif";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -28,7 +28,7 @@ export async function generateMetadata(props) {
   const found = m && findBacChapitre(m, chapitre);
   if (!found) return {};
   const niv = bacNiveauInfo(niveau);
-  const contenu = bacChapitreContenu(niveau, matiere, chapitre);
+  const contenu = await getBacChapitreEffectif(niveau, matiere, chapitre);
   const title = `${found.chapitre.titre} — ${m.court} ${niv.label}`;
   const description = `${m.nom} ${niv.label} : ${found.chapitre.titre}. Cours, exercices corrigés, résumé et QCM.`;
   return {
@@ -51,7 +51,7 @@ export default async function BacChapitrePage(props) {
   if (!found) notFound();
   const { chapitre: c, prev, next } = found;
   const niv = bacNiveauInfo(niveau);
-  const contenu = bacChapitreContenu(niveau, matiere, chapitre);
+  const contenu = await getBacChapitreEffectif(niveau, matiere, chapitre);
 
   return (
     <>

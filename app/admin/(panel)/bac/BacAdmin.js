@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import StatCard from "@/app/admin/_components/dashboard/StatCard";
 import BarList from "@/app/admin/_components/dashboard/BarList";
 import Skeleton from "@/app/admin/_components/ui/Skeleton";
@@ -170,10 +171,19 @@ export default function BacAdmin() {
                       <td data-label="Semestre">{c.semestre}</td>
                       <td data-label="Statut">
                         <span className={`bac-adm-status ${c.redige ? "ok" : ""}`}>{c.redige ? "Rédigé" : "À rédiger"}</span>
+                        {c.modifieLe && (
+                          <span className="bac-adm-status edit" title={new Date(c.modifieLe).toLocaleString("fr-FR")}>
+                            {" "}
+                            Modifié dans l'admin
+                          </span>
+                        )}
                       </td>
                       <td data-label="QCM">{c.qcm}</td>
                       <td data-label="Vues">{formatNumber(c.vues)}</td>
                       <td data-label="">
+                        <Link className="admin-btn small" href={`/admin/bac/modifier?id=${encodeURIComponent(c.id)}`}>
+                          {c.redige ? "Modifier" : "Rédiger"}
+                        </Link>{" "}
                         <a className="admin-link-btn" href={c.href} target="_blank" rel="noopener noreferrer">
                           Voir ↗
                         </a>
@@ -188,7 +198,8 @@ export default function BacAdmin() {
       </div>
 
       <p className="bac-adm-muted">
-        Le programme et le contenu des chapitres sont versionnés dans le code (<code>lib/bacProgramme.js</code> et <code>lib/bacContenu/</code>). Les vues proviennent du même compteur que le reste du site.
+        Cliquez sur « Modifier » pour changer le cours, les exercices, le résumé ou le QCM d'un chapitre. Chaque enregistrement est publié sur GitHub
+        (fichier <code>data/bac.json</code>) et apparaît en ligne après le redéploiement automatique ; « Rétablir l'original » annule vos changements.
       </p>
     </div>
   );

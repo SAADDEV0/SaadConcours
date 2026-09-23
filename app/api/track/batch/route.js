@@ -55,7 +55,9 @@ const HANDLERS = {
     limit: ["pagepath", 60, 60],
     run: (e, ctx) => {
       const path = sanitizePath(e.path);
-      return path ? trackPathView(path, ctx) : null;
+      // first === false : page suivante de la même session → vue comptée,
+      // mais pas de nouvelle entrée ville / journal des visiteurs.
+      return path ? trackPathView(path, e.first === false ? null : ctx) : null;
     },
   },
   ad: {

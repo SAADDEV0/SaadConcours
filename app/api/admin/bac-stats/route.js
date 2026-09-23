@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getTopPaths } from "@/lib/analytics";
 import { BAC_NIVEAUX, BAC_GROUPES, bacMatieres, bacMatiereHref, bacChapitreHref, parseBacPath } from "@/lib/bacProgramme";
-import { bacMatiereContenu } from "@/lib/bacContenu";
+import { getBacMatiereEffectif, getBacEditsIndex, bacContenuId } from "@/lib/bacContenuEffectif";
 
 export const dynamic = "force-dynamic";
 
@@ -38,9 +38,14 @@ export async function GET() {
 
     let chapitresTotal = 0;
     let chapitresRediges = 0;
+    const editsIndex = await getBacEditsIndex();
+    const contenus = {};
+    for (const n of BAC_NIVEAUX) {
+      for (const m of bacMatieres(n.code)) contenus[`${n.code}/${m.slug}`] = await getBacMatiereEffectif(n.code, m.slug);
+    }
     const niveaux = BAC_NIVEAUX.map((n) => {
       const matieres = bacMatieres(n.code).map((m) => {
-        const contenu = bacMatiereContenu(n.code, m.slug);
+        const contenu = contenus[`${n.code}/${m.slug}`];
         const km = `${n.code}/${m.slug}`;
         const chapitres = m.chapitres.map((c) => {
           const ch = contenu[c.slug];
@@ -50,6 +55,8 @@ export async function GET() {
             slug: c.slug,
             semestre: c.semestre,
             href: bacChapitreHref(m, c),
+            id: bacContenuId(n.code, m.slug, c.slug),
+            modifieLe: editsIndex.get(bacContenuId(n.code, m.slug, c.slug)) || null,
             redige: Boolean(ch),
             qcm: ch?.qcm?.length || 0,
             vues: vuesParChapitre[`${km}/${c.slug}`] || 0,

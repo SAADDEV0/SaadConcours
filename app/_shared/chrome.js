@@ -373,8 +373,12 @@ export const chromeScript = function initChrome() {
   // pings once (localStorage-gated, same "first hit only" semantics the
   // old counter used) so the real number stays visible in /admin.
   (function initVisitorTracking() {
-    if (localStorage.getItem("sc_visited") === "1") return;
-    localStorage.setItem("sc_visited", "1");
+    try {
+      if (localStorage.getItem("sc_visited") === "1") return;
+      localStorage.setItem("sc_visited", "1");
+    } catch {
+      return;
+    }
 
     function detectSource() {
       try {
@@ -405,8 +409,18 @@ export const chromeScript = function initChrome() {
   // browser, ever), this pings on every single page load so the admin
   // dashboard can show a view count for each individual page, not just
   // concours detail pages (already covered by trackConcoursView).
+  // Une page n'est comptée qu'une fois par session (un rafraîchissement ne
+  // compte pas), et la ville / le journal des visiteurs seulement à la
+  // première page de la session (`first`).
   (function initPathTracking() {
-    queueTrackEvent({ t: "page-path", path: location.pathname });
+    let first = true;
+    try {
+      const seen = JSON.parse(sessionStorage.getItem("sc_paths") || "[]");
+      if (seen.includes(location.pathname)) return;
+      first = seen.length === 0;
+      sessionStorage.setItem("sc_paths", JSON.stringify([...seen, location.pathname].slice(-200)));
+    } catch {}
+    queueTrackEvent({ t: "page-path", path: location.pathname, first });
   })();
 
   (function initDua() {
@@ -616,6 +630,9 @@ function bindTrackLifecycle() {
 export function queueTrackEvent(event) {
   try {
     if (!event || !event.t) return;
+    // Navigateur de l'administrateur (marqué à l'ouverture de /admin) : ses
+    // propres visites ne faussent pas les statistiques.
+    if (localStorage.getItem("sc_no_track") === "1") return;
     bindTrackLifecycle();
     trackQueue.push(event);
     if (trackQueue.length >= TRACK_MAX_QUEUE) {
@@ -633,5 +650,10 @@ export function trackPdfDownload(kind, id) {
 }
 
 export function trackConcoursView(id) {
+  try {
+    const key = "sc_cv:" + id;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+  } catch {}
   queueTrackEvent({ t: "concours-view", id });
 }
