@@ -1971,3 +1971,17 @@
 .bac-qe-input{width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); font:inherit; font-size:.88rem;}
 .bac-qe-choix{display:flex; align-items:center; gap:8px;}
 .bac-qe-choix input[type="radio"]{flex-shrink:0; accent-color:var(--accent); width:16px; height:16px;}
+.bac-adm-guide{padding:14px 18px; border-radius:var(--admin-r-lg); border:1px solid color-mix(in srgb, var(--accent) 35%, var(--border-soft)); background:color-mix(in srgb, var(--accent) 7%, var(--bg-elev)); font-size:.88rem;}
+.bac-adm-guide ol{margin:8px 0 6px; padding-left:1.3em; display:flex; flex-direction:column; gap:3px;}
+.bac-adm-mats{display:flex; flex-direction:column;}
+.bac-adm-mat{border-top:1px solid var(--border-soft);}
+.bac-adm-mat:first-child{border-top:none;}
+.bac-adm-mat.open{background:color-mix(in srgb, var(--accent) 4%, transparent); border-radius:10px;}
+.bac-adm-mat-row{display:grid; grid-template-columns:minmax(0,1fr) 220px auto; align-items:center; gap:14px; padding:12px 8px;}
+.bac-adm-mat-name{display:flex; flex-direction:column; gap:3px; min-width:0; font-weight:600;}
+.bac-adm-mat-name .bac-adm-muted{font-weight:400;}
+.bac-adm-chaps{margin:0 8px 12px;}
+.bac-adm-actions{white-space:nowrap;}
+.bac-adm-actions .admin-btn{margin-right:8px;}
+.bac-adm-status.edit{margin-left:6px;}
+@media (max-width:760px){ .bac-adm-mat-row{grid-template-columns:1fr; gap:8px;} }

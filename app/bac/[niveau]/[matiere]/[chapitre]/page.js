@@ -56,7 +56,7 @@ export default async function BacChapitrePage(props) {
   return (
     <>
       {contenu && <MathScripts />}
-      <BacChapitreClient />
+      <BacChapitreClient editId={`${niveau}/${matiere}/${chapitre}`} />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
 
       <div className="bac-space" style={{ "--mat-h": m.hue }}>
