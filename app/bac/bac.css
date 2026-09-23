@@ -135,6 +135,29 @@
 .bac-exam-year{font-size:1.15rem; font-weight:800; margin-bottom:6px;}
 .bac-exam-sessions{display:flex; flex-direction:column; gap:4px;}
 .bac-exam-sessions span{font-size:.72rem; padding:3px 6px; border-radius:6px; background:var(--bg); color:var(--text-faint);}
+.bac-exam-sessions a.on{font-size:.72rem; font-weight:700; padding:3px 6px; border-radius:6px; text-decoration:none; background:var(--mat-tint); color:var(--mat-color); border:1px solid var(--mat-line);}
+.bac-exam-sessions a.on:hover{background:var(--mat-color); color:#fff;}
+
+/* ---------- Examens nationaux ---------- */
+.bac-nat-serie{margin-bottom:20px;}
+.bac-nat-serie-title{display:flex; align-items:center; gap:8px; font-size:1rem; margin:4px 0 10px;}
+.bac-nat-fil{font-size:.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:var(--mat-color); color:#fff;}
+.bac-nat-note{font-size:.84rem; color:var(--text-dim); margin:0 0 10px;}
+.bac-nat-legend{font-size:.78rem; color:var(--text-faint); margin:4px 0 0;}
+.bac-chap-hero .bac-nat-note{margin:10px 0 0;}
+.bac-nat-docs{display:flex; flex-direction:column; gap:10px; margin-bottom:16px;}
+.bac-nat-doc{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border);}
+.bac-nat-doc-corrige{border-color:var(--mat-line);}
+.bac-nat-doc-icon{font-size:1.4rem; flex-shrink:0;}
+.bac-nat-doc-body{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+.bac-nat-doc-body span{font-size:.75rem; color:var(--text-faint);}
+.bac-nat-doc-actions{display:flex; gap:6px; flex-shrink:0;}
+.bac-nat-btn{font-size:.8rem; font-weight:700; padding:7px 12px; border-radius:8px; text-decoration:none; background:var(--mat-color); color:#fff !important; border:1px solid var(--mat-color);}
+.bac-nat-btn.ghost{background:transparent; color:var(--mat-color) !important;}
+.bac-nat-btn:hover{filter:brightness(1.08);}
+.bac-nat-viewer{border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); background:var(--bg-card); margin-bottom:12px;}
+.bac-nat-viewer iframe{display:block; width:100%; height:80vh; min-height:520px; border:0;}
+.bac-nat-disclaimer,.bac-nat-source{font-size:.8rem; color:var(--text-faint); margin:0 0 8px;}
 
 /* ---------- Page chapitre ---------- */
 .bac-side-back{display:block; font-weight:700; font-size:.92rem; text-decoration:none; padding:4px 4px 10px; border-bottom:1px solid var(--border); margin-bottom:6px;}
@@ -248,4 +271,9 @@
   .bac-qcm-q{padding:14px;}
   .bac-pager{grid-template-columns:1fr;}
   .bac-pager-btn.next{text-align:left;}
+  .bac-nat-doc{flex-wrap:wrap;}
+  .bac-nat-doc-actions{width:100%;}
+  .bac-nat-btn{flex:1; text-align:center;}
+  /* Les navigateurs mobiles n'affichent pas les PDF en iframe : boutons seuls. */
+  .bac-nat-viewer{display:none;}
 }

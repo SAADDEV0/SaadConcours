@@ -2,6 +2,7 @@ import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews } from 
 import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
+import { bacNationauxMatiere, bacNationalHref } from "@/lib/bacNationaux";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -111,6 +112,9 @@ export default async function sitemap() {
       bacRoutes.push({ url: `${SITE_URL}${bacMatiereHref(m)}`, changeFrequency: "monthly", priority: 0.6 });
       for (const c of m.chapitres) {
         if (contenu[c.slug]) bacRoutes.push({ url: `${SITE_URL}${bacChapitreHref(m, c)}`, changeFrequency: "monthly", priority: 0.5 });
+      }
+      for (const e of bacNationauxMatiere(n.code, m.slug)) {
+        bacRoutes.push({ url: `${SITE_URL}${bacNationalHref(m, e)}`, changeFrequency: "yearly", priority: 0.5 });
       }
     }
   }

@@ -3,6 +3,7 @@ import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import ChromeInit from "../../../_shared/ChromeInit";
 import { getBacMatiereEffectif } from "../../../../lib/bacContenuEffectif";
 import { BAC_MATIERES, bacNiveauInfo, findBacMatiere, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
+import { bacNationauxSeries, bacNationalHref, bacNationalContenu } from "../../../../lib/bacNationaux";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -31,6 +32,9 @@ export default async function BacMatierePage(props) {
   if (!m) notFound();
   const niv = bacNiveauInfo(niveau);
   const contenu = await getBacMatiereEffectif(niveau, matiere);
+  // Examens réellement en ligne (2ème Bac) ; sinon, grille « Bientôt » du programme.
+  const series = bacNationauxSeries(niveau, matiere);
+  const nbExamens = series.length ? new Set(series.flatMap((s) => s.annees.flatMap((a) => [a.normale, a.rattrapage].filter(Boolean)))).size : m.examen?.annees.length;
 
   return (
     <>
@@ -63,7 +67,7 @@ export default async function BacMatierePage(props) {
                 </span>
                 {m.examen && (
                   <span className="bac-stat">
-                    <strong>{m.examen.annees.length}</strong> {m.examen.pluriel.toLowerCase()}
+                    <strong>{nbExamens}</strong> {m.examen.pluriel.toLowerCase()}
                   </span>
                 )}
               </div>
@@ -83,7 +87,7 @@ export default async function BacMatierePage(props) {
                 {m.examen && (
                   <a href="#examens" className="bac-side-link">
                     {m.examen.pluriel}
-                    <span>{m.examen.annees.length}</span>
+                    <span>{nbExamens}</span>
                   </a>
                 )}
               </div>
@@ -158,6 +162,34 @@ export default async function BacMatierePage(props) {
                     <span className="bac-semestre-code">🏆</span>
                     {m.examen.label}
                   </h2>
+                  {series.map((serie) => (
+                    <div key={serie.filiere.code} className="bac-nat-serie">
+                      <h3 className="bac-nat-serie-title">
+                        <span className="bac-nat-fil">{serie.filiere.court}</span> {serie.filiere.label}
+                      </h3>
+                      {serie.note && <p className="bac-nat-note">{serie.note}</p>}
+                      <div className="bac-exam-grid">
+                        {serie.annees.map((a) => (
+                          <div key={a.annee} className="bac-exam">
+                            <div className="bac-exam-year">{a.annee}</div>
+                            <div className="bac-exam-sessions">
+                              {["normale", "rattrapage"].map((ses) =>
+                                a[ses] ? (
+                                  <a key={ses} href={bacNationalHref(m, a[ses])} className="on" title={bacNationalContenu(a[ses]).label}>
+                                    {ses === "normale" ? "Normale" : "Rattrapage"}
+                                    {a[ses].docs.some((d) => d.type === "corrige") ? " ✓" : ""}
+                                  </a>
+                                ) : (
+                                  <span key={ses}>{ses === "normale" ? "Normale" : "Rattrapage"} —</span>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  {!series.length && (
                   <div className="bac-exam-grid">
                     {m.examen.annees.map((y) => (
                       <div key={y} className="bac-exam">
@@ -169,6 +201,8 @@ export default async function BacMatierePage(props) {
                       </div>
                     ))}
                   </div>
+                  )}
+                  {series.length > 0 && <p className="bac-nat-legend">✓ = sujet et corrigé · les sessions grisées ne sont pas publiées en ligne.</p>}
                 </section>
               )}
             </main>

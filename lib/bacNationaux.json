@@ -1,0 +1,5782 @@
+[
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2025,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2025-normale-sujet.pdf",
+        "size": 1099031,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2025-normale-corrige.pdf",
+        "size": 4754978,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2024-normale-sujet.pdf",
+        "size": 1682564,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2024-normale-corrige.pdf",
+        "size": 834589,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2024-rattrapage-sujet.pdf",
+        "size": 1804399,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2024-rattrapage-corrige.pdf",
+        "size": 827943,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2023-normale-sujet.pdf",
+        "size": 470179,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2023-normale-corrige.pdf",
+        "size": 209307,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2023-rattrapage-sujet.pdf",
+        "size": 573832,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2023-rattrapage-corrige.pdf",
+        "size": 267864,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2022-normale-sujet.pdf",
+        "size": 518388,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2022-normale-corrige.pdf",
+        "size": 309243,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2022-rattrapage-sujet.pdf",
+        "size": 518382,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2022-rattrapage-corrige.pdf",
+        "size": 471448,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2021-normale-sujet.pdf",
+        "size": 375424,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2021-normale-corrige.pdf",
+        "size": 99693,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2021-rattrapage-sujet.pdf",
+        "size": 1933070,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2021-rattrapage-corrige.pdf",
+        "size": 95238,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2020-normale-sujet.pdf",
+        "size": 986406,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2020-normale-corrige.pdf",
+        "size": 474720,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2019-normale-sujet.pdf",
+        "size": 480205,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2019-normale-corrige.pdf",
+        "size": 445280,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2019-rattrapage-sujet.pdf",
+        "size": 537290,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2019-rattrapage-corrige.pdf",
+        "size": 426443,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2018-normale-sujet.pdf",
+        "size": 1092115,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2018-normale-corrige-1.pdf",
+        "size": 495366,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "part": "Bridge",
+        "file": "bac/nationaux/commun/anglais/2018-normale-corrige-2.pdf",
+        "size": 261421,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2018-rattrapage-sujet.pdf",
+        "size": 1244129,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2018-rattrapage-corrige.pdf",
+        "size": 497099,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2017-normale-sujet.pdf",
+        "size": 1140876,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2017-normale-corrige.pdf",
+        "size": 1218888,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2017-rattrapage-sujet.pdf",
+        "size": 1101302,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2016-normale-sujet.pdf",
+        "size": 756321,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2016-normale-corrige.pdf",
+        "size": 290222,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2016-rattrapage-sujet.pdf",
+        "size": 802851,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2015-normale-sujet.pdf",
+        "size": 897516,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2015-normale-corrige.pdf",
+        "size": 540719,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2015-rattrapage-sujet.pdf",
+        "size": 1061078,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2015-rattrapage-corrige.pdf",
+        "size": 581360,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2014-normale-sujet.pdf",
+        "size": 487610,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2014-normale-corrige.pdf",
+        "size": 381235,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2014-rattrapage-sujet.pdf",
+        "size": 1395226,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2014-rattrapage-corrige.pdf",
+        "size": 418598,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2013-normale-sujet.pdf",
+        "size": 423846,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2013-normale-corrige.pdf",
+        "size": 172795,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2013-rattrapage-sujet.pdf",
+        "size": 1074413,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2013-rattrapage-corrige.pdf",
+        "size": 343673,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2012-normale-sujet.pdf",
+        "size": 1486058,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2012-normale-corrige.pdf",
+        "size": 163585,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2012-rattrapage-sujet.pdf",
+        "size": 435995,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2012-rattrapage-corrige.pdf",
+        "size": 183879,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2011-normale-sujet.pdf",
+        "size": 420953,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2011-normale-corrige.pdf",
+        "size": 188786,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2011-rattrapage-sujet.pdf",
+        "size": 403488,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2011-rattrapage-corrige.pdf",
+        "size": 177026,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2010-normale-sujet.pdf",
+        "size": 289892,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2010-normale-corrige.pdf",
+        "size": 165400,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2010-rattrapage-sujet.pdf",
+        "size": 299475,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2010-rattrapage-corrige.pdf",
+        "size": 174149,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2009,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2009-normale-sujet.pdf",
+        "size": 192574,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2009-normale-corrige.pdf",
+        "size": 536744,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2009-rattrapage-sujet.pdf",
+        "size": 678772,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2009-rattrapage-corrige.pdf",
+        "size": 543748,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2008,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2008-normale-sujet.pdf",
+        "size": 1804584,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2008-normale-corrige.pdf",
+        "size": 119043,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "anglais",
+    "annee": 2008,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/anglais/2008-rattrapage-sujet.pdf",
+        "size": 48558,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/anglais/2008-rattrapage-corrige.pdf",
+        "size": 120101,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2025,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2025-normale-corrige.pdf",
+        "size": 532601,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2025,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2025-rattrapage-sujet.pdf",
+        "size": 2058595,
+        "src": "profelhamdaoui"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2025-rattrapage-corrige.pdf",
+        "size": 633038,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2024-normale-sujet.pdf",
+        "size": 481885,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2024-normale-corrige.pdf",
+        "size": 370617,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2024-rattrapage-sujet.pdf",
+        "size": 438368,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2024-rattrapage-corrige.pdf",
+        "size": 355319,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2023-normale-sujet.pdf",
+        "size": 468629,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2023-normale-corrige.pdf",
+        "size": 434798,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2023-rattrapage-sujet.pdf",
+        "size": 434713,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2023-rattrapage-corrige.pdf",
+        "size": 403519,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2022-normale-sujet.pdf",
+        "size": 407528,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2022-normale-corrige.pdf",
+        "size": 278466,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2022-rattrapage-sujet.pdf",
+        "size": 404263,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2022-rattrapage-corrige.pdf",
+        "size": 323866,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2021-normale-sujet.pdf",
+        "size": 739665,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2021-normale-corrige.pdf",
+        "size": 355931,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2020-normale-sujet.pdf",
+        "size": 466614,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2020-normale-corrige.pdf",
+        "size": 584244,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2020-rattrapage-sujet.pdf",
+        "size": 530076,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2020-rattrapage-corrige.pdf",
+        "size": 652883,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2019-normale-sujet.pdf",
+        "size": 392152,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2019-normale-corrige.pdf",
+        "size": 367392,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2019-rattrapage-sujet.pdf",
+        "size": 416735,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2019-rattrapage-corrige.pdf",
+        "size": 335321,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2018-normale-sujet.pdf",
+        "size": 713712,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2018-normale-corrige.pdf",
+        "size": 727598,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2018-rattrapage-sujet.pdf",
+        "size": 713698,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2018-rattrapage-corrige.pdf",
+        "size": 609657,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2017-normale-sujet.pdf",
+        "size": 723701,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2017-normale-corrige.pdf",
+        "size": 919519,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2017-rattrapage-sujet.pdf",
+        "size": 880842,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2017-rattrapage-corrige.pdf",
+        "size": 800875,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2016-normale-sujet.pdf",
+        "size": 712805,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2016-normale-corrige.pdf",
+        "size": 655743,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2016-rattrapage-sujet.pdf",
+        "size": 749259,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2016-rattrapage-corrige.pdf",
+        "size": 699752,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2015-normale-sujet.pdf",
+        "size": 756462,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2015-normale-corrige.pdf",
+        "size": 686294,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2015-rattrapage-sujet.pdf",
+        "size": 716420,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2015-rattrapage-corrige.pdf",
+        "size": 673799,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2014-normale-sujet.pdf",
+        "size": 669761,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2014-normale-corrige.pdf",
+        "size": 677138,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2014-rattrapage-sujet.pdf",
+        "size": 668250,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2014-rattrapage-corrige.pdf",
+        "size": 594246,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2013-normale-sujet.pdf",
+        "size": 601050,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2013-normale-corrige.pdf",
+        "size": 576097,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2013-rattrapage-sujet.pdf",
+        "size": 644584,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2013-rattrapage-corrige.pdf",
+        "size": 613263,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2012-normale-sujet.pdf",
+        "size": 432249,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2012-normale-corrige.pdf",
+        "size": 434900,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2012-rattrapage-sujet.pdf",
+        "size": 434675,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2012-rattrapage-corrige.pdf",
+        "size": 307430,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2011-normale-sujet.pdf",
+        "size": 365903,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2011-normale-corrige.pdf",
+        "size": 361704,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2011-rattrapage-sujet.pdf",
+        "size": 314824,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2011-rattrapage-corrige.pdf",
+        "size": 407048,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2010-normale-sujet.pdf",
+        "size": 367144,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2010-normale-corrige.pdf",
+        "size": 387282,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2010-rattrapage-sujet.pdf",
+        "size": 315375,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2010-rattrapage-corrige.pdf",
+        "size": 397228,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2009,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2009-normale-sujet.pdf",
+        "size": 1754745,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2009-normale-corrige.pdf",
+        "size": 1818105,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2009-rattrapage-sujet.pdf",
+        "size": 1659839,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2009-rattrapage-corrige.pdf",
+        "size": 1438648,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2008,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/compta/2008-rattrapage-sujet.pdf",
+        "size": 1719559,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/compta/2008-rattrapage-corrige.pdf",
+        "size": 1578547,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2024-normale-sujet.pdf",
+        "size": 512988,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2024-normale-corrige.pdf",
+        "size": 351999,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2024-rattrapage-sujet.pdf",
+        "size": 527656,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2024-rattrapage-corrige.pdf",
+        "size": 443770,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2023-normale-sujet.pdf",
+        "size": 580181,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2023-normale-corrige.pdf",
+        "size": 458620,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2023-rattrapage-sujet.pdf",
+        "size": 489726,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2023-rattrapage-corrige.pdf",
+        "size": 378446,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2022-normale-sujet.pdf",
+        "size": 570230,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2022-normale-corrige.pdf",
+        "size": 328438,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2022-rattrapage-sujet.pdf",
+        "size": 529345,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2022-rattrapage-corrige.pdf",
+        "size": 306741,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2021-normale-sujet.pdf",
+        "size": 851547,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2021-normale-corrige.pdf",
+        "size": 409316,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2021-rattrapage-sujet.pdf",
+        "size": 449070,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2020-normale-sujet.pdf",
+        "size": 536334,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2020-normale-corrige.pdf",
+        "size": 444893,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2020-rattrapage-sujet.pdf",
+        "size": 600381,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2020-rattrapage-corrige.pdf",
+        "size": 621632,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2019-normale-sujet.pdf",
+        "size": 673105,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2019-normale-corrige.pdf",
+        "size": 541329,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2019-rattrapage-sujet.pdf",
+        "size": 705095,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2019-rattrapage-corrige.pdf",
+        "size": 601633,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2018-normale-sujet.pdf",
+        "size": 711514,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2018-normale-corrige.pdf",
+        "size": 708101,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2018-rattrapage-sujet.pdf",
+        "size": 800376,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2018-rattrapage-corrige.pdf",
+        "size": 707297,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2017-normale-sujet.pdf",
+        "size": 1039970,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2017-normale-corrige.pdf",
+        "size": 963212,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2017-rattrapage-sujet.pdf",
+        "size": 955707,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2017-rattrapage-corrige.pdf",
+        "size": 934871,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2016-normale-sujet.pdf",
+        "size": 852539,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2016-normale-corrige.pdf",
+        "size": 465543,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2016-rattrapage-sujet.pdf",
+        "size": 769580,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2016-rattrapage-corrige.pdf",
+        "size": 729623,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2015-normale-sujet.pdf",
+        "size": 905618,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2015-normale-corrige.pdf",
+        "size": 663276,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2015-rattrapage-sujet.pdf",
+        "size": 850477,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2015-rattrapage-corrige.pdf",
+        "size": 674478,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2014-normale-sujet.pdf",
+        "size": 918574,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2014-normale-corrige.pdf",
+        "size": 759366,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2014-rattrapage-sujet.pdf",
+        "size": 868927,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2014-rattrapage-corrige.pdf",
+        "size": 630478,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2013-normale-sujet.pdf",
+        "size": 878695,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2013-normale-corrige.pdf",
+        "size": 578254,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2013-rattrapage-sujet.pdf",
+        "size": 766573,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2013-rattrapage-corrige.pdf",
+        "size": 595051,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2012-normale-sujet.pdf",
+        "size": 546664,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2012-normale-corrige.pdf",
+        "size": 500680,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2012-rattrapage-sujet.pdf",
+        "size": 601956,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2012-rattrapage-corrige.pdf",
+        "size": 460287,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2011-normale-sujet.pdf",
+        "size": 330050,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2011-normale-corrige.pdf",
+        "size": 468502,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2011-rattrapage-sujet.pdf",
+        "size": 329415,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2011-rattrapage-corrige.pdf",
+        "size": 432036,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2010-normale-sujet.pdf",
+        "size": 398432,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2010-normale-corrige.pdf",
+        "size": 386144,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2010-rattrapage-sujet.pdf",
+        "size": 419395,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/compta/2010-rattrapage-corrige.pdf",
+        "size": 479805,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "comptabilite-mathematiques-financieres",
+    "annee": 2008,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/compta/2008-normale-sujet.pdf",
+        "size": 2774612,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2025,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2025-normale-sujet.pdf",
+        "size": 1546315,
+        "src": "profelhamdaoui"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2025-normale-corrige.pdf",
+        "size": 1411356,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2025,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2025-rattrapage-sujet.pdf",
+        "size": 1339176,
+        "src": "profelhamdaoui"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2025-rattrapage-corrige.pdf",
+        "size": 1420685,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2024-normale-sujet.pdf",
+        "size": 1543040,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2024-normale-corrige.pdf",
+        "size": 1462583,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2024-rattrapage-sujet.pdf",
+        "size": 1415086,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2024-rattrapage-corrige.pdf",
+        "size": 1431129,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2023-normale-sujet.pdf",
+        "size": 1281007,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2023-normale-corrige.pdf",
+        "size": 1365528,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2023-rattrapage-sujet.pdf",
+        "size": 1485597,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2023-rattrapage-corrige.pdf",
+        "size": 1323776,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2022-normale-sujet.pdf",
+        "size": 927234,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2022-normale-corrige.pdf",
+        "size": 615349,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2022-rattrapage-sujet.pdf",
+        "size": 962317,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2022-rattrapage-corrige.pdf",
+        "size": 960400,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2021-normale-sujet.pdf",
+        "size": 1160883,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2021-normale-corrige.pdf",
+        "size": 756348,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2021-rattrapage-sujet.pdf",
+        "size": 505029,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2020-normale-sujet.pdf",
+        "size": 452925,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2020-normale-corrige.pdf",
+        "size": 476317,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2020-rattrapage-sujet.pdf",
+        "size": 426705,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2020-rattrapage-corrige.pdf",
+        "size": 507712,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2019-normale-sujet.pdf",
+        "size": 1468490,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2019-normale-corrige.pdf",
+        "size": 992775,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2019-rattrapage-sujet.pdf",
+        "size": 1218984,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2019-rattrapage-corrige.pdf",
+        "size": 684705,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2018-normale-sujet.pdf",
+        "size": 1003397,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2018-rattrapage-sujet.pdf",
+        "size": 897528,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2018-rattrapage-corrige.pdf",
+        "size": 860260,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2017-normale-sujet.pdf",
+        "size": 904299,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2017-normale-corrige.pdf",
+        "size": 905262,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2017-rattrapage-sujet.pdf",
+        "size": 922822,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2017-rattrapage-corrige.pdf",
+        "size": 832676,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2016-normale-sujet.pdf",
+        "size": 574784,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2016-normale-corrige.pdf",
+        "size": 528585,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2016-rattrapage-sujet.pdf",
+        "size": 601519,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2016-rattrapage-corrige.pdf",
+        "size": 546118,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2015-normale-sujet.pdf",
+        "size": 601541,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2015-normale-corrige.pdf",
+        "size": 627136,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2015-rattrapage-sujet.pdf",
+        "size": 647228,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2015-rattrapage-corrige.pdf",
+        "size": 629313,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2014-normale-sujet.pdf",
+        "size": 655771,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2014-normale-corrige.pdf",
+        "size": 607008,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2014-rattrapage-sujet.pdf",
+        "size": 557375,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2014-rattrapage-corrige.pdf",
+        "size": 597001,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2013-normale-sujet.pdf",
+        "size": 515303,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2013-normale-corrige.pdf",
+        "size": 448072,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2013-rattrapage-sujet.pdf",
+        "size": 551812,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2013-rattrapage-corrige.pdf",
+        "size": 465405,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2012-normale-sujet.pdf",
+        "size": 414767,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2012-normale-corrige.pdf",
+        "size": 365131,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2012-rattrapage-sujet.pdf",
+        "size": 326122,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2012-rattrapage-corrige.pdf",
+        "size": 249013,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2010-normale-sujet.pdf",
+        "size": 449110,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2010-normale-corrige.pdf",
+        "size": 264523,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2010-rattrapage-sujet.pdf",
+        "size": 407997,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2010-rattrapage-corrige.pdf",
+        "size": 279567,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/egs/2009-rattrapage-corrige.pdf",
+        "size": 1445158,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2008,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/egs/2008-normale-sujet.pdf",
+        "size": 2689387,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2024-normale-sujet.pdf",
+        "size": 1485326,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2024-normale-corrige.pdf",
+        "size": 1439999,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2024-rattrapage-sujet.pdf",
+        "size": 1387649,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2024-rattrapage-corrige.pdf",
+        "size": 1298144,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2023-normale-sujet.pdf",
+        "size": 1218802,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2023-normale-corrige.pdf",
+        "size": 1303648,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2023-rattrapage-sujet.pdf",
+        "size": 1354945,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2023-rattrapage-corrige.pdf",
+        "size": 1329295,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2022-normale-sujet.pdf",
+        "size": 796633,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2022-normale-corrige.pdf",
+        "size": 488412,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2022-rattrapage-sujet.pdf",
+        "size": 816479,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2022-rattrapage-corrige.pdf",
+        "size": 584291,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2021-normale-sujet.pdf",
+        "size": 611998,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2021-normale-corrige.pdf",
+        "size": 635962,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2021-rattrapage-sujet.pdf",
+        "size": 9005358,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2021-rattrapage-corrige.pdf",
+        "size": 713480,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2020-rattrapage-sujet.pdf",
+        "size": 751286,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2020-rattrapage-corrige.pdf",
+        "size": 512988,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2019-normale-sujet.pdf",
+        "size": 913051,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2019-normale-corrige.pdf",
+        "size": 672179,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2019-rattrapage-sujet.pdf",
+        "size": 1010605,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2019-rattrapage-corrige.pdf",
+        "size": 652143,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2018-normale-sujet.pdf",
+        "size": 892611,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2018-normale-corrige.pdf",
+        "size": 833166,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2018-rattrapage-sujet.pdf",
+        "size": 868658,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2018-rattrapage-corrige.pdf",
+        "size": 850453,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2017-normale-sujet.pdf",
+        "size": 848689,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2017-normale-corrige.pdf",
+        "size": 819534,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2017-rattrapage-corrige.pdf",
+        "size": 812533,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2016-normale-sujet.pdf",
+        "size": 539553,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2016-normale-corrige.pdf",
+        "size": 507444,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2016-rattrapage-sujet.pdf",
+        "size": 553684,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2016-rattrapage-corrige.pdf",
+        "size": 520772,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2015-normale-sujet.pdf",
+        "size": 549118,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2015-normale-corrige.pdf",
+        "size": 540466,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2015-rattrapage-sujet.pdf",
+        "size": 574184,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2015-rattrapage-corrige.pdf",
+        "size": 501702,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2014-normale-sujet.pdf",
+        "size": 544581,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2014-normale-corrige.pdf",
+        "size": 529312,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2014-rattrapage-sujet.pdf",
+        "size": 630467,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2014-rattrapage-corrige.pdf",
+        "size": 516821,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2013-normale-sujet.pdf",
+        "size": 505813,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2013-normale-corrige.pdf",
+        "size": 418895,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2013-rattrapage-sujet.pdf",
+        "size": 400652,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2013-rattrapage-corrige.pdf",
+        "size": 366282,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2012-normale-sujet.pdf",
+        "size": 267702,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2012-normale-corrige.pdf",
+        "size": 232474,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2012-rattrapage-sujet.pdf",
+        "size": 257817,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2012-rattrapage-corrige.pdf",
+        "size": 224211,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2010-normale-sujet.pdf",
+        "size": 321122,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2010-normale-corrige.pdf",
+        "size": 266219,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2010-rattrapage-sujet.pdf",
+        "size": 227289,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2010-rattrapage-corrige.pdf",
+        "size": 239437,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/egs/2009-rattrapage-corrige.pdf",
+        "size": 1836515,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-generale-statistiques",
+    "annee": 2008,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/egs/2008-normale-sujet.pdf",
+        "size": 1687144,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2025,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2025-normale-sujet.pdf",
+        "size": 5553675,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2024-normale-sujet.pdf",
+        "size": 1134630,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2024-normale-corrige.pdf",
+        "size": 1003958,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2024-rattrapage-sujet.pdf",
+        "size": 1152517,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2024-rattrapage-corrige.pdf",
+        "size": 1004632,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2023-normale-sujet.pdf",
+        "size": 1097307,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2023-normale-corrige.pdf",
+        "size": 1082193,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2023-rattrapage-sujet.pdf",
+        "size": 1176723,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2023-rattrapage-corrige.pdf",
+        "size": 971857,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2022-normale-sujet.pdf",
+        "size": 719099,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2022-normale-corrige.pdf",
+        "size": 334621,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2022-rattrapage-sujet.pdf",
+        "size": 767101,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2022-rattrapage-corrige.pdf",
+        "size": 409339,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2021-normale-sujet.pdf",
+        "size": 548720,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2021-normale-corrige.pdf",
+        "size": 349400,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2021-rattrapage-sujet.pdf",
+        "size": 567223,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2020-normale-sujet.pdf",
+        "size": 576329,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2020-normale-corrige.pdf",
+        "size": 532062,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2020-rattrapage-sujet.pdf",
+        "size": 654034,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2020-rattrapage-corrige.pdf",
+        "size": 532829,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2019-normale-sujet.pdf",
+        "size": 680400,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2019-rattrapage-sujet.pdf",
+        "size": 684766,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2019-rattrapage-corrige.pdf",
+        "size": 730901,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2018-normale-sujet.pdf",
+        "size": 792054,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2018-normale-corrige.pdf",
+        "size": 607179,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2018-rattrapage-sujet.pdf",
+        "size": 666169,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2018-rattrapage-corrige.pdf",
+        "size": 547823,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2017-normale-sujet.pdf",
+        "size": 922185,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2017-normale-corrige.pdf",
+        "size": 799769,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2017-rattrapage-sujet.pdf",
+        "size": 877513,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2016-normale-sujet.pdf",
+        "size": 597770,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2016-normale-corrige.pdf",
+        "size": 517910,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2016-rattrapage-sujet.pdf",
+        "size": 623088,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2016-rattrapage-corrige.pdf",
+        "size": 552162,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2015-normale-sujet.pdf",
+        "size": 619734,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2015-normale-corrige.pdf",
+        "size": 532570,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2015-rattrapage-sujet.pdf",
+        "size": 612292,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2015-rattrapage-corrige.pdf",
+        "size": 526066,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2014-normale-sujet.pdf",
+        "size": 584923,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2014-normale-corrige.pdf",
+        "size": 503756,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2014-rattrapage-sujet.pdf",
+        "size": 575501,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2014-rattrapage-corrige.pdf",
+        "size": 498208,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2013-normale-sujet.pdf",
+        "size": 577162,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2013-normale-corrige.pdf",
+        "size": 522461,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2013-rattrapage-sujet.pdf",
+        "size": 620291,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2013-rattrapage-corrige.pdf",
+        "size": 513030,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2012-normale-sujet.pdf",
+        "size": 407129,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2012-normale-corrige.pdf",
+        "size": 254705,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2012-rattrapage-sujet.pdf",
+        "size": 521563,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2012-rattrapage-corrige.pdf",
+        "size": 354119,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2011-normale-sujet.pdf",
+        "size": 363949,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2011-normale-corrige.pdf",
+        "size": 247097,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2011-rattrapage-sujet.pdf",
+        "size": 444504,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2011-rattrapage-corrige.pdf",
+        "size": 289863,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2010-normale-sujet.pdf",
+        "size": 496500,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2010-normale-corrige.pdf",
+        "size": 273026,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2010-rattrapage-sujet.pdf",
+        "size": 476394,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2010-rattrapage-corrige.pdf",
+        "size": 265509,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2009,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2009-normale-sujet.pdf",
+        "size": 2001108,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2009-normale-corrige.pdf",
+        "size": 1043531,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2009-rattrapage-sujet.pdf",
+        "size": 1848717,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2009-rattrapage-corrige.pdf",
+        "size": 1332408,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2008,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2008-normale-sujet.pdf",
+        "size": 1622335,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2008-normale-corrige.pdf",
+        "size": 808374,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "se",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2008,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/se/eoae/2008-rattrapage-sujet.pdf",
+        "size": 1558117,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/se/eoae/2008-rattrapage-corrige.pdf",
+        "size": 813487,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2024-normale-sujet.pdf",
+        "size": 1060494,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2024-normale-corrige.pdf",
+        "size": 1001346,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2024-rattrapage-sujet.pdf",
+        "size": 1154257,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2024-rattrapage-corrige.pdf",
+        "size": 1006996,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2023-normale-sujet.pdf",
+        "size": 1075568,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2023-normale-corrige.pdf",
+        "size": 995204,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2023-rattrapage-sujet.pdf",
+        "size": 1184562,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2023-rattrapage-corrige.pdf",
+        "size": 1019742,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2022-normale-sujet.pdf",
+        "size": 798736,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2022-normale-corrige.pdf",
+        "size": 347025,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2022-rattrapage-sujet.pdf",
+        "size": 784646,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2022-rattrapage-corrige.pdf",
+        "size": 434997,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2021-normale-sujet.pdf",
+        "size": 665405,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2021-normale-corrige.pdf",
+        "size": 393328,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2021-rattrapage-sujet.pdf",
+        "size": 584190,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2020-normale-sujet.pdf",
+        "size": 594221,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2020-normale-corrige.pdf",
+        "size": 538938,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2020-rattrapage-sujet.pdf",
+        "size": 654083,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2020-rattrapage-corrige.pdf",
+        "size": 561911,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2019-normale-sujet.pdf",
+        "size": 842966,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2019-normale-corrige.pdf",
+        "size": 629885,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2019-rattrapage-sujet.pdf",
+        "size": 946819,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2019-rattrapage-corrige.pdf",
+        "size": 715684,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2018-normale-sujet.pdf",
+        "size": 683856,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2018-normale-corrige.pdf",
+        "size": 572317,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2018-rattrapage-sujet.pdf",
+        "size": 613347,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2018-rattrapage-corrige.pdf",
+        "size": 548864,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2017-normale-sujet.pdf",
+        "size": 960507,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2017-normale-corrige.pdf",
+        "size": 811742,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2017-rattrapage-sujet.pdf",
+        "size": 856129,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2016-normale-sujet.pdf",
+        "size": 692445,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2016-normale-corrige.pdf",
+        "size": 550676,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2016-rattrapage-sujet.pdf",
+        "size": 775379,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2016-rattrapage-corrige.pdf",
+        "size": 548277,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2015-normale-sujet.pdf",
+        "size": 650416,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2015-normale-corrige.pdf",
+        "size": 549594,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2015-rattrapage-sujet.pdf",
+        "size": 656374,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2015-rattrapage-corrige.pdf",
+        "size": 544063,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2014-normale-sujet.pdf",
+        "size": 638539,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2014-normale-corrige.pdf",
+        "size": 558200,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2014-rattrapage-sujet.pdf",
+        "size": 632441,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2014-rattrapage-corrige.pdf",
+        "size": 573832,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2013-normale-sujet.pdf",
+        "size": 605946,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2013-normale-corrige.pdf",
+        "size": 620359,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2013-rattrapage-sujet.pdf",
+        "size": 696118,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2013-rattrapage-corrige.pdf",
+        "size": 582433,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2012-normale-sujet.pdf",
+        "size": 472320,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2012-normale-corrige.pdf",
+        "size": 344290,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2012-rattrapage-sujet.pdf",
+        "size": 562109,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2012-rattrapage-corrige.pdf",
+        "size": 394863,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2011-normale-sujet.pdf",
+        "size": 465978,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2011-normale-corrige.pdf",
+        "size": 320883,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2011-rattrapage-sujet.pdf",
+        "size": 510941,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2011-rattrapage-corrige.pdf",
+        "size": 380284,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2010-normale-sujet.pdf",
+        "size": 503946,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2010-normale-corrige.pdf",
+        "size": 362656,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/sgc/eoae/2010-rattrapage-sujet.pdf",
+        "size": 557188,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2010-rattrapage-corrige.pdf",
+        "size": 291042,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "sgc",
+    "matiere": "economie-organisation-administrative-entreprises",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/sgc/eoae/2009-rattrapage-corrige.pdf",
+        "size": 1874772,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2025,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "corrige",
+        "part": "Sujet et corrigé",
+        "file": "bac/nationaux/commun/maths/2025-normale-corrige.pdf",
+        "size": 372923,
+        "src": "fayssalmaths"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2025,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "corrige",
+        "part": "Sujet et corrigé",
+        "file": "bac/nationaux/commun/maths/2025-rattrapage-corrige.pdf",
+        "size": 382073,
+        "src": "fayssalmaths"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2024-normale-sujet.pdf",
+        "size": 1226748,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2024-normale-corrige.pdf",
+        "size": 1016429,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2024-rattrapage-sujet.pdf",
+        "size": 1189284,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2024-rattrapage-corrige.pdf",
+        "size": 1112699,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2023-normale-sujet.pdf",
+        "size": 370945,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2023-normale-corrige.pdf",
+        "size": 341719,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2023-rattrapage-sujet.pdf",
+        "size": 363745,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2023-rattrapage-corrige.pdf",
+        "size": 337243,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2022-normale-sujet.pdf",
+        "size": 1192964,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2022-normale-corrige.pdf",
+        "size": 478317,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2022-rattrapage-sujet.pdf",
+        "size": 1188293,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2022-rattrapage-corrige.pdf",
+        "size": 546412,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2021-normale-sujet.pdf",
+        "size": 168599,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2021-normale-corrige.pdf",
+        "size": 146067,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2020-normale-sujet.pdf",
+        "size": 829355,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2020-normale-corrige.pdf",
+        "size": 767950,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2020-rattrapage-sujet.pdf",
+        "size": 837127,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/maths/2020-rattrapage-corrige.pdf",
+        "size": 818157,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2019-normale-sujet.pdf",
+        "size": 262011,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2019,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/maths/2019-rattrapage-sujet.pdf",
+        "size": 259163,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2018-normale-sujet-ar.pdf",
+        "size": 798419,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2018-normale-sujet-fr.pdf",
+        "size": 428779,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2018-normale-corrige.pdf",
+        "size": 811195,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2018,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2018-rattrapage-sujet.pdf",
+        "size": 695334,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2017-normale-sujet-ar.pdf",
+        "size": 1018112,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2017-normale-sujet-fr.pdf",
+        "size": 590737,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2017-normale-corrige.pdf",
+        "size": 319564,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2017-rattrapage-sujet-ar.pdf",
+        "size": 682461,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2017-rattrapage-sujet-fr.pdf",
+        "size": 571313,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2017-rattrapage-corrige.pdf",
+        "size": 1077930,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2016-normale-sujet-ar.pdf",
+        "size": 755070,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2016-normale-sujet-fr.pdf",
+        "size": 544611,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2016-normale-corrige.pdf",
+        "size": 497326,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2016-rattrapage-sujet-ar.pdf",
+        "size": 483477,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2016-rattrapage-sujet-fr.pdf",
+        "size": 601850,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2016-rattrapage-corrige.pdf",
+        "size": 497142,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2015-normale-sujet-ar.pdf",
+        "size": 485155,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2015-normale-sujet-fr.pdf",
+        "size": 566888,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2015-normale-corrige.pdf",
+        "size": 447632,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2015-rattrapage-sujet-ar.pdf",
+        "size": 483355,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2015-rattrapage-sujet-fr.pdf",
+        "size": 555173,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2015-rattrapage-corrige.pdf",
+        "size": 448348,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2014-normale-sujet-ar.pdf",
+        "size": 507978,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2014-normale-sujet-fr.pdf",
+        "size": 539306,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2014-normale-corrige.pdf",
+        "size": 449847,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2014-rattrapage-sujet-ar.pdf",
+        "size": 520498,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2014-rattrapage-sujet-fr.pdf",
+        "size": 660416,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2014-rattrapage-corrige.pdf",
+        "size": 464379,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2013-normale-sujet-ar.pdf",
+        "size": 553059,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2013-normale-sujet-fr.pdf",
+        "size": 515291,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2013-normale-corrige.pdf",
+        "size": 467117,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2013-rattrapage-sujet-ar.pdf",
+        "size": 538527,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2013-rattrapage-sujet-fr.pdf",
+        "size": 628414,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2013-rattrapage-corrige.pdf",
+        "size": 450636,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2012-normale-sujet-ar.pdf",
+        "size": 398790,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2012-normale-sujet-fr.pdf",
+        "size": 482268,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2012-normale-corrige.pdf",
+        "size": 222287,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2012-rattrapage-sujet.pdf",
+        "size": 281807,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2012-rattrapage-corrige.pdf",
+        "size": 247755,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2011-normale-sujet-ar.pdf",
+        "size": 348352,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2011-normale-sujet-fr.pdf",
+        "size": 499680,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2011-normale-corrige.pdf",
+        "size": 280096,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2011-rattrapage-sujet-ar.pdf",
+        "size": 370388,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2011-rattrapage-sujet-fr.pdf",
+        "size": 499186,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2011-rattrapage-corrige.pdf",
+        "size": 259533,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2010-normale-sujet-ar.pdf",
+        "size": 374255,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2010-normale-sujet-fr.pdf",
+        "size": 359913,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2010-normale-corrige.pdf",
+        "size": 166256,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "mathematiques",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2010-rattrapage-sujet-ar.pdf",
+        "size": 398494,
+        "src": "alloschool"
+      },
+      {
+        "type": "sujet",
+        "langue": "fr",
+        "file": "bac/nationaux/commun/maths/2010-rattrapage-sujet-fr.pdf",
+        "size": 555837,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "langue": "ar",
+        "file": "bac/nationaux/commun/maths/2010-rattrapage-corrige.pdf",
+        "size": 149494,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2025,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2025-normale-sujet.pdf",
+        "size": 86771,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2025-normale-corrige.pdf",
+        "size": 411109,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2024,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2024-normale-sujet.pdf",
+        "size": 932545,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2024-normale-corrige.pdf",
+        "size": 2241866,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2024,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2024-rattrapage-sujet.pdf",
+        "size": 867470,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2024-rattrapage-corrige.pdf",
+        "size": 2338093,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2023,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2023-normale-sujet.pdf",
+        "size": 386835,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2023-normale-corrige.pdf",
+        "size": 1431287,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2023,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2023-rattrapage-sujet.pdf",
+        "size": 440245,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2023-rattrapage-corrige.pdf",
+        "size": 1487822,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2022,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2022-normale-sujet.pdf",
+        "size": 976538,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2022-normale-corrige.pdf",
+        "size": 1156402,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2022,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2022-rattrapage-sujet.pdf",
+        "size": 976628,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2022-rattrapage-corrige.pdf",
+        "size": 800056,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2021,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2021-normale-sujet.pdf",
+        "size": 77319,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2021-normale-corrige.pdf",
+        "size": 333269,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2021,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2021-rattrapage-sujet.pdf",
+        "size": 337055,
+        "src": "profelhamdaoui"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2020,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2020-normale-sujet.pdf",
+        "size": 518115,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2020-normale-corrige.pdf",
+        "size": 816069,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2020,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2020-rattrapage-sujet.pdf",
+        "size": 520454,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2020-rattrapage-corrige.pdf",
+        "size": 696706,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2019,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2019-normale-sujet.pdf",
+        "size": 65616,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2019-normale-corrige.pdf",
+        "size": 331719,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2018,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2018-normale-sujet.pdf",
+        "size": 486253,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2018-normale-corrige.pdf",
+        "size": 763497,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2017,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2017-normale-sujet.pdf",
+        "size": 554937,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2017-normale-corrige.pdf",
+        "size": 724759,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2017,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2017-rattrapage-sujet.pdf",
+        "size": 554048,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2017-rattrapage-corrige.pdf",
+        "size": 730136,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2016,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2016-normale-sujet.pdf",
+        "size": 286410,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2016-normale-corrige.pdf",
+        "size": 519900,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2016,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2016-rattrapage-sujet.pdf",
+        "size": 286010,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2016-rattrapage-corrige.pdf",
+        "size": 521809,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2015,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2015-normale-sujet.pdf",
+        "size": 356347,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2015-normale-corrige.pdf",
+        "size": 425977,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2015,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2015-rattrapage-sujet.pdf",
+        "size": 356396,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2015-rattrapage-corrige.pdf",
+        "size": 419880,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2014,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2014-normale-sujet.pdf",
+        "size": 339394,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2014-normale-corrige.pdf",
+        "size": 430474,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2014,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2014-rattrapage-sujet.pdf",
+        "size": 332249,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2014-rattrapage-corrige.pdf",
+        "size": 479546,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2013,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2013-normale-sujet.pdf",
+        "size": 186832,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2013-normale-corrige.pdf",
+        "size": 352390,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2013,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2013-rattrapage-sujet.pdf",
+        "size": 186331,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2013-rattrapage-corrige.pdf",
+        "size": 388954,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2012,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2012-normale-sujet.pdf",
+        "size": 187039,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2012-normale-corrige.pdf",
+        "size": 239169,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2012,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2012-rattrapage-sujet.pdf",
+        "size": 148699,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2012-rattrapage-corrige.pdf",
+        "size": 240597,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2011,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2011-normale-sujet.pdf",
+        "size": 130360,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2011-normale-corrige.pdf",
+        "size": 220195,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2011,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2011-rattrapage-sujet.pdf",
+        "size": 137127,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2011-rattrapage-corrige.pdf",
+        "size": 192874,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2010,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2010-normale-sujet.pdf",
+        "size": 149215,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2010-normale-corrige.pdf",
+        "size": 206653,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2010,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2010-rattrapage-sujet.pdf",
+        "size": 140091,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2010-rattrapage-corrige.pdf",
+        "size": 167759,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2009,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2009-normale-sujet.pdf",
+        "size": 198995,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2009-normale-corrige.pdf",
+        "size": 942585,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2009,
+    "session": "rattrapage",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2009-rattrapage-sujet.pdf",
+        "size": 181541,
+        "src": "alloschool"
+      },
+      {
+        "type": "corrige",
+        "file": "bac/nationaux/commun/philo/2009-rattrapage-corrige.pdf",
+        "size": 1269480,
+        "src": "alloschool"
+      }
+    ]
+  },
+  {
+    "filiere": "commun",
+    "matiere": "philosophie",
+    "annee": 2008,
+    "session": "normale",
+    "docs": [
+      {
+        "type": "sujet",
+        "file": "bac/nationaux/commun/philo/2008-normale-sujet.pdf",
+        "size": 401964,
+        "src": "profelhamdaoui"
+      }
+    ]
+  }
+]
