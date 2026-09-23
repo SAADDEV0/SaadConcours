@@ -109,7 +109,7 @@ export function footerHtml() {
 <footer>
   <div class="footer-text">Base de données de sujets de concours réels — corrigés indicatifs quand disponibles, sources publiques citées sur chaque fiche.</div>
   <div class="footer-social" id="footerSocial"></div>
-  <div class="footer-legal"><a href="/faq">FAQ</a> · <a href="/confidentialite">Confidentialité</a></div>
+  <div class="footer-legal"><a href="/a-propos">À propos</a> · <a href="/contact">Contact</a> · <a href="/faq">FAQ</a> · <a href="/confidentialite">Confidentialité</a></div>
 </footer>
 `;
 }

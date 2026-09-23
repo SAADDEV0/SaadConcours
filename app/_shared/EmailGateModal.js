@@ -8,6 +8,13 @@ import { usePathname } from "next/navigation";
 // the same browser never sees it again — no cookie, no server-side gate,
 // and it never blocks access to the content (Passer always works).
 const STORAGE_KEY = "emailGateChoice";
+// Never on the landing page view: a modal over the first page a visitor (or
+// the AdSense reviewer) sees counts as an intrusive interstitial. It waits
+// for the second page viewed, i.e. someone who is already browsing the site.
+const VIEWS_KEY = "emailGateViews";
+const MIN_VIEWS = 2;
+// Pages people open to read the rules or reach us — no prompt over them.
+const QUIET_PATHS = ["/a-propos", "/contact", "/confidentialite", "/faq"];
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -24,14 +31,18 @@ export default function EmailGateModal() {
 
   useEffect(() => {
     if (isAdmin) return;
+    let views;
     try {
       if (localStorage.getItem(STORAGE_KEY)) return;
+      views = (parseInt(localStorage.getItem(VIEWS_KEY), 10) || 0) + 1;
+      localStorage.setItem(VIEWS_KEY, String(views));
     } catch {
       return;
     }
+    if (views < MIN_VIEWS || QUIET_PATHS.includes(pathname)) return;
     const t = setTimeout(() => setVisible(true), 800);
     return () => clearTimeout(t);
-  }, [isAdmin]);
+  }, [isAdmin, pathname]);
 
   function close(choice) {
     try {

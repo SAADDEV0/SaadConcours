@@ -111,7 +111,7 @@ export default function FaqPage() {
         </div>
 
         <p style={{ marginTop: 24, color: "var(--text-dim)" }}>
-          Une autre question ? Passe par les réseaux sociaux listés en pied de page, ou consulte la page{" "}
+          Une autre question ? Écris-nous depuis la page <a href="/contact">Contact</a>, ou consulte la page{" "}
           <a href="/confidentialite">Confidentialité</a>.
         </p>
       </div>

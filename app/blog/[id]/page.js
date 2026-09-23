@@ -5,6 +5,7 @@ import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
 import { categoryInfo } from "../../../lib/blogTaxonomy";
+import { findDuplicateBlogIds } from "../../../lib/blogDuplicates";
 import { readingTimeMinutes } from "../../_shared/blogCard";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 import MathScripts from "../../_shared/MathScripts";
@@ -27,15 +28,19 @@ function getRelatedPosts(list, current, limit = 4) {
 
 export async function generateMetadata(props) {
   const params = await props.params;
-  const { p } = await findPost(params.id);
+  const { p, list } = await findPost(params.id);
   if (!p || !p.available) return {};
 
   const url = `${SITE_URL}/blog/${p.id}`;
+  // Templated near-copies of an earlier post stay readable but out of the
+  // index — see lib/blogDuplicates.js.
+  const isDuplicate = findDuplicateBlogIds(list).has(p.id);
 
   return {
     title: p.title,
     description: p.excerpt,
     alternates: { canonical: url },
+    ...(isDuplicate ? { robots: { index: false, follow: true } } : {}),
     openGraph: { type: "article", title: p.title, description: p.excerpt, url, publishedTime: p.publishedAt },
     twitter: { card: "summary_large_image", title: p.title, description: p.excerpt },
   };

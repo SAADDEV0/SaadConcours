@@ -1,4 +1,5 @@
 import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews } from "@/lib/store";
+import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 
@@ -34,7 +35,7 @@ export default async function sitemap() {
   // the blog, so it is as fresh as the freshest of the three.
   const homeUpdated = [concoursUpdated, blogUpdated, newsUpdated].filter(Boolean).sort().pop() || null;
 
-  // /cours, /evaluation, /faq and /confidentialite carry no lastModified on
+  // /cours, /evaluation, /faq, /a-propos, /contact and /confidentialite carry no lastModified on
   // purpose: their datasets have no date field (and the two legal/info pages
   // are hand-edited), so any value here would be invented.
   const staticRoutes = [
@@ -45,6 +46,8 @@ export default async function sitemap() {
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },
     { path: "/evaluation", changeFrequency: "weekly", priority: 0.8 },
     { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
+    { path: "/a-propos", changeFrequency: "monthly", priority: 0.5 },
+    { path: "/contact", changeFrequency: "yearly", priority: 0.3 },
     { path: "/confidentialite", changeFrequency: "yearly", priority: 0.2 },
   ].map(({ path, changeFrequency, priority, lastModified }) => ({
     url: `${SITE_URL}${path}`,
@@ -86,8 +89,11 @@ export default async function sitemap() {
   // app/news/[id]/page.js — the /news listing above is the indexable
   // surface for this content.
 
+  // Near-duplicate posts are noindex'd on their page (lib/blogDuplicates.js);
+  // listing them here would contradict that.
+  const duplicateBlogIds = findDuplicateBlogIds(blog);
   const blogRoutes = blog
-    .filter((p) => p.available)
+    .filter((p) => p.available && !duplicateBlogIds.has(p.id))
     .map((p) => ({
       url: `${SITE_URL}/blog/${p.id}`,
       changeFrequency: "monthly",
