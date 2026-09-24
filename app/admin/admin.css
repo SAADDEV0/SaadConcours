@@ -184,6 +184,8 @@
 .ax-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
 .ax-card-head .ax-title { margin: 0; }
 .ax-grid { display: grid; gap: 14px; }
+/* Dans une grille, l'écart vient de `gap` : la marge de .ax-card + .ax-card décalerait toutes les cartes sauf la première. */
+.ax-grid > .ax-card + .ax-card { margin-top: 0; }
 .ax-grid.c2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .ax-grid.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ax-grid.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -619,3 +621,17 @@ a.ax-cell-title:hover { color: var(--ax-accent-ink); }
 .ax-mb0 { margin-bottom: 0 !important; }
 .ax-login-mark { width: 48px; height: 48px; }
 .ax-login-art > div:first-child svg { width: 40px; height: 40px; }
+
+/* Monétisation — aperçu des bannières partenaires (iframe au rendu du site). */
+.ax-pa-preview { margin-bottom: 14px; }
+.ax-pa-preview-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.ax-pa-stage { position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); }
+.ax-pa-frame { display: block; border: 0; transform-origin: 0 0; background: transparent; }
+.ax-check-desc { align-items: flex-start; }
+.ax-check-desc input { margin-top: 2px; flex: none; }
+.ax-check-desc small { display: block; margin-top: 2px; font-weight: 500; font-size: 0.78rem; color: var(--text-faint); line-height: 1.45; }
+.ax-pa-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr)); gap: 8px 14px; }
+.ax-color { width: 44px; height: 34px; padding: 2px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; }
+.ax-pa-textthumb { display: block; width: 100%; padding: 10px 12px; border-radius: 8px; text-align: center; font-weight: 700; font-size: 0.86rem; }
+.ax-pa-spark { height: 34px; margin-top: 10px; }
+.ax-pa-spark svg { width: 100%; height: 100%; }

@@ -394,58 +394,97 @@ header.site-header{
 .pa-zone{max-width:1400px; margin:0 auto; padding:14px 20px 0;}
 .pa-zone:empty{display:none; padding:0;}
 .pa-zone-footer{padding:0 20px;}
+/* « Dans le contenu » : posée entre deux cartes d'une fiche, elle prend la
+ * largeur de la colonne et le même espacement qu'une carte. */
+.pa-zone-inline{max-width:none; padding:0; margin:0 0 18px;}
 
-.pa-banner{
-  display:block; position:relative; overflow:hidden; text-decoration:none; color:var(--text);
+/* Une unité = la mention (« Sponsorisé ») + la bannière. Les dimensions et
+ * espacements ci-dessous sont repris à l'identique par reservationCss()
+ * (partnerAds.js) : les changer ici, c'est les changer là-bas. */
+.pa-unit{position:relative; max-width:970px; margin:0 auto;}
+.pa-tag{
+  display:block; height:16px; line-height:16px; margin:0 0 4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+  font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; font-weight:600; color:var(--text-faint);
+}
+/* Variante « sur le visuel » (réglage de la console) : pastille dans le coin. */
+.pa-label-overlay > .pa-tag{
+  position:absolute; top:6px; left:6px; z-index:2; height:auto; line-height:1.4; margin:0; padding:2px 7px;
+  border-radius:20px; font-size:.58rem; letter-spacing:.05em; background:var(--bg); border:1px solid var(--border); opacity:.9;
+}
+
+/* Préfixées .pa-unit : la zone « dans le contenu » vit dans .bac-space, dont
+ * le .bac-space a{color:inherit} (bac.css) écraserait sinon la couleur de
+ * texte choisie pour l'encart. */
+.pa-unit .pa-banner{
+  display:block; overflow:hidden; text-decoration:none; color:var(--text);
   background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius);
   transition:border-color .15s ease;
 }
-a.pa-banner:hover{border-color:var(--accent);}
-/* height:auto + les attributs width/height posés par partnerAdHtml donnent au
- * navigateur le ratio avant le téléchargement : la place est réservée, rien ne
- * saute quand l'image arrive. */
+.pa-unit a.pa-banner:hover{border-color:var(--accent);}
+/* height:auto + les attributs width/height posés par partnerAdHtml (et par la
+ * <source> mobile) donnent au navigateur le ratio avant le téléchargement : la
+ * place est réservée, rien ne saute quand l'image arrive. */
+.pa-banner picture{display:block;}
 .pa-banner img{display:block; width:100%; height:auto;}
-.pa-tag{
-  position:absolute; top:6px; left:6px; z-index:2; padding:2px 7px; border-radius:20px;
-  font-size:.58rem; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
-  color:var(--text-faint); background:var(--bg); border:1px solid var(--border); opacity:.9;
-}
-.pa-banner-text{padding:16px 14px 14px;}
-.pa-text{display:block; text-align:center;}
-.pa-text-title{display:block; font-weight:600; font-size:.95rem;}
-.pa-text-desc{display:block; margin-top:5px; font-size:.82rem; color:var(--text-dim);}
-.pa-text-cta{display:block; margin-top:9px; font-size:.82rem; font-weight:600; color:var(--accent);}
 
-/* Bandeaux haut/bas : centrés à leur format d'origine (970px), plafonnés en
- * hauteur pour qu'un visuel mal dimensionné ne mange jamais l'écran. */
-.pa-banner-header, .pa-banner-footer{max-width:970px; margin:0 auto;}
-.pa-banner-header img, .pa-banner-footer img{max-height:110px; object-fit:contain;}
+/* Plafonds de hauteur : un visuel au bon format (970×120, 640×200 sur mobile)
+ * remplit exactement son cadre ; un visuel mal dimensionné est contenu au lieu
+ * de manger l'écran. */
+.pa-unit-header .pa-banner img, .pa-unit-footer .pa-banner img{max-height:120px; object-fit:contain;}
+.pa-unit-inline .pa-banner img{max-height:250px; object-fit:contain;}
+
+/* Encart texte (sans visuel) : couleurs réglables par bannière depuis la
+ * console (--pa-bg, --pa-fg, --pa-accent), sinon celles du thème. */
+.pa-unit .pa-banner-text{
+  display:flex; align-items:center; gap:14px; min-height:88px; padding:14px 18px;
+  background:var(--pa-bg, var(--bg-elev)); color:var(--pa-fg, var(--text));
+}
+.pa-text{flex:1; min-width:0;}
+.pa-text-title{display:block; font-weight:700; font-size:1rem; line-height:1.3;}
+.pa-text-desc{display:block; margin-top:3px; font-size:.84rem; line-height:1.45; opacity:.78;}
+.pa-text-cta{
+  flex:none; display:inline-flex; align-items:center; justify-content:center; padding:9px 16px; border-radius:999px;
+  font-size:.84rem; font-weight:700; white-space:nowrap;
+  background:var(--pa-accent, var(--accent)); color:var(--pa-accent-fg, #fff);
+}
+a.pa-banner-text:hover .pa-text-cta{filter:brightness(1.08);}
+.pa-banner img.pa-text-logo{flex:none; width:52px; height:52px; max-height:none; border-radius:12px; object-fit:cover; background:#fff;}
+
 @media (max-width: 700px){
-  .pa-zone{padding-top:12px;}
-  .pa-banner-header img, .pa-banner-footer img{max-height:70px;}
-  .pa-banner-text{padding:14px 12px 12px;}
+  .pa-zone{padding:12px 16px 0;}
+  .pa-zone-footer{padding:0 16px;}
+  .pa-zone-inline{padding:0;}
+  .pa-unit-inline .pa-banner img{max-height:300px;}
+  .pa-unit .pa-banner-text{flex-wrap:wrap; align-content:center; min-height:112px; padding:12px 14px; gap:10px 12px;}
+  .pa-text{flex:1 1 180px;}
+  .pa-text-cta{flex:1 1 100%;}
+  .pa-banner img.pa-text-logo{width:44px; height:44px;}
 }
 
-/* Rails gauche/droite — accueil et fiches individuelles (concours, cours,
- * article) seulement, jamais les pages de liste : voir le paramètre `rails`
- * de chromeHtml() dans _shared/chrome.js, qui pose le marqueur que ce module
- * lit avant de créer quoi que ce soit.
+/* Rails gauche/droite — accueil, fiches concours et articles de blog
+ * seulement, jamais les pages de liste : voir le paramètre `rails` de
+ * chromeHtml() dans _shared/chrome.js, qui pose le marqueur que ce module lit
+ * avant de créer quoi que ce soit.
  *
  * display:none par défaut : createRail() dans chrome.js les crée toujours
  * (pour pouvoir les révéler après un redimensionnement) mais ne les rend
  * visibles (display:flex + `left` posé) qu'une fois la marge à côté du
- * contenu réellement mesurée comme suffisante — pas de seuil fixe, la largeur
- * de la page (820 à 1100px selon le gabarit) est lue en direct plutôt que
- * devinée. Sans annonceur sur l'un des deux côtés, l'élément n'est même pas
- * créé : un site sans partenaire ne porte aucune trace de ce mécanisme.
+ * contenu — et des bandeaux haut/bas, plus larges qu'un article — réellement
+ * mesurée comme suffisante : pas de seuil fixe, la largeur de la page (900 à
+ * 1100px selon le gabarit) est lue en direct plutôt que devinée. Sans
+ * annonceur sur l'un des deux côtés, l'élément n'est même pas créé : un site
+ * sans partenaire ne porte aucune trace de ce mécanisme.
  * Pas de scroll interne : la hauteur est plafonnée sur l'image, sinon un
  * conteneur de hauteur nulle empêche l'image de charger. */
 .pa-rail{
   display:none; position:fixed; top:96px; z-index:5;
   flex-direction:column; gap:14px;
 }
-.pa-rail img{max-height:calc(100vh - 140px); object-fit:contain;}
-@media (prefers-reduced-motion: reduce){ .pa-banner{transition:none;} }
+.pa-rail .pa-unit{max-width:none; width:100%; margin:0;}
+.pa-rail img{max-height:calc(100vh - 160px); object-fit:contain;}
+.pa-rail .pa-banner-text{flex-direction:column; text-align:center; min-height:0; padding:16px 12px;}
+.pa-rail .pa-text-cta{align-self:stretch; white-space:normal;}
+@media (prefers-reduced-motion: reduce){ .pa-unit .pa-banner{transition:none;} }
 
 .faq-item{border-bottom:1px solid var(--border); padding:14px 0;}
 .faq-item:last-child{border-bottom:none;}

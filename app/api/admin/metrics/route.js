@@ -35,6 +35,13 @@ export async function GET(req) {
 
   const safe = (p, fallback) => p.catch((err) => (console.error("metrics", err), fallback));
 
+  // ?scope=ads → seulement les compteurs des bannières partenaires (écran
+  // Monétisation), sans le reste du tableau de bord.
+  if (sp.get("scope") === "ads") {
+    const ads = await safe(getAdStats(), { views: {}, clicks: {}, days: [] });
+    return NextResponse.json({ ads }, { headers: { "Cache-Control": "private, max-age=30" } });
+  }
+
   try {
     const [metrics, totals, subscribers, topPaths, sources, searchMisses] = await Promise.all([
       safe(getRangeMetrics(range), null),
@@ -56,7 +63,7 @@ export async function GET(req) {
         safe(getSearchMissLog(80), []),
         safe(getRecentVisits(40), []),
         safe(getRecentPdfDownloads(40), []),
-        safe(getAdStats(), { views: {}, clicks: {} }),
+        safe(getAdStats(), { views: {}, clicks: {}, days: [] }),
         safe(getShopStats(), { views: {}, clicks: {} }),
       ]);
       Object.assign(payload, { cities, pdfCities, pdfItems, concoursViews, searchLog, recentVisits, recentPdf, ads, shop });

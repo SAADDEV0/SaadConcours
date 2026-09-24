@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSettings, updateSettings } from "@/lib/store";
 import { recordAudit } from "@/lib/auditLog";
+import { publicAd } from "@/app/_shared/partnerAds";
 
 // Without this, GET has no request-specific data or uncached fetch to key
 // off, so Next statically optimizes it — freezing the footer's social
@@ -9,14 +10,14 @@ export const dynamic = "force-dynamic";
 
 // Partner ads carry the advertiser's private contact details and Saad's own
 // notes about the deal — needed in the admin panel, but this response is
-// world-readable (the site's chrome fetches it on every page), so those two
-// fields are dropped here. the admin console reads the full settings.json straight from the repo for
-// an authenticated admin.
+// world-readable (the site's chrome fetches it on every page), so only the
+// whitelisted public fields go out (publicAd). The admin console reads the
+// full settings.json straight from the repo for an authenticated admin.
 function publicSettings(settings) {
   if (!Array.isArray(settings?.partnerAds)) return settings;
   return {
     ...settings,
-    partnerAds: settings.partnerAds.map(({ contact, note, ...ad }) => ad),
+    partnerAds: settings.partnerAds.map(publicAd),
   };
 }
 

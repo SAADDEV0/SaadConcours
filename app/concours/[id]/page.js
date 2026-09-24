@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getPublicConcours, getCorrigeFile, getSettings } from "@/lib/store";
-import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
+import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
 import { CONCOURS_HUES } from "../../_shared/concoursCard";
 import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
@@ -308,6 +308,9 @@ export default async function ConcoursDetailPage(props) {
           slotId={settings?.adsConcoursMidSlot}
           label="Publicité — entre énoncé et corrigé"
         />
+
+        {/* Bannière partenaire « Dans le contenu » (vide sans annonceur). */}
+        <div dangerouslySetInnerHTML={{ __html: partnerZoneHtml("inline") }} />
 
         {corrigeHtml && (
           <div className="cd-card" id="section-corrige">

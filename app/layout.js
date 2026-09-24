@@ -5,7 +5,7 @@ import "./bac/bac.css";
 import "./_shared/space.css";
 import Script from "next/script";
 import { getSettings } from "@/lib/store";
-import { adsForPlacement, reservationCss } from "./_shared/partnerAds";
+import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservationCss } from "./_shared/partnerAds";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
@@ -85,11 +85,20 @@ export default async function RootLayout({ children }) {
   const adsEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
   const gaEnabled = Boolean(settings?.gaEnabled && settings?.gaMeasurementId);
   // Réservation d'espace pour les bannières partenaires (voir reservationCss).
-  // Ne cible que le haut et le bas de page : la colonne latérale est posée dans
-  // sa propre cellule ou en flottant, elle ne pousse rien.
-  const partnerAdReservation = ["header", "footer"]
-    .map((placement) => reservationCss(placement, adsForPlacement(settings, placement)))
+  // Haut, bas de page et zone « dans le contenu » : les colonnes latérales
+  // flottent dans la marge, elles ne poussent rien.
+  const { labelPosition } = partnerAdsOptions(settings);
+  const partnerAdReservation = ["header", "inline", "footer"]
+    .map((placement) => reservationCss(placement, adsForPlacement(settings, placement), { labelPosition }))
     .join("");
+  // Configuration publique des bannières, inscrite dans la page : le site les
+  // affiche dès l'hydratation sans appeler le Worker (voir chrome.js). Pas de
+  // balise du tout quand les réglages n'ont pas pu être lus au build — le
+  // navigateur se rabat alors sur /api/settings. « < » échappé : le JSON ne
+  // doit jamais pouvoir fermer la balise <script>.
+  const partnerAdsJson = settings
+    ? JSON.stringify(publicPartnerAdsConfig(settings) || { partnerAdsEnabled: false }).replace(/</g, "\\u003c")
+    : null;
 
   return (
     // suppressHydrationWarning: data-theme is stamped on by the pre-paint
@@ -154,6 +163,14 @@ export default async function RootLayout({ children }) {
         )}
       </head>
       <body>
+        {partnerAdsJson && (
+          <script
+            id="sc-partner-ads"
+            type="application/json"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: partnerAdsJson }}
+          />
+        )}
         {children}
         {/* <EmailGateModal /> (app/_shared/EmailGateModal.js) retirée le
            2026-09-24 pour la demande AdSense : une modale qui recouvre la

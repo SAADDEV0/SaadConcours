@@ -120,3 +120,14 @@ Refaite en septembre 2026, au design du site public. Écrans : tableau de bord, 
 - Supprimer met l'élément dans une corbeille (KV) restaurable depuis Activité › Corbeille.
 - L'indicateur « Mise en ligne » de la barre du haut suit le workflow `deploy-cloudflare.yml` : une modification est visible sur le site à la fin du déploiement (3 à 5 min).
 - Toute route `/api/admin/*` exige une session (middleware), sauf login/logout.
+
+## Bannières partenaires (Monétisation)
+
+Publicités vendues en direct à une école ou un centre, gérées dans **Console › Monétisation › Bannières partenaires**. Code : `app/_shared/partnerAds.js` (modèle, rendu, réservation d'espace), `app/_shared/chrome.js` (affichage), `app/layout.js` (configuration inscrite dans les pages).
+
+- **Emplacements** : haut de page, bas de page, dans le contenu (fiche concours entre énoncé et corrigé, fin d'article de blog), colonnes gauche/droite (accueil, fiches concours, articles ; grands écrans seulement).
+- **Par bannière** : visuel + visuel mobile (sinon un 970×120 tombe à ~45 px de haut sur téléphone), ou encart texte (titre, description, bouton, logo, couleurs) ; pages ciblées, appareils, part d'affichage (poids 1 à 5), dates, suivi UTM. L'éditeur montre un aperçu au rendu exact du site (ordinateur/mobile, clair/sombre) et signale un visuel hors format.
+- **Réglages communs** : durée de rotation, texte et position de la mention « Sponsorisé ».
+- **Mise en ligne** : la configuration publique (sans `contact` ni `note`) est inscrite dans chaque page au build. Une modification est donc visible au prochain déploiement (3 à 5 min), comme ses images. Aucun appel au Worker n'est nécessaire pour afficher une bannière.
+- **Statistiques** : un affichage n'est compté que si la bannière a été vue (chargée, à moitié à l'écran, onglet au premier plan). Totaux et détail par jour (30 j) dans KV ; le bouton « rapport » de chaque carte copie un bilan à envoyer à l'annonceur.
+- **Tester en local** : les enregistrements de la console restent en mémoire et le site local les relit (`getSettings`), mais une image envoyée depuis la console n'existe pas sur le disque : elle est remplacée à l'affichage par la bannière suivante, comme en production avant la fin d'un déploiement.

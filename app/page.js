@@ -248,7 +248,17 @@ export default async function HomePage() {
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
 
-      <HomeClient settings={settings} />
+      {/* Only the four AdSense fields HomeClient reads: a client component's
+         props are serialized into the public HTML, and the full settings
+         carry partner-ad contacts and deal notes that must stay private. */}
+      <HomeClient
+        settings={{
+          adsEnabled: settings?.adsEnabled,
+          adsHomeBannerEnabled: settings?.adsHomeBannerEnabled,
+          adsPublisherId: settings?.adsPublisherId,
+          adsHomeBannerSlot: settings?.adsHomeBannerSlot,
+        }}
+      />
     </>
   );
 }

@@ -2,7 +2,15 @@
 // reused verbatim across every page since they're separate routes now
 // instead of one single-page app.
 
-import { adsForPlacement, partnerAdHtml } from "./partnerAds";
+import {
+  adsForPlacement,
+  partnerAdHtml,
+  partnerAdsOptions,
+  rotationOrder,
+  sectionOfNav,
+  localTodayIso,
+  MOBILE_QUERY,
+} from "./partnerAds";
 import boutiqueData from "../../public/data/boutique.json";
 import { isProduitVisible } from "../../lib/boutique";
 
@@ -54,9 +62,12 @@ const NAV_FLAT = NAV_ITEMS.flatMap((item) => item.children || [item]);
 // only. Every listing page (/concours, /cours, /blog, /evaluation, /news,
 // /faq) omits it: it's the request that scoped rails to "une page sélectionnée"
 // and explicitly not "la page initiale" of any section.
+// `data-pa-section` is the rubrique a partner banner can target (see
+// PARTNER_SECTIONS) — read by renderPartnerAds() below and by the space
+// reservation CSS in app/layout.js.
 export function chromeHtml({ active, showSearch, rails = false }) {
   return `
-<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}"></div>
+<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}" data-pa-section="${sectionOfNav(active)}"></div>
 
 <header class="site-header">
   <div class="header-inner">
@@ -124,8 +135,16 @@ export function chromeHtml({ active, showSearch, rails = false }) {
   </div>
 </header>
 
-<div class="pa-zone pa-zone-header" id="paHeader"></div>
+<div class="pa-zone pa-zone-header" id="paHeader" data-pa-zone="header"></div>
 `;
+}
+
+// In-content partner zone ("Dans le contenu"), dropped into a detail page
+// between two blocks — see app/concours/[id]/page.js and app/blog/[id]/page.js.
+// Injected as raw HTML like the rest of the chrome so React never owns (or
+// re-renders over) what renderPartnerAds() puts inside it.
+export function partnerZoneHtml(placement) {
+  return `<div class="pa-zone pa-zone-${placement}" data-pa-zone="${placement}"></div>`;
 }
 
 // Drop-in replacement for an empty grid while its first fetch() is in
@@ -145,7 +164,7 @@ export function spinnerHtml(label) {
 // for that network, so an unconfigured link never flashes then disappears.
 export function footerHtml() {
   return `
-<div class="pa-zone pa-zone-footer" id="paFooter"></div>
+<div class="pa-zone pa-zone-footer" id="paFooter" data-pa-zone="footer"></div>
 <footer>
   <div class="footer-text">Cours du Bac Sciences Économiques et de la Licence FSJES, sujets réels de concours Master — corrigés indicatifs, sources publiques citées sur chaque fiche.</div>
   <div class="footer-social" id="footerSocial"></div>
@@ -206,6 +225,12 @@ export function ensureKatexCss() {
   document.head.appendChild(link);
 }
 
+// Partner-ad rails (createRail below). Module-level on purpose: the baked ad
+// config renders synchronously while initChrome() is still running, before
+// any `const` declared further down inside it would be initialized.
+const RAIL_WIDTH = 160;
+const RAIL_MARGIN = 16;
+
 export const chromeScript = function initChrome() {
   ensureKatexCss();
 
@@ -231,21 +256,38 @@ export const chromeScript = function initChrome() {
     window.addEventListener("pageshow", () => bar.classList.remove("loading"));
   })();
 
-  // One /api/settings round-trip feeds both the footer's social row and the
-  // partner ad zones — they used to be two separate fetches of the same
-  // document on every page load.
+  // Partner banners come from the configuration baked into the page at build
+  // time (app/layout.js, <script id="sc-partner-ads">): they render on
+  // hydration, with no network round-trip that could be slow, fail, or land
+  // on a cold Worker. /api/settings now only feeds the footer's social row —
+  // and stands in for the baked config on a page built without settings.
   (function initSettingsChrome() {
     if (document.__scSettingsChromeWired) return;
     document.__scSettingsChromeWired = true;
+
+    const baked = readBakedPartnerAds();
+    if (baked !== undefined) renderPartnerAds(baked);
 
     fetch("/api/settings")
       .then((r) => r.json())
       .then((settings) => {
         renderSocialLinks(settings);
-        renderPartnerAds(settings);
+        if (baked === undefined) renderPartnerAds(settings);
       })
       .catch(() => {});
   })();
+
+  // undefined = no baked config on this page (fall back to the fetch);
+  // {partnerAdsEnabled:false} = baked, and there is nothing to show.
+  function readBakedPartnerAds() {
+    const el = document.getElementById("sc-partner-ads");
+    if (!el) return undefined;
+    try {
+      return JSON.parse(el.textContent);
+    } catch {
+      return undefined;
+    }
+  }
 
   function renderSocialLinks(settings) {
     const el = document.getElementById("footerSocial");
@@ -262,8 +304,8 @@ export const chromeScript = function initChrome() {
   }
 
   // Own-inventory banners (see _shared/partnerAds.js). Each zone shows one
-  // banner at a time and cycles through the others every 12s, so several
-  // advertisers can share the same slot instead of competing for it.
+  // banner at a time and cycles through the others, so several advertisers
+  // can share the same slot instead of competing for it.
   //
   // Every zone lives in the normal document flow — no overlay is ever allowed
   // to push, shrink or cover the site. The one exception is the left/right
@@ -271,52 +313,71 @@ export const chromeScript = function initChrome() {
   // genuinely empty, measured against the real page rather than guessed from
   // a fixed breakpoint.
   function renderPartnerAds(settings) {
-    // The header/footer zones are already in the markup and collapse on their
-    // own when left empty (.pa-zone:empty), so they only need filling.
-    for (const placement of ["header", "footer"]) {
-      const el = document.getElementById(placement === "header" ? "paHeader" : "paFooter");
-      const ads = el && adsForPlacement(settings, placement);
-      if (ads && ads.length) mountAdZone(el, ads, placement);
-    }
+    if (!settings || settings.partnerAdsEnabled === false) return;
+    const opts = partnerAdsOptions(settings);
+    const bar = document.getElementById("topProgressBar");
+    const mobile = window.matchMedia(MOBILE_QUERY).matches;
+    const filter = {
+      today: localTodayIso(),
+      section: bar?.dataset.paSection || "info",
+      device: mobile ? "mobile" : "desktop",
+    };
 
-    const railsAllowed = document.getElementById("topProgressBar")?.dataset.paRails === "1";
-    if (!railsAllowed) return;
-    const leftAds = adsForPlacement(settings, "rail_left");
-    const rightAds = adsForPlacement(settings, "rail_right");
-    if (leftAds.length) {
-      const { el, isVisible } = createRail("left");
-      mountAdZone(el, leftAds, "rail_left", isVisible);
-    }
-    if (rightAds.length) {
-      const { el, isVisible } = createRail("right");
-      mountAdZone(el, rightAds, "rail_right", isVisible);
+    // Header, footer and in-content zones are already in the markup and
+    // collapse on their own when left empty (.pa-zone:empty).
+    document.querySelectorAll(".pa-zone[data-pa-zone]").forEach((el) => {
+      const placement = el.dataset.paZone;
+      const ads = adsForPlacement(settings, placement, filter);
+      if (ads.length) mountAdZone(el, ads, placement, opts);
+      // Nothing for this page or screen after all (targeting, a campaign
+      // that ended since the build…): give back any space the build reserved.
+      else el.style.display = "none";
+    });
+
+    // Rails never fit beside the content on a phone.
+    if (bar?.dataset.paRails !== "1" || mobile) return;
+    for (const side of ["left", "right"]) {
+      const ads = adsForPlacement(settings, `rail_${side}`, filter);
+      if (ads.length) mountAdZone(createRail(side), ads, `rail_${side}`, opts);
     }
   }
 
-  const RAIL_WIDTH = 160;
-  const RAIL_MARGIN = 16;
-
   // Fixed-position rail, hidden by default. Its `left` is computed — not
-  // guessed from a viewport breakpoint — from the actual rendered width of
-  // whichever content wrapper the current page uses (.home-view is 1100px,
-  // .cd-view is 820px on concours/blog and 1100px on cours — see its inline
-  // style there — so a single breakpoint could never fit all of them
-  // correctly). The rail only appears once that measured gutter is wide
-  // enough to hold it without touching the content, and re-measures on
-  // resize so rotating a phone or resizing a window never leaves it
-  // overlapping text.
+  // guessed from a viewport breakpoint — from what actually occupies the
+  // middle of the page: the content column (.bac-wrap: 1100px on the home
+  // page, 900px on a concours or article page; .home-view / .cd-view on the
+  // older templates) measured at its padding edge, and the 970px header and
+  // footer banners, which are wider than a 900px article and would otherwise
+  // slide under the rail. The rail only appears once the gutter left by all
+  // of them is wide enough, and re-measures on resize so rotating a tablet or
+  // resizing a window never leaves it overlapping anything.
   function createRail(side) {
     const rail = document.createElement("aside");
-    rail.className = "pa-rail";
+    rail.className = "pa-rail pa-rail-" + side;
     rail.style.width = RAIL_WIDTH + "px";
     rail.setAttribute("aria-label", "Publicité partenaire");
     document.body.appendChild(rail);
 
-    function reposition() {
-      const content = document.querySelector(".home-view, .cd-view");
-      if (!content) return (rail.style.display = "none");
+    function obstacle() {
+      const content = document.querySelector(".bac-wrap, .home-view, .cd-view");
+      if (!content) return null;
       const box = content.getBoundingClientRect();
-      const gutter = side === "left" ? box.left : window.innerWidth - box.right;
+      const cs = getComputedStyle(content);
+      let left = box.left + parseFloat(cs.paddingLeft || 0);
+      let right = box.right - parseFloat(cs.paddingRight || 0);
+      document.querySelectorAll(".pa-zone-header .pa-unit, .pa-zone-footer .pa-unit").forEach((u) => {
+        const r = u.getBoundingClientRect();
+        if (!r.width) return;
+        left = Math.min(left, r.left);
+        right = Math.max(right, r.right);
+      });
+      return { left, right };
+    }
+
+    function reposition() {
+      const box = obstacle();
+      if (!box) return (rail.style.display = "none");
+      const gutter = side === "left" ? box.left : document.documentElement.clientWidth - box.right;
       if (gutter < RAIL_WIDTH + RAIL_MARGIN * 2) {
         rail.style.display = "none";
         return;
@@ -326,78 +387,127 @@ export const chromeScript = function initChrome() {
     }
 
     reposition();
+    // Watching the page's own box, not just the window: a scrollbar that
+    // appears once the content has loaded narrows the layout by ~15px and
+    // re-centres everything without firing any window resize — the rail
+    // would then sit against the header banner.
     let resizeTimer = null;
-    window.addEventListener("resize", () => {
+    const later = () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(reposition, 150);
-    });
+      resizeTimer = setTimeout(reposition, 100);
+    };
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(later).observe(document.documentElement);
+    window.addEventListener("resize", later);
 
-    return { el: rail, isVisible: () => rail.style.display !== "none" };
+    return rail;
   }
 
-  // `isVisible` defaults to true (header/footer are only ever mounted once
-  // they're already going to render). The rail passes its own check: it's
-  // created unconditionally so a resize can reveal it later, but must not
-  // bill an advertiser for an impression that happened while display:none.
-  function mountAdZone(el, ads, placement, isVisible = () => true) {
-    // Random start index so the same advertiser isn't always the one seen by
-    // visitors who bounce before the first rotation.
-    let idx = Math.floor(Math.random() * ads.length);
+  // One zone = one banner on screen at a time, rotating through `ads`.
+  //
+  // What an advertiser is shown as "affichages" must be banners somebody
+  // could actually see, so an impression is counted only when the banner is
+  // (1) loaded, (2) at least half inside the viewport and (3) in a visible
+  // tab — a footer banner nobody scrolled down to, a rail with no room to
+  // appear or a tab left in the background count nothing. Rotation pauses
+  // in the same situations, which also stops a footer from cycling through
+  // every advertiser unseen.
+  function mountAdZone(el, ads, placement, opts) {
+    const order = rotationOrder(ads);
+    let pos = Math.floor(Math.random() * order.length);
+    const failed = new Set(); // indexes into `ads` whose visual failed to load
+    let current = null;
+    let pendingView = null; // id of the banner shown but not yet counted
+    let inView = typeof IntersectionObserver === "undefined";
     let timer = null;
 
-    // `tried` guards the failover below from looping when every visual in the
-    // zone is broken.
-    function show(tried = 0) {
-      const ad = ads[idx];
-      el.innerHTML = partnerAdHtml(ad, placement);
-      const banner = el.firstElementChild;
-      if (!banner) return;
-      if (banner.tagName === "A") {
-        banner.addEventListener("click", () => trackAdEvent(ad.id, "click"));
+    function countIfSeen() {
+      if (inView && pendingView && !document.hidden) {
+        trackAdEvent(pendingView, "view");
+        pendingView = null;
       }
-
-      const img = banner.querySelector("img");
-      if (!img) {
-        if (isVisible()) trackAdEvent(ad.id, "view");
-        return;
-      }
-      // An impression is only counted once the visual is actually on screen —
-      // an advertiser shouldn't be shown a number that includes the times his
-      // banner failed to load, or a rail that never had room to appear.
-      img.addEventListener("load", () => isVisible() && trackAdEvent(ad.id, "view"));
-      // A visual that 404s (typically one uploaded seconds ago, before the
-      // deploy carrying it has landed) must leave no trace: a broken-image box
-      // labelled "Sponsorisé" reads as the site itself being broken. Hand the
-      // slot to the next advertiser instead of leaving a hole.
-      img.addEventListener("error", () => {
-        banner.remove();
-        if (tried < ads.length - 1) {
-          idx = (idx + 1) % ads.length;
-          show(tried + 1);
-        }
-      });
     }
 
-    show();
-    if (ads.length <= 1) return;
+    function show() {
+      for (let tries = 0; failed.has(order[pos]) && tries < order.length; tries++) pos = (pos + 1) % order.length;
+      if (failed.size >= ads.length) {
+        // Every visual is broken (typically uploaded seconds ago, before the
+        // deploy carrying it has landed): leave no trace. A broken-image box
+        // labelled "Sponsorisé" reads as the site itself being broken.
+        stop();
+        el.innerHTML = "";
+        el.style.display = "none";
+        return;
+      }
+      const index = order[pos];
+      const ad = ads[index];
+      // The same advertiser again (a heavier weight comes round twice in a
+      // row): it simply stays up longer — no redraw, no second impression.
+      if (ad === current && el.firstElementChild) return;
+      current = ad;
+      pendingView = null;
+      el.innerHTML = partnerAdHtml(ad, placement, opts);
 
-    // Rotation stops while the tab is in the background: no timers, no
-    // redraws, and above all no impressions billed for a banner nobody could
-    // have seen.
+      const link = el.querySelector("a.pa-banner");
+      if (link) link.addEventListener("click", () => trackAdEvent(ad.id, "click"));
+      const logo = el.querySelector(".pa-text-logo");
+      if (logo) logo.addEventListener("error", () => logo.remove(), { once: true });
+
+      const ready = () => {
+        if (current !== ad) return;
+        pendingView = ad.id;
+        countIfSeen();
+      };
+      const img = el.querySelector(".pa-banner:not(.pa-banner-text) img");
+      if (!img || (img.complete && img.naturalWidth)) return ready();
+      img.addEventListener("load", ready, { once: true });
+      // Hand the slot to the next advertiser instead of leaving a hole.
+      img.addEventListener(
+        "error",
+        () => {
+          if (current !== ad) return;
+          failed.add(index);
+          current = null;
+          next();
+        },
+        { once: true }
+      );
+    }
+
+    function next() {
+      pos = (pos + 1) % order.length;
+      show();
+    }
     function start() {
-      if (!timer) timer = setInterval(next, 12000);
+      if (!timer && ads.length - failed.size > 1) timer = setInterval(next, opts.rotationSec * 1000);
     }
     function stop() {
       clearInterval(timer);
       timer = null;
     }
-    function next() {
-      idx = (idx + 1) % ads.length;
-      show();
-    }
 
-    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
-    if (!document.hidden) start();
+    show();
+
+    if (!inView) {
+      new IntersectionObserver(
+        (entries) => {
+          const e = entries[entries.length - 1];
+          inView = e.isIntersecting && e.intersectionRatio >= 0.5;
+          if (inView && !document.hidden) {
+            countIfSeen();
+            start();
+          } else stop();
+        },
+        { threshold: [0, 0.5] }
+      ).observe(el);
+    } else start();
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) return stop();
+      if (inView) {
+        countIfSeen();
+        start();
+      }
+    });
   }
 
   // Same fire-and-forget contract as the other counters below: never awaited,

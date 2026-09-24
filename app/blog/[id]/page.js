@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getAllBlog } from "@/lib/store";
-import { chromeHtml, footerHtml } from "../../_shared/chrome";
+import { chromeHtml, footerHtml, partnerZoneHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
 import { categoryInfo } from "../../../lib/blogTaxonomy";
@@ -147,6 +147,9 @@ export default async function BlogDetailPage(props) {
         <div className="cd-card">
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </div>
+
+        {/* Bannière partenaire « Dans le contenu » (vide sans annonceur). */}
+        <div dangerouslySetInnerHTML={{ __html: partnerZoneHtml("inline") }} />
 
         <BlogDetailClient post={p} />
 
