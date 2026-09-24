@@ -47,28 +47,7 @@
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
   "partnerAdsEnabled": false,
-  "partnerAds": [
-    {
-      "id": "pa_mubeqm3h1sz1",
-      "name": "Facebook",
-      "contact": "",
-      "image": "images/partenaires/saadconcours-facebook-970x120@2x.png",
-      "link": "https://facebook.com/saadconcours",
-      "alt": "SaadConcours - Cours FSJES",
-      "title": "",
-      "description": "",
-      "cta": "",
-      "placements": [
-        "header"
-      ],
-      "active": true,
-      "startDate": "",
-      "endDate": "",
-      "note": "",
-      "w": "",
-      "h": ""
-    }
-  ],
+  "partnerAds": [],
   "pdfMarginMm": 28,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
