@@ -97,6 +97,23 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
    en production sur Cloudflare) → recette [P1](#p1--vérifier-committer-publier).
 4. Compte rendu court : ce qui a été ajouté (liste d'`id`), ce qui a été écarté et pourquoi.
 
+### 1.6 AdSense : jamais de « low value content »
+Le site a été refusé par AdSense pour « low value content ». Les causes, corrigées le 2026-09-24 :
+289 pages d'examen réduites à un lien PDF, 172 pages de 1ère Bac « en préparation », des devoirs
+« Bientôt », une boutique vide, une section news copiée automatiquement d'almaster-maroc.com.
+**Un `noindex` ne suffit pas** : la relecture suit les liens du site, qu'ils soient indexés ou non.
+- Aucune page vide et aucun lien vers une page vide : pas de badge « Bientôt », pas d'onglet
+  « en préparation ». Un chapitre non rédigé n'a pas de page ; un niveau Bac ne passe à
+  `available: true` (`lib/bacProgramme.js`) que quand ses matières ont des chapitres rédigés.
+- Pas une page par fichier : un PDF ou une image se liste sur la page qui lui donne un contexte
+  (ex. examens nationaux sur la page de la matière), jamais seul sur sa page.
+- Pas de contenu copié ou récupéré automatiquement d'un autre site (scraping), sous aucune forme.
+- Pas de gabarit recyclé d'une page à l'autre (voir A1 pour le blog).
+- Contrôle : `npm run check` = lint + build + `scripts/audit-contenu.mjs` (aussi lancé en CI). Il
+  parcourt le site construit depuis l'accueil et échoue sur une page « Bientôt / en préparation »,
+  une page de moins de 120 mots ou un lien interne cassé. **Ne pas l'affaiblir pour le faire
+  passer** : corriger la page, ou ne pas la générer et retirer les liens qui y mènent.
+
 ---
 
 ## C. CONCOURS
@@ -379,10 +396,15 @@ export default {
    l'année en cours ; matières en arabe rédigées en arabe.
 5. Vérifier que `public/data/bac.json` ne contient pas déjà une surcharge admin du même chapitre
    (elle masquerait le nouveau contenu) — sinon le signaler.
-6. `rédige toute la 1ère Bac` : procéder matière par matière, un commit par matière.
+6. `rédige toute la 1ère Bac` : procéder matière par matière, un commit par matière. La 1ère Bac est
+   masquée (`available: false` dans `BAC_NIVEAUX`) : la repasser à `true` seulement quand chaque
+   matière a ses chapitres rédigés (règle 1.6), puis vérifier `npm run check`.
 
 ### B2 — Examens nationaux 2ème Bac
-Pages : `/bac/2bac/<matière>/examens/<id>` (statiques, PDF en assets Cloudflare : aucun coût Worker).
+Affichage : **pas de page par examen**. Les PDF sont listés en liens directs dans la section
+« Examens nationaux » de la page matière (`/bac/2bac/<matière>#examens`), servis en assets
+Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été supprimées le
+2026-09-24 : 289 pages de ~90 mots autour d'un PDF, cause du refus AdSense (règle 1.6).
 1. **SE ≠ SGC** : économie générale & statistiques, EOAE et comptabilité ont des sujets
    différents par filière (`filiere: "se"` / `"sgc"`). Maths, philosophie et anglais ont un sujet
    commun (`filiere: "commun"`, un seul exemplaire). Droit et informatique de gestion ne sont pas
@@ -402,7 +424,8 @@ Pages : `/bac/2bac/<matière>/examens/<id>` (statiques, PDF en assets Cloudflare
    source dans `NATIONAL_SOURCES` (`lib/bacNationaux.js`).
 5. `.gitattributes` déclare `*.pdf binary` : ne jamais l'enlever (sinon `core.autocrlf` corrompt
    les PDF). Vérifier après `git add` que la taille de chaque blob = taille du fichier.
-6. Contrôles : build, 200 sur chaque page d'examen et chaque PDF, entrées `/examens/` du sitemap.
+6. Contrôles : `npm run check`, 200 sur chaque PDF listé (le garde-fou vérifie que chaque lien
+   pointe vers un fichier existant de `public/`).
    Plafonds Cloudflare gratuits : 25 Mio par fichier, 20 000 fichiers d'assets.
 
 ---
@@ -489,6 +512,11 @@ Pages : `/bac/2bac/<matière>/examens/<id>` (statiques, PDF en assets Cloudflare
 ## N. NEWS (concours ouverts)
 
 ### N1 — News concours ouverts
+**Section retirée du site public le 2026-09-24** (page `/news`, pages `/news/<id>`, bouton du
+header, encarts de l'accueil) : c'était une copie automatique d'almaster-maroc.com, donc du contenu
+« scrapé » refusé par AdSense (règle 1.6). `public/data/news.json`, le scraper et l'écran de la
+console restent, mais rien n'est affiché. Une demande sur les news → rappeler ce retrait et
+demander avant toute remise en ligne (elle exigerait un contenu rédigé, pas une copie).
 - Schéma : `{ id (16 hex aléatoires), titre, etablissement, ville, filiere, date_limite (AAAA-MM-JJ|null), cloture, lien_inscription, source, date_publication }`.
 - Ajouter : insérer en **tête** du tableau (le fichier est trié par `date_publication`
   décroissante, comme le fait le scraper), `date_publication` = aujourd'hui.
@@ -504,7 +532,8 @@ Pages : `/bac/2bac/<matière>/examens/<id>` (statiques, PDF en assets Cloudflare
 ### V1 — Boutique : cahiers Gumroad
 - Pages publiques : `/boutique` (liste, recherche, filtre par niveau) et `/boutique/<id>` (fiche + bouton « Acheter sur Gumroad »). Le site n’encaisse rien : le paiement et la livraison du PDF se font sur Gumroad.
 - Schéma : `{ id (slug du titre), titre, sousTitre, niveau (bac|licence|licence_excellence|master), matiere, description (Markdown), sommaire: [], pointsForts: [], prix, prixBarre (promo, facultatif), devise (MAD|EUR|USD), pages, format, couverture (images/boutique/<id>/…), apercu (lien d’extrait gratuit), gumroadUrl, paiementDirect (true = ouvre directement le paiement, ?wanted=true), badge (Nouveau|Best-seller|Promo|Édition 2026|Bientôt), vedette, available, dateAjout }`.
-- **Ne jamais inventer** un prix ni un lien Gumroad : les demander s’ils ne sont pas fournis. Une fiche sans `gumroadUrl` valide s’affiche en « Bientôt disponible », sans bouton d’achat.
+- **Ne jamais inventer** un prix ni un lien Gumroad : les demander s’ils ne sont pas fournis. Une fiche sans `gumroadUrl` valide s’affiche en « Bientôt disponible », sans bouton d’achat : ne pas la publier (`available: true`) dans cet état, le garde-fou de la règle 1.6 bloquerait.
+- Tant qu’aucun cahier n’est publié, la boutique est absente du menu, du sitemap et de l’index (`BOUTIQUE_OUVERTE` dans `app/_shared/chrome.js`) : le premier cahier `available` la fait apparaître au déploiement suivant, sans toucher au code.
 - Le plus simple pour Saad : Console › Contenu › Boutique › « Nouveau cahier ». Par script : mêmes règles que 1.2 (lecture, modification, `JSON.stringify(list, null, 2) + "
 "`).
 - Couverture : image portrait (3:4) en WebP, sous un **nouveau nom** à chaque remplacement (les images sont en cache immuable).
@@ -538,7 +567,8 @@ Terminer par les **5 prochaines actions** les plus utiles, formulées comme comm
 ## P. PUBLICATION
 
 ### P1 — Vérifier, committer, publier
-1. `npm run check` (lint + build) si du code a changé ; pour des données seules, vérifier que les JSON parsent.
+1. `npm run check` (lint + build + garde-fou contenu, règle 1.6) si du code a changé ou si des
+   pages sont ajoutées ou retirées ; pour une simple correction de données, vérifier que les JSON parsent.
 2. Commit (si pas déjà fait) avec le style du dépôt.
 3. `git push origin main` → GitHub Actions déploie sur Cloudflare Workers.
 4. Après déploiement, vérifier qu'une page publique touchée reste statique :

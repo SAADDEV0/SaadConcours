@@ -1,8 +1,7 @@
-import { getPublicConcours, getAllNews, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
-import { escapeHtml, CONCOURS_HUES } from "./_shared/concoursCard";
+import { CONCOURS_HUES } from "./_shared/concoursCard";
 import { isLicenceExcellence } from "@/lib/concoursNiveaux";
-import { daysUntil, visibleNews } from "./_shared/newsCard";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES } from "../lib/bacProgramme";
 import { fsjesModule } from "../lib/fsjesChapitres";
@@ -20,16 +19,15 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 // Server-rendered (the homepage is the page most likely to earn backlinks and
-// get crawled first). HomeClient only wires the alert subscribe form and the
-// partner banner ad, which have nothing to crawl.
+// get crawled first). HomeClient only wires the header and the AdSense home
+// banner, which have nothing to crawl.
 //
 // Le site couvre trois publics — lycée (Bac), université (Licence FSJES) et
 // préparation des concours de Master — et la page d'accueil les présente à
 // égalité, avec le même design que les espaces de cours (classes bac-*).
 export default async function HomePage() {
-  const [allConcours, rawNews, settings, cours, quiz, blog] = await Promise.all([
+  const [allConcours, settings, cours, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
-    getAllNews().catch(() => []),
     getSettings().catch(() => null),
     getAllCours().catch(() => []),
     getAllQuiz().catch(() => []),
@@ -52,20 +50,6 @@ export default async function HomePage() {
   const recentPosts = blog
     .filter((p) => p.available)
     .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
-    .slice(0, 3);
-
-  // Interrupteur des réglages (« Encarts concours sur la page d'accueil ») :
-  // masque les deux encarts alimentés par les concours ouverts sans toucher
-  // à /news. Absent = activé, comme newsScraperEnabled.
-  const showNewsBoxes = settings?.homeNewsBoxesEnabled !== false;
-
-  const newsItems = visibleNews(rawNews, settings);
-  const open = newsItems.filter((i) => !i.cloture);
-  const urgent = open
-    .filter((i) => i.date_limite && daysUntil(i.date_limite) >= 0 && daysUntil(i.date_limite) <= 7)
-    .sort((a, b) => daysUntil(a.date_limite) - daysUntil(b.date_limite));
-  const recentOpen = [...open]
-    .sort((a, b) => (b.date_publication || "").localeCompare(a.date_publication || ""))
     .slice(0, 3);
 
   const PILIERS = [
@@ -109,7 +93,6 @@ export default async function HomePage() {
 
   const OUTILS = [
     { href: "/evaluation", icon: "📝", hue: 22, title: "Évaluation", desc: "Concours blancs en QCM par module, corrigés." },
-    { href: "/news", icon: "🆕", hue: 42, title: "Concours ouverts", desc: "Les Masters actuellement ouverts et leurs dates limites." },
     { href: "/blog", icon: "📰", hue: 330, title: "Blog", desc: "Méthode, orientation et conseils de révision." },
   ];
 
@@ -155,40 +138,6 @@ export default async function HomePage() {
 
           <div id="homeBannerAd" />
 
-          {showNewsBoxes && urgent.length > 0 && (
-            <section className="urgent-alert" id="urgentAlert">
-              <div className="urgent-alert-head">
-                <span className="urgent-alert-title">
-                  ⏰ <strong id="urgentCount">{urgent.length}</strong> concours ferment bientôt
-                </span>
-                <a className="home-alert-link" href="/news">
-                  Voir tout →
-                </a>
-              </div>
-              <div
-                className="urgent-alert-list"
-                id="urgentAlertList"
-                dangerouslySetInnerHTML={{
-                  __html: urgent
-                    .slice(0, 5)
-                    .map(
-                      (item) => `
-              <div class="urgent-alert-item">
-                <span>${escapeHtml(item.titre)}${item.ville ? " · " + escapeHtml(item.ville) : ""}</span>
-                <span class="urgent-alert-date">${escapeHtml(item.date_limite)}</span>
-              </div>`
-                    )
-                    .join(""),
-                }}
-              />
-              <form className="alert-subscribe-form" id="alertForm">
-                <input type="email" id="alertEmail" placeholder="Ton email pour être alerté avant la clôture" required />
-                <button type="submit">🔔 M'alerter</button>
-              </form>
-              <div className="alert-form-msg" id="alertFormMsg" />
-            </section>
-          )}
-
           <section className="bac-group">
             <h2 className="bac-section-title">Choisis ton niveau</h2>
             <div className="sp-piliers">
@@ -210,33 +159,6 @@ export default async function HomePage() {
               ))}
             </div>
           </section>
-
-          {showNewsBoxes && recentOpen.length > 0 && (
-            <section className="home-alert" id="homeAlert">
-              <div className="home-alert-head">
-                <span className="home-alert-title">🔔 Concours récemment ouverts</span>
-                <a className="home-alert-link" href="/news">
-                  Voir tout →
-                </a>
-              </div>
-              <div
-                className="home-alert-list"
-                id="homeAlertList"
-                dangerouslySetInnerHTML={{
-                  __html: recentOpen
-                    .map(
-                      (item) => `
-              <a class="home-alert-item" href="${escapeHtml(item.lien_inscription || item.source || "/news")}" target="_blank" rel="noopener">
-                <span class="home-alert-etab">${escapeHtml(item.etablissement || "Autre")}</span>
-                <span class="home-alert-titre">${escapeHtml(item.titre)}</span>
-                ${item.ville ? `<span class="home-alert-ville">📍 ${escapeHtml(item.ville)}</span>` : ""}
-              </a>`
-                    )
-                    .join(""),
-                }}
-              />
-            </section>
-          )}
 
           <section className="bac-group">
             <h2 className="bac-section-title">S'entraîner et s'informer</h2>

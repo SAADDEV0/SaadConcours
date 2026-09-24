@@ -15,5 +15,6 @@ export async function GET(req) {
       console.error("alerts unsubscribe error", err);
     }
   }
-  return NextResponse.redirect(new URL("/news?desabonne=1", req.url));
+  // /news n'existe plus (section retirée le 2026-09-24) : retour à l'accueil.
+  return NextResponse.redirect(new URL("/", req.url));
 }

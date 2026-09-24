@@ -55,6 +55,7 @@ export default async function BacNiveauPage(props) {
 
   const matieres = bacMatieres(niveau);
   const totalChapitres = matieres.reduce((n, m) => n + m.chapitres.length, 0);
+  const niveauxPublies = BAC_NIVEAUX.filter((n) => n.available);
 
   return (
     <>
@@ -68,7 +69,7 @@ export default async function BacNiveauPage(props) {
           <section className="bac-hero">
             <div className="bac-eyebrow">Lycée · Baccalauréat marocain</div>
             <h1>Cours {info.label} Sciences Économiques & Gestion</h1>
-            <p>Chaque matière est découpée en chapitres, comme en classe. Pour chaque chapitre : le cours, des exercices, un résumé et un QCM, puis les devoirs et les examens corrigés.</p>
+            <p>Chaque matière est découpée en chapitres, comme en classe. Pour chaque chapitre : le cours, des exercices, un résumé et un QCM, et pour les matières de l'examen national, les sujets des sessions précédentes.</p>
             <div className="bac-hero-stats">
               <span className="bac-stat">
                 <strong>{matieres.length}</strong> matières
@@ -82,19 +83,17 @@ export default async function BacNiveauPage(props) {
             </div>
           </section>
 
-          <div className="bac-year-tabs" role="tablist" aria-label="Année">
-            {BAC_NIVEAUX.map((n) =>
-              n.available ? (
+          {/* Seuls les niveaux publiés : un onglet « Bientôt » est un marqueur de
+             site en construction (voir BAC_NIVEAUX). */}
+          {niveauxPublies.length > 1 && (
+            <div className="bac-year-tabs" role="tablist" aria-label="Année">
+              {niveauxPublies.map((n) => (
                 <a key={n.code} href={`/bac/${n.code}`} className={`bac-year-tab${n.code === niveau ? " active" : ""}`} role="tab" aria-selected={n.code === niveau}>
                   {n.label}
                 </a>
-              ) : (
-                <span key={n.code} className="bac-year-tab disabled" role="tab" aria-disabled="true">
-                  {n.label} <em>Bientôt</em>
-                </span>
-              )
-            )}
-          </div>
+              ))}
+            </div>
+          )}
 
           <div className="bac-filieres">
             <span className="bac-filieres-label">{info.filieres.length > 1 ? "Programme commun aux filières" : "Filière"}</span>

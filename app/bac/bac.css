@@ -97,8 +97,7 @@
 .bac-side-link{display:flex; justify-content:space-between; padding:8px 10px; border-radius:8px; font-size:.87rem; text-decoration:none; font-weight:600;}
 .bac-side-link span{color:var(--text-faint); font-weight:500; font-size:.78rem;}
 .bac-side-link:hover{background:var(--bg); color:var(--accent);}
-.bac-side-doc{font-size:.83rem; color:var(--text-dim); padding:6px 2px; display:flex; justify-content:space-between; gap:8px;}
-.bac-side-doc em, .bac-soon{font-style:normal; font-size:.68rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
+.bac-soon{font-style:normal; font-size:.68rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
 
 .bac-main{min-width:0;}
 .bac-semestre{margin-bottom:28px; scroll-margin-top:84px;}
@@ -124,11 +123,6 @@
 .bac-chap-res{display:flex; gap:4px;}
 .bac-res-chip{font-size:.68rem; padding:2px 7px; border-radius:6px; color:var(--text-faint); background:var(--bg); border:1px solid var(--border);}
 
-.bac-devoirs{border:1px dashed var(--border); border-radius:var(--radius-lg); padding:14px 18px;}
-.bac-devoirs-title{font-weight:700; font-size:.9rem; margin-bottom:10px;}
-.bac-devoirs-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
-.bac-devoir{display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:8px; background:var(--bg-card); border:1px solid var(--border); font-size:.85rem;}
-.bac-devoir span{font-size:.7rem; color:var(--text-faint);}
 
 .bac-exam-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px;}
 .bac-exam{padding:12px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); text-align:center;}
@@ -137,6 +131,12 @@
 .bac-exam-sessions span{font-size:.72rem; padding:3px 6px; border-radius:6px; background:var(--bg); color:var(--text-faint);}
 .bac-exam-sessions a.on{font-size:.72rem; font-weight:700; padding:3px 6px; border-radius:6px; text-decoration:none; background:var(--mat-tint); color:var(--mat-color); border:1px solid var(--mat-line);}
 .bac-exam-sessions a.on:hover{background:var(--mat-color); color:#fff;}
+/* Grille des examens nationaux : une ligne par session, un lien par PDF. */
+.bac-exam-grid-docs{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+.bac-exam-ses{display:flex; flex-direction:column; gap:3px;}
+.bac-exam-ses-label{font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
+.bac-exam-ses-links{display:flex; flex-wrap:wrap; gap:4px;}
+.bac-exam-ses-links a.on{flex:1 1 auto;}
 
 /* ---------- Examens nationaux ---------- */
 .bac-nat-serie{margin-bottom:20px;}
@@ -145,19 +145,7 @@
 .bac-nat-note{font-size:.84rem; color:var(--text-dim); margin:0 0 10px;}
 .bac-nat-legend{font-size:.78rem; color:var(--text-faint); margin:4px 0 0;}
 .bac-chap-hero .bac-nat-note{margin:10px 0 0;}
-.bac-nat-docs{display:flex; flex-direction:column; gap:10px; margin-bottom:16px;}
-.bac-nat-doc{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border);}
-.bac-nat-doc-corrige{border-color:var(--mat-line);}
-.bac-nat-doc-icon{font-size:1.4rem; flex-shrink:0;}
-.bac-nat-doc-body{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
-.bac-nat-doc-body span{font-size:.75rem; color:var(--text-faint);}
-.bac-nat-doc-actions{display:flex; gap:6px; flex-shrink:0;}
-.bac-nat-btn{font-size:.8rem; font-weight:700; padding:7px 12px; border-radius:8px; text-decoration:none; background:var(--mat-color); color:#fff !important; border:1px solid var(--mat-color);}
-.bac-nat-btn.ghost{background:transparent; color:var(--mat-color) !important;}
-.bac-nat-btn:hover{filter:brightness(1.08);}
-.bac-nat-viewer{border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); background:var(--bg-card); margin-bottom:12px;}
-.bac-nat-viewer iframe{display:block; width:100%; height:80vh; min-height:520px; border:0;}
-.bac-nat-disclaimer,.bac-nat-source{font-size:.8rem; color:var(--text-faint); margin:0 0 8px;}
+.bac-nat-source{font-size:.8rem; color:var(--text-faint); margin:0 0 8px;}
 
 /* ---------- Page chapitre ---------- */
 .bac-side-back{display:block; font-weight:700; font-size:.92rem; text-decoration:none; padding:4px 4px 10px; border-bottom:1px solid var(--border); margin-bottom:6px;}
@@ -266,14 +254,8 @@
   .bac-mat-hero h1, .bac-chap-hero h1{font-size:1.25rem;}
   .bac-chap-row{padding:12px 14px;}
   .bac-soon{display:none;}
-  .bac-devoirs-grid{grid-template-columns:1fr;}
   .bac-md{padding:18px 16px;}
   .bac-qcm-q{padding:14px;}
   .bac-pager{grid-template-columns:1fr;}
   .bac-pager-btn.next{text-align:left;}
-  .bac-nat-doc{flex-wrap:wrap;}
-  .bac-nat-doc-actions{width:100%;}
-  .bac-nat-btn{flex:1; text-align:center;}
-  /* Les navigateurs mobiles n'affichent pas les PDF en iframe : boutons seuls. */
-  .bac-nat-viewer{display:none;}
 }

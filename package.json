@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check": "next lint && next build",
+    "check": "next lint && next build && node scripts/audit-contenu.mjs",
+    "audit:contenu": "node scripts/audit-contenu.mjs",
     "cf:assets": "node scripts/prerender-to-assets.mjs"
   },
   "dependencies": {

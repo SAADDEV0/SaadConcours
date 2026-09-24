@@ -177,7 +177,6 @@ export default async function LicenceExcellencePage() {
               { href: "/concours", label: "Concours Master", icon: "🎓" },
               { href: "/cours", label: "Cours Licence FSJES (S1-S4)", icon: "📖" },
               { href: "/evaluation", label: "QCM d'entraînement", icon: "📝" },
-              { href: "/news", label: "Concours ouverts", icon: "🆕" },
             ]}
           />
 

@@ -4,19 +4,32 @@ Base de données de sujets réels de concours d'accès aux Masters économie-ges
 
 Application Next.js multi-pages :
 
-- `/` — Accueil (présentation, alerte mini-news, accès aux 4 sections)
+- `/` — Accueil (présentation, accès aux sections)
+- `/bac/2bac` — Cours du 2ème Bac SEG par matière et chapitre ; examens nationaux listés sur la page de chaque matière (la 1ère Bac est masquée tant qu'elle n'est pas rédigée)
+- `/cours` — Cours de Licence FSJES par module et chapitre
 - `/concours` — Concours (filtres, recherche, rendu Markdown/LaTeX, galerie d'images, export PDF, corrigé quand disponible)
-- `/cours` — Fiches de cours par module
 - `/evaluation` — QCM d'auto-évaluation par module
-- `/news` — Concours ouverts (mis à jour automatiquement depuis almaster-maroc.com)
-- `/boutique` — Cahiers de préparation vendus sur Gumroad (le site présente, Gumroad encaisse et livre le PDF)
+- `/blog` — Articles de méthode et d'orientation
+- `/boutique` — Cahiers de préparation vendus sur Gumroad (le site présente, Gumroad encaisse et livre le PDF) ; absente du menu tant qu'aucun cahier n'est publié
 - `/admin` — Console d'administration v6 (voir « La console d'administration » plus bas), protégée par mot de passe
+
+La section « Concours ouverts » (`/news`, copie automatique d'almaster-maroc.com) a été retirée du
+site public le 24/09/2026 pour la demande AdSense ; `public/data/news.json` et le scraper restent.
+
+## Garde-fou AdSense (« low value content »)
+
+Le site a été refusé par AdSense pour « low value content » à cause de pages minces ou en
+construction (pages d'examen réduites à un PDF, chapitres « en préparation », boutique vide,
+news copiées). `npm run check` (et le CI) lance `scripts/audit-contenu.mjs` après le build : il
+parcourt le site depuis l'accueil comme le relecteur et échoue sur toute page « Bientôt / en
+préparation », de moins de 120 mots, ou sur un lien interne cassé. Un `noindex` ne protège pas :
+une page liée est vue. Règles détaillées : `BANQUE_PROMPTS.md`, section 1.6.
 
 **GitHub est la base de données.** `public/data/concours.json`, `cours.json`, `quiz.json` et `news.json` ne sont pas une simple seed : ce sont les fichiers que le site lit à chaque requête (via le contenu brut du dépôt) et dans lesquels `/admin` écrit directement à chaque ajout/modification/suppression (un commit Git par écriture, sur `main`). Il n'y a pas de base de données séparée qui pourrait diverger du dépôt — GitHub est la source unique, toujours à jour.
 - `public/data/concours.json` — un objet par concours, avec `enonce_md` (énoncé transcrit) et `corrige_md` (corrigé, optionnel)
 - `public/data/extraits/<id>.md` et `public/data/corriges/<id>.md` — une copie lisible par concours de `enonce_md`/`corrige_md`, régénérée automatiquement à chaque écriture admin sur un concours, pour naviguer facilement dans le dépôt GitHub sans ouvrir le JSON — même logique que `public/images/<ville>/<id>/`. Ce sont des copies dérivées (lecture seule) : les éditer directement sur GitHub n'a pas d'effet sur le site, seul `concours.json` est réellement lu.
 - `public/data/cours.json`, `public/data/quiz.json` — mêmes principes que `concours.json`, pour les fiches de cours et les QCM d'évaluation.
-- `public/data/news.json` — mis à jour à la fois par `scripts/fetch_almaster.py` (cron, scraping) et par `/admin` (ajout/suppression manuelle) : les deux écrivent dans le même fichier.
+- `public/data/news.json` — mis à jour à la fois par `scripts/fetch_almaster.py` (cron, scraping) et par `/admin` (ajout/suppression manuelle) : les deux écrivent dans le même fichier. N'est plus affiché sur le site public (voir plus haut).
 - `public/images/` — extraits réels scannés des sujets, organisés par ville puis par concours
 
 **Corrigés.** Un corrigé, quand il existe, est rédigé par IA (relecture croisée entre le scan réel et une transcription texte de la source citée dans `source`, avec vérification par recoupement des chiffres donnés dans l'énoncé) — pas une correction officielle. Il est marqué comme tel sur le site (bandeau d'avertissement dans l'onglet "Corrigé"). Toute donnée manquante ou illisible dans les sources disponibles est signalée explicitement dans le corrigé plutôt qu'inventée.
@@ -94,7 +107,7 @@ Sans `GITHUB_TOKEN` en production, l'API se rabat sur les fichiers embarqués da
 
 - **GitHub = source de vérité.** Le dépôt contient le code (déployé par Vercel à chaque push sur `main`) et les données (`public/data/*.json`, lues en direct par le site et écrites par `/admin` via des commits, voir ci-dessus).
 - **Vercel = hébergement.** Chaque push sur `main` déclenche un build et un déploiement automatique sur `saadconcours.space` (projet Vercel `saad-concours`, domaine custom configuré dans Vercel → Settings → Domains).
-- **GitHub Actions** exécute les jobs planifiés (`.github/workflows/`) : scraping almaster (`update-news.yml`). L'envoi d'emails aux abonnés a été retiré du site (septembre 2026) : la liste s'exporte en CSV depuis la console vers une plateforme d'emailing externe.
+- **GitHub Actions** exécute les jobs planifiés (`.github/workflows/`) : scraping almaster (`update-news.yml`, désactivé par `newsScraperEnabled: false` ; ses données ne sont plus affichées). L'envoi d'emails aux abonnés a été retiré du site (septembre 2026) : la liste s'exporte en CSV depuis la console vers une plateforme d'emailing externe.
 - **GitHub Pages est désactivé.** Le site n'est plus servi que par Vercel/saadconcours.space ; `index.html` à la racine est un reliquat de l'ancienne redirection et peut être supprimé.
 
 ## La console d'administration (`/admin`, v6)

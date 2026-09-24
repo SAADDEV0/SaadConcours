@@ -13,12 +13,19 @@ export const revalidate = false;
 
 const SITE_URL = "https://www.saadconcours.space";
 
-export const metadata = {
-  title: "Boutique — cahiers de préparation Bac, Licence et Master",
-  description:
-    "Cahiers de préparation en PDF pour le Bac, la Licence FSJES et les concours Master au Maroc : QCM corrigés, sujets blancs, fiches de révision. Paiement sécurisé et téléchargement immédiat.",
-  alternates: { canonical: `${SITE_URL}/boutique` },
-};
+// Sans cahier publié, la page n'est qu'un « les premiers cahiers arrivent
+// bientôt » : hors menu (voir BOUTIQUE_OUVERTE dans chrome.js), hors sitemap
+// et hors index jusqu'au premier cahier.
+export async function generateMetadata() {
+  const ouverte = (await getAllBoutique()).some(isProduitVisible);
+  return {
+    title: "Boutique — cahiers de préparation Bac, Licence et Master",
+    description:
+      "Cahiers de préparation en PDF pour le Bac, la Licence FSJES et les concours Master au Maroc : QCM corrigés, sujets blancs, fiches de révision. Paiement sécurisé et téléchargement immédiat.",
+    alternates: { canonical: `${SITE_URL}/boutique` },
+    ...(ouverte ? {} : { robots: { index: false, follow: true } }),
+  };
+}
 
 const ETAPES = [
   ["🔎", "Trouve ton cahier", "Filtre par niveau ou cherche ta matière, ton concours."],

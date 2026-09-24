@@ -26,6 +26,35 @@ function mdLiteInline(s) {
     .replace(/\*(.+?)\*/g, "<em>$1</em>");
 }
 
+// Une carte question, sans la réponse (la justification n'est remplie qu'à la
+// validation). Sert au rendu serveur de la liste complète — les questions sont
+// le contenu de la page, elles doivent être dans le HTML et pas seulement
+// ajoutées après hydratation — puis à chaque re-rendu côté client.
+function questionCardInner(q, idx, total) {
+  return `
+          <div class="eval-q-num">Q${idx + 1} / ${total} — ${escapeHtml(q.section || q.chapter)}</div>
+          <div class="eval-q-text">${mdLiteInline(q.question)}</div>
+          <div class="eval-hint">Choisis une ou plusieurs réponses — une réponse en trop compte comme fausse.</div>
+          <div class="eval-opts">
+            ${q.options
+              .map(
+                (o) => `
+              <label class="eval-opt" data-letter="${o.letter}">
+                <input type="checkbox" name="q${q.id}" value="${o.letter}">
+                <span><strong>${o.letter}.</strong> ${escapeHtml(o.text)}</span>
+              </label>
+            `
+              )
+              .join("")}
+          </div>
+          <div class="eval-justif" style="display:none;"></div>
+        `;
+}
+
+function questionsHtml(questions) {
+  return questions.map((q, idx) => `<div class="eval-q-card" data-qid="${escapeHtml(q.id)}">${questionCardInner(q, idx, questions.length)}</div>`).join("");
+}
+
 export default function EvaluationDetailClient({ quiz }) {
   useEffect(() => {
     chromeScript();
@@ -73,24 +102,7 @@ export default function EvaluationDetailClient({ quiz }) {
         const card = document.createElement("div");
         card.className = "eval-q-card";
         card.dataset.qid = q.id;
-        card.innerHTML = `
-          <div class="eval-q-num">Q${idx + 1} / ${qs.length} — ${escapeHtml(q.section || q.chapter)}</div>
-          <div class="eval-q-text">${mdLiteInline(q.question)}</div>
-          <div class="eval-hint">Choisis une ou plusieurs réponses — une réponse en trop compte comme fausse.</div>
-          <div class="eval-opts">
-            ${q.options
-              .map(
-                (o) => `
-              <label class="eval-opt" data-letter="${o.letter}">
-                <input type="checkbox" name="q${q.id}" value="${o.letter}">
-                <span><strong>${o.letter}.</strong> ${escapeHtml(o.text)}</span>
-              </label>
-            `
-              )
-              .join("")}
-          </div>
-          <div class="eval-justif" style="display:none;"></div>
-        `;
+        card.innerHTML = questionCardInner(q, idx, qs.length);
         card.querySelectorAll("input").forEach((inp) => {
           inp.addEventListener("change", () => {
             if (submitted) return;
@@ -295,7 +307,9 @@ export default function EvaluationDetailClient({ quiz }) {
         <div className="eval-progress" id="evalProgress"></div>
       </div>
       <div id="evalScoreBanner"></div>
-      <div id="evalQuestions"></div>
+      {/* Rendu au serveur (donc présent dans le HTML prérendu), remplacé à
+         l'identique par renderQuestions() une fois les écouteurs posés. */}
+      <div id="evalQuestions" dangerouslySetInnerHTML={{ __html: questionsHtml(quiz.questions || []) }} />
       <div className="eval-submit-bar">
         <button className="dl-btn" id="evalSubmitBtn">✅ Valider mes réponses</button>
         <button className="reset-btn" id="evalRetryBtn" style={{ display: "none" }}>🔄 Refaire l'évaluation à zéro</button>

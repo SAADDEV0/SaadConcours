@@ -3,10 +3,19 @@
 // instead of one single-page app.
 
 import { adsForPlacement, partnerAdHtml } from "./partnerAds";
+import boutiqueData from "../../public/data/boutique.json";
+import { isProduitVisible } from "../../lib/boutique";
 
-// Liens principaux du header. « Concours ouverts » n'y figure pas : c'est le
-// bouton mis en avant à droite (CTA_ITEM), et il reprend sa place dans le
-// menu mobile. `icon` ne sert qu'au menu mobile.
+// La Boutique n'entre dans le menu qu'une fois un cahier publié : une boutique
+// vide (« 0 cahier, les premiers arrivent bientôt ») est une page « en
+// construction », exactement ce que la relecture AdSense sanctionne. Lu au
+// build comme tout le site : publier un cahier depuis l'admin redéploie et
+// fait revenir l'entrée, sans toucher au code.
+export const BOUTIQUE_OUVERTE = Array.isArray(boutiqueData) && boutiqueData.some(isProduitVisible);
+
+// Liens principaux du header. `icon` ne sert qu'au menu mobile.
+// L'ancien bouton « Concours ouverts » (/news) est parti avec la section le
+// 2026-09-24 : c'était une copie automatique d'almaster-maroc.com.
 const NAV_ITEMS = [
   { key: "home", href: "/", icon: "🏠", label: "Accueil" },
   {
@@ -29,13 +38,12 @@ const NAV_ITEMS = [
   },
   { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
   { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
-  { key: "boutique", href: "/boutique", icon: "🛒", label: "Boutique" },
+  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", href: "/boutique", icon: "🛒", label: "Boutique" }] : []),
 ];
 
 // Liens à plat (menu mobile) : les entrées du menu déroulant y deviennent
 // des tuiles à part entière.
 const NAV_FLAT = NAV_ITEMS.flatMap((item) => item.children || [item]);
-const CTA_ITEM = { key: "news", href: "/news", icon: "🔔", label: "Concours ouverts" };
 
 // Fires on every internal link click (nav, cards, "voir tout"...) - since
 // most navigation here is a plain <a href> full page load (not Next <Link>
@@ -100,7 +108,6 @@ export function chromeHtml({ active, showSearch, rails = false }) {
       </form>`
           : ""
       }
-      <a class="header-cta${active === CTA_ITEM.key ? " active" : ""}" href="${CTA_ITEM.href}"><span class="header-cta-dot" aria-hidden="true"></span>${CTA_ITEM.label}</a>
       <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
       <button class="nav-toggle-btn" id="navToggleBtn" title="Menu" aria-label="Ouvrir le menu" aria-expanded="false">
         <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
@@ -108,7 +115,7 @@ export function chromeHtml({ active, showSearch, rails = false }) {
     </div>
   </div>
   <div class="mobile-nav-panel" id="mobileNavPanel">
-    ${[...NAV_FLAT, CTA_ITEM]
+    ${NAV_FLAT
       .map(
         (item) =>
           `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}"><span class="mobile-nav-icon" aria-hidden="true">${item.icon}</span>${item.label}</a>`

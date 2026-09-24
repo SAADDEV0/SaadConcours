@@ -91,7 +91,6 @@ export default async function ConcoursPage() {
             concours={concours}
             sideLinks={[
               { href: "/concours/licence-excellence", label: "Concours Licence d'excellence", icon: "⭐" },
-              { href: "/news", label: "Concours ouverts", icon: "🆕" },
               { href: "/evaluation", label: "QCM d'entraînement", icon: "📝" },
               { href: "/cours", label: "Cours Licence FSJES", icon: "📖" },
             ]}

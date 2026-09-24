@@ -33,3 +33,10 @@ jobs:
           # to compile, and nothing here reaches a deployed environment.
           ADMIN_PASSWORD: ci-placeholder
           ADMIN_SESSION_SECRET: ci-placeholder
+
+      # Garde-fou AdSense « low value content » : parcourt le site construit
+      # comme le relecteur (en suivant les liens depuis l'accueil) et échoue si
+      # une page est en construction, trop mince ou pointe vers une page qui
+      # n'existe pas. Voir l'en-tête de scripts/audit-contenu.mjs.
+      - name: Contenu (garde-fou AdSense)
+        run: npm run audit:contenu

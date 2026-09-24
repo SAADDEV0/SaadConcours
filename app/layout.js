@@ -6,7 +6,6 @@ import "./_shared/space.css";
 import Script from "next/script";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, reservationCss } from "./_shared/partnerAds";
-import EmailGateModal from "./_shared/EmailGateModal";
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
@@ -156,7 +155,11 @@ export default async function RootLayout({ children }) {
       </head>
       <body>
         {children}
-        <EmailGateModal />
+        {/* <EmailGateModal /> (app/_shared/EmailGateModal.js) retirée le
+           2026-09-24 pour la demande AdSense : une modale qui recouvre la
+           page à la 2e vue est un interstitiel intrusif, et elle promettait
+           des alertes email que le site n'envoie plus. Le composant reste en
+           place ; le réimporter ici suffit à la remettre. */}
         {/* <Analytics /> et <SpeedInsights /> retirés le 2026-09-21 : leurs
            scripts vivent sous /_vercel/*, qui n'existe pas sur Cloudflare.
            Ils partaient donc en 404 SERVIS PAR LE WORKER (x-opennext: 1) —

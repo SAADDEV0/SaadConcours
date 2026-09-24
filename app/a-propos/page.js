@@ -1,4 +1,4 @@
-import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getCorrigeIds } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { BAC_MATIERES } from "../../lib/bacProgramme";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
@@ -26,13 +26,14 @@ const H2 = { fontSize: "1.1rem", marginTop: 28 };
 // serves — an About page that overstates the catalogue is exactly the kind of
 // thing a quality review checks against the rest of the site.
 async function getFigures() {
-  const [concours, cours, quiz, blog, corrigeIds] = await Promise.all([
+  const [concours, cours, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
-    getCorrigeIds().catch(() => new Set()),
   ]);
+  // Pas getCorrigeIds() : voir getCorrigeIdsLocal dans lib/store.js.
+  const corrigeIds = getCorrigeIdsLocal();
   const annees = concours.map((c) => Number(c.annee)).filter(Boolean);
   return {
     concours: concours.length,
@@ -124,11 +125,7 @@ export default async function AProposPage() {
           </li>
           <li>
             <a href="/blog">{f.articles} articles</a> de méthode : déroulement du concours, choix du master,
-            dossier de candidature, oral ;
-          </li>
-          <li>
-            la liste des <a href="/news">concours actuellement ouverts</a>, avec les dates limites et les liens
-            d&apos;inscription officiels.
+            dossier de candidature, oral.
           </li>
         </ul>
 
@@ -154,16 +151,15 @@ export default async function AProposPage() {
         <h2 style={H2}>Comment le site est tenu à jour</h2>
         <p style={P}>
           Les nouveaux sujets sont ajoutés au fil des sessions de concours, et les fiches existantes sont corrigées
-          quand une erreur est signalée. La liste des concours ouverts est actualisée tous les deux jours à partir des
-          annonces publiées en ligne, et chaque annonce renvoie vers la page officielle de l&apos;établissement :
-          c&apos;est toujours elle qui fait foi pour les dates et les conditions.
+          quand une erreur est signalée. Pour les dates de candidature et les conditions d&apos;admission, c&apos;est
+          toujours l&apos;annonce officielle de l&apos;établissement qui fait foi.
         </p>
 
         <h2 style={H2}>Ce que SaadConcours n&apos;est pas</h2>
         <p style={P}>
-          Le site n&apos;est affilié à aucune université ni à aucun établissement. Il ne gère aucune candidature et
-          ne demande aucun paiement : tout le contenu est en accès libre. Le site peut afficher de la publicité pour
-          couvrir ses frais — voir la page <a href="/confidentialite">Confidentialité</a>.
+          Le site n&apos;est affilié à aucune université ni à aucun établissement et ne gère aucune candidature. Les
+          cours, les sujets, les corrigés et les QCM sont en accès libre, sans compte. Le site peut afficher de la
+          publicité pour couvrir ses frais — voir la page <a href="/confidentialite">Confidentialité</a>.
         </p>
 
         <h2 style={H2}>Une erreur, un sujet à proposer ?</h2>

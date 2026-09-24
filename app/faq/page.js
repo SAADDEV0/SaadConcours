@@ -24,7 +24,7 @@ const FAQ = [
   },
   {
     q: "Quelles sont les conditions pour s'inscrire à un master au Maroc ?",
-    a: "En général : une licence fondamentale ou professionnelle en économie, gestion ou finance (ou un diplôme équivalent — ENCG, ISCAE, licence étrangère), avec parfois une moyenne minimale exigée. Les conditions précises (pièces à fournir, dates, moyenne requise) sont fixées par chaque établissement et publiées sur son site — c'est ce que la page Concours ouverts de SaadConcours recense au fur et à mesure.",
+    a: "En général : une licence fondamentale ou professionnelle en économie, gestion ou finance (ou un diplôme équivalent — ENCG, ISCAE, licence étrangère), avec parfois une moyenne minimale exigée. Les conditions précises (pièces à fournir, dates, moyenne requise) sont fixées par chaque établissement et publiées sur son site — c'est toujours cette annonce officielle qui fait foi.",
   },
   {
     q: "C'est quoi la différence entre les masters CCA, GFCF, Finance, Fiscalité et Audit ?",
@@ -36,11 +36,11 @@ const FAQ = [
   },
   {
     q: "SaadConcours est-il vraiment gratuit ?",
-    a: "Oui, entièrement — pas de compte utilisateur, pas de paywall, pas de publicité. C'est un site indépendant, pas affilié à une université ou un établissement.",
+    a: "Oui : les cours, les sujets de concours, les corrigés et les QCM sont en accès libre, sans compte et sans paywall. Le site peut afficher de la publicité pour couvrir ses frais. C'est un site indépendant, pas affilié à une université ou un établissement.",
   },
   {
-    q: "Comment être alerté quand un nouveau concours ouvre ?",
-    a: "La page Concours ouverts liste en continu les masters actuellement ouverts aux inscriptions (mise à jour automatique toutes les ~6h). Tu peux aussi laisser ton email pour recevoir une alerte quand un concours qui t'intéresse approche de sa date limite.",
+    q: "Comment savoir quand un concours de master ouvre ?",
+    a: "Chaque établissement annonce l'ouverture de ses candidatures sur son propre site ou sur sa plateforme de candidature en ligne : c'est la seule source qui fait foi pour les dates et les pièces à fournir. La plupart des campagnes se concentrent entre juillet et septembre ; l'article « Quand postuler ? Le calendrier des concours Master au Maroc » du blog détaille les étapes habituelles.",
   },
   {
     q: "Comment bien réviser pour un concours d'accès au master ?",
@@ -51,7 +51,7 @@ const FAQ = [
 export const metadata = {
   title: "Questions fréquentes — Concours d'accès aux Masters au Maroc",
   description:
-    "Réponses aux questions les plus courantes sur le concours d'accès aux masters économie-gestion au Maroc : déroulement, conditions, corrigés, alertes.",
+    "Réponses aux questions les plus courantes sur le concours d'accès aux masters économie-gestion au Maroc : déroulement, conditions, corrigés, calendrier.",
   alternates: { canonical: "/faq" },
   openGraph: { title: "Questions fréquentes — SaadConcours", url: "/faq" },
 };

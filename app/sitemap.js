@@ -1,9 +1,8 @@
-import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews, getAllBoutique } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
 import { isProduitVisible } from "@/lib/boutique";
 import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
-import { bacNationauxMatiere, bacNationalHref } from "@/lib/bacNationaux";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
 import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 
@@ -24,22 +23,21 @@ export default async function sitemap() {
   // Fetched up front because the listing routes below now carry a real
   // lastModified derived from the freshest item they actually list — same
   // rule as the per-item entries: only emit a date when it's true.
-  const [concours, cours, quiz, blog, news, boutique] = await Promise.all([
+  const [concours, cours, quiz, blog, boutique] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
-    getAllNews().catch(() => []),
     getAllBoutique().catch(() => []),
   ]);
 
   const concoursUpdated = latestDate(concours.filter((c) => !isLicenceExcellence(c)), "date_ajout");
   const licenceUpdated = latestDate(concours.filter(isLicenceExcellence), "date_ajout");
   const blogUpdated = latestDate(blog, "publishedAt");
-  const newsUpdated = latestDate(news, "date_publication");
-  // The homepage surfaces the latest concours, the latest open concours and
-  // the blog, so it is as fresh as the freshest of the three.
-  const homeUpdated = [concoursUpdated, licenceUpdated, blogUpdated, newsUpdated].filter(Boolean).sort().pop() || null;
+  // The homepage surfaces the latest concours and the latest blog posts, so it
+  // is as fresh as the freshest of them.
+  const homeUpdated = [concoursUpdated, licenceUpdated, blogUpdated].filter(Boolean).sort().pop() || null;
+  const produits = boutique.filter(isProduitVisible);
 
   // /cours, /evaluation, /faq, /a-propos, /contact and /confidentialite carry no lastModified on
   // purpose: their datasets have no date field (and the two legal/info pages
@@ -48,11 +46,11 @@ export default async function sitemap() {
     { path: "", changeFrequency: "daily", priority: 1, lastModified: homeUpdated },
     { path: "/concours", changeFrequency: "weekly", priority: 0.9, lastModified: concoursUpdated },
     { path: "/concours/licence-excellence", changeFrequency: "weekly", priority: 0.8, lastModified: licenceUpdated },
-    { path: "/news", changeFrequency: "daily", priority: 0.8, lastModified: newsUpdated },
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },
     { path: "/evaluation", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/boutique", changeFrequency: "weekly", priority: 0.7 },
+    // Boutique vide = page « bientôt » : hors sitemap tant qu'aucun cahier n'est publié.
+    ...(produits.length ? [{ path: "/boutique", changeFrequency: "weekly", priority: 0.7 }] : []),
     { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
     { path: "/a-propos", changeFrequency: "monthly", priority: 0.5 },
     { path: "/contact", changeFrequency: "yearly", priority: 0.3 },
@@ -91,12 +89,6 @@ export default async function sitemap() {
       priority: 0.6,
     }));
 
-  // Individual news pages are excluded from the sitemap: they're thin,
-  // largely boilerplate re-posts of external announcements (flagged as
-  // low-value/scraped content in AdSense review) and are noindex'd in
-  // app/news/[id]/page.js — the /news listing above is the indexable
-  // surface for this content.
-
   // Near-duplicate posts are noindex'd on their page (lib/blogDuplicates.js);
   // listing them here would contradict that.
   const duplicateBlogIds = findDuplicateBlogIds(blog);
@@ -109,8 +101,9 @@ export default async function sitemap() {
       ...(p.publishedAt ? { lastModified: p.publishedAt } : {}),
     }));
 
-  // Espace Bac : niveaux et matières, plus les seuls chapitres rédigés (les
-  // chapitres vides sont en noindex, voir app/bac/[niveau]/[matiere]/[chapitre]).
+  // Espace Bac : niveaux publiés, leurs matières et les chapitres rédigés —
+  // exactement les pages que le site génère (les examens nationaux sont
+  // listés sur la page de la matière, ils n'ont plus de page à eux).
   const bacRoutes = [];
   for (const n of BAC_NIVEAUX.filter((x) => x.available)) {
     bacRoutes.push({ url: `${SITE_URL}/bac/${n.code}`, changeFrequency: "monthly", priority: 0.7 });
@@ -120,13 +113,10 @@ export default async function sitemap() {
       for (const c of m.chapitres) {
         if (contenu[c.slug]) bacRoutes.push({ url: `${SITE_URL}${bacChapitreHref(m, c)}`, changeFrequency: "monthly", priority: 0.5 });
       }
-      for (const e of bacNationauxMatiere(n.code, m.slug)) {
-        bacRoutes.push({ url: `${SITE_URL}${bacNationalHref(m, e)}`, changeFrequency: "yearly", priority: 0.5 });
-      }
     }
   }
 
-  const boutiqueRoutes = boutique.filter(isProduitVisible).map((p) => ({
+  const boutiqueRoutes = produits.map((p) => ({
     url: `${SITE_URL}/boutique/${p.id}`,
     changeFrequency: "monthly",
     priority: 0.6,

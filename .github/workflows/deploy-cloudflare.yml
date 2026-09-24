@@ -88,8 +88,10 @@ jobs:
       - name: Check the build baked real settings
         run: |
           set -e
-          page=$(find .next/server/app -maxdepth 1 -name "news.html" | head -1)
-          [ -n "$page" ] || { echo "news.html not found in build output"; exit 1; }
+          # /news n'existe plus depuis le 2026-09-24 : n'importe quelle page
+          # prérendue porte le tag, /faq est la plus stable.
+          page=$(find .next/server/app -maxdepth 1 -name "faq.html" | head -1)
+          [ -n "$page" ] || { echo "faq.html not found in build output"; exit 1; }
           if ! grep -q "googletagmanager" "$page"; then
             echo "FAILED: no analytics tag in the prerendered HTML."
             echo "That means settings.json was unreadable at build time --"
@@ -102,7 +104,7 @@ jobs:
         run: |
           set -e
           sleep 10
-          for path in "" "concours" "news" "sitemap.xml"; do
+          for path in "" "concours" "a-propos" "sitemap.xml"; do
             code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 \
               "https://www.saadconcours.space/$path")
             echo "  /$path -> $code"
@@ -143,7 +145,7 @@ jobs:
         run: |
           set -e
           fail=0
-          for path in "" "concours" "cours" "news" "blog" "faq" "evaluation"; do
+          for path in "" "concours" "cours" "bac/2bac" "blog" "faq" "evaluation" "a-propos"; do
             ok=0
             for attempt in 1 2 3 4 5 6; do
               hdr=$(curl -s -o /dev/null -D - --max-time 60 \

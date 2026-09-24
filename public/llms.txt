@@ -1,25 +1,26 @@
 # SaadConcours
 
-> Base de données gratuite de sujets de concours réels d'accès aux Masters spécialisés (CCA, GFCF, Finance, Fiscalité, Audit) dans les universités marocaines — énoncés, corrigés indicatifs, fiches de cours et QCM d'entraînement.
+> Site gratuit d'économie et de gestion au Maroc, du lycée au master : cours du 2ème Bac Sciences Économiques et Gestion, cours de Licence FSJES (S1 à S6) chapitre par chapitre, et base de sujets réels de concours d'accès aux licences d'excellence et aux masters, avec corrigés indicatifs et QCM.
 
-SaadConcours est un site indépendant, gratuit et sans publicité, à destination des étudiants marocains qui préparent le concours écrit d'accès aux masters spécialisés en économie-gestion (Comptabilité Contrôle Audit, Gestion Financière et Comptable des Entreprises, Finance, Fiscalité, Audit). Le contenu est géré par un administrateur unique (pas de soumission publique/collaborative) et régulièrement mis à jour.
+SaadConcours est un site indépendant, non affilié aux universités, à destination des élèves du Bac Sciences Économiques et Gestion, des étudiants en Licence FSJES et des candidats aux concours d'accès aux masters spécialisés en économie-gestion (CCA, GFCF, Finance, Fiscalité, Audit, Marketing, GRH...). Le contenu est géré par un administrateur unique et mis à jour régulièrement.
 
 ## Contenu du site
 
-- [Concours](https://www.saadconcours.space/concours): plus de 65 sujets réels de concours d'accès au master, avec énoncé complet, scans originaux quand disponibles, et corrigé indicatif (généré, à vérifier) pour la majorité d'entre eux. Filtrable par ville, établissement, filière et année.
-- [Cours](https://www.saadconcours.space/cours): fiches de cours synthétiques par module (comptabilité analytique, analyse financière, mathématiques financières, macroéconomie, audit...).
-- [Évaluation](https://www.saadconcours.space/evaluation): QCM d'auto-évaluation par module, en conditions concours, avec correction et export PDF.
-- [Concours ouverts](https://www.saadconcours.space/news): veille automatique (mise à jour ~toutes les 6h) des masters actuellement ouverts aux inscriptions dans les universités marocaines, avec dates limites.
-- [Blog](https://www.saadconcours.space/blog): articles d'analyse méthodologique basés sur les données réelles du site (ex: fréquence des matières qui reviennent au concours, par filière).
+- [Cours Bac](https://www.saadconcours.space/bac/2bac): les matières du 2ème Bac Sciences Économiques et Gestion (économie générale, EOAE, comptabilité, droit, maths, informatique, philosophie, anglais), chapitre par chapitre avec cours, exercices corrigés, résumé et QCM, plus les examens nationaux en PDF avec leurs sources.
+- [Cours Licence FSJES](https://www.saadconcours.space/cours): 21 modules du S1 au S6 (comptabilité générale et analytique, analyse financière, mathématiques financières, micro et macroéconomie, statistiques, droit, marketing, audit...), découpés en chapitres avec exercices corrigés.
+- [Concours Master](https://www.saadconcours.space/concours): plus de 250 sujets réels de concours d'accès au master (FSJES, ENCG, facultés polydisciplinaires), énoncé retranscrit, scan original quand il existe et corrigé indicatif. Filtrable par ville, établissement, filière et année.
+- [Concours Licence d'excellence](https://www.saadconcours.space/concours/licence-excellence): sujets d'accès aux licences d'excellence (accès en S5).
+- [Évaluation](https://www.saadconcours.space/evaluation): QCM d'auto-évaluation de 100 questions par module, avec correction et export PDF.
+- [Blog](https://www.saadconcours.space/blog): méthode, choix du master, dossier de candidature et préparation de l'oral, à partir des sujets réels de la base.
 
 ## Faits clés
 
-- Gratuit, sans compte utilisateur, sans publicité.
-- Couvre les masters économie-gestion : CCA (Comptabilité Contrôle Audit), GFCF (Gestion Financière et Comptable des Entreprises), Finance, Fiscalité, Audit.
-- Les corrigés sont indicatifs (relecture humaine non garantie) — à vérifier avant de s'en servir pour réviser.
-- Chaque concours cite sa source publique d'origine quand elle est connue.
+- Gratuit, sans compte utilisateur ; le site peut afficher de la publicité.
+- Les corrigés sont indicatifs : rédigés avec l'aide d'une intelligence artificielle à partir du sujet, puis vérifiés par recoupement des chiffres de l'énoncé. Ce ne sont pas des corrigés officiels.
+- Chaque sujet de concours cite sa source publique d'origine.
 
 ## Pages utiles
 
-- [Confidentialité](https://www.saadconcours.space/confidentialite): ce qui est mesuré (visites, téléchargements) et pourquoi.
+- [À propos](https://www.saadconcours.space/a-propos): d'où viennent les sujets et comment les corrigés sont rédigés.
+- [Confidentialité](https://www.saadconcours.space/confidentialite): données collectées, cookies de mesure d'audience et de publicité.
 - [Sitemap](https://www.saadconcours.space/sitemap.xml): liste complète des URLs indexables.
