@@ -1,19 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // lib/store.js reads `path.join(process.cwd(), "public", relPath)`. That
-    // path is dynamic, so Next's file tracer can't tell which files it needs
-    // and conservatively pulls all of public/ into EVERY serverless function.
-    // With ~68 routes that multiplied 66MB of scans into gigabytes of
-    // Functions Storage per deployment. public/images is only ever served as
-    // static <img src> URLs off the CDN — no server code opens it — so it is
-    // safe to keep out of the function bundles.
-    outputFileTracingExcludes: {
-      "*": [
-        "public/images/**",
-        "public/data/extraits/**",
-      ],
-    },
+  // lib/store.js reads `path.join(process.cwd(), "public", relPath)`. That
+  // path is dynamic, so Next's file tracer can't tell which files it needs
+  // and conservatively pulls all of public/ into EVERY server function.
+  // public/images is only ever served as static <img src> URLs off the CDN —
+  // no server code opens it — so it is safe to keep out of the bundles.
+  // Top-level key since Next 15: under `experimental` it was ignored (Next
+  // warned about it at every start), so the exclusion never applied.
+  outputFileTracingExcludes: {
+    "*": [
+      "public/images/**",
+      "public/data/extraits/**",
+    ],
   },
 
   async headers() {
@@ -27,7 +25,7 @@ const nextConfig = {
         // the école and the filière of the paper it reproduces, so a given
         // path always means the same document. The cost of `immutable` is
         // that replacing a scan in place (same path, better quality via
-        // /api/admin/upload-image) stays invisible to anyone who already
+        // the admin image upload) stays invisible to anyone who already
         // loaded it — publish such a rescan under a new filename instead.
         source: "/images/:path*",
         headers: [

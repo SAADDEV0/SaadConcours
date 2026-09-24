@@ -1,4 +1,4 @@
-import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getCorrigeIds } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getCorrigeIds } from "@/lib/store";
 import { BAC_MATIERES } from "../../lib/bacProgramme";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
@@ -27,7 +27,7 @@ const H2 = { fontSize: "1.1rem", marginTop: 28 };
 // thing a quality review checks against the rest of the site.
 async function getFigures() {
   const [concours, cours, quiz, blog, corrigeIds] = await Promise.all([
-    getAllConcours().catch(() => []),
+    getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),

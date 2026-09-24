@@ -1,37 +1,30 @@
-import { Inter, JetBrains_Mono } from "next/font/google";
 import "./admin.css";
 import MathScripts from "../_shared/MathScripts";
-
-// The panel gets its own typography instead of the public site's system
-// stack: Inter for UI (designed for dense interface text — real tabular
-// figures, unambiguous 1/l/I) and JetBrains Mono for the v4 micro-labels,
-// IDs and metric readouts. next/font self-hosts both at build time, so no
-// request ever leaves the page at runtime.
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-admin-sans",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600"],
-  variable: "--font-admin-mono",
-});
+import { getSettings } from "@/lib/store";
 
 export const metadata = {
+  title: { template: "%s · Console SaadConcours", absolute: "Console SaadConcours" },
   robots: { index: false, follow: false },
 };
 
-export default function AdminLayout({ children }) {
-  // display:contents — the wrapper carries the font variables down without
-  // introducing a box that could disturb .admin-shell's full-height flex
-  // layout (custom properties inherit through it normally).
+export default async function AdminLayout({ children }) {
+  // Le layout racine du site pose Google Analytics sur toutes les pages, admin
+  // compris : chaque passage dans la console comptait comme une visite dans
+  // GA. Ce drapeau officiel (« ga-disable-<ID> ») coupe la mesure avant que
+  // gtag ne démarre, sans rendre les pages publiques dynamiques.
+  const settings = await getSettings().catch(() => null);
+  const gaId = settings?.gaEnabled && settings?.gaMeasurementId ? String(settings.gaMeasurementId) : "";
   return (
-    <div className={`${inter.variable} ${jetbrains.variable}`} style={{ display: "contents" }}>
+    <>
+      {gaId && /^[A-Z0-9-]+$/.test(gaId) && (
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: `window["ga-disable-${gaId}"]=true;try{localStorage.setItem("sc_no_track","1")}catch(e){}` }}
+        />
+      )}
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" precedence="default" />
       <MathScripts />
       {children}
-    </div>
+    </>
   );
 }

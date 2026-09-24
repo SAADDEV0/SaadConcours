@@ -1,4 +1,4 @@
-import { getAllConcours } from "@/lib/store";
+import { getPublicConcours } from "@/lib/store";
 import { buildOgImage, ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 
 export const size = ogImageSize;
@@ -7,7 +7,7 @@ export const alt = "Concours SaadConcours";
 
 export default async function Image(props) {
   const params = await props.params;
-  const list = await getAllConcours();
+  const list = await getPublicConcours();
   const c = list.find((x) => x.id === params.id);
   if (!c) {
     return buildOgImage({ eyebrow: "SaadConcours", title: "Concours introuvable" });

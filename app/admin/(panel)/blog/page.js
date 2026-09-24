@@ -1,13 +1,18 @@
-import ResourcePanel from "@/app/admin/_components/resource/ResourcePanel";
-import PageHeader from "@/app/admin/_components/shell/PageHeader";
+import ContentList from "../../_features/ContentList";
 
 export const metadata = { title: "Blog" };
 
-export default function BlogPage() {
+export default function Page() {
   return (
-    <>
-      <PageHeader icon="newspaper" title="Blog" subtitle="Gère les articles publiés sur le site." />
-      <ResourcePanel resourceKey="blog" />
-    </>
+    <ContentList
+      collectionKey="blog"
+      hero={{
+        icon: "✍️",
+        eyebrow: "Contenu · Blog",
+        title: "Articles du blog",
+        text: "Guides, méthode et comparatifs. Le score de qualité vérifie aussi le référencement : longueur du titre et du résumé, structure, liens internes.",
+        newLabel: "Nouvel article",
+      }}
+    />
   );
 }

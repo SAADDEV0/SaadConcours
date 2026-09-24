@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllConcours, getCorrigeFile, getSettings } from "@/lib/store";
+import { getPublicConcours, getCorrigeFile, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, pub } from "../../_shared/chrome";
 import { CONCOURS_HUES } from "../../_shared/concoursCard";
 import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
@@ -14,7 +14,7 @@ import { isLicenceExcellence, niveauInfo, niveauOf } from "@/lib/concoursNiveaux
 const SITE_URL = "https://www.saadconcours.space";
 
 async function findConcours(id) {
-  const list = await getAllConcours();
+  const list = await getPublicConcours();
   return { c: list.find((x) => x.id === id) || null, list };
 }
 
@@ -159,7 +159,7 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   try {
-    const list = await getAllConcours();
+    const list = await getPublicConcours();
     return list.map((c) => ({ id: c.id }));
   } catch {
     return [];

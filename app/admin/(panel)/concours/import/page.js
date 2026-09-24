@@ -1,7 +1,7 @@
-import BulkImportPanel from "@/app/admin/_components/import/BulkImportPanel";
+import Import from "../../../_features/Import";
 
 export const metadata = { title: "Import groupé" };
 
-export default function ConcoursImportPage() {
-  return <BulkImportPanel />;
+export default function Page() {
+  return <Import />;
 }

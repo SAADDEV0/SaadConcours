@@ -1,7 +1,7 @@
-import ResourcePanel from "@/app/admin/_components/resource/ResourcePanel";
+import ConcoursPage from "../../_features/ConcoursPage";
 
-export const metadata = { title: "Concours" };
+export const metadata = { title: "Concours Master" };
 
-export default function ConcoursPage() {
-  return <ResourcePanel resourceKey="concours" />;
+export default function Page() {
+  return <ConcoursPage />;
 }

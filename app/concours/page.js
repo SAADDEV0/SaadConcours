@@ -1,4 +1,4 @@
-import { getAllConcours } from "@/lib/store";
+import { getPublicConcours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
@@ -27,7 +27,7 @@ export const revalidate = false;
 // the visitor actually filters (or lands with a ?q= from the sitelinks
 // search box, see app/layout.js's WebSite/SearchAction JSON-LD).
 export default async function ConcoursPage() {
-  const tous = await getAllConcours().catch(() => []);
+  const tous = await getPublicConcours().catch(() => []);
   // Les concours de licence d'excellence ont leur propre page
   // (/concours/licence-excellence) : celle-ci ne liste que le Master.
   const concours = tous.filter((c) => !isLicenceExcellence(c));

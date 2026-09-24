@@ -1,4 +1,4 @@
-import { getAllConcours } from "@/lib/store";
+import { getPublicConcours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
 import { faqJsonLd } from "../../_shared/faqSchema";
@@ -66,7 +66,7 @@ function buildFaq({ total, nbQcm, etabs, qcmRange }) {
 }
 
 export default async function LicenceExcellencePage() {
-  const tous = await getAllConcours().catch(() => []);
+  const tous = await getPublicConcours().catch(() => []);
   const concours = tous.filter(isLicenceExcellence);
   const nbMaster = tous.length - concours.length;
   const etabs = [...new Set(concours.map((c) => c.etablissement).filter(Boolean))].sort((a, b) => a.localeCompare(b, "fr"));

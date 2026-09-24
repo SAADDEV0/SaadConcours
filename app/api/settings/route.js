@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 // Partner ads carry the advertiser's private contact details and Saad's own
 // notes about the deal — needed in the admin panel, but this response is
 // world-readable (the site's chrome fetches it on every page), so those two
-// fields are dropped here. /api/admin/settings serves the full document to
+// fields are dropped here. the admin console reads the full settings.json straight from the repo for
 // an authenticated admin.
 function publicSettings(settings) {
   if (!Array.isArray(settings?.partnerAds)) return settings;

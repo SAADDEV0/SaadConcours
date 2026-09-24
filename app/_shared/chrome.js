@@ -29,6 +29,7 @@ const NAV_ITEMS = [
   },
   { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
   { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
+  { key: "boutique", href: "/boutique", icon: "🛒", label: "Boutique" },
 ];
 
 // Liens à plat (menu mobile) : les entrées du menu déroulant y deviennent

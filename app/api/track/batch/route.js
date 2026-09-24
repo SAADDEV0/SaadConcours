@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   trackAdEvent,
+  trackShopEvent,
   trackConcoursView,
   trackPageview,
   trackPathView,
@@ -66,6 +67,14 @@ const HANDLERS = {
       if (!e.id || typeof e.id !== "string" || e.id.length > 100) return null;
       if (!AD_TYPES.includes(e.type)) return null;
       return trackAdEvent(e.id, e.type);
+    },
+  },
+  shop: {
+    limit: ["shop", 60, 60],
+    run: (e) => {
+      if (!e.id || typeof e.id !== "string" || e.id.length > 120) return null;
+      if (!AD_TYPES.includes(e.type)) return null;
+      return trackShopEvent(e.id, e.type);
     },
   },
   "concours-view": {

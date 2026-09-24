@@ -2,18 +2,23 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import ThemeToggle from "../../_shared/ThemeToggle";
 import BrandLogo from "../../_shared/BrandLogo";
+import Icon from "../_ui/Icon";
 
-function AdminLoginForm() {
+const FEATURES = [
+  ["📝", "Concours, cours, QCM et blog dans un seul éditeur, avec aperçu LaTeX en direct"],
+  ["🚀", "Chaque enregistrement = un commit, et le suivi de la mise en ligne"],
+  ["📣", "Studio réseaux sociaux et studio PDF intégrés"],
+];
+
+function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  // Middleware records where the admin was headed when it bounced them here,
-  // so a deep link survives the login instead of always landing on /admin.
-  const nextPath = searchParams.get("next");
-  const target = nextPath && nextPath.startsWith("/admin") ? nextPath : "/admin";
+  const sp = useSearchParams();
+  const next = sp.get("next");
+  const target = next && next.startsWith("/admin") && !next.startsWith("//") ? next : "/admin";
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState(sp.get("expired") ? "Ta session a expiré : reconnecte-toi pour continuer." : "");
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e) {
@@ -26,65 +31,91 @@ function AdminLoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data.error || "Erreur de connexion.");
+        setError(data.error || "Connexion impossible.");
+        setLoading(false);
         return;
       }
-      router.push(target);
+      router.replace(target);
       router.refresh();
-    } finally {
+    } catch {
+      setError("Serveur injoignable. Vérifie ta connexion.");
       setLoading(false);
     }
   }
 
-  // Wrapped in .admin-shell so the gate inherits the panel's v4 tokens — in
-  // v3 this page fell back to the public site's palette and looked like a
-  // different product than the thing it unlocks.
   return (
-    <div className="admin-shell admin-gate">
-      <div className="admin-login-wrap">
-        <div className="admin-login-topbar">
-          <a className="admin-login-brand" href="/">
-            <BrandLogo className="admin-login-logo" gradientId="adminLoginLogoGrad" from="#19c8a0" to="#49c7ff" />
-            <span className="brand-saad">Saad</span>
-            <span className="brand-concours">Concours</span>
-          </a>
-          <ThemeToggle />
+    <div className="ax ax-login">
+      <aside className="ax-login-art">
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <BrandLogo gradientId="axLoginArt" />
+          <strong style={{ fontSize: "1.1rem" }}>SaadConcours</strong>
         </div>
-        <div className="admin-card admin-gate-card">
-          <div className="ad-kicker">Accès restreint</div>
-          <h1 className="admin-gate-title">Espace d&apos;administration</h1>
-          <p className="admin-gate-sub">Cette console gère les concours, cours et diffusions publiés sur le site.</p>
+        <div>
+          <h2>La console qui fait tourner le site.</h2>
+          <p>Concours Master, cours Licence et Bac, évaluations, blog et diffusion : tout se gère ici, et tout part en ligne automatiquement.</p>
+          <div className="ax-login-feats">
+            {FEATURES.map(([e, t]) => (
+              <div className="ax-login-feat" key={t}>
+                <span>{e}</span>
+                <span>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <span style={{ fontSize: "0.78rem", opacity: 0.55 }}>Console v6 · accès réservé</span>
+      </aside>
+      <main className="ax-login-form">
+        <div className="ax-login-box">
+          <BrandLogo gradientId="axLoginMark" className="ax-login-mark" />
+          <h1>Connexion</h1>
+          <p>Entre le mot de passe administrateur.</p>
           <form onSubmit={onSubmit}>
-            <div className="admin-field">
-              <label htmlFor="password">Mot de passe</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoFocus
-                required
-              />
+            <div className="ax-field">
+              <label className="ax-label" htmlFor="password">
+                Mot de passe
+              </label>
+              <div className="ax-pass">
+                <input
+                  id="password"
+                  className="ax-input"
+                  type={show ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  autoFocus
+                  required
+                />
+                <button type="button" className="ax-btn ghost icon sm" onClick={() => setShow((s) => !s)} aria-label={show ? "Masquer" : "Afficher"}>
+                  <Icon name={show ? "eyeOff" : "eye"} />
+                </button>
+              </div>
             </div>
-            <button className="admin-btn admin-gate-submit" type="submit" disabled={loading}>
+            {error && (
+              <div className="ax-alert error" role="alert">
+                <Icon name="alert" />
+                <div className="ax-alert-body">{error}</div>
+              </div>
+            )}
+            <button className="ax-btn primary block" style={{ height: 46 }} type="submit" disabled={loading || !password}>
+              {loading ? <Icon name="loader" /> : <Icon name="shield" />}
               {loading ? "Connexion…" : "Se connecter"}
             </button>
-            {error && <div className="admin-error">{error}</div>}
           </form>
+          <p className="ax-hint" style={{ marginTop: 18 }}>
+            5 essais ratés bloquent la connexion 15 minutes depuis cette adresse.
+          </p>
         </div>
-        <div className="admin-gate-foot ad-kicker">SaadConcours · Console v5</div>
-      </div>
+      </main>
     </div>
   );
 }
 
-// useSearchParams forces a suspense boundary in the App Router.
-export default function AdminLoginPage() {
+export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="admin-shell admin-gate" />}>
-      <AdminLoginForm />
+    <Suspense fallback={<div className="ax ax-login" />}>
+      <LoginForm />
     </Suspense>
   );
 }

@@ -1,4 +1,5 @@
-import { getAllConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getAllNews, getAllBoutique } from "@/lib/store";
+import { isProduitVisible } from "@/lib/boutique";
 import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
@@ -23,12 +24,13 @@ export default async function sitemap() {
   // Fetched up front because the listing routes below now carry a real
   // lastModified derived from the freshest item they actually list — same
   // rule as the per-item entries: only emit a date when it's true.
-  const [concours, cours, quiz, blog, news] = await Promise.all([
-    getAllConcours().catch(() => []),
+  const [concours, cours, quiz, blog, news, boutique] = await Promise.all([
+    getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
     getAllNews().catch(() => []),
+    getAllBoutique().catch(() => []),
   ]);
 
   const concoursUpdated = latestDate(concours.filter((c) => !isLicenceExcellence(c)), "date_ajout");
@@ -50,6 +52,7 @@ export default async function sitemap() {
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },
     { path: "/evaluation", changeFrequency: "weekly", priority: 0.8 },
+    { path: "/boutique", changeFrequency: "weekly", priority: 0.7 },
     { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
     { path: "/a-propos", changeFrequency: "monthly", priority: 0.5 },
     { path: "/contact", changeFrequency: "yearly", priority: 0.3 },
@@ -123,5 +126,12 @@ export default async function sitemap() {
     }
   }
 
-  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes, ...bacRoutes];
+  const boutiqueRoutes = boutique.filter(isProduitVisible).map((p) => ({
+    url: `${SITE_URL}/boutique/${p.id}`,
+    changeFrequency: "monthly",
+    priority: 0.6,
+    ...(p.dateAjout ? { lastModified: p.dateAjout } : {}),
+  }));
+
+  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes, ...boutiqueRoutes, ...bacRoutes];
 }

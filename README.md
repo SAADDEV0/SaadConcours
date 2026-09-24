@@ -9,7 +9,8 @@ Application Next.js multi-pages :
 - `/cours` — Fiches de cours par module
 - `/evaluation` — QCM d'auto-évaluation par module
 - `/news` — Concours ouverts (mis à jour automatiquement depuis almaster-maroc.com)
-- `/admin` — Panneau d'administration (ajout/édition/suppression concours/cours/évaluation/news), protégé par mot de passe
+- `/boutique` — Cahiers de préparation vendus sur Gumroad (le site présente, Gumroad encaisse et livre le PDF)
+- `/admin` — Console d'administration v6 (voir « La console d'administration » plus bas), protégée par mot de passe
 
 **GitHub est la base de données.** `public/data/concours.json`, `cours.json`, `quiz.json` et `news.json` ne sont pas une simple seed : ce sont les fichiers que le site lit à chaque requête (via le contenu brut du dépôt) et dans lesquels `/admin` écrit directement à chaque ajout/modification/suppression (un commit Git par écriture, sur `main`). Il n'y a pas de base de données séparée qui pourrait diverger du dépôt — GitHub est la source unique, toujours à jour.
 - `public/data/concours.json` — un objet par concours, avec `enonce_md` (énoncé transcrit) et `corrige_md` (corrigé, optionnel)
@@ -93,5 +94,16 @@ Sans `GITHUB_TOKEN` en production, l'API se rabat sur les fichiers embarqués da
 
 - **GitHub = source de vérité.** Le dépôt contient le code (déployé par Vercel à chaque push sur `main`) et les données (`public/data/*.json`, lues en direct par le site et écrites par `/admin` via des commits, voir ci-dessus).
 - **Vercel = hébergement.** Chaque push sur `main` déclenche un build et un déploiement automatique sur `saadconcours.space` (projet Vercel `saad-concours`, domaine custom configuré dans Vercel → Settings → Domains).
-- **GitHub Actions** exécute les jobs planifiés (`.github/workflows/`) : scraping almaster (`update-news.yml`) et digest email des concours qui ferment bientôt (`news-digest.yml`).
+- **GitHub Actions** exécute les jobs planifiés (`.github/workflows/`) : scraping almaster (`update-news.yml`). L'envoi d'emails aux abonnés a été retiré du site (septembre 2026) : la liste s'exporte en CSV depuis la console vers une plateforme d'emailing externe.
 - **GitHub Pages est désactivé.** Le site n'est plus servi que par Vercel/saadconcours.space ; `index.html` à la racine est un reliquat de l'ancienne redirection et peut être supprimé.
+
+## La console d'administration (`/admin`, v6)
+
+Refaite en septembre 2026, au design du site public. Écrans : tableau de bord, concours (liste, éditeur, couverture & qualité, import groupé), cours Licence, cours Bac, évaluations, blog, concours ouverts, boutique, studio social, studio PDF, abonnés, statistiques, monétisation, activité & corbeille, réglages. Recherche globale : `Ctrl K`.
+
+**Comment elle écrit dans le dépôt.** Le Worker n'a que 10 ms de CPU : il ne parse plus jamais les gros fichiers. Le navigateur lit `public/data/*.json` sur le CDN de GitHub (adressé par hash de commit), applique la modification lui-même, envoie le résultat en blob, et `/api/admin/repo/commit` crée **un seul commit** pour tous les fichiers touchés (JSON + miroirs Markdown + images), refusé (409) si le fichier a changé entre-temps — la console recharge et réessaie. Voir `lib/githubGit.js` et `app/admin/_lib/repo.js`.
+
+- Un concours `"statut": "brouillon"` n'apparaît nulle part sur le site (`getPublicConcours` dans `lib/store.js`).
+- Supprimer met l'élément dans une corbeille (KV) restaurable depuis Activité › Corbeille.
+- L'indicateur « Mise en ligne » de la barre du haut suit le workflow `deploy-cloudflare.yml` : une modification est visible sur le site à la fin du déploiement (3 à 5 min).
+- Toute route `/api/admin/*` exige une session (middleware), sauf login/logout.

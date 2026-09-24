@@ -1,7 +1,7 @@
-import GeneralSettingsForm from "@/app/admin/_components/settings/GeneralSettingsForm";
+import Settings from "../../_features/Settings";
 
 export const metadata = { title: "Réglages" };
 
-export default function ReglagesPage() {
-  return <GeneralSettingsForm />;
+export default function Page() {
+  return <Settings />;
 }

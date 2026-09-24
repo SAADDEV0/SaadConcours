@@ -1,119 +1,61 @@
-// Single source of truth for admin navigation — sidebar, mobile drawer,
-// sub-nav strips, page headers/breadcrumbs and the command palette's
-// "Navigation" section all read from this file instead of keeping their
-// own copies in sync.
+// Navigation de la console : menu latéral, fil d'Ariane et palette de
+// commandes lisent tous cette liste.
 
-export const SECTIONS = [
+export const NAV = [
   {
     label: null,
-    items: [{ key: "dashboard", href: "/admin", icon: "dashboard", label: "Tableau de bord", exact: true }],
+    items: [{ href: "/admin", icon: "home", label: "Tableau de bord", exact: true }],
   },
   {
     label: "Contenu",
     items: [
-      {
-        key: "concours",
-        href: "/admin/concours",
-        icon: "book",
-        label: "Concours",
-        children: [
-          { key: "concours-liste", href: "/admin/concours", label: "Liste", exact: true },
-          { key: "concours-pipeline", href: "/admin/concours?vue=pipeline", label: "Pipeline", basePath: "/admin/concours", query: { vue: "pipeline" } },
-          { key: "concours-import", href: "/admin/concours/import", label: "Import groupé" },
-          { key: "concours-filieres", href: "/admin/concours/filieres", label: "Filières" },
-        ],
-      },
-      { key: "cours", href: "/admin/cours", icon: "notebook", label: "Cours" },
-      { key: "bac", href: "/admin/bac", icon: "folders", label: "Cours Bac" },
-      { key: "evaluation", href: "/admin/evaluation", icon: "clipboard", label: "Évaluation" },
-      { key: "blog", href: "/admin/blog", icon: "newspaper", label: "Blog" },
+      { href: "/admin/concours", icon: "book", label: "Concours Master", badge: "concours" },
+      { href: "/admin/cours", icon: "notebook", label: "Cours Licence" },
+      { href: "/admin/bac", icon: "graduation", label: "Cours Bac" },
+      { href: "/admin/evaluations", icon: "quiz", label: "Évaluations" },
+      { href: "/admin/blog", icon: "news", label: "Blog" },
+      { href: "/admin/annonces", icon: "megaphone", label: "Concours ouverts", badge: "news" },
+      { href: "/admin/boutique", icon: "bag", label: "Boutique" },
     ],
   },
   {
     label: "Diffusion",
     items: [
-      { key: "concours-ouverts", href: "/admin/concours-ouverts", icon: "sparkles", label: "Concours ouverts" },
-      { key: "reseaux", href: "/admin/reseaux", icon: "megaphone", label: "Réseaux sociaux" },
-      {
-        key: "alertes",
-        href: "/admin/alertes",
-        icon: "bell",
-        label: "Alertes email",
-        children: [
-          { key: "alertes-reglages", href: "/admin/alertes", label: "Réglages d'alerte", exact: true },
-          { key: "alertes-composer", href: "/admin/alertes/composer", label: "Composer un envoi" },
-          { key: "alertes-abonnes", href: "/admin/alertes/abonnes", label: "Abonnés" },
-        ],
-      },
+      { href: "/admin/social", icon: "share", label: "Studio social" },
+      { href: "/admin/pdf", icon: "palette", label: "Studio PDF" },
+      { href: "/admin/abonnes", icon: "users", label: "Abonnés" },
     ],
   },
   {
-    label: "Réglages",
+    label: "Pilotage",
     items: [
-      {
-        key: "reglages",
-        href: "/admin/reglages",
-        icon: "settings",
-        label: "Réglages",
-        children: [
-          { key: "reglages-general", href: "/admin/reglages", label: "Général", exact: true },
-          { key: "reglages-publicite", href: "/admin/reglages/publicite", label: "Publicité (AdSense)" },
-          { key: "reglages-partenaires", href: "/admin/reglages/partenaires", label: "Bannières partenaires" },
-        ],
-      },
+      { href: "/admin/statistiques", icon: "chart", label: "Statistiques" },
+      { href: "/admin/monetisation", icon: "coins", label: "Monétisation" },
+      { href: "/admin/activite", icon: "activity", label: "Activité & corbeille" },
+      { href: "/admin/reglages", icon: "settings", label: "Réglages" },
     ],
-  },
-  {
-    label: "Édition",
-    items: [{ key: "pdf-editor", href: "/admin/pdf-editor", icon: "palette", label: "Éditeur PDF" }],
   },
 ];
 
-function stripQuery(href) {
-  const i = href.indexOf("?");
-  return i === -1 ? href : href.slice(0, i);
-}
+export const SUBPAGES = {
+  "/admin/concours/editer": "Éditeur",
+  "/admin/concours/couverture": "Couverture & qualité",
+  "/admin/concours/import": "Import groupé",
+  "/admin/cours/editer": "Éditeur",
+  "/admin/evaluations/editer": "Éditeur",
+  "/admin/blog/editer": "Éditeur",
+  "/admin/bac/editer": "Éditeur de chapitre",
+  "/admin/annonces/editer": "Éditeur",
+  "/admin/boutique/editer": "Fiche produit",
+};
 
-// Top-level item is "active" when the current path matches it or falls
-// under one of its children's base paths (so "Concours" stays highlighted
-// while on /admin/concours/import).
-export function isItemActive(item, pathname) {
-  const base = stripQuery(item.href);
-  if (item.exact) return pathname === base;
-  if (item.children) {
-    return pathname === base || item.children.some((c) => pathname === (c.basePath || stripQuery(c.href)));
+export const FLAT_NAV = NAV.flatMap((s) => s.items.map((i) => ({ ...i, group: s.label || "Général" })));
+
+export function activeItem(pathname) {
+  let best = null;
+  for (const item of FLAT_NAV) {
+    const match = item.exact ? pathname === item.href : pathname === item.href || pathname.startsWith(item.href + "/");
+    if (match && (!best || item.href.length > best.href.length)) best = item;
   }
-  return pathname === base || pathname.startsWith(base + "/");
+  return best;
 }
-
-export function isChildActive(child, pathname, searchParams) {
-  const base = child.basePath || stripQuery(child.href);
-  if (pathname !== base) return false;
-  if (!child.query) return child.exact ? true : !Object.keys(child.query || {}).some((k) => searchParams?.get(k));
-  return Object.entries(child.query).every(([k, v]) => searchParams?.get(k) === v);
-}
-
-export function findActiveTrail(pathname, searchParams) {
-  for (const section of SECTIONS) {
-    for (const item of section.items) {
-      if (!isItemActive(item, pathname)) continue;
-      const child = item.children?.find((c) => isChildActive(c, pathname, searchParams));
-      return { section, item, child };
-    }
-  }
-  return { section: null, item: null, child: null };
-}
-
-// Flat list for the command palette / global search "Aller à…" section.
-export const FLAT_NAV = SECTIONS.flatMap((section) =>
-  section.items.flatMap((item) => [
-    { key: item.key, href: item.href, icon: item.icon, label: item.label, group: section.label },
-    ...(item.children || []).map((c) => ({
-      key: c.key,
-      href: c.href,
-      icon: item.icon,
-      label: `${item.label} · ${c.label}`,
-      group: section.label,
-    })),
-  ])
-);

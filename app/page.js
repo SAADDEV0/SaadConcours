@@ -1,4 +1,4 @@
-import { getAllConcours, getAllNews, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getAllNews, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { escapeHtml, CONCOURS_HUES } from "./_shared/concoursCard";
 import { isLicenceExcellence } from "@/lib/concoursNiveaux";
@@ -28,7 +28,7 @@ export const revalidate = false;
 // égalité, avec le même design que les espaces de cours (classes bac-*).
 export default async function HomePage() {
   const [allConcours, rawNews, settings, cours, quiz, blog] = await Promise.all([
-    getAllConcours().catch(() => []),
+    getPublicConcours().catch(() => []),
     getAllNews().catch(() => []),
     getSettings().catch(() => null),
     getAllCours().catch(() => []),

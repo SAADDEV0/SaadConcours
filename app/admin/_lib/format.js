@@ -1,84 +1,112 @@
-// French grouping (narrow no-break space) for every number the panel shows.
-// Raw `12483` in a metric slab reads as a reference number, not a quantity,
-// and at 5–6 digits it overflows the hero's grid column. Non-finite values
-// (a count that failed to load) render as an em dash rather than "NaN".
-const NUMBER_FR = new Intl.NumberFormat("fr-FR");
+// Petits utilitaires d'affichage et de texte partagés par toute la console.
 
-export function formatNumber(n) {
-  if (n === null || n === undefined || n === "") return "—";
-  const num = typeof n === "number" ? n : Number(n);
-  if (!Number.isFinite(num)) return typeof n === "string" ? n : "—";
-  return NUMBER_FR.format(num);
+export function normalize(s) {
+  return String(s ?? "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
 }
 
-// Compact form for the places where the full number can't fit — the hero
-// value at 4+ digits, axis ticks. 12483 → "12,5 k", 1200000 → "1,2 M".
-export function formatCompact(n) {
-  const num = Number(n);
-  if (!Number.isFinite(num)) return formatNumber(n);
-  if (Math.abs(num) < 10000) return NUMBER_FR.format(num);
-  if (Math.abs(num) < 1000000) return NUMBER_FR.format(Math.round(num / 100) / 10) + " k";
-  return NUMBER_FR.format(Math.round(num / 100000) / 10) + " M";
+// Recherche tolérante : tous les mots de la requête doivent apparaître, sans
+// tenir compte des accents ni de la casse.
+export function matchQuery(haystack, query) {
+  const terms = normalize(query).split(/\s+/).filter(Boolean);
+  if (!terms.length) return true;
+  const h = normalize(haystack);
+  return terms.every((t) => h.includes(t));
 }
 
-// Signed percentage for a delta badge — "+12,4 %" / "−8 %". The minus is a
-// real U+2212, which aligns with digits where the hyphen doesn't.
-export function formatDeltaPct(pct) {
-  if (typeof pct !== "number" || !Number.isFinite(pct)) return null;
-  const rounded = Math.round(Math.abs(pct) * 10) / 10;
-  return `${pct >= 0 ? "+" : "−"}${NUMBER_FR.format(rounded)} %`;
+export function slugify(s, sep = "-") {
+  return normalize(s)
+    .replace(/[^a-z0-9]+/g, sep)
+    .replace(new RegExp(`^\\${sep}+|\\${sep}+$`, "g"), "")
+    .slice(0, 80);
 }
 
-// Pluralises AND formats in one call, for the "12 483 téléchargements" that
-// appear in half the widget value slots.
-export function countLabel(n, singular, plural = singular + "s") {
-  const num = Number(n) || 0;
-  return `${formatNumber(num)} ${num > 1 ? plural : singular}`;
+export function randomId(n = 16) {
+  const bytes = crypto.getRandomValues(new Uint8Array(Math.ceil(n / 2)));
+  return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, n);
 }
 
-// trend is computed from the real 7-day series (today vs the average of the
-// previous 6 days) - never fabricated. null when there isn't enough signal
-// (e.g. the previous days are all zero) so we don't show a misleading "+inf%".
-export function trendFromSeries(values) {
-  if (!values || values.length < 2) return null;
-  const today = values[values.length - 1];
-  const prev = values.slice(0, -1);
-  const avgPrev = prev.reduce((s, n) => s + n, 0) / prev.length;
-  if (avgPrev <= 0) return null;
-  const pct = ((today - avgPrev) / avgPrev) * 100;
-  return Math.round(pct);
+export function todayIso() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function dayLabelShort(d) {
-  return new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short" }).replace(".", "");
+const nf = typeof Intl !== "undefined" ? new Intl.NumberFormat("fr-FR") : null;
+export function num(n) {
+  if (n === null || n === undefined || Number.isNaN(n)) return "—";
+  return nf ? nf.format(n) : String(n);
 }
 
-export function dayLabelMed(d) {
-  return new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+export function compact(n) {
+  if (n === null || n === undefined) return "—";
+  if (n < 1000) return String(n);
+  if (n < 1e6) return `${(n / 1000).toFixed(n < 10000 ? 1 : 0).replace(".", ",")} k`;
+  return `${(n / 1e6).toFixed(1).replace(".", ",")} M`;
 }
 
-// Coarse French relative time ("à l'instant", "il y a 5 min", "il y a 3 h",
-// "il y a 2 j") — good enough for a "derniers abonnés" list, no need for a
-// full i18n relative-time library for four buckets.
-export function timeAgoFr(timestampMs) {
-  const diffSec = Math.max(0, Math.round((Date.now() - timestampMs) / 1000));
-  if (diffSec < 60) return "à l'instant";
-  const diffMin = Math.round(diffSec / 60);
-  if (diffMin < 60) return `il y a ${diffMin} min`;
-  const diffH = Math.round(diffMin / 60);
-  if (diffH < 24) return `il y a ${diffH} h`;
-  const diffD = Math.round(diffH / 24);
-  if (diffD < 30) return `il y a ${diffD} j`;
-  return new Date(timestampMs).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+export function dateFr(value, opts = { day: "numeric", month: "short", year: "numeric" }) {
+  if (!value) return "—";
+  const d = typeof value === "number" ? new Date(value) : /^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(value + "T12:00:00") : new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleDateString("fr-FR", opts);
 }
 
-// Exact date + hour, for the places where timeAgoFr's four coarse buckets
-// aren't enough — typically a tooltip listing every occurrence of an event.
-export function dateTimeFr(timestampMs) {
-  return new Date(timestampMs).toLocaleString("fr-FR", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+export function dateTimeFr(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+export function timeAgo(value) {
+  if (!value) return "";
+  const t = typeof value === "number" ? value : new Date(value).getTime();
+  const s = Math.round((Date.now() - t) / 1000);
+  if (s < 45) return "à l'instant";
+  const m = Math.round(s / 60);
+  if (m < 60) return `il y a ${m} min`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `il y a ${h} h`;
+  const d = Math.round(h / 24);
+  if (d < 30) return `il y a ${d} j`;
+  const mo = Math.round(d / 30);
+  if (mo < 12) return `il y a ${mo} mois`;
+  return `il y a ${Math.round(mo / 12)} an${mo >= 24 ? "s" : ""}`;
+}
+
+// Jours restants avant une date AAAA-MM-JJ (négatif si passée).
+export function daysUntil(iso) {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}/.test(iso)) return null;
+  const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
+  const target = Date.UTC(y, m - 1, d);
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((target - today) / 86400000);
+}
+
+export function plural(n, one, many) {
+  return `${num(n)} ${n > 1 ? many || one + "s" : one}`;
+}
+
+export function truncate(s, n) {
+  const str = String(s || "");
+  return str.length > n ? str.slice(0, n - 1).trimEnd() + "…" : str;
+}
+
+export function wordCount(md) {
+  return String(md || "").split(/\s+/).filter(Boolean).length;
+}
+
+export function bytes(n) {
+  if (!n && n !== 0) return "—";
+  if (n < 1024) return `${n} o`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} Ko`;
+  return `${(n / 1024 / 1024).toFixed(1).replace(".", ",")} Mo`;
+}
+
+export function pctDelta(curr, prev) {
+  if (!prev) return curr ? 100 : 0;
+  return Math.round(((curr - prev) / prev) * 1000) / 10;
 }

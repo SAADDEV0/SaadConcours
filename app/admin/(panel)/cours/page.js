@@ -1,13 +1,18 @@
-import ResourcePanel from "@/app/admin/_components/resource/ResourcePanel";
-import PageHeader from "@/app/admin/_components/shell/PageHeader";
+import ContentList from "../../_features/ContentList";
 
-export const metadata = { title: "Cours" };
+export const metadata = { title: "Cours Licence" };
 
-export default function CoursPage() {
+export default function Page() {
   return (
-    <>
-      <PageHeader icon="notebook" title="Cours" subtitle="Gère les fiches de cours publiées sur le site." />
-      <ResourcePanel resourceKey="cours" />
-    </>
+    <ContentList
+      collectionKey="cours"
+      hero={{
+        icon: "📚",
+        eyebrow: "Contenu · Licence FSJES",
+        title: "Cours Licence",
+        text: "Les modules de la Licence Économie & Gestion. Chaque titre « ## » d'un cours devient une page chapitre sur le site.",
+        newLabel: "Nouveau cours",
+      }}
+    />
   );
 }
