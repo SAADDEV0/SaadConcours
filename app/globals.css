@@ -523,6 +523,8 @@ footer{text-align:center; padding:30px 20px; color:var(--text-faint); font-size:
 .niveau-switch-sub{display:block; font-size:.72rem; color:var(--text-faint);}
 .niveau-switch-btn.active[data-niveau="fsjes"]{background:var(--accent); color:#fff;}
 .niveau-switch-btn.active[data-niveau="bac"]{background:#0e9f6e; color:#fff;}
+.niveau-switch-btn.active[data-niveau="master"]{background:var(--accent); color:#fff;}
+.niveau-switch-btn.active[data-niveau="licence_excellence"]{background:#b45309; color:#fff;}
 .niveau-switch-btn.active .niveau-switch-sub{color:rgba(255,255,255,.8);}
 @media (max-width:480px){
   .niveau-switch{display:flex;}

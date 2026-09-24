@@ -18,7 +18,15 @@ const NAV_ITEMS = [
       { key: "cours", href: "/cours", icon: "🎓", label: "Cours Licence FSJES", desc: "Université · modules du S1 au S6" },
     ],
   },
-  { key: "concours", href: "/concours", icon: "📚", label: "Concours" },
+  {
+    key: "concours-menu",
+    label: "Concours",
+    // Un espace de sujets par niveau d'accès, comme le menu Cours.
+    children: [
+      { key: "concours", href: "/concours", icon: "📚", label: "Concours Master", desc: "Après la licence · sujets FSJES, ENCG…" },
+      { key: "concours-le", href: "/concours/licence-excellence", icon: "⭐", label: "Concours Licence d'excellence", desc: "Après le DEUG · accès en S5" },
+    ],
+  },
   { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
   { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
 ];
@@ -58,7 +66,7 @@ export function chromeHtml({ active, showSearch, rails = false }) {
       </svg>
       <span class="brand-text">
         <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
-        <span class="brand-tagline">Bac · Licence FSJES · Master</span>
+        <span class="brand-tagline">Bac · Licence · Master</span>
       </span>
     </a>
     <nav class="view-nav" aria-label="Navigation principale">

@@ -1,9 +1,10 @@
 import { getAllConcours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
-import { concoursCardHtml } from "../_shared/concoursCard";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
-import ConcoursExplorer from "./ConcoursExplorer";
+import ConcoursNiveauSwitch from "../_shared/ConcoursNiveauSwitch";
+import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
+import ConcoursListing from "./ConcoursListing";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
 // request. lib/github.js reads the data JSON with `cache: "no-store"` (
@@ -26,7 +27,11 @@ export const revalidate = false;
 // the visitor actually filters (or lands with a ?q= from the sitelinks
 // search box, see app/layout.js's WebSite/SearchAction JSON-LD).
 export default async function ConcoursPage() {
-  const concours = await getAllConcours().catch(() => []);
+  const tous = await getAllConcours().catch(() => []);
+  // Les concours de licence d'excellence ont leur propre page
+  // (/concours/licence-excellence) : celle-ci ne liste que le Master.
+  const concours = tous.filter((c) => !isLicenceExcellence(c));
+  const nbLicence = tous.length - concours.length;
   const nbEtabs = new Set(concours.map((c) => c.etablissement).filter(Boolean)).size;
   const nbVilles = new Set(concours.map((c) => c.ville).filter(Boolean)).size;
   const nbCorriges = concours.filter((c) => c.corrige_md || c.corrige_from_github).length;
@@ -52,6 +57,8 @@ export default async function ConcoursPage() {
 
       <div className="bac-space site-space">
         <div className="bac-wrap">
+          <ConcoursNiveauSwitch active="master" counts={{ master: concours.length, [LICENCE_EXCELLENCE]: nbLicence }} />
+
           <section className="bac-hero" style={{ "--hero-icon": '"📚"' }}>
             <div className="bac-eyebrow">Master · Concours d'accès</div>
             <h1>Concours d'accès aux Masters — sujets réels</h1>
@@ -80,80 +87,20 @@ export default async function ConcoursPage() {
             </div>
           </section>
 
-          <div className="bac-mat-layout">
-            <aside className="bac-side">
-              <div className="bac-side-card">
-                <div className="bac-side-title">Filtrer les sujets</div>
-                <label className="sp-field">
-                  <span>Ville</span>
-                  <select id="filterVille">
-                    <option value="">Toutes les villes</option>
-                  </select>
-                </label>
-                <label className="sp-field">
-                  <span>Catégorie</span>
-                  <select id="filterCategorie">
-                    <option value="">Toutes les catégories</option>
-                  </select>
-                </label>
-                <label className="sp-field">
-                  <span>Filière</span>
-                  <select id="filterFiliere">
-                    <option value="">Toutes les filières</option>
-                  </select>
-                </label>
-                <label className="sp-field">
-                  <span>Établissement</span>
-                  <select id="filterEtab">
-                    <option value="">Tous les établissements</option>
-                  </select>
-                </label>
-                <label className="sp-field">
-                  <span>Année</span>
-                  <select id="filterAnnee">
-                    <option value="">Toutes les années</option>
-                  </select>
-                </label>
-                <label className="sp-field">
-                  <span>Module requis</span>
-                  <select id="filterModule">
-                    <option value="">Tous les modules</option>
-                  </select>
-                </label>
-                <button type="button" className="sp-reset sp-reset-full" id="resetBtn">
-                  ✕ Réinitialiser les filtres
-                </button>
-              </div>
-              <div className="bac-side-card">
-                <div className="bac-side-title">Pour aller plus loin</div>
-                <a href="/news" className="bac-side-link">
-                  Concours ouverts <span>🆕</span>
-                </a>
-                <a href="/evaluation" className="bac-side-link">
-                  QCM d'entraînement <span>📝</span>
-                </a>
-                <a href="/cours" className="bac-side-link">
-                  Cours Licence FSJES <span>📖</span>
-                </a>
-              </div>
-            </aside>
-
-            <main className="bac-main">
-              <div className="sp-results-head">
-                <h2 className="bac-section-title">Tous les sujets</h2>
-                <span className="sp-count" id="resultsCount">
-                  {concours.length} résultat{concours.length > 1 ? "s" : ""}
-                </span>
-              </div>
-              <div className="sp-card-grid" id="grid" dangerouslySetInnerHTML={{ __html: concours.map(concoursCardHtml).join("") }} />
-            </main>
-          </div>
+          <ConcoursListing
+            concours={concours}
+            sideLinks={[
+              { href: "/concours/licence-excellence", label: "Concours Licence d'excellence", icon: "⭐" },
+              { href: "/news", label: "Concours ouverts", icon: "🆕" },
+              { href: "/evaluation", label: "QCM d'entraînement", icon: "📝" },
+              { href: "/cours", label: "Cours Licence FSJES", icon: "📖" },
+            ]}
+          />
         </div>
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
 
-      <ConcoursExplorer initialData={concours} />
     </>
   );
 }

@@ -4,6 +4,8 @@
 // keep both in sync instead of two copies drifting apart. Same card
 // component as the Bac / FSJES course spaces (bac-mat-card).
 
+import { isLicenceExcellence } from "../../lib/concoursNiveaux";
+
 export function escapeHtml(s) {
   return String(s ?? "").replace(
     /[&<>"']/g,
@@ -35,6 +37,7 @@ export function concoursCardHtml(c) {
           : ""
       }
       <span class="bac-mat-meta">
+        ${isLicenceExcellence(c) ? `<span class="sp-le-badge">⭐ Licence d'excellence</span>` : ""}
         <span>Difficulté : ${escapeHtml(c.difficulte || "?")}</span>
         ${hasCorrige ? '<span class="bac-dispo">✅ Corrigé</span>' : ""}
         ${hasImg ? '<span class="bac-soon">🖼️ Scan réel</span>' : ""}

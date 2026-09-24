@@ -9,6 +9,7 @@ import { faqJsonLd } from "../../_shared/faqSchema";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 import MathScripts from "../../_shared/MathScripts";
+import { isLicenceExcellence, niveauInfo, niveauOf } from "@/lib/concoursNiveaux";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -22,14 +23,21 @@ async function findConcours(id) {
 // browsing instead of bouncing after one PDF - also gives Google more
 // crawl paths into pages that have no other inbound links.
 function getRelatedConcours(list, current, limit = 4) {
-  const others = list.filter((x) => x.id !== current.id);
+  // Un candidat à une licence d'excellence ne cherche pas un sujet de Master
+  // (et inversement) : les suggestions restent dans le même niveau.
+  const others = list.filter((x) => x.id !== current.id && niveauOf(x) === niveauOf(current));
   const sameMaster = current.master_reel
     ? others.filter((x) => x.master_reel === current.master_reel)
     : [];
   const sameEtab = others.filter((x) => x.etablissement === current.etablissement);
+  // Repli sur la même filière, puis (licence d'excellence, niveau encore peu
+  // fourni) sur n'importe quel sujet du niveau, pour ne jamais laisser le
+  // bloc vide.
+  const sameFiliere = others.filter((x) => x.filiere === current.filiere);
+  const fallback = isLicenceExcellence(current) ? others : [];
   const seen = new Set();
   const related = [];
-  for (const x of [...sameMaster, ...sameEtab]) {
+  for (const x of [...sameMaster, ...sameEtab, ...sameFiliere, ...fallback]) {
     if (seen.has(x.id)) continue;
     seen.add(x.id);
     related.push(x);
@@ -115,7 +123,8 @@ export async function generateMetadata(props) {
   const corrigeMd = await resolveCorrigeMd(c);
   const masterLabel = c.master_reel || c.filiere;
   const title = seoTitle(c);
-  const description = `Sujet de concours réel — ${c.etablissement}, ${c.ville}, session ${c.annee}${
+  const intro = isLicenceExcellence(c) ? "Sujet réel de concours d'accès à la licence d'excellence" : "Sujet de concours réel";
+  const description = `${intro} — ${c.etablissement}, ${c.ville}, session ${c.annee}${
     masterLabel ? `, filière ${masterLabel}` : ""
   }.${corrigeMd ? " Corrigé indicatif disponible." : ""} Énoncé complet et téléchargement PDF gratuit sur SaadConcours.`;
   const url = `${SITE_URL}/concours/${c.id}`;
@@ -183,6 +192,7 @@ export default async function ConcoursDetailPage(props) {
   // out, rather than emitting structured data Google would flag invalid.
   const sourceUrlMatch = (c.source || "").match(/https?:\/\/\S+/);
 
+  const niveau = niveauInfo(niveauOf(c));
   const faqs = buildConcoursFaq(c, Boolean(corrigeHtml));
   const faqLd = faqJsonLd(faqs);
 
@@ -192,7 +202,7 @@ export default async function ConcoursDetailPage(props) {
     name: seoTitle(c),
     description: `Sujet de concours ${masterLabel || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
     url,
-    educationalLevel: "Master",
+    educationalLevel: isLicenceExcellence(c) ? "Licence" : "Master",
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
     ...(sourceUrlMatch ? { isBasedOn: sourceUrlMatch[0] } : {}),
   };
@@ -202,7 +212,7 @@ export default async function ConcoursDetailPage(props) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Concours", item: `${SITE_URL}/concours` },
+      { "@type": "ListItem", position: 2, name: niveau.label === "Master" ? "Concours" : `Concours ${niveau.label}`, item: `${SITE_URL}${niveau.href}` },
       { "@type": "ListItem", position: 3, name: `${c.etablissement} ${c.annee}`, item: url },
     ],
   };
@@ -227,18 +237,23 @@ export default async function ConcoursDetailPage(props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       )}
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false, rails: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: isLicenceExcellence(c) ? "concours-le" : "concours", showSearch: false, rails: true }) }} />
 
       <div className="bac-space site-space" style={{ "--mat-h": CONCOURS_HUES[c.categorie] ?? 220 }}>
       <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/concours">Concours</a> <span>/</span>{" "}
+          {isLicenceExcellence(c) && (
+            <>
+              <a href={niveau.href}>{niveau.label}</a> <span>/</span>{" "}
+            </>
+          )}
           <span>{c.etablissement} {c.annee}</span>
         </nav>
 
         <div className="bac-chap-hero sp-detail-hero">
           <div className="bac-eyebrow">
-            Concours d'accès au Master · {c.annee}
+            {niveau.long} · {c.annee}
           </div>
           <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
           <div className="bac-hero-stats">

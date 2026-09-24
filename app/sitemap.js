@@ -4,6 +4,7 @@ import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { bacNationauxMatiere, bacNationalHref } from "@/lib/bacNationaux";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
+import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -30,12 +31,13 @@ export default async function sitemap() {
     getAllNews().catch(() => []),
   ]);
 
-  const concoursUpdated = latestDate(concours, "date_ajout");
+  const concoursUpdated = latestDate(concours.filter((c) => !isLicenceExcellence(c)), "date_ajout");
+  const licenceUpdated = latestDate(concours.filter(isLicenceExcellence), "date_ajout");
   const blogUpdated = latestDate(blog, "publishedAt");
   const newsUpdated = latestDate(news, "date_publication");
   // The homepage surfaces the latest concours, the latest open concours and
   // the blog, so it is as fresh as the freshest of the three.
-  const homeUpdated = [concoursUpdated, blogUpdated, newsUpdated].filter(Boolean).sort().pop() || null;
+  const homeUpdated = [concoursUpdated, licenceUpdated, blogUpdated, newsUpdated].filter(Boolean).sort().pop() || null;
 
   // /cours, /evaluation, /faq, /a-propos, /contact and /confidentialite carry no lastModified on
   // purpose: their datasets have no date field (and the two legal/info pages
@@ -43,6 +45,7 @@ export default async function sitemap() {
   const staticRoutes = [
     { path: "", changeFrequency: "daily", priority: 1, lastModified: homeUpdated },
     { path: "/concours", changeFrequency: "weekly", priority: 0.9, lastModified: concoursUpdated },
+    { path: "/concours/licence-excellence", changeFrequency: "weekly", priority: 0.8, lastModified: licenceUpdated },
     { path: "/news", changeFrequency: "daily", priority: 0.8, lastModified: newsUpdated },
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },

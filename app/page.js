@@ -1,6 +1,7 @@
 import { getAllConcours, getAllNews, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { escapeHtml, CONCOURS_HUES } from "./_shared/concoursCard";
+import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 import { daysUntil, visibleNews } from "./_shared/newsCard";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES } from "../lib/bacProgramme";
@@ -46,6 +47,8 @@ export default async function HomePage() {
   // Storage appends new entries to the end of the array (lib/store.js
   // addItem): tail = most recent.
   const recentConcours = allConcours.slice(-4).reverse();
+  const concoursLicence = allConcours.filter(isLicenceExcellence);
+  const concoursMaster = allConcours.length - concoursLicence.length;
   const recentPosts = blog
     .filter((p) => p.available)
     .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
@@ -85,13 +88,22 @@ export default async function HomePage() {
       stat: `${coursPublies.length} modules · ${chapitresFsjes} chapitres`,
     },
     {
+      href: "/concours/licence-excellence",
+      icon: "⭐",
+      hue: 35,
+      eyebrow: "Après le DEUG",
+      title: "Concours d'accès aux Licences d'excellence",
+      desc: "Les QCM et épreuves écrites des licences d'excellence en économie et gestion (accès en S5) : CCA, finance, marketing digital, commerce international, avec corrigés.",
+      stat: `${concoursLicence.length} sujets réels`,
+    },
+    {
       href: "/concours",
       icon: "📚",
       hue: 265,
       eyebrow: "Master",
       title: "Sujets de concours d'accès au Master",
       desc: "Des sujets réellement tombés aux concours des FSJES et ENCG du Maroc, filtrables par ville, filière et année, avec corrigés indicatifs et export PDF.",
-      stat: `${allConcours.length} sujets réels`,
+      stat: `${concoursMaster} sujets réels`,
     },
   ];
 
@@ -108,11 +120,12 @@ export default async function HomePage() {
       <div className="bac-space site-space">
         <div className="bac-wrap">
           <section className="bac-hero sp-home-hero" style={{ "--hero-icon": '"🎓"' }}>
-            <div className="bac-eyebrow">Bac · Licence FSJES · Master</div>
+            <div className="bac-eyebrow">Bac · Licence FSJES · Licence d'excellence · Master</div>
             <h1>Cours, exercices et concours en économie & gestion au Maroc</h1>
             <p>
               SaadConcours accompagne les élèves du <strong>Bac Sciences Économiques et Gestion</strong>, les étudiants
-              en <strong>Licence FSJES</strong> et les candidats aux <strong>concours d'accès au Master</strong> : cours
+              en <strong>Licence FSJES</strong> et les candidats aux concours d'accès aux <strong>licences d'excellence</strong>
+              et au <strong>Master</strong> : cours
               rédigés chapitre par chapitre, exercices corrigés, résumés, QCM et sujets réels de concours — gratuitement
               et sans inscription.
             </p>
@@ -260,7 +273,10 @@ export default async function HomePage() {
                       <span className="bac-mat-desc">
                         🏫 {c.etablissement} · 📍 {c.ville}
                       </span>
-                      {c.date_ajout && <span className="bac-mat-meta">Ajouté le {c.date_ajout}</span>}
+                      <span className="bac-mat-meta">
+                        {isLicenceExcellence(c) && <span className="sp-le-badge">⭐ Licence d'excellence</span>}
+                        {c.date_ajout && <span>Ajouté le {c.date_ajout}</span>}
+                      </span>
                     </span>
                   </a>
                 ))}
@@ -300,8 +316,9 @@ export default async function HomePage() {
               Au <strong>lycée</strong>, les cours du Bac Sciences Économiques et Sciences de Gestion Comptable suivent le
               programme officiel marocain, matière par matière et chapitre par chapitre. À l'<strong>université</strong>,
               les cours de Licence FSJES couvrent les modules du tronc commun (S1 à S4) et des filières de spécialisation
-              (S5-S6). Pour le <strong>Master</strong>, la base de sujets réels et les QCM permettent de préparer les
-              concours d'accès des FSJES et des ENCG en conditions réelles.
+              (S5-S6). Après le DEUG, les sujets des concours de <strong>licence d'excellence</strong> préparent l'accès
+              direct en S5 ; pour le <strong>Master</strong>, la base de sujets réels et les QCM permettent de préparer
+              les concours d'accès des FSJES et des ENCG en conditions réelles.
             </p>
           </section>
         </div>
