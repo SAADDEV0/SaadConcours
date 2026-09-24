@@ -371,6 +371,29 @@ export default {
 - **Déclarer** le fichier dans `SUPPLEMENTS` de `lib/fsjesContenu/index.js`
   (`<id du cours>: <import>`), sinon il n'est pas affiché.
 
+### Norme « cours détaillé » (réécriture des cours FSJES, septembre 2026)
+Tous les cours sont réécrits sur ce modèle ; tout nouveau cours doit le suivre.
+- **Chapitre (Markdown de `cours.json`)** : bloc `> 🎯 **Objectifs du chapitre**`, sections
+  `## N.1 …` expliquées en phrases (pas seulement des tableaux), définitions en citation
+  `> **Définition — …**`, exemples chiffrés d'entreprises marocaines (DH, villes, CGNC, lois),
+  une section `## N.x Méthode : …`, puis `## ⚠️ Les pièges à éviter`, puis l'exercice type
+  examen (`## ✏️ EXERCICE` / `## ✅ CORRECTION`, plusieurs questions, correction détaillée).
+  Cible : 1 100 mots et plus pour l'onglet Cours (900 pour les modules très formalisés).
+  Rien après l'exercice : tout ce qui suit `## ✏️ EXERCICE` part dans l'onglet Exercices.
+- **Compléments** : `titre` (**jamais modifié** sur un chapitre publié : il fixe l'URL),
+  `description` (meta description propre au chapitre, 100 à 160 caractères), `resume`
+  (8 à 10 puces avec les formules), `exercices` (2 exercices corrigés dans `<details>`),
+  `qcm` (10 questions, texte brut : pas de LaTeX ni de gras, pas d'option « ci-dessus » car
+  les choix sont mélangés).
+- Les chapitres peuvent être réordonnés ou complétés (le slug vient du titre, pas du numéro) :
+  on n'en supprime jamais un qui est publié.
+- Procédure éprouvée : rédiger chaque chapitre dans le scratchpad (`k/<id>/cNN.md` +
+  `k/<id>/sNN.js`, plus `head.md`, `annexe.md`, `meta.json`), assembler par script
+  (content + fichier de compléments `const chapitres = {…}; export default chapitres;`),
+  puis contrôler : toutes les anciennes URL présentes, 3 exercices et 10 QCM par chapitre,
+  descriptions uniques, tableaux convertis par `marked`, `$` appariés. Recalculer chaque
+  chiffre avec Node avant de l'écrire. Un commit par cours.
+
 ### K3 — Modifier ou supprimer un cours
 - Modifier : éditer `content` (respecter la convention), ou le fichier de compléments.
 - Supprimer : retirer l'entrée de `cours.json`, supprimer son fichier `lib/fsjesContenu/…` et sa
