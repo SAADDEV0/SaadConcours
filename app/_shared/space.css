@@ -50,6 +50,16 @@
 .sp-related .bac-mat-card{padding:14px;}
 .sp-related .bac-mat-icon{width:38px; height:38px; font-size:1.15rem; border-radius:11px;}
 
+/* Sujets de concours liés à un module de cours (app/_shared/ConcoursLies.js). */
+.sp-concours-intro{color:var(--text-dim); font-size:.9rem; line-height:1.55; margin:0 0 12px;}
+.sp-concours-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr)); gap:8px;}
+.sp-concours-list a{display:grid; grid-template-columns:auto 1fr; column-gap:12px; row-gap:2px; padding:10px 12px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); text-decoration:none; color:var(--text);}
+.sp-concours-list a:hover{border-color:var(--mat-color, var(--accent));}
+.sp-concours-annee{grid-row:span 2; align-self:center; min-width:2.6em; font-weight:800; font-size:.85rem; color:var(--mat-color, var(--accent));}
+.sp-concours-titre{font-weight:600; font-size:.86rem; line-height:1.3;}
+.sp-concours-lieu{font-size:.76rem; color:var(--text-faint);}
+.sp-concours-more{display:inline-block; margin-top:12px; font-size:.88rem; font-weight:600; color:var(--mat-color, var(--accent));}
+
 /* ---------- Listes (concours, évaluation, blog) ---------- */
 .sp-field{display:flex; flex-direction:column; gap:5px; margin-bottom:10px; font-size:.78rem; color:var(--text-dim); font-weight:600;}
 .sp-field select, .sp-field input{

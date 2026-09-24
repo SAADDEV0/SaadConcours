@@ -10,6 +10,8 @@ import BacQcm from "../../../bac/BacQcm";
 import BacChapitreClient from "../../../bac/BacChapitreClient";
 import { coursCategoryInfo, licenceSemestreLabel } from "../../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../../lib/fsjesChapitres";
+import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursParModule";
+import ConcoursLies from "../../../_shared/ConcoursLies";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -31,7 +33,7 @@ async function findChapitre(id, slug) {
   const { chapitres } = fsjesModule(c);
   const i = chapitres.findIndex((x) => x.slug === slug);
   if (i === -1) return null;
-  return { c, chapitres, ch: chapitres[i], prev: chapitres[i - 1] || null, next: chapitres[i + 1] || null };
+  return { c, chapitres, i, ch: chapitres[i], prev: chapitres[i - 1] || null, next: chapitres[i + 1] || null };
 }
 
 export async function generateStaticParams() {
@@ -67,8 +69,10 @@ export default async function CoursChapitrePage(props) {
   const { id, chapitre } = await props.params;
   const found = await findChapitre(id, chapitre);
   if (!found) notFound();
-  const { c, chapitres, ch, prev, next } = found;
+  const { c, chapitres, i, ch, prev, next } = found;
   const cat = coursCategoryInfo(c.category);
+  const nbSujets = concoursDuModule(c.id).length;
+  const sujets = concoursDuChapitre(c.id, i);
   const url = `${SITE_URL}${fsjesChapitreHref(c, ch)}`;
 
   const jsonLd = {
@@ -172,6 +176,17 @@ export default async function CoursChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <ConcoursLies
+                titre="S'entraîner sur des sujets réels"
+                intro={`Des sujets réels de concours (master, licence d'excellence) avec une épreuve de ${c.module} : énoncé complet et corrigé indicatif.`}
+                sujets={sujets}
+                lienTous={
+                  nbSujets > sujets.length
+                    ? { href: `/cours/${c.id}#concours`, label: `Voir les ${nbSujets} sujets de concours en ${c.module}` }
+                    : null
+                }
+              />
 
               <nav className="bac-pager">
                 {prev ? (

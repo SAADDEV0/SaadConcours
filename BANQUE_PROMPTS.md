@@ -344,7 +344,11 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
 5. `ajoute les cours du S3` : lister les modules du semestre manquants, les créer tous.
 6. Contrôle : ouvrir `/cours/<id>` en local (`npm run dev`) et vérifier que les chapitres sont détectés.
-7. Fin de recette. Si un article de blog « valider le Sx » existe, y ajouter le lien.
+7. Ajouter l'`id` du module dans `MOTIFS` (`lib/concoursParModule.js`) avec les mots-clés des épreuves
+   de concours correspondantes : c'est ce qui affiche « Sujets de concours avec une épreuve de … »
+   sur le module et ses chapitres — et ce qui donne aux pages concours les liens dont Google a besoin
+   pour venir les explorer.
+8. Fin de recette. Si un article de blog « valider le Sx » existe, y ajouter le lien.
 
 ### K2 — Compléter un cours par chapitres
 Fichier `lib/fsjesContenu/<module>.js`, indexé par **numéro** de `# CHAPITRE N` :
@@ -506,6 +510,11 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
 - Mettre à jour : réécrire les sections concernées, **ne pas changer l'`id`** (URL indexée),
   mettre à jour les chiffres avec l'état actuel de la base.
 - Supprimer : retirer l'entrée ; chercher les liens `/blog/<id>` dans les autres articles et les corriger.
+- **Avant de dépublier ou supprimer un article, vérifier ses clics dans Search Console**
+  (Performances › Pages, propriété `https://www.saadconcours.space/`). Un article qui amène du trafic
+  se **réécrit sous le même `id`**, il ne se supprime pas — précédent : les guides « FSJES Mohammedia »
+  et « FSJES Tétouan », dépubliés comme quasi-doublons le 24/09/2026 alors qu'ils étaient parmi les
+  pages les plus visitées, puis réécrits le jour même avec les vrais sujets de la faculté.
 
 ---
 

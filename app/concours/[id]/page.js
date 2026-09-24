@@ -63,10 +63,31 @@ async function resolveCorrigeMd(c) {
 // is on 8 different concours). The on-page H1 drops the étab/ville/année
 // suffix entirely — see ConcoursDetailPage below — since cd-tags right
 // underneath already shows those details individually.
-function seoTitle(c) {
-  const masterLabel = c.master_reel || c.filiere;
-  const location = `${c.etablissement}, ${c.ville} ${c.annee}`;
-  return masterLabel ? `${masterLabel} — Concours ${location}` : `Concours ${location}`;
+//
+// Tourné comme la recherche d'un étudiant (« concours master cca fsjes
+// settat 2015 corrigé ») depuis septembre 2026 : l'ancien titre
+// « CCA — Concours FSJES Settat, Settat 2015 » n'avait ni « master » ni
+// « corrigé », et répétait la ville.
+const sansAccents = (s) =>
+  String(s || "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+
+function seoTitle(c, hasCorrige = false) {
+  const niveau = isLicenceExcellence(c) ? "Licence d'excellence" : "Master";
+  // « Master Management Logistique… » ou « Licence parcours d'excellence … » :
+  // le niveau est déjà dans « Concours Master » / « Concours Licence d'excellence ».
+  let masterLabel = (c.master_reel || c.filiere || "").replace(/^(master|licence( parcours)?( d'excellence)?)\s+/i, "");
+  // Épreuve commune à plusieurs masters : la liste complète (jusqu'à 300
+  // caractères) reste sur la page, le titre dit seulement combien.
+  const communs = masterLabel.split(" / ");
+  const precision = communs.length > 1 ? ` (épreuve commune à ${communs.length} masters)` : "";
+  if (precision) masterLabel = "";
+  const etab = c.etablissement || "";
+  const lieu = c.ville && !sansAccents(etab).includes(sansAccents(c.ville)) ? `${etab} ${c.ville}` : etab;
+  const annee = /^\d{4}$/.test(String(c.annee)) ? ` ${c.annee}` : "";
+  return `Concours ${niveau} ${masterLabel ? `${masterLabel} ` : ""}${lieu}${annee}${precision} : ${hasCorrige ? "sujet et corrigé" : "sujet"}`;
 }
 
 // Plain-text Q&A generated from fields already shown on the page (tags,
@@ -122,7 +143,7 @@ export async function generateMetadata(props) {
 
   const corrigeMd = await resolveCorrigeMd(c);
   const masterLabel = c.master_reel || c.filiere;
-  const title = seoTitle(c);
+  const title = seoTitle(c, Boolean(corrigeMd));
   const intro = isLicenceExcellence(c) ? "Sujet réel de concours d'accès à la licence d'excellence" : "Sujet de concours réel";
   const description = `${intro} — ${c.etablissement}, ${c.ville}, session ${c.annee}${
     masterLabel ? `, filière ${masterLabel}` : ""
@@ -199,7 +220,7 @@ export default async function ConcoursDetailPage(props) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    name: seoTitle(c),
+    name: seoTitle(c, Boolean(corrigeMd)),
     description: `Sujet de concours ${masterLabel || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
     url,
     educationalLevel: isLicenceExcellence(c) ? "Licence" : "Master",

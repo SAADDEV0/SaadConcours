@@ -7,8 +7,10 @@ import { breadcrumbJsonLd } from "../../_shared/listingSchema";
 import JsonLd from "../../_shared/JsonLd";
 import MathScripts from "../../_shared/MathScripts";
 import CoursDetailClient from "./CoursDetailClient";
+import ConcoursLies from "../../_shared/ConcoursLies";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
+import { concoursDuModule } from "../../../lib/concoursParModule";
 
 const SITE_URL = "https://www.saadconcours.space";
 const RESSOURCES = [
@@ -89,6 +91,7 @@ export default async function CoursModulePage(props) {
   const { chapitres, annexe } = fsjesModule(c);
   const url = `${SITE_URL}/cours/${c.id}`;
   const related = getRelatedCours(list, c);
+  const sujets = concoursDuModule(c.id);
   const nbExercices = chapitres.reduce((n, x) => n + x.nbExercices, 0);
   const nbQcm = chapitres.reduce((n, x) => n + x.qcm.length, 0);
   // Titres de l'annexe décalés d'un niveau quand elle commence en "# " : la
@@ -164,6 +167,11 @@ export default async function CoursModulePage(props) {
                 {annexe && (
                   <a href="#formulaire" className="bac-side-link">
                     Formulaire & conseils <span>📐</span>
+                  </a>
+                )}
+                {sujets.length > 0 && (
+                  <a href="#concours" className="bac-side-link">
+                    Sujets de concours <span>{sujets.length}</span>
                   </a>
                 )}
               </div>
@@ -247,6 +255,13 @@ export default async function CoursModulePage(props) {
                   </div>
                 </section>
               )}
+
+              <ConcoursLies
+                id="concours"
+                titre={`Sujets de concours avec une épreuve de ${c.module}`}
+                intro={`${sujets.length} sujet${sujets.length > 1 ? "s" : ""} réel${sujets.length > 1 ? "s" : ""} de concours d'accès au master ou à la licence d'excellence comportent une épreuve de ${c.module}. Chaque fiche donne l'énoncé complet et, pour la quasi-totalité, un corrigé indicatif : de quoi vérifier que ce module est acquis au niveau attendu le jour du concours.`}
+                sujets={sujets}
+              />
 
               {related.length > 0 && (
                 <section className="bac-semestre">
