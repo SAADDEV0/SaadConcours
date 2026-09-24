@@ -176,8 +176,24 @@ export default function ConcoursExplorer({ initialData }) {
       });
     }
 
+    const FILTER_SELECTS = ["#filterVille", "#filterCategorie", "#filterFiliere", "#filterEtab", "#filterAnnee", "#filterModule"];
+
+    // Libellés du panneau mobile (bouton replié, badge des filtres actifs,
+    // bouton « Voir les N résultats ») : invisibles sur ordinateur.
+    function syncFilterPanel() {
+      const label = `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
+      const actifs = FILTER_SELECTS.filter((id) => $(id).value).length;
+      document.querySelectorAll(".sp-filter-badge").forEach((b) => {
+        b.textContent = String(actifs);
+        b.hidden = actifs === 0;
+      });
+      $(".sp-filter-count").textContent = label;
+      $("#filterApply").textContent = filtered.length ? `Voir les ${label}` : "Aucun résultat";
+    }
+
     function renderGrid() {
       $("#resultsCount").textContent = `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
+      syncFilterPanel();
       const grid = $("#grid");
       if (filtered.length === 0) {
         grid.innerHTML = `<div class="sp-empty">Aucun concours ne correspond à ces filtres.</div>`;
@@ -259,6 +275,46 @@ export default function ConcoursExplorer({ initialData }) {
       });
     }
 
+    // Panneau de filtres mobile (voir ConcoursListing.js / space.css). Handlers
+    // posés en propriétés et non via addEventListener : l'effet tourne deux
+    // fois en StrictMode (dev), et un double écouteur sur le bouton replierait
+    // aussitôt ce qu'il vient d'ouvrir.
+    const filterCard = $("#filterCard");
+    const filterToggle = $("#filterToggle");
+    const filterFab = $("#filterFab");
+
+    function setFilterPanelOpen(open) {
+      filterCard.classList.toggle("is-open", open);
+      filterToggle.setAttribute("aria-expanded", String(open));
+    }
+
+    // Place le haut de la carte des filtres juste sous le header collant.
+    function scrollToFilterPanel() {
+      const header = document.querySelector("header.site-header");
+      const top = filterCard.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }
+
+    filterToggle.onclick = () => setFilterPanelOpen(!filterCard.classList.contains("is-open"));
+    $("#filterApply").onclick = () => {
+      setFilterPanelOpen(false);
+      scrollToFilterPanel();
+    };
+    filterFab.onclick = () => {
+      setFilterPanelOpen(true);
+      scrollToFilterPanel();
+    };
+
+    // Le bouton flottant n'apparaît qu'une fois la carte des filtres sortie
+    // de l'écran par le haut, c.-à-d. quand on est descendu dans la liste.
+    let filterObserver = null;
+    if ("IntersectionObserver" in window) {
+      filterObserver = new IntersectionObserver(([entry]) => {
+        filterFab.classList.toggle("is-visible", !entry.isIntersecting && entry.boundingClientRect.top < 0);
+      });
+      filterObserver.observe(filterCard);
+    }
+
     initFilters();
     wireDownloadButtons();
 
@@ -272,6 +328,8 @@ export default function ConcoursExplorer({ initialData }) {
       $("#searchInput").value = q;
       applyFilters();
     }
+
+    return () => filterObserver?.disconnect();
   }, [initialData]);
 
   return null;

@@ -76,6 +76,46 @@
 .sp-card.disabled:hover{transform:none; border-color:var(--border);}
 .sp-pagination{display:flex; justify-content:center; flex-wrap:wrap; gap:6px; margin-top:18px;}
 
+/* Filtres des listes de concours (app/concours/ConcoursListing.js) : colonne
+   latérale sur ordinateur. Sur mobile, .bac-side passe normalement sous la
+   liste (order:2, bac.css) — avec 250+ cartes les filtres devenaient
+   inatteignables. Ici la carte des filtres remonte au-dessus de la grille,
+   repliée derrière un bouton, et un bouton flottant y ramène depuis la liste. */
+.sp-filter-toggle, .sp-filter-apply, .sp-filter-fab{display:none;}
+.sp-filter-badge{
+  min-width:20px; padding:1px 7px; border-radius:999px; background:var(--accent); color:#fff;
+  font-size:.74rem; font-weight:700; line-height:1.5; text-align:center;
+}
+@media (max-width:860px){
+  .sp-listing .bac-side{display:contents;}
+  .sp-listing .sp-filter-card{order:-1;}
+  .sp-listing .sp-side-more{order:2;}
+  .sp-filter-title{display:none;}
+  .sp-filter-toggle{
+    display:flex; align-items:center; gap:8px; width:100%; padding:2px 0; border:none; background:none;
+    color:var(--text); font:inherit; font-size:.95rem; font-weight:700; text-align:left; cursor:pointer;
+  }
+  .sp-filter-count{margin-left:auto; font-size:.8rem; font-weight:500; color:var(--text-faint);}
+  .sp-filter-chevron{color:var(--text-faint); transition:transform .2s;}
+  .sp-filter-card.is-open .sp-filter-chevron{transform:rotate(180deg);}
+  .sp-filter-body{display:none; margin-top:14px;}
+  .sp-filter-card.is-open .sp-filter-body{display:block;}
+  .sp-filter-body .sp-field select{padding:10px; font-size:1rem;}
+  .sp-filter-apply{
+    display:block; width:100%; margin-top:8px; padding:11px 12px; border:none; border-radius:10px;
+    background:var(--bac-grad); color:#fff; font:inherit; font-size:.9rem; font-weight:700; cursor:pointer;
+  }
+  .sp-filter-fab{
+    display:flex; align-items:center; gap:7px; position:fixed; right:16px; bottom:18px; z-index:40;
+    padding:11px 18px; border:none; border-radius:999px; background:var(--bac-grad); color:#fff;
+    font:inherit; font-size:.9rem; font-weight:700; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.28);
+    opacity:0; visibility:hidden; transform:translateY(12px); transition:opacity .2s, transform .2s, visibility .2s;
+  }
+  .sp-filter-fab svg{width:17px; height:17px;}
+  .sp-filter-fab .sp-filter-badge{background:#fff; color:#2f6fed;}
+  .sp-filter-fab.is-visible{opacity:1; visibility:visible; transform:none;}
+}
+
 @media (max-width:560px){
   .sp-annexe{padding:4px 14px 14px;}
   .sp-count{margin-left:0; width:100%;}
