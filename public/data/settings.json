@@ -46,7 +46,7 @@
   "adsConcoursMidSlot": "",
   "adsConcoursBottomEnabled": false,
   "adsConcoursBottomSlot": "",
-  "partnerAdsEnabled": false,
+  "partnerAdsEnabled": true,
   "partnerAds": [],
   "pdfMarginMm": 28,
   "pdfBorderEnabled": false,
