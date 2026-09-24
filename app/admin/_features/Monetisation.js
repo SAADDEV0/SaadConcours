@@ -36,6 +36,8 @@ const SLOTS = [
   { enabledKey: "adsHomeBannerEnabled", slotKey: "adsHomeBannerSlot", title: "Accueil — bannière", desc: "Sous le titre de la page d'accueil." },
   { enabledKey: "adsConcoursMidEnabled", slotKey: "adsConcoursMidSlot", title: "Fiche concours — entre énoncé et corrigé", desc: "Un seul bloc entre les deux sections." },
   { enabledKey: "adsConcoursBottomEnabled", slotKey: "adsConcoursBottomSlot", title: "Fiche concours — bas de page", desc: "Après les scans, avant les concours similaires." },
+  { enabledKey: "adsCoursChapitreEnabled", slotKey: "adsCoursChapitreSlot", title: "Chapitre de cours FSJES", desc: "Sous les onglets Cours / Exercices / Résumé / QCM, avant les sujets de concours." },
+  { enabledKey: "adsCoursModuleEnabled", slotKey: "adsCoursModuleSlot", title: "Page d'un module FSJES", desc: "Sous la liste des chapitres, avant la synthèse du module." },
 ];
 
 function AdSense() {

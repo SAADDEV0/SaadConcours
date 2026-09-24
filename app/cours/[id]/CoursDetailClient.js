@@ -18,8 +18,22 @@ export default function CoursDetailClient({ cours }) {
     const annexe = document.getElementById("coursAnnexe");
     if (annexe) renderMathWhenReady(annexe);
 
+    // Le Markdown du module n'est pas inscrit dans la page (trop lourd) : il
+    // est lu au clic dans public/data/cours.json, servi en asset statique.
     const pdfBtn = document.getElementById("coursPdfBtn");
-    const onPdf = () => downloadCoursPdf(cours);
+    const onPdf = async () => {
+      if (pdfBtn.disabled) return;
+      pdfBtn.disabled = true;
+      try {
+        const list = await fetch("/data/cours.json").then((r) => r.json());
+        const complet = list.find((x) => x.id === cours.id);
+        if (complet) await downloadCoursPdf({ ...cours, content: complet.content });
+      } catch {
+        // Réseau coupé : le bouton redevient cliquable, rien d'autre à faire.
+      } finally {
+        pdfBtn.disabled = false;
+      }
+    };
     pdfBtn?.addEventListener("click", onPdf);
     try {
       setAdmin(localStorage.getItem("sc_no_track") === "1");

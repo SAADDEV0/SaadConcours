@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllCours } from "@/lib/store";
+import { getAllCours, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { breadcrumbJsonLd } from "../../_shared/listingSchema";
@@ -8,6 +8,7 @@ import JsonLd from "../../_shared/JsonLd";
 import MathScripts from "../../_shared/MathScripts";
 import CoursDetailClient from "./CoursDetailClient";
 import ConcoursLies from "../../_shared/ConcoursLies";
+import AdSlot from "../../_shared/AdSlot";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
 import { concoursDuModule } from "../../../lib/concoursParModule";
@@ -98,6 +99,8 @@ export default async function CoursModulePage(props) {
   // section a déjà son propre h2.
   const annexeMd = annexe.startsWith("# ") ? annexe.replace(/^## /gm, "### ").replace(/^# /gm, "## ") : annexe;
   const annexeHtml = annexe ? renderMarkdownWithMath(marked, annexeMd) : "";
+  const settings = await getSettings().catch(() => null);
+  const adsActives = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -244,6 +247,13 @@ export default async function CoursModulePage(props) {
                 ))}
               </section>
 
+              <AdSlot
+                enabled={adsActives && settings?.adsCoursModuleEnabled}
+                publisherId={settings?.adsPublisherId}
+                slotId={settings?.adsCoursModuleSlot}
+                label="Publicité — page du module"
+              />
+
               {annexe && (
                 <section id="formulaire" className="bac-semestre">
                   <h2 className="bac-semestre-title">
@@ -290,7 +300,9 @@ export default async function CoursModulePage(props) {
         </div>
       </div>
 
-      <CoursDetailClient cours={c} />
+      {/* Sans le Markdown : il pèserait plus lourd que la page elle-même dans
+          le HTML. Le bouton PDF le charge au clic. */}
+      <CoursDetailClient cours={{ id: c.id, module: c.module, title: c.title, description: c.description }} />
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
     </>
   );

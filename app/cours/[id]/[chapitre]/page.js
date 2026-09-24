@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllCours } from "@/lib/store";
+import { getAllCours, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../../_shared/mathMarkdown";
 import { breadcrumbJsonLd } from "../../../_shared/listingSchema";
@@ -9,9 +9,10 @@ import MathScripts from "../../../_shared/MathScripts";
 import BacQcm from "../../../bac/BacQcm";
 import BacChapitreClient from "../../../bac/BacChapitreClient";
 import { coursCategoryInfo, licenceSemestreLabel } from "../../../../lib/coursTaxonomy";
-import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../../lib/fsjesChapitres";
+import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref, slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursParModule";
 import ConcoursLies from "../../../_shared/ConcoursLies";
+import AdSlot from "../../../_shared/AdSlot";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -45,19 +46,54 @@ export async function generateStaticParams() {
   }
 }
 
+// Titre de résultat Google : la forme longue (« cours et exercices corrigés »,
+// ce que tapent les étudiants) tant qu'elle reste lisible, sinon la courte.
+function titreSeo(c, ch) {
+  const sem = c.semestre ? ` ${c.semestre}` : "";
+  const long = `${ch.titre} : cours et exercices corrigés — ${c.module}${sem}`;
+  return long.length <= 78 ? long : `${ch.titre} — ${c.module}${sem}`;
+}
+
+function descriptionSeo(c, ch) {
+  if (ch.description) return ch.description;
+  return `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours, exercices corrigés, résumé et QCM.`;
+}
+
+const ENTITES = { "&amp;": "&", "&#39;": "'", "&quot;": '"', "&lt;": "<", "&gt;": ">" };
+
+// Sommaire du chapitre : marked ne pose pas d'id sur les titres, on les ajoute
+// aux <h2> du cours pour des liens d'ancre (et des « Aller à » dans Google).
+function avecAncres(html) {
+  const sommaire = [];
+  const vus = new Set();
+  const out = html.replace(/<h2>([\s\S]*?)<\/h2>/g, (m, inner) => {
+    const texte = inner
+      .replace(/<[^>]+>/g, "")
+      .replace(/&(amp|#39|quot|lt|gt);/g, (e) => ENTITES[e])
+      .trim();
+    let ancre = slugifyTitre(texte) || `section-${sommaire.length + 1}`;
+    while (vus.has(ancre)) ancre = `${ancre}-${sommaire.length + 1}`;
+    vus.add(ancre);
+    sommaire.push({ ancre, texte });
+    return `<h2 id="${ancre}">${inner}</h2>`;
+  });
+  return { html: out, sommaire };
+}
+
 export async function generateMetadata(props) {
   const { id, chapitre } = await props.params;
   const found = await findChapitre(id, chapitre);
   if (!found) return {};
   const { c, ch } = found;
-  const title = `${ch.titre} — ${c.module}${c.semestre ? ` ${c.semestre}` : ""}`;
-  const description = `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours, exercices corrigés, résumé et QCM.`;
+  const title = titreSeo(c, ch);
+  const description = descriptionSeo(c, ch);
   const url = `${SITE_URL}${fsjesChapitreHref(c, ch)}`;
   return {
     title,
     description,
     alternates: { canonical: url },
     openGraph: { type: "article", title, description, url },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -74,16 +110,27 @@ export default async function CoursChapitrePage(props) {
   const nbSujets = concoursDuModule(c.id).length;
   const sujets = concoursDuChapitre(c.id, i);
   const url = `${SITE_URL}${fsjesChapitreHref(c, ch)}`;
+  const coursRendu = ch.cours ? avecAncres(md(ch.cours)) : null;
+  const settings = await getSettings().catch(() => null);
+  const adsActives = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
     name: ch.titre,
-    description: `${c.module} — chapitre ${ch.numero} : ${ch.titre}`,
+    headline: ch.titre,
+    description: descriptionSeo(c, ch),
     url,
-    educationalLevel: "Licence",
+    inLanguage: "fr",
+    isAccessibleForFree: true,
+    learningResourceType: ["Cours", "Exercices corrigés", "Résumé", "QCM"],
+    educationalLevel: `Licence FSJES${c.semestre ? ` — ${licenceSemestreLabel(c.semestre)}` : ""}`,
+    teaches: coursRendu?.sommaire.length ? coursRendu.sommaire.map((s) => s.texte) : ch.titre,
+    audience: { "@type": "EducationalAudience", educationalRole: "student" },
+    position: ch.numero,
     isPartOf: { "@type": "Course", name: c.module, url: `${SITE_URL}/cours/${c.id}` },
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
+    author: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
   };
 
   return (
@@ -166,6 +213,24 @@ export default async function CoursChapitrePage(props) {
                     );
                   } else if (o.code === "qcm") {
                     corps = <BacQcm questions={valeur} lang="fr" />;
+                  } else if (o.code === "cours" && coursRendu) {
+                    corps = (
+                      <>
+                        {coursRendu.sommaire.length >= 3 && (
+                          <nav className="fs-sommaire" aria-label="Sommaire du chapitre">
+                            <div className="fs-sommaire-title">Au sommaire de ce chapitre</div>
+                            <ol>
+                              {coursRendu.sommaire.map((s) => (
+                                <li key={s.ancre}>
+                                  <a href={`#${s.ancre}`}>{s.texte}</a>
+                                </li>
+                              ))}
+                            </ol>
+                          </nav>
+                        )}
+                        <div className="cours-content bac-md" dangerouslySetInnerHTML={{ __html: coursRendu.html }} />
+                      </>
+                    );
                   } else {
                     corps = <div className="cours-content bac-md" dangerouslySetInnerHTML={{ __html: md(valeur) }} />;
                   }
@@ -176,6 +241,13 @@ export default async function CoursChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <AdSlot
+                enabled={adsActives && settings?.adsCoursChapitreEnabled}
+                publisherId={settings?.adsPublisherId}
+                slotId={settings?.adsCoursChapitreSlot}
+                label="Publicité — chapitre de cours"
+              />
 
               <ConcoursLies
                 titre="S'entraîner sur des sujets réels"
