@@ -38,7 +38,7 @@
   "pdfShowSocialFooter": true,
   "gaEnabled": true,
   "gaMeasurementId": "G-Q59L27R5RE",
-  "adsEnabled": false,
+  "adsEnabled": true,
   "adsPublisherId": "ca-pub-2207983003890908",
   "adsHomeBannerEnabled": false,
   "adsHomeBannerSlot": "",
