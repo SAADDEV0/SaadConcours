@@ -50,7 +50,7 @@
   "adsCoursChapitreSlot": "",
   "adsCoursModuleEnabled": false,
   "adsCoursModuleSlot": "",
-  "partnerAdsEnabled": false,
+  "partnerAdsEnabled": true,
   "partnerAds": [],
   "pdfMarginMm": 28,
   "pdfBorderEnabled": false,
