@@ -73,6 +73,8 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 - **Contexte marocain** systématique : CGNC/PCGE, CGI et loi de finances de l'année, DOC 1913,
   Constitution 2011, lois 17-95 / 5-96 / 15-89 / 09-08, Bank Al-Maghrib, AMMC, HCP, etc.
 - Maths / formules en LaTeX `$...$` et `$$...$$` (rendu KaTeX), tableaux en Markdown.
+- **Jamais de `$` pour une monnaie** : deux `$` dans un même paragraphe deviennent une formule KaTeX
+  (« 500 000 $ (1 $ = 9 dh) » devient illisible). Écrire « USD » ou « dollars » (précédent : ACGSI Aïn Chock 2014).
 - **Ne jamais inventer** un chiffre, une question ou une donnée illisible : écrire
   `[illisible sur le scan]` ou signaler l'hypothèse retenue. Si le sujet lui-même contient une
   erreur, la signaler et donner les deux lectures (précédent : CCAF 2019 Aïn Sebaâ).
@@ -191,6 +193,8 @@ Règles des champs :
      `blogger.googleusercontent.com` en **portrait** (`data-original-width/height` < 0,85 : les carrés
      sont des vignettes de couverture) et remplacer le segment de taille (`/s320-rw/`, `/w…-h…/`) par
      `/s0/` pour la pleine résolution ;
+   - page qui répond par une redirection « google.com/sorry » (limitation de débit) : réessayer avec
+     `?m=1` et un User-Agent de navigateur. Pour ces articles, le flux JSON ne donne qu'un résumé ;
    - certains articles n'ont que le texte du sujet (pas de scan) : acceptables, `images: []`, à
      défaut de mieux ;
    - écarter les sélections de **doctorat** et les pages « Correction du concours » sans énoncé.
@@ -203,7 +207,11 @@ Règles des champs :
    **Contrôle anti-doublon obligatoire, avant rédaction** : (a) URL source déjà présente dans un
    champ `source` ; (b) même `id` ; (c) même ville + même année + intitulé de master proche ;
    (d) recoupement du texte : 5-grammes d'une phrase caractéristique de l'énoncé comparés à tous les
-   `enonce_md` (> 30 % = doublon). Attention aux épreuves communes (Meknès, Kénitra) : le sujet
+   `enonce_md` (> 30 % = doublon). Un score élevé entre deux **sessions différentes** d'une même
+   faculté peut venir d'une trame recyclée (même cas, autres montants) : comparer montants et questions
+   avant de conclure. S'il s'agit bien de deux épreuves distinctes, garder les deux et le signaler dans
+   la fiche (précédent : CCA Aïn Chock 2017 et 2019 formation initiale, 55 % de texte commun).
+   Attention aux épreuves communes (Meknès, Kénitra) : le sujet
    général peut déjà exister dans une entrée d'un autre master — c'est l'épreuve de **spécialité**
    qui décide.
 4. Écarter : sujets illisibles, simples annonces d'inscription, listes de résultats, doublons.
@@ -215,9 +223,11 @@ Règles des champs :
 7. Contrôles : chaque `id` unique, `filiere` ∈ taxonomie, `categorie` cohérente, chaque image
    référencée existe sur disque, miroirs identiques au JSON, `git diff --numstat` de
    `concours.json` = ajouts seulement, JSON valide. Rendu : passer `enonce_md`/`corrige_md` dans
-   `marked` (lignes `|…|` non converties en `<table>` = tableau cassé). **`npm run dev` ne montre
-   pas les nouvelles fiches** : le site lit les données sur `raw.githubusercontent.com`, elles
-   n'apparaissent qu'après le push.
+   `marked` (lignes `|…|` non converties en `<table>` = tableau cassé). **Avec `GITHUB_TOKEN`
+   défini, `npm run dev` ne montre pas les nouvelles fiches** : le site lit alors les données sur
+   `raw.githubusercontent.com`, et elles n'apparaissent qu'après le push. Sans jeton (cas de ce poste
+   en septembre 2026), `dev` et `build` lisent le dépôt local : `npm run check` contrôle alors les
+   nouvelles pages avant le push.
 8. Fin de recette (§1.5). Message : « Ajoute N concours … » + liste (master, faculté, année, format d'épreuve).
 
 ### C2 — Ajouter un concours fourni (photo, PDF, lien)
