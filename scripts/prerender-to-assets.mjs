@@ -138,7 +138,13 @@ if (copied === 0) {
 // pages publiées incluent quelques pages absentes du sitemap à dessein
 // (boutique vide en noindex, redirections) : d'où la marge de 10 %.
 const sitemapSrc = join(APP_DIR, "sitemap.xml.body");
-const sitemap = await readFile(sitemapSrc, "utf8").catch(() => "");
+const sitemap = await readFile(sitemapSrc, "utf8").catch(() => null);
+if (sitemap === null) {
+  throw new Error(
+    `Pas de ${sitemapSrc} : app/sitemap.js n'a pas été prérendu. Vérifier qu'il exporte encore ` +
+      `dynamic = "force-static" et revalidate = false (sans eux, la route est dynamique dès que GITHUB_TOKEN est défini).`,
+  );
+}
 const nbUrls = (sitemap.match(/<loc>/g) || []).length;
 if (nbUrls < copied * 0.9) {
   throw new Error(

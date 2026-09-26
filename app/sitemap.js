@@ -8,6 +8,15 @@ import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 
 const SITE_URL = "https://www.saadconcours.space";
 
+// Prérendu au build, comme les pages (voir app/concours/page.js) : sans ces
+// deux lignes, la lecture `no-store` de lib/github.js rend la route dynamique
+// dès que GITHUB_TOKEN est défini — donc en CI, pas en local. Le build de
+// déploiement ne produisait alors aucun sitemap.xml.body, et
+// scripts/prerender-to-assets.mjs, qui publie ce fichier en asset statique,
+// a refusé le déploiement du 2026-09-26.
+export const dynamic = "force-static";
+export const revalidate = false;
+
 // Every date field in the datasets is a plain ISO "YYYY-MM-DD" string, so the
 // newest one is just the lexicographic max — no Date parsing needed.
 function latestDate(items, field) {
