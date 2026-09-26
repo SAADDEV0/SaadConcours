@@ -24,3 +24,7 @@
 /concours/2022_Casablanca_ENCGCasablanca_Finance /concours/2022_Casablanca_ENCGCasablanca_ActuariatFinance 301
 /concours/2023_Casablanca_FSJES_AinSebaa_MRH_QCM /concours/2023_Casablanca_FSJES_AinSebaa_MRH 301
 /concours/2023_Meknes_FSJES_Meknes_Audit /concours/2023_Meknes_FSJES_Meknes_CCA 301
+
+# /bac n'a pas de page à lui : seule la 2ème Bac est publiée (lib/bacProgramme.js).
+# Le redirect() de app/bac/page.js répondait en 307 depuis le Worker.
+/bac /bac/2bac 301

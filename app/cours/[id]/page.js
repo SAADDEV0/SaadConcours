@@ -9,6 +9,7 @@ import MathScripts from "../../_shared/MathScripts";
 import CoursDetailClient from "./CoursDetailClient";
 import ConcoursLies from "../../_shared/ConcoursLies";
 import AdSlot from "../../_shared/AdSlot";
+import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
 import { concoursDuModule } from "../../../lib/concoursParModule";
@@ -41,8 +42,15 @@ export async function generateMetadata(props) {
   const { c } = await findCours(params.id);
   if (!c || !c.available) return {};
 
-  const title = `${c.module} — Cours ${c.semestre ? `${c.semestre} ` : ""}FSJES par chapitre`;
-  const description = `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}) : ${c.description || ""} Cours, exercices corrigés, résumé et QCM par chapitre.`.trim();
+  const title = fitTitle([
+    `${c.module} — Cours ${c.semestre ? `${c.semestre} ` : ""}FSJES par chapitre`,
+    `${c.module} — Cours ${c.semestre ? `${c.semestre} ` : ""}FSJES`,
+  ]);
+  // c.description fait jusqu'à 300 caractères : la phrase utile d'abord,
+  // bornée à 155 (seoText.js).
+  const description = clampDescription(
+    `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}) : cours, exercices corrigés, résumé et QCM par chapitre. ${c.description || ""}`
+  );
   const url = `${SITE_URL}/cours/${c.id}`;
 
   return {

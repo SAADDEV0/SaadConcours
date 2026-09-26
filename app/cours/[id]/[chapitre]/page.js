@@ -13,6 +13,7 @@ import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref, slugifyTitre } from ".
 import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursParModule";
 import ConcoursLies from "../../../_shared/ConcoursLies";
 import AdSlot from "../../../_shared/AdSlot";
+import { fitTitle, clampDescription } from "../../../_shared/seoText";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -34,7 +35,7 @@ async function findChapitre(id, slug) {
   const { chapitres } = fsjesModule(c);
   const i = chapitres.findIndex((x) => x.slug === slug);
   if (i === -1) return null;
-  return { c, chapitres, i, ch: chapitres[i], prev: chapitres[i - 1] || null, next: chapitres[i + 1] || null };
+  return { c, list, chapitres, i, ch: chapitres[i], prev: chapitres[i - 1] || null, next: chapitres[i + 1] || null };
 }
 
 export async function generateStaticParams() {
@@ -47,16 +48,28 @@ export async function generateStaticParams() {
 }
 
 // Titre de résultat Google : la forme longue (« cours et exercices corrigés »,
-// ce que tapent les étudiants) tant qu'elle reste lisible, sinon la courte.
-function titreSeo(c, ch) {
+// ce que tapent les étudiants) tant qu'elle tient en 65 caractères, puis des
+// formes de plus en plus courtes (voir seoText.js). Un chapitre dont le titre
+// existe aussi dans un autre module (« Les emprunts obligataires » en
+// Comptabilité des sociétés et en Mathématiques financières) garde toujours
+// le nom du module : deux pages ne doivent pas partager un titre.
+function titreSeo(c, ch, list = []) {
   const sem = c.semestre ? ` ${c.semestre}` : "";
-  const long = `${ch.titre} : cours et exercices corrigés — ${c.module}${sem}`;
-  return long.length <= 78 ? long : `${ch.titre} — ${c.module}${sem}`;
+  const partage = list.some((x) => x.available && x.id !== c.id && fsjesModule(x).chapitres.some((k) => k.titre === ch.titre));
+  return fitTitle([
+    `${ch.titre} : cours et exercices corrigés — ${c.module}${sem}`,
+    !partage && `${ch.titre} : cours et exercices corrigés`,
+    `${ch.titre} — ${c.module}${sem}`,
+    !partage && `${ch.titre} : cours et exercices`,
+    partage ? `${ch.titre} — ${c.module}` : ch.titre,
+  ]);
 }
 
 function descriptionSeo(c, ch) {
-  if (ch.description) return ch.description;
-  return `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours, exercices corrigés, résumé et QCM.`;
+  if (ch.description) return clampDescription(ch.description);
+  return clampDescription(
+    `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours, exercices corrigés, résumé et QCM.`
+  );
 }
 
 const ENTITES = { "&amp;": "&", "&#39;": "'", "&quot;": '"', "&lt;": "<", "&gt;": ">" };
@@ -84,16 +97,20 @@ export async function generateMetadata(props) {
   const { id, chapitre } = await props.params;
   const found = await findChapitre(id, chapitre);
   if (!found) return {};
-  const { c, ch } = found;
-  const title = titreSeo(c, ch);
+  const { c, ch, list } = found;
+  const title = titreSeo(c, ch, list);
   const description = descriptionSeo(c, ch);
   const url = `${SITE_URL}${fsjesChapitreHref(c, ch)}`;
+  // L'image de partage du module (app/cours/[id]/opengraph-image.js) : un
+  // openGraph posé ici remplace celui du parent en entier, images comprises,
+  // si bien que les 177 chapitres n'en avaient aucune.
+  const image = { url: `/cours/${c.id}/opengraph-image`, width: 1200, height: 630, alt: `${c.module} — cours SaadConcours` };
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { type: "article", title, description, url },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { type: "article", title, description, url, images: [image] },
+    twitter: { card: "summary_large_image", title, description, images: [image.url] },
   };
 }
 

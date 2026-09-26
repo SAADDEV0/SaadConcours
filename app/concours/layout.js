@@ -6,7 +6,7 @@ export const metadata = {
   // problem, fixed together.
   title: "Sujets de Concours Master Maroc — Corrigés",
   description:
-    "Sujets de concours d'accès aux Masters marocains réellement tombés (FSJES, ENCG) — énoncés complets, scans, corrigés indicatifs et export PDF gratuit.",
+    "Sujets de concours d'accès aux Masters marocains réellement tombés (FSJES, ENCG) : énoncés complets, scans, corrigés indicatifs et PDF gratuit.",
   alternates: { canonical: "/concours" },
   openGraph: { title: "Concours Masters Maroc — Sujets réels avec corrigés", url: "/concours" },
 };

@@ -54,7 +54,7 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 | Cours Bac | `lib/bacContenu/<niveau>/<fichier>.js` (déclarés dans `lib/bacContenu/index.js`) ; surcharges admin dans `public/data/bac.json` | `lib/bacProgramme.js` |
 | Examens nationaux Bac | `lib/bacNationaux.json` (catalogue) + PDF `public/bac/nationaux/<se|sgc|commun>/<matière>/<année>-<session>-<sujet|corrige>.pdf` | `lib/bacNationaux.js` |
 | Évaluations (QCM) | `public/data/quiz.json` | — |
-| Blog | `public/data/blog.json` | `lib/blogTaxonomy.js`, FAQ : `app/_shared/faqSchema.js`, anti-doublon : `lib/blogDuplicates.js` |
+| Blog | `public/data/blog.json` | `lib/blogTaxonomy.js`, anti-doublon : `lib/blogDuplicates.js` |
 | News | `public/data/news.json` (aussi écrit par `scripts/fetch_almaster.py`) | — |
 | Boutique (cahiers Gumroad) | `public/data/boutique.json` + couvertures `public/images/boutique/<id>/` | `lib/boutique.js` |
 
@@ -116,6 +116,20 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   une page de moins de 120 mots ou un lien interne cassé. **Ne pas l'affaiblir pour le faire
   passer** : corriger la page, ou ne pas la générer et retirer les liens qui y mènent.
 
+### 1.7 SEO : règles fixées par l'audit du 2026-09-26
+- Titre ≤ 65 caractères, meta description ≤ 155 : passer par `fitTitle` / `clampDescription`
+  (`app/_shared/seoText.js`) plutôt qu'une chaîne libre. Fiches concours : `app/_shared/concoursSeo.js`
+  (titres et descriptions uniques, calculés sur toute la liste). Blog : champ `seoTitle` quand le
+  titre de l'article dépasse 65 caractères (le H1 garde `title`).
+- Pas de balisage `FAQPage` ni `SearchAction` : Google ne les affiche plus pour ce site. Une FAQ
+  reste une section visible normale.
+- Une page de liste n'envoie au navigateur que les données de ses cartes (`concoursListItem`,
+  `blogListItem`) ; le texte intégral se charge à la demande depuis `/data/*.json`.
+- Une redirection publique va dans `public/_redirects` (301 servi avant le Worker), jamais dans un
+  `redirect()` Next. Le sitemap est publié en fichier statique par `scripts/prerender-to-assets.mjs`.
+- Pages de confiance : `/a-propos` (éditeur : Saad), `/contact`, `/confidentialite`,
+  `/mentions-legales`, toutes liées depuis le pied de page. Les tenir exactes quand le site change.
+
 ---
 
 ## C. CONCOURS
@@ -154,6 +168,9 @@ Règles des champs :
 - `master_reel` : intitulé officiel du master tel qu'écrit sur le sujet.
 - `difficulte` : `"1/5"` à `"5/5"` (jugée sur la longueur, la technicité, le barème négatif).
 - `source` : format `- <site> — <titre de la page> : <url>` ; sujet fourni par moi → `- Lien / origine du sujet : https://saadconcours.space`.
+  **Donnée interne, jamais publiée** (depuis le 2026-09-26) : ni sur la fiche, ni dans le PDF, ni en
+  JSON-LD. Même règle dans le texte : ne pas nommer le site d'origine dans `enonce_md` / `corrige_md`
+  (écrire « une version publiée en ligne », « un corrigé publié en ligne »).
 - `date_ajout` : date du jour.
 - `niveau` : **absent pour un concours de Master** ; `"licence_excellence"` pour un concours d'accès à une
   licence d'excellence (voir [C9](#c9--concours-de-licence-dexcellence)). Source de vérité : `lib/concoursNiveaux.js`.
@@ -524,7 +541,8 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
 {
   "id": "preparer_master_cca_fsjes_agadir_2026_2027",
   "title": "…",
-  "excerpt": "1-2 phrases (≈ 250 caractères) pour la carte et la meta description.",
+  "seoTitle": "(facultatif) titre Google ≤ 65 caractères si title est plus long",
+  "excerpt": "1-2 phrases (≈ 250 caractères) pour la carte ; la meta description en garde 155.",
   "publishedAt": "AAAA-MM-JJ",
   "available": true,
   "category": "facultes",
@@ -542,7 +560,7 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
    format d'épreuve, difficulté, questions recyclées d'une année à l'autre) et donner des chiffres
    (« Comptabilité analytique : 8 sessions sur 8 »). C'est ce qui distingue l'article (AdSense).
 3. Structure : intro sans titre → sections `##` → `## En résumé` → **`## FAQ`** avec des
-   questions en `### …` (alimente le schema FAQPage automatiquement).
+   questions en `### …` (section visible ; plus de balisage FAQPage, voir 1.7).
 4. Maillage interne : liens relatifs vers `/concours/<id>`, `/cours/<id>`, `/evaluation/<id>`,
    `/blog/<id>` — uniquement vers des `id` qui existent.
 5. 1 500 à 3 000 mots, noms réels des facultés et masters (ce que les étudiants recherchent).

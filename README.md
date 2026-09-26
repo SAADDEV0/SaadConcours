@@ -60,8 +60,11 @@ La parade est structurelle : **le site public ne passe pas par le Worker.**
 `next build` prérend les pages en `.html`, et
 `scripts/prerender-to-assets.mjs` les publie dans les assets Cloudflare, servis
 au bord du réseau sans démarrer d'isolate — gratuit, illimité, et incapable par
-construction de rendre une 1102. Le Worker ne garde que `/admin`, `/api/*`, le
-sitemap et les 404.
+construction de rendre une 1102. Le sitemap y est publié aussi (le script refuse
+un sitemap tronqué), et les redirections vivent dans `public/_redirects`, lu par
+Cloudflare avant le Worker — jamais un `redirect()` Next sur une URL publique.
+Le Worker ne garde que `/admin`, `/api/*`, les images de partage
+(`opengraph-image`) et les 404.
 
 En pratique, quand tu touches à une page publique :
 

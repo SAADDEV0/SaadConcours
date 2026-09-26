@@ -16,9 +16,31 @@ export function escapeHtml(s) {
 // Teinte de la carte par grande famille de filières (lib/taxonomy.js).
 export const CONCOURS_HUES = { FCA: 152, MRH: 22, MCL: 330, EAPP: 210, EDMQ: 265 };
 
+// Ce que lisent une carte et les filtres de /concours, et rien d'autre. La
+// liste complète (énoncés et corrigés) partait dans le HTML de /concours pour
+// hydrater ConcoursExplorer : 3,9 Mo de page. ConcoursExplorer charge
+// désormais le texte des sujets à la demande (recherche dans les énoncés,
+// PDF) depuis /data/concours.json, fichier statique.
+export function concoursListItem(c) {
+  return {
+    id: c.id,
+    annee: c.annee,
+    ville: c.ville,
+    etablissement: c.etablissement,
+    filiere: c.filiere,
+    master_reel: c.master_reel,
+    categorie: c.categorie,
+    modules: c.modules,
+    difficulte: c.difficulte,
+    ...(c.niveau ? { niveau: c.niveau } : {}),
+    hasImg: (c.images || []).length > 0,
+    hasCorrige: Boolean(c.corrige_md || c.corrige_from_github),
+  };
+}
+
 export function concoursCardHtml(c) {
-  const hasImg = (c.images || []).length > 0;
-  const hasCorrige = Boolean(c.corrige_md || c.corrige_from_github);
+  const hasImg = c.hasImg ?? (c.images || []).length > 0;
+  const hasCorrige = c.hasCorrige ?? Boolean(c.corrige_md || c.corrige_from_github);
   const masterLabel = c.master_reel || c.filiere || `${c.etablissement} — ${c.ville} — ${c.annee}`;
   const hue = CONCOURS_HUES[c.categorie] ?? 220;
   const modules = c.modules || [];

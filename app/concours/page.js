@@ -1,4 +1,4 @@
-import { getPublicConcours } from "@/lib/store";
+import { getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
@@ -24,13 +24,18 @@ export const revalidate = false;
 // the full list of concours — real <a href="/concours/[id]"> links and text —
 // is already in the raw HTML for crawlers. ConcoursExplorer then hydrates on
 // top to power the filters/search without wiping this initial markup unless
-// the visitor actually filters (or lands with a ?q= from the sitelinks
-// search box, see app/layout.js's WebSite/SearchAction JSON-LD).
+// the visitor actually filters (or lands with a ?q= link).
 export default async function ConcoursPage() {
   const tous = await getPublicConcours().catch(() => []);
+  // Un corrigé peut n'exister qu'en fichier (public/data/corriges/<id>.md) :
+  // sans ce drapeau, la carte n'affichait pas « Corrigé » et le compteur du
+  // haut de page oubliait ces sujets.
+  const corrigeIds = getCorrigeIdsLocal();
   // Les concours de licence d'excellence ont leur propre page
   // (/concours/licence-excellence) : celle-ci ne liste que le Master.
-  const concours = tous.filter((c) => !isLicenceExcellence(c));
+  const concours = tous
+    .filter((c) => !isLicenceExcellence(c))
+    .map((c) => (!c.corrige_md && corrigeIds.has(c.id) ? { ...c, corrige_from_github: true } : c));
   const nbLicence = tous.length - concours.length;
   const nbEtabs = new Set(concours.map((c) => c.etablissement).filter(Boolean)).size;
   const nbVilles = new Set(concours.map((c) => c.ville).filter(Boolean)).size;

@@ -19,9 +19,23 @@ export function readingTimeMinutes(content) {
 // Teinte par catégorie, pour garder le même code couleur que les cours.
 const BLOG_HUES = { facultes: 220, matieres: 152, comparatifs: 265, methode: 42 };
 
+// Ce que lisent une carte et les filtres de /blog. Le texte intégral des
+// articles (517 Ko de page) n'est plus envoyé : BlogExplorer le charge à la
+// première recherche depuis /data/blog.json, fichier statique.
+export function blogListItem(post) {
+  return {
+    id: post.id,
+    title: post.title,
+    excerpt: post.excerpt,
+    category: post.category,
+    publishedAt: post.publishedAt,
+    minutes: readingTimeMinutes(post.content),
+  };
+}
+
 export function blogCardHtml(post) {
   const cat = categoryInfo(post.category);
-  const minutes = readingTimeMinutes(post.content);
+  const minutes = post.minutes ?? readingTimeMinutes(post.content);
   const hue = BLOG_HUES[post.category] ?? 220;
   return `
   <a class="bac-mat-card sp-card" href="/blog/${encodeURIComponent(post.id)}" data-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || "")}" style="--mat-h:${hue}">

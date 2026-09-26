@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getPublicConcours, getCorrigeFile, getSettings } from "@/lib/store";
+import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
 import { CONCOURS_HUES } from "../../_shared/concoursCard";
 import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
-import { faqJsonLd } from "../../_shared/faqSchema";
+import { concoursSeo } from "../../_shared/concoursSeo";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 import MathScripts from "../../_shared/MathScripts";
@@ -55,75 +55,14 @@ async function resolveCorrigeMd(c) {
   return c.corrige_md || (await getCorrigeFile(c.id));
 }
 
-// SEO-facing title (browser tab, <title>, OpenGraph/Twitter, JSON-LD name)
-// leads with the real master name — the keyword a prospective student
-// actually searches for — but keeps établissement/ville/année so pages
-// stay distinguishable in search results even when several concours share
-// the same master_reel (e.g. "Comptabilité, Contrôle et Audit (CCA)" alone
-// is on 8 different concours). The on-page H1 drops the étab/ville/année
-// suffix entirely — see ConcoursDetailPage below — since cd-tags right
-// underneath already shows those details individually.
-//
-// Tourné comme la recherche d'un étudiant (« concours master cca fsjes
-// settat 2015 corrigé ») depuis septembre 2026 : l'ancien titre
-// « CCA — Concours FSJES Settat, Settat 2015 » n'avait ni « master » ni
-// « corrigé », et répétait la ville.
-const sansAccents = (s) =>
-  String(s || "")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase();
-
-function seoTitle(c, hasCorrige = false) {
-  const niveau = isLicenceExcellence(c) ? "Licence d'excellence" : "Master";
-  // « Master Management Logistique… » ou « Licence parcours d'excellence … » :
-  // le niveau est déjà dans « Concours Master » / « Concours Licence d'excellence ».
-  let masterLabel = (c.master_reel || c.filiere || "").replace(/^(master|licence( parcours)?( d'excellence)?)\s+/i, "");
-  // Épreuve commune à plusieurs masters : la liste complète (jusqu'à 300
-  // caractères) reste sur la page, le titre dit seulement combien.
-  const communs = masterLabel.split(" / ");
-  const precision = communs.length > 1 ? ` (épreuve commune à ${communs.length} masters)` : "";
-  if (precision) masterLabel = "";
-  const etab = c.etablissement || "";
-  const lieu = c.ville && !sansAccents(etab).includes(sansAccents(c.ville)) ? `${etab} ${c.ville}` : etab;
-  const annee = /^\d{4}$/.test(String(c.annee)) ? ` ${c.annee}` : "";
-  return `Concours ${niveau} ${masterLabel ? `${masterLabel} ` : ""}${lieu}${annee}${precision} : ${hasCorrige ? "sujet et corrigé" : "sujet"}`;
-}
-
-// Plain-text Q&A generated from fields already shown on the page (tags,
-// corrigé badge, difficulté) — kept in sync with what's visible so the
-// FAQPage schema below never markets content the page doesn't actually show.
-function buildConcoursFaq(c, hasCorrige) {
-  const masterLabel = c.master_reel || c.filiere;
-  const faqs = [];
-
-  if (c.modules && c.modules.length) {
-    faqs.push({
-      question: `Quelles sont les matières du concours ${masterLabel ? masterLabel + " " : ""}à ${c.etablissement} (${c.annee}) ?`,
-      answer: `Les épreuves portent sur : ${c.modules.join(", ")}.`,
-    });
-  }
-
-  faqs.push({
-    question: "Un corrigé est-il disponible pour ce sujet ?",
-    answer: hasCorrige
-      ? "Oui, un corrigé indicatif est disponible sur cette page — vérifie les calculs avant de t'y fier pour réviser, la relecture humaine n'est pas garantie."
-      : "Pas encore pour ce sujet précis — l'énoncé complet reste disponible gratuitement, et un corrigé pourra être ajouté ultérieurement.",
-  });
-
-  faqs.push({
-    question: "Ce sujet de concours est-il gratuit ?",
-    answer: "Oui, l'énoncé complet est consultable en ligne et téléchargeable en PDF gratuitement sur SaadConcours, sans inscription.",
-  });
-
-  if (c.difficulte) {
-    faqs.push({
-      question: "Quel est le niveau de difficulté de ce concours ?",
-      answer: `Ce sujet est classé avec une difficulté de ${c.difficulte} sur notre échelle, à titre indicatif.`,
-    });
-  }
-
-  return faqs;
+// Titre et description : voir app/_shared/concoursSeo.js (tenir en 65 / 155
+// caractères, jamais deux fiches identiques). Le H1 de la page garde le nom
+// complet du master, sans établissement ni année : les pastilles juste en
+// dessous les affichent déjà.
+async function seoDe(c, list) {
+  const corrigeIds = getCorrigeIdsLocal();
+  for (const x of list) if ((x.corrige_md || "").trim()) corrigeIds.add(x.id);
+  return concoursSeo(list, c, corrigeIds);
 }
 
 // breaks: true because an énoncé is a transcribed exam paper, not prose — its
@@ -132,22 +71,23 @@ function buildConcoursFaq(c, hasCorrige) {
 // into one wrapped paragraph. Safe here specifically because formatQCM has
 // already pulled the answer choices out onto bullet lines, and nothing left in
 // the corpus is soft-wrapped mid-sentence.
+//
+// Un énoncé ou un corrigé qui titre ses parties en « # » produisait des <h1>
+// en plus du titre de la page (jusqu'à 5 sur une fiche). Il est rangé sous le
+// <h2> de sa carte (« Énoncé », « Corrigé ») : ses titres descendent de deux
+// niveaux, h1 → h3, h2 → h4… Les documents sans « # » ne changent pas.
 function renderEnonce(md) {
-  return markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
+  const html = markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
+  if (!/<h1[\s>]/.test(html)) return html;
+  return html.replace(/<(\/?)h([1-6])(?=[\s>])/g, (m, fin, n) => `<${fin}h${Math.min(6, Number(n) + 2)}`);
 }
 
 export async function generateMetadata(props) {
   const params = await props.params;
-  const { c } = await findConcours(params.id);
+  const { c, list } = await findConcours(params.id);
   if (!c) return {};
 
-  const corrigeMd = await resolveCorrigeMd(c);
-  const masterLabel = c.master_reel || c.filiere;
-  const title = seoTitle(c, Boolean(corrigeMd));
-  const intro = isLicenceExcellence(c) ? "Sujet réel de concours d'accès à la licence d'excellence" : "Sujet de concours réel";
-  const description = `${intro} — ${c.etablissement}, ${c.ville}, session ${c.annee}${
-    masterLabel ? `, filière ${masterLabel}` : ""
-  }.${corrigeMd ? " Corrigé indicatif disponible." : ""} Énoncé complet et téléchargement PDF gratuit sur SaadConcours.`;
+  const { title, description } = await seoDe(c, list);
   const url = `${SITE_URL}/concours/${c.id}`;
 
   return {
@@ -202,30 +142,27 @@ export default async function ConcoursDetailPage(props) {
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
   const hasImages = Boolean(c.images && c.images.length > 0);
-  const hasSource = Boolean(c.source);
+  // La source d'un sujet (c.source) reste dans concours.json pour la console,
+  // mais n'est plus publiée depuis le 2026-09-26 : ni section « Source », ni
+  // ligne dans le PDF, ni isBasedOn — et elle est retirée des props des
+  // composants client, sinon elle ressortirait dans le HTML (données RSC).
+  // eslint-disable-next-line no-unused-vars
+  const { source, ...publique } = c;
   // corrige_md merged in so the PDF (top button + bottom actions) includes
   // the corrigé even when it only exists as a raw file, not on c itself.
-  const fullConcours = corrigeMd ? { ...c, corrige_md: corrigeMd } : c;
-
-  // c.source is free text ("- Lien / origine du sujet : https://...") in
-  // some entries, not always a bare URL — schema.org's isBasedOn expects a
-  // URL or CreativeWork, so only include it when we can pull a clean one
-  // out, rather than emitting structured data Google would flag invalid.
-  const sourceUrlMatch = (c.source || "").match(/https?:\/\/\S+/);
+  const fullConcours = corrigeMd ? { ...publique, corrige_md: corrigeMd } : publique;
+  const { title } = await seoDe(c, list);
 
   const niveau = niveauInfo(niveauOf(c));
-  const faqs = buildConcoursFaq(c, Boolean(corrigeHtml));
-  const faqLd = faqJsonLd(faqs);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    name: seoTitle(c, Boolean(corrigeMd)),
+    name: title,
     description: `Sujet de concours ${masterLabel || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
     url,
     educationalLevel: isLicenceExcellence(c) ? "Licence" : "Master",
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
-    ...(sourceUrlMatch ? { isBasedOn: sourceUrlMatch[0] } : {}),
   };
 
   const breadcrumbJsonLd = {
@@ -251,13 +188,6 @@ export default async function ConcoursDetailPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {faqLd && (
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-        />
-      )}
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: isLicenceExcellence(c) ? "concours-le" : "concours", showSearch: false, rails: true }) }} />
 
       <div className="bac-space site-space" style={{ "--mat-h": CONCOURS_HUES[c.categorie] ?? 220 }}>
@@ -284,9 +214,21 @@ export default async function ConcoursDetailPage(props) {
             {c.difficulte && <span className="bac-stat">⭐ {c.difficulte}</span>}
             {corrigeMd && <span className="bac-dispo">✅ Corrigé disponible</span>}
           </div>
+          {c.modules?.length > 0 && (
+            <p className="sp-chips sp-detail-modules">
+              <span className="sp-detail-modules-label">Matières :</span>
+              {c.modules.map((m) => (
+                <span key={m} className="bac-res-chip on">
+                  {m}
+                </span>
+              ))}
+            </p>
+          )}
           <div className="sp-hero-actions cd-head-actions">
             <DownloadPdfButton concours={fullConcours} />
-            <ShareButton concours={c} />
+            <ShareButton
+              concours={{ master_reel: c.master_reel, filiere: c.filiere, etablissement: c.etablissement, ville: c.ville, annee: c.annee }}
+            />
           </div>
         </div>
 
@@ -294,7 +236,6 @@ export default async function ConcoursDetailPage(props) {
           <a className="bac-tab-label" href="#section-enonce">📝 Énoncé</a>
           {corrigeHtml && <a className="bac-tab-label" href="#section-corrige">✅ Corrigé</a>}
           {hasImages && <a className="bac-tab-label" href="#section-images">🖼️ Extraits</a>}
-          {hasSource && <a className="bac-tab-label" href="#section-source">🔗 Source</a>}
         </nav>
 
         <div className="cd-card" id="section-enonce">
@@ -340,28 +281,13 @@ export default async function ConcoursDetailPage(props) {
           label="Publicité — bas de page"
         />
 
-        {hasSource && (
-          <div className="cd-card" id="section-source">
-            <h2>Source</h2>
-            <p className="cd-source">
-              <a href={c.source} target="_blank" rel="noopener noreferrer">{c.source}</a>
-            </p>
-          </div>
-        )}
+        <ConcoursDetailClient concours={{ id: c.id }} />
 
-        <ConcoursDetailClient concours={fullConcours} />
-
-        {faqs.length > 0 && (
-          <div className="cd-card">
-            <h2>Questions fréquentes</h2>
-            {faqs.map((f) => (
-              <div key={f.question} className="faq-item">
-                <h3 className="faq-question">{f.question}</h3>
-                <p className="faq-answer">{f.answer}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Plus de bloc « Questions fréquentes » : c'étaient les mêmes
+           questions génériques (« Ce sujet est-il gratuit ? ») sur chaque
+           fiche, là pour alimenter un balisage FAQPage que Google n'affiche
+           plus hors sites officiels et de santé depuis 2023. Les matières et
+           la difficulté sont affichées dans l'en-tête de la fiche. */}
 
         {related.length > 0 && (
           <section className="bac-group">

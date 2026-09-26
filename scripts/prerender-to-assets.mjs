@@ -39,23 +39,26 @@
 //   on ne s'en remet pas à ça : /admin et /api sont exclus explicitement, et
 //   le script échoue si une telle route se présente.
 
-// POURQUOI SEULEMENT LE .html, ET SURTOUT PAS LE SITEMAP
+// LE SITEMAP, AVEC UN GARDE-FOU
 //   next build produit aussi le corps des route handlers (sitemap.xml.body,
-//   manifest.webmanifest.body, opengraph-image.body...). Il serait tentant de
-//   les publier de la même façon. Ne le faites pas pour le sitemap : mesuré le
-//   2026-09-21, .next/server/app/sitemap.xml.body ne contient que 8 <loc>
-//   quand la production en sert 338. C'est le repli décrit dans
-//   .github/workflows/deploy-cloudflare.yml — le sitemap se réduit aux routes
-//   statiques quand la récupération des données n'a pas lieu au build. Le
-//   publier en asset remplacerait un sitemap de 338 URL par un de 8, en
-//   silence et avec un code 200 : la pire façon de perdre le référencement
-//   d'un site qui vit du trafic de recherche. Il reste donc servi par le
-//   Worker, où il est construit avec les vraies données.
+//   manifest.webmanifest.body, opengraph-image.body...). Le 2026-09-21, le
+//   sitemap.xml.body du build ne contenait que 8 <loc> : les données n'étaient
+//   pas lues au build, et le sitemap restait donc servi par le Worker, qui le
+//   construisait avec les vraies données.
 //
-//   Les images (opengraph-image, icon, apple-icon) sont écartées pour une
-//   autre raison : leurs routes n'ont pas d'extension de fichier, donc servies
-//   en asset elles perdraient leur Content-Type image/png et les crawlers
-//   sociaux les rejetteraient.
+//   Ce n'est plus le cas : toutes les fiches (concours, cours, blog, Bac) sont
+//   prérendues au build à partir des données, et le sitemap du build les liste
+//   toutes (651 <loc> le 2026-09-26). Servi par le Worker, il coûtait 1,8 s et
+//   pouvait rendre une Error 1102 à Googlebot sur un isolate froid. Il est donc
+//   publié en asset — mais seulement s'il couvre au moins 90 % des pages
+//   publiées ci-dessous : un sitemap réduit aux routes statiques (le cas de
+//   2026-09-21) fait échouer le déploiement au lieu de remplacer en silence
+//   des centaines d'URL par huit, avec un code 200.
+//
+//   Les images (opengraph-image, icon, apple-icon) restent écartées : leurs
+//   routes n'ont pas d'extension de fichier, donc servies en asset elles
+//   perdraient leur Content-Type image/png et les crawlers sociaux les
+//   rejetteraient.
 
 import { readFile, mkdir, copyFile, access } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -130,3 +133,18 @@ if (copied === 0) {
       `sans ce transfert, chaque page vue redevient une invocation de Worker et les 1102 reviennent.`,
   );
 }
+
+// Sitemap (voir « LE SITEMAP, AVEC UN GARDE-FOU » en tête de fichier). Les
+// pages publiées incluent quelques pages absentes du sitemap à dessein
+// (boutique vide en noindex, redirections) : d'où la marge de 10 %.
+const sitemapSrc = join(APP_DIR, "sitemap.xml.body");
+const sitemap = await readFile(sitemapSrc, "utf8").catch(() => "");
+const nbUrls = (sitemap.match(/<loc>/g) || []).length;
+if (nbUrls < copied * 0.9) {
+  throw new Error(
+    `Sitemap du build incomplet : ${nbUrls} URL pour ${copied} pages publiées (${sitemapSrc}). ` +
+      `Les données n'ont sans doute pas été lues au build — le publier remplacerait le sitemap par une version tronquée.`,
+  );
+}
+await copyFile(sitemapSrc, join(ASSETS_DIR, "sitemap.xml"));
+console.log(`  sitemap.xml publié en asset statique (${nbUrls} URL)`);

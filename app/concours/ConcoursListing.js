@@ -1,4 +1,4 @@
-import { concoursCardHtml } from "../_shared/concoursCard";
+import { concoursCardHtml, concoursListItem } from "../_shared/concoursCard";
 import ConcoursExplorer from "./ConcoursExplorer";
 
 // Filtres + grille de cartes, communs aux deux pages de liste (/concours pour
@@ -100,7 +100,8 @@ export default function ConcoursListing({ concours, gridTitle = "Tous les sujets
         <span className="sp-filter-badge" hidden />
       </button>
 
-      <ConcoursExplorer initialData={concours} />
+      {/* Données des cartes seulement : voir concoursListItem. */}
+      <ConcoursExplorer initialData={concours.map(concoursListItem)} />
     </>
   );
 }

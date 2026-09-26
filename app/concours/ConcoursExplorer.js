@@ -19,6 +19,28 @@ export default function ConcoursExplorer({ initialData }) {
 
     const $ = (sel) => document.querySelector(sel);
 
+    // initialData ne porte que les données des cartes (concoursListItem) :
+    // le texte des sujets (énoncé, notions clés) n'est chargé qu'à la
+    // première recherche ou au premier PDF, depuis le fichier statique que
+    // Cloudflare sert sans invoquer le Worker (~1 Mo compressé, une fois).
+    let fullById = null;
+    let fullPromise = null;
+    function loadFull() {
+      if (!fullPromise) {
+        fullPromise = fetch("/data/concours.json")
+          .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+          .then((list) => {
+            fullById = new Map(list.map((c) => [c.id, c]));
+            return fullById;
+          })
+          .catch(() => {
+            fullPromise = null;
+            return null;
+          });
+      }
+      return fullPromise;
+    }
+
     // Debounced: only reports a search term once the visitor has paused
     // typing (~1s), so a term is tallied once per real search, not once per
     // keystroke while it's still being composed. See lib/analytics.js
@@ -166,12 +188,14 @@ export default function ConcoursExplorer({ initialData }) {
         const btn = card.querySelector(".card-dl");
         if (!btn || btn.dataset.wired === "1") return;
         btn.dataset.wired = "1";
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", async (e) => {
           e.preventDefault();
           e.stopPropagation();
           const id = card.dataset.id;
-          const c = ALL.find((x) => x.id === id);
+          const c = (await loadFull())?.get(id);
+          // Fichier injoignable : la fiche du sujet a son propre bouton PDF.
           if (c) downloadConcoursPdf(c);
+          else window.location.href = `/concours/${encodeURIComponent(id)}`;
         });
       });
     }
@@ -226,8 +250,9 @@ export default function ConcoursExplorer({ initialData }) {
           if (!(c.modules || []).some((m) => normalizeModuleKey(m) === key)) return false;
         }
         if (q) {
+          const full = fullById?.get(c.id);
           const hay = searchNormalize(
-            [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, c.notions_cles, c.enonce_md, (c.modules || []).join(" ")].join(" ")
+            [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, full?.notions_cles, full?.enonce_md, (c.modules || []).join(" ")].join(" ")
           );
           const tokens = searchTokens(q);
           if (!tokens.every((t) => hay.includes(t))) return false;
@@ -237,7 +262,17 @@ export default function ConcoursExplorer({ initialData }) {
 
       renderGrid();
 
-      if (q.length >= 2 && filtered.length === 0) reportSearchMissDebounced(q);
+      // Premier mot tapé : les résultats sur les métadonnées s'affichent tout
+      // de suite, puis la recherche repasse dans les énoncés une fois chargés.
+      if (q && !fullById) {
+        loadFull().then((loaded) => {
+          if (loaded && $("#searchInput").value.trim()) applyFilters();
+        });
+      }
+
+      // Un « aucun résultat » n'est compté qu'une fois les énoncés fouillés,
+      // sinon il signalerait comme absent un sujet qui est dans la base.
+      if (q.length >= 2 && filtered.length === 0 && fullById) reportSearchMissDebounced(q);
       else clearTimeout(searchMissTimer);
     }
 
@@ -321,8 +356,8 @@ export default function ConcoursExplorer({ initialData }) {
     const statPill = document.getElementById("statPill");
     if (statPill) statPill.textContent = `${ALL.length} concours`;
 
-    // Prefills from ?q= so a direct link (e.g. Google's sitelinks search
-    // box) lands on filtered results instead of the full list.
+    // Prefills from ?q= so a direct link lands on filtered results instead
+    // of the full list.
     const q = new URLSearchParams(window.location.search).get("q");
     if (q) {
       $("#searchInput").value = q;

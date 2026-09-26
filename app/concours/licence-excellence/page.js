@@ -1,7 +1,6 @@
-import { getPublicConcours } from "@/lib/store";
+import { getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
-import { faqJsonLd } from "../../_shared/faqSchema";
 import JsonLd from "../../_shared/JsonLd";
 import ConcoursNiveauSwitch from "../../_shared/ConcoursNiveauSwitch";
 import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
@@ -17,9 +16,10 @@ const PATH = "/concours/licence-excellence";
 export const metadata = {
   title: "Concours Licence d'Excellence — Sujets réels",
   description:
-    "Sujets réels des concours d'accès aux licences d'excellence en économie et gestion (FSJES, FP, EST) : QCM et épreuves écrites avec corrigés indicatifs, accès en S5 après le DEUG.",
+    "Sujets réels des concours d'accès aux licences d'excellence en économie et gestion (FSJES, FP, EST) : QCM et épreuves écrites avec corrigés indicatifs.",
   alternates: { canonical: PATH },
-  openGraph: { title: "Concours Licence d'Excellence Maroc — Sujets avec corrigés", url: PATH },
+  // Un openGraph posé ici remplace celui de la racine, image comprise.
+  openGraph: { title: "Concours Licence d'Excellence Maroc — Sujets avec corrigés", url: PATH, images: ["/opengraph-image"] },
 };
 
 // Nombre de questions de QCM d'un énoncé : la plus grande « **Question N :** ».
@@ -67,7 +67,11 @@ function buildFaq({ total, nbQcm, etabs, qcmRange }) {
 
 export default async function LicenceExcellencePage() {
   const tous = await getPublicConcours().catch(() => []);
-  const concours = tous.filter(isLicenceExcellence);
+  // Corrigés présents seulement en fichier : même drapeau que sur /concours.
+  const corrigeIds = getCorrigeIdsLocal();
+  const concours = tous
+    .filter(isLicenceExcellence)
+    .map((c) => (!c.corrige_md && corrigeIds.has(c.id) ? { ...c, corrige_from_github: true } : c));
   const nbMaster = tous.length - concours.length;
   const etabs = [...new Set(concours.map((c) => c.etablissement).filter(Boolean))].sort((a, b) => a.localeCompare(b, "fr"));
   const nbEtabs = etabs.length;
@@ -98,7 +102,8 @@ export default async function LicenceExcellencePage() {
               path: `/concours/${encodeURIComponent(c.id)}`,
             })),
           }),
-          faqJsonLd(faqs),
+          // Pas de balisage FAQPage : Google ne l'affiche plus que pour les
+          // sites officiels et de santé (2023). La FAQ reste lisible sur la page.
         ].filter(Boolean)}
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours-le", showSearch: true }) }} />

@@ -9,9 +9,10 @@ import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservation
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
-const SITE_TITLE = "SaadConcours — Cours Bac, Licence FSJES et concours Master au Maroc";
+// ≤ 65 et ≤ 155 caractères : voir app/_shared/seoText.js.
+const SITE_TITLE = "SaadConcours — Cours Bac, FSJES et concours Master au Maroc";
 const SITE_DESCRIPTION =
-  "Cours gratuits du Bac Sciences Économiques et Gestion et de la Licence FSJES (S1 à S6), chapitre par chapitre avec exercices corrigés, résumés et QCM, et base de sujets réels de concours d'accès aux Masters économie-gestion au Maroc.";
+  "Cours gratuits du Bac SEG et de la Licence FSJES (S1 à S6) avec exercices corrigés et QCM, et sujets réels des concours Master au Maroc avec corrigés.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -65,19 +66,15 @@ const ORG_JSON_LD = {
   areaServed: { "@type": "Country", name: "Maroc" },
 };
 
-// Lets Google show a search box directly in the SERP for site: queries
-// ("sitelinks search box") — target actually works, see the ?q= handling
-// added to app/concours/page.js.
+// Nom du site affiché par Google au-dessus des résultats. Plus de
+// potentialAction/SearchAction : Google a retiré la « sitelinks search box »
+// en novembre 2024 et n'en lit plus le balisage. Le ?q= de /concours
+// (ConcoursExplorer.js) reste utilisable dans un lien.
 const WEBSITE_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE_NAME,
   url: SITE_URL,
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${SITE_URL}/concours?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
 };
 
 export default async function RootLayout({ children }) {

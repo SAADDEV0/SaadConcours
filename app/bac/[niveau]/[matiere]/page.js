@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import ChromeInit from "../../../_shared/ChromeInit";
+import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { getBacMatiereEffectif } from "../../../../lib/bacContenuEffectif";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
 import { NATIONAL_SOURCES, bacNationauxSeries, bacNationalPdf, bacNationalDocLabel } from "../../../../lib/bacNationaux";
@@ -21,8 +22,8 @@ export async function generateMetadata(props) {
   const niv = bacNiveauInfo(niveau);
   if (!m || !niv?.available) return {};
   return {
-    title: `${m.nom} — ${niv.label} Sciences Économiques`,
-    description: `${m.nom} ${niv.label} : ${m.description}`,
+    title: fitTitle([`${m.nom} — ${niv.label} Sciences Économiques`, `${m.nom} — ${niv.label}`]),
+    description: clampDescription(`${m.nom} ${niv.label} : ${m.description}`),
     alternates: { canonical: `/bac/${niveau}/${matiere}` },
   };
 }

@@ -3,6 +3,7 @@ import { marked } from "marked";
 import { chromeHtml, footerHtml } from "../../../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../../../_shared/mathMarkdown";
 import MathScripts from "../../../../_shared/MathScripts";
+import { fitTitle, clampDescription } from "../../../../_shared/seoText";
 import BacQcm from "../../../BacQcm";
 import BacChapitreClient from "../../../BacChapitreClient";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, findBacChapitre, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../../lib/bacProgramme";
@@ -40,8 +41,9 @@ export async function generateMetadata(props) {
   const found = m && findBacChapitre(m, chapitre);
   if (!found) return {};
   const niv = bacNiveauInfo(niveau);
-  const title = `${found.chapitre.titre} — ${m.court} ${niv.label}`;
-  const description = `${m.nom} ${niv.label} : ${found.chapitre.titre}. Cours, exercices corrigés, résumé et QCM.`;
+  const t = found.chapitre.titre;
+  const title = fitTitle([`${t} — ${m.court} ${niv.label}`, `${t} — ${niv.label}`, t]);
+  const description = clampDescription(`${m.nom} ${niv.label} : ${t}. Cours, exercices corrigés, résumé et QCM.`);
   return {
     title,
     description,

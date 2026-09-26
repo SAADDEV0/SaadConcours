@@ -439,6 +439,8 @@ const blog = {
       title: "Article",
       fields: [
         { key: "title", label: "Titre", type: "text", required: true, full: true, counter: [40, 65] },
+        // Résultat Google seulement (app/blog/[id]/page.js) ; le H1 garde le titre.
+        { key: "seoTitle", label: "Titre Google (si le titre dépasse 65 caractères)", type: "text", full: true, counter: [40, 65] },
         { key: "excerpt", label: "Résumé (description SEO)", type: "textarea", rows: 2, required: true, full: true, counter: [120, 160] },
         { key: "category", label: "Rubrique", type: "select", options: BLOG_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })) },
         { key: "publishedAt", label: "Date de publication", type: "date" },
@@ -456,7 +458,10 @@ const blog = {
     const words = wordCount(b.content);
     return checks([
       [b.title, "Titre", "red"],
-      [b.title && b.title.length <= 70, `Titre de 70 caractères max (${(b.title || "").length})`],
+      [
+        (b.seoTitle || b.title || "").length <= 65,
+        `Titre Google de 65 caractères max (${(b.seoTitle || b.title || "").length}) : sinon remplir « Titre Google »`,
+      ],
       [b.excerpt && b.excerpt.length >= 110 && b.excerpt.length <= 170, `Résumé SEO entre 110 et 170 caractères (${(b.excerpt || "").length})`],
       [words >= 600, `Au moins 600 mots (${words})`],
       [(String(b.content || "").match(/^## /gm) || []).length >= 2, "Structuré en sections « ## »"],

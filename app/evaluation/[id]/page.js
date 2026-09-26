@@ -3,6 +3,7 @@ import { getAllQuiz } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { evalModuleStyle } from "../../_shared/evalCard";
 import EvaluationDetailClient from "./EvaluationDetailClient";
+import { fitTitle, clampDescription } from "../../_shared/seoText";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -24,10 +25,17 @@ export async function generateMetadata(props) {
 
   const nb = (q.questions || []).length;
 
-  const title = `${q.title} — QCM ${q.module} (${nb} questions)`;
-  const description =
+  // q.title (« Concours Blanc — Audit (100 Questions) ») répétait déjà le
+  // module et le nombre de questions : 82 à 102 caractères.
+  const title = fitTitle([
+    `QCM ${q.module} : ${nb} questions corrigées (concours blanc)`,
+    `QCM ${q.module} : ${nb} questions corrigées`,
+    `QCM ${q.module} (${nb} questions)`,
+  ]);
+  const description = clampDescription(
     q.description ||
-    `QCM d'auto-évaluation — ${q.module} : ${nb} questions corrigées et commentées pour t'entraîner avant les concours de Master au Maroc.`;
+      `QCM d'auto-évaluation — ${q.module} : ${nb} questions corrigées et commentées pour t'entraîner avant les concours de Master au Maroc.`
+  );
   const url = `${SITE_URL}/evaluation/${q.id}`;
 
   return {

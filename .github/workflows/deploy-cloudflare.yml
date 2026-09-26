@@ -110,12 +110,13 @@ jobs:
             echo "  /$path -> $code"
             [ "$code" = "200" ] || { echo "FAILED: /$path returned $code"; exit 1; }
           done
-          # The sitemap collapses to 8 static routes when the data fetch fails,
-          # so its size is a cheap proof that the deployed Worker can actually
-          # reach GitHub at runtime.
+          # The sitemap collapses to 8 static routes when the data fetch fails.
+          # Since 2026-09-26 it is published as a static asset from the build
+          # (scripts/prerender-to-assets.mjs refuses a truncated one), so its
+          # size here proves the deployed file is the full one.
           urls=$(curl -s --max-time 60 "https://www.saadconcours.space/sitemap.xml" | grep -c "<loc>")
           echo "  sitemap urls -> $urls"
-          [ "$urls" -gt 50 ] || { echo "FAILED: sitemap has only $urls urls, runtime data fetch is broken"; exit 1; }
+          [ "$urls" -gt 50 ] || { echo "FAILED: sitemap has only $urls urls"; exit 1; }
 
       # LE GARDE-FOU QUI EMPÊCHE L'ERROR 1102 DE REVENIR
       #
@@ -145,7 +146,7 @@ jobs:
         run: |
           set -e
           fail=0
-          for path in "" "concours" "cours" "bac/2bac" "blog" "faq" "evaluation" "a-propos"; do
+          for path in "" "concours" "cours" "bac/2bac" "blog" "faq" "evaluation" "a-propos" "sitemap.xml"; do
             ok=0
             for attempt in 1 2 3 4 5 6; do
               hdr=$(curl -s -o /dev/null -D - --max-time 60 \

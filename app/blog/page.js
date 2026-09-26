@@ -2,7 +2,7 @@ import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
 import BlogExplorer from "./BlogExplorer";
-import { blogCardHtml } from "../_shared/blogCard";
+import { blogCardHtml, blogListItem } from "../_shared/blogCard";
 import { BLOG_CATEGORIES } from "../../lib/blogTaxonomy";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
@@ -72,7 +72,7 @@ export default async function BlogPage() {
       />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", showSearch: false }) }} />
       <ChromeInit />
-      <BlogExplorer initialData={posts} />
+      <BlogExplorer initialData={posts.map(blogListItem)} />
 
       <div className="bac-space site-space">
         <div className="bac-wrap">

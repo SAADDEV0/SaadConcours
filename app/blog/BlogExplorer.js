@@ -22,6 +22,27 @@ export default function BlogExplorer({ initialData }) {
 
     const $ = (sel) => document.querySelector(sel);
 
+    // initialData ne porte que les cartes (blogListItem) : le texte des
+    // articles n'est chargé qu'à la première recherche, depuis le fichier
+    // statique servi par Cloudflare.
+    let contentById = null;
+    let contentPromise = null;
+    function loadContent() {
+      if (!contentPromise) {
+        contentPromise = fetch("/data/blog.json")
+          .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+          .then((list) => {
+            contentById = new Map(list.map((p) => [p.id, p.content || ""]));
+            return contentById;
+          })
+          .catch(() => {
+            contentPromise = null;
+            return null;
+          });
+      }
+      return contentPromise;
+    }
+
     function renderPagination() {
       const pager = $("#blogPagination");
       if (!pager) return;
@@ -80,7 +101,7 @@ export default function BlogExplorer({ initialData }) {
       filtered = ALL.filter((p) => {
         if (activeCategory && p.category !== activeCategory) return false;
         if (q) {
-          const hay = [p.title, p.excerpt, p.content].join(" ").toLowerCase();
+          const hay = [p.title, p.excerpt, contentById?.get(p.id)].join(" ").toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
@@ -88,6 +109,14 @@ export default function BlogExplorer({ initialData }) {
 
       currentPage = 1;
       renderGrid();
+
+      // Résultats sur titres et résumés tout de suite, puis dans le texte des
+      // articles une fois chargé.
+      if (q && !contentById) {
+        loadContent().then((loaded) => {
+          if (loaded && ($("#blogSearchInput")?.value || "").trim()) applyFilters();
+        });
+      }
     }
 
     function setActiveChip(code) {

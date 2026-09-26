@@ -344,6 +344,10 @@ header.site-header{
 .enonce-content blockquote{border-left:3px solid var(--accent); margin:10px 0; padding:2px 14px; color:var(--text-dim);}
 .enonce-content p{margin:10px 0; line-height:1.65;}
 .enonce-content h3,.enonce-content h4{margin:22px 0 10px;}
+/* Titres « ### » d'un corrigé rédigé en « # » : descendus de deux niveaux
+   (voir renderEnonce, app/concours/[id]/page.js), sans tomber à la taille
+   minuscule par défaut des h5/h6. */
+.enonce-content h5,.enonce-content h6{margin:18px 0 8px; font-size:.95em;}
 .enonce-content ul,.enonce-content ol{margin:10px 0; padding-left:1.35em;}
 .enonce-content li{margin:5px 0; line-height:1.6;}
 /* QCM answer choices (tagged by markQcmOptions in app/_shared/concoursFormat.js).

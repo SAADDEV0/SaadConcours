@@ -3,7 +3,7 @@ import { marked } from "marked";
 import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml, partnerZoneHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
-import { extractFaqFromMarkdown, faqJsonLd } from "../../_shared/faqSchema";
+import { clampDescription } from "../../_shared/seoText";
 import { categoryInfo } from "../../../lib/blogTaxonomy";
 import { findDuplicateBlogIds } from "../../../lib/blogDuplicates";
 import { readingTimeMinutes } from "../../_shared/blogCard";
@@ -36,13 +36,19 @@ export async function generateMetadata(props) {
   // index — see lib/blogDuplicates.js.
   const isDuplicate = findDuplicateBlogIds(list).has(p.id);
 
+  // seoTitle : forme courte (≤ 65 caractères) pour les résultats Google quand
+  // le titre de l'article est plus long ; le H1 garde le titre complet.
+  // L'extrait (≈ 250 caractères, pensé pour la carte) est borné à 155.
+  const title = p.seoTitle || p.title;
+  const description = clampDescription(p.excerpt);
+
   return {
-    title: p.title,
-    description: p.excerpt,
+    title,
+    description,
     alternates: { canonical: url },
     ...(isDuplicate ? { robots: { index: false, follow: true } } : {}),
-    openGraph: { type: "article", title: p.title, description: p.excerpt, url, publishedTime: p.publishedAt },
-    twitter: { card: "summary_large_image", title: p.title, description: p.excerpt },
+    openGraph: { type: "article", title, description, url, publishedTime: p.publishedAt },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -69,7 +75,6 @@ export default async function BlogDetailPage(props) {
   const contentHtml = renderMarkdownWithMath(marked, p.content || "");
   const url = `${SITE_URL}/blog/${p.id}`;
   const related = getRelatedPosts(list, p);
-  const faqLd = faqJsonLd(extractFaqFromMarkdown(p.content));
   const cat = categoryInfo(p.category);
   const minutes = readingTimeMinutes(p.content);
 
@@ -109,13 +114,6 @@ export default async function BlogDetailPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {faqLd && (
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-        />
-      )}
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", showSearch: false, rails: true }) }} />
 
       <div className="bac-space site-space" style={{ "--mat-h": 330 }}>

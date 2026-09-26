@@ -49,24 +49,18 @@ const FAQ = [
 ];
 
 export const metadata = {
-  title: "Questions fréquentes — Concours d'accès aux Masters au Maroc",
+  // + « | SaadConcours » (modèle de app/layout.js) : 60 caractères.
+  title: "FAQ : concours d'accès aux Masters au Maroc",
   description:
     "Réponses aux questions les plus courantes sur le concours d'accès aux masters économie-gestion au Maroc : déroulement, conditions, corrigés, calendrier.",
   alternates: { canonical: "/faq" },
-  openGraph: { title: "Questions fréquentes — SaadConcours", url: "/faq" },
+  // Un openGraph posé ici remplace celui de la racine, image comprise.
+  openGraph: { title: "Questions fréquentes — SaadConcours", url: "/faq", images: ["/opengraph-image"] },
 };
 
+// Pas de balisage FAQPage : depuis 2023, Google ne l'affiche plus que pour
+// les sites officiels et de santé. Les questions restent sur la page.
 export default function FaqPage() {
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -78,11 +72,6 @@ export default function FaqPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
