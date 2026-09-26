@@ -55,6 +55,7 @@ export default async function sitemap() {
     { path: "/a-propos", changeFrequency: "monthly", priority: 0.5 },
     { path: "/contact", changeFrequency: "yearly", priority: 0.3 },
     { path: "/confidentialite", changeFrequency: "yearly", priority: 0.2 },
+    { path: "/mentions-legales", changeFrequency: "yearly", priority: 0.2 },
   ].map(({ path, changeFrequency, priority, lastModified }) => ({
     url: `${SITE_URL}${path}`,
     changeFrequency,

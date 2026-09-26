@@ -33,9 +33,11 @@ export default function ConfidentialitePage() {
         <a href="/">Accueil</a> <span>/</span> <span>Confidentialité</span>
       </nav>
       <h1 style={{ fontSize: "1.5rem" }}>Confidentialité</h1>
+      <p style={{ ...P, fontSize: ".85rem" }}>Dernière mise à jour : 26 septembre 2026</p>
       <p style={P}>
-        SaadConcours est un site indépendant, sans compte utilisateur. Voici, précisément, ce qui est collecté et
-        pourquoi.
+        SaadConcours est un site indépendant, sans compte utilisateur, édité par Saad (voir les{" "}
+        <a href="/mentions-legales">mentions légales</a>), responsable des données décrites ici. Voici, précisément, ce
+        qui est collecté et pourquoi.
       </p>
 
       <h2 style={H2}>Ce qui est mesuré</h2>
@@ -63,10 +65,10 @@ export default function ConfidentialitePage() {
 
       <h2 style={H2}>Alertes email</h2>
       <p style={P}>
-        Si tu t&apos;inscris aux alertes « concours ouverts », ton adresse email est conservée dans la base de
-        données du site dans le seul but de t&apos;envoyer ces alertes. Elle n&apos;est ni revendue, ni partagée, ni
-        utilisée pour autre chose. Chaque email contient un lien de désinscription, et la désinscription supprime
-        l&apos;adresse — elle n&apos;est pas simplement marquée comme inactive.
+        Les inscriptions aux alertes « concours ouverts » sont fermées depuis septembre 2026 : le site ne demande
+        plus d&apos;adresse email. Les adresses inscrites auparavant sont conservées dans la base de données du site,
+        uniquement pour ces alertes ; elles ne sont ni revendues, ni utilisées pour autre chose. Sur simple demande à
+        l&apos;adresse ci-dessous, la tienne est supprimée — effacée, pas seulement marquée comme inactive.
       </p>
 
       <h2 style={H2}>Google Analytics</h2>
@@ -124,8 +126,17 @@ export default function ConfidentialitePage() {
 
       <h2 style={H2}>Contenu et corrigés</h2>
       <p style={P}>
-        Les énoncés proviennent de sources publiques citées sur chaque fiche. Les corrigés, quand ils existent, sont
-        rédigés par IA et signalés comme indicatifs — à vérifier avant de s&apos;y fier pour réviser.
+        Les énoncés sont retranscrits à partir de documents publics. Les corrigés, quand ils existent, sont rédigés
+        avec l&apos;aide d&apos;une IA et signalés comme indicatifs — à vérifier avant de s&apos;y fier pour réviser.
+      </p>
+
+      <h2 style={H2}>Tes droits</h2>
+      <p style={P}>
+        Conformément à la loi marocaine n° 09-08 sur la protection des données personnelles (et, pour les visiteurs de
+        l&apos;Union européenne, au RGPD), tu peux demander l&apos;accès aux données qui te concernent, leur
+        rectification ou leur suppression, et t&apos;opposer à leur traitement. Il suffit d&apos;écrire à
+        l&apos;adresse ci-dessous ; la réponse arrive sous 30 jours au plus. Tu peux aussi saisir la CNDP (Commission
+        nationale de contrôle de la protection des données à caractère personnel, cndp.ma).
       </p>
 
       <h2 style={H2}>Contact</h2>

@@ -2,7 +2,7 @@
 
 > Site gratuit d'économie et de gestion au Maroc, du lycée au master : cours du 2ème Bac Sciences Économiques et Gestion, cours de Licence FSJES (S1 à S6) chapitre par chapitre, et base de sujets réels de concours d'accès aux licences d'excellence et aux masters, avec corrigés indicatifs et QCM.
 
-SaadConcours est un site indépendant, non affilié aux universités, à destination des élèves du Bac Sciences Économiques et Gestion, des étudiants en Licence FSJES et des candidats aux concours d'accès aux masters spécialisés en économie-gestion (CCA, GFCF, Finance, Fiscalité, Audit, Marketing, GRH...). Le contenu est géré par un administrateur unique et mis à jour régulièrement.
+SaadConcours est un site indépendant, non affilié aux universités, à destination des élèves du Bac Sciences Économiques et Gestion, des étudiants en Licence FSJES et des candidats aux concours d'accès aux masters spécialisés en économie-gestion (CCA, GFCF, Finance, Fiscalité, Audit, Marketing, GRH...). Le site est édité et tenu par Saad, seul administrateur, et mis à jour régulièrement.
 
 ## Contenu du site
 
@@ -17,10 +17,11 @@ SaadConcours est un site indépendant, non affilié aux universités, à destina
 
 - Gratuit, sans compte utilisateur ; le site peut afficher de la publicité.
 - Les corrigés sont indicatifs : rédigés avec l'aide d'une intelligence artificielle à partir du sujet, puis vérifiés par recoupement des chiffres de l'énoncé. Ce ne sont pas des corrigés officiels.
-- Chaque sujet de concours cite sa source publique d'origine.
+- Les sujets de concours sont retranscrits à partir de documents publics ; un titulaire de droits peut demander le retrait d'un document.
 
 ## Pages utiles
 
 - [À propos](https://www.saadconcours.space/a-propos): d'où viennent les sujets et comment les corrigés sont rédigés.
 - [Confidentialité](https://www.saadconcours.space/confidentialite): données collectées, cookies de mesure d'audience et de publicité.
+- [Mentions légales](https://www.saadconcours.space/mentions-legales): éditeur, hébergeur, droits d'auteur et demandes de retrait.
 - [Sitemap](https://www.saadconcours.space/sitemap.xml): liste complète des URLs indexables.

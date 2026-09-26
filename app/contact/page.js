@@ -58,11 +58,19 @@ export default function ContactPage() {
           <a href={mailto("Proposition de sujet de concours")}>Proposer un sujet</a>
         </p>
 
+        <h2 style={H2}>Demander le retrait d&apos;un document</h2>
+        <p style={P}>
+          Tu es l&apos;auteur ou le titulaire des droits d&apos;un sujet, d&apos;un scan ou d&apos;un texte publié ici ?
+          Indique l&apos;adresse de la page concernée : la demande est traitée en priorité (voir les{" "}
+          <a href="/mentions-legales">mentions légales</a>).{" "}
+          <a href={mailto("Demande de retrait")}>Demander un retrait</a>
+        </p>
+
         <h2 style={H2}>Données personnelles</h2>
         <p style={P}>
-          Pour faire supprimer ton adresse des alertes email, le plus rapide est le lien de désinscription présent en
-          bas de chaque email. Pour toute autre demande liée à tes données, écris à la même adresse — le détail de ce
-          qui est collecté est sur la page <a href="/confidentialite">Confidentialité</a>.
+          Pour faire supprimer ton adresse des anciennes alertes email, ou pour toute autre demande liée à tes données,
+          écris à la même adresse — le détail de ce qui est collecté et de tes droits est sur la page{" "}
+          <a href="/confidentialite">Confidentialité</a>.
         </p>
 
         <h2 style={H2}>Avant d&apos;écrire</h2>

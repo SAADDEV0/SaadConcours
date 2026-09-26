@@ -15,7 +15,7 @@ const SITE_URL = "https://www.saadconcours.space";
 export const metadata = {
   title: "À propos",
   description:
-    "Qui fait SaadConcours, ce que couvrent les cours du Bac et de la Licence FSJES, d'où viennent les sujets de concours Master, comment les corrigés sont rédigés et comment le site est tenu à jour.",
+    "Qui tient SaadConcours, ce que couvrent les cours du Bac et de la Licence FSJES, d'où viennent les sujets de concours et comment les corrigés sont rédigés.",
   alternates: { canonical: "/a-propos" },
 };
 
@@ -66,6 +66,7 @@ export default async function AProposPage() {
       name: "SaadConcours",
       url: SITE_URL,
       email: "saadconcours.space@gmail.com",
+      founder: { "@type": "Person", name: "Saad" },
     },
   };
 
@@ -90,6 +91,14 @@ export default async function AProposPage() {
           master : des cours du Bac Sciences Économiques et Gestion et de la Licence FSJES rédigés chapitre par
           chapitre, avec exercices corrigés, résumés et QCM, et les sujets réels des concours d&apos;accès aux
           masters — FSJES, ENCG, facultés polydisciplinaires — pour s&apos;y préparer.
+        </p>
+
+        <h2 style={H2}>Qui tient le site</h2>
+        <p style={P}>
+          SaadConcours est créé et tenu par Saad, qui en assure seul l&apos;édition : choix des sujets et des cours
+          publiés, mises à jour, corrections des erreurs signalées et réponses aux messages envoyés depuis la page{" "}
+          <a href="/contact">Contact</a>. Les informations légales (éditeur, hébergeur) sont sur la page{" "}
+          <a href="/mentions-legales">Mentions légales</a>.
         </p>
 
         <h2 style={H2}>Pourquoi ce site existe</h2>
@@ -131,11 +140,13 @@ export default async function AProposPage() {
 
         <h2 style={H2}>D&apos;où viennent les sujets</h2>
         <p style={P}>
-          Chaque sujet provient d&apos;une source publique — site d&apos;une faculté, page d&apos;une association
-          d&apos;étudiants, archive partagée par des candidats — citée sur la fiche du concours. Le sujet est
-          retranscrit à partir du document d&apos;origine (tableaux, formules et énoncés compris), puis classé par
-          année, ville, établissement, filière et modules concernés, pour pouvoir filtrer exactement ce qu&apos;on
-          cherche. Quand un passage est illisible sur la source, la fiche le dit au lieu de deviner.
+          Ce sont des épreuves réellement données par les facultés et les écoles. Chaque sujet provient d&apos;un
+          document public — archive de sujets publiée en ligne, page d&apos;une faculté, copie transmise par un
+          candidat — et il est retranscrit à partir de ce document (tableaux, formules et énoncés compris), puis classé
+          par année, ville, établissement, filière et modules concernés, pour pouvoir filtrer exactement ce qu&apos;on
+          cherche. Quand un passage est illisible sur le document d&apos;origine, la fiche le dit au lieu de deviner.
+          Un titulaire de droits qui souhaite le retrait d&apos;un document peut le demander depuis la page{" "}
+          <a href="/contact">Contact</a>.
         </p>
 
         <h2 style={H2}>Comment les corrigés sont rédigés</h2>
