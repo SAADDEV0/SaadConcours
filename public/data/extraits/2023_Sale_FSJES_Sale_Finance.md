@@ -17,4 +17,4 @@ De plus, le sérieux que Nous préconisons doit avoir cours parmi les opérateur
 
 En définitive, le sérieux est la clé de voûte d'une approche intégrée qui subordonne l'exercice de la responsabilité à l'exigence de reddition des comptes et fait prévaloir les règles de bonne gouvernance, la valeur travail, le mérite et l'égalité des chances… ».
 
-*(Note : cette épreuve de dissertation tient sur une seule page dans le document source, conformément à sa durée d'1 heure ; aucune page supplémentaire n'a été identifiée sur fsjesmaster.com pour ce sujet.)*
+*(Note : cette épreuve de dissertation tient sur une seule page dans le document source, conformément à sa durée d'1 heure ; aucune page supplémentaire n'a été identifiée en ligne pour ce sujet.)*

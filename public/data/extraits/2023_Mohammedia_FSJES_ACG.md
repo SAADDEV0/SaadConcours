@@ -4,7 +4,7 @@
 
 ### Exercice 1 — Comptabilité des titres (société AMINE)
 
-*Reconstitution : le texte complet de cet exercice n'a pas été retrouvé, seul le corrigé-guide de mesconcours.ma était disponible pour ce sujet. Les données ci-dessous ont été reconstituées à partir des éléments numériques donnés par ce guide (elles sont cohérentes avec les résultats attendus, mais leur formulation d'origine peut différer légèrement de l'énoncé réel).*
+*Reconstitution : le texte complet de cet exercice n'a pas été retrouvé, seul un corrigé-guide publié en ligne était disponible pour ce sujet. Les données ci-dessous ont été reconstituées à partir des éléments numériques donnés par ce guide (elles sont cohérentes avec les résultats attendus, mais leur formulation d'origine peut différer légèrement de l'énoncé réel).*
 
 Le 13/05/2013, la société AMINE a acquis des titres et valeurs de placement (TVP) : 150 titres « X » à 350 DH l'un et 200 titres « Y » à 450 DH l'un.
 

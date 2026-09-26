@@ -279,13 +279,9 @@ export async function downloadConcoursPdf(c) {
   // branch above already lays out one per line.
   renderMarkdown(formatQCM(c.enonce_md || "Énoncé non disponible."));
 
-  y += 4;
-  ensureSpace(14);
-  doc.setDrawColor(200, 200, 210);
-  doc.line(marginX, y, pageW - marginX, y);
-  y += 6;
-  addWrappedLine("Source", { bold: true, size: 10 * fontScale });
-  addWrappedLine(c.source || "non précisée", { size: 9 * fontScale, color: [110, 110, 120] });
+  // Plus de ligne « Source » depuis le 2026-09-26 : la source d'un sujet reste
+  // dans concours.json pour la console, elle n'est plus publiée (voir
+  // app/concours/[id]/page.js).
 
   // c.corrige_md is empty when the corrigé exists only as a raw file in the
   // repo's data/corriges/ folder (see lib/store.js getCorrigeFile) — fetch

@@ -2,7 +2,7 @@
 **Concours d'accès au Master Comptabilité Contrôle Audit**
 **Durée 2h**
 
-*Remarque : ce sujet est diffusé par fsjesmaster.com sous l'intitulé « CCA 2022-2023 », mais son contenu (bilan au 01/01/2021, exercice fiscal 2020) correspond en réalité à la session 2020/2021.*
+*Remarque : ce sujet circule en ligne sous l'intitulé « CCA 2022-2023 », mais son contenu (bilan au 01/01/2021, exercice fiscal 2020) correspond en réalité à la session 2020/2021.*
 
 ### I. Définir les concepts suivants
 

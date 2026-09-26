@@ -4,7 +4,7 @@
 
 **Durée : 2 heures**
 
-*Sujet reproduit d'après la version texte publiée par fsjesmaster.com (aucun scan disponible). La session n'est indiquée ni sur le sujet ni sur la page source.*
+*Sujet reproduit d'après une version texte publiée en ligne (aucun scan disponible). La session n'est indiquée ni sur le sujet ni sur la page source.*
 
 *NB :*
 - *Documents non autorisés, machine à calculer autorisée pour un usage strictement personnel.*

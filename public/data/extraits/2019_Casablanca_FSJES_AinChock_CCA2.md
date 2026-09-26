@@ -4,7 +4,7 @@
 
 **Durée : 2 heures**
 
-*Sujet reproduit d'après la version texte publiée par fsjesmaster.com (aucun scan disponible). L'année n'est pas imprimée sur cette version ; la consigne « loi de finances de 2019 » du cas de fiscalité le rattache à la session 2019 (Master 2019-2020).*
+*Sujet reproduit d'après une version texte publiée en ligne (aucun scan disponible). L'année n'est pas imprimée sur cette version ; la consigne « loi de finances de 2019 » du cas de fiscalité le rattache à la session 2019 (Master 2019-2020).*
 
 *NB :*
 - *Documents non autorisés, machine à calculer autorisée pour un usage strictement personnel.*

@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. **Important :** le document source lui-même est incomplet (photo de la 2ème page coupée après la question 5 ; aucune version plus complète trouvée en ligne, y compris sur fsjesmaster.com qui héberge la même image). Les questions 6 et suivantes ne peuvent donc pas être corrigées ici faute d'énoncé disponible.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. **Important :** le document source lui-même est incomplet (photo de la 2ème page coupée après la question 5 ; aucune version plus complète trouvée en ligne, les versions en circulation reprenant la même image). Les questions 6 et suivantes ne peuvent donc pas être corrigées ici faute d'énoncé disponible.
 
 ### Sujet d'ordre général — La transformation digitale et la performance des entreprises marocaines
 

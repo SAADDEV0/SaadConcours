@@ -191,4 +191,4 @@ a. Est venu
 b. Sont venus
 c. Ont été venu
 
-*[Le scan disponible s'arrête à la question 37. D'après la page source (fsjesmaster.com), l'épreuve complète comporte 40 questions organisées en trois blocs — gestion d'entreprise (1-10), ressources humaines et leadership (11-25), communication et compétences transversales (26-40) — mais les questions 38 à 40 ne figurent pas sur les pages numérisées disponibles localement.]*
+*[Le scan disponible s'arrête à la question 37. D'après la page d'origine du sujet, l'épreuve complète comporte 40 questions organisées en trois blocs — gestion d'entreprise (1-10), ressources humaines et leadership (11-25), communication et compétences transversales (26-40) — mais les questions 38 à 40 ne figurent pas sur les pages numérisées disponibles localement.]*
