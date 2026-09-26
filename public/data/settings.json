@@ -21,9 +21,9 @@
   "newsAlertsFromEmail": "alerts@saadconcours.space",
   "pdfLogoDataUrl": "",
   "pdfLogoPosition": "left",
-  "pdfAccentColor": "#4f46e5",
-  "pdfTextColor": "#1a1d27",
-  "pdfFontFamily": "helvetica",
+  "pdfAccentColor": "#1e3a8a",
+  "pdfTextColor": "#111827",
+  "pdfFontFamily": "times",
   "pdfFontSize": "normal",
   "pdfLineSpacing": "normal",
   "pdfMargins": "normal",
@@ -31,8 +31,8 @@
   "pdfCoverPageEnabled": true,
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
-  "pdfWatermarkOpacity": 0.09,
-  "pdfWatermarkStyle": "tiled",
+  "pdfWatermarkOpacity": 0.17,
+  "pdfWatermarkStyle": "brand",
   "pdfWatermarkRotation": 45,
   "pdfFooterText": "",
   "pdfShowSocialFooter": true,
@@ -52,28 +52,19 @@
   "adsCoursModuleSlot": "",
   "partnerAdsEnabled": true,
   "partnerAds": [],
-  "pdfMarginMm": 28,
+  "pdfMarginMm": 26,
   "pdfBorderEnabled": false,
-  "pdfBorderColor": "#4f46e5",
-  "pdfBorderWidth": 0.5,
-  "pdfBorderInset": 6,
+  "pdfBorderColor": "#1e3a8a",
+  "pdfBorderWidth": 0.4,
+  "pdfBorderInset": 8,
   "pdfCoverBackgroundColor": "",
   "pdfCoverAccentBar": false,
   "pdfCoverShowDescription": true,
   "pdfCoverShowDate": false,
   "pdfCoverTagline": "SaadConcours",
   "pdfHeadings": {},
-  "pdfLayout": {
-    "logo": {
-      "xPct": 13.33,
-      "yPct": 4.81
-    },
-    "pageNumber": {
-      "xPct": 83.33,
-      "yPct": 94.91
-    }
-  },
-  "pdfCoverTitleSize": 22,
+  "pdfLayout": {},
+  "pdfCoverTitleSize": 24,
   "pdfCoverTextScale": 1,
   "pdfTemplates": [
     {
@@ -133,7 +124,7 @@
   ],
   "pdfHeadingRule": false,
   "pdfShowHeader": true,
-  "pdfHeaderRule": false,
+  "pdfHeaderRule": true,
   "pdfCoverAlign": "center",
   "pdfCoverCleanPage": true,
   "pdfCoverAccentBarHeight": 10,
@@ -143,9 +134,12 @@
   "pdfCoverEyebrowColor": "",
   "pdfCoverTitleColor": "",
   "pdfCoverSubtitleColor": "",
-  "pdfCoverShowRule": true,
-  "pdfCoverRuleWidth": 40,
+  "pdfCoverShowRule": false,
+  "pdfCoverRuleWidth": 60,
   "pdfCoverShowTagline": true,
   "pdfCoverTaglineColor": "",
-  "pdfCoverLayout": {}
+  "pdfCoverLayout": {},
+  "pdfQuoteStyle": "bar",
+  "pdfHeaderTitle": false,
+  "pdfPageNumberStyle": "n/N"
 }
