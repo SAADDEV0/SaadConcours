@@ -1,0 +1,26 @@
+# Redirections servies par Cloudflare AVANT le Worker (Workers Static Assets).
+#
+# OpenNext copie public/ à la racine de .open-next/assets, et wrangler lit ce
+# fichier comme configuration au déploiement (il n'est pas servi comme page).
+# Une règle ici répond en 301 depuis le bord du réseau, sans démarrer
+# d'isolate : pas d'Error 1102 possible, contrairement à un redirect() de
+# Next, qui passe par le Worker (voir README, « une page publique n'invoque
+# pas le Worker »).
+#
+# Format : <chemin> <destination> 301 — une règle par ligne, chemins exacts.
+# À maintenir à la main (BANQUE_PROMPTS.md, recette C6).
+
+# Concours supprimés comme doublons (même épreuve publiée deux fois), le
+# 2026-09-26 : l'ancienne URL renvoie vers la fiche conservée.
+/concours/2023_Agadir_FSJES_ManagementStrategiqueLogistique2024 /concours/2023_Agadir_FSJES_ManagementStrategiqueLogistique 301
+/concours/2021_Rabat_FsjesAgdal_ManagementStrategiqueDesRessou /concours/2021_Rabat_FSJESAgdal_MSRH 301
+/concours/2019_Marrakech_FSJES_CCA_ControleGestion /concours/2019_Marrakech_FSJES_CCA 301
+/concours/2023_Casablanca_FSJES_AinChock_Marketing2 /concours/2023_Casablanca_FSJES_AinChock_Marketing 301
+/concours/2017_Mohammedia_Fsjes_DeveloppementEconomiqueEtIngen /concours/2017_Mohammedia_FSJES_DEIP 301
+/concours/2017_Rabat_FsjesSouissi_EconometrieStatistiqueEtModeli /concours/2017_Rabat_FSJES_Souissi_ESMA 301
+/concours/2017_Agadir_Fsjes_EntrepreneuriatEtManagementDes /concours/2017_Agadir_Fsjes_EntrepreneuriatEtManagementDes2 301
+/concours/2023_Meknes_FSJES_Meknes_Actuariat /concours/2023_Meknes_FSJES_Actuariat 301
+/concours/2017_Meknes_Fsjes_DeveloppementDurableDesTerrito /concours/2017_Meknes_FSJES_DeveloppementDurable 301
+/concours/2022_Casablanca_ENCGCasablanca_Finance /concours/2022_Casablanca_ENCGCasablanca_ActuariatFinance 301
+/concours/2023_Casablanca_FSJES_AinSebaa_MRH_QCM /concours/2023_Casablanca_FSJES_AinSebaa_MRH 301
+/concours/2023_Meknes_FSJES_Meknes_Audit /concours/2023_Meknes_FSJES_Meknes_CCA 301

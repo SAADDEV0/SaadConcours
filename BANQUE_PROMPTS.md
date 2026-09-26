@@ -261,7 +261,17 @@ le miroir correspondant ; si `id` ou `ville` change, déplacer le dossier d'imag
 2. Retirer l'entrée de `concours.json`, supprimer `extraits/<id>.md`, `corriges/<id>.md` et
    `public/images/<ville>/<id>/`.
 3. Chercher les liens vers `/concours/<id>` dans `blog.json` et les signaler/corriger.
-4. Commit : « Supprime le concours <id> » + raison.
+4. L'URL était indexée : ajouter `/concours/<id> /concours/<id gardé ou page liste> 301` dans
+   `public/_redirects` (redirection servie par Cloudflare avant le Worker, jamais un `redirect()` Next).
+5. Commit : « Supprime le concours <id> » + raison.
+
+**Doublons** (`supprime les doublons`) : ne jamais se fier au seul titre. Un doublon = même
+épreuve publiée deux fois : scans identiques octet pour octet (hash), même URL source, énoncé
+recouvert à > 75 % (bardeaux de 5 mots). Des masters d'une même faculté qui partagent **une**
+page de tronc commun (Meknès 2022/2023) ne sont pas des doublons, ni deux sujets de même titre
+dont les textes diffèrent (`SD_…AinChock_CCA` / `CCA2`). Garder la fiche au corrigé le plus
+complet et à la source la plus précise ; montrer la liste avant de supprimer (précédent :
+12 doublons supprimés le 2026-09-26).
 
 ### C7 — Concours blanc
 - Construit à partir de l'**analyse de fréquence** des modules sur les sessions réelles du même
