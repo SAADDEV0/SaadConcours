@@ -20,6 +20,12 @@ const AUTOTABLE_URL = "https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/j
 const SVG2PDF_URL = "https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.3/dist/svg2pdf.umd.min.js";
 const MATHJAX_URL = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js";
 const MARKED_URL = "https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js";
+// PDF.js, the admin PDF studio's viewer only (never loaded on the public
+// site). v3 is the last line with a classic UMD build (window.pdfjsLib),
+// which fits loadScript() below; it wraps a cross-origin worker URL in a
+// same-origin blob itself.
+const PDFJS_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js";
+const PDFJS_WORKER_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
 
 const cache = new Map();
 
@@ -85,9 +91,9 @@ export function ensureConcoursPdfScripts() {
   return ensureJsPDF();
 }
 
-// app/evaluation/[id]/EvaluationDetailClient.js: same as concours — math is
-// converted to plain text (see latexPlainText.js) rather than typeset, so
-// no MathJax/svg2pdf/marked needed.
+// app/_shared/evaluationPdf.js: same as concours — math is converted to
+// plain text (see latexPlainText.js) rather than typeset, so no
+// MathJax/svg2pdf/marked needed.
 export function ensureEvaluationPdfScripts() {
   return ensureJsPDF();
 }
@@ -95,10 +101,20 @@ export function ensureEvaluationPdfScripts() {
 // app/_shared/coursPdf.js: the one PDF that actually typesets LaTeX as
 // vector paths (MathJax -> SVG -> svg2pdf.js) and renders markdown tables,
 // so it needs the full set. Used by the public cours download button and by
-// every admin PDF preview (PdfStudio, CoursPdfPreviewButton) since they all
-// call buildCoursPdf() under the hood.
+// the admin PDF studio's cours preview, both through buildCoursPdf().
 export function ensureCoursPdfScripts() {
   return Promise.all([ensureSvg2Pdf(), ensureMathJax(), ensureMarked()]);
+}
+
+// app/admin/_features/pdf/PdfViewer.js: draws the studio's preview pages
+// onto canvases, so the admin sees the real PDF with its own page layout
+// (and draggable handles on top) instead of the browser's PDF viewer.
+export async function ensurePdfJs() {
+  await loadScript(PDFJS_URL);
+  const lib = window.pdfjsLib;
+  if (!lib?.getDocument) throw new Error("PDF.js n'a pas pu être chargé.");
+  lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+  return lib;
 }
 
 // app/admin/_components/fields/MarkdownEditor.js: live markdown preview

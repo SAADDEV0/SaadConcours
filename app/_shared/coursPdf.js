@@ -22,7 +22,7 @@
 // plain text only (autotable doesn't have a clean spot to draw an inline
 // SVG per cell).
 import { trackPdfDownload } from "./chrome";
-import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
+import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
 import { ensureCoursPdfScripts } from "./pdfScripts";
@@ -207,23 +207,15 @@ function runsToPlainText(runs) {
 }
 
 // Builds the fiche-de-cours jsPDF document without saving it — shared by
-// downloadCoursPdf (the public "download" button) and the admin's own PDF
-// preview button, which renders the *same* document into an iframe instead
-// of triggering a file download. `brandingOverride`, when given, skips the
-// /api/settings fetch entirely — used by the admin's PDF settings page to
-// preview its own unsaved form state instead of what's currently persisted.
+// downloadCoursPdf (the public "download" button) and the admin's PDF
+// studio, which shows the *same* document in its preview instead of
+// triggering a file download. `brandingOverride`, when given, skips loading
+// the saved settings entirely — the studio previews its own unsaved form
+// state instead of what's currently persisted.
 export async function buildCoursPdf(cours, brandingOverride) {
   let branding = brandingOverride;
   const scriptsReady = ensureCoursPdfScripts();
-  if (!branding) {
-    let settings = {};
-    try {
-      settings = await (await fetch("/api/settings")).json();
-    } catch {
-      // best-effort: fall back to the default vector logo/watermark, no socials
-    }
-    branding = await resolvePdfBranding(settings);
-  }
+  if (!branding) branding = await resolvePdfBranding(await loadPdfSettings());
   await scriptsReady;
 
   const { jsPDF } = window.jspdf;
@@ -270,7 +262,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
   // getTextWidth is still used for wrap *decisions* — worst case a line
   // wraps a hair early/late, which is harmless next to visibly fused words.
   async function writeRuns(runs, opts = {}) {
-    const { size = baseFontSize, indent = 0, color = branding.textColor, gapAfter = 3, font = bodyFont } = opts;
+    const { size = baseFontSize, indent = 0, color = branding.textColor, gapAfter = 3, font = bodyFont, quote = null } = opts;
     const x0 = marginX + indent;
     const usableWidth = maxWidth - indent;
     const lineHeight = (size * 0.42 + 1.3) * lineSpacing;
@@ -325,6 +317,11 @@ export async function buildCoursPdf(cours, brandingOverride) {
       // margin, over the footer. Doing it once, right before the line is
       // actually drawn, also covers the taller-than-usual formula lines.
       ensureSpace(effLineHeight);
+      // Inside a blockquote, the accent bar / tinted band of this line goes
+      // down first so the text is drawn on top of it (see drawQuoteLine).
+      if (quote) {
+        drawQuoteLine(doc, branding, { x: quote.x, top: y - size * PT_TO_MM * 0.78, height: effLineHeight, width: marginX + maxWidth - quote.x });
+      }
       doc.setTextColor(...color);
       let x = x0;
       let i = 0;
@@ -471,7 +468,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
             break;
           }
         }
-        await writeRuns(runs, { indent, color, gapAfter: 3 });
+        await writeRuns(runs, { indent, color, gapAfter: 3, quote: ctx.quote });
         break;
       }
       case "list": {
@@ -479,7 +476,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
           const bullet = token.ordered ? `${(token.start || 1) + idx}. ` : "•  ";
           const runs = flattenInline(getInlineTokens(item), {}, ctx.store, []);
           runs.unshift({ text: bullet });
-          await writeRuns(runs, { indent: indent + 4, color, gapAfter: 1.5 });
+          await writeRuns(runs, { indent: indent + 4, color, gapAfter: 1.5, quote: ctx.quote });
           const nestedLists = (item.tokens || []).filter((t) => t.type === "list");
           for (const nested of nestedLists) {
             await renderBlock(nested, { ...ctx, indent: indent + 8 });
@@ -489,9 +486,13 @@ export async function buildCoursPdf(cours, brandingOverride) {
         break;
       }
       case "blockquote": {
+        // The bar sits 1mm into the quote's 6mm indent. A nested quote keeps
+        // the outer one's bar: one bar reads cleaner than a staircase.
+        const quote = ctx.quote || { x: marginX + indent + 1 };
         for (const child of token.tokens || []) {
-          await renderBlock(child, { ...ctx, indent: indent + 6, color: [95, 100, 112] });
+          await renderBlock(child, { ...ctx, indent: indent + 6, color: [95, 100, 112], quote });
         }
+        y += 1;
         break;
       }
       case "table": {
@@ -537,7 +538,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
     await renderBlock(t, { store });
   }
 
-  addPageFurniture(doc, branding);
+  addPageFurniture(doc, branding, { title: cours.title || cours.module });
   return doc;
 }
 

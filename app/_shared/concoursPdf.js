@@ -7,7 +7,7 @@
 
 import { pub, trackPdfDownload } from "./chrome";
 import { formatQCM } from "./concoursFormat";
-import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
+import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { convertMathSpansToPlainText } from "./latexPlainText";
 import { ensureConcoursPdfScripts } from "./pdfScripts";
@@ -47,19 +47,12 @@ function getImageDimensions(dataUrl) {
   });
 }
 
-export async function downloadConcoursPdf(c) {
-  let settings = {};
-  await Promise.all([
-    ensureConcoursPdfScripts(),
-    (async () => {
-      try {
-        settings = await (await fetch("/api/settings")).json();
-      } catch {
-        // best-effort: fall back to the default vector logo/watermark, no socials
-      }
-    })(),
-  ]);
-  const branding = await resolvePdfBranding(settings);
+// Builds the énoncé/corrigé document without saving it — shared by
+// downloadConcoursPdf and the admin's PDF studio, which previews it with its
+// unsaved settings (`brandingOverride`) and without the scans (`images`).
+export async function buildConcoursPdf(c, brandingOverride, { images = true } = {}) {
+  const [settings] = await Promise.all([brandingOverride ? null : loadPdfSettings(), ensureConcoursPdfScripts()]);
+  const branding = brandingOverride || (await resolvePdfBranding(settings));
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -96,20 +89,24 @@ export async function downloadConcoursPdf(c) {
   }
 
   function addWrappedLine(text, opts = {}) {
-    const { bold = false, size = baseFontSize, indent = 0, gapAfter = 1.6, color = branding.textColor, font } = opts;
-    doc.setFont(font || undefined, bold ? "bold" : "normal");
-    doc.setFontSize(size);
-    doc.setTextColor(...color);
+    const { bold = false, size = baseFontSize, indent = 0, gapAfter = 1.6, color = branding.textColor, font, quote = false } = opts;
     const clean = stripInlineMd(text);
     if (!clean) {
       y += 2 * lineSpacing;
       return;
     }
+    doc.setFont(font || undefined, bold ? "bold" : "normal");
+    doc.setFontSize(size);
+    const lineStep = size * 0.42 * lineSpacing;
     const wrapped = doc.splitTextToSize(clean, maxWidth - indent);
     for (const wl of wrapped) {
-      ensureSpace(size * 0.42 * lineSpacing);
+      ensureSpace(lineStep);
+      // A "> note" line gets the same bar / tinted band as the cours'
+      // blockquotes, drawn under the text (see drawQuoteLine).
+      if (quote) drawQuoteLine(doc, branding, { x: marginX, top: y - size * 0.3528 * 0.78, height: lineStep, width: maxWidth });
+      doc.setTextColor(...color);
       doc.text(wl, marginX + indent, y);
-      y += size * 0.42 * lineSpacing;
+      y += lineStep;
     }
     y += gapAfter * lineSpacing;
   }
@@ -186,7 +183,7 @@ export async function downloadConcoursPdf(c) {
   }
 
   addWrappedLine(`${c.etablissement} — ${c.annee}`, { bold: true, size: 15 * fontScale, gapAfter: 2 });
-  addWrappedLine(`${c.master_reel || c.filiere} · ${c.ville}${c.difficulte ? " · Difficulté : " + c.difficulte : ""}`, {
+  addWrappedLine([c.master_reel || c.filiere, c.ville, c.difficulte && `Difficulté : ${c.difficulte}`].filter(Boolean).join(" · "), {
     size: baseFontSize,
     color: [90, 90, 100],
     gapAfter: 3,
@@ -208,7 +205,17 @@ export async function downloadConcoursPdf(c) {
       }
 
       if (/^>/.test(line.trim())) {
-        addWrappedLine(line.replace(/^>\s*/, ""), { size: 9.5 * fontScale, color: [150, 110, 30], gapAfter: 2.5 });
+        const quoted = branding.quoteStyle !== "plain";
+        addWrappedLine(line.trim().replace(/^>\s*/, ""), {
+          size: 9.5 * fontScale,
+          color: [150, 110, 30],
+          gapAfter: quoted ? 0 : 2.5,
+          indent: quoted ? 5 : 0,
+          quote: quoted,
+        });
+        // Consecutive "> " lines form one continuous note; the gap only
+        // comes after the last of them.
+        if (quoted && !/^>/.test((src[i + 1] || "").trim())) y += 2.5 * lineSpacing;
         i++;
         continue;
       }
@@ -315,29 +322,39 @@ export async function downloadConcoursPdf(c) {
     renderMarkdown(formatQCM(corrigeMd));
   }
 
-  for (const imgPath of c.images || []) {
+  // Scanned pages sit inside the same content area as the text: the label
+  // used to be drawn at a fixed 15mm and the scan from 20mm, i.e. right on
+  // top of the running header (its URL line is at 14mm, its rule at 16.5mm)
+  // and, at the bottom, under the footer.
+  const scans = images ? c.images || [] : [];
+  for (const [idx, imgPath] of scans.entries()) {
     try {
       const dataUrl = await loadImageAsDataURL(pub(imgPath));
       const { width, height } = await getImageDimensions(dataUrl);
       doc.addPage();
-      const availW = pageW - marginX * 2;
-      const availH = pageH - 32;
-      const scale = Math.min(availW / width, availH / height, 1);
-      const imgW = width * scale;
-      const imgH = height * scale;
-      const x = (pageW - imgW) / 2;
       doc.setFont(undefined, "bold");
       doc.setFontSize(10);
       doc.setTextColor(90, 90, 100);
-      doc.text("Extrait scanné", marginX, 15);
+      doc.text(scans.length > 1 ? `Extrait scanné (${idx + 1}/${scans.length})` : "Extrait scanné", marginX, topY);
+      const imgTop = topY + 4;
+      const availW = pageW - marginX * 2;
+      const availH = bottomLimit - imgTop;
+      const scale = Math.min(availW / width, availH / height, 1);
+      const imgW = width * scale;
+      const imgH = height * scale;
       const format = (dataUrl.match(/data:image\/(\w+);/) || [])[1]?.toUpperCase() || "JPEG";
-      doc.addImage(dataUrl, format === "JPG" ? "JPEG" : format, x, 20, imgW, imgH);
-    } catch (err) {
+      doc.addImage(dataUrl, format === "JPG" ? "JPEG" : format, (pageW - imgW) / 2, imgTop, imgW, imgH);
+    } catch {
       // Skip images that fail to load rather than aborting the whole PDF.
     }
   }
 
-  addPageFurniture(doc, branding);
+  addPageFurniture(doc, branding, { title: `${c.etablissement} — ${c.annee}` });
+  return doc;
+}
+
+export async function downloadConcoursPdf(c) {
+  const doc = await buildConcoursPdf(c);
   doc.save(`${c.id}.pdf`);
   trackPdfDownload("concours", c.id);
 }

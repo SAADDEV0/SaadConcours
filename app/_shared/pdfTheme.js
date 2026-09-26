@@ -88,6 +88,21 @@ export const PDF_COVER_ALIGN_OPTIONS = [
   { value: "left", label: "Aligné à gauche" },
 ];
 
+export const PDF_PAGE_NUMBER_STYLE_OPTIONS = [
+  { value: "n/N", label: "1 / 5" },
+  { value: "page-n/N", label: "Page 1 / 5" },
+  { value: "page-n", label: "Page 1" },
+  { value: "n", label: "1" },
+];
+
+// How a markdown blockquote (the cours' « À retenir », the concours' notes)
+// is set apart from body text.
+export const PDF_QUOTE_STYLE_OPTIONS = [
+  { value: "bar", label: "Barre d'accent" },
+  { value: "box", label: "Encadré teinté" },
+  { value: "plain", label: "Retrait simple" },
+];
+
 // Kept only so settings saved before the exact-mm slider existed still
 // resolve to the margin they always had.
 export const PDF_MARGIN_PRESETS = { compact: 13, normal: 18, large: 24 };
@@ -235,6 +250,34 @@ export function isHex(value) {
   return /^#[0-9a-f]{6}$/i.test(String(value || "").trim());
 }
 
+// Blends an RGB triplet toward white — `amount` is how much of the color is
+// kept (0.08 = a faint tint). Used for the tinted blockquote box.
+export function tintRgb(rgb, amount) {
+  return rgb.map((c) => Math.round(255 - (255 - c) * amount));
+}
+
+export function formatPageNumber(style, n, total) {
+  switch (style) {
+    case "page-n/N":
+      return `Page ${n} / ${total}`;
+    case "page-n":
+      return `Page ${n}`;
+    case "n":
+      return String(n);
+    default:
+      return `${n} / ${total}`;
+  }
+}
+
+// Shortens `text` with an ellipsis until it fits `maxW` mm in the current
+// font — for single-line furniture (the running title) that must never wrap.
+function fitText(doc, text, maxW) {
+  if (doc.getTextWidth(text) <= maxW) return text;
+  let t = text;
+  while (t.length > 1 && doc.getTextWidth(`${t}…`) > maxW) t = t.slice(0, -1);
+  return `${t.trimEnd()}…`;
+}
+
 function clamp(value, min, max, fallback) {
   return Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
 }
@@ -341,6 +384,27 @@ export function getImageDimensions(dataUrl) {
 
 // ---- settings -> branding --------------------------------------------
 
+// The saved settings every public PDF is styled with. /api/settings runs on
+// the Worker, and on a cold isolate it can answer with an Error 1102 page
+// instead of JSON (README, « une page publique n'invoque pas le Worker ») —
+// the PDF then silently came out in the default look, without the cover or
+// the colors the admin chose. The static copy deployed with the site
+// (/data/settings.json, served from the edge) is the fallback: at worst it's
+// the version of the last deploy, never the factory defaults.
+export async function loadPdfSettings() {
+  for (const url of ["/api/settings", "/data/settings.json"]) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data && typeof data === "object" && !Array.isArray(data)) return data;
+    } catch {
+      // next source
+    }
+  }
+  return {};
+}
+
 // Resolves the admin's saved PDF settings (or the studio's in-progress,
 // unsaved form state when called from its live preview) into a
 // ready-to-draw shape — pre-loads the custom logo's dimensions once so the
@@ -373,14 +437,19 @@ export async function resolvePdfBranding(settings = {}) {
     // now opt-in, since on a document with many sections it reads as a
     // stray line cutting the page in two rather than as a section divider.
     headingRule: settings.pdfHeadingRule === true,
+    quoteStyle: pickOption(PDF_QUOTE_STYLE_OPTIONS, settings.pdfQuoteStyle, "bar"),
     borderEnabled: settings.pdfBorderEnabled === true,
     borderColor: hexToRgb(settings.pdfBorderColor, DEFAULT_ACCENT_RGB),
     borderColorHex: isHex(settings.pdfBorderColor) ? settings.pdfBorderColor : DEFAULT_ACCENT_HEX,
     borderWidth: clamp(settings.pdfBorderWidth, PDF_BORDER_WIDTH_RANGE.min, PDF_BORDER_WIDTH_RANGE.max, PDF_BORDER_WIDTH_RANGE.default),
     borderInset: clamp(settings.pdfBorderInset, PDF_BORDER_INSET_RANGE.min, PDF_BORDER_INSET_RANGE.max, PDF_BORDER_INSET_RANGE.default),
     showPageNumbers: settings.pdfShowPageNumbers === true,
+    pageNumberStyle: pickOption(PDF_PAGE_NUMBER_STYLE_OPTIONS, settings.pdfPageNumberStyle, "n/N"),
     showHeader: settings.pdfShowHeader !== false,
     headerRule: settings.pdfHeaderRule !== false,
+    // Document title repeated in the header, opposite the logo ("titre
+    // courant") — each builder hands the title to addPageFurniture.
+    headerTitle: settings.pdfHeaderTitle === true,
     coverPageEnabled: settings.pdfCoverPageEnabled === true,
     // Admin-typed strings get the same treatment as document content — an
     // em-dash or an arrow pasted into the footer would corrupt its line the
@@ -472,21 +541,22 @@ export async function resolvePdfBranding(settings = {}) {
   return branding;
 }
 
+
 // The vertical band flowing text may occupy. Horizontally the content area
 // is simply `marginX` on both sides; vertically it's the same margin, except
 // where the running header or footer strip sits at its default spot and
-// would otherwise be written over. Before this, every builder hardcoded
-// `marginX + 8` for the top and `pageH - marginX` for the bottom, which both
-// wasted 8mm at large margins and — at the small end of the slider — let the
-// first line collide with the header rule at 16.5mm and the last line run
-// under the footer.
+// would otherwise be written over.
+//
+// `top` is the *baseline* of the first line, so the header reserve has to
+// clear the tallest first line a page can start with, not just body text: at
+// 20mm a 15pt H1 (bigger with "Grande") had its capitals touching the header
+// rule at 16.5mm. 24mm leaves ~2.5mm under the rule for the largest heading.
 export function contentBounds(branding, pageH) {
   const marginX = branding.marginX ?? 18;
   const headerInPlace = branding.showHeader !== false && !branding.positions?.logo;
-  const footerInPlace =
-    (branding.showSocialFooter !== false || branding.footerText || branding.showPageNumbers) && !branding.positions?.footer;
+  const footerInPlace = footerVisible(branding) && !branding.positions?.footer;
   return {
-    top: Math.max(marginX, headerInPlace ? 20 : 0),
+    top: Math.max(marginX, headerInPlace ? 24 : 0),
     bottom: pageH - Math.max(marginX, footerInPlace ? 16 : 0),
   };
 }
@@ -495,8 +565,132 @@ export function contentBounds(branding, pageH) {
 // when a "clean" cover page occupies page 1, page 1 otherwise. Every
 // per-page loop below starts here so the cover keeps its own layout instead
 // of being overprinted by document furniture.
-function firstFurniturePage(branding) {
+export function firstFurniturePage(branding) {
   return branding.coverPageEnabled && branding.cover?.cleanPage !== false ? 2 : 1;
+}
+
+function footerVisible(branding) {
+  return branding.showSocialFooter !== false || Boolean(branding.footerText) || Boolean(branding.showPageNumbers);
+}
+
+// ---- geometry shared by the draw code and the studio ------------------
+//
+// The admin's PDF studio puts a draggable handle on each piece of furniture.
+// For a handle to sit exactly on what gets printed, the studio asks these
+// same functions where things are (pdfFurnitureAnchors) instead of keeping
+// its own copy of the numbers — the previous studio guessed a default spot
+// for each element, so switching a position on made the element jump.
+
+const HEADER_ICON_MM = 7;
+
+// Size of the running header's brand block and a function drawing it with
+// its top-left corner at (x, y): the uploaded logo, or the vector mark +
+// "SaadConcours" wordmark + clickable site URL.
+function headerBlock(doc, branding) {
+  const font = branding.fontFamily || "helvetica";
+  const accent = branding.accentColor || DEFAULT_ACCENT_RGB;
+  if (branding.logo) {
+    const h = 9;
+    const w = (branding.logo.width / branding.logo.height) * h;
+    return { w, h, draw: (x, y) => doc.addImage(branding.logo.dataUrl, branding.logo.format, x, y, w, h) };
+  }
+  doc.setFont(font, "bold");
+  doc.setFontSize(12);
+  const textW = doc.getTextWidth("Saad") + doc.getTextWidth("Concours");
+  return {
+    w: HEADER_ICON_MM + 2.5 + textW,
+    h: HEADER_ICON_MM + 4.5, // icon + the URL line drawn below it
+    draw: (x, y) => {
+      const iconY = y + 1;
+      drawLogoMark(doc, x, iconY, HEADER_ICON_MM, accent);
+      const textX = x + HEADER_ICON_MM + 2.5;
+      doc.setFont(font, "bold");
+      doc.setFontSize(12);
+      doc.setTextColor(25, 28, 35);
+      doc.text("Saad", textX, iconY + HEADER_ICON_MM * 0.65);
+      const saadW = doc.getTextWidth("Saad");
+      doc.setTextColor(...accent);
+      doc.text("Concours", textX + saadW, iconY + HEADER_ICON_MM * 0.65);
+
+      doc.setFont(font, "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(130, 138, 155);
+      doc.textWithLink(SITE_HOST, textX, iconY + HEADER_ICON_MM + 2.2, { url: SITE_URL });
+    },
+  };
+}
+
+// Top-left corner of the header block. A custom position is the block's
+// *center* (the studio's handle is centered on it), converted back here.
+function headerBlockOrigin(branding, block, pageW, pageH) {
+  const customPos = branding.positions?.logo;
+  if (customPos) {
+    return { x: (customPos.xPct / 100) * pageW - block.w / 2, y: (customPos.yPct / 100) * pageH - block.h / 2 };
+  }
+  const marginX = branding.marginX ?? 18;
+  const position = branding.logoPosition || "left";
+  const x = position === "center" ? (pageW - block.w) / 2 : position === "right" ? pageW - marginX - block.w : marginX;
+  return { x, y: 4 };
+}
+
+function watermarkCenter(branding, pageW, pageH) {
+  const pos = branding.positions?.watermark;
+  return pos ? { x: (pos.xPct / 100) * pageW, y: (pos.yPct / 100) * pageH } : { x: pageW / 2, y: pageH / 2 };
+}
+
+// Horizontal center and first baseline of the footer block.
+function footerOrigin(branding, pageW, pageH) {
+  const pos = branding.positions?.footer;
+  return pos ? { x: (pos.xPct / 100) * pageW, y: (pos.yPct / 100) * pageH } : { x: pageW / 2, y: pageH - 10 };
+}
+
+// A custom page-number position is the label's center; the default spot is
+// right-aligned on the margin.
+function pageNumberPlacement(branding, pageW, pageH) {
+  const pos = branding.positions?.pageNumber;
+  if (pos) return { x: (pos.xPct / 100) * pageW, y: (pos.yPct / 100) * pageH, align: "center" };
+  return { x: pageW - (branding.marginX ?? 18), y: pageH - 6, align: "right" };
+}
+
+// Page numbering skips a clean cover: the first content page is "1", not "2".
+function pageNumbering(doc, branding) {
+  const offset = firstFurniturePage(branding) - 1;
+  return { offset, total: Math.max(1, doc.internal.getNumberOfPages() - offset) };
+}
+
+// Where each draggable element currently sits, as percentages of the page —
+// the same anchor semantics as the saved `pdfLayout` positions, so a handle
+// dropped where it already is changes nothing. Elements that are switched
+// off are simply absent. Call on a finished document (fonts are measured).
+export function pdfFurnitureAnchors(doc, branding) {
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const pct = (x, y) => ({ xPct: (x / pageW) * 100, yPct: (y / pageH) * 100 });
+  const anchors = {};
+
+  if (branding.showHeader !== false) {
+    const block = headerBlock(doc, branding);
+    const o = headerBlockOrigin(branding, block, pageW, pageH);
+    anchors.logo = pct(o.x + block.w / 2, o.y + block.h / 2);
+  }
+  // "tiled" covers the whole page by design: there's no single spot to drag.
+  if (branding.watermarkEnabled !== false && branding.watermarkStyle !== "tiled") {
+    const c = watermarkCenter(branding, pageW, pageH);
+    anchors.watermark = pct(c.x, c.y);
+  }
+  if (branding.showSocialFooter !== false || branding.footerText) {
+    const f = footerOrigin(branding, pageW, pageH);
+    anchors.footer = pct(f.x, f.y);
+  }
+  if (branding.showPageNumbers) {
+    const { total } = pageNumbering(doc, branding);
+    doc.setFont(branding.fontFamily || "helvetica", "normal");
+    doc.setFontSize(7.5);
+    const labelW = doc.getTextWidth(formatPageNumber(branding.pageNumberStyle, 1, total));
+    const p = pageNumberPlacement(branding, pageW, pageH);
+    anchors.pageNumber = pct(p.align === "right" ? p.x - labelW / 2 : p.x, p.y);
+  }
+  return anchors;
 }
 
 // ---- watermark --------------------------------------------------------
@@ -550,22 +744,18 @@ export function addWatermark(doc, branding = {}) {
   const text = branding.watermarkText || "SaadConcours";
   const opacity = branding.watermarkOpacity ?? 0.05;
   const style = branding.watermarkStyle || "brand";
-  // "tiled" repeats across the whole page by design, so a single anchor
-  // point means nothing for it — only "brand"/"diagonal" honor a drag.
-  const customPos = branding.positions?.watermark;
 
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = firstFurniturePage(branding); i <= pageCount; i++) {
     doc.setPage(i);
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
-    const cx = customPos ? (customPos.xPct / 100) * pageW : pageW / 2;
-    const cy = customPos ? (customPos.yPct / 100) * pageH : pageH / 2;
+    const c = watermarkCenter(branding, pageW, pageH);
     doc.saveGraphicsState();
     doc.setGState(new doc.GState({ opacity }));
     if (style === "tiled") drawTiledWatermark(doc, branding, text, pageW, pageH);
-    else if (style === "diagonal") drawDiagonalWatermark(doc, branding, text, cx, cy);
-    else drawBrandWatermark(doc, branding, text, cx, cy);
+    else if (style === "diagonal") drawDiagonalWatermark(doc, branding, text, c.x, c.y);
+    else drawBrandWatermark(doc, branding, text, c.x, c.y);
     doc.restoreGraphicsState();
   }
 }
@@ -574,70 +764,24 @@ export function addWatermark(doc, branding = {}) {
 
 // Branded header on every content page — logo + "SaadConcours" wordmark +
 // clickable URL by default, or just the uploaded logo image when one is set,
-// with an optional thin rule underneath, so a printed or forwarded PDF is
-// unmistakably sourced from the site.
-export function addSiteHeader(doc, branding = {}) {
+// with an optional thin rule underneath and, optionally, the document's
+// title on the opposite side, so a printed or forwarded PDF is unmistakably
+// sourced from the site.
+export function addSiteHeader(doc, branding = {}, meta = {}) {
   if (branding.showHeader === false) return;
   const pageCount = doc.internal.getNumberOfPages();
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const marginX = branding.marginX ?? 18;
-  const position = branding.logoPosition || "left";
-  const font = branding.fontFamily || "helvetica";
-  const accent = branding.accentColor || DEFAULT_ACCENT_RGB;
   const customPos = branding.positions?.logo;
-
-  const iconSize = 7;
-  let blockW;
-  let blockH;
-  let drawBlock; // (x, y) => void — draws the block with its top-left at (x, y)
-
-  if (branding.logo) {
-    const h = 9;
-    const w = (branding.logo.width / branding.logo.height) * h;
-    blockW = w;
-    blockH = h;
-    drawBlock = (x, y) => {
-      doc.addImage(branding.logo.dataUrl, branding.logo.format, x, y, w, h);
-    };
-  } else {
-    doc.setFont(font, "bold");
-    doc.setFontSize(12);
-    const textW = doc.getTextWidth("Saad") + doc.getTextWidth("Concours");
-    blockW = iconSize + 2.5 + textW;
-    blockH = iconSize + 4.5; // icon + the URL line drawn below it
-    drawBlock = (x, y) => {
-      const iconY = y + 1;
-      drawLogoMark(doc, x, iconY, iconSize, accent);
-      const textX = x + iconSize + 2.5;
-      doc.setFont(font, "bold");
-      doc.setFontSize(12);
-      doc.setTextColor(25, 28, 35);
-      doc.text("Saad", textX, iconY + iconSize * 0.65);
-      const saadW = doc.getTextWidth("Saad");
-      doc.setTextColor(...accent);
-      doc.text("Concours", textX + saadW, iconY + iconSize * 0.65);
-
-      doc.setFont(font, "normal");
-      doc.setFontSize(7.5);
-      doc.setTextColor(130, 138, 155);
-      doc.textWithLink(SITE_HOST, textX, iconY + iconSize + 2.2, { url: SITE_URL });
-    };
-  }
-
-  // The studio's drag handle represents the *center* of this block (it's
-  // rendered with a CSS translate(-50%, -50%)), so a custom position has to
-  // be converted from that center point back to the top-left corner
-  // drawBlock expects, or the logo lands visibly down-and-right of where it
-  // was dropped.
-  const blockX = customPos
-    ? (customPos.xPct / 100) * pageW - blockW / 2
-    : position === "center" ? (pageW - blockW) / 2 : position === "right" ? pageW - marginX - blockW : marginX;
-  const blockY = customPos ? (customPos.yPct / 100) * pageH - blockH / 2 : 4;
+  const block = headerBlock(doc, branding);
+  const origin = headerBlockOrigin(branding, block, pageW, pageH);
+  const runningTitle = branding.headerTitle ? sanitizePdfText(meta.title).replace(/\s+/g, " ").trim() : "";
 
   for (let i = firstFurniturePage(branding); i <= pageCount; i++) {
     doc.setPage(i);
-    drawBlock(blockX, blockY);
+    block.draw(origin.x, origin.y);
+    if (runningTitle) drawRunningTitle(doc, branding, runningTitle, block, origin, pageW);
     // The rule under the header assumes the logo sits near the top — once
     // it's been dragged elsewhere, a fixed line at 16.5mm would just read as
     // a stray mark unrelated to it.
@@ -649,11 +793,33 @@ export function addSiteHeader(doc, branding = {}) {
   }
 }
 
+// Small grey title on the side of the header the logo isn't on, shortened
+// with an ellipsis rather than ever running into the logo.
+function drawRunningTitle(doc, branding, title, block, origin, pageW) {
+  const marginX = branding.marginX ?? 18;
+  const logoInBand = origin.y < 18;
+  const logoCenter = origin.x + block.w / 2;
+  const onRight = logoCenter <= pageW / 2 + 1;
+  const available = !logoInBand
+    ? pageW - marginX * 2
+    : onRight
+      ? pageW - marginX - (origin.x + block.w) - 8
+      : origin.x - marginX - 8;
+  if (available < 25) return;
+  doc.setFont(branding.fontFamily || "helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(130, 138, 155);
+  const text = fitText(doc, title, available);
+  const y = 11;
+  if (onRight) doc.text(text, pageW - marginX, y, { align: "right" });
+  else doc.text(text, marginX, y);
+}
+
 // Bottom-of-page strip stamped once per content page: an optional custom
-// mention line, the "site + social links" line, and optional "N / total"
-// page numbers — stacked in that order so any subset can be toggled off
-// without leaving a gap. Plain text/links only (jsPDF has no SVG support,
-// and rasterizing an icon per network per page isn't worth it).
+// mention line, the "site + social links" line, and optional page numbers —
+// stacked in that order so any subset can be toggled off without leaving a
+// gap. Plain text/links only (jsPDF has no SVG support, and rasterizing an
+// icon per network per page isn't worth it).
 export function addFooter(doc, branding = {}) {
   const showSocial = branding.showSocialFooter !== false;
   const customText = (branding.footerText || "").trim();
@@ -665,17 +831,18 @@ export function addFooter(doc, branding = {}) {
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const marginX = branding.marginX ?? 18;
-  const footerPos = branding.positions?.footer;
-  const pageNumPos = branding.positions?.pageNumber;
+  const footerCustom = Boolean(branding.positions?.footer);
+  const origin = footerOrigin(branding, pageW, pageH);
+  const numberPlace = pageNumberPlacement(branding, pageW, pageH);
+  const { offset, total } = pageNumbering(doc, branding);
 
   for (let i = firstFurniturePage(branding); i <= pageCount; i++) {
     doc.setPage(i);
-    let y = footerPos ? (footerPos.yPct / 100) * pageH : pageH - 10;
-    const centerX = footerPos ? (footerPos.xPct / 100) * pageW : pageW / 2;
+    let y = origin.y;
 
     // Same reasoning as the header rule: only draw it while the block still
     // sits at its default bottom-of-page spot.
-    if ((showSocial || customText) && !footerPos) {
+    if ((showSocial || customText) && !footerCustom) {
       doc.setDrawColor(225, 228, 235);
       doc.setLineWidth(0.2);
       doc.line(marginX, y - 3.5, pageW - marginX, y - 3.5);
@@ -685,7 +852,7 @@ export function addFooter(doc, branding = {}) {
       doc.setFont(font, "italic");
       doc.setFontSize(7.5);
       doc.setTextColor(140, 144, 155);
-      doc.text(customText, centerX, y, { align: "center" });
+      doc.text(customText, origin.x, y, { align: "center" });
       y += 4.5;
     }
 
@@ -696,7 +863,7 @@ export function addFooter(doc, branding = {}) {
       const sep = "   ·   ";
       const sepW = doc.getTextWidth(sep);
       const totalW = parts.reduce((sum, p, idx) => sum + doc.getTextWidth(p.label) + (idx > 0 ? sepW : 0), 0);
-      let x = centerX - totalW / 2;
+      let x = origin.x - totalW / 2;
       parts.forEach((p, idx) => {
         if (idx > 0) {
           doc.setTextColor(190, 194, 202);
@@ -712,12 +879,8 @@ export function addFooter(doc, branding = {}) {
     if (showPageNumbers) {
       doc.setFont(font, "normal");
       doc.setFontSize(7.5);
-      doc.setTextColor(170, 174, 185);
-      if (pageNumPos) {
-        doc.text(`${i} / ${pageCount}`, (pageNumPos.xPct / 100) * pageW, (pageNumPos.yPct / 100) * pageH, { align: "center" });
-      } else {
-        doc.text(`${i} / ${pageCount}`, pageW - marginX, pageH - 6, { align: "right" });
-      }
+      doc.setTextColor(150, 154, 165);
+      doc.text(formatPageNumber(branding.pageNumberStyle, i - offset, total), numberPlace.x, numberPlace.y, { align: numberPlace.align });
     }
   }
 }
@@ -742,10 +905,28 @@ export function addPageBorder(doc, branding = {}) {
 
 // Everything a finished document needs stamped on top of it, in the one
 // order that looks right (watermark underneath, border, then header/footer
-// over both). Replaces the four-call sequence every builder used to repeat.
-export function addPageFurniture(doc, branding = {}) {
+// over both). `meta.title` feeds the optional running title in the header.
+export function addPageFurniture(doc, branding = {}, meta = {}) {
   addWatermark(doc, branding);
   addPageBorder(doc, branding);
-  addSiteHeader(doc, branding);
+  addSiteHeader(doc, branding, meta);
   addFooter(doc, branding);
+}
+
+// Draws the accent bar / tinted band that marks one line of a blockquote,
+// *before* the line's text so the tint sits underneath it. Line by line
+// rather than one rectangle per quote: consecutive line boxes join up
+// seamlessly, and a quote that breaks across pages is handled for free.
+//   top/height — the line box, in mm; x — where the quote's bar sits;
+//   width — the text column the tinted box has to cover.
+export function drawQuoteLine(doc, branding, { x, top, height, width }) {
+  const style = branding.quoteStyle || "bar";
+  if (style === "plain") return;
+  const accent = branding.accentColor || DEFAULT_ACCENT_RGB;
+  if (style === "box") {
+    doc.setFillColor(...tintRgb(accent, 0.08));
+    doc.rect(x, top, width, height, "F");
+  }
+  doc.setFillColor(...accent);
+  doc.rect(x, top, 0.9, height, "F");
 }

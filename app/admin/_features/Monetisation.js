@@ -338,7 +338,7 @@ function ColorField({ label, value, fallback, onChange }) {
   return (
     <Field label={label}>
       <div className="ax-inline">
-        <input type="color" className="ax-color" value={value || fallback} onChange={(e) => onChange(e.target.value)} aria-label={label} />
+        <input type="color" className="ax-color-input" value={value || fallback} onChange={(e) => onChange(e.target.value)} aria-label={label} />
         {value ? (
           <button type="button" className="ax-btn sm ghost" onClick={() => onChange("")}>
             Thème du site

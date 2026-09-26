@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { chromeScript, trackPdfDownload } from "../../_shared/chrome";
-import { addPageFurniture, contentBounds, resolvePdfBranding, sanitizePdfText } from "../../_shared/pdfTheme";
-import { coverDateString, maybeDrawCoverPage } from "../../_shared/pdfCover";
-import { convertMathSpansToPlainText } from "../../_shared/latexPlainText";
-import { ensureEvaluationPdfScripts } from "../../_shared/pdfScripts";
+import { chromeScript } from "../../_shared/chrome";
+import { downloadEvaluationPdf } from "../../_shared/evaluationPdf";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -171,121 +168,8 @@ export default function EvaluationDetailClient({ quiz }) {
       $("#evalPdfBtn").style.display = "inline-block";
     }
 
-    async function downloadEvalPDF() {
-      const qs = currentQuestions();
-
-      let settings = {};
-      await Promise.all([
-        ensureEvaluationPdfScripts(),
-        (async () => {
-          try {
-            settings = await (await fetch("/api/settings")).json();
-          } catch {
-            // best-effort: fall back to the default vector logo/watermark, no socials
-          }
-        })(),
-      ]);
-      const branding = await resolvePdfBranding(settings);
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: "mm", format: "a4" });
-      const bodyFont = branding.fontFamily || "helvetica";
-      doc.setFont(bodyFont, "normal"); // ambient default — every doc.setFont(undefined, style) call below keeps this family
-      const baseFontSize = branding.fontSize || 10.5;
-      const fontScale = baseFontSize / 10.5;
-      const lineSpacing = branding.lineSpacing || 1;
-      const marginX = branding.marginX ?? 16;
-      const pageW = doc.internal.pageSize.getWidth();
-      const pageH = doc.internal.pageSize.getHeight();
-      const maxWidth = pageW - marginX * 2;
-      const { top: topY, bottom: bottomLimit } = contentBounds(branding, pageH);
-      let y = topY;
-
-      // Title cover page, drawn on the document's first page before the
-      // questions (see pdfCover.js).
-      if (
-        maybeDrawCoverPage(doc, branding, {
-          eyebrow: quiz.module || "Évaluation",
-          title: quiz.title,
-          subtitle: [quiz.description, `${currentChapter} — ${qs.length} question${qs.length > 1 ? "s" : ""}`],
-          date: coverDateString(),
-        })
-      ) {
-        y = topY;
-      }
-
-      function ensureSpace(need) {
-        if (y + need > bottomLimit) {
-          doc.addPage();
-          y = topY;
-        }
-      }
-
-      // Questions and answers come straight from the quiz JSON, which uses
-      // real minus signs, arrows and Greek letters — sanitizePdfText keeps a
-      // single one of them from flipping its line into UTF-16 (spaced-out
-      // characters, twice as wide as measured, spilling off the page).
-      //
-      // Some questions/options/justifications also carry **bold** markdown
-      // and $...$ LaTeX (see mdLiteInline, used for the on-page HTML) — this
-      // used to reach doc.text() completely unprocessed, so a formula showed
-      // up as literal "$\dfrac{C \times t \times n}{100}$" in the PDF.
-      // convertMathSpansToPlainText gives it the same readable-plain-text
-      // fallback coursPdf.js uses; bold is stripped rather than rendered
-      // (this PDF draws each line as a single run, same simplification
-      // concoursPdf.js's plain body text uses).
-      function wrapText(text, size, bold, indent, color, font) {
-        doc.setFont(font || undefined, bold ? "bold" : "normal");
-        doc.setFontSize(size);
-        doc.setTextColor(...color);
-        const clean = convertMathSpansToPlainText(text).replace(/\*\*/g, "");
-        const wrapped = doc.splitTextToSize(sanitizePdfText(clean), maxWidth - indent);
-        for (const wl of wrapped) {
-          ensureSpace(size * 0.42 * lineSpacing);
-          doc.text(wl, marginX + indent, y);
-          y += size * 0.42 * lineSpacing;
-        }
-      }
-
-      wrapText(quiz.title, 15 * fontScale, true, 0, branding.textColor);
-      y += 1;
-      doc.setDrawColor(200, 200, 210);
-      doc.line(marginX, y, pageW - marginX, y);
-      y += 6;
-      wrapText(
-        `Module : ${quiz.module} — ${currentChapter} — ${qs.length} questions — Généré depuis SaadConcours`,
-        9 * fontScale,
-        false,
-        0,
-        [120, 120, 130]
-      );
-      y += 6;
-
-      qs.forEach((q, idx) => {
-        ensureSpace(14);
-        wrapText(`Q${idx + 1}. ${q.question}`, 11 * fontScale, true, 0, branding.textColor);
-        y += 1.5;
-        q.options.forEach((o) => {
-          const isCorrect = q.correct.includes(o.letter);
-          ensureSpace(9);
-          wrapText(`${o.letter}. ${o.text}`, 9.5 * fontScale, false, 5, isCorrect ? [30, 140, 90] : [70, 70, 80]);
-        });
-        y += 1;
-        ensureSpace(9);
-        const correctLetters = q.correct.join(", ").toUpperCase();
-        wrapText(
-          `Réponse(s) correcte(s) : ${correctLetters}${q.justification ? " — " + q.justification : ""}`,
-          9 * fontScale,
-          true,
-          0,
-          [30, 140, 90]
-        );
-        y += 5;
-      });
-
-      addPageFurniture(doc, branding);
-      doc.save(`${quiz.id}_${currentChapter.replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 30)}.pdf`);
-      trackPdfDownload("evaluation", quiz.id);
+    function downloadEvalPDF() {
+      downloadEvaluationPdf({ quiz, questions: currentQuestions(), chapter: currentChapter });
     }
 
     $("#evalSubmitBtn").addEventListener("click", submitEval);
