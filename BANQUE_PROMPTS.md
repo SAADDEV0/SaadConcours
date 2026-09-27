@@ -435,6 +435,14 @@ Tous les cours sont réécrits sur ce modèle ; tout nouveau cours doit le suivr
 - Modifier : éditer `content` (respecter la convention), ou le fichier de compléments.
 - Supprimer : retirer l'entrée de `cours.json`, supprimer son fichier `lib/fsjesContenu/…` et sa
   ligne dans `index.js`, chercher les liens `/cours/<id>` dans `blog.json` et les corriger.
+- Séparer un module en deux (`le cours X doit être séparé en Y (Sx) et Z (Sy)`, précédent :
+  Statistiques et Probabilités → `stats_cours` S2 + `probas_cours` S3, 2026-09-27) : le module
+  d'origine garde son `id` (ses URL et les liens du blog restent valides) ; les chapitres déplacés
+  gardent leur `titre`, donc leur slug, et chaque ancienne URL `/cours/<ancien>/<slug>` reçoit une
+  301 vers `/cours/<nouveau>/<slug>` dans `public/_redirects`. Découper les compléments par script
+  (blocs de l'ancien fichier renumérotés), compléter chaque nouveau module jusqu'à un programme
+  complet (norme « cours détaillé »), séparer `MOTIFS` et relier les deux modules entre eux
+  (liens dans les chapitres et l'annexe).
 
 ---
 

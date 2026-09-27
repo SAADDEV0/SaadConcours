@@ -28,3 +28,10 @@
 # /bac n'a pas de page à lui : seule la 2ème Bac est publiée (lib/bacProgramme.js).
 # Le redirect() de app/bac/page.js répondait en 307 depuis le Worker.
 /bac /bac/2bac 301
+
+# Le module « Statistiques et Probabilités » (S2) a été séparé le 2026-09-27 en
+# Statistique descriptive (S2, stats_cours) et Probabilités (S3, probas_cours) :
+# ses chapitres de probabilités ont changé de module.
+/cours/stats_cours/les-fondements-du-calcul-des-probabilites /cours/probas_cours/les-fondements-du-calcul-des-probabilites 301
+/cours/stats_cours/variables-aleatoires-et-lois-usuelles /cours/probas_cours/variables-aleatoires-et-lois-usuelles 301
+/cours/stats_cours/echantillonnage-et-estimation /cours/probas_cours/echantillonnage-et-estimation 301
