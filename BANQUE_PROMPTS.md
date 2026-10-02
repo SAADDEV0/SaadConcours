@@ -250,6 +250,12 @@ Règles des champs :
 ### C2 — Ajouter un concours fourni (photo, PDF, lien)
 Comme C1 étapes 5 → 8, à partir du fichier ou du lien que je donne. Si des infos manquent sur le
 sujet (année, faculté), les déduire de l'en-tête ; à défaut, **demander**.
+- Photos collées dans le chat : seules celles du **premier message** sont enregistrées sur disque
+  (dossier `images/` de la session). Celles envoyées en cours de tâche ne sont lisibles qu'à l'écran :
+  transcrire quand même, `images: []`, et le signaler dans `notions_cles` et le compte rendu
+  (précédent : AIF Aïn Chock 2025, questionnaires B et C).
+- Plusieurs questionnaires (A, B, C…) d'une même session = textes différents → une fiche chacun
+  (`…_AIF`, `…_AIF2`), chacune renvoyant à l'autre dans `notions_cles`.
 
 ### C3 — Rédiger ou refaire un corrigé
 - `corrige le concours X` : relire les scans **et** `enonce_md`, rédiger/refaire `corrige_md`,
