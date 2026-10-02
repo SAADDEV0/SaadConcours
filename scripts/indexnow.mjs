@@ -51,6 +51,9 @@ const tout = args.has("--all");
 
 function echec(message) {
   console.error(`ÉCHEC IndexNow : ${message}`);
+  // L'étape est en continue-on-error et ses logs ne se lisent qu'authentifié :
+  // l'annotation, elle, s'affiche dans le résumé du run (et via l'API publique).
+  if (process.env.GITHUB_ACTIONS) console.log(`::warning title=IndexNow::${message}`);
   process.exit(1);
 }
 
@@ -110,8 +113,9 @@ if (aEnvoyer.length) {
   // partout : jusqu'à une minute d'attente, comme les vérifications du workflow.
   let cleEnLigne = false;
   for (let essai = 1; essai <= 6 && !cleEnLigne; essai++) {
-    const r = await fetch(KEY_LOCATION, { cache: "no-store" }).catch(() => null);
+    const r = await fetch(KEY_LOCATION).catch(() => null);
     cleEnLigne = Boolean(r?.ok) && (await r.text()).trim() === KEY;
+    if (!cleEnLigne) console.log(`  clé pas encore en ligne (essai ${essai}/6 : ${r ? r.status : "requête impossible"})`);
     if (!cleEnLigne && essai < 6) await new Promise((ok) => setTimeout(ok, 10_000));
   }
   if (!cleEnLigne) echec(`${KEY_LOCATION} ne renvoie pas la clé : le site n'est pas (encore) déployé avec elle.`);
