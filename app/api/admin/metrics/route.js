@@ -14,11 +14,15 @@ import {
   getRecentPdfDownloads,
   getAdStats,
   getShopStats,
+  getPageStats,
 } from "@/lib/analytics";
 import { getSubscriberHistory } from "@/lib/subscribers";
 import { resolveRange } from "@/lib/dateRange";
 
 export const dynamic = "force-dynamic";
+
+// Même forme que les chemins acceptés par /api/track/* (seuls ceux-là existent).
+const PATH_RE = /^\/[a-zA-Z0-9\-_/]{0,180}$/;
 
 // Statistiques de la console v6. Uniquement des lectures KV (compteurs,
 // classements, journaux) : aucun fichier de contenu n'est chargé ici, les
@@ -40,6 +44,19 @@ export async function GET(req) {
   if (sp.get("scope") === "ads") {
     const ads = await safe(getAdStats(), { views: {}, clicks: {}, days: [] });
     return NextResponse.json({ ads }, { headers: { "Cache-Control": "private, max-age=30" } });
+  }
+
+  // ?scope=page&path=/concours/xyz → fiche d'une page (onglet Pages).
+  if (sp.get("scope") === "page") {
+    const path = sp.get("path") || "";
+    if (!PATH_RE.test(path)) return NextResponse.json({ error: "Chemin invalide." }, { status: 400 });
+    try {
+      const page = await getPageStats(path, range);
+      return NextResponse.json({ range, page }, { headers: { "Cache-Control": "private, max-age=30" } });
+    } catch (err) {
+      console.error("metrics page", err);
+      return NextResponse.json({ error: "Statistiques indisponibles." }, { status: 500 });
+    }
   }
 
   try {

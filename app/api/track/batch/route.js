@@ -58,7 +58,8 @@ const HANDLERS = {
       const path = sanitizePath(e.path);
       // first === false : page suivante de la même session → vue comptée,
       // mais pas de nouvelle entrée ville / journal des visiteurs.
-      return path ? trackPathView(path, e.first === false ? null : ctx) : null;
+      const first = e.first !== false;
+      return path ? trackPathView(path, ctx, { first, source: first && e.source ? sanitizeSource(e.source) : null }) : null;
     },
   },
   ad: {

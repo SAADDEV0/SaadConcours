@@ -522,6 +522,30 @@ export const chromeScript = function initChrome() {
   // widget — no longer shown on the site, but every unique browser still
   // pings once (localStorage-gated, same "first hit only" semantics the
   // old counter used) so the real number stays visible in /admin.
+  // D'où arrive le visiteur : partagé par le compteur de visites ci-dessous et
+  // par le compteur par page (source d'arrivée de la première page vue).
+  function detectSource() {
+    try {
+      const utm = new URLSearchParams(location.search).get("utm_source");
+      if (utm) return utm.toLowerCase();
+      const ref = document.referrer;
+      if (!ref) return "direct";
+      const host = new URL(ref).hostname.replace(/^www\./, "");
+      if (host === location.hostname) return "direct";
+      if (host.includes("google")) return "google";
+      if (host.includes("facebook") || host.includes("fb.com")) return "facebook";
+      if (host.includes("instagram")) return "instagram";
+      if (host.includes("t.co") || host.includes("twitter") || host.includes("x.com")) return "twitter";
+      if (host.includes("whatsapp")) return "whatsapp";
+      if (host.includes("tiktok")) return "tiktok";
+      if (host.includes("youtube")) return "youtube";
+      if (host.includes("bing")) return "bing";
+      return host;
+    } catch {
+      return "direct";
+    }
+  }
+
   (function initVisitorTracking() {
     try {
       if (localStorage.getItem("sc_visited") === "1") return;
@@ -529,29 +553,6 @@ export const chromeScript = function initChrome() {
     } catch {
       return;
     }
-
-    function detectSource() {
-      try {
-        const utm = new URLSearchParams(location.search).get("utm_source");
-        if (utm) return utm.toLowerCase();
-        const ref = document.referrer;
-        if (!ref) return "direct";
-        const host = new URL(ref).hostname.replace(/^www\./, "");
-        if (host === location.hostname) return "direct";
-        if (host.includes("google")) return "google";
-        if (host.includes("facebook") || host.includes("fb.com")) return "facebook";
-        if (host.includes("instagram")) return "instagram";
-        if (host.includes("t.co") || host.includes("twitter") || host.includes("x.com")) return "twitter";
-        if (host.includes("whatsapp")) return "whatsapp";
-        if (host.includes("tiktok")) return "tiktok";
-        if (host.includes("youtube")) return "youtube";
-        if (host.includes("bing")) return "bing";
-        return host;
-      } catch {
-        return "direct";
-      }
-    }
-
     queueTrackEvent({ t: "pageview", source: detectSource() });
   })();
 
@@ -570,7 +571,7 @@ export const chromeScript = function initChrome() {
       first = seen.length === 0;
       sessionStorage.setItem("sc_paths", JSON.stringify([...seen, location.pathname].slice(-200)));
     } catch {}
-    queueTrackEvent({ t: "page-path", path: location.pathname, first });
+    queueTrackEvent(first ? { t: "page-path", path: location.pathname, first, source: detectSource() } : { t: "page-path", path: location.pathname, first });
   })();
 
   (function initTheme() {

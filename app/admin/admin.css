@@ -223,6 +223,8 @@ a.ax-stat:hover { border-color: var(--ax-line); }
 .ax-list-meta { font-size: 0.76rem; color: var(--text-faint); display: block; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ax-list a.ax-list-title { text-decoration: none; }
 .ax-list a.ax-list-title:hover { color: var(--ax-accent-ink); }
+.ax-list-open { background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.ax-list-open:hover .ax-list-title { color: var(--ax-accent-ink); }
 .ax-num { font-variant-numeric: tabular-nums; font-weight: 700; }
 .ax-muted { color: var(--text-faint); }
 .ax-dim { color: var(--text-dim); }
