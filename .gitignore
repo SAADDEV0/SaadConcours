@@ -33,3 +33,7 @@ scripts/.r2-uploaded
 # OpenNext build output for Cloudflare
 .open-next/
 .wrangler/
+
+# Empreintes du dernier envoi IndexNow (scripts/indexnow.mjs), gardées par le
+# cache GitHub Actions entre deux déploiements, pas par git.
+.indexnow/

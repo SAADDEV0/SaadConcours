@@ -524,14 +524,30 @@ export const chromeScript = function initChrome() {
   // old counter used) so the real number stays visible in /admin.
   // D'où arrive le visiteur : partagé par le compteur de visites ci-dessous et
   // par le compteur par page (source d'arrivée de la première page vue).
+  // Moteurs de réponse IA : testés avant Google (gemini.google.com contient
+  // « google ») et aussi sur utm_source, que ChatGPT ajoute à ses liens
+  // (utm_source=chatgpt.com).
+  function aiSource(s) {
+    if (s.includes("chatgpt") || s.includes("openai")) return "chatgpt";
+    if (s.includes("perplexity")) return "perplexity";
+    if (s.includes("gemini") || s.includes("bard.google")) return "gemini";
+    if (s.includes("claude")) return "claude";
+    if (s.includes("copilot")) return "copilot";
+    if (s.includes("mistral")) return "mistral";
+    if (s.includes("deepseek")) return "deepseek";
+    return null;
+  }
+
   function detectSource() {
     try {
       const utm = new URLSearchParams(location.search).get("utm_source");
-      if (utm) return utm.toLowerCase();
+      if (utm) return aiSource(utm.toLowerCase()) || utm.toLowerCase();
       const ref = document.referrer;
       if (!ref) return "direct";
       const host = new URL(ref).hostname.replace(/^www\./, "");
       if (host === location.hostname) return "direct";
+      const ai = aiSource(host);
+      if (ai) return ai;
       if (host.includes("google")) return "google";
       if (host.includes("facebook") || host.includes("fb.com")) return "facebook";
       if (host.includes("instagram")) return "instagram";

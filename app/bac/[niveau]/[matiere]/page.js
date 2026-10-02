@@ -2,9 +2,13 @@ import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import ChromeInit from "../../../_shared/ChromeInit";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
+import { breadcrumbJsonLd } from "../../../_shared/listingSchema";
+import JsonLd from "../../../_shared/JsonLd";
 import { getBacMatiereEffectif } from "../../../../lib/bacContenuEffectif";
-import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
+import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
 import { NATIONAL_SOURCES, bacNationauxSeries, bacNationalPdf, bacNationalDocLabel } from "../../../../lib/bacNationaux";
+
+const SITE_URL = "https://www.saadconcours.space";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -55,8 +59,33 @@ export default async function BacMatierePage(props) {
     .filter(Boolean);
   const examen = m.examen || { label: "Examens nationaux corrigés", pluriel: "Examens nationaux" };
 
+  // Comme la page d'un module FSJES (app/cours/[id]/page.js) : la matière et
+  // ses chapitres rédigés, les seuls qui ont une page.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: `${m.nom} — ${niv.label}`,
+    description: m.description,
+    url: `${SITE_URL}${bacMatiereHref(m)}`,
+    educationalLevel: `${niv.label} Sciences Économiques et Gestion`,
+    isAccessibleForFree: true,
+    provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
+    hasPart: m.chapitres
+      .filter((c) => contenu[c.slug])
+      .map((c) => ({ "@type": "LearningResource", name: c.titre, url: `${SITE_URL}${bacChapitreHref(m, c)}` })),
+  };
+
   return (
     <>
+      <JsonLd
+        data={[
+          jsonLd,
+          breadcrumbJsonLd([
+            { name: `Cours Bac · ${niv.label}`, path: `/bac/${niveau}` },
+            { name: m.court, path: bacMatiereHref(m) },
+          ]),
+        ]}
+      />
       <ChromeInit />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac", showSearch: false }) }} />
 

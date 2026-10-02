@@ -34,6 +34,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-gumroad) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
+| `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
 | `vérifie` · `publie` · `push` · `déploie` | [P1](#p1--vérifier-committer-publier) |
 
 Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à livrer. Un filtre
@@ -130,6 +131,15 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   `redirect()` Next. Le sitemap est publié en fichier statique par `scripts/prerender-to-assets.mjs`.
 - Pages de confiance : `/a-propos` (éditeur : Saad), `/contact`, `/confidentialite`,
   `/mentions-legales`, toutes liées depuis le pied de page. Les tenir exactes quand le site change.
+
+### 1.8 GEO (moteurs de réponse IA) : règles fixées par l'audit du 2026-10-02
+- Chaque type de fiche publique a son JSON-LD + `BreadcrumbList` (concours, chapitres FSJES et Bac,
+  matières, blog, QCM). Un nouveau type de page en reçoit un sur le même modèle.
+- `public/llms.txt` est écrit à la main : ses chiffres sont des planchers (« plus de 270 sujets »).
+  Le mettre à jour quand un module ou une matière s'ajoute, ou quand un plancher est largement dépassé.
+- IndexNow part tout seul à chaque déploiement (`scripts/indexnow.mjs`, étape du workflow de
+  déploiement) : ne pas supprimer la clé `public/e657fda819c595e0829622889594962d.txt`.
+- `robots.txt` autorise les crawlers IA : ne jamais les bloquer.
 
 ---
 
@@ -672,6 +682,23 @@ Produire un rapport chiffré :
 - évaluations : modules couverts vs modules de concours les plus fréquents ;
 - blog : articles par catégorie, articles désindexés comme quasi-doublons.
 Terminer par les **5 prochaines actions** les plus utiles, formulées comme commandes de ce fichier.
+
+### M2 — Audit GEO (moteurs de réponse IA)
+Vérifier que ChatGPT, Claude, Perplexity, Gemini et Copilot peuvent trouver, lire et citer le site,
+**en production**. Rapport seulement, corrections sur demande.
+1. **Accès** : `robots.txt` en ligne identique à `public/robots.txt` (`diff --strip-trailing-cr`) ;
+   `/`, `/concours`, `/blog`, `/llms.txt` en 200 avec les user-agents GPTBot, OAI-SearchBot,
+   ChatGPT-User, ClaudeBot, Claude-SearchBot, PerplexityBot, Googlebot, bingbot. Un 200 avec un
+   user-agent imité ne prouve pas que Cloudflare laisse passer les vrais robots (il les reconnaît
+   par IP) : me rappeler de vérifier Security → Bots / AI Crawl Control.
+2. **Lecture** : une ou deux pages de chaque type (accueil, concours, chapitre FSJES, chapitre Bac,
+   article, QCM) : texte présent dans le HTML sans JavaScript, JSON-LD qui parse et types attendus
+   (règle 1.8), titre ≤ 65 et description ≤ 155 (règle 1.7).
+3. **Index Bing** (ChatGPT Search, Copilot, DuckDuckGo) : nombre de résultats `site:saadconcours.space`
+   sur bing.com comparé au nombre d'URL du sitemap ; étape IndexNow du dernier déploiement réussie.
+4. **llms.txt** : chiffres et liens à jour avec les données (règle 1.8).
+5. **Mesure** : sources ChatGPT, Perplexity, Gemini, Claude, Copilot dans /admin → Statistiques.
+Terminer par ce qui va bien, puis ce qu'il faut corriger, le plus important d'abord.
 
 ---
 

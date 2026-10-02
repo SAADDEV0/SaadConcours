@@ -20,7 +20,7 @@ const TABS = [
   { key: "journal", label: "Journal", icon: "clock" },
 ];
 
-const SOURCE_LABELS = { google: "Google", direct: "Accès direct", facebook: "Facebook", instagram: "Instagram", whatsapp: "WhatsApp", bing: "Bing", other: "Autres sites", tiktok: "TikTok", youtube: "YouTube", telegram: "Telegram", linkedin: "LinkedIn", interne: "Navigation sur le site" };
+const SOURCE_LABELS = { google: "Google", direct: "Accès direct", facebook: "Facebook", instagram: "Instagram", whatsapp: "WhatsApp", bing: "Bing", other: "Autres sites", tiktok: "TikTok", youtube: "YouTube", telegram: "Telegram", linkedin: "LinkedIn", interne: "Navigation sur le site", chatgpt: "ChatGPT", perplexity: "Perplexity", gemini: "Gemini", claude: "Claude", copilot: "Copilot", mistral: "Le Chat (Mistral)", deepseek: "DeepSeek" };
 
 export default function Statistics() {
   const [tab, setTab] = useTab(TABS);

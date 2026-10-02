@@ -1,23 +1,37 @@
 # SaadConcours
 
-> Site gratuit d'économie et de gestion au Maroc, du lycée au master : cours du 2ème Bac Sciences Économiques et Gestion, cours de Licence FSJES (S1 à S6) chapitre par chapitre, et base de sujets réels de concours d'accès aux licences d'excellence et aux masters, avec corrigés indicatifs et QCM.
+> Site gratuit d'économie et de gestion au Maroc, du lycée au master : cours du 2ème Bac Sciences Économiques et Gestion, cours de Licence FSJES (S1 à S6) chapitre par chapitre, et base de plus de 270 sujets réels de concours d'accès aux licences d'excellence et aux masters, avec corrigés indicatifs et QCM.
 
 SaadConcours est un site indépendant, non affilié aux universités, à destination des élèves du Bac Sciences Économiques et Gestion, des étudiants en Licence FSJES et des candidats aux concours d'accès aux masters spécialisés en économie-gestion (CCA, GFCF, Finance, Fiscalité, Audit, Marketing, GRH...). Le site est édité et tenu par Saad, seul administrateur, et mis à jour régulièrement.
 
 ## Contenu du site
 
-- [Cours Bac](https://www.saadconcours.space/bac/2bac): les matières du 2ème Bac Sciences Économiques et Gestion (économie générale, EOAE, comptabilité, droit, maths, informatique, philosophie, anglais), chapitre par chapitre avec cours, exercices corrigés, résumé et QCM, plus les examens nationaux en PDF avec leurs sources.
-- [Cours Licence FSJES](https://www.saadconcours.space/cours): 21 modules du S1 au S6 (comptabilité générale et analytique, analyse financière, mathématiques financières, micro et macroéconomie, statistiques, droit, marketing, audit...), découpés en chapitres avec exercices corrigés.
-- [Concours Master](https://www.saadconcours.space/concours): plus de 250 sujets réels de concours d'accès au master (FSJES, ENCG, facultés polydisciplinaires), énoncé retranscrit, scan original quand il existe et corrigé indicatif. Filtrable par ville, établissement, filière et année.
+- [Cours Bac](https://www.saadconcours.space/bac/2bac): les 8 matières du 2ème Bac Sciences Économiques et Gestion (économie générale, EOAE, comptabilité et mathématiques financières, droit, maths, informatique, philosophie, anglais), plus de 90 chapitres rédigés avec cours, exercices corrigés, résumé et QCM, et, pour les matières de l'examen national, les sujets des sessions précédentes en PDF.
+- [Cours Licence FSJES](https://www.saadconcours.space/cours): 24 modules du S1 au S6 (comptabilité générale, analytique et approfondie, analyse financière, mathématiques financières, micro et macroéconomie, statistique, probabilités, économétrie, droit, fiscalité, marketing, GRH, audit, contrôle de gestion...), découpés en chapitres avec exercices corrigés.
+- [Concours Master](https://www.saadconcours.space/concours): plus de 260 sujets réels de concours d'accès au master, énoncé retranscrit, scan original quand il existe et, pour la plupart, corrigé indicatif. Filtrable par ville, établissement, filière et année.
 - [Concours Licence d'excellence](https://www.saadconcours.space/concours/licence-excellence): sujets d'accès aux licences d'excellence (accès en S5).
-- [Évaluation](https://www.saadconcours.space/evaluation): QCM d'auto-évaluation de 100 questions par module, avec correction et export PDF.
-- [Blog](https://www.saadconcours.space/blog): méthode, choix du master, dossier de candidature et préparation de l'oral, à partir des sujets réels de la base.
+- [Évaluation](https://www.saadconcours.space/evaluation): concours blancs de 100 questions corrigées (analyse financière, audit, comptabilité analytique, macroéconomie, mathématiques financières), avec export PDF.
+- [Blog](https://www.saadconcours.space/blog): une soixantaine d'articles sur la méthode, le choix du master, chaque faculté, le dossier de candidature et l'oral, à partir des sujets réels de la base.
+- [FAQ](https://www.saadconcours.space/faq): déroulement du concours d'accès au master, conditions d'inscription, différences entre les masters CCA, GFCF, Finance, Fiscalité et Audit.
 
 ## Faits clés
 
+- Couverture de la base de concours : plus de 60 établissements (FSJES surtout, ENCG, facultés polydisciplinaires) dans 25 villes du Maroc, sessions de 2010 à 2026 ; plus de 190 sujets ont un corrigé indicatif.
 - Gratuit, sans compte utilisateur ; le site peut afficher de la publicité.
 - Les corrigés sont indicatifs : rédigés avec l'aide d'une intelligence artificielle à partir du sujet, puis vérifiés par recoupement des chiffres de l'énoncé. Ce ne sont pas des corrigés officiels.
 - Les sujets de concours sont retranscrits à partir de documents publics ; un titulaire de droits peut demander le retrait d'un document.
+
+## Guides de référence
+
+- [Liste des masters économie-gestion accessibles sur concours au Maroc](https://www.saadconcours.space/blog/liste_des_masters_economie_gestion_accessibles_sur_concours_au_maroc)
+- [Comment se déroule le concours d'entrée en master économie-gestion](https://www.saadconcours.space/blog/comment_se_deroule_le_concours_d_entree_en_master_economie_gestion_au_maroc)
+- [Le calendrier des concours master au Maroc](https://www.saadconcours.space/blog/quand_postuler_le_calendrier_des_concours_master_au_maroc)
+- [Quelle moyenne faut-il pour intégrer un master](https://www.saadconcours.space/blog/quelle_moyenne_faut_il_pour_integrer_un_master_au_maroc)
+- [Note éliminatoire au concours de master](https://www.saadconcours.space/blog/note_eliminatoire_au_concours_de_master_comment_ca_marche)
+- [Les 5 masters les plus difficiles au Maroc](https://www.saadconcours.space/blog/les_5_masters_les_plus_difficiles_au_maroc): classement calculé sur la difficulté des sujets de la base.
+- [Master CCA ou master Finance](https://www.saadconcours.space/blog/master_cca_vs_master_finance_lequel_choisir)
+- [FSJES ou ENCG pour un master](https://www.saadconcours.space/blog/fsjes_vs_encg_quelles_differences_pour_ton_master)
+- [Dossier de candidature au master : la checklist](https://www.saadconcours.space/blog/dossier_de_candidature_au_master_checklist)
 
 ## Pages utiles
 

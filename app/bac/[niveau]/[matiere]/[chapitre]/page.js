@@ -4,10 +4,14 @@ import { chromeHtml, footerHtml } from "../../../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../../../_shared/mathMarkdown";
 import MathScripts from "../../../../_shared/MathScripts";
 import { fitTitle, clampDescription } from "../../../../_shared/seoText";
+import { breadcrumbJsonLd } from "../../../../_shared/listingSchema";
+import JsonLd from "../../../../_shared/JsonLd";
 import BacQcm from "../../../BacQcm";
 import BacChapitreClient from "../../../BacChapitreClient";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, findBacChapitre, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../../lib/bacProgramme";
 import { getBacChapitreEffectif, getBacMatiereEffectif } from "../../../../../lib/bacContenuEffectif";
+
+const SITE_URL = "https://www.saadconcours.space";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -21,6 +25,17 @@ const ONGLETS = [
 ];
 
 const rempli = (v) => Boolean(v) && (!Array.isArray(v) || v.length > 0);
+
+function descriptionDe(m, niv, titre) {
+  return clampDescription(`${m.nom} ${niv.label} : ${titre}. Cours, exercices corrigés, résumé et QCM.`);
+}
+
+// Titres de sections du cours (## et ###), pour `teaches` : ce que le chapitre
+// enseigne vraiment, comme le sommaire des chapitres FSJES.
+function sommaireDe(cours) {
+  if (typeof cours !== "string") return [];
+  return [...cours.matchAll(/^#{2,3}\s+(.+)$/gm)].map((x) => x[1].replace(/[*_`]/g, "").trim()).filter(Boolean);
+}
 
 // Seuls les chapitres rédigés ont une page. Un chapitre vide rendait quatre
 // onglets « en préparation » : une page vide de plus aux yeux de la relecture
@@ -43,10 +58,9 @@ export async function generateMetadata(props) {
   const niv = bacNiveauInfo(niveau);
   const t = found.chapitre.titre;
   const title = fitTitle([`${t} — ${m.court} ${niv.label}`, `${t} — ${niv.label}`, t]);
-  const description = clampDescription(`${m.nom} ${niv.label} : ${t}. Cours, exercices corrigés, résumé et QCM.`);
   return {
     title,
-    description,
+    description: descriptionDe(m, niv, t),
     alternates: { canonical: `/bac/${niveau}/${matiere}/${chapitre}` },
   };
 }
@@ -71,10 +85,43 @@ export default async function BacChapitrePage(props) {
   const prev = chapitresRediges[i - 1] || null;
   const next = chapitresRediges[i + 1] || null;
   const onglets = ONGLETS.filter((o) => rempli(contenu[o.code]));
+  const sommaire = sommaireDe(contenu.cours);
+
+  // Même balisage que les chapitres FSJES (app/cours/[id]/[chapitre]/page.js) :
+  // les pages Bac n'avaient que le balisage commun à tout le site.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    name: c.titre,
+    headline: c.titre,
+    description: descriptionDe(m, niv, c.titre),
+    url: `${SITE_URL}${bacChapitreHref(m, c)}`,
+    // L'anglais est rédigé en anglais mais n'a pas de `lang` (réservé à l'arabe, qui change le sens d'écriture).
+    inLanguage: m.lang || (m.slug === "anglais" ? "en" : "fr"),
+    isAccessibleForFree: true,
+    learningResourceType: onglets.map((o) => o.label),
+    educationalLevel: `${niv.label} Sciences Économiques et Gestion`,
+    teaches: sommaire.length ? sommaire : c.titre,
+    audience: { "@type": "EducationalAudience", educationalRole: "student" },
+    position: c.numero,
+    isPartOf: { "@type": "Course", name: `${m.nom} — ${niv.label}`, url: `${SITE_URL}${bacMatiereHref(m)}` },
+    provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
+    author: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
+  };
 
   return (
     <>
       <MathScripts />
+      <JsonLd
+        data={[
+          jsonLd,
+          breadcrumbJsonLd([
+            { name: `Cours Bac · ${niv.label}`, path: `/bac/${niveau}` },
+            { name: m.court, path: bacMatiereHref(m) },
+            { name: c.titre, path: bacChapitreHref(m, c) },
+          ]),
+        ]}
+      />
       <BacChapitreClient editId={`${niveau}/${matiere}/${chapitre}`} />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac", showSearch: false }) }} />
 

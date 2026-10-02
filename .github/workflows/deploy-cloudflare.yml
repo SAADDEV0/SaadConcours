@@ -172,3 +172,35 @@ jobs:
             echo "scripts/prerender-to-assets.mjs n'avait rien à publier."
             exit 1
           fi
+
+      # INDEXNOW : PRÉVENIR BING DES PAGES CHANGÉES
+      #
+      # ChatGPT Search, Copilot et DuckDuckGo répondent depuis l'index de Bing,
+      # qui ne connaissait qu'environ 55 pages du site le 2026-10-02. Une fois
+      # le déploiement vérifié, scripts/indexnow.mjs envoie les URL dont le
+      # contenu a changé depuis le déploiement précédent. Les empreintes de ce
+      # dernier passent d'un déploiement à l'autre par le cache Actions
+      # (une entrée par run, la plus récente est restaurée) ; si le cache a
+      # expiré, tout le sitemap part, ce qu'IndexNow accepte.
+      #
+      # continue-on-error : le site est déjà en ligne, un refus d'IndexNow ne
+      # doit pas marquer le déploiement en échec. Le manifeste n'est alors pas
+      # sauvegardé, et le déploiement suivant renvoie les mêmes pages.
+      - name: Restore IndexNow manifest
+        uses: actions/cache/restore@v4
+        with:
+          path: .indexnow/manifest.json
+          key: indexnow-${{ github.run_id }}
+          restore-keys: indexnow-
+
+      - name: Notify search engines (IndexNow)
+        id: indexnow
+        continue-on-error: true
+        run: node scripts/indexnow.mjs
+
+      - name: Save IndexNow manifest
+        if: steps.indexnow.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: .indexnow/manifest.json
+          key: indexnow-${{ github.run_id }}

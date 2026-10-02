@@ -3,6 +3,9 @@ import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import NiveauSwitch from "../../_shared/NiveauSwitch";
 import ChromeInit from "../../_shared/ChromeInit";
 import { BAC_NIVEAUX, BAC_GROUPES, bacNiveauInfo, bacMatieres, bacMatiereHref, bacTextDir } from "../../../lib/bacProgramme";
+import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
+import JsonLd from "../../_shared/JsonLd";
+import { clampDescription } from "../../_shared/seoText";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -17,8 +20,16 @@ export async function generateMetadata(props) {
   if (!info?.available) return {};
   return {
     title: `Cours ${info.label} Sciences Économiques & Gestion`,
+    description: descriptionDe(info),
     alternates: { canonical: `/bac/${niveau}` },
   };
+}
+
+// Sans elle, la page reprenait la description générique de app/bac/layout.js.
+function descriptionDe(info) {
+  return clampDescription(
+    `Cours ${info.label} Sciences Économiques et Gestion au Maroc : ${bacMatieres(info.code).length} matières découpées en chapitres, avec exercices corrigés, résumés, QCM et examens nationaux.`,
+  );
 }
 
 function MatiereCard({ m }) {
@@ -59,6 +70,17 @@ export default async function BacNiveauPage(props) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          collectionJsonLd({
+            name: `Cours ${info.label} Sciences Économiques & Gestion`,
+            description: descriptionDe(info),
+            path: `/bac/${niveau}`,
+            items: matieres.map((m) => ({ name: m.nom, path: bacMatiereHref(m) })),
+          }),
+          breadcrumbJsonLd([{ name: `Cours Bac · ${info.label}`, path: `/bac/${niveau}` }]),
+        ]}
+      />
       <ChromeInit />
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac", showSearch: false }) }} />
 

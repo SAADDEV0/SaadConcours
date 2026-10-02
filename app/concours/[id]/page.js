@@ -151,17 +151,27 @@ export default async function ConcoursDetailPage(props) {
   // corrige_md merged in so the PDF (top button + bottom actions) includes
   // the corrigé even when it only exists as a raw file, not on c itself.
   const fullConcours = corrigeMd ? { ...publique, corrige_md: corrigeMd } : publique;
-  const { title } = await seoDe(c, list);
+  const { title, description } = await seoDe(c, list);
 
   const niveau = niveauInfo(niveauOf(c));
 
+  // Lu par Google et par les moteurs de réponse IA (ChatGPT, Perplexity,
+  // Gemini…) : de quoi citer la fiche sans la deviner — matières évaluées,
+  // corrigé ou non, date de mise en ligne. Jamais la source du sujet (voir plus haut).
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
     name: title,
-    description: `Sujet de concours ${masterLabel || ""} — ${c.etablissement}, ${c.ville}, ${c.annee}`.trim(),
+    description,
     url,
+    inLanguage: "fr",
+    isAccessibleForFree: true,
+    learningResourceType: corrigeHtml ? ["Sujet d'examen", "Corrigé indicatif"] : ["Sujet d'examen"],
     educationalLevel: isLicenceExcellence(c) ? "Licence" : "Master",
+    ...(c.modules?.length ? { assesses: c.modules } : {}),
+    keywords: [...new Set([masterLabel, c.filiere, c.etablissement, c.ville, String(c.annee)].filter(Boolean))].join(", "),
+    ...(c.date_ajout ? { datePublished: c.date_ajout } : {}),
+    isPartOf: { "@type": "CollectionPage", name: `Concours ${niveau.label}`, url: `${SITE_URL}${niveau.href}` },
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
   };
 
