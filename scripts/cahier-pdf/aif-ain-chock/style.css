@@ -128,3 +128,11 @@ h2.qtitre { break-before: auto; margin-top: 7mm; break-after: avoid; }
 .welcome .tab td, .welcome .tab th { padding-top: 1.1mm; padding-bottom: 1.1mm; }
 .welcome h3.sous { margin-top: 4mm; }
 .welcome p { margin-bottom: 2mm; }
+
+/* questions qui retombent */
+.qcm.rq { border-color: #c7d2fe; }
+.rinfo { display: flex; justify-content: space-between; align-items: baseline; gap: 3mm; margin: -2.5mm -3.5mm 2mm; padding: 1.8mm 3.5mm; background: #eef2ff; border-radius: 2.5mm 2.5mm 0 0; border-bottom: 1px solid #c7d2fe; }
+.rtit { font-weight: 800; color: #312e81; font-size: 9.5pt; }
+.rans { font-size: 8.3pt; font-weight: 700; color: #92400e; background: #fef3c7; padding: .4mm 2mm; border-radius: 1.5mm; white-space: nowrap; }
+.retenir { margin-top: 1.5mm; font-size: 9pt; background: #fef3c7; border-radius: 1.5mm; padding: 1.5mm 3mm; }
+.retenir b { color: #92400e; }
