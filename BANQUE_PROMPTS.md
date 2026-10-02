@@ -29,6 +29,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `modifie / supprime l'évaluation X` · `corrige la question N de X` | [E2](#e2--modifier-ou-supprimer-une-évaluation) |
 | `ajoute un article sur …` · `ajoute 3 articles blog` | [A1](#a1--ajouter-un-article-de-blog) |
 | `mets à jour l'article X` · `supprime l'article X` | [A2](#a2--modifier-ou-supprimer-un-article) |
+| `fais le même cahier PDF pour <master> <fac>` · `cahier de préparation + article` | [A3](#a3--cahier-de-préparation-pdf--article--fais-le-même-cahier-pour-master-fac-) |
 | `ajoute une news …` · `supprime la news X` · `lance le scraper news` | [N1](#n1--news-concours-ouverts) |
 | `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-gumroad) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
@@ -597,6 +598,25 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
   se **réécrit sous le même `id`**, il ne se supprime pas — précédent : les guides « FSJES Mohammedia »
   et « FSJES Tétouan », dépubliés comme quasi-doublons le 24/09/2026 alors qu'ils étaient parmi les
   pages les plus visitées, puis réécrits le jour même avec les vrais sujets de la faculté.
+
+### A3 — Cahier de préparation PDF + article (« fais le même cahier pour <master> <fac> »)
+Modèle : cahier GFC Aïn Sebaâ et cahier AIF Aïn Chock (article
+`cahier_preparation_master_aif_fsjes_ain_chock_pdf_gratuit`, 2026-10-02).
+1. **Annales** : partir des concours du master en base (énoncé + corrigé). S'il y en a peu, ajouter
+   les sujets d'un master voisin de la même faculté dont le jury recycle les questions (AIF ← ACGSI),
+   en le disant dans le cahier. Chaque réponse est revérifiée (les vieux corrigés en base peuvent
+   être faux) et porte un niveau : réponse sûre / probable / à vérifier. Une question écrite par nous
+   est marquée « Entraînement » et n'est jamais présentée comme une annale.
+2. **PDF** : copier `scripts/cahier-pdf/aif-ain-chock/` dans un nouveau dossier, réécrire `qcm.mjs`
+   (QCM par partie) et `fiches.mjs` (mémo, 12 pièges, fiches avec formules LaTeX), adapter les
+   textes de `build.mjs`, puis `node scripts/cahier-pdf/<dossier>/build.mjs public/cahiers/<slug>.pdf`.
+   Outils : Edge headless + `pdftotext` (pas de Python sur le poste). Relire des pages avec
+   `snap.mjs` (couverture, sommaire, une fiche, une page de QCM, la fin).
+3. Le cahier est un **document officiel de saadconcours.space** (couverture et encadré). Préciser
+   seulement que la faculté ne publie pas de corrigé : les réponses sont rédigées par SaadConcours.
+4. **Article** (recette A1) : chiffres tirés des annales (questions par thème, questions recyclées,
+   « aucune réponse » justes…), bouton de téléchargement vers `/cahiers/<slug>.pdf` avec pages et
+   poids, liens vers les fiches concours. Pas de lien Facebook tant qu'aucune publication n'existe.
 
 ---
 
