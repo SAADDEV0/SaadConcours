@@ -558,6 +558,7 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
   "seoTitle": "(facultatif) titre Google ≤ 65 caractères si title est plus long",
   "excerpt": "1-2 phrases (≈ 250 caractères) pour la carte ; la meta description en garde 155.",
   "publishedAt": "AAAA-MM-JJ",
+  "updatedAt": "(facultatif) AAAA-MM-JJ de la dernière révision : dateModified, sitemap, « Mis à jour le »",
   "available": true,
   "category": "facultes",
   "content": "…Markdown…"
@@ -583,7 +584,13 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
 
 ### A2 — Modifier ou supprimer un article
 - Mettre à jour : réécrire les sections concernées, **ne pas changer l'`id`** (URL indexée),
-  mettre à jour les chiffres avec l'état actuel de la base.
+  mettre à jour les chiffres avec l'état actuel de la base, et poser `updatedAt` à la date du jour.
+- Article qui offre un PDF (cahier, fiche) : le PDF est **hébergé sur le site**, dans
+  `public/cahiers/<slug>.pdf`, et le bouton « Télécharger » pointe dessus. Jamais un bouton
+  « Télécharger le PDF » qui mène à un post Facebook ou à une autre page : promesse non tenue =
+  retour immédiat vers Google (SEO) et navigation trompeuse (AdSense). Facebook reste un lien
+  secondaire (« pose ta question sous la publication »). Indiquer le nombre de pages et le poids.
+  Précédent : cahier Master GFC FSJES Aïn Sebaâ, 2026-10-02.
 - Supprimer : retirer l'entrée ; chercher les liens `/blog/<id>` dans les autres articles et les corriger.
 - **Avant de dépublier ou supprimer un article, vérifier ses clics dans Search Console**
   (Performances › Pages, propriété `https://www.saadconcours.space/`). Un article qui amène du trafic

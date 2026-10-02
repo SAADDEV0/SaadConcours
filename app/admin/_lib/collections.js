@@ -444,6 +444,8 @@ const blog = {
         { key: "excerpt", label: "Résumé (description SEO)", type: "textarea", rows: 2, required: true, full: true, counter: [120, 160] },
         { key: "category", label: "Rubrique", type: "select", options: BLOG_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })) },
         { key: "publishedAt", label: "Date de publication", type: "date" },
+        // dateModified (JSON-LD), og:modifiedTime, sitemap et « Mis à jour le » de l'article.
+        { key: "updatedAt", label: "Dernière mise à jour (si l'article a été revu)", type: "date" },
       ],
     },
     { title: "Contenu", fields: [{ key: "content", label: "Contenu (Markdown)", type: "markdown", required: true, full: true, rows: 26 }] },

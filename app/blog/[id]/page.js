@@ -47,7 +47,14 @@ export async function generateMetadata(props) {
     description,
     alternates: { canonical: url },
     ...(isDuplicate ? { robots: { index: false, follow: true } } : {}),
-    openGraph: { type: "article", title, description, url, publishedTime: p.publishedAt },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url,
+      publishedTime: p.publishedAt,
+      ...(p.updatedAt ? { modifiedTime: p.updatedAt } : {}),
+    },
     twitter: { card: "summary_large_image", title, description },
   };
 }
@@ -85,7 +92,10 @@ export default async function BlogDetailPage(props) {
     description: p.excerpt,
     url,
     datePublished: p.publishedAt,
-    author: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
+    dateModified: p.updatedAt || p.publishedAt,
+    // L'éditeur nommé sur /a-propos : un auteur identifié pèse plus qu'une
+    // organisation pour Google (E-E-A-T).
+    author: { "@type": "Person", name: "Saad", url: `${SITE_URL}/a-propos` },
     publisher: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
     mainEntityOfPage: url,
     ...(cat ? { articleSection: cat.label } : {}),
@@ -135,6 +145,9 @@ export default async function BlogDetailPage(props) {
           <h1>{p.title}</h1>
           <div className="bac-hero-stats">
             <span className="bac-stat">📅 {p.publishedAt}</span>
+            {p.updatedAt && p.updatedAt !== p.publishedAt && (
+              <span className="bac-stat">🔄 Mis à jour le {p.updatedAt}</span>
+            )}
             <span className="bac-stat">⏱️ {minutes} min de lecture</span>
           </div>
           <div className="sp-hero-actions cd-head-actions">

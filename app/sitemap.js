@@ -108,7 +108,7 @@ export default async function sitemap() {
       url: `${SITE_URL}/blog/${p.id}`,
       changeFrequency: "monthly",
       priority: 0.6,
-      ...(p.publishedAt ? { lastModified: p.publishedAt } : {}),
+      ...(p.updatedAt || p.publishedAt ? { lastModified: p.updatedAt || p.publishedAt } : {}),
     }));
 
   // Espace Bac : niveaux publiés, leurs matières et les chapitres rédigés —
