@@ -94,6 +94,8 @@
 .ax-crumbs strong { color: var(--text); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ax-top-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 .ax-menu-btn { display: none; }
+.ax-shell.side-collapsed { grid-template-columns: minmax(0, 1fr); }
+.ax-shell.side-collapsed .ax-side { display: none; }
 .ax-content { padding: 22px 24px 80px; width: 100%; max-width: 1320px; margin: 0 auto; }
 .ax-content:focus { outline: none; }
 
@@ -102,6 +104,8 @@
   .ax-shell { grid-template-columns: minmax(0, 1fr); }
   .ax-side { position: fixed; left: 0; top: 0; z-index: 90; width: min(300px, 86vw); transform: translateX(-102%); transition: transform 0.22s ease; box-shadow: var(--ax-shadow-pop); }
   .ax-side.open { transform: none; }
+  .ax-shell.side-collapsed .ax-side { display: flex; }
+  .ax-side-toggle { display: none; }
   .ax-scrim.open { display: block; position: fixed; inset: 0; z-index: 80; background: rgba(0, 0, 0, 0.45); }
   .ax-menu-btn { display: inline-flex; }
   .ax-top { padding: 0 14px; }

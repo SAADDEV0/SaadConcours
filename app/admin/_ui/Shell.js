@@ -31,6 +31,29 @@ function useTheme() {
   return { theme, toggle };
 }
 
+// Barre latérale masquable sur grand écran ; le choix est mémorisé.
+function useSideCollapsed() {
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    try {
+      setCollapsed(localStorage.getItem("ax-side-collapsed") === "1");
+    } catch {
+      // stockage indisponible : barre affichée par défaut
+    }
+  }, []);
+  function toggle() {
+    setCollapsed((c) => {
+      try {
+        localStorage.setItem("ax-side-collapsed", c ? "0" : "1");
+      } catch {
+        // stockage indisponible : le choix vaut pour cette page seulement
+      }
+      return !c;
+    });
+  }
+  return { collapsed, toggle };
+}
+
 // Pastilles du menu : brouillons de concours, annonces qui ferment bientôt.
 function useBadges() {
   const [badges, setBadges] = useState({});
@@ -186,6 +209,7 @@ export default function Shell({ children }) {
   const [navOpen, setNavOpen] = useState(false);
   const [palette, setPalette] = useState(false);
   const { theme, toggle } = useTheme();
+  const side = useSideCollapsed();
   const pathname = usePathname();
 
   useHotkey("mod+k", () => setPalette((p) => !p), { allowInInputs: true });
@@ -201,13 +225,23 @@ export default function Shell({ children }) {
         <a className="ax-skip" href="#ax-content">
           Aller au contenu
         </a>
-        <div className="ax-shell">
+        <div className={`ax-shell${side.collapsed ? " side-collapsed" : ""}`}>
           <div className={`ax-scrim${navOpen ? " open" : ""}`} onClick={() => setNavOpen(false)} />
           <Sidebar open={navOpen} onNavigate={() => setNavOpen(false)} onSearch={() => setPalette(true)} />
           <div className="ax-main">
             <header className="ax-top">
               <button type="button" className="ax-btn icon sm ax-menu-btn" onClick={() => setNavOpen(true)} aria-label="Ouvrir le menu">
                 <Icon name="menu" />
+              </button>
+              <button
+                type="button"
+                className="ax-btn icon sm ax-side-toggle"
+                onClick={side.toggle}
+                aria-label={side.collapsed ? "Afficher la barre latérale" : "Masquer la barre latérale"}
+                title={side.collapsed ? "Afficher la barre latérale" : "Masquer la barre latérale"}
+                aria-pressed={side.collapsed}
+              >
+                <Icon name="panels" />
               </button>
               <Crumbs />
               <div className="ax-top-actions">
