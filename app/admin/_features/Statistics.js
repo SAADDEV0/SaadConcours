@@ -111,34 +111,7 @@ export default function Statistics() {
           </div>
         </>
       )}
-      {data && tab === "pages" && (
-        <section className="ax-card">
-          <SectionTitle aside="vues cumulées">Pages les plus vues</SectionTitle>
-          <ul className="ax-list">
-            {(data.topPaths || []).map((p, i) => {
-              const edit = adminHrefForPath(p.member);
-              return (
-                <li key={p.member}>
-                  <span className="ax-muted" style={{ width: 24 }}>{i + 1}</span>
-                  <span className="ax-list-main">
-                    <span className="ax-list-title">{labelForPath(p.member, content)}</span>
-                    <span className="ax-list-meta">{p.member}</span>
-                  </span>
-                  <span className="ax-num">{num(p.score)}</span>
-                  <a className="ax-btn ghost icon sm" href={`https://www.saadconcours.space${p.member}`} target="_blank" rel="noopener noreferrer" aria-label="Ouvrir">
-                    <Icon name="external" size="sm" />
-                  </a>
-                  {edit && (
-                    <Link className="ax-btn ghost icon sm" href={edit} aria-label="Modifier">
-                      <Icon name="edit" size="sm" />
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
+      {data && tab === "pages" && <PagesTab paths={data.topPaths || []} content={content} />}
       {data && tab === "pdf" && (
         <div className="ax-grid main-side">
           <section className="ax-card">
@@ -221,5 +194,64 @@ export default function Statistics() {
         </div>
       )}
     </>
+  );
+}
+
+const PAGE = 20;
+
+// Classement des pages : recherche sur le titre et l'adresse, affiché par
+// paquets de PAGE pour ne pas dérouler des centaines de lignes d'un coup.
+// Le rang reste celui du classement complet, même filtré.
+function PagesTab({ paths, content }) {
+  const [q, setQ] = useState("");
+  const [limit, setLimit] = useState(PAGE);
+  const rows = useMemo(() => paths.map((p, i) => ({ ...p, rank: i + 1, label: labelForPath(p.member, content) })), [paths, content]);
+  const needle = q.trim().toLowerCase();
+  const list = needle ? rows.filter((p) => p.label.toLowerCase().includes(needle) || p.member.toLowerCase().includes(needle)) : rows;
+
+  return (
+    <section className="ax-card">
+      <SectionTitle aside={`vues cumulées · ${num(rows.length)} pages`}>Pages les plus vues</SectionTitle>
+      <div className="ax-toolbar">
+        <div className="ax-search">
+          <Icon name="search" size="sm" />
+          <input className="ax-input" placeholder="Rechercher une page (titre ou adresse)…" value={q} onChange={(e) => (setQ(e.target.value), setLimit(PAGE))} />
+        </div>
+      </div>
+      {!list.length ? (
+        <p className="ax-muted">{q ? "Aucune page ne correspond." : "Aucune page vue pour l'instant."}</p>
+      ) : (
+        <ul className="ax-list">
+          {list.slice(0, limit).map((p) => {
+            const edit = adminHrefForPath(p.member);
+            return (
+              <li key={p.member}>
+                <span className="ax-muted" style={{ width: 28 }}>{p.rank}</span>
+                <span className="ax-list-main">
+                  <span className="ax-list-title">{p.label}</span>
+                  <span className="ax-list-meta">{p.member}</span>
+                </span>
+                <span className="ax-num">{num(p.score)}</span>
+                <a className="ax-btn ghost icon sm" href={`https://www.saadconcours.space${p.member}`} target="_blank" rel="noopener noreferrer" aria-label="Ouvrir">
+                  <Icon name="external" size="sm" />
+                </a>
+                {edit && (
+                  <Link className="ax-btn ghost icon sm" href={edit} aria-label="Modifier">
+                    <Icon name="edit" size="sm" />
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {list.length > limit && (
+        <div className="ax-more">
+          <button type="button" className="ax-btn" onClick={() => setLimit((l) => l + PAGE)}>
+            Afficher plus ({num(list.length - limit)} restantes)
+          </button>
+        </div>
+      )}
+    </section>
   );
 }

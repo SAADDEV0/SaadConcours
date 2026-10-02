@@ -47,7 +47,7 @@ export async function GET(req) {
       safe(getRangeMetrics(range), null),
       safe(getTotals(), null),
       safe(getSubscriberHistory(30), []),
-      safe(getTopPaths(full ? 60 : 12), []),
+      safe(getTopPaths(full ? 500 : 12), []),
       safe(getVisitSources(12), []),
       safe(getTopSearchMisses(full ? 30 : 8), []),
     ]);
