@@ -6707,7 +6707,8 @@
     "source": "- Lien / origine du sujet : https://saadconcours.space (document de correction transmis le 2026-10-03, captures non publiées ; énoncé laissé vide à la demande de l'administrateur)",
     "images": [],
     "categorie": "FCA",
-    "date_ajout": "2026-10-03"
+    "date_ajout": "2026-10-03",
+    "statut": "brouillon"
   },
   {
     "id": "2022_Casablanca_FSJES_AinChock_CCA_Entrainement",
@@ -6730,7 +6731,8 @@
     "source": "- Lien / origine du sujet : https://saadconcours.space (document « Concours d'entraînement 2022/2023 — reconstitution non officielle » transmis le 2026-10-03, captures non publiées ; énoncé laissé vide à la demande de l'administrateur)",
     "images": [],
     "categorie": "FCA",
-    "date_ajout": "2026-10-03"
+    "date_ajout": "2026-10-03",
+    "statut": "brouillon"
   },
   {
     "id": "2022_Casablanca_FSJES_AinChock_CCA",
