@@ -226,6 +226,15 @@ Règles des champs :
    - certains articles n'ont que le texte du sujet (pas de scan) : acceptables, `images: []`, à
      défaut de mieux ;
    - écarter les sélections de **doctorat** et les pages « Correction du concours » sans énoncé.
+   Autres sources (précédent : recherche CCA Aïn Chock, 2026-10-03) :
+   - **Studocu** : curl et WebFetch ne voient qu'une page anti-robot. Ouvrir le document dans le
+     navigateur intégré : le texte de chaque page est dans `div.pf` > `div.t` (le lire par
+     `textContent`, `innerText` est vide). Les fonds `bg*.png` ne contiennent que les filets, pas
+     de scan → `images: []`. Le titre Studocu peut se tromper d'année : se fier à l'en-tête ;
+   - blog disparu (ex. fsjesmaroc.info) : passer par `archive.org/wayback/available?url=…` ;
+   - **mesconcours.ma** ressaisit des sujets sans scan et mélange des reconstitutions : son
+     « CCA Aïn Chock 2022/2023 » est la reconstitution non officielle déjà en base
+     (`…_CCA_Entrainement`). Ne rien en tirer sans scan ou autre source qui le confirme.
 3. **Priorités par défaut** si je ne filtre pas :
    1. **sous-filières** les moins couvertes : compter `filiere` par sous-filière de
       `lib/taxonomy.js` (beaucoup d'anciennes entrées ont un `filiere` hors taxonomie : les
