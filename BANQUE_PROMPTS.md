@@ -643,6 +643,16 @@ Modèle : cahier GFC Aïn Sebaâ et cahier AIF Aïn Chock (article
 4. **Article** (recette A1) : chiffres tirés des annales (questions par thème, questions recyclées,
    « aucune réponse » justes…), bouton de téléchargement vers `/cahiers/<slug>.pdf` avec pages et
    poids, liens vers les fiches concours. Pas de lien Facebook tant qu'aucune publication n'existe.
+5. Précédent CCA Aïn Chock (`scripts/cahier-pdf/cca-ain-chock/`, 2026-10-03) :
+   - concours passé du rédigé au QCM : les exercices des épreuves rédigées sont **mis en QCM**
+     (source « … · adapté en QCM » : énoncé du sujet, propositions écrites par nous) ;
+   - un module annoncé sans annales (IFRS) a sa partie, en QCM « Entraînement » uniquement ;
+   - les QCM d'entraînement sont rédigés avec la bonne réponse souvent en B : `qcm.mjs` fait tourner
+     leurs propositions pour répartir les lettres (les QCM d'un sujet gardent les leurs) ;
+   - une question reprise dans « Les trames qui retombent » doit être unique : champ `key` si sa
+     source est partagée ;
+   - une fiche en brouillon (sujet incomplet) peut servir de source au cahier, mais l'article ne
+     la lie pas (pas de page publique) ; une reconstitution non officielle est nommée comme telle.
 
 ---
 
