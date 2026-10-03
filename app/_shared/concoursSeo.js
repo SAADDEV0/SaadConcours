@@ -16,8 +16,8 @@
 // restent dans le titre indexé — un nom abrégé à la main les perdrait.
 //
 // Deux fiches ne partagent jamais un titre ni une description : les
-// collisions sont résolues sur la liste entière (« Formation continue »,
-// « sujet 2 »).
+// collisions sont résolues sur la liste entière (« Formation initiale »,
+// « sujet 2 »). « Formation continue » figure toujours dans le titre.
 import { isLicenceExcellence } from "../../lib/concoursNiveaux";
 import { DESCRIPTION_MAX, fitTitle, clampDescription } from "./seoText";
 
@@ -136,7 +136,13 @@ function seoPourListe(list, corrigeIds) {
   const seo = new Map();
   const calcule = (c, precision) => {
     const hasCorrige = corrigeIds.has(c.id);
-    const f = formes(c, hasCorrige, precision);
+    let f = formes(c, hasCorrige, precision);
+    // La formation continue est un autre concours que la formation initiale
+    // (autre public, autre épreuve) : on le dit toujours, même sans homonyme.
+    if (!precision && /formation continue/i.test(f.variante)) {
+      precision = "formation continue";
+      f = formes(c, hasCorrige, precision);
+    }
     const complet = fitTitle(f.titres);
     // Sinon : la forme complète la plus courte si elle reste dans la
     // tolérance, puis l'essentiel devant le nom.
