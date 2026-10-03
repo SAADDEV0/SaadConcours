@@ -94,6 +94,16 @@ ${F("Régularisation de la TVA (assujetti partiel)", R`\Delta = \text{TVA} \time
 <tr><td>Créance ou dette en devises au 31/12</td><td>Baisse d'une créance (ou hausse d'une dette) : écart de conversion actif (3701 pour une créance circulante) + provision. Hausse d'une créance : écart passif (4701), gain latent non constaté en produit</td></tr>
 <tr><td>Crédit-bail</td><td>Redevances en charges (6132) ; à la levée d'option, le bien entre au prix de l'option</td></tr>
 <tr><td>Immobilisation produite</td><td>Coûts de l'exercice neutralisés par 7143 ; en cours 2392 à la clôture, soldé à l'achèvement</td></tr>
+</tbody></table>
+<h3 class="sous">Méthode en 5 étapes : le cas d'importation (CCA 2022, formation continue)</h3>
+<table class="tab">
+<thead><tr><th>Étape</th><th>Calcul</th><th>Montant</th></tr></thead>
+<tbody>
+<tr><td>1. Convertir la facture au cours du jour de réception</td><td>83 980 € × 10,82</td><td>908 663,60</td></tr>
+<tr><td>2. Ajouter les frais et droits non récupérables</td><td>908 663,60 + 47 250 de droits ; TVA de 181 732,72 récupérable, hors coût</td><td>955 913,60</td></tr>
+<tr><td>3. Enregistrer l'acquisition</td><td>D 2332 et D 34551 ; C 4481 (fournisseur, 908 663,60) et C 4458 (douane, 228 982,72)</td><td>1 137 646,32</td></tr>
+<tr><td>4. Régler au cours du virement (10,85)</td><td>Perte de change 83 980 × 0,03 en 6331 ; commissions 1 120 HT + TVA 112</td><td>2 519,40</td></tr>
+<tr><td>5. Si la dette reste due au 31/12</td><td>Conversion au cours de clôture : hausse = écart de conversion actif + provision ; baisse = écart passif</td><td>—</td></tr>
 </tbody></table>`,
 
   2: R`
@@ -124,7 +134,7 @@ ${F("Bénéfice distribuable", R`BD = RN - \text{report débiteur} - \text{rése
 ${F("Droit préférentiel de souscription", R`DPS = V_{\text{avant}} - \frac{N \times V_{\text{avant}} + n \times P_e}{N + n}`, "300 − (10 000 × 300 + 2 000 × 240) ÷ 12 000 = 300 − 290 = 10.")}`,
 
   3: R`
-<div class="encadre"><b>Pourquoi cette partie, sans QCM ?</b> D'après les candidats de la session 2026, l'écrit du Master CCA porte désormais aussi sur les <b>normes IFRS</b>. Aucun sujet CCA d'Aïn Chock connu ne contient de question IFRS : ce cahier n'utilisant que des questions tirées des sujets CCA, cette partie est une fiche de cours, sans QCM. Elle se concentre sur les différences avec le CGNC, les plus faciles à transformer en QCM.</div>
+<div class="encadre"><b>Pourquoi cette partie, sans QCM ?</b> Selon la note de la coordination du master, l'écrit porte aussi sur les <b>normes IFRS</b>. Aucun sujet CCA d'Aïn Chock connu ne contient de question IFRS : ce cahier n'utilisant que des questions tirées des sujets CCA, cette partie est une fiche de cours, sans QCM. Elle se concentre sur les différences avec le CGNC, les plus faciles à transformer en QCM.</div>
 <h3 class="sous">CGNC et IFRS : les différences qui font des questions</h3>
 <table class="tab">
 <thead><tr><th>Opération</th><th>CGNC (Maroc)</th><th>IFRS</th></tr></thead>
@@ -211,6 +221,18 @@ ${F("Retenue à la source sur un produit net", R`\text{Brut} = \frac{\text{Net}}
 </tbody></table>
 <p class="note">Applique toujours les taux donnés par le sujet. Impôt exigible = max (IS ; CM). Acomptes : 25 % de l'impôt de N-1 chacun. Régularisation avec la déclaration, dans les 3 mois de la clôture. Déficit : 4 ans, sauf la part due aux amortissements, reportable sans limite.</p>
 
+<h3 class="sous">Méthode en 6 étapes : le cas d'IS (CCA 2020, formation continue)</h3>
+<table class="tab">
+<thead><tr><th>Étape</th><th>Calcul</th><th>Résultat</th></tr></thead>
+<tbody>
+<tr><td>1. Résultat fiscal de N-1</td><td>−87 950 + 395 620 − 3 460</td><td>304 210</td></tr>
+<tr><td>2. Impôt de N-1 : IS ou CM ?</td><td>IS 30 736,75 (barème 2019) ; CM 14 124 800 × 0,5 % = 70 624</td><td>CM : 70 624</td></tr>
+<tr><td>3. Résultat fiscal de N</td><td>989 560,80 + 172 711,33 de réintégrations − 141 140 de déductions</td><td>1 021 132,13</td></tr>
+<tr><td>4. Impôt de N</td><td>IS = 1 021 132,13 × 31 % − 140 000 ; CM = 18 675 400 × 0,5 % = 93 377</td><td>IS : 176 550,96</td></tr>
+<tr><td>5. Acomptes versés en N</td><td>25 % de l'impôt de N-1 (la CM), au plus tard les 31/03, 30/06, 30/09 et 31/12</td><td>4 × 17 656</td></tr>
+<tr><td>6. Régularisation, avant le 31/03/N+1</td><td>176 550,96 − 70 624 d'acomptes − 3 630 de retenue à la source non imputée</td><td>102 296,96</td></tr>
+</tbody></table>
+
 <h3 class="sous">TVA</h3>
 <table class="tab">
 <thead><tr><th>Notion</th><th>Règle</th></tr></thead>
@@ -258,5 +280,5 @@ ${F("Reversement de TVA à la cession d'un immeuble", R`\text{Reversement} = \te
 <tr><td>COSO</td><td>Environnement de contrôle, évaluation des risques, activités de contrôle, information et communication, pilotage</td></tr>
 </tbody></table>
 ${F("Modèle du risque d'audit", R`RA = RI \times RC \times RND`, "RI et RC élevés : l'auditeur réduit RND en étendant ses contrôles substantifs.")}
-<div class="encadre"><b>Une seule question dans les sujets CCA.</b> L'audit n'apparaît qu'une fois dans les annales du CCA (question de cours de 2024), alors que les candidats de 2026 le citent parmi les modules de l'écrit et qu'il reviendra à l'oral. Cette fiche couvre l'essentiel à connaître.</div>`,
+<div class="encadre"><b>Une seule question dans les sujets CCA.</b> L'audit n'apparaît qu'une fois dans les annales du CCA (question de cours de 2024), alors que la coordination du master le cite parmi les modules de l'écrit et qu'il reviendra à l'oral. Cette fiche couvre l'essentiel à connaître.</div>`,
 };

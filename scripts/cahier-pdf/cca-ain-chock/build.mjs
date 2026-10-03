@@ -29,10 +29,10 @@ const S = {
 const PARTIES = [
   { n: 1, titre: "Comptabilité générale et approfondie", sous: "Importations, coûts d'entrée, amortissements, devises, régularisations : le plus gros bloc des annales" },
   { n: 2, titre: "Comptabilité des sociétés", sous: "Capital, libération, réserve légale, premier dividende" },
-  { n: 3, titre: "Normes IFRS", sous: "Fiche de cours : les différences avec le CGNC et les normes à connaître", tombe: "Aucune question dans les sujets CCA connus : module annoncé par les candidats de 2026" },
+  { n: 3, titre: "Normes IFRS", sous: "Fiche de cours : les différences avec le CGNC et les normes à connaître", tombe: "Aucune question dans les sujets CCA connus, mais module annoncé par la coordination du master" },
   { n: 4, titre: "Comptabilité analytique et contrôle de gestion", sous: "Coûts complets, charges de substitution, seuil de rentabilité, budgets" },
   { n: 5, titre: "Fiscalité", sous: "Réintégrations, intérêts d'associés, cotisation minimale, prorata de TVA : les points les plus sûrs" },
-  { n: 6, titre: "Audit", sous: "Assertions, commissaire aux comptes, démarche : utile aussi pour l'oral", tombe: "Une question de cours dans le sujet CCA 2024 ; module annoncé par les candidats de 2026" },
+  { n: 6, titre: "Audit", sous: "Assertions, commissaire aux comptes, démarche : utile aussi pour l'oral", tombe: "Une question de cours dans le sujet CCA 2024 ; module annoncé par la coordination du master" },
 ];
 
 const CONF = {
@@ -196,7 +196,16 @@ function html(pages) {
 <section class="page welcome">
   <div class="ph"><div class="pnum star">★</div><div><h1>${mark("W")}Bienvenue dans ton cahier</h1><div class="psous">À lire avant de commencer</div></div></div>
   <p>Ce cahier de préparation a été entièrement conçu par saadconcours.space pour t'accompagner vers la réussite du concours d'accès au <b>Master Comptabilité, Contrôle et Audit (CCA)</b> de la FSJES Aïn Chock (Université Hassan II, Casablanca). Il est pensé pour les deux derniers jours : d'abord les trames que le jury repose, puis, par thème, une fiche de cours, les formules en LaTeX et les QCM corrigés et expliqués. <b>Tous les QCM viennent des sujets du Master CCA d'Aïn Chock</b> : aucune question d'un autre master ni d'une autre faculté.</p>
-  <div class="encadre"><b>Le format a changé.</b> Jusqu'en 2020, l'écrit du CCA était une épreuve rédigée de 2 heures. Depuis, c'est un <b>QCM</b> : 14 questions en formation continue en 2022, une trentaine en 2024. D'après les candidats de la session 2026, la sélection se fait sur dossier, puis par un écrit en QCM sur la comptabilité (approfondie), les <b>normes IFRS</b>, le contrôle de gestion, la fiscalité et l'audit ; un oral est possible. Vérifie ces informations sur l'avis officiel de la faculté.</div>
+  <div class="encadre"><b>Ce qui t'attend.</b> Selon une note de la coordination du master (Mme Leila El Gnaoui et Mme Dounia Karimi), la sélection se fait d'abord <b>sur dossier</b> (notes), puis par un <b>concours écrit</b> qui porte, à un niveau approfondi, sur la comptabilité, les <b>normes IFRS</b>, le contrôle de gestion, la fiscalité et l'audit. Un <b>oral</b> est possible. Vérifie le calendrier sur l'avis officiel de la faculté.</div>
+  <h3 class="sous">Format des épreuves</h3>
+  <table class="tab">
+  <thead><tr><th>Épreuve</th><th>Questions</th><th>Durée</th><th>Règle et consignes</th></tr></thead>
+  <tbody>
+  <tr><td>${S.y24}</td><td>Une trentaine de QCM + 2 questions de cours</td><td>Non indiquée</td><td>Trois propositions, une ou plusieurs justes</td></tr>
+  <tr><td>${S.fc22}</td><td>14 QCM + 4 questions de cours</td><td>1 h 40 (1 h 45 sur la grille)</td><td>Propositions a, b, c, une ou plusieurs justes, à cocher sur une grille ; ni rature ni Blanco ; une copie rendue plus de 10 minutes après l'heure est considérée comme défaillante</td></tr>
+  <tr><td>CCA 2017 à 2020</td><td>Épreuve rédigée : un cas de comptabilité, un cas d'IS, des questions de cours</td><td>2 h</td><td>Documents interdits (plan comptable autorisé en 2019) ; calculatrice personnelle</td></tr>
+  </tbody></table>
+  <p class="note">Les sujets récupérés n'indiquent pas de barème négatif. L'écrit est passé du rédigé au QCM après 2020 : les trames des épreuves rédigées se retrouvent pourtant dans les QCM de 2022 et 2024.</p>
   <h3 class="sous">Les sujets utilisés</h3>
   <table class="tab">
   <thead><tr><th>Sujet</th><th>Format</th><th>Dans ce cahier</th></tr></thead>
