@@ -447,6 +447,13 @@ Tous les cours sont réécrits sur ce modèle ; tout nouveau cours doit le suivr
   puis contrôler : toutes les anciennes URL présentes, 3 exercices et 10 QCM par chapitre,
   descriptions uniques, tableaux convertis par `marked`, `$` appariés. Recalculer chaque
   chiffre avec Node avant de l'écrire. Un commit par cours.
+- À l'assemblage, n'indenter que le code JS : le Markdown des gabarits md`…` reste en
+  colonne 0, sinon `### Exercice` et les puces `- ` ne sont plus reconnus (exercices et
+  résumé comptés à zéro). KaTeX est rendu dans le navigateur : contrôler les formules sur
+  la page (`.katex-error`, `$` restés bruts), pas avec curl.
+- Droit marocain : vérifier les articles sur le texte du Code de commerce (loi 15-95), en
+  tenant compte des réformes : livre V remplacé par la loi 73-17 (2018), régime pénal du
+  chèque revu par la loi 71-24 (2026). Ne reprendre que ce sur quoi les sources concordent.
 
 ### K3 — Modifier ou supprimer un cours
 - Modifier : éditer `content` (respecter la convention), ou le fichier de compléments.
