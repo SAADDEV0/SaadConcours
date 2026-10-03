@@ -646,9 +646,12 @@ Modèle : cahier GFC Aïn Sebaâ et cahier AIF Aïn Chock (article
 5. Précédent CCA Aïn Chock (`scripts/cahier-pdf/cca-ain-chock/`, 2026-10-03) :
    - concours passé du rédigé au QCM : les exercices des épreuves rédigées sont **mis en QCM**
      (source « … · adapté en QCM » : énoncé du sujet, propositions écrites par nous) ;
-   - un module annoncé sans annales (IFRS) a sa partie, en QCM « Entraînement » uniquement ;
-   - les QCM d'entraînement sont rédigés avec la bonne réponse souvent en B : `qcm.mjs` fait tourner
-     leurs propositions pour répartir les lettres (les QCM d'un sujet gardent les leurs) ;
+   - **seulement des questions des sujets du master** (demande du 2026-10-03) : pas de QCM
+     d'entraînement dans le PDF (`AVEC_ENTRAINEMENT = false` dans `build.mjs`) ; un module sans
+     annales (IFRS) n'a qu'une fiche de cours ;
+   - sujets nommés en toutes lettres partout (« CCA 2019 (formation initiale) », « CCA non daté 1 »,
+     « CCA 2022/23 (reconstitution) ») : jamais d'abréviation (A, B, Rec.) ; chaque trame qui
+     retombe liste les sujets où elle apparaît, vérifiés dans les énoncés ;
    - une question reprise dans « Les trames qui retombent » doit être unique : champ `key` si sa
      source est partagée ;
    - une fiche en brouillon (sujet incomplet) peut servir de source au cahier, mais l'article ne

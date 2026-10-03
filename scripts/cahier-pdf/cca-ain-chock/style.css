@@ -136,3 +136,5 @@ h2.qtitre { break-before: auto; margin-top: 7mm; break-after: avoid; }
 .rans { font-size: 8.3pt; font-weight: 700; color: #92400e; background: #fef3c7; padding: .4mm 2mm; border-radius: 1.5mm; white-space: nowrap; }
 .retenir { margin-top: 1.5mm; font-size: 9pt; background: #fef3c7; border-radius: 1.5mm; padding: 1.5mm 3mm; }
 .retenir b { color: #92400e; }
+.rsuj { font-size: 8pt; color: #475569; margin: -1mm 0 2mm; line-height: 1.45; }
+.rsuj b { color: #3730a3; }

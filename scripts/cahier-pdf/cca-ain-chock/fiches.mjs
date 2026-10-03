@@ -38,7 +38,7 @@ export const MEMO = R`
 <tr><td>La dotation omise</td><td>Une dotation non comptabilisée dans son exercice est perdue fiscalement : son rattrapage est réintégré.</td></tr>
 <tr><td>Brut ou net</td><td>Retenue à la source à réintégrer seulement si le produit a été comptabilisé net. Comptabilisé brut : aucun retraitement.</td></tr>
 <tr><td>IS contre CM</td><td>Compare toujours les deux. Avec un gros chiffre d'affaires et une faible marge, la CM l'emporte, y compris pour calculer les acomptes de l'année suivante.</td></tr>
-<tr><td>Les propositions fausses</td><td>Le sujet FC 2022 n'a aucune proposition juste aux questions 8, 13 et 14, le sujet 2024 à la question 4. Calcule d'abord, puis choisis la proposition qui suit le raisonnement attendu.</td></tr>
+<tr><td>Les propositions fausses</td><td>Le sujet CCA 2022 (formation continue) n'a aucune proposition juste aux questions 8, 13 et 14, le sujet CCA 2024 à la question 4. Calcule d'abord, puis choisis la proposition qui suit le raisonnement attendu.</td></tr>
 </tbody></table>`;
 
 export const FICHES = {
@@ -49,7 +49,7 @@ export const FICHES = {
 <tbody>
 <tr><td>Continuité d'exploitation</td><td>Les comptes supposent que l'activité se poursuit</td><td>Justifie l'amortissement et le coût historique</td></tr>
 <tr><td>Permanence des méthodes</td><td>Mêmes méthodes d'un exercice à l'autre ; tout changement est justifié dans l'ETIC</td><td>Passage d'une méthode à une autre</td></tr>
-<tr><td>Coût historique</td><td>Valeur d'entrée intangible, sauf réévaluation légale</td><td>Questions de cours 2020 et sujet B</td></tr>
+<tr><td>Coût historique</td><td>Valeur d'entrée intangible, sauf réévaluation légale</td><td>Questions de cours 2020 et non daté 2</td></tr>
 <tr><td>Spécialisation des exercices</td><td>Charges et produits rattachés à leur exercice</td><td>Régularisations, fournitures non consommées</td></tr>
 <tr><td>Prudence</td><td>Pertes probables constatées, gains latents ignorés</td><td>Provisions, écarts de conversion</td></tr>
 <tr><td>Clarté</td><td>Pas de compensation, classement correct</td><td>Escompte de règlement non compensé</td></tr>
@@ -124,7 +124,7 @@ ${F("Bénéfice distribuable", R`BD = RN - \text{report débiteur} - \text{rése
 ${F("Droit préférentiel de souscription", R`DPS = V_{\text{avant}} - \frac{N \times V_{\text{avant}} + n \times P_e}{N + n}`, "300 − (10 000 × 300 + 2 000 × 240) ÷ 12 000 = 300 − 290 = 10.")}`,
 
   3: R`
-<div class="encadre"><b>Pourquoi cette partie ?</b> D'après les candidats de la session 2026, l'écrit du Master CCA porte désormais aussi sur les <b>normes IFRS</b>. Aucun des sujets d'Aïn Chock que nous connaissons ne contient de question IFRS : les QCM de cette partie sont tous marqués « Entraînement ». Ils ont été rédigés par SaadConcours et suivent les comparaisons avec le CGNC qu'un jury de comptabilité aime poser.</div>
+<div class="encadre"><b>Pourquoi cette partie, sans QCM ?</b> D'après les candidats de la session 2026, l'écrit du Master CCA porte désormais aussi sur les <b>normes IFRS</b>. Aucun sujet CCA d'Aïn Chock connu ne contient de question IFRS : ce cahier n'utilisant que des questions tirées des sujets CCA, cette partie est une fiche de cours, sans QCM. Elle se concentre sur les différences avec le CGNC, les plus faciles à transformer en QCM.</div>
 <h3 class="sous">CGNC et IFRS : les différences qui font des questions</h3>
 <table class="tab">
 <thead><tr><th>Opération</th><th>CGNC (Maroc)</th><th>IFRS</th></tr></thead>
@@ -258,5 +258,5 @@ ${F("Reversement de TVA à la cession d'un immeuble", R`\text{Reversement} = \te
 <tr><td>COSO</td><td>Environnement de contrôle, évaluation des risques, activités de contrôle, information et communication, pilotage</td></tr>
 </tbody></table>
 ${F("Modèle du risque d'audit", R`RA = RI \times RC \times RND`, "RI et RC élevés : l'auditeur réduit RND en étendant ses contrôles substantifs.")}
-<div class="encadre"><b>Pourquoi des QCM d'entraînement ici ?</b> Les annales CCA ne contiennent qu'une question d'audit, alors que les candidats de 2026 citent l'audit parmi les modules de l'écrit et que l'oral y revient. Les questions marquées « Entraînement » ont été rédigées par SaadConcours à partir de ce cours.</div>`,
+<div class="encadre"><b>Une seule question dans les sujets CCA.</b> L'audit n'apparaît qu'une fois dans les annales du CCA (question de cours de 2024), alors que les candidats de 2026 le citent parmi les modules de l'écrit et qu'il reviendra à l'oral. Cette fiche couvre l'essentiel à connaître.</div>`,
 };
