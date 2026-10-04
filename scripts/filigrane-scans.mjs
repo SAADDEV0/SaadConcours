@@ -1,5 +1,7 @@
 // Convertit des photos de sujets en webp filigranés SaadConcours.
-// Usage : node scripts/filigrane-scans.mjs <source> <destination.webp> [<source> <destination.webp> …]
+// Usage : node scripts/filigrane-scans.mjs [--rotation=90] [--recadrer] <source> <destination.webp> [<source> <destination.webp> …]
+//   --rotation=N : tourne la photo de N degrés (sens horaire) avant tout traitement (photo prise de travers).
+//   --recadrer   : ne garde que la feuille blanche (supprime la table, le sol, les doigts autour).
 // Toujours partir de la photo d'origine : refiligraner un webp déjà marqué superpose deux filigranes.
 import sharp from "sharp";
 
@@ -36,9 +38,48 @@ function filigraneSvg(w, h) {
 </svg>`);
 }
 
-export async function filigraner(source, destination) {
-  const base = sharp(source).rotate().resize({ width: LARGEUR_MAX, withoutEnlargement: true });
-  const { data, info } = await base.toBuffer({ resolveWithObject: true });
+// Cadre de la feuille : lignes et colonnes dont la majorité des pixels sont clairs et peu saturés
+// (papier), par opposition à une table, un sol ou une main. Recherche depuis le centre vers les bords,
+// pour s'arrêter au bord de la feuille même si un autre objet clair traîne plus loin.
+async function cadreFeuille(buffer) {
+  const { data, info } = await sharp(buffer).raw().toBuffer({ resolveWithObject: true });
+  const { width: w, height: h, channels: c } = info;
+  const papier = (i) => {
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    return min > 80 && max - min < 45;
+  };
+  const lignes = new Array(h).fill(0);
+  const colonnes = new Array(w).fill(0);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (papier((y * w + x) * c)) {
+        lignes[y]++;
+        colonnes[x]++;
+      }
+    }
+  }
+  const bornes = (compte, longueur) => {
+    const seuil = longueur * 0.35;
+    let a = Math.floor(compte.length / 2);
+    let b = a;
+    while (a > 0 && compte[a - 1] >= seuil) a--;
+    while (b < compte.length - 1 && compte[b + 1] >= seuil) b++;
+    return [a, b];
+  };
+  const [y0, y1] = bornes(lignes, w);
+  const [x0, x1] = bornes(colonnes, h);
+  // Rogner un peu vers l'intérieur : le bord d'une feuille photographiée en biais laisse un liseré de table.
+  const marge = Math.round(Math.min(x1 - x0, y1 - y0) * 0.012);
+  return { left: x0 + marge, top: y0 + marge, width: x1 - x0 - 2 * marge, height: y1 - y0 - 2 * marge };
+}
+
+export async function filigraner(source, destination, { rotation = 0, recadrer = false } = {}) {
+  let buffer = await sharp(source).rotate().rotate(rotation).png().toBuffer();
+  if (recadrer) buffer = await sharp(buffer).extract(await cadreFeuille(buffer)).png().toBuffer();
+  const { data, info } = await sharp(buffer)
+    .resize({ width: LARGEUR_MAX, withoutEnlargement: true })
+    .toBuffer({ resolveWithObject: true });
   await sharp(data)
     .composite([{ input: filigraneSvg(info.width, info.height), top: 0, left: 0 }])
     .webp({ quality: 80 })
@@ -46,12 +87,18 @@ export async function filigraner(source, destination) {
   return info;
 }
 
-const args = process.argv.slice(2);
-if (args.length === 0 || args.length % 2 !== 0) {
-  console.error("Usage : node scripts/filigrane-scans.mjs <source> <destination.webp> [...]");
+const options = { rotation: 0, recadrer: false };
+const fichiers = [];
+for (const arg of process.argv.slice(2)) {
+  if (arg === "--recadrer") options.recadrer = true;
+  else if (arg.startsWith("--rotation=")) options.rotation = Number(arg.slice("--rotation=".length)) || 0;
+  else fichiers.push(arg);
+}
+if (fichiers.length === 0 || fichiers.length % 2 !== 0) {
+  console.error("Usage : node scripts/filigrane-scans.mjs [--rotation=90] [--recadrer] <source> <destination.webp> [...]");
   process.exit(1);
 }
-for (let i = 0; i < args.length; i += 2) {
-  const info = await filigraner(args[i], args[i + 1]);
-  console.log(`${args[i + 1]} (${info.width}×${info.height})`);
+for (let i = 0; i < fichiers.length; i += 2) {
+  const info = await filigraner(fichiers[i], fichiers[i + 1], options);
+  console.log(`${fichiers[i + 1]} (${info.width}×${info.height})`);
 }

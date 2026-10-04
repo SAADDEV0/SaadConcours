@@ -208,6 +208,10 @@ Règles des champs :
   `node scripts/filigrane-scans.mjs <photo> public/images/<ville>/<id>/<id>_p1.webp [<photo2> …_p2.webp]`
   (webp, largeur max 1600 px, qualité 80, « saadconcours.space » en diagonale discrète + étiquette
   en bas à droite). Toujours partir de la photo d'origine, jamais d'un webp déjà filigrané.
+  Photo d'une feuille posée sur une table ou prise de travers : ajouter `--rotation=90` (ou 180,
+  270, sens horaire) et `--recadrer` (ne garde que la feuille). Vérifier le résultat sur un aperçu :
+  une colonne coupée = feuille trop ombrée, ajuster le seuil « papier » du script
+  (précédent : AIF Aïn Chock 2026).
   Nom : `<id>_p1.webp`, `<id>_p2.webp`… dans `public/images/<ville>/<id>/`.
 - Ne garder que les pages du sujet (pas les logos, pubs, bannières du site source).
 
