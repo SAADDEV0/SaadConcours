@@ -20,8 +20,8 @@ export default function ConcoursExplorer({ initialData }) {
     const $ = (sel) => document.querySelector(sel);
 
     // initialData ne porte que les données des cartes (concoursListItem) :
-    // le texte des sujets (énoncé, notions clés) n'est chargé qu'à la
-    // première recherche ou au premier PDF, depuis le fichier statique que
+    // le texte des sujets (énoncé, notions clés) n'est chargé qu'au
+    // premier PDF, depuis le fichier statique que
     // Cloudflare sert sans invoquer le Worker (~1 Mo compressé, une fois).
     let fullById = null;
     let fullPromise = null;
@@ -249,11 +249,11 @@ export default function ConcoursExplorer({ initialData }) {
           const key = normalizeModuleKey(moduleFilter);
           if (!(c.modules || []).some((m) => normalizeModuleKey(m) === key)) return false;
         }
+        // La recherche ne porte que sur le titre du master (celui affiché sur
+        // la carte), la faculté et la ville : pas sur l'énoncé, les notions
+        // ni les modules.
         if (q) {
-          const full = fullById?.get(c.id);
-          const hay = searchNormalize(
-            [c.ville, c.etablissement, c.filiere, c.master_reel, c.annee, full?.notions_cles, full?.enonce_md, (c.modules || []).join(" ")].join(" ")
-          );
+          const hay = searchNormalize([c.master_reel || c.filiere, c.etablissement, c.ville].join(" "));
           const tokens = searchTokens(q);
           if (!tokens.every((t) => hay.includes(t))) return false;
         }
@@ -262,17 +262,7 @@ export default function ConcoursExplorer({ initialData }) {
 
       renderGrid();
 
-      // Premier mot tapé : les résultats sur les métadonnées s'affichent tout
-      // de suite, puis la recherche repasse dans les énoncés une fois chargés.
-      if (q && !fullById) {
-        loadFull().then((loaded) => {
-          if (loaded && $("#searchInput").value.trim()) applyFilters();
-        });
-      }
-
-      // Un « aucun résultat » n'est compté qu'une fois les énoncés fouillés,
-      // sinon il signalerait comme absent un sujet qui est dans la base.
-      if (q.length >= 2 && filtered.length === 0 && fullById) reportSearchMissDebounced(q);
+      if (q.length >= 2 && filtered.length === 0) reportSearchMissDebounced(q);
       else clearTimeout(searchMissTimer);
     }
 
