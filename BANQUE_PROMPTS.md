@@ -204,9 +204,11 @@ Règles des champs :
 - Barème négatif : le rappeler et conseiller la stratégie de réponse.
 
 ### Scans (images)
-- Convertir en **webp** avec `sharp` (déjà dans `node_modules`) :
-  largeur max 1600 px, qualité 80. Nom : `<id>_p1.webp`, `<id>_p2.webp`… dans
-  `public/images/<ville>/<id>/`.
+- Convertir **et filigraner** en une étape (depuis le 2026-10-04, à ma demande) :
+  `node scripts/filigrane-scans.mjs <photo> public/images/<ville>/<id>/<id>_p1.webp [<photo2> …_p2.webp]`
+  (webp, largeur max 1600 px, qualité 80, « saadconcours.space » en diagonale discrète + étiquette
+  en bas à droite). Toujours partir de la photo d'origine, jamais d'un webp déjà filigrané.
+  Nom : `<id>_p1.webp`, `<id>_p2.webp`… dans `public/images/<ville>/<id>/`.
 - Ne garder que les pages du sujet (pas les logos, pubs, bannières du site source).
 
 ### C1 — Ajouter N concours depuis internet
@@ -273,7 +275,13 @@ sujet (année, faculté), les déduire de l'en-tête ; à défaut, **demander**.
 - Photos collées dans le chat : seules celles du **premier message** sont enregistrées sur disque
   (dossier `images/` de la session). Celles envoyées en cours de tâche ne sont lisibles qu'à l'écran :
   transcrire quand même, `images: []`, et le signaler dans `notions_cles` et le compte rendu
-  (précédent : AIF Aïn Chock 2025, questionnaires B et C).
+  (précédent : AIF Aïn Chock 2025, questionnaires B et C). Pour publier les scans, me demander
+  de déposer les fichiers (ex. dans `C:\Users\saad\Downloads`) puis les filigraner.
+- Faculté absente de l'en-tête : la déduire des questions reprises d'une session déjà en base
+  (précédent : MRH Aïn Sebaâ 2025, Q41 à Q50 identiques à 2018 et 2023) ou du master déjà rattaché
+  (AIF → Aïn Chock), et le dire dans le bandeau du corrigé.
+- Ne pas mentionner le questionnaire (A, B…) quand une seule version de la session est en base,
+  sauf demande.
 - Plusieurs questionnaires (A, B, C…) d'une même session = textes différents → une fiche chacun
   (`…_AIF`, `…_AIF2`), chacune renvoyant à l'autre dans `notions_cles`.
 
