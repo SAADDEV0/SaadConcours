@@ -4,6 +4,7 @@ import "./globals.css";
 import "./bac/bac.css";
 import "./_shared/space.css";
 import Script from "next/script";
+import DuaToast from "./_shared/DuaToast";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservationCss } from "./_shared/partnerAds";
 
@@ -169,6 +170,7 @@ export default async function RootLayout({ children }) {
           />
         )}
         {children}
+        <DuaToast />
         {/* <EmailGateModal /> (app/_shared/EmailGateModal.js) retirée le
            2026-09-24 pour la demande AdSense : une modale qui recouvre la
            page à la 2e vue est un interstitiel intrusif, et elle promettait
