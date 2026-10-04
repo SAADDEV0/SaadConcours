@@ -207,7 +207,10 @@ Règles des champs :
 - Convertir **et filigraner** en une étape (depuis le 2026-10-04, à ma demande) :
   `node scripts/filigrane-scans.mjs <photo> public/images/<ville>/<id>/<id>_p1.webp [<photo2> …_p2.webp]`
   (webp, largeur max 1600 px, qualité 80, « saadconcours.space » en diagonale discrète + étiquette
-  en bas à droite). Toujours partir de la photo d'origine, jamais d'un webp déjà filigrané.
+  en bas à droite, posée sur une bande blanche ajoutée sous la feuille pour ne jamais masquer le
+  sujet — précédent : MRH Aïn Sebaâ 2022, options de la Q26 cachées). Toujours partir de la photo
+  d'origine, jamais d'un webp déjà filigrané. `--recadrer` ne rogne pas le côté où la feuille sort
+  déjà du cadre (le texte y touche le bord).
   Photo d'une feuille posée sur une table ou prise de travers : ajouter `--rotation=90` (ou 180,
   270, sens horaire) et `--recadrer` (ne garde que la feuille). Vérifier le résultat sur un aperçu :
   une colonne coupée = feuille trop ombrée, ajuster le seuil « papier » du script
@@ -281,6 +284,11 @@ sujet (année, faculté), les déduire de l'en-tête ; à défaut, **demander**.
   transcrire quand même, `images: []`, et le signaler dans `notions_cles` et le compte rendu
   (précédent : AIF Aïn Chock 2025, questionnaires B et C). Pour publier les scans, me demander
   de déposer les fichiers (ex. dans `C:\Users\saad\Downloads`) puis les filigraner.
+- **Sujet déjà en base** (même faculté, master, année, mêmes questions) : ne pas créer de doublon.
+  Compléter la fiche existante : remplacer ses scans par les photos fournies (filigranées, recadrées ;
+  surtout si les anciens portent le filigrane d'un autre site), relire l'énoncé, rédiger le corrigé
+  s'il manque. Vérifier aussi le miroir `corriges/<id>.md` : il peut contenir un brouillon absent
+  du JSON (précédent : MRH Aïn Sebaâ 2022).
 - Faculté absente de l'en-tête : la déduire des questions reprises d'une session déjà en base
   (précédent : MRH Aïn Sebaâ 2025, Q41 à Q50 identiques à 2018 et 2023) ou du master déjà rattaché
   (AIF → Aïn Chock), et le dire dans le bandeau du corrigé.

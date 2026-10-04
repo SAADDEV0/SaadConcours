@@ -70,15 +70,24 @@ async function cadreFeuille(buffer) {
   const [y0, y1] = bornes(lignes, w);
   const [x0, x1] = bornes(colonnes, h);
   // Rogner un peu vers l'intérieur : le bord d'une feuille photographiée en biais laisse un liseré de table.
-  const marge = Math.round(Math.min(x1 - x0, y1 - y0) * 0.012);
-  return { left: x0 + marge, top: y0 + marge, width: x1 - x0 - 2 * marge, height: y1 - y0 - 2 * marge };
+  // Pas de marge du côté où la feuille sort du cadre : il n'y a pas de table, seulement du texte à garder.
+  const m = Math.round(Math.min(x1 - x0, y1 - y0) * 0.012);
+  const gauche = x0 > 0 ? m : 0, droite = x1 < w - 1 ? m : 0;
+  const haut = y0 > 0 ? m : 0, bas = y1 < h - 1 ? m : 0;
+  return { left: x0 + gauche, top: y0 + haut, width: x1 - x0 + 1 - gauche - droite, height: y1 - y0 + 1 - haut - bas };
 }
 
 export async function filigraner(source, destination, { rotation = 0, recadrer = false } = {}) {
   let buffer = await sharp(source).rotate().rotate(rotation).png().toBuffer();
   if (recadrer) buffer = await sharp(buffer).extract(await cadreFeuille(buffer)).png().toBuffer();
-  const { data, info } = await sharp(buffer)
+  const redim = await sharp(buffer)
     .resize({ width: LARGEUR_MAX, withoutEnlargement: true })
+    .toBuffer({ resolveWithObject: true });
+  // Bande blanche sous la feuille pour l'étiquette : posée sur la photo, elle masquait la fin du
+  // sujet (précédent : MRH Aïn Sebaâ 2022, options de la Q26). Même calcul de taille que filigraneSvg.
+  const tag = Math.round(Math.max(redim.info.width, redim.info.height) / 55);
+  const { data, info } = await sharp(redim.data)
+    .extend({ bottom: Math.round(tag * 1.9) + 2 * tag, background: "#ffffff" })
     .toBuffer({ resolveWithObject: true });
   await sharp(data)
     .composite([{ input: filigraneSvg(info.width, info.height), top: 0, left: 0 }])

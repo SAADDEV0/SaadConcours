@@ -1,103 +1,128 @@
-> Corrigé rédigé à partir du programme standard des modules (droit et gestion sociale, GRH, management, statistique descriptive, grammaire française) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Les réponses cochées au crayon sur le scan par un candidat ne sont pas prises comme référence.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Aïn Sebaâ. Les taux et plafonds sont ceux en vigueur à la rentrée 2022, date de l'épreuve. Les cases cochées sur les photos sont celles d'un candidat : plusieurs sont fausses (Q11, Q40, Q49, Q50…) et n'ont pas été suivies.
 
-### Questions
+## Méthode
 
-**1. b) 15,55 DH l'heure.** C'est le SMIG horaire du secteur non agricole au Maroc après la revalorisation appliquée en septembre 2022.
+Le sujet compte 50 questions en quatre blocs. Les questions 1 à 12 portent sur la paie et la gestion sociale au Maroc : SMIG, cotisations CNSS et AMO, indemnités de transport, IR, prime d'ancienneté. Les questions 13 à 37 couvrent la GRH, le management et la théorie des organisations. La question 38 est un calcul de statistique descriptive. Les questions 39 à 50 testent le français (grammaire, accords, pronoms relatifs).
 
-**2. c) Les dettes du passif circulant.** Un salaire dû mais non encore versé est une dette de l'entreprise envers son personnel, donc une dette à court terme.
+La feuille n'indique ni la durée, ni le barème, ni si plusieurs réponses sont admises. Plusieurs questions ont pourtant plus d'une proposition juste (Q10, Q12, Q17, Q35). Le corrigé les signale. **Si l'épreuve applique un barème négatif, laissez en blanc les questions où vous hésitez.**
 
-**3. b) Les charges d'exploitations.** Les dépenses de formation du personnel sont des charges de l'exercice au cours duquel elles sont engagées, et non des immobilisations.
+Beaucoup de questions de ce sujet reviennent d'une session à l'autre : la plupart des questions 13 à 29 figurent presque mot pour mot dans les tests MRH de 2018 et de 2023, et quelques-unes (culture organisationnelle, marque employeur, logique entrepreneuriale) encore en 2025. Ce sont des points sûrs pour qui travaille les annales.
 
-**4. a) Une charge pour l'entreprise.** La part patronale des cotisations sociales (CNSS, AMO...) est supportée par l'employeur, en plus du salaire brut.
+## Paie et gestion sociale (Q1 à Q12)
 
-**5. b) Une charge pour le salarié.** La part salariale est retenue directement sur le salaire brut du salarié (précompte).
+**Q1 — B (15,55 DH l'heure).** L'accord social du 30 avril 2022 a relevé le SMIG de 10 % en deux étapes de 5 %. La première s'applique au 1er septembre 2022 : le SMIG passe de 14,81 à **15,55 DH l'heure** dans l'industrie, le commerce et les professions libérales ($14{,}81 \times 1{,}05 \approx 15{,}55$). La seconde étape le porte à 16,29 DH en septembre 2023. Le chiffre de cette question change donc chaque année : vérifiez le décret en vigueur le jour de votre concours.
 
-**6. a) 4,48%.** C'est le taux global de la part salariale des « prestations sociales » CNSS (plafonné à 6 000 DH/mois) ; 8,98% est la part patronale correspondante.
+**Q2 — C.** Un salaire dû mais pas encore payé est une dette de l'entreprise envers son personnel. Le CGNC l'enregistre au crédit du compte 4432 « Rémunérations dues au personnel », dans les dettes du passif circulant. Une créance (A, B) est au contraire une somme que l'entreprise doit recevoir. Les charges de personnel (D) enregistrent la consommation, pas la dette.
 
-**7. c) 6,37%.** C'est le taux global de cotisation à l'AMO dans le secteur privé (part patronale + part salariale réunies) géré par la CNSS.
+**Q3 — B.** Les frais de formation sont une consommation de l'exercice : ce sont des charges d'exploitation. Ils ne remplissent pas les conditions d'une immobilisation en recherche et développement (C), qui suppose un projet identifié et des chances sérieuses de rentabilité. Ce ne sont pas non plus des immobilisations financières (A).
 
-**8. b) 500 DH par mois.** Plafond d'exonération fiscale de l'indemnité de transport domicile-travail à l'intérieur du périmètre urbain (Code Général des Impôts).
+**Q4 — A.** La part patronale des cotisations sociales est payée par l'employeur en plus du salaire brut. C'est une charge sociale de l'entreprise.
 
-**9. b) 750 DH par mois.** Plafond d'exonération pour un lieu de travail situé en dehors du périmètre urbain.
+**Q5 — B.** La part salariale est prélevée sur le salaire brut du salarié : c'est lui qui la supporte. L'entreprise ne fait que la retenir et la reverser à la CNSS. Pour la CNSS, c'est une recette, pas une charge (C).
 
-**10. a), b) et c).** Les salaires, les pensions et les avantages en argent/nature accordés en complément du salaire entrent tous dans la catégorie des revenus salariaux imposables à l'IR. À l'inverse, l'option d) (allocations spéciales destinées à couvrir des frais inhérents à la fonction) est en principe exonérée si elle est effectivement utilisée conformément à son objet.
+**Q6 — A (4,48 %).** Au titre des prestations sociales du régime général, la part salariale est de **4,48 %** et la part patronale de 8,98 %, sur un salaire plafonné à 6 000 DH par mois. La proposition C (8,98 %) est le piège : c'est le taux patronal.
 
-**11. b) 10% du salaire versé.** Barème légal de la prime d'ancienneté (Code du travail, art. 350) : 5% après 2 ans, 10% après 5 ans, 15% après 12 ans, 20% après 20 ans, 25% après 25 ans.
+**Q7 — B (4,52 %).** La cotisation AMO est de **4,52 %** du salaire brut, sans plafond, partagée à parts égales : 2,26 % salarié et 2,26 % employeur. L'employeur verse en plus une participation AMO de 1,85 %. La proposition C (6,37 %) additionne ces deux montants ($4{,}52 + 1{,}85 = 6{,}37$) : c'est le coût total AMO, pas le taux de cotisation. Certaines grilles de paie affichent pourtant « AMO 6,37 % » en regroupant les deux : si le correcteur raisonne en coût total, il attend C. Cochez B, le taux légal de cotisation, et laissez en blanc en cas de barème négatif si vous doutez.
 
-**12. a), c) et d).** La nourriture, le transport et le logement fournis par l'employeur sont des avantages en nature classiques. Les vêtements de travail obligatoires pour l'exercice de la fonction (b) sont un moyen de travail, pas un avantage en nature.
+**Q8 — B (500 DH par mois).** L'administration fiscale exonère d'IR l'indemnité de déplacement du domicile au lieu de travail dans la limite de **500 DH par mois** quand le lieu de travail est dans le périmètre urbain.
 
-**13. c) a et b.** La culture organisationnelle recouvre à la fois les normes/valeurs/règles formalisées et les mythes, histoires et personnalités qui circulent de manière informelle dans l'entreprise.
+**Q9 — B (750 DH par mois).** Même règle hors du périmètre urbain : le plafond d'exonération passe à **750 DH par mois**. Retenez la paire 500 / 750.
 
-**14. a) Grandement influencé le rôle de la fonction RH.** La digitalisation (SIRH, self-service RH, recrutement en ligne, IA) a profondément transformé les pratiques et le positionnement de la fonction RH.
+**Q10 — A, B, C et D.** L'article 56 du CGI range parmi les revenus salariaux imposables les traitements et salaires (A), les pensions (B), les avantages en argent ou en nature accordés en plus de ces revenus (C) et les allocations spéciales et autres rémunérations allouées aux dirigeants de sociétés (D). Les quatre propositions sont justes. Attention à D : ces allocations restent imposables, sauf la part qui rembourse des frais réellement engagés pour la fonction et justifiés (article 57 du CGI). Si une seule réponse est attendue, cochez A, le cas de base.
 
-**15. c) A et b.** Dans une logique de marque employeur, salariés et candidats sont tous deux considérés comme des ambassadeurs de la réputation de l'entreprise.
+**Q11 — B (10 %).** L'article 350 du Code du travail fixe la prime d'ancienneté à 5 % après 2 ans de service, **10 % après 5 ans**, 15 % après 12 ans, 20 % après 20 ans et 25 % après 25 ans. Le candidat a coché 15 % : c'est le taux de 12 ans.
 
-**16. d) Aucune réponse.** La RSE n'est ni un simple effet de mode, ni réservée aux grandes entreprises, ni un coût sans retour : c'est une démarche volontaire d'intégration des enjeux sociaux et environnementaux dans la stratégie, créatrice de valeur à moyen/long terme.
+**Q12 — A, C et D.** La nourriture, le transport et le logement fournis par l'employeur sont des avantages en nature, imposables à l'IR avec le salaire. Les vêtements de travail nécessaires à la fonction (B) sont l'intrus : ce sont des frais professionnels, que l'employeur prend en charge pour que le travail soit fait. Ils ne sont pas un avantage pour le salarié.
 
-**17. a) et b).** La formation vise à la fois à maintenir l'employabilité des salariés et à développer leurs compétences ; l'augmentation des salaires (c) n'est pas son objectif direct.
+## GRH, management et organisations (Q13 à Q37)
 
-**18. a) Repérer des opportunités et prendre des risques.** Définition classique de la logique entrepreneuriale (Say, Schumpeter, Stevenson) : détection d'opportunités et prise de risque calculée, à la différence de la logique managériale centrée sur l'optimisation des ressources existantes.
+**Q13 — C (a et b).** La culture organisationnelle comprend les normes, valeurs et règles de l'entreprise (A) et sa part symbolique : mythes, récits, figures fondatrices (B). C'est l'analyse d'Edgar Schein et de Maurice Thévenet.
 
-**19. a) Une forte croissance économique et sociale.** Expression de Jean Fourastié pour désigner la période 1945-1975 de croissance exceptionnelle dans les pays occidentaux.
+**Q14 — A.** Les plateformes digitales ont transformé la fonction RH : e-recrutement, SIRH, formation en ligne, marque employeur sur les réseaux sociaux.
 
-**20. a) Redorer l'image de l'entreprise à travers un positionnement écologique.** Le greenwashing consiste à se donner une image écologique trompeuse, sans réalité derrière le discours.
+**Q15 — C (A et b).** Dans une logique de marque employeur, salariés et candidats sont tous deux des ambassadeurs de l'entreprise : avis en ligne, réseaux sociaux, bouche-à-oreille. A inclut déjà B, d'où « A et b ». C'est la réponse retenue sur la même question en 2023 et 2025.
 
-**21. c) Le facteur humain doit être considéré à sa juste valeur.** Conclusion des expériences de Hawthorne (Elton Mayo) : la motivation et la performance dépendent des relations humaines et de la reconnaissance, pas seulement de l'organisation rationnelle du travail.
+**Q16 — D.** La RSE n'est ni un effet de mode (elle est encadrée par des normes comme l'ISO 26000 et, au Maroc, par le label RSE de la CGEM), ni réservée aux grandes entreprises, ni un coût sans retour : elle améliore l'image, la fidélisation et la gestion des risques.
 
-**22. c) A et b.** La pyramide de Maslow est à la fois une théorie de la motivation au travail et une hiérarchisation des besoins humains.
+**Q17 — A et B.** La formation développe les compétences des salariés (B), ce qui maintient leur employabilité (A). Elle n'entraîne pas automatiquement une hausse de salaire (C). Si une seule réponse est acceptée, cochez B : c'est l'objet même de la formation. La proposition D (« Autre réponse ») peut aussi viser la combinaison A et B : sans barème connu, c'est une question à risque.
 
-**23. a) Adam Smith.** Auteur du concept de la « main invisible » du marché (*Recherches sur la nature et les causes de la richesse des nations*, 1776).
+**Q18 — A.** La logique entrepreneuriale consiste à repérer des opportunités et à prendre des risques pour les saisir. B et C relèvent de la logique managériale, centrée sur l'optimisation et le contrôle.
 
-**24. a) Chaque culture fonctionne selon son propre système de valeurs.** C'est le sens donné par Geert Hofstede à la culture comme « programmation mentale collective » distinguant les groupes humains.
+**Q19 — A.** Les Trente Glorieuses (1945-1975, expression de Jean Fourastié) désignent la forte croissance économique et sociale des pays industrialisés après la guerre. La première révolution industrielle (C) date de la fin du XVIIIe siècle.
 
-**25. c) Concilier les intérêts des actionnaires, dirigeants et parties prenantes.** La gouvernance d'entreprise vise à arbitrer entre les intérêts parfois divergents des différentes parties prenantes (actionnaires, dirigeants, salariés, etc.).
+**Q20 — A.** Le greenwashing (ou « écoblanchiment ») consiste à se donner une image écologique trompeuse ou exagérée, sans démarche environnementale réelle. C'est l'inverse d'appliquer la RSE (C).
 
-**26. a) Facebook.** Le scandale Cambridge Analytica (2018) portait sur l'exploitation non autorisée des données de dizaines de millions d'utilisateurs Facebook à des fins de ciblage politique.
+**Q21 — C.** Les expériences d'Elton Mayo à la Western Electric (Hawthorne, 1924-1932) montrent que la productivité dépend aussi de l'attention portée aux personnes et du groupe. Le facteur humain doit être considéré à sa juste valeur. A et B résument au contraire la vision taylorienne.
 
-**27. a) La minimalisation des stocks et des en-cours de fabrication.** C'est la définition de base du Juste-à-Temps (zéro stock), issue du système de production Toyota.
+**Q22 — C (a et b).** La pyramide de Maslow hiérarchise les besoins humains (physiologiques, sécurité, appartenance, estime, accomplissement) et sert à expliquer la motivation au travail.
 
-**28. a) Sur lesquelles l'entreprise se base pour optimiser son avantage concurrentiel.** Le modèle des 5(+1) forces de Porter sert à analyser l'attractivité et la structure concurrentielle d'un secteur ; l'option b) est une affirmation absurde, donc la combinaison « a et b » proposée en c) est fausse.
+**Q23 — A.** La « main invisible » est un concept d'Adam Smith (*La Richesse des nations*, 1776) : la poursuite des intérêts individuels conduit le marché à un équilibre favorable à tous.
 
-**29. c) A et B.** La théorie des parties prenantes (Freeman) postule que l'entreprise s'inscrit dans un écosystème d'acteurs dont elle doit intégrer les intérêts dans ses décisions.
+**Q24 — A.** Pour Geert Hofstede, la culture est une « programmation mentale collective » qui distingue les membres d'un groupe de ceux d'un autre. Chaque culture a donc son propre système de valeurs.
 
-**30. c) Des sciences économiques et gestion.** La GRH est un champ appliqué qui mobilise à la fois les sciences de gestion (management, organisation) et les sciences économiques (marché du travail, coûts salariaux).
+**Q25 — C.** La gouvernance d'entreprise organise le pouvoir pour concilier les intérêts des actionnaires, des dirigeants et des autres parties prenantes. Au Maroc, le Code marocain de bonnes pratiques de gouvernance d'entreprise va dans ce sens.
 
-**31. a) Contextes organisationnels et contextes socio-économiques.** L'approche contextualiste de la GRH (Pichault & Nizet) souligne que les pratiques RH résultent de l'interaction permanente entre la dynamique interne de l'organisation et son environnement socio-économique.
+**Q26 — A.** Le scandale Cambridge Analytica (2018) porte sur l'exploitation sans consentement des données de dizaines de millions d'utilisateurs de Facebook à des fins de ciblage politique.
 
-**32. b) Les natures et la structure du capital.** La diversité des pratiques GRH s'explique notamment par la structure de propriété de l'entreprise (capital familial, actionnariat dispersé, filiale de groupe...), qui conditionne les logiques de gestion (logique financière, logique de métier, logique actionnariale).
+**Q27 — A.** Le juste-à-temps (JIT), né chez Toyota, vise à produire au moment de la demande, donc à réduire au minimum les stocks et les en-cours. Il raccourcit aussi les délais (C), mais c'est une conséquence : la définition attendue est A. Il ne vise pas à réduire les effectifs (B).
 
-**33. b) L'homme représente un coût qu'il faut minimiser.** Dans l'ancienne conception administrative de la « gestion du personnel » (par opposition à la GRH moderne fondée sur la logique de capital humain), le salarié est perçu avant tout comme un facteur de production dont il faut maîtriser le coût.
+**Q28 — A.** Les cinq forces de Porter (rivalité entre concurrents, nouveaux entrants, produits de substitution, pouvoir des clients, pouvoir des fournisseurs) sont les dimensions qu'analyse l'entreprise pour construire son avantage concurrentiel. Il ne s'agit pas de les « bannir » (B).
 
-**34. a) Part des valeurs, des perceptions, des croyances des hommes et des femmes au travail.** La GRH « comme culture » désigne précisément la dimension des valeurs et représentations partagées au sein de l'organisation, par opposition à la GRH comme administration ou comme technique d'analyse.
+**Q29 — C (A et B).** La théorie des parties prenantes (Freeman, 1984) invite l'entreprise à tenir compte des intérêts de tous ses interlocuteurs (B) et à se penser dans un écosystème (A).
 
-**35. a), b) et c).** Un tableau de bord social complet combine des indicateurs de performance sociale (absentéisme, turnover...), de gestion/pilotage social (masse salariale, effectifs) et de responsabilité sociale (diversité, sécurité, formation).
+**Q30 — A.** La GRH est une discipline des sciences de gestion, au même titre que le marketing, la finance ou la stratégie.
 
-**36. b) La gouvernance publique et la gouvernance privée.** C'est la distinction usuelle entre gouvernance des institutions publiques (État, collectivités) et gouvernance des organisations privées (entreprises).
+**Q31 — A.** La GRH se construit dans l'interaction permanente entre le contexte de l'organisation (taille, structure, stratégie) et le contexte socio-économique (marché du travail, droit social, syndicats). B et C ne retiennent qu'une moitié de cet environnement.
 
-**37. c) Associées, en pratique et en théorie.** Le management (processus de pilotage) et l'organisation (structure) sont indissociables : on ne peut manager sans structure, ni structurer sans finalité managériale.
+**Q32 — B.** Les pratiques de GRH varient fortement selon la nature et la structure du capital : une entreprise familiale, une filiale de multinationale, une entreprise publique ou une PME ne gèrent pas leur personnel de la même façon. Les « abus de pouvoir » (C) ne sont pas un critère d'analyse.
 
-**38. c) Mo = 3.** Avec un effectif total N = 20+60+80+40 = 200, la position médiane est le 100ᵉ/101ᵉ individu. Les effectifs cumulés sont 20 (Xi=1), 80 (Xi=2), 160 (Xi=3), 200 (Xi=4) : le 100ᵉ individu se situe dans la classe Xi = 3, qui est aussi la valeur la plus fréquente (Ni = 80) — médiane et mode coïncident ici à 3.
+**Q33 — B.** Dans la gestion du personnel traditionnelle (administration du personnel), l'homme est vu comme un coût qu'il faut minimiser. Le passage à la GRH le considère comme une ressource et une richesse immatérielle (A, C).
 
-**39. d) D'anticiper les actions.** La planification est fondamentalement un exercice d'anticipation : elle consiste à se projeter dans l'avenir pour préparer les décisions et actions à mener, avant même de les évaluer ou de les exécuter.
+**Q34 — A.** Vue comme une culture, la GRH part des valeurs, des perceptions et des croyances des hommes et des femmes au travail. B décrit plutôt la GRH comme technique (audit social, enquêtes d'opinion), C la GRH comme outil de performance.
 
-**40. b) Quelque.** « Quelque » est ici un adverbe invariable placé devant un adjectif suivi de « que + subjonctif » (tournure concessive) : « Quelque flous que soient ces témoignages... ».
+**Q35 — A, B et C.** Un tableau de bord social peut réunir des indicateurs de gestion sociale (effectifs, absentéisme, turn-over), de performance sociale (climat, satisfaction, formation) et de responsabilité sociale (égalité, santé et sécurité). Si une seule réponse est acceptée, cochez B, le cœur classique du tableau de bord social.
 
-**41. a) Quelque.** « Quelque temps » (un certain temps) : « quelque » est ici un adjectif indéfini invariable devant un nom singulier.
+**Q36 — B.** On distingue la gouvernance publique (État, collectivités, établissements publics) et la gouvernance privée, dont la gouvernance d'entreprise fait partie. A oppose deux notions qui se recouvrent ; C oppose un tout et sa partie. L'option e) est vide sur le sujet.
 
-**42. b) Les.** Pronom complément d'objet direct représentant des personnes déjà mentionnées : « Nous ne les verrons pas demain ».
+**Q37 — C.** Management et organisation sont étroitement associés : manager, c'est organiser (Fayol : prévoir, organiser, commander, coordonner, contrôler), et toute organisation suppose un management.
 
-**43. a) S'est.** Verbe pronominal « se lever » au passé composé, 3ᵉ personne du singulier : « Elle s'est levée ».
+## Statistique descriptive (Q38)
 
-**44. d) Pendant.** « Pendant toute son enfance » indique la durée complète pendant laquelle l'action (ne pas manger de viande) s'est déroulée.
+**Q38 — C (valeur 3).** L'effectif total est $N = 20 + 60 + 80 + 40 = 200$. Effectifs cumulés croissants : 20, 80, 160, 200.
 
-**45. b) Que.** Pronom relatif complément d'objet direct : « le livre que je lis ».
+| $x_i$ | $n_i$ | $N_i$ cumulé |
+|---|---|---|
+| 1 | 20 | 20 |
+| 2 | 60 | 80 |
+| 3 | 80 | 160 |
+| 4 | 40 | 200 |
 
-**46. Essayé (options b et d, identiques sur le scan).** Participe passé de « essayer » avec l'auxiliaire « avoir » : pas d'accord avec le COD « ces nouveaux logiciels » car il est placé après le verbe → « Ils ont essayé ces nouveaux logiciels ».
+La médiane partage l'effectif en deux : on cherche la valeur des 100e et 101e observations. Le cumul dépasse 100 pour la première fois à $x = 3$ (cumul 160). **Médiane = 3.**
 
-**47. d) Autant.** Comparatif d'égalité entre deux quantités : « autant de sucre que de farine ».
+Les propositions sont libellées « Mo », le symbole du mode, alors que la question demande la médiane. Ici la confusion est sans effet : le mode (valeur d'effectif maximal, 80) vaut aussi 3. La réponse est C dans les deux lectures.
 
-**48. d) Dont.** Le verbe « parler de » impose le pronom relatif « dont » : « la recrue dont je vous ai parlé ».
+## Français (Q39 à Q50)
 
-**49. d) Où.** Pronom relatif de temps : « le jour où il est arrivé ».
+**Q39 — A.** Planifier, c'est préparer les actions à mener : fixer des objectifs, choisir les moyens et un calendrier. « Anticiper » (D) est proche, mais on anticipe des événements, on prépare des actions. C'est la question la plus ambiguë du sujet : à laisser en blanc si le barème est négatif.
 
-**50. c) Y.** Pronom adverbial remplaçant un complément de lieu introduit par « à » : « nous nous y rendons » (= à Marrakech).
+**Q40 — B (Quelque).** Devant un adjectif suivi de « que » + subjonctif, « quelque » est un adverbe qui signifie « si » : il est invariable. « Quelque flous que soient ces témoignages » = « si flous que soient… ». On écrirait « Quels que soient ces témoignages » seulement si « que » suivait directement, sans adjectif. Le candidat a coché A : c'est le piège.
+
+**Q41 — A (Quelque).** « Depuis quelque temps » : « quelque » est ici un déterminant qui signifie « un certain ». Il s'accorde avec le nom au singulier « temps ».
+
+**Q42 — B (Les).** « Nous ne les verrons pas » : le pronom complément d'objet direct qui remplace « ils » (des personnes, au pluriel) est « les ». « Leur » est un COI (« nous leur parlerons »), « leurs » un déterminant possessif.
+
+**Q43 — A (S'est).** « Elle s'est levée » : verbe pronominal « se lever » au passé composé, avec l'auxiliaire être. Le participe s'accorde avec le sujet féminin.
+
+**Q44 — D (Pendant).** « Pendant toute son enfance » exprime une durée achevée. « Depuis » marque une durée qui dure encore, ce qui ne colle pas avec une enfance terminée.
+
+**Q45 — B (Que).** « Le livre que je lis » : « que » est COD du verbe « lire », le sujet étant « je ».
+
+**Q46 — B (Essayé).** « Ils ont essayé ces nouveaux logiciels » : avec l'auxiliaire avoir, le participe passé s'accorde avec le COD seulement si celui-ci est placé avant le verbe. Ici le COD « ces nouveaux logiciels » est après : pas d'accord. Le sujet imprime « Essayé » deux fois (B et D) : les deux sont justes. Cochez B.
+
+**Q47 — D (Autant).** « Autant de sucre que de farine » : « autant de… que de… » exprime l'égalité de quantité. « Aussi » se place devant un adjectif ou un adverbe (« aussi sucré que »).
+
+**Q48 — D (Dont).** On parle **de** quelqu'un : le relatif qui remplace un complément introduit par « de » est « dont ». « Voici la recrue dont je vous ai parlé. »
+
+**Q49 — D (Où).** Après un nom de temps (le jour, l'année, le moment), le relatif est « où » : « le jour où il est arrivé ». « Quand » (A, coché par le candidat) n'est pas un pronom relatif.
+
+**Q50 — C (Y).** « Nous nous y rendons » : « y » remplace un complément de lieu introduit par « à » (« à Marrakech »). « En » (A, coché par le candidat) remplacerait un complément introduit par « de » (« nous en revenons »).

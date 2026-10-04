@@ -1,15 +1,15 @@
-**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales — Aïn Sebâa**
+**Université Hassan II de Casablanca — Faculté des Sciences Juridiques, Économiques et Sociales — Aïn Sebaâ**
 
 **Examen écrit du Master Management des Ressources Humaines — Année universitaire 2022/2023**
 
-NB : les cases cochées au crayon sur le scan correspondent aux réponses d'un candidat et non à un corrigé officiel ; elles ne sont pas reprises ici.
+*QCM de 50 questions. Les cases cochées au crayon sur les photos sont les réponses d'un candidat, pas un corrigé officiel : elles ne sont pas reprises ici.*
 
 ### Questions
 
 **1. Le SMIG s'élève à :**
 a) 14,55 DH l'heure
 b) 15,55 DH l'heure
-c) 16,55 DH l'heure
+c) 16,55
 d) Aucune bonne réponse
 
 **2. Les salaires non-versés par l'entreprise sont classés parmi :**
@@ -289,7 +289,7 @@ d) Lequel
 a) Essayés
 b) Essayé
 c) Essayait
-d) Essayé
+d) Essayé *(la même proposition est imprimée deux fois sur le sujet)*
 
 **47. Pour cette recette, il faut mettre ….. de sucre que de farine.**
 a) Aussi
@@ -314,3 +314,4 @@ a) En
 b) Où
 c) Y
 d) Est
+
