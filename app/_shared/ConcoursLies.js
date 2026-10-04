@@ -1,11 +1,15 @@
 // Liste compacte de sujets de concours liés à un module de cours
 // (lib/concoursParModule.js) : page du module et pages de chapitre FSJES.
+import { Icon } from "./icons";
+
 export default function ConcoursLies({ id, titre, intro, sujets, lienTous }) {
   if (!sujets.length) return null;
   return (
     <section id={id} className="bac-semestre">
       <h2 className="bac-semestre-title">
-        <span className="bac-semestre-code">📚</span>
+        <span className="bac-semestre-code">
+          <Icon name="library" size={16} />
+        </span>
         {titre}
       </h2>
       {intro && <p className="sp-concours-intro">{intro}</p>}

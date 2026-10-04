@@ -10,6 +10,7 @@ import BacQcm from "../../../BacQcm";
 import BacChapitreClient from "../../../BacChapitreClient";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, findBacChapitre, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../../lib/bacProgramme";
 import { getBacChapitreEffectif, getBacMatiereEffectif } from "../../../../../lib/bacContenuEffectif";
+import { Icon } from "../../../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -138,7 +139,7 @@ export default async function BacChapitrePage(props) {
             <aside className="bac-side">
               <div className="bac-side-card">
                 <a href={bacMatiereHref(m)} className="bac-side-back">
-                  {m.icon} {m.court}
+                  <Icon e={m.icon} size={18} /> {m.court}
                 </a>
                 <ol className="bac-side-chaps" {...bacTextDir(m)}>
                   {chapitresRediges.map((x) => (
@@ -172,7 +173,7 @@ export default async function BacChapitrePage(props) {
                 <div className="bac-tab-labels">
                   {onglets.map((o) => (
                     <label key={o.code} htmlFor={`tab-${o.code}`} className={`bac-tab-label bac-tab-label-${o.code}`}>
-                      <span aria-hidden="true">{o.icon}</span> {o.label}
+                      <Icon e={o.icon} size={18} /> {o.label}
                     </label>
                   ))}
                 </div>

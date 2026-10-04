@@ -11,6 +11,7 @@ import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./Concours
 import AdSlot from "../../_shared/AdSlot";
 import MathScripts from "../../_shared/MathScripts";
 import { isLicenceExcellence, niveauInfo, niveauOf } from "@/lib/concoursNiveaux";
+import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -219,13 +220,27 @@ export default async function ConcoursDetailPage(props) {
           </div>
           <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
           <div className="bac-hero-stats">
-            <span className="bac-stat">🏫 {c.etablissement}</span>
-            <span className="bac-stat">📍 {c.ville}</span>
-            <span className="bac-stat">📅 {c.annee}</span>
+            <span className="bac-stat">
+              <Icon name="school" size={15} />
+              {c.etablissement}
+            </span>
+            <span className="bac-stat">
+              <Icon name="pin" size={15} />
+              {c.ville}
+            </span>
+            <span className="bac-stat">
+              <Icon name="calendar" size={15} />
+              {c.annee}
+            </span>
             {difficulteHtml(c.difficulte) && (
               <span className="bac-stat" dangerouslySetInnerHTML={{ __html: difficulteHtml(c.difficulte) }} />
             )}
-            {corrigeMd && <span className="bac-dispo">✅ Corrigé disponible</span>}
+            {corrigeMd && (
+              <span className="bac-dispo">
+                <Icon name="check-circle" size={14} />
+                Corrigé disponible
+              </span>
+            )}
           </div>
           {c.modules?.length > 0 && (
             <p className="sp-chips sp-detail-modules">
@@ -247,16 +262,16 @@ export default async function ConcoursDetailPage(props) {
 
         <nav className="bac-tab-labels sp-anchor-tabs" aria-label="Sections du sujet">
           <a className="bac-tab-label" href="#section-enonce">
-            <span aria-hidden="true">📝</span> Énoncé
+            <Icon name="file-pen" size={18} /> Énoncé
           </a>
           {hasImages && (
             <a className="bac-tab-label" href="#section-images">
-              <span aria-hidden="true">🖼️</span> Sujet scanné
+              <Icon name="image" size={18} /> Sujet scanné
             </a>
           )}
           {corrigeHtml && (
             <a className="bac-tab-label" href="#section-corrige">
-              <span aria-hidden="true">✅</span> Corrigé
+              <Icon name="check-circle" size={18} /> Corrigé
             </a>
           )}
         </nav>
@@ -297,12 +312,19 @@ export default async function ConcoursDetailPage(props) {
                « Corrigé » des onglets l'ouvre (ConcoursDetailClient). */}
             <details className="sp-reveal" id="corrigeReveal">
               <summary>
-                <span className="sp-reveal-title sp-reveal-show">👁️ Afficher le corrigé</span>
-                <span className="sp-reveal-title sp-reveal-hide">🙈 Masquer le corrigé</span>
+                <span className="sp-reveal-title sp-reveal-show">
+                  <Icon name="eye" size={19} />
+                  Afficher le corrigé
+                </span>
+                <span className="sp-reveal-title sp-reveal-hide">
+                  <Icon name="eye-off" size={19} />
+                  Masquer le corrigé
+                </span>
                 <span className="sp-reveal-sub">Essaie d&apos;abord de traiter le sujet en conditions réelles.</span>
               </summary>
               <div className="corrige-disclaimer">
-                ⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t&apos;y fier pour réviser.
+                <Icon name="alert" size={18} />
+                <span>Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
               </div>
               <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
             </details>

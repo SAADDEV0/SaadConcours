@@ -7,6 +7,7 @@ import MathScripts from "../../_shared/MathScripts";
 import { boutiqueCardHtml } from "../../_shared/boutiqueCard";
 import { boutiqueNiveau, formatPrix, gumroadHref, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
 import ProduitClient from "./ProduitClient";
+import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -118,7 +119,7 @@ export default async function ProduitPage(props) {
                 <img src={cover} alt={`Couverture : ${p.titre}`} />
               ) : (
                 <span className="shop-cover-ph" aria-hidden="true">
-                  {niv?.icon || "📘"}
+                  <Icon e={niv?.icon || "book"} size={64} strokeWidth={1.4} />
                 </span>
               )}
               {p.badge && <span className="shop-badge">{p.badge}</span>}
@@ -128,7 +129,7 @@ export default async function ProduitPage(props) {
               <div className="bac-eyebrow">
                 {niv ? (
                   <a href={`/boutique?niveau=${niv.code}`}>
-                    {niv.icon} {niv.long}
+                    {niv.long}
                   </a>
                 ) : (
                   "Cahier de préparation"
@@ -156,25 +157,46 @@ export default async function ProduitPage(props) {
                 </div>
                 {achetable && (
                   <a className="sp-btn primary shop-buy" href={href} target="_blank" rel="noopener" data-shop-buy={p.id}>
-                    🛒 Acheter sur Gumroad
+                    <Icon name="cart" size={18} />
+                    Acheter sur Gumroad
                   </a>
                 )}
                 {p.apercu && (
                   <a className="sp-btn" href={p.apercu} target="_blank" rel="noopener">
-                    👀 Voir un extrait gratuit
+                    <Icon name="eye" size={18} />
+                    Voir un extrait gratuit
                   </a>
                 )}
                 <ul className="shop-reassure">
-                  <li>🔒 Paiement sécurisé sur Gumroad</li>
-                  <li>📥 PDF envoyé par email, tout de suite</li>
-                  <li>📱 Lisible sur téléphone, tablette et ordinateur</li>
+                  <li>
+                    <Icon name="lock" size={15} /> Paiement sécurisé sur Gumroad
+                  </li>
+                  <li>
+                    <Icon name="download" size={15} /> PDF envoyé par email, tout de suite
+                  </li>
+                  <li>
+                    <Icon name="phone" size={15} /> Lisible sur téléphone, tablette et ordinateur
+                  </li>
                 </ul>
               </div>
 
               <div className="bac-hero-stats">
-                {p.pages ? <span className="bac-stat">📄 {p.pages} pages</span> : null}
-                <span className="bac-stat">🗂️ {p.format || "PDF"}</span>
-                {niv && <span className="bac-stat">{niv.icon} {niv.label}</span>}
+                {p.pages ? (
+                  <span className="bac-stat">
+                    <Icon name="file" size={15} />
+                    {p.pages} pages
+                  </span>
+                ) : null}
+                <span className="bac-stat">
+                  <Icon name="folder" size={15} />
+                  {p.format || "PDF"}
+                </span>
+                {niv && (
+                  <span className="bac-stat">
+                    <Icon e={niv.icon} size={15} />
+                    {niv.label}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -184,7 +206,10 @@ export default async function ProduitPage(props) {
               <h2 className="bac-section-title">Ce que tu trouveras dedans</h2>
               <ul className="shop-points">
                 {p.pointsForts.map((pt) => (
-                  <li key={pt}>✅ {pt}</li>
+                  <li key={pt}>
+                    <Icon name="check-circle" size={17} />
+                    <span>{pt}</span>
+                  </li>
                 ))}
               </ul>
             </section>
@@ -217,7 +242,8 @@ export default async function ProduitPage(props) {
                 <span>{formatPrix(p.prix, p.devise)} · téléchargement immédiat</span>
               </div>
               <a className="sp-btn primary shop-buy" href={href} target="_blank" rel="noopener" data-shop-buy={p.id}>
-                🛒 Acheter sur Gumroad
+                <Icon name="cart" size={18} />
+                Acheter sur Gumroad
               </a>
             </div>
           )}

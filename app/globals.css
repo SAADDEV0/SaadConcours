@@ -6,45 +6,61 @@ html{scroll-behavior:smooth; font-size:93.75%;}
    --accent-fill  fond des boutons/puces actives à texte blanc ;
    --accent-ink   texte posé sur --accent-dim (badges teintés).
    --accent seul reste la couleur des liens et du texte d'accent. */
+/* Design « SaadConcours 2 » : indigo de la marque (celui du logo) pour tout
+   le site, émeraude pour l espace Bac, surfaces plus profondes en sombre,
+   coins plus doux. Contrastes vérifiés (WCAG AA, 4,5:1) :
+   --text-faint   petits textes secondaires (dates, compteurs, pied de page) ;
+   --accent-fill  fond des boutons/puces actives à texte blanc ;
+   --accent-ink   texte posé sur --accent-dim (badges teintés).
+   --accent seul reste la couleur des liens et du texte d accent. */
 :root{
-  --bg:#0f1115; --bg-elev:#161922; --bg-card:#1b1f2a; --border:#2a2f3d;
-  --text:#e8eaf0; --text-dim:#9aa1b2; --text-faint:#8b93a5;
-  --accent:#4f8cff; --accent-dim:#2d4a8a; --accent-fill:#2f6fed; --accent-ink:#a9c4ff;
+  --bg:#0a0c11; --bg-elev:#11141b; --bg-card:#151922; --border:#242a37;
+  --text:#eef0f6; --text-dim:#a3aabb; --text-faint:#8b93a5;
+  --accent:#939bff; --accent-dim:#2b2f66; --accent-fill:#4f46e5; --accent-ink:#c7cbff;
   --green:#3ecf8e; --green-dim:#1e4536; --amber:#f0a83d; --red:#f0555f;
-  --violet:#8a5cf6; --violet-dim:#3d2f6b; --violet-ink:#c4b5fd;
-  --radius:10px; --radius-lg:18px; --shadow:0 4px 20px rgba(0,0,0,.35);
-  --brand-grad:linear-gradient(135deg,#4f46e5,#9333ea);
-  --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --violet:#a78bfa; --violet-dim:#3d2f6b; --violet-ink:#c4b5fd;
+  --radius:12px; --radius-lg:18px;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 10px 30px -12px rgba(0,0,0,.5);
+  --shadow-hover:0 18px 40px -16px rgba(79,70,229,.45);
+  --brand-grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+  --font: var(--font-sans, ui-sans-serif), -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   /* Hauteur du header collant, lue par tout ce qui colle en dessous
      (onglets, sommaires). Passe à 0 quand le header se replie (mobile). */
-  --header-h:59px;
+  --header-h:61px;
   --focus-ring:0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+  --glow:color-mix(in srgb, #4f46e5 18%, transparent);
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
-    --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
-    --text:#1a1d27; --text-dim:#5a6072; --text-faint:#646b7a;
-    --accent:#2559cc; --accent-dim:#dce7ff; --accent-fill:#2559cc; --accent-ink:#2559cc;
+    --bg:#f5f6fa; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e4e7ee;
+    --text:#141824; --text-dim:#525a6e; --text-faint:#646b7a;
+    --accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
     /* Dark-mode amber/red/green read fine on near-black but drop under 2:1
        contrast as text on a white card — darkened here so badges, the
        corrigé disclaimer and markdown call-outs stay legible in light mode. */
     --green:#13764a; --green-dim:#d9f5e8; --amber:#a3690a; --red:#d33a44; --violet-dim:#ece3ff; --violet-ink:#6d28d9;
-    --shadow:0 4px 20px rgba(20,20,40,.08);
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px -12px rgba(16,24,40,.12);
+    --shadow-hover:0 16px 36px -14px rgba(67,56,202,.28);
+    --glow:color-mix(in srgb, #4f46e5 10%, transparent);
   }
 }
 :root[data-theme="light"]{
-  --bg:#f5f6f9; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e2e5ec;
-  --text:#1a1d27; --text-dim:#5a6072; --text-faint:#646b7a;
-  --accent:#2559cc; --accent-dim:#dce7ff; --accent-fill:#2559cc; --accent-ink:#2559cc;
+  --bg:#f5f6fa; --bg-elev:#ffffff; --bg-card:#ffffff; --border:#e4e7ee;
+  --text:#141824; --text-dim:#525a6e; --text-faint:#646b7a;
+  --accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
   --green:#13764a; --green-dim:#d9f5e8; --amber:#a3690a; --red:#d33a44; --violet-dim:#ece3ff; --violet-ink:#6d28d9;
-  --shadow:0 4px 20px rgba(20,20,40,.08);
+  --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px -12px rgba(16,24,40,.12);
+  --shadow-hover:0 16px 36px -14px rgba(67,56,202,.28);
+  --glow:color-mix(in srgb, #4f46e5 10%, transparent);
 }
 :root[data-theme="dark"]{
-  --bg:#0f1115; --bg-elev:#161922; --bg-card:#1b1f2a; --border:#2a2f3d;
-  --text:#e8eaf0; --text-dim:#9aa1b2; --text-faint:#8b93a5;
-  --accent:#4f8cff; --accent-dim:#2d4a8a; --accent-fill:#2f6fed; --accent-ink:#a9c4ff;
+  --bg:#0a0c11; --bg-elev:#11141b; --bg-card:#151922; --border:#242a37;
+  --text:#eef0f6; --text-dim:#a3aabb; --text-faint:#8b93a5;
+  --accent:#939bff; --accent-dim:#2b2f66; --accent-fill:#4f46e5; --accent-ink:#c7cbff;
   --green-dim:#1e4536; --violet-dim:#3d2f6b; --violet-ink:#c4b5fd;
-  --shadow:0 4px 20px rgba(0,0,0,.35);
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 10px 30px -12px rgba(0,0,0,.5);
+  --shadow-hover:0 18px 40px -16px rgba(79,70,229,.45);
+  --glow:color-mix(in srgb, #4f46e5 18%, transparent);
 }
 /* Admin palette tokens (Zenith) and all .admin-* rules now live in
  * app/admin/admin.css, imported only by the admin route — keeps this
@@ -66,13 +82,18 @@ input:focus-visible, select:focus-visible, textarea:focus-visible{outline:none; 
   html.theme-anim *{transition:none !important;}
 }
 html,body{margin:0;padding:0;}
+/* Halo indigo discret en haut de page : donne de la profondeur au fond. */
 body{
-  background:var(--bg); color:var(--text); font-family:var(--font);
-  line-height:1.55; min-height:100vh;
+  background:radial-gradient(1100px 520px at 50% -260px, var(--glow), transparent 70%) no-repeat, var(--bg);
+  color:var(--text); font-family:var(--font);
+  line-height:1.6; min-height:100vh; font-feature-settings:"ss01" on;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 }
 a{color:var(--accent);}
 ::selection{background:var(--accent-dim);}
+h1,h2,h3,h4{letter-spacing:-.015em;}
+.ic-wrap{display:inline-flex; align-items:center; justify-content:center; line-height:0; flex-shrink:0;}
+.ic{display:block; flex-shrink:0;}
 
 
 /* ---------- Header ---------- */

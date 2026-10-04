@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import NiveauSwitch from "../../_shared/NiveauSwitch";
+import HeroArt from "../../_shared/HeroArt";
+import { Icon } from "../../_shared/icons";
 import ChromeInit from "../../_shared/ChromeInit";
 import { BAC_NIVEAUX, BAC_GROUPES, bacNiveauInfo, bacMatieres, bacMatiereHref, bacTextDir } from "../../../lib/bacProgramme";
 import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
@@ -35,7 +37,9 @@ function descriptionDe(info) {
 function MatiereCard({ m }) {
   return (
     <a className="bac-mat-card" href={bacMatiereHref(m)} style={{ "--mat-h": m.hue }}>
-      <span className="bac-mat-icon">{m.icon}</span>
+      <span className="bac-mat-icon">
+        <Icon e={m.icon} size={23} />
+      </span>
       <span className="bac-mat-body">
         <span className="bac-mat-name" {...bacTextDir(m)}>
           {m.nom}
@@ -89,6 +93,7 @@ export default async function BacNiveauPage(props) {
           <NiveauSwitch active="bac" />
 
           <section className="bac-hero">
+            <HeroArt icon="book" />
             <div className="bac-eyebrow">Lycée · Baccalauréat marocain</div>
             <h1>Cours {info.label} Sciences Économiques & Gestion</h1>
             <p>Chaque matière est découpée en chapitres, comme en classe. Pour chaque chapitre : le cours, des exercices, un résumé et un QCM, et pour les matières de l'examen national, les sujets des sessions précédentes.</p>

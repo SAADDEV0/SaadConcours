@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { chromeScript } from "../../_shared/chrome";
 import { downloadEvaluationPdf } from "../../_shared/evaluationPdf";
 import { loadEvalAnswers, saveEvalAnswers, recordEvalScore } from "../../_shared/progress";
+import { iconHtml, Icon } from "../../_shared/icons";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -193,7 +194,7 @@ export default function EvaluationDetailClient({ quiz }) {
         if (q.justification) {
           const j = card.querySelector(".eval-justif");
           j.style.display = "block";
-          j.innerHTML = `💡 ${escapeHtml(q.justification)}`;
+          j.innerHTML = `${iconHtml("bulb", { size: 16 })}${escapeHtml(q.justification)}`;
         }
       });
 
@@ -261,9 +262,18 @@ export default function EvaluationDetailClient({ quiz }) {
             <span className="eval-submit-fill" id="evalSubmitFill" />
           </span>
         </div>
-        <button className="dl-btn" id="evalSubmitBtn">✅ Valider mes réponses</button>
-        <button className="reset-btn" id="evalRetryBtn" style={{ display: "none" }}>🔄 Refaire l'évaluation à zéro</button>
-        <button className="reset-btn" id="evalPdfBtn" style={{ display: "none" }}>⬇ Télécharger en PDF (avec réponses)</button>
+        <button className="dl-btn" id="evalSubmitBtn">
+          <Icon name="check-circle" size={18} />
+          Valider mes réponses
+        </button>
+        <button className="reset-btn" id="evalRetryBtn" style={{ display: "none" }}>
+          <Icon name="refresh" size={18} />
+          Refaire l'évaluation à zéro
+        </button>
+        <button className="reset-btn" id="evalPdfBtn" style={{ display: "none" }}>
+          <Icon name="file-pdf" size={18} />
+          Télécharger en PDF (avec réponses)
+        </button>
       </div>
     </div>
   );

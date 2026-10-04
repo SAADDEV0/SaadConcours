@@ -10,6 +10,7 @@ import { readingTimeMinutes } from "../../_shared/blogCard";
 import { formatDateFr } from "../../_shared/format";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 import MathScripts from "../../_shared/MathScripts";
+import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -137,7 +138,7 @@ export default async function BlogDetailPage(props) {
           <div className="bac-eyebrow">
             {cat ? (
               <a href={`/blog?category=${cat.code}`}>
-                {cat.emoji} {cat.label}
+                {cat.label}
               </a>
             ) : (
               "Blog"
@@ -145,11 +146,20 @@ export default async function BlogDetailPage(props) {
           </div>
           <h1>{p.title}</h1>
           <div className="bac-hero-stats">
-            <span className="bac-stat">📅 {formatDateFr(p.publishedAt)}</span>
+            <span className="bac-stat">
+              <Icon name="calendar" size={15} />
+              {formatDateFr(p.publishedAt)}
+            </span>
             {p.updatedAt && p.updatedAt !== p.publishedAt && (
-              <span className="bac-stat">🔄 Mis à jour le {formatDateFr(p.updatedAt)}</span>
+              <span className="bac-stat">
+                <Icon name="refresh" size={15} />
+                Mis à jour le {formatDateFr(p.updatedAt)}
+              </span>
             )}
-            <span className="bac-stat">⏱️ {minutes} min de lecture</span>
+            <span className="bac-stat">
+              <Icon name="clock" size={15} />
+              {minutes} min de lecture
+            </span>
           </div>
           <div className="sp-hero-actions cd-head-actions">
             <ShareButton post={p} />
@@ -171,7 +181,9 @@ export default async function BlogDetailPage(props) {
             <div className="sp-related">
               {related.map((r) => (
                 <a key={r.id} className="bac-mat-card" href={`/blog/${r.id}`}>
-                  <span className="bac-mat-icon">📰</span>
+                  <span className="bac-mat-icon">
+                    <Icon name="news" size={23} />
+                  </span>
                   <span className="bac-mat-body">
                     <span className="bac-mat-name">{r.title}</span>
                     <span className="bac-mat-meta">{formatDateFr(r.publishedAt)}</span>

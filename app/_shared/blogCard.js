@@ -5,6 +5,7 @@
 
 import { escapeHtml } from "./concoursCard";
 import { formatDateFr } from "./format";
+import { iconHtml } from "./icons";
 import { categoryInfo } from "../../lib/blogTaxonomy";
 
 const WORDS_PER_MINUTE = 200;
@@ -40,7 +41,7 @@ export function blogCardHtml(post) {
   const hue = BLOG_HUES[post.category] ?? 220;
   return `
   <a class="bac-mat-card sp-card" href="/blog/${encodeURIComponent(post.id)}" data-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || "")}" style="--mat-h:${hue}">
-    <span class="bac-mat-icon">${cat ? cat.emoji : "📰"}</span>
+    <span class="bac-mat-icon">${iconHtml(cat ? cat.emoji : "news", { size: 23 })}</span>
     <span class="bac-mat-body">
       ${cat ? `<span class="sp-card-kicker">${escapeHtml(cat.label)}</span>` : ""}
       <span class="bac-mat-name">${escapeHtml(post.title)}</span>
@@ -48,7 +49,7 @@ export function blogCardHtml(post) {
       <span class="bac-mat-meta">
         <time datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(formatDateFr(post.publishedAt))}</time>
         <span class="bac-dot">·</span>
-        <span>⏱️ ${minutes} min de lecture</span>
+        <span class="sp-meta-line"><span>${iconHtml("clock", { size: 13 })}${minutes} min de lecture</span></span>
       </span>
     </span>
   </a>`;

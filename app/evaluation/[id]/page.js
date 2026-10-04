@@ -4,6 +4,7 @@ import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { evalModuleStyle } from "../../_shared/evalCard";
 import EvaluationDetailClient from "./EvaluationDetailClient";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
+import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -118,7 +119,8 @@ export default async function EvaluationDetailPage(props) {
           <h1>{q.title}</h1>
           <div className="bac-hero-stats">
             <span className="bac-stat">
-              {style.icon} {q.module}
+              <Icon e={style.icon} size={15} />
+              {q.module}
             </span>
             <span className="bac-stat">
               <strong>{nb}</strong> questions
@@ -169,7 +171,9 @@ export default async function EvaluationDetailPage(props) {
             <div className="sp-related">
               {related.map((r) => (
                 <a key={r.id} className="bac-mat-card" href={`/evaluation/${r.id}`}>
-                  <span className="bac-mat-icon">{evalModuleStyle(r).icon}</span>
+                  <span className="bac-mat-icon">
+                    <Icon e={evalModuleStyle(r).icon} size={23} />
+                  </span>
                   <span className="bac-mat-body">
                     <span className="bac-mat-name">{r.title}</span>
                     <span className="bac-mat-meta">{r.module}</span>

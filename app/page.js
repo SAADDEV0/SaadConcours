@@ -7,6 +7,8 @@ import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES } from "../lib/bacProgramme";
 import { fsjesModule } from "../lib/fsjesChapitres";
 import HomeClient from "./HomeClient";
+import HeroArt from "./_shared/HeroArt";
+import { Icon } from "./_shared/icons";
 
 // Served as prerendered HTML instead of rendered per request. lib/github.js
 // reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
@@ -112,7 +114,8 @@ export default async function HomePage() {
              revient est de reprendre là où il s'était arrêté. */}
           <div data-resume="*" hidden />
 
-          <section className="bac-hero sp-home-hero" style={{ "--hero-icon": '"🎓"' }}>
+          <section className="bac-hero sp-home-hero">
+            <HeroArt icon="grad" />
             <div className="bac-eyebrow">Bac · Licence FSJES · Licence d'excellence · Master</div>
             <h1>Cours, exercices et concours en économie & gestion au Maroc</h1>
             <p>
@@ -124,12 +127,15 @@ export default async function HomePage() {
             </p>
             <div className="bac-hero-stats">
               <span className="bac-stat">
+                <Icon name="book-open" size={15} />
                 <strong>{chapitresBac + chapitresFsjes}</strong> chapitres de cours
               </span>
               <span className="bac-stat">
+                <Icon name="library" size={15} />
                 <strong>{allConcours.length}</strong> sujets de concours
               </span>
               <span className="bac-stat">
+                <Icon name="clipboard" size={15} />
                 <strong>{questionsQcm}</strong> questions de QCM
               </span>
             </div>
@@ -139,15 +145,19 @@ export default async function HomePage() {
             <div className="sp-hero-actions sp-audience" role="group" aria-label="Je prépare">
               <span className="sp-audience-label">Je prépare :</span>
               <a className="sp-btn sp-choice" href="/bac/2bac">
+                <Icon name="book" size={18} />
                 Le Bac
               </a>
               <a className="sp-btn sp-choice" href="/cours">
+                <Icon name="grad" size={18} />
                 Ma Licence FSJES
               </a>
               <a className="sp-btn sp-choice" href="/concours/licence-excellence">
-                Une Licence d&apos;excellence
+                <Icon name="star" size={18} />
+                Licence d&apos;excellence
               </a>
               <a className="sp-btn sp-choice" href="/concours">
+                <Icon name="library" size={18} />
                 Un concours Master
               </a>
             </div>
@@ -160,7 +170,9 @@ export default async function HomePage() {
             <div className="sp-piliers">
               {PILIERS.map((p) => (
                 <a key={p.href} className="bac-mat-card sp-pilier" href={p.href} style={{ "--mat-h": p.hue }}>
-                  <span className="bac-mat-icon">{p.icon}</span>
+                  <span className="bac-mat-icon">
+                    <Icon e={p.icon} size={26} />
+                  </span>
                   <span className="bac-mat-body">
                     <span className="sp-card-kicker">{p.eyebrow}</span>
                     <span className="bac-mat-name">{p.title}</span>
@@ -182,7 +194,9 @@ export default async function HomePage() {
             <div className="bac-mat-grid sp-fill-grid">
               {OUTILS.map((o) => (
                 <a key={o.href} className="bac-mat-card" href={o.href} style={{ "--mat-h": o.hue }}>
-                  <span className="bac-mat-icon">{o.icon}</span>
+                  <span className="bac-mat-icon">
+                    <Icon e={o.icon} size={23} />
+                  </span>
                   <span className="bac-mat-body">
                     <span className="bac-mat-name">{o.title}</span>
                     <span className="bac-mat-desc">{o.desc}</span>
@@ -209,11 +223,21 @@ export default async function HomePage() {
                     <span className="bac-mat-icon sp-year">{c.annee}</span>
                     <span className="bac-mat-body">
                       <span className="bac-mat-name">{c.master_reel || c.filiere || c.etablissement}</span>
-                      <span className="bac-mat-desc">
-                        🏫 {c.etablissement} · 📍 {c.ville}
+                      <span className="bac-mat-desc sp-meta-line">
+                        <span>
+                          <Icon name="school" size={14} />
+                          {c.etablissement}
+                        </span>
+                        <span>
+                          <Icon name="pin" size={14} />
+                          {c.ville}
+                        </span>
                       </span>
                       <span className="bac-mat-meta">
-                        {isLicenceExcellence(c) && <span className="sp-le-badge">⭐ Licence d'excellence</span>}
+                        {isLicenceExcellence(c) && <span className="sp-le-badge">
+                            <Icon name="star" size={12} />
+                            Licence d'excellence
+                          </span>}
                         {c.date_ajout && <span>Ajouté le {formatDateFr(c.date_ajout)}</span>}
                       </span>
                     </span>
@@ -236,7 +260,9 @@ export default async function HomePage() {
                   const cat = categoryInfo(p.category);
                   return (
                     <a key={p.id} className="bac-mat-card sp-card" href={`/blog/${encodeURIComponent(p.id)}`} style={{ "--mat-h": 330 }}>
-                      <span className="bac-mat-icon">{cat?.emoji || "📰"}</span>
+                      <span className="bac-mat-icon">
+                        <Icon e={cat?.emoji || "📰"} size={23} />
+                      </span>
                       <span className="bac-mat-body">
                         {cat && <span className="sp-card-kicker">{cat.label}</span>}
                         <span className="bac-mat-name">{p.title}</span>

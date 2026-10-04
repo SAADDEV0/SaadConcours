@@ -26,10 +26,6 @@
   background:linear-gradient(135deg, color-mix(in srgb,#10b981 16%, var(--bg-card)), var(--bg-card) 70%);
   border:1px solid color-mix(in srgb,#10b981 30%, var(--border)); margin-bottom:22px;
 }
-.bac-hero::after{
-  content:"📘"; position:absolute; right:24px; top:50%; transform:translateY(-50%) rotate(-8deg);
-  font-size:6rem; opacity:.14; pointer-events:none;
-}
 .bac-hero h1{font-size:1.5rem; margin:0 0 8px; max-width:720px;}
 .bac-hero p{color:var(--text-dim); margin:0 0 16px; max-width:680px; line-height:1.55;}
 .bac-hero-stats{display:flex; flex-wrap:wrap; gap:8px;}
@@ -274,7 +270,6 @@
 @media (max-width:560px){
   .bac-wrap{padding:18px 16px 60px;}
   .bac-hero{padding:22px 18px;}
-  .bac-hero::after{display:none;}
   .bac-hero h1{font-size:1.3rem;}
   .bac-mat-hero{flex-direction:column; padding:20px 18px;}
   .bac-mat-hero h1, .bac-chap-hero h1{font-size:1.3rem;}

@@ -6,6 +6,7 @@
 
 import { isLicenceExcellence } from "../../lib/concoursNiveaux";
 import { difficulteHtml } from "./format";
+import { iconHtml } from "./icons";
 
 // Cartes affichées d'emblée sur une liste de concours ; les suivantes
 // arrivent par « Voir plus » (ConcoursExplorer). Toutes restent dans le HTML
@@ -75,7 +76,7 @@ export function concoursCardHtml(c, { hidden = false } = {}) {
     <span class="bac-mat-icon sp-year">${escapeHtml(String(c.annee || "—"))}</span>
     <span class="bac-mat-body">
       <span class="bac-mat-name">${escapeHtml(masterLabel)}</span>
-      <span class="bac-mat-desc">🏫 ${escapeHtml(c.etablissement)} · 📍 ${escapeHtml(c.ville)}</span>
+      <span class="bac-mat-desc sp-meta-line"><span>${iconHtml("school", { size: 14 })}${escapeHtml(c.etablissement)}</span><span>${iconHtml("pin", { size: 14 })}${escapeHtml(c.ville)}</span></span>
       ${
         modules.length
           ? `<span class="sp-chips">${modules
@@ -85,12 +86,12 @@ export function concoursCardHtml(c, { hidden = false } = {}) {
           : ""
       }
       <span class="bac-mat-meta">
-        ${isLicenceExcellence(c) ? `<span class="sp-le-badge">⭐ Licence d'excellence</span>` : ""}
+        ${isLicenceExcellence(c) ? `<span class="sp-le-badge">${iconHtml("star", { size: 12 })}Licence d'excellence</span>` : ""}
         ${difficulteHtml(c.difficulte)}
         ${hasCorrige ? "" : '<span class="sp-flag">Sans corrigé</span>'}
         ${hasImg ? "" : '<span class="sp-flag">Sans scan</span>'}
       </span>
     </span>
-    <button type="button" class="card-dl sp-card-dl" title="Télécharger l'énoncé (PDF)" aria-label="Télécharger l'énoncé en PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>PDF</button>
+    <button type="button" class="card-dl sp-card-dl" title="Télécharger l'énoncé (PDF)" aria-label="Télécharger l'énoncé en PDF">${iconHtml("file-pdf", { size: 17 })}PDF</button>
   </a>`;
 }

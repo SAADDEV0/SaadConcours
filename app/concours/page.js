@@ -5,6 +5,7 @@ import JsonLd from "../_shared/JsonLd";
 import ConcoursNiveauSwitch from "../_shared/ConcoursNiveauSwitch";
 import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
 import ConcoursListing from "./ConcoursListing";
+import HeroArt from "../_shared/HeroArt";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
 // request. lib/github.js reads the data JSON with `cache: "no-store"` (
@@ -64,7 +65,8 @@ export default async function ConcoursPage() {
         <div className="bac-wrap">
           <ConcoursNiveauSwitch active="master" counts={{ master: concours.length, [LICENCE_EXCELLENCE]: nbLicence }} />
 
-          <section className="bac-hero" style={{ "--hero-icon": '"📚"' }}>
+          <section className="bac-hero">
+            <HeroArt icon="library" />
             <div className="bac-eyebrow">Master · Concours d'accès</div>
             <h1>Concours d'accès aux Masters — sujets réels</h1>
             {/* Seule page de liste sans texte sous son H1 à l'origine : ce

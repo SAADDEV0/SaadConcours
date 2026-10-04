@@ -3,6 +3,7 @@
 // blogCard.js.
 
 import { escapeHtml } from "./concoursCard";
+import { iconHtml } from "./icons";
 import { boutiqueNiveau, formatPrix, remisePct, produitImage, isProduitAchetable } from "../../lib/boutique";
 
 export function boutiqueCardHtml(p) {
@@ -13,12 +14,12 @@ export function boutiqueCardHtml(p) {
   return `
   <a class="shop-card" href="/boutique/${encodeURIComponent(p.id)}" data-id="${escapeHtml(p.id)}" data-niveau="${escapeHtml(p.niveau || "")}" style="--mat-h:${niv?.hue ?? 230}">
     <span class="shop-cover">
-      ${cover ? `<img src="${escapeHtml(cover)}" alt="Couverture : ${escapeHtml(p.titre)}" loading="lazy" decoding="async">` : `<span class="shop-cover-ph" aria-hidden="true">${niv?.icon || "📘"}</span>`}
+      ${cover ? `<img src="${escapeHtml(cover)}" alt="Couverture : ${escapeHtml(p.titre)}" loading="lazy" decoding="async">` : `<span class="shop-cover-ph" aria-hidden="true">${iconHtml(niv?.icon || "book", { size: 64, strokeWidth: 1.4 })}</span>`}
       ${p.badge ? `<span class="shop-badge">${escapeHtml(p.badge)}</span>` : ""}
       ${remise ? `<span class="shop-remise">−${remise} %</span>` : ""}
     </span>
     <span class="shop-body">
-      <span class="sp-card-kicker">${niv ? `${niv.icon} ${escapeHtml(niv.label)}` : "Cahier"}${p.matiere ? ` · ${escapeHtml(p.matiere)}` : ""}</span>
+      <span class="sp-card-kicker">${niv ? `${iconHtml(niv.icon, { size: 14 })} ${escapeHtml(niv.label)}` : "Cahier"}${p.matiere ? ` · ${escapeHtml(p.matiere)}` : ""}</span>
       <span class="shop-title">${escapeHtml(p.titre)}</span>
       ${p.sousTitre ? `<span class="shop-sub">${escapeHtml(p.sousTitre)}</span>` : ""}
       <span class="shop-foot">

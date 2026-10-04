@@ -14,6 +14,7 @@ import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursPa
 import ConcoursLies from "../../../_shared/ConcoursLies";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
+import { Icon } from "../../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -177,7 +178,7 @@ export default async function CoursChapitrePage(props) {
             <aside className="bac-side">
               <div className="bac-side-card">
                 <a href={`/cours/${c.id}`} className="bac-side-back">
-                  {fsjesModuleIcon(c, cat?.emoji)} {c.module}
+                  <Icon e={fsjesModuleIcon(c, cat?.emoji)} size={18} /> {c.module}
                 </a>
                 <ol className="bac-side-chaps">
                   {chapitres.map((x) => (
@@ -213,7 +214,7 @@ export default async function CoursChapitrePage(props) {
                 <div className="bac-tab-labels">
                   {ONGLETS.map((o) => (
                     <label key={o.code} htmlFor={`tab-${o.code}`} className={`bac-tab-label bac-tab-label-${o.code}`}>
-                      <span aria-hidden="true">{o.icon}</span> {o.label}
+                      <Icon e={o.icon} size={18} /> {o.label}
                     </label>
                   ))}
                 </div>
@@ -223,7 +224,9 @@ export default async function CoursChapitrePage(props) {
                   if (!valeur || (Array.isArray(valeur) && !valeur.length)) {
                     corps = (
                       <div className="bac-empty">
-                        <div className="bac-empty-icon">{o.icon}</div>
+                        <div className="bac-empty-icon">
+                          <Icon e={o.icon} size={40} strokeWidth={1.5} />
+                        </div>
                         <div className="bac-empty-title">{o.label} en préparation</div>
                         <p>{o.vide}</p>
                       </div>

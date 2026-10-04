@@ -3,6 +3,7 @@
 // card component as the Bac / FSJES course spaces (bac-mat-card).
 
 import { escapeHtml } from "./concoursCard";
+import { iconHtml } from "./icons";
 
 // Teinte et icône par module, reprises des matières des cours FSJES.
 const MODULES = [
@@ -31,7 +32,7 @@ export function evalCardHtml(m) {
   // sert au meilleur score de l'élève, rempli par EvaluationExplorer depuis
   // son navigateur (vide au rendu serveur).
   const body = `
-    <span class="bac-mat-icon">${icon}</span>
+    <span class="bac-mat-icon">${iconHtml(icon, { size: 23 })}</span>
     <span class="bac-mat-body">
       <span class="bac-mat-name">${escapeHtml(m.module)}</span>
       <span class="bac-mat-desc">${escapeHtml(titre)}</span>

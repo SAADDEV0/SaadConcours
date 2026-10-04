@@ -3,10 +3,24 @@ import "./globals.css";
 // concours, évaluation, blog, accueil).
 import "./bac/bac.css";
 import "./_shared/space.css";
+// Couche visuelle (design « SaadConcours 2 ») : en dernier, elle redessine
+// les composants ci-dessus.
+import "./_shared/design.css";
 import Script from "next/script";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import DuaToast from "./_shared/DuaToast";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservationCss } from "./_shared/partnerAds";
+
+// Police du site, téléchargée au build et servie par le site lui-même
+// (next/font) : pas de requête vers Google au chargement, pas de saut de
+// mise en page (métriques de repli ajustées), exposée en --font-sans.
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-sans",
+});
 
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
@@ -101,7 +115,7 @@ export default async function RootLayout({ children }) {
   return (
     // suppressHydrationWarning: data-theme is stamped on by the pre-paint
     // script below, so it is always an "extra" attribute at hydration time.
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className={jakarta.variable} suppressHydrationWarning>
       <head>
         {/* Applies the saved light/dark choice before the first paint.
            chromeScript() also sets data-theme, but only from a useEffect

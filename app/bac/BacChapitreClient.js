@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { chromeScript } from "../_shared/chrome";
 import { renderMathWhenReady } from "../_shared/mathMarkdown";
 import { markChapterRead } from "../_shared/progress";
+import { Icon } from "../_shared/icons";
 
 // Commun aux chapitres Bac et Licence FSJES.
 // editId : "niveau/matiere/chapitre". Le raccourci d'édition n'est affiché que
@@ -44,7 +45,8 @@ export default function BacChapitreClient({ editId }) {
   if (!admin || !editId) return null;
   return (
     <a className="bac-edit-fab" href={`/admin/bac/modifier?id=${encodeURIComponent(editId)}`}>
-      ✏️ Modifier ce chapitre
+      <Icon name="pen" size={17} />
+      Modifier ce chapitre
     </a>
   );
 }

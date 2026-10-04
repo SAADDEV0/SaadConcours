@@ -13,6 +13,7 @@ import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
 import { concoursDuModule } from "../../../lib/concoursParModule";
+import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 const RESSOURCES = [
@@ -134,7 +135,9 @@ export default async function CoursModulePage(props) {
           </nav>
 
           <div className="bac-mat-hero">
-            <span className="bac-mat-hero-icon">{fsjesModuleIcon(c, cat?.emoji)}</span>
+            <span className="bac-mat-hero-icon">
+              <Icon e={fsjesModuleIcon(c, cat?.emoji)} size={32} />
+            </span>
             <div className="bac-mat-hero-body">
               <div className="bac-eyebrow">
                 Licence FSJES{c.semestre ? ` · ${licenceSemestreLabel(c.semestre)}` : ""}
@@ -162,7 +165,8 @@ export default async function CoursModulePage(props) {
                   </a>
                 )}
                 <button type="button" className="sp-btn" id="coursPdfBtn">
-                  ⬇ Cours complet en PDF
+                  <Icon name="file-pdf" size={18} />
+                  Cours complet en PDF
                 </button>
               </div>
             </div>
@@ -177,7 +181,10 @@ export default async function CoursModulePage(props) {
                 </a>
                 {annexe && (
                   <a href="#formulaire" className="bac-side-link">
-                    Formulaire & conseils <span>📐</span>
+                    Formulaire & conseils{" "}
+                    <span>
+                      <Icon name="ruler" size={16} />
+                    </span>
                   </a>
                 )}
                 {sujets.length > 0 && (
@@ -212,7 +219,7 @@ export default async function CoursModulePage(props) {
             <main className="bac-main">
               <section id="chapitres" className="bac-semestre">
                 <h2 className="bac-semestre-title">
-                  <span className="bac-semestre-code">{c.semestre || "📖"}</span>
+                  <span className="bac-semestre-code">{c.semestre || <Icon name="book-open" size={16} />}</span>
                   Chapitres du module
                 </h2>
                 {groupesParPartie(chapitres).map((g) => (
@@ -265,7 +272,9 @@ export default async function CoursModulePage(props) {
               {annexe && (
                 <section id="formulaire" className="bac-semestre">
                   <h2 className="bac-semestre-title">
-                    <span className="bac-semestre-code">📐</span>
+                    <span className="bac-semestre-code">
+                    <Icon name="ruler" size={16} />
+                  </span>
                     Synthèse du module
                   </h2>
                   <div className="sp-annexe">
@@ -289,7 +298,9 @@ export default async function CoursModulePage(props) {
                       const rc = coursCategoryInfo(r.category);
                       return (
                         <a key={r.id} className="bac-mat-card" href={`/cours/${r.id}`} style={{ "--mat-h": rc?.hue ?? 220 }}>
-                          <span className="bac-mat-icon">{fsjesModuleIcon(r, rc?.emoji)}</span>
+                          <span className="bac-mat-icon">
+                            <Icon e={fsjesModuleIcon(r, rc?.emoji)} size={23} />
+                          </span>
                           <span className="bac-mat-body">
                             <span className="bac-mat-name">{r.module}</span>
                             <span className="bac-mat-meta">

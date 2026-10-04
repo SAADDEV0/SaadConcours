@@ -14,9 +14,27 @@ import {
 import boutiqueData from "../../public/data/boutique.json";
 import { isProduitVisible } from "../../lib/boutique";
 import { readChapters, lastChapter } from "./progress";
+import { iconHtml } from "./icons";
 
-const ICON_MOON = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>`;
-const ICON_SUN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`;
+const ICON_MOON = iconHtml("moon", { size: 18, strokeWidth: 2 });
+const ICON_SUN = iconHtml("sun", { size: 18, strokeWidth: 2 });
+
+// Logo (toque + livre ouvert). `gradId` distinct par exemplaire : deux <svg>
+// avec le même id dans une page se volent leur <linearGradient>.
+function brandLogoSvg(gradId) {
+  return `<svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="${gradId}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="16" fill="url(#${gradId})"/>
+        <polygon points="32,13 49,21 32,29 15,21" fill="white"/>
+        <line x1="49" y1="21" x2="51" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="51" cy="32.5" r="2" fill="#fbbf24"/>
+        <polygon points="32,42 13,37 13,48 32,54" fill="white"/>
+        <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
+        <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
+      </svg>`;
+}
 
 function escapeAttr(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -42,13 +60,13 @@ function initProgressMarks() {
     if (!last || a.dataset.resumed === "1") return;
     a.dataset.resumed = "1";
     a.href = last.href;
-    a.innerHTML = `Reprendre : ${escapeAttr(last.title || "dernier chapitre lu")} →`;
+    a.innerHTML = `Reprendre : ${escapeAttr(last.title || "dernier chapitre lu")} ${iconHtml("arrow-right", { size: 18 })}`;
   });
   document.querySelectorAll("[data-resume]").forEach((el) => {
     const last = lastChapter(el.dataset.resume || "*");
     if (!last || el.dataset.filled === "1") return;
     el.dataset.filled = "1";
-    el.innerHTML = `<a class="sp-resume" href="${escapeAttr(last.href)}"><span class="sp-resume-kicker">Reprendre où tu t'es arrêté</span><span class="sp-resume-title">${escapeAttr(last.title || last.href)}</span><span class="sp-resume-go" aria-hidden="true">→</span></a>`;
+    el.innerHTML = `<a class="sp-resume" href="${escapeAttr(last.href)}"><span class="sp-resume-kicker">Reprendre où tu t'es arrêté</span><span class="sp-resume-title">${escapeAttr(last.title || last.href)}</span><span class="sp-resume-go">${iconHtml("arrow-right", { size: 22 })}</span></a>`;
     el.hidden = false;
   });
 }
@@ -60,19 +78,17 @@ function initProgressMarks() {
 // fait revenir l'entrée, sans toucher au code.
 export const BOUTIQUE_OUVERTE = Array.isArray(boutiqueData) && boutiqueData.some(isProduitVisible);
 
-// Icônes de navigation en SVG (trait, 24×24) : les emoji s'affichaient
-// différemment sous Windows, Android et iOS, à côté d'un logo vectoriel.
-const navSvg = (d) =>
-  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+// Icônes de navigation : même jeu que le reste du site (icons.js).
+const navIcon = (name) => iconHtml(name, { size: 20 });
 const NAV_ICONS = {
-  home: navSvg('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>'),
-  bac: navSvg('<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/>'),
-  fsjes: navSvg('<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c2 1.5 4 2 6 2s4-.5 6-2v-5"/><path d="M22 9v5"/>'),
-  concours: navSvg('<path d="M9 3h6l1 2h3v16H5V5h3z"/><path d="M9 11h6M9 15h4"/>'),
-  excellence: navSvg('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'),
-  eval: navSvg('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 9 1.5 1.5L12 8M8 15l1.5 1.5L12 14M14 9.5h3M14 15.5h3"/>'),
-  blog: navSvg('<path d="M4 5h12v14H6a2 2 0 0 1-2-2z"/><path d="M16 9h4v8a2 2 0 0 1-2 2"/><path d="M7 9h6M7 13h6"/>'),
-  boutique: navSvg('<path d="M5 7h14l-1 13H6z"/><path d="M9 7a3 3 0 0 1 6 0"/>'),
+  home: navIcon("home"),
+  bac: navIcon("book"),
+  fsjes: navIcon("grad"),
+  concours: navIcon("library"),
+  excellence: navIcon("star"),
+  eval: navIcon("clipboard"),
+  blog: navIcon("news"),
+  boutique: navIcon("cart"),
 };
 
 // Liens principaux du header. `icon` ne sert qu'au menu mobile.
@@ -126,18 +142,7 @@ export function chromeHtml({ active, showSearch, rails = false }) {
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="/" aria-label="SaadConcours, accueil">
-      <svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/>
-        </linearGradient></defs>
-        <rect width="64" height="64" rx="16" fill="url(#logoGrad)"/>
-        <polygon points="32,13 49,21 32,29 15,21" fill="white"/>
-        <line x1="49" y1="21" x2="51" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="51" cy="32.5" r="2" fill="#fbbf24"/>
-        <polygon points="32,42 13,37 13,48 32,54" fill="white"/>
-        <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
-        <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
-      </svg>
+      ${brandLogoSvg("logoGrad")}
       <span class="brand-text">
         <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
         <span class="brand-tagline">Bac · Licence · Master</span>
@@ -216,13 +221,54 @@ export function spinnerHtml(label) {
 // Shared footer with a social-links row — icons are hidden by default and
 // only shown once initSocialLinks() (below) confirms a URL is actually set
 // for that network, so an unconfigured link never flashes then disappears.
+// Pied de page en colonnes : marque + réseaux, puis les familles de pages
+// (cours, concours, site) et une barre légale.
 export function footerHtml() {
+  const annee = new Date().getFullYear();
   return `
 <div class="pa-zone pa-zone-footer" id="paFooter" data-pa-zone="footer"></div>
-<footer>
-  <div class="footer-text">Cours du Bac Sciences Économiques et de la Licence FSJES, sujets réels de concours Master — corrigés indicatifs, sources publiques citées sur chaque fiche.</div>
-  <div class="footer-social" id="footerSocial"></div>
-  <div class="footer-legal"><a href="/a-propos">À propos</a> · <a href="/contact">Contact</a> · <a href="/faq">FAQ</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/mentions-legales">Mentions légales</a></div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="/" aria-label="SaadConcours, accueil">
+        ${brandLogoSvg("logoGradFooter")}
+        <span class="brand-text">
+          <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
+          <span class="brand-tagline">Bac · Licence · Master</span>
+        </span>
+      </a>
+      <p class="footer-text">Cours du Bac Sciences Économiques et de la Licence FSJES, sujets réels de concours Master — corrigés indicatifs, sources publiques citées sur chaque fiche. Gratuit et sans inscription.</p>
+      <div class="footer-social" id="footerSocial"></div>
+    </div>
+    <nav class="footer-col" aria-label="Cours">
+      <h2>Cours</h2>
+      <ul>
+        <li><a href="/bac/2bac">Cours Bac Éco &amp; Gestion</a></li>
+        <li><a href="/cours">Cours Licence FSJES</a></li>
+        <li><a href="/evaluation">QCM d'entraînement</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-col" aria-label="Concours">
+      <h2>Concours</h2>
+      <ul>
+        <li><a href="/concours">Concours Master</a></li>
+        <li><a href="/concours/licence-excellence">Licence d'excellence</a></li>
+        <li><a href="/blog">Blog &amp; méthode</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-col" aria-label="SaadConcours">
+      <h2>SaadConcours</h2>
+      <ul>
+        <li><a href="/a-propos">À propos</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/faq">FAQ</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer-bottom footer-legal">
+    <span>© ${annee} SaadConcours</span>
+    <span><a href="/confidentialite">Confidentialité</a> · <a href="/mentions-legales">Mentions légales</a></span>
+  </div>
 </footer>
 `;
 }

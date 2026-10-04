@@ -1,20 +1,16 @@
-/* Espaces du site (Licence FSJES, concours, évaluation, blog, accueil) : mêmes composants que l'espace Bac (app/bac/bac.css,
-   classes bac-*), avec l'accent bleu du site à la place du vert. */
-/* Les deux bouts du dégradé gardent ≥ 4,5:1 sous un texte blanc. */
+/* Espaces du site (Licence FSJES, concours, évaluation, blog, accueil) : mêmes
+   composants que l espace Bac (app/bac/bac.css, classes bac-*), avec l indigo
+   de la marque à la place de l émeraude. Les deux bouts du dégradé gardent
+   ≥ 4,5:1 sous un texte blanc. */
 .bac-space.site-space{
-  --accent:#4f8cff; --accent-dim:#2d4a8a; --accent-fill:#2f6fed; --accent-ink:#a9c4ff;
-  --bac-grad:linear-gradient(135deg,#2f6fed,#6d4aff);
+  --accent:#939bff; --accent-dim:#2b2f66; --accent-fill:#4f46e5; --accent-ink:#c7cbff;
+  --bac-grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+  --hero-tint:#6366f1;
 }
-:root[data-theme="light"] .bac-space.site-space{--accent:#2559cc; --accent-dim:#dce7ff; --accent-fill:#2559cc; --accent-ink:#2559cc;}
+:root[data-theme="light"] .bac-space.site-space{--accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;}
 @media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]) .bac-space.site-space{--accent:#2559cc; --accent-dim:#dce7ff; --accent-fill:#2559cc; --accent-ink:#2559cc;}
+  :root:not([data-theme="dark"]) .bac-space.site-space{--accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;}
 }
-
-.site-space .bac-hero{
-  background:linear-gradient(135deg, color-mix(in srgb,#4f8cff 16%, var(--bg-card)), var(--bg-card) 70%);
-  border-color:color-mix(in srgb,#4f8cff 30%, var(--border));
-}
-.site-space .bac-hero::after{content:var(--hero-icon,"🎓");}
 
 /* ---------- Index : filtres ---------- */
 .sp-filters{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:26px;}
@@ -343,7 +339,6 @@
 .bac-wrap{padding-top:18px;}
 .bac-hero{padding:22px 24px; margin-bottom:18px;}
 .bac-hero h1{font-size:1.5rem;}
-.bac-hero::after{font-size:5rem;}
 .bac-mat-hero{padding:20px 22px; margin-bottom:18px;}
 .bac-mat-hero-icon{width:56px; height:56px; font-size:1.75rem;}
 .bac-chap-hero{padding:18px 20px;}

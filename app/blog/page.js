@@ -2,6 +2,8 @@ import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
 import BlogExplorer from "./BlogExplorer";
+import HeroArt from "../_shared/HeroArt";
+import { Icon } from "../_shared/icons";
 import { blogCardHtml, blogListItem } from "../_shared/blogCard";
 import { BLOG_CATEGORIES } from "../../lib/blogTaxonomy";
 
@@ -76,7 +78,8 @@ export default async function BlogPage() {
 
       <div className="bac-space site-space">
         <div className="bac-wrap">
-          <section className="bac-hero" style={{ "--hero-icon": '"📰"' }}>
+          <section className="bac-hero">
+            <HeroArt icon="news" />
             <div className="bac-eyebrow">Blog · Méthode et orientation</div>
             <h1>Le blog SaadConcours</h1>
             <p>
@@ -98,7 +101,8 @@ export default async function BlogPage() {
               <div className="bac-year-tabs" id="blogCategoryChips" role="group" aria-label="Rubriques">
                 {categoryCounts.map((c) => (
                   <button key={c.code} type="button" className="bac-year-tab blog-cat-chip" data-category={c.code}>
-                    {c.emoji} {c.label} <em>{c.count}</em>
+                    <Icon e={c.emoji} size={16} />
+                    {c.label} <em>{c.count}</em>
                   </button>
                 ))}
               </div>

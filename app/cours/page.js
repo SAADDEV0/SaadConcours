@@ -6,6 +6,8 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
 import NiveauSwitch from "../_shared/NiveauSwitch";
+import HeroArt from "../_shared/HeroArt";
+import { Icon } from "../_shared/icons";
 
 // Served as prerendered HTML instead of rendered per request. lib/github.js
 // reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
@@ -47,7 +49,9 @@ function ModuleCard({ c }) {
   const tag = c.filiere ? licenceFiliereLabel(c.filiere) : c.parcours ? `Parcours ${licenceParcoursLabel(c.parcours)}` : "Tronc commun";
   const inner = (
     <>
-      <span className="bac-mat-icon">{c.icon}</span>
+      <span className="bac-mat-icon">
+        <Icon e={c.icon} size={23} />
+      </span>
       <span className="bac-mat-body">
         <span className="bac-mat-name">{c.module}</span>
         {/* Description complète dans le HTML, repliée à 3 lignes à l'affichage. */}
@@ -114,6 +118,7 @@ export default async function CoursPage() {
           <NiveauSwitch active="fsjes" />
 
           <section className="bac-hero">
+            <HeroArt icon="grad" />
             <div className="bac-eyebrow">Université · Licence Fondamentale FSJES</div>
             <h1>Cours Licence Économie & Gestion</h1>
             <p>Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
@@ -161,7 +166,7 @@ export default async function CoursPage() {
               <option value="">Toutes les matières</option>
               {COURS_CATEGORIES.map((c) => (
                 <option key={c.code} value={c.code}>
-                  {c.emoji} {c.label}
+                  {c.label}
                 </option>
               ))}
             </select>

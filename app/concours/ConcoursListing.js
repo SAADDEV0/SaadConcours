@@ -1,5 +1,6 @@
 import { concoursCardHtml, concoursListItem, compareConcoursRecents, CONCOURS_PAGE_SIZE } from "../_shared/concoursCard";
 import ConcoursExplorer from "./ConcoursExplorer";
+import { Icon } from "../_shared/icons";
 
 // Filtres + grille de cartes, communs aux deux pages de liste (/concours pour
 // le Master, /concours/licence-excellence). Chaque page passe sa propre liste
@@ -77,7 +78,10 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
             <div className="bac-side-title">Pour aller plus loin</div>
             {sideLinks.map((l) => (
               <a key={l.href} href={l.href} className="bac-side-link">
-                {l.label} <span>{l.icon}</span>
+                {l.label}
+                <span>
+                  <Icon e={l.icon} size={16} />
+                </span>
               </a>
             ))}
           </div>
@@ -95,7 +99,7 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
             <input
               type="search"
               id="searchInput"
-              placeholder="Rechercher un master, une faculté, une ville…"
+              placeholder="Master, faculté, ville…"
               aria-label="Rechercher un concours par titre du master, faculté ou ville"
               autoComplete="off"
               enterKeyHint="search"

@@ -4,6 +4,8 @@ import ChromeInit from "../_shared/ChromeInit";
 import { boutiqueCardHtml } from "../_shared/boutiqueCard";
 import { BOUTIQUE_NIVEAUX, isProduitVisible, trierProduits } from "../../lib/boutique";
 import BoutiqueExplorer from "./BoutiqueExplorer";
+import HeroArt from "../_shared/HeroArt";
+import { Icon } from "../_shared/icons";
 
 // Prérendue au build, comme /blog : la page ne passe jamais par le Worker
 // (voir README, « une page publique n'invoque pas le Worker »). La recherche
@@ -28,9 +30,9 @@ export async function generateMetadata() {
 }
 
 const ETAPES = [
-  ["🔎", "Trouve ton cahier", "Filtre par niveau ou cherche ta matière, ton concours."],
-  ["💳", "Paie en toute sécurité", "Le paiement se fait sur Gumroad, par carte bancaire."],
-  ["📥", "Télécharge tout de suite", "Le PDF arrive par email et reste disponible dans ton compte Gumroad."],
+  ["search", "Trouve ton cahier", "Filtre par niveau ou cherche ta matière, ton concours."],
+  ["credit-card", "Paie en toute sécurité", "Le paiement se fait sur Gumroad, par carte bancaire."],
+  ["download", "Télécharge tout de suite", "Le PDF arrive par email et reste disponible dans ton compte Gumroad."],
 ];
 
 export default async function BoutiquePage() {
@@ -57,7 +59,8 @@ export default async function BoutiquePage() {
 
       <div className="bac-space site-space">
         <div className="bac-wrap">
-          <section className="bac-hero" style={{ "--hero-icon": '"🛒"' }}>
+          <section className="bac-hero">
+            <HeroArt icon="cart" />
             <div className="bac-eyebrow">Boutique · Cahiers de préparation</div>
             <h1>Des cahiers pour réviser plus vite et mieux</h1>
             <p>
@@ -68,8 +71,14 @@ export default async function BoutiquePage() {
               <span className="bac-stat">
                 <strong>{produits.length}</strong> cahier{produits.length > 1 ? "s" : ""}
               </span>
-              <span className="bac-stat">🔒 Paiement sécurisé Gumroad</span>
-              <span className="bac-stat">📥 Téléchargement immédiat</span>
+              <span className="bac-stat">
+                <Icon name="lock" size={15} />
+                Paiement sécurisé Gumroad
+              </span>
+              <span className="bac-stat">
+                <Icon name="download" size={15} />
+                Téléchargement immédiat
+              </span>
             </div>
           </section>
 
@@ -78,7 +87,7 @@ export default async function BoutiquePage() {
               <div className="shop-step" key={titre}>
                 <span className="shop-step-num">{i + 1}</span>
                 <span className="shop-step-icon" aria-hidden="true">
-                  {icon}
+                  <Icon name={icon} size={26} />
                 </span>
                 <strong>{titre}</strong>
                 <span>{texte}</span>
@@ -96,7 +105,8 @@ export default async function BoutiquePage() {
                     </button>
                     {niveaux.map((n) => (
                       <button key={n.code} type="button" className="bac-year-tab" data-niveau={n.code}>
-                        {n.icon} {n.label} <em>{n.count}</em>
+                        <Icon e={n.icon} size={16} />
+                        {n.label} <em>{n.count}</em>
                       </button>
                     ))}
                   </div>

@@ -5,6 +5,7 @@ import JsonLd from "../../_shared/JsonLd";
 import ConcoursNiveauSwitch from "../../_shared/ConcoursNiveauSwitch";
 import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
 import ConcoursListing from "../ConcoursListing";
+import HeroArt from "../../_shared/HeroArt";
 
 // Même contrainte que /concours : page prérendue, servie depuis les assets
 // Cloudflare sans invoquer le Worker (voir README).
@@ -112,7 +113,8 @@ export default async function LicenceExcellencePage() {
         <div className="bac-wrap">
           <ConcoursNiveauSwitch active={LICENCE_EXCELLENCE} counts={{ master: nbMaster, [LICENCE_EXCELLENCE]: concours.length }} />
 
-          <section className="bac-hero sp-le-hero" style={{ "--hero-icon": '"⭐"' }}>
+          <section className="bac-hero sp-le-hero">
+            <HeroArt icon="star" />
             <div className="bac-eyebrow">Licence d'excellence · Concours d'accès en S5</div>
             <h1>Concours d'accès aux Licences d'Excellence — sujets réels</h1>
             <p>

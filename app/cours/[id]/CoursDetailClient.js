@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { chromeScript } from "../../_shared/chrome";
 import { downloadCoursPdf } from "../../_shared/coursPdf";
 import { renderMathWhenReady } from "../../_shared/mathMarkdown";
+import { Icon } from "../../_shared/icons";
 
 // Page module (server-rendered, see page.js) : header behavior, KaTeX render
 // of the "Synthèse du module" section and the full-course PDF button, which
@@ -44,7 +45,8 @@ export default function CoursDetailClient({ cours }) {
   if (!admin) return null;
   return (
     <a className="bac-edit-fab" href="/admin/cours">
-      ✏️ Modifier ce module
+      <Icon name="pen" size={17} />
+      Modifier ce module
     </a>
   );
 }

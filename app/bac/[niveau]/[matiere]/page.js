@@ -7,6 +7,7 @@ import JsonLd from "../../../_shared/JsonLd";
 import { getBacMatiereEffectif } from "../../../../lib/bacContenuEffectif";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
 import { NATIONAL_SOURCES, bacNationauxSeries, bacNationalPdf, bacNationalDocLabel } from "../../../../lib/bacNationaux";
+import { Icon } from "../../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -98,7 +99,9 @@ export default async function BacMatierePage(props) {
           </nav>
 
           <div className="bac-mat-hero">
-            <span className="bac-mat-hero-icon">{m.icon}</span>
+            <span className="bac-mat-hero-icon">
+              <Icon e={m.icon} size={32} />
+            </span>
             <div className="bac-mat-hero-body">
               <div className="bac-eyebrow">
                 {niv.label} · {niv.filieres.map((f) => f.code.toUpperCase()).join(" & ")}
@@ -198,7 +201,9 @@ export default async function BacMatierePage(props) {
               {nbExamens > 0 && (
                 <section id="examens" className="bac-semestre">
                   <h2 className="bac-semestre-title">
-                    <span className="bac-semestre-code">🏆</span>
+                    <span className="bac-semestre-code">
+                    <Icon name="trophy" size={16} />
+                  </span>
                     {examen.label}
                   </h2>
                   <p className="bac-nat-note">

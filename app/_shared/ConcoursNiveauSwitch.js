@@ -1,4 +1,5 @@
 import { CONCOURS_NIVEAUX } from "@/lib/concoursNiveaux";
+import { Icon } from "./icons";
 
 // Même interrupteur que celui des cours (NiveauSwitch : Licence FSJES / Bac),
 // appliqué aux sujets de concours : Master / Licence d'excellence. Deux vraies
@@ -15,7 +16,9 @@ export default function ConcoursNiveauSwitch({ active, counts = {} }) {
           data-niveau={n.code}
           aria-current={active === n.code ? "page" : undefined}
         >
-          <span className="niveau-switch-icon">{n.icon}</span>
+          <span className="niveau-switch-icon">
+            <Icon e={n.icon} size={19} />
+          </span>
           <span>
             <span className="niveau-switch-label">
               Concours {n.label}

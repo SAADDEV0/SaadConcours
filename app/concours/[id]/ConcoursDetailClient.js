@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { chromeScript, trackConcoursView } from "../../_shared/chrome";
 import { downloadConcoursPdf } from "../../_shared/concoursPdf";
 import { renderMathWhenReady } from "../../_shared/mathMarkdown";
+import { Icon } from "../../_shared/icons";
 
 // Always opens our own WhatsApp/Facebook/Telegram panel instead of the
 // native OS share sheet (navigator.share) - the native sheet hides which
@@ -45,7 +46,8 @@ export function ShareButton({ concours }) {
   return (
     <div className="share-wrap" ref={wrapRef}>
       <button type="button" className="reset-btn share-btn" onClick={handleClick}>
-        🔗 Partager
+        <Icon name="share" size={18} />
+        Partager
       </button>
       {open && (
         <div className="share-panel">
@@ -56,7 +58,8 @@ export function ShareButton({ concours }) {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
           >
-            💬 WhatsApp
+            <Icon name="message" size={18} />
+            WhatsApp
           </a>
           <a
             className="share-opt"
@@ -65,7 +68,8 @@ export function ShareButton({ concours }) {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
           >
-            📘 Facebook
+            <Icon name="users" size={18} />
+            Facebook
           </a>
           <a
             className="share-opt"
@@ -74,10 +78,12 @@ export function ShareButton({ concours }) {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
           >
-            ✈️ Telegram
+            <Icon name="send" size={18} />
+            Telegram
           </a>
           <button type="button" className="share-opt" onClick={copyLink}>
-            🔗 Copier le lien
+            <Icon name="link" size={18} />
+            Copier le lien
           </button>
         </div>
       )}
@@ -90,7 +96,8 @@ export function ShareButton({ concours }) {
 export function DownloadPdfButton({ concours }) {
   return (
     <button className="dl-btn" onClick={() => downloadConcoursPdf(concours)}>
-      ⬇ Télécharger en PDF
+      <Icon name="file-pdf" size={18} />
+      Télécharger en PDF
     </button>
   );
 }

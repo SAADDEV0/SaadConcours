@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { chromeScript } from "../../_shared/chrome";
 import { renderMathWhenReady } from "../../_shared/mathMarkdown";
 import { categoryLabel } from "../../../lib/blogTaxonomy";
+import { Icon } from "../../_shared/icons";
 
 // Same WhatsApp/Facebook/Telegram panel as ConcoursDetailClient's
 // ShareButton, reused here so blog posts (the content most likely to get
@@ -42,7 +43,8 @@ export function ShareButton({ post }) {
   return (
     <div className="share-wrap" ref={wrapRef}>
       <button type="button" className="reset-btn share-btn" onClick={handleClick}>
-        🔗 Partager
+        <Icon name="share" size={18} />
+        Partager
       </button>
       {open && (
         <div className="share-panel">
@@ -53,7 +55,8 @@ export function ShareButton({ post }) {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
           >
-            💬 WhatsApp
+            <Icon name="message" size={18} />
+            WhatsApp
           </a>
           <a
             className="share-opt"
@@ -62,7 +65,8 @@ export function ShareButton({ post }) {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
           >
-            📘 Facebook
+            <Icon name="users" size={18} />
+            Facebook
           </a>
           <a
             className="share-opt"
@@ -71,10 +75,12 @@ export function ShareButton({ post }) {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
           >
-            ✈️ Telegram
+            <Icon name="send" size={18} />
+            Telegram
           </a>
           <button type="button" className="share-opt" onClick={copyLink}>
-            🔗 Copier le lien
+            <Icon name="link" size={18} />
+            Copier le lien
           </button>
         </div>
       )}
