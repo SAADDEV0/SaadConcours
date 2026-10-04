@@ -13,7 +13,7 @@
 
 import { formatQCM } from "@/app/_shared/concoursFormat";
 import { convertMathSpansToPlainText } from "@/app/_shared/latexPlainText";
-import { FONT, FORMATS, drawLogo, drawVisual, fitTitle, paintBackground, roundRect, wrap } from "./visual";
+import { FONT, FORMATS, drawLogo, drawVisual, fitTitle, normalizeStyle, paintBackground, roundRect, wrap } from "./visual";
 import { googleQuery } from "./captions";
 
 export const CAROUSEL_FORMAT = FORMATS.find((f) => f.key === "portrait");
@@ -382,13 +382,15 @@ export function planExtrait(ctx, md, max = MAX_EXTRAIT_SLIDES) {
 
 /* ------------------------------ Dessin ------------------------------ */
 
-function header(ctx, t, label) {
-  drawLogo(ctx, MARGIN, 44, 58);
-  ctx.fillStyle = t.text;
-  ctx.font = `800 30px ${FONT}`;
+function header(ctx, t, label, st) {
   ctx.textBaseline = "middle";
   ctx.textAlign = "left";
-  ctx.fillText("SaadConcours", MARGIN + 74, 73);
+  if (st.brand) {
+    drawLogo(ctx, MARGIN, 44, 58);
+    ctx.fillStyle = t.text;
+    ctx.font = `800 30px ${FONT}`;
+    ctx.fillText("SaadConcours", MARGIN + 74, 73);
+  }
   if (label) {
     ctx.font = `700 26px ${FONT}`;
     const w = ctx.measureText(label).width + 36;
@@ -400,12 +402,12 @@ function header(ctx, t, label) {
   }
 }
 
-function drawExtraitSlide(canvas, { theme: t, kicker, page, n, total, footRight }) {
+function drawExtraitSlide(canvas, { theme: t, st, kicker, page, n, total, footRight }) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
-  paintBackground(ctx, W, H, t);
-  header(ctx, t, `${n} / ${total}`);
+  paintBackground(ctx, W, H, t, st.pattern);
+  header(ctx, t, `${n} / ${total}`, st);
 
   ctx.font = `600 25px ${FONT}`;
   ctx.fillStyle = t.dim;
@@ -420,7 +422,7 @@ function drawExtraitSlide(canvas, { theme: t, kicker, page, n, total, footRight 
   roundRect(ctx, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 26);
   ctx.fill();
   ctx.restore();
-  if (t.key === "clair") {
+  if (t.light) {
     ctx.strokeStyle = RULE;
     ctx.lineWidth = 2;
     roundRect(ctx, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 26);
@@ -438,9 +440,9 @@ function drawExtraitSlide(canvas, { theme: t, kicker, page, n, total, footRight 
   ctx.font = `600 26px ${FONT}`;
   ctx.fillStyle = t.dim;
   ctx.textAlign = "left";
-  ctx.fillText("saadconcours.space", MARGIN, fy);
+  if (st.url) ctx.fillText(st.footer || "saadconcours.space", MARGIN, fy);
   ctx.font = `800 28px ${FONT}`;
-  ctx.fillStyle = t.key === "clair" ? t.accent : t.text;
+  ctx.fillStyle = t.light ? t.accent : t.text;
   ctx.textAlign = "right";
   ctx.fillText(footRight, W - MARGIN, fy);
   ctx.textAlign = "left";
@@ -459,12 +461,12 @@ function drawSearchIcon(ctx, x, y, s, color) {
   ctx.stroke();
 }
 
-function drawGoogleSlide(canvas, { theme: t, query, truncated, hasCorrige, n, total }) {
+function drawGoogleSlide(canvas, { theme: t, st, query, truncated, hasCorrige, n, total }) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
-  paintBackground(ctx, W, H, t);
-  header(ctx, t, `${n} / ${total}`);
+  paintBackground(ctx, W, H, t, st.pattern);
+  header(ctx, t, `${n} / ${total}`, st);
   const pad = 72;
   const maxW = W - 2 * pad;
 
@@ -528,13 +530,20 @@ function drawGoogleSlide(canvas, { theme: t, query, truncated, hasCorrige, n, to
 
 /* ------------------------------ Assemblage ------------------------------ */
 
+// Points forts de l'affiche du carrousel, quand l'admin ne les a pas retouchés.
+export function carouselBullets(item, { truncated, hasCorrige }) {
+  return [truncated ? "Le début du sujet dans ce post" : "Le sujet complet dans ce post", hasCorrige ? "Corrigé détaillé gratuit sur le site" : null, item.difficulte ? `Difficulté : ${item.difficulte}` : null].filter(Boolean);
+}
+
 // Construit toutes les images du carrousel. `facts` : textes de l'affiche
-// (ceux du studio, retouches comprises) ; `ctaOverride` : bouton retouché.
+// (ceux du studio, retouches comprises) ; `ctaOverride` / `bulletsOverride` :
+// bouton et points forts retouchés ; `style` : mise en page (visual.js).
 // `createCanvas` : fourni par le script de publication automatique (Node), qui
 // n'a pas de `document`.
-export function buildCarousel(item, { theme, facts, ctaOverride, hasCorrige, createCanvas = () => document.createElement("canvas") }) {
+export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride, hasCorrige, style, createCanvas = () => document.createElement("canvas") }) {
+  const st = normalizeStyle(style);
   const measure = createCanvas().getContext("2d");
-  const { pages, truncated } = planExtrait(measure, item.enonce_md || "");
+  const { pages, truncated } = planExtrait(measure, item.enonce_md || "", st.maxPages);
   const total = pages.length + 2;
   const kicker = [facts.kicker, item.etablissement].filter(Boolean).join(" · ");
 
@@ -542,9 +551,10 @@ export function buildCarousel(item, { theme, facts, ctaOverride, hasCorrige, cre
   drawVisual(cover, {
     format: CAROUSEL_FORMAT,
     theme,
+    style: st,
     facts: {
       ...facts,
-      bullets: [truncated ? "Le début du sujet dans ce post" : "Le sujet complet dans ce post", hasCorrige ? "Corrigé détaillé gratuit sur le site" : null, item.difficulte ? `Difficulté : ${item.difficulte}` : null].filter(Boolean),
+      bullets: bulletsOverride || carouselBullets(item, { truncated, hasCorrige }),
       cta: ctaOverride || "Glisse pour voir le sujet",
     },
   });
@@ -552,12 +562,12 @@ export function buildCarousel(item, { theme, facts, ctaOverride, hasCorrige, cre
   const slides = pages.map((page, k) => {
     const c = createCanvas();
     const last = k === pages.length - 1;
-    drawExtraitSlide(c, { theme, kicker, page, n: k + 2, total, footRight: !last ? "Suite →" : truncated ? "La suite →" : "Le corrigé →" });
+    drawExtraitSlide(c, { theme, st, kicker, page, n: k + 2, total, footRight: !last ? "Suite →" : truncated ? "La suite →" : "Le corrigé →" });
     return c;
   });
 
   const end = createCanvas();
-  drawGoogleSlide(end, { theme, query: googleQuery(item), truncated, hasCorrige, n: total, total });
+  drawGoogleSlide(end, { theme, st, query: googleQuery(item), truncated, hasCorrige, n: total, total });
 
   return { canvases: [cover, ...slides, end], truncated, extraitPages: pages.length };
 }

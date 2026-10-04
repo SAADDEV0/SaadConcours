@@ -8,7 +8,9 @@ export const dynamic = "force-dynamic";
 // dans GitHub Actions (.github/workflows/social-publish.yml), qui lit cette
 // file dans KV : un clic = une seule requête Worker, quel que soit le lot.
 //
-// Corps : { theme, items: [{ id, title, date?, captions?: { instagram, facebook } }] }
+// Corps : { theme, design?, items: [{ id, title, date?, design?, captions?: { instagram, facebook } }] }
+// design : réglages du Studio (style, ton, hashtags, fin de texte) communs au
+// lot ; celui d'un concours (textes de l'affiche retouchés) s'y ajoute.
 // Sans date : publication immédiate, on réveille le workflow tout de suite.
 
 const OWNER = "SAADDEV0";
@@ -56,6 +58,7 @@ export async function POST(req) {
         status: "planned",
         auto: true,
         theme: body.theme,
+        design: { ...(body.design || {}), ...(it.design || {}) },
         date: at,
         caption: it.captions?.[platform] || "",
         url: `${SITE}/concours/${encodeURIComponent(it.id)}?utm_source=${platform}&utm_medium=social&utm_campaign=concours`,

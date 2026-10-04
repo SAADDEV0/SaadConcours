@@ -23,6 +23,8 @@ export const TONES = [
   { value: "info", label: "Informatif" },
   { value: "motivant", label: "Motivant" },
   { value: "urgent", label: "Urgent" },
+  { value: "question", label: "Question" },
+  { value: "defi", label: "Défi" },
 ];
 
 export const CONTENT_KINDS = [
@@ -170,25 +172,45 @@ const INTROS = {
     blog: "⚠️ À lire avant de postuler.",
     boutique: "⏳ Offre limitée sur ce cahier !",
   },
+  question: {
+    concours: "Tu saurais répondre à ce sujet de concours ? 🤔",
+    news: "Tu comptes postuler à ce master ? 👀",
+    cours: "Ce chapitre te pose problème ? 🤔",
+    quiz: "Combien de bonnes réponses vas-tu avoir ? 🤔",
+    blog: "Tu te poses aussi la question ? 👇",
+    boutique: "Tu cherches un support complet pour réviser ? 📘",
+  },
+  defi: {
+    concours: "🔥 Défi du jour : traite ce sujet en conditions réelles, chrono en main !",
+    news: "🎯 Défi : dépose ton dossier avant la date limite !",
+    cours: "🔥 Défi : maîtrise ce cours en une semaine.",
+    quiz: "🏆 Défi : vise 100 % à ce QCM !",
+    blog: "🔥 Défi : applique ce conseil dès aujourd'hui.",
+    boutique: "🔥 Défi : boucle tes révisions avec ce cahier.",
+  },
 };
 
-export function captionFor(platform, kind, item, { tone = "info", ctx } = {}) {
+// Options communes des textes : `tags` remplace les hashtags automatiques,
+// `outro` est une phrase ajoutée avant les hashtags (groupe, abonnement…).
+const tagsOf = (kind, item, tags) => (Array.isArray(tags) ? tags : hashtagsFor(kind, item));
+
+export function captionFor(platform, kind, item, { tone = "info", ctx, tags: customTags, outro = "" } = {}) {
   const f = factsFor(kind, item, ctx);
   const url = trackedUrl(kind, item, platform);
-  const tags = hashtagsFor(kind, item);
+  const tags = tagsOf(kind, item, customTags);
   const intro = INTROS[tone]?.[kind] || INTROS.info[kind] || "";
   const bullets = f.bullets.map((b) => `✅ ${b}`).join("\n");
   const head = `${f.emoji} ${f.title}${f.subtitle ? `\n${f.subtitle}` : ""}`;
 
   switch (platform) {
     case "instagram":
-      return [intro, head, bullets, `👉 ${f.cta} : lien dans la bio (saadconcours.space)`, tags.join(" ")].filter(Boolean).join("\n\n");
+      return [intro, head, bullets, `👉 ${f.cta} : lien dans la bio (saadconcours.space)`, outro, tags.join(" ")].filter(Boolean).join("\n\n");
     case "whatsapp":
-      return [`*${f.emoji} ${f.title}*${f.subtitle ? `\n${f.subtitle}` : ""}`, intro, bullets, `👉 ${url}`].filter(Boolean).join("\n\n");
+      return [`*${f.emoji} ${f.title}*${f.subtitle ? `\n${f.subtitle}` : ""}`, intro, bullets, `👉 ${url}`, outro].filter(Boolean).join("\n\n");
     case "telegram":
-      return [`${f.emoji} ${f.title}${f.subtitle ? `\n${f.subtitle}` : ""}`, bullets, `👉 ${f.cta} : ${url}`].filter(Boolean).join("\n\n");
+      return [`${f.emoji} ${f.title}${f.subtitle ? `\n${f.subtitle}` : ""}`, bullets, `👉 ${f.cta} : ${url}`, outro].filter(Boolean).join("\n\n");
     case "linkedin":
-      return [intro, head, bullets, `${f.cta} : ${url}`, tags.slice(0, 4).join(" ")].filter(Boolean).join("\n\n");
+      return [intro, head, bullets, `${f.cta} : ${url}`, outro, tags.slice(0, 4).join(" ")].filter(Boolean).join("\n\n");
     case "x": {
       // Un lien compte toujours 23 caractères sur X.
       const tagsShort = tags.slice(0, 2).join(" ");
@@ -198,7 +220,7 @@ export function captionFor(platform, kind, item, { tone = "info", ctx } = {}) {
       return `${text}\n${url}\n${tagsShort}`;
     }
     default:
-      return [intro, head, bullets, `👉 ${f.cta} : ${url}`, tags.slice(0, 4).join(" ")].filter(Boolean).join("\n\n");
+      return [intro, head, bullets, `👉 ${f.cta} : ${url}`, outro, tags.slice(0, 4).join(" ")].filter(Boolean).join("\n\n");
   }
 }
 
@@ -221,7 +243,7 @@ export function googleQuery(item) {
 // Instagram ne le rend pas cliquable et Facebook montre moins les posts qui
 // sortent de Facebook. On fait chercher le site sur Google, et le lien va
 // en bio (Instagram) ou en premier commentaire (Facebook).
-export function carouselCaption(platform, item, { tone = "info", truncated = false, ctx } = {}) {
+export function carouselCaption(platform, item, { tone = "info", truncated = false, ctx, tags, outro = "" } = {}) {
   const f = factsFor("concours", item, ctx);
   const hasCorrige = Boolean(item.corrige_md) || ctx?.corrigeFiles?.has(item.id);
   const intro = INTROS[tone]?.concours || INTROS.info.concours;
@@ -231,8 +253,11 @@ export function carouselCaption(platform, item, { tone = "info", truncated = fal
     `${f.emoji} ${f.title}\n${f.subtitle} · ${item.annee}`,
     `👉 ${truncated ? "Le début du sujet" : "Le sujet complet"} est dans les images (glisse ➡️)`,
     `✅ ${what} : gratuit sur notre site.\n🔎 Cherche sur Google : ${googleQuery(item)}\n${platform === "facebook" ? "🔗 Ou le lien en commentaire 👇" : "🔗 Ou le lien dans la bio"}`,
-    hashtagsFor("concours", item).join(" "),
-  ].join("\n\n");
+    outro,
+    tagsOf("concours", item, tags).join(" "),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 // Longueur telle que la compte le réseau (liens à 23 caractères sur X).

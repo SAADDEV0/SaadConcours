@@ -21,7 +21,7 @@ import path from "node:path";
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 import { buildCarousel } from "@/app/admin/_features/social/carousel";
 import { carouselCaption, factsFor, trackedUrl } from "@/app/admin/_features/social/captions";
-import { THEMES } from "@/app/admin/_features/social/visual";
+import { resolveTheme } from "@/app/admin/_features/social/visual";
 
 const KEY = "admin:social:plan";
 const ROOT = ".social";
@@ -80,10 +80,21 @@ function loadContent() {
   return { list, corrigeFiles };
 }
 
-async function renderItem(item, { themeKey, corrigeFiles }, dir) {
-  const theme = THEMES.find((t) => t.key === themeKey) || THEMES[0];
+// design : réglages du Studio envoyés avec la publication (style, textes de
+// l'affiche retouchés, ton, hashtags), pour dessiner exactement l'aperçu.
+async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
+  const theme = resolveTheme(themeKey, design.style);
   const hasCorrige = Boolean(item.corrige_md) || corrigeFiles.has(item.id);
-  const built = buildCarousel(item, { theme, facts: factsFor("concours", item, { corrigeFiles }), hasCorrige, createCanvas: () => createCanvas(1, 1) });
+  const { bullets, ...facts } = design.facts || {};
+  const built = buildCarousel(item, {
+    theme,
+    style: design.style,
+    facts: { ...factsFor("concours", item, { corrigeFiles }), ...facts },
+    ctaOverride: facts.cta,
+    bulletsOverride: Array.isArray(bullets) ? bullets : undefined,
+    hasCorrige,
+    createCanvas: () => createCanvas(1, 1),
+  });
   fs.mkdirSync(dir, { recursive: true });
   const files = [];
   for (let k = 0; k < built.canvases.length; k++) {
@@ -107,7 +118,7 @@ async function prepare() {
     let g = groups.find((x) => x.itemId === e.itemId);
     if (!g) {
       if (groups.length >= MAX_ITEMS) continue;
-      groups.push((g = { itemId: e.itemId, theme: e.theme, entries: [] }));
+      groups.push((g = { itemId: e.itemId, theme: e.theme, design: e.design || {}, entries: [] }));
     }
     g.entries.push(e);
   }
@@ -127,13 +138,13 @@ async function prepare() {
       continue;
     }
     const dir = `${plan.run}/${safe(item.id)}`;
-    const { files, truncated } = await renderItem(item, { themeKey: g.theme, corrigeFiles }, path.join(OUT, dir));
+    const { files, truncated } = await renderItem(item, { themeKey: g.theme, design: g.design, corrigeFiles }, path.join(OUT, dir));
     plan.items.push({
       itemId: item.id,
       dir,
       files,
       comment: `Le corrigé détaillé ici 👉 ${trackedUrl("concours", item, "facebook")}`,
-      entries: g.entries.map((e) => ({ id: e.id, platform: e.platform, caption: e.caption || carouselCaption(e.platform, item, { truncated, ctx: { corrigeFiles } }) })),
+      entries: g.entries.map((e) => ({ id: e.id, platform: e.platform, caption: e.caption || carouselCaption(e.platform, item, { truncated, tone: g.design.tone, tags: g.design.tags, outro: g.design.outro, ctx: { corrigeFiles } }) })),
     });
     log(`Prêt : ${item.id} (${files.length} images${truncated ? ", sujet coupé" : ""})`);
   }
@@ -228,7 +239,8 @@ async function publish() {
         } else {
           result = await publishFacebook(item, e.caption);
         }
-        await patchQueue(e.id, { status: "published", date: new Date().toISOString(), result, caption: e.caption });
+        // Les réglages ne servent plus une fois publié : la file reste légère.
+        await patchQueue(e.id, { status: "published", date: new Date().toISOString(), result, caption: e.caption, design: undefined });
         log(`Publié : ${item.itemId} sur ${e.platform} (${result})`);
       } catch (err) {
         failures++;
