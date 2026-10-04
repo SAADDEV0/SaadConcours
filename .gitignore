@@ -37,3 +37,6 @@ scripts/.r2-uploaded
 # Empreintes du dernier envoi IndexNow (scripts/indexnow.mjs), gardées par le
 # cache GitHub Actions entre deux déploiements, pas par git.
 .indexnow/
+
+# Sortie de l'analyse graphify : régénérable, propre à chaque poste.
+graphify-out/

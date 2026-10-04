@@ -1,8 +1,11 @@
 name: Mise à jour des concours ouverts (almaster)
 
+# Plus de déclenchement planifié depuis le 04/10/2026 : la section « Concours
+# ouverts » a quitté le site public le 24/09/2026 et le scraper est coupé
+# (newsScraperEnabled: false). Le cron tournait quand même tous les deux jours
+# pour s'arrêter à l'étape « gate » — des minutes Actions pour rien.
+# Lancement à la main depuis l'onglet Actions si besoin.
 on:
-  schedule:
-    - cron: "0 8 */2 * *"
   workflow_dispatch: {}
 
 permissions:

@@ -29,7 +29,7 @@ une page liée est vue. Règles détaillées : `BANQUE_PROMPTS.md`, section 1.6.
 - `public/data/concours.json` — un objet par concours, avec `enonce_md` (énoncé transcrit) et `corrige_md` (corrigé, optionnel)
 - `public/data/extraits/<id>.md` et `public/data/corriges/<id>.md` — une copie lisible par concours de `enonce_md`/`corrige_md`, régénérée automatiquement à chaque écriture admin sur un concours, pour naviguer facilement dans le dépôt GitHub sans ouvrir le JSON — même logique que `public/images/<ville>/<id>/`. Ce sont des copies dérivées (lecture seule) : les éditer directement sur GitHub n'a pas d'effet sur le site, seul `concours.json` est réellement lu.
 - `public/data/cours.json`, `public/data/quiz.json` — mêmes principes que `concours.json`, pour les fiches de cours et les QCM d'évaluation.
-- `public/data/news.json` — mis à jour à la fois par `scripts/fetch_almaster.py` (cron, scraping) et par `/admin` (ajout/suppression manuelle) : les deux écrivent dans le même fichier. N'est plus affiché sur le site public (voir plus haut).
+- `public/data/news.json` — mis à jour à la fois par `scripts/fetch_almaster.py` (scraping, lancé à la main depuis l'onglet Actions) et par `/admin` (ajout/suppression manuelle) : les deux écrivent dans le même fichier. N'est plus affiché sur le site public (voir plus haut).
 - `public/images/` — extraits réels scannés des sujets, organisés par ville puis par concours
 
 **Corrigés.** Un corrigé, quand il existe, est rédigé par IA (relecture croisée entre le scan réel et une transcription texte de la source citée dans `source`, avec vérification par recoupement des chiffres donnés dans l'énoncé) — pas une correction officielle. Il est marqué comme tel sur le site (bandeau d'avertissement dans l'onglet "Corrigé"). Toute donnée manquante ou illisible dans les sources disponibles est signalée explicitement dans le corrigé plutôt qu'inventée.
@@ -44,9 +44,6 @@ npm run dev
 Puis ouvrir `http://localhost:3000`. Sans `GITHUB_TOKEN` configuré, l'API lit les fichiers `public/data/*.json` du checkout local (lecture seule : les écritures admin restent en mémoire pour la durée du process, sans toucher au disque ni à GitHub).
 
 ## La règle à ne pas casser : une page publique n'invoque pas le Worker
-
-> Les sections « Vercel » ci-dessous datent d'avant la migration sur Cloudflare
-> Workers (21/09/2026) et ne décrivent plus l'hébergement réel.
 
 Le site tourne sur le **plan gratuit** de Cloudflare Workers, qui accorde
 **10 ms de CPU par invocation**. Démarrer un isolate froid en consomme à lui
@@ -97,21 +94,41 @@ npx wrangler tail saad-concours --format json --status error
 pas confondre avec la 1102 de l'espace admin causée par une `KV_REST_API_URL`
 invalide, qui est systématique et non intermittente.
 
-## Déploiement sur Vercel
+## Déploiement sur Cloudflare Workers
 
-1. Importer le repo sur [vercel.com/new](https://vercel.com/new) (Next.js est détecté automatiquement, aucune configuration nécessaire).
-2. Créer un **GitHub Personal Access Token (fine-grained)** sur [github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens) : Repository access → ce repo uniquement, Permissions → **Contents: Read and write**.
-3. Dans **Settings → Environment Variables** du projet Vercel, ajouter `GITHUB_TOKEN` (le token ci-dessus) et `ADMIN_PASSWORD` (le mot de passe pour accéder à `/admin`).
-4. Redéployer. Le panneau `/admin` permet ensuite d'ajouter/modifier/supprimer des concours/cours/QCM/news — chaque action crée un commit sur `main`, visible sur GitHub quasi immédiatement (le site relit le fichier brut avec un cache de 10 secondes).
+Le site a quitté Vercel pour Cloudflare Workers le 21/09/2026. Le déploiement est fait par
+GitHub Actions (`.github/workflows/deploy-cloudflare.yml`) à chaque push sur `main` :
+`opennextjs-cloudflare build`, publication des pages prérendues en assets
+(`scripts/prerender-to-assets.mjs`), `wrangler deploy`, puis vérifications en production
+(pages en 200, sitemap complet, aucune page publique servie par le Worker) et envoi IndexNow.
+L'en-tête du workflow détaille chaque étape.
 
-Sans `GITHUB_TOKEN` en production, l'API se rabat sur les fichiers embarqués dans le build (figés à la dernière compilation) et `/admin` ne peut pas écrire — définir `GITHUB_TOKEN` est donc nécessaire pour que le panneau d'administration fonctionne.
+**Jeton GitHub.** Un **Personal Access Token fine-grained**
+([github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens)) :
+Repository access → ce dépôt uniquement, Permissions → **Contents: Read and write**. Le même
+jeton est utilisé à deux endroits :
+- secret Actions `GH_CONTENT_TOKEN` (le build lit `settings.json` avec) ;
+- secret du Worker `GITHUB_TOKEN` (la console `/admin` écrit avec).
 
-## Relation GitHub / Vercel
+**Secrets.**
 
-- **GitHub = source de vérité.** Le dépôt contient le code (déployé par Vercel à chaque push sur `main`) et les données (`public/data/*.json`, lues en direct par le site et écrites par `/admin` via des commits, voir ci-dessus).
-- **Vercel = hébergement.** Chaque push sur `main` déclenche un build et un déploiement automatique sur `saadconcours.space` (projet Vercel `saad-concours`, domaine custom configuré dans Vercel → Settings → Domains).
-- **GitHub Actions** exécute les jobs planifiés (`.github/workflows/`) : scraping almaster (`update-news.yml`, désactivé par `newsScraperEnabled: false` ; ses données ne sont plus affichées). L'envoi d'emails aux abonnés a été retiré du site (septembre 2026) : la liste s'exporte en CSV depuis la console vers une plateforme d'emailing externe.
-- **GitHub Pages est désactivé.** Le site n'est plus servi que par Vercel/saadconcours.space ; `index.html` à la racine est un reliquat de l'ancienne redirection et peut être supprimé.
+| Où | Nom | Rôle |
+|---|---|---|
+| GitHub → Settings → Secrets → Actions | `CLOUDFLARE_API_TOKEN` | déploiement (modèle « Edit Cloudflare Workers ») |
+| GitHub → Settings → Secrets → Actions | `GH_CONTENT_TOKEN` | jeton GitHub ci-dessus, pour le build |
+| Worker (`npx wrangler secret put …`) | `GITHUB_TOKEN` | écritures de `/admin` dans le dépôt |
+| Worker | `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET` | connexion à `/admin` |
+| Worker | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Redis Upstash (stats, abonnés, corbeille, sessions) |
+
+En local, ces valeurs vont dans `.dev.vars` (ignoré par git). Sans `GITHUB_TOKEN`, l'API se
+rabat sur les fichiers du build et `/admin` ne peut pas écrire.
+
+## Relation GitHub / Cloudflare
+
+- **GitHub = source de vérité.** Le dépôt contient le code et les données (`public/data/*.json`, écrites par `/admin` via des commits, voir ci-dessus). Chaque commit sur `main`, y compris ceux de la console, déclenche un déploiement.
+- **Cloudflare = hébergement.** Worker `saad-concours`, route `www.saadconcours.space/*` (`wrangler.jsonc`). Le domaine nu `saadconcours.space` répond par une redirection 301 vers `www`, servie par Cloudflare.
+- **GitHub Actions** : `ci.yml` (lint, build, garde-fou AdSense sur chaque push), `deploy-cloudflare.yml` (ci-dessus) et `update-news.yml` (scraping almaster). Ce dernier n'a plus de cron depuis le 04/10/2026, puisque ses données ne sont plus affichées : il se lance à la main. L'envoi d'emails aux abonnés a été retiré du site (septembre 2026) : la liste s'exporte en CSV depuis la console vers une plateforme d'emailing externe.
+- **GitHub Pages est désactivé.**
 
 ## La console d'administration (`/admin`, v6)
 

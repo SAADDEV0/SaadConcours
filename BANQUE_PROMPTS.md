@@ -691,8 +691,8 @@ demander avant toute remise en ligne (elle exigerait un contenu rédigé, pas un
 - Ajouter : insérer en **tête** du tableau (le fichier est trié par `date_publication`
   décroissante, comme le fait le scraper), `date_publication` = aujourd'hui.
 - Supprimer : par `id` ou par titre (confirmer si plusieurs correspondances).
-- `lance le scraper news` : `scripts/fetch_almaster.py` (exécuté normalement par le workflow
-  `.github/workflows/update-news.yml`) ; le scraper est désactivable dans `settings.json`
+- `lance le scraper news` : `scripts/fetch_almaster.py` (workflow
+  `.github/workflows/update-news.yml`, sans cron depuis le 04/10/2026 : lancement à la main) ; le scraper est désactivable dans `settings.json`
   (`newsScraperEnabled`).
 
 ---
