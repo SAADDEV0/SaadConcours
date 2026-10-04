@@ -787,3 +787,11 @@ a.ax-cell-title:hover { color: var(--ax-accent-ink); }
 .ax-pa-textthumb { display: block; width: 100%; padding: 10px 12px; border-radius: 8px; text-align: center; font-weight: 700; font-size: 0.86rem; }
 .ax-pa-spark { height: 34px; margin-top: 10px; }
 .ax-pa-spark svg { width: 100%; height: 100%; }
+
+/* Studio social : carrousel « extrait » (affiche + énoncé + recherche Google). */
+.ax-carousel-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.ax-carousel-thumb { position: relative; flex: 0 0 auto; width: 78px; padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: var(--bg); cursor: pointer; }
+.ax-carousel-thumb.on { border-color: var(--accent, #4f46e5); }
+.ax-carousel-thumb img { display: block; width: 100%; height: auto; }
+.ax-carousel-thumb span { position: absolute; left: 4px; bottom: 4px; min-width: 20px; padding: 1px 5px; border-radius: 6px; background: rgba(0, 0, 0, 0.65); color: #fff; font-size: 0.7rem; font-weight: 700; text-align: center; }
+.ax-social-stage img.ax-carousel-main { max-height: 62vh; width: auto; max-width: 100%; }

@@ -15,9 +15,9 @@ export const THEMES = [
   { key: "urgent", label: "Urgent", bg: ["#7f1d1d", "#c2410c"], card: "rgba(255,255,255,0.09)", text: "#ffffff", dim: "rgba(255,255,255,0.82)", accent: "#fde047", chip: "rgba(255,255,255,0.16)" },
 ];
 
-const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+export const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
 
-function roundRect(ctx, x, y, w, h, r) {
+export function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
   ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -27,7 +27,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-function wrap(ctx, text, maxWidth, maxLines) {
+export function wrap(ctx, text, maxWidth, maxLines) {
   const words = String(text || "").split(/\s+/).filter(Boolean);
   const lines = [];
   let line = "";
@@ -49,7 +49,7 @@ function wrap(ctx, text, maxWidth, maxLines) {
 }
 
 // Ajuste la taille du titre pour qu'il tienne dans `maxLines` lignes.
-function fitTitle(ctx, text, maxWidth, maxLines, start, min) {
+export function fitTitle(ctx, text, maxWidth, maxLines, start, min) {
   let size = start;
   for (; size > min; size -= 4) {
     ctx.font = `800 ${size}px ${FONT}`;
@@ -60,7 +60,7 @@ function fitTitle(ctx, text, maxWidth, maxLines, start, min) {
   return { size: min, lines: wrap(ctx, text, maxWidth, maxLines) };
 }
 
-function drawLogo(ctx, x, y, s) {
+export function drawLogo(ctx, x, y, s) {
   const g = ctx.createLinearGradient(x, y, x + s, y + s);
   g.addColorStop(0, "#4f46e5");
   g.addColorStop(1, "#a855f7");
@@ -91,6 +91,23 @@ function drawLogo(ctx, x, y, s) {
   ctx.fill();
 }
 
+// Dégradé du thème + halo décoratif : le fond commun à tous les visuels.
+export function paintBackground(ctx, w, h, t) {
+  const bg = ctx.createLinearGradient(0, 0, w, h);
+  bg.addColorStop(0, t.bg[0]);
+  bg.addColorStop(1, t.bg[1]);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.globalAlpha = t.key === "clair" ? 0.35 : 0.22;
+  const halo = ctx.createRadialGradient(w * 0.9, h * 0.1, 10, w * 0.9, h * 0.1, w * 0.6);
+  halo.addColorStop(0, t.key === "clair" ? "#a5b4fc" : "#a855f7");
+  halo.addColorStop(1, "transparent");
+  ctx.fillStyle = halo;
+  ctx.fillRect(0, 0, w, h);
+  ctx.globalAlpha = 1;
+}
+
 export function drawVisual(canvas, { format, theme, facts, cover }) {
   const { w, h } = format;
   canvas.width = w;
@@ -101,20 +118,7 @@ export function drawVisual(canvas, { format, theme, facts, cover }) {
   const pad = land ? 64 : 84;
   const scale = land ? 0.8 : h > 1500 ? 1.15 : 1;
 
-  const bg = ctx.createLinearGradient(0, 0, w, h);
-  bg.addColorStop(0, t.bg[0]);
-  bg.addColorStop(1, t.bg[1]);
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, w, h);
-
-  // Halos décoratifs.
-  ctx.globalAlpha = t.key === "clair" ? 0.35 : 0.22;
-  const halo = ctx.createRadialGradient(w * 0.9, h * 0.1, 10, w * 0.9, h * 0.1, w * 0.6);
-  halo.addColorStop(0, t.key === "clair" ? "#a5b4fc" : "#a855f7");
-  halo.addColorStop(1, "transparent");
-  ctx.fillStyle = halo;
-  ctx.fillRect(0, 0, w, h);
-  ctx.globalAlpha = 1;
+  paintBackground(ctx, w, h, t);
 
   // Grand emoji en filigrane.
   ctx.save();

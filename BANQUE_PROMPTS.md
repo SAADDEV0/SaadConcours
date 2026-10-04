@@ -32,6 +32,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `fais le même cahier PDF pour <master> <fac>` · `cahier de préparation + article` | [A3](#a3--cahier-de-préparation-pdf--article--fais-le-même-cahier-pour-master-fac-) |
 | `ajoute une news …` · `supprime la news X` · `lance le scraper news` | [N1](#n1--news-concours-ouverts) |
 | `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-gumroad) |
+| `poste les concours` · `prépare les posts Instagram / Facebook` · `carrousels de la semaine` | [R1](#r1--carrousels-instagram--facebook-des-concours) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
 | `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
@@ -710,6 +711,30 @@ demander avant toute remise en ligne (elle exigerait un contenu rédigé, pas un
 - Suivi : vues des fiches et clics sur « Acheter » dans la liste Boutique de la console (Gumroad compte les ventes).
 
 ---
+## R. RÉSEAUX SOCIAUX
+
+### R1 — Carrousels Instagram / Facebook des concours
+Format validé le 2026-10-04 : **l'extrait est donné dans le post, le corrigé reste sur le site.**
+- Outil : `/admin/social` → type « Concours » → « Carrousel extrait » (code :
+  `app/admin/_features/social/carousel.js`). Toutes les images en portrait 1080×1350.
+- Carrousel : 1) l'affiche du studio ; 2) l'énoncé (`enonce_md`) sur des feuilles blanches,
+  **8 pages au maximum** ; 3) une image finale « Cherche sur Google : saadconcours <sigle> <fac>
+  <ville> <année> » (`googleQuery()` dans `captions.js`).
+- Sujet trop long : **pas de découpage en plusieurs posts.** On coupe au dernier début de partie
+  (exercice, dossier, question numérotée…) qui tient dans les 8 pages, et l'image finale dit
+  « La suite du sujet et le corrigé détaillé ».
+- Texte du post : pas de lien. Instagram ne le rend pas cliquable (« lien dans la bio »), et
+  Facebook montre moins les posts qui sortent de Facebook : le lien suivi (UTM) va **en premier
+  commentaire** (`facebook-premier-commentaire.txt`).
+- En lot : bouton « Exporter le lot » (60 max, du plus récent au plus ancien, ceux déjà publiés
+  ou planifiés sont ignorés). Le ZIP contient un dossier par concours : `01.png…`,
+  `instagram.txt`, `facebook.txt`, `facebook-premier-commentaire.txt`. Option : inscrire le lot
+  au planning du studio, un par jour. La programmation se fait dans Meta Business Suite
+  (gratuit), Facebook et Instagram cochés ensemble.
+- Les nouveaux concours n'exigent rien de plus : ils entrent dans le prochain export en lot.
+
+---
+
 ## S. SUPPRESSION
 
 ### S1 — Suppression générique

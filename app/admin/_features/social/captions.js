@@ -85,7 +85,8 @@ export function hashtagsFor(kind, item) {
   if (kind === "news") extra.push(tag(item.etablissement), tag(item.ville));
   if (kind === "cours" || kind === "quiz") extra.push(tag(item.module));
   if (kind === "boutique") extra.push(tag(item.matiere));
-  return [...new Set([...extra, ...base].filter(Boolean))].slice(0, 10);
+  const seen = new Set();
+  return [...extra, ...base].filter((t) => t && !seen.has(t.toLowerCase()) && seen.add(t.toLowerCase())).slice(0, 10);
 }
 
 // Les faits à mettre en avant, quel que soit le réseau.
@@ -199,6 +200,39 @@ export function captionFor(platform, kind, item, { tone = "info", ctx } = {}) {
     default:
       return [intro, head, bullets, `👉 ${f.cta} : ${url}`, tags.slice(0, 4).join(" ")].filter(Boolean).join("\n\n");
   }
+}
+
+// Phrase à taper dans Google pour retrouver la fiche d'un concours :
+// « saadconcours CCA FSJES Souissi Rabat 2011 ». Elle reprend le sigle du
+// master, la faculté, la ville et l'année, qui sont dans le titre de la page.
+export function googleQuery(item) {
+  const filiere = String(item.master_reel || item.filiere || "");
+  const sigle = filiere.match(/\(([A-Za-z0-9&.\- ]{2,14})\)/)?.[1]?.replace(/[.\s]/g, "");
+  const sujet = sigle || filiere.replace(/\(.*?\)/g, " ").split(/\s+/).filter((w) => w.length > 3).slice(0, 3).join(" ");
+  const etab = String(item.etablissement || "");
+  const ville = item.ville && !normalize(etab).includes(normalize(item.ville)) ? item.ville : "";
+  const words = ["saadconcours", ...`${sujet} ${etab} ${ville} ${item.annee || ""}`.split(/\s+/)].filter(Boolean);
+  const seen = new Set();
+  return words.filter((w) => !seen.has(normalize(w)) && seen.add(normalize(w))).join(" ");
+}
+
+// Texte d'un carrousel « extrait » (Instagram, Facebook) : le sujet est dans
+// les images, le corrigé reste sur le site. Pas de lien dans le texte :
+// Instagram ne le rend pas cliquable et Facebook montre moins les posts qui
+// sortent de Facebook. On fait chercher le site sur Google, et le lien va
+// en bio (Instagram) ou en premier commentaire (Facebook).
+export function carouselCaption(platform, item, { tone = "info", truncated = false, ctx } = {}) {
+  const f = factsFor("concours", item, ctx);
+  const hasCorrige = Boolean(item.corrige_md) || ctx?.corrigeFiles?.has(item.id);
+  const intro = INTROS[tone]?.concours || INTROS.info.concours;
+  const what = truncated ? "La suite du sujet" + (hasCorrige ? " et le corrigé détaillé" : "") : hasCorrige ? "Le corrigé détaillé" : "D'autres sujets corrigés";
+  return [
+    intro,
+    `${f.emoji} ${f.title}\n${f.subtitle} · ${item.annee}`,
+    `👉 ${truncated ? "Le début du sujet" : "Le sujet complet"} est dans les images (glisse ➡️)`,
+    `✅ ${what} : gratuit sur notre site.\n🔎 Cherche sur Google : ${googleQuery(item)}\n${platform === "facebook" ? "🔗 Ou le lien en commentaire 👇" : "🔗 Ou le lien dans la bio"}`,
+    hashtagsFor("concours", item).join(" "),
+  ].join("\n\n");
 }
 
 // Longueur telle que la compte le réseau (liens à 23 caractères sur X).

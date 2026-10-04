@@ -10,8 +10,41 @@ import { COLLECTIONS } from "../../_lib/collections";
 import { assetUrl } from "../../_lib/repo";
 import { api } from "../../_lib/api";
 import { dateTimeFr, daysUntil, matchQuery, timeAgo } from "../../_lib/format";
-import { CONTENT_KINDS, PLATFORMS, TONES, captionFor, countFor, factsFor, intentUrl, trackedUrl } from "./captions";
+import { CONTENT_KINDS, PLATFORMS, TONES, captionFor, carouselCaption, countFor, factsFor, googleQuery, intentUrl, trackedUrl } from "./captions";
 import { FORMATS, THEMES, canvasBlob, drawVisual, loadImage } from "./visual";
+import { MAX_EXTRAIT_SLIDES, buildCarousel } from "./carousel";
+import { blobBytes, downloadBlob, makeZip } from "./zip";
+
+const MODES = [
+  { value: "visuel", label: "Visuel seul" },
+  { value: "carrousel", label: "Carrousel extrait" },
+];
+
+const hasCorrigeOf = (item, corrigeFiles) => Boolean(item.corrige_md) || Boolean(corrigeFiles?.has(item.id));
+
+// Fichiers d'un carrousel dans le ZIP : images numérotées + textes à coller.
+async function carouselFiles(dir, item, { canvases, truncated }, { tone, corrigeFiles }) {
+  const ctx = { corrigeFiles };
+  const files = [];
+  for (let k = 0; k < canvases.length; k++) files.push({ name: `${dir}/${String(k + 1).padStart(2, "0")}.png`, data: await blobBytes(await canvasBlob(canvases[k])) });
+  files.push({ name: `${dir}/instagram.txt`, data: carouselCaption("instagram", item, { tone, truncated, ctx }) });
+  files.push({ name: `${dir}/facebook.txt`, data: carouselCaption("facebook", item, { tone, truncated, ctx }) });
+  files.push({ name: `${dir}/facebook-premier-commentaire.txt`, data: `Le corrigé détaillé ici 👉 ${trackedUrl("concours", item, "facebook")}` });
+  return files;
+}
+
+const BATCH_README = `Carrousels SaadConcours
+=======================
+
+Un dossier par concours :
+- 01.png, 02.png… : les images, dans l'ordre (affiche, sujet, recherche Google) ;
+- instagram.txt / facebook.txt : le texte à coller ;
+- facebook-premier-commentaire.txt : le lien, à poster en premier commentaire.
+
+Publier ou programmer : Meta Business Suite (business.facebook.com) >
+Créer une publication > cocher Facebook et Instagram > ajouter les images
+du dossier > coller le texte > Programmer.
+`;
 
 const TABS = [
   { key: "composer", label: "Composer", icon: "edit" },
@@ -68,6 +101,98 @@ function PlanDialog({ onClose, onSave, platform }) {
   );
 }
 
+const localDay = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+// Export en lot : N carrousels dans un seul ZIP, prêts à programmer dans
+// Meta Business Suite. Option : les inscrire au planning, un par jour.
+function BatchExport({ list, log, theme, tone, corrigeFiles }) {
+  const toast = useToast();
+  const col = COLLECTIONS.concours;
+  const [count, setCount] = useState(14);
+  const [skipDone, setSkipDone] = useState(true);
+  const [plan, setPlan] = useState(false);
+  const [hour, setHour] = useState("18:00");
+  const [busy, setBusy] = useState("");
+
+  const pool = useMemo(() => {
+    const done = new Set((log.entries || []).filter((e) => e.kind === "concours" && (e.platform === "instagram" || e.platform === "facebook")).map((e) => e.itemId));
+    return (Array.isArray(list) ? list : [])
+      .filter((c) => col.isPublished(c) && String(c.enonce_md || "").trim() && !(skipDone && done.has(c.id)))
+      .sort((a, b) => String(b.annee).localeCompare(String(a.annee)) || String(a.id).localeCompare(String(b.id)));
+  }, [list, log.entries, skipDone, col]);
+
+  async function run() {
+    const picked = pool.slice(0, Math.max(1, Math.min(60, Number(count) || 1)));
+    const start = new Date();
+    start.setDate(start.getDate() + 1);
+    const [hh, mm] = hour.split(":").map(Number);
+    start.setHours(hh || 18, mm || 0, 0, 0);
+    const dayOf = (k) => {
+      const d = new Date(start);
+      d.setDate(start.getDate() + k);
+      return d;
+    };
+    const files = [{ name: "LISEZ-MOI.txt", data: BATCH_README }];
+    try {
+      for (let k = 0; k < picked.length; k++) {
+        setBusy(`${k + 1} / ${picked.length}`);
+        const c = picked[k];
+        const hasCorrige = hasCorrigeOf(c, corrigeFiles);
+        const built = buildCarousel(c, { theme, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige });
+        const dir = `${String(k + 1).padStart(2, "0")}_${plan ? `${localDay(dayOf(k))}_` : ""}${c.id}`;
+        files.push(...(await carouselFiles(dir, c, built, { tone, corrigeFiles })));
+        await new Promise((r) => setTimeout(r, 0));
+      }
+      setBusy("ZIP…");
+      downloadBlob(makeZip(files), `saadconcours-carrousels-${localDay(new Date())}.zip`);
+      if (plan) {
+        const added = [];
+        for (let k = 0; k < picked.length; k++) {
+          const c = picked[k];
+          for (const platform of ["instagram", "facebook"]) {
+            added.push(
+              await api("/api/admin/social", {
+                method: "POST",
+                body: { kind: "concours", itemId: c.id, title: col.title(c), platform, status: "planned", date: dayOf(k).toISOString(), caption: carouselCaption(platform, c, { tone, ctx: { corrigeFiles } }), url: trackedUrl("concours", c, platform), note: "Carrousel extrait (lot)" },
+              })
+            );
+          }
+        }
+        log.setEntries((e) => [...added.reverse(), ...(e || [])]);
+      }
+      toast.success(`${picked.length} carrousel${picked.length > 1 ? "s" : ""} exporté${picked.length > 1 ? "s" : ""}`, plan ? "Ajoutés au planning, un par jour." : "Décompresse le ZIP puis programme-les dans Meta Business Suite.");
+    } catch (err) {
+      toast.error("Export interrompu", err.message);
+    } finally {
+      setBusy("");
+    }
+  }
+
+  return (
+    <section className="ax-card">
+      <SectionTitle aside={`${pool.length} concours disponibles`}>4. Export en lot</SectionTitle>
+      <p className="ax-muted" style={{ marginTop: 0 }}>
+        Un ZIP avec un dossier par concours (images + textes Instagram et Facebook + lien du 1er commentaire), du plus récent au plus ancien. Thème et ton : ceux choisis ci-dessus.
+      </p>
+      <div className="ax-btn-row" style={{ alignItems: "flex-end" }}>
+        <Field label="Nombre (60 max)">
+          <input type="number" min={1} max={60} className="ax-input sm" style={{ width: 110 }} value={count} onChange={(e) => setCount(e.target.value)} />
+        </Field>
+        <label className="ax-inline" style={{ gap: 6 }}>
+          <input type="checkbox" checked={skipDone} onChange={(e) => setSkipDone(e.target.checked)} /> Ignorer ceux déjà publiés ou planifiés
+        </label>
+        <label className="ax-inline" style={{ gap: 6 }}>
+          <input type="checkbox" checked={plan} onChange={(e) => setPlan(e.target.checked)} /> Ajouter au planning, 1 par jour à partir de demain à
+          <input type="time" className="ax-input sm" style={{ width: 110 }} value={hour} onChange={(e) => setHour(e.target.value)} disabled={!plan} />
+        </label>
+        <button type="button" className="ax-btn primary ax-right" onClick={run} disabled={Boolean(busy) || !pool.length}>
+          <Icon name="download" /> {busy ? `Préparation ${busy}` : "Exporter le lot"}
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function Composer({ log }) {
   const sp = useSearchParams();
   const toast = useToast();
@@ -78,6 +203,9 @@ function Composer({ log }) {
   const [format, setFormat] = useState(FORMATS[0].key);
   const [themeKey, setThemeKey] = useState("brand");
   const [tone, setTone] = useState("info");
+  const [mode, setMode] = useState("carrousel");
+  const [carousel, setCarousel] = useState(null);
+  const [slide, setSlide] = useState(0);
   const [override, setOverride] = useState({});
   const [texts, setTexts] = useState({});
   const [planFor, setPlanFor] = useState(null);
@@ -105,6 +233,7 @@ function Composer({ log }) {
   const facts = useMemo(() => (item ? { ...factsFor(kind, item, { corrigeFiles }), ...override } : null), [item, kind, corrigeFiles, override]);
   const theme = THEMES.find((t) => t.key === themeKey) || THEMES[0];
   const fmt = FORMATS.find((f) => f.key === format);
+  const isCarousel = kind === "concours" && mode === "carrousel";
 
   useEffect(() => {
     setOverride({});
@@ -114,10 +243,24 @@ function Composer({ log }) {
 
   useEffect(() => {
     setTexts({});
-  }, [tone]);
+  }, [tone, mode]);
 
   useEffect(() => {
-    if (!facts || !canvasRef.current) return;
+    if (!isCarousel || !facts || !item) {
+      setCarousel(null);
+      return;
+    }
+    const built = buildCarousel(item, { theme, facts, ctaOverride: override.cta, hasCorrige: hasCorrigeOf(item, corrigeFiles) });
+    setCarousel({ ...built, thumbs: built.canvases.map((c) => c.toDataURL("image/png")) });
+    setSlide((s) => Math.min(s, built.canvases.length - 1));
+  }, [isCarousel, item, facts, theme, override.cta, corrigeFiles]);
+
+  useEffect(() => {
+    setSlide(0);
+  }, [item?.id]);
+
+  useEffect(() => {
+    if (isCarousel || !facts || !canvasRef.current) return;
     let alive = true;
     (async () => {
       const cover = kind === "boutique" && item.couverture ? await loadImage(assetUrl(item.couverture)) : null;
@@ -126,12 +269,36 @@ function Composer({ log }) {
     return () => {
       alive = false;
     };
-  }, [facts, fmt, theme, kind, item]);
+  }, [facts, fmt, theme, kind, item, isCarousel]);
 
+  const truncated = Boolean(carousel?.truncated);
   const captions = useMemo(() => {
     if (!item) return {};
-    return Object.fromEntries(PLATFORMS.map((p) => [p.key, texts[p.key] ?? captionFor(p.key, kind, item, { tone, ctx: { corrigeFiles } })]));
-  }, [item, kind, tone, texts, corrigeFiles]);
+    const auto = (p) =>
+      isCarousel && (p === "instagram" || p === "facebook")
+        ? carouselCaption(p, item, { tone, truncated, ctx: { corrigeFiles } })
+        : captionFor(p, kind, item, { tone, ctx: { corrigeFiles } });
+    return Object.fromEntries(PLATFORMS.map((p) => [p.key, texts[p.key] ?? auto(p.key)]));
+  }, [item, kind, tone, texts, corrigeFiles, isCarousel, truncated]);
+
+  async function downloadCarousel() {
+    const dir = `saadconcours-${String(item.id).slice(0, 60)}`;
+    const files = await carouselFiles(dir, item, carousel, { tone, corrigeFiles });
+    // Textes retouchés dans le studio : ce sont eux qu'on veut coller.
+    for (const f of files) {
+      if (f.name.endsWith("/instagram.txt")) f.data = captions.instagram;
+      if (f.name.endsWith("/facebook.txt")) f.data = captions.facebook;
+    }
+    downloadBlob(makeZip(files), `${dir}.zip`);
+  }
+  async function copyComment() {
+    try {
+      await navigator.clipboard.writeText(`Le corrigé détaillé ici 👉 ${trackedUrl("concours", item, "facebook")}`);
+      toast.success("Commentaire copié", "Colle-le en premier commentaire sous le post Facebook.");
+    } catch {
+      toast.error("Copie impossible");
+    }
+  }
 
   const filename = item ? `saadconcours-${kind}-${String(item.id).slice(0, 40)}-${format}.png` : "visuel.png";
 
@@ -228,9 +395,16 @@ function Composer({ log }) {
 
         <hr className="ax-sep" />
         <SectionTitle>2. Visuel</SectionTitle>
-        <Field label="Format">
-          <Seg value={format} onChange={setFormat} options={FORMATS.map((f) => ({ value: f.key, label: f.label, title: f.hint }))} />
-        </Field>
+        {kind === "concours" && (
+          <Field label="Type de publication" hint={isCarousel ? `Affiche + énoncé (${MAX_EXTRAIT_SLIDES} pages max) + « cherche sur Google ». Format portrait 4:5.` : undefined}>
+            <Seg value={mode} onChange={setMode} options={MODES} />
+          </Field>
+        )}
+        {!isCarousel && (
+          <Field label="Format">
+            <Seg value={format} onChange={setFormat} options={FORMATS.map((f) => ({ value: f.key, label: f.label, title: f.hint }))} />
+          </Field>
+        )}
         <Field label="Thème">
           <Seg value={themeKey} onChange={setThemeKey} options={THEMES.map((t) => ({ value: t.key, label: t.label }))} />
         </Field>
@@ -262,6 +436,43 @@ function Composer({ log }) {
           <Empty icon="📣" title="Choisis un contenu à publier" />
         ) : (
           <>
+            {isCarousel ? (
+              <>
+                <div className="ax-social-stage">{carousel ? <img src={carousel.thumbs[slide]} alt={`Image ${slide + 1}`} className="ax-social-canvas ax-carousel-main" /> : <Skeleton rows={1} height={420} />}</div>
+                {carousel && (
+                  <>
+                    <div className="ax-carousel-strip">
+                      {carousel.thumbs.map((src, k) => (
+                        <button key={k} type="button" className={`ax-carousel-thumb${k === slide ? " on" : ""}`} onClick={() => setSlide(k)} aria-label={`Image ${k + 1}`}>
+                          <img src={src} alt="" />
+                          <span>{k + 1}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <p className="ax-hint" style={{ margin: 0 }}>
+                      {carousel.canvases.length} images · {carousel.extraitPages} page{carousel.extraitPages > 1 ? "s" : ""} d&apos;énoncé
+                      {carousel.truncated ? " · sujet long : coupé au début d'une partie, la suite est sur le site" : " · sujet complet"} · recherche Google : « {googleQuery(item)} »
+                    </p>
+                  </>
+                )}
+                <div className="ax-btn-row">
+                  <button type="button" className="ax-btn primary" onClick={downloadCarousel} disabled={!carousel}>
+                    <Icon name="download" /> Télécharger le carrousel (ZIP)
+                  </button>
+                  <button type="button" className="ax-btn" onClick={copyComment}>
+                    <Icon name="copy" size="sm" /> Lien pour le 1er commentaire Facebook
+                  </button>
+                  <a className="ax-btn" href={col.publicUrl(item)} target="_blank" rel="noopener noreferrer">
+                    <Icon name="external" size="sm" /> Voir la page
+                  </a>
+                  <span className="ax-right ax-inline">
+                    <span className="ax-hint">Ton</span>
+                    <Seg value={tone} onChange={setTone} options={TONES} />
+                  </span>
+                </div>
+              </>
+            ) : (
+            <>
             <div className="ax-social-stage">
               <canvas ref={canvasRef} className="ax-social-canvas" />
             </div>
@@ -280,6 +491,8 @@ function Composer({ log }) {
                 <Seg value={tone} onChange={setTone} options={TONES} />
               </span>
             </div>
+            </>
+            )}
 
             <SectionTitle aside="liens suivis par réseau (utm_source) · textes modifiables">3. Textes par réseau</SectionTitle>
             <div className="ax-net-grid">
@@ -321,6 +534,7 @@ function Composer({ log }) {
             </div>
           </>
         )}
+        {isCarousel && <BatchExport list={list} log={log} theme={theme} tone={tone} corrigeFiles={corrigeFiles} />}
       </section>
       {planFor && (
         <PlanDialog
