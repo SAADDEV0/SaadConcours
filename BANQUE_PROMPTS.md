@@ -726,12 +726,30 @@ Format validé le 2026-10-04 : **l'extrait est donné dans le post, le corrigé 
 - Texte du post : pas de lien. Instagram ne le rend pas cliquable (« lien dans la bio »), et
   Facebook montre moins les posts qui sortent de Facebook : le lien suivi (UTM) va **en premier
   commentaire** (`facebook-premier-commentaire.txt`).
-- En lot : bouton « Exporter le lot » (60 max, du plus récent au plus ancien, ceux déjà publiés
-  ou planifiés sont ignorés). Le ZIP contient un dossier par concours : `01.png…`,
-  `instagram.txt`, `facebook.txt`, `facebook-premier-commentaire.txt`. Option : inscrire le lot
-  au planning du studio, un par jour. La programmation se fait dans Meta Business Suite
-  (gratuit), Facebook et Instagram cochés ensemble.
-- Les nouveaux concours n'exigent rien de plus : ils entrent dans le prochain export en lot.
+- **Publication sur clic, jamais sans permission** (ajoutée le 2026-10-04) : l'admin coche
+  des concours dans la liste (20 max par envoi), clique « Publier N », valide la liste dans
+  la confirmation, et tout part sur Instagram + Facebook. Aussi « Publier sur Instagram +
+  Facebook » et « Programmer » pour le concours affiché. **Rien ne choisit ni ne publie de
+  concours sans ce clic** : pas de lot automatique. Ces boutons ne font que mettre des entrées
+  `auto: true` dans la file KV (`/api/admin/social/publish`, une seule requête Worker).
+- **Suivi** : dans la liste, filtre « À publier / Publiés / Tous », compteur « X / Y
+  publiés », et une pastille par concours : ✓ IG FB (avec les dates), ⏳ en cours, ⚠ échec.
+  La confirmation prévient si un concours coché a déjà été publié. Le travail est fait par `.github/workflows/social-publish.yml`
+  (toutes les 15 min, gratuit, dépôt public) avec `scripts/social/publier.mjs` : dessin des
+  JPEG sur le runner, hébergement sur la branche `social-media` (réécrite à chaque passage),
+  envoi à l'API Meta, puis statut `published` ou `failed` + motif dans la file (onglet
+  « Planning & historique », bouton « Réessayer »).
+- **Règle : zéro charge Cloudflare.** Rien de lourd dans le Worker. Pas d'images servies par
+  le site, pas de boucle de requêtes depuis l'admin (une requête par clic, même pour un lot).
+- Secrets GitHub requis : `META_PAGE_ID`, `META_PAGE_TOKEN` (jeton de Page longue durée,
+  permissions `pages_manage_posts`, `pages_read_engagement`, `instagram_basic`,
+  `instagram_content_publish`), `KV_REST_API_URL`, `KV_REST_API_TOKEN` (les mêmes que pour le
+  Worker), `META_IG_USER_ID` facultatif. Sans eux, le workflow s'arrête en quelques secondes.
+- Tester le dessin en local : `npm i --no-save --no-package-lock --prefix .social @napi-rs/canvas@0`,
+  empaqueter avec esbuild comme dans le workflow, puis `node .social/publier.mjs render <id>`.
+- ZIP (publication à la main via Meta Business Suite) : toujours possible, un dossier par
+  concours : `01.png…`, `instagram.txt`, `facebook.txt`, `facebook-premier-commentaire.txt`.
+- Les nouveaux concours n'exigent rien de plus : ils entrent dans le prochain lot programmé.
 
 ---
 

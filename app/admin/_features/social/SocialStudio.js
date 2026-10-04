@@ -68,7 +68,7 @@ function useSocialLog() {
   return { entries, reload: load, setEntries };
 }
 
-function PlanDialog({ onClose, onSave, platform }) {
+function PlanDialog({ onClose, onSave, platform, auto = false }) {
   const [when, setWhen] = useState(() => {
     const d = new Date(Date.now() + 86400000);
     d.setHours(18, 0, 0, 0);
@@ -90,112 +90,69 @@ function PlanDialog({ onClose, onSave, platform }) {
         </>
       }
     >
-      <p style={{ marginTop: 0 }}>La publication apparaîtra dans le calendrier et sur le tableau de bord le jour J. Tu la publieras toi-même : le studio te redonne le texte et l&apos;image.</p>
+      <p style={{ marginTop: 0 }}>
+        {auto
+          ? "Le robot publie le carrousel tout seul à cette heure-là (à 15 minutes près), avec le lien en premier commentaire sur Facebook."
+          : "La publication apparaîtra dans le calendrier et sur le tableau de bord le jour J. Tu la publieras toi-même : le studio te redonne le texte et l'image."}
+      </p>
       <Field label="Date et heure">
         <input type="datetime-local" className="ax-input" value={when} onChange={(e) => setWhen(e.target.value)} />
       </Field>
-      <Field label="Note (facultatif)">
-        <input className="ax-input" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ex. relancer 2 jours avant la clôture" />
-      </Field>
+      {!auto && (
+        <Field label="Note (facultatif)">
+          <input className="ax-input" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ex. relancer 2 jours avant la clôture" />
+        </Field>
+      )}
     </Dialog>
   );
 }
 
 const localDay = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
-// Export en lot : N carrousels dans un seul ZIP, prêts à programmer dans
-// Meta Business Suite. Option : les inscrire au planning, un par jour.
-function BatchExport({ list, log, theme, tone, corrigeFiles }) {
-  const toast = useToast();
-  const col = COLLECTIONS.concours;
-  const [count, setCount] = useState(14);
-  const [skipDone, setSkipDone] = useState(true);
-  const [plan, setPlan] = useState(false);
-  const [hour, setHour] = useState("18:00");
-  const [busy, setBusy] = useState("");
-
-  const pool = useMemo(() => {
-    const done = new Set((log.entries || []).filter((e) => e.kind === "concours" && (e.platform === "instagram" || e.platform === "facebook")).map((e) => e.itemId));
-    return (Array.isArray(list) ? list : [])
-      .filter((c) => col.isPublished(c) && String(c.enonce_md || "").trim() && !(skipDone && done.has(c.id)))
-      .sort((a, b) => String(b.annee).localeCompare(String(a.annee)) || String(a.id).localeCompare(String(b.id)));
-  }, [list, log.entries, skipDone, col]);
-
-  async function run() {
-    const picked = pool.slice(0, Math.max(1, Math.min(60, Number(count) || 1)));
-    const start = new Date();
-    start.setDate(start.getDate() + 1);
-    const [hh, mm] = hour.split(":").map(Number);
-    start.setHours(hh || 18, mm || 0, 0, 0);
-    const dayOf = (k) => {
-      const d = new Date(start);
-      d.setDate(start.getDate() + k);
-      return d;
-    };
-    const files = [{ name: "LISEZ-MOI.txt", data: BATCH_README }];
-    try {
-      for (let k = 0; k < picked.length; k++) {
-        setBusy(`${k + 1} / ${picked.length}`);
-        const c = picked[k];
-        const hasCorrige = hasCorrigeOf(c, corrigeFiles);
-        const built = buildCarousel(c, { theme, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige });
-        const dir = `${String(k + 1).padStart(2, "0")}_${plan ? `${localDay(dayOf(k))}_` : ""}${c.id}`;
-        files.push(...(await carouselFiles(dir, c, built, { tone, corrigeFiles })));
-        await new Promise((r) => setTimeout(r, 0));
-      }
-      setBusy("ZIP…");
-      downloadBlob(makeZip(files), `saadconcours-carrousels-${localDay(new Date())}.zip`);
-      if (plan) {
-        const added = [];
-        for (let k = 0; k < picked.length; k++) {
-          const c = picked[k];
-          for (const platform of ["instagram", "facebook"]) {
-            added.push(
-              await api("/api/admin/social", {
-                method: "POST",
-                body: { kind: "concours", itemId: c.id, title: col.title(c), platform, status: "planned", date: dayOf(k).toISOString(), caption: carouselCaption(platform, c, { tone, ctx: { corrigeFiles } }), url: trackedUrl("concours", c, platform), note: "Carrousel extrait (lot)" },
-              })
-            );
-          }
-        }
-        log.setEntries((e) => [...added.reverse(), ...(e || [])]);
-      }
-      toast.success(`${picked.length} carrousel${picked.length > 1 ? "s" : ""} exporté${picked.length > 1 ? "s" : ""}`, plan ? "Ajoutés au planning, un par jour." : "Décompresse le ZIP puis programme-les dans Meta Business Suite.");
-    } catch (err) {
-      toast.error("Export interrompu", err.message);
-    } finally {
-      setBusy("");
-    }
+// Suivi des concours sur Instagram et Facebook, d'après l'historique (KV) :
+// date de publication par réseau, publication en cours, dernier échec.
+function trackConcours(entries) {
+  const m = new Map();
+  for (const e of entries || []) {
+    if (e.kind !== "concours" || (e.platform !== "instagram" && e.platform !== "facebook")) continue;
+    const t = m.get(e.itemId) || { published: {}, pending: false, failed: "" };
+    if (e.status === "published") {
+      if (!t.published[e.platform] || e.date > t.published[e.platform]) t.published[e.platform] = e.date;
+    } else if (e.status === "planned" && e.auto) t.pending = true;
+    else if (e.status === "failed") t.failed = e.result || "Échec";
+    m.set(e.itemId, t);
   }
-
-  return (
-    <section className="ax-card">
-      <SectionTitle aside={`${pool.length} concours disponibles`}>4. Export en lot</SectionTitle>
-      <p className="ax-muted" style={{ marginTop: 0 }}>
-        Un ZIP avec un dossier par concours (images + textes Instagram et Facebook + lien du 1er commentaire), du plus récent au plus ancien. Thème et ton : ceux choisis ci-dessus.
-      </p>
-      <div className="ax-btn-row" style={{ alignItems: "flex-end" }}>
-        <Field label="Nombre (60 max)">
-          <input type="number" min={1} max={60} className="ax-input sm" style={{ width: 110 }} value={count} onChange={(e) => setCount(e.target.value)} />
-        </Field>
-        <label className="ax-inline" style={{ gap: 6 }}>
-          <input type="checkbox" checked={skipDone} onChange={(e) => setSkipDone(e.target.checked)} /> Ignorer ceux déjà publiés ou planifiés
-        </label>
-        <label className="ax-inline" style={{ gap: 6 }}>
-          <input type="checkbox" checked={plan} onChange={(e) => setPlan(e.target.checked)} /> Ajouter au planning, 1 par jour à partir de demain à
-          <input type="time" className="ax-input sm" style={{ width: 110 }} value={hour} onChange={(e) => setHour(e.target.value)} disabled={!plan} />
-        </label>
-        <button type="button" className="ax-btn primary ax-right" onClick={run} disabled={Boolean(busy) || !pool.length}>
-          <Icon name="download" /> {busy ? `Préparation ${busy}` : "Exporter le lot"}
-        </button>
-      </div>
-    </section>
-  );
+  return m;
 }
+
+const isDone = (t) => Boolean(t && (t.published.instagram || t.published.facebook));
+
+function TrackPill({ t }) {
+  if (!t) return null;
+  if (t.pending) return <span className="ax-pill" title="Publication en cours">⏳</span>;
+  if (isDone(t)) {
+    const nets = [t.published.instagram && "IG", t.published.facebook && "FB"].filter(Boolean).join(" ");
+    const when = [t.published.instagram && `Instagram : ${dateTimeFr(t.published.instagram)}`, t.published.facebook && `Facebook : ${dateTimeFr(t.published.facebook)}`].filter(Boolean).join("\n");
+    return <span className="ax-pill green" title={`Déjà publié\n${when}`}>✓ {nets}</span>;
+  }
+  if (t.failed) return <span className="ax-pill red" title={`Échec : ${t.failed}`}>⚠</span>;
+  return null;
+}
+
+const MAX_SELECTION = 20;
+const SHOW = [
+  { value: "todo", label: "À publier" },
+  { value: "done", label: "Publiés" },
+  { value: "all", label: "Tous" },
+];
 
 function Composer({ log }) {
   const sp = useSearchParams();
   const toast = useToast();
+  const confirm = useConfirm();
+  const [autoPlan, setAutoPlan] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [show, setShow] = useState("todo");
   const corrigeFiles = useCorrigeFiles();
   const [kind, setKind] = useState(() => (CONTENT_KINDS.some((k) => k.key === sp.get("type")) ? sp.get("type") : "concours"));
   const [itemId, setItemId] = useState(sp.get("id") || "");
@@ -213,6 +170,7 @@ function Composer({ log }) {
   const col = COLLECTIONS[kind];
   const { data: list } = useJson(col.path);
 
+  const track = useMemo(() => trackConcours(log.entries), [log.entries]);
   const candidates = useMemo(() => {
     if (!Array.isArray(list)) return [];
     const pub = list.filter((x) => col.isPublished(x));
@@ -220,8 +178,17 @@ function Composer({ log }) {
       kind === "news"
         ? [...pub].sort((a, b) => String(a.date_limite || "9999").localeCompare(String(b.date_limite || "9999"))).filter((n) => daysUntil(n.date_limite) === null || daysUntil(n.date_limite) >= 0)
         : [...pub].reverse();
-    return sorted.filter((x) => matchQuery(col.searchText(x), q)).slice(0, 60);
-  }, [list, kind, q, col]);
+    const shown =
+      kind === "concours" && mode === "carrousel" && show !== "all"
+        ? sorted.filter((x) => {
+            const t = track.get(x.id);
+            return show === "done" ? isDone(t) : !isDone(t) && !t?.pending;
+          })
+        : sorted;
+    return shown.filter((x) => matchQuery(col.searchText(x), q)).slice(0, 80);
+  }, [list, kind, q, col, mode, show, track]);
+  const doneCount = useMemo(() => (kind === "concours" && Array.isArray(list) ? list.filter((c) => col.isPublished(c) && isDone(track.get(c.id))).length : 0), [kind, list, col, track]);
+  const totalCount = useMemo(() => (Array.isArray(list) ? list.filter((c) => col.isPublished(c)).length : 0), [list, col]);
 
   const item = useMemo(() => (Array.isArray(list) ? list.find((x) => x.id === itemId) : null) || candidates[0] || null, [list, itemId, candidates]);
   const published = useMemo(() => {
@@ -290,6 +257,73 @@ function Composer({ log }) {
       if (f.name.endsWith("/facebook.txt")) f.data = captions.facebook;
     }
     downloadBlob(makeZip(files), `${dir}.zip`);
+  }
+  // Publication automatique (GitHub Actions → Meta) : seuls les textes
+  // retouchés partent d'ici ; sinon le robot écrit le texte d'après son
+  // propre rendu (sujet complet ou coupé).
+  async function queueAuto(date) {
+    const edited = Object.fromEntries(["instagram", "facebook"].filter((p) => texts[p] != null).map((p) => [p, texts[p]]));
+    try {
+      const res = await api("/api/admin/social/publish", { method: "POST", body: { theme: themeKey, items: [{ id: item.id, title: col.title(item), date, captions: edited }] } });
+      log.setEntries((e) => [...res.entries, ...(e || [])]);
+      if (date) toast.success("Publication programmée", `${dateTimeFr(date)} sur Instagram et Facebook, automatiquement.`);
+      else toast.success("Publication lancée", res.woken ? "En ligne dans 2 à 3 minutes. Résultat dans « Planning & historique »." : "Elle part au prochain passage du robot (15 minutes au plus).");
+    } catch (err) {
+      toast.error("Publication impossible", err.message);
+    }
+  }
+  function toggleSelect(id) {
+    if (!selected.includes(id) && selected.length >= MAX_SELECTION) return toast.info(`${MAX_SELECTION} concours au maximum par envoi`);
+    setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+  }
+  async function publishSelection() {
+    const items = selected.map((id) => list.find((c) => c.id === id)).filter(Boolean);
+    if (!items.length) return;
+    const again = items.filter((c) => isDone(track.get(c.id)) || track.get(c.id)?.pending);
+    const ok = await confirm({
+      title: `Publier ${items.length} concours ?`,
+      body: (
+        <>
+          <p style={{ marginTop: 0 }}>Chacun en carrousel sur Instagram et sur Facebook, avec le lien en premier commentaire sur Facebook :</p>
+          <ul style={{ margin: "0 0 8px", paddingLeft: 18 }}>
+            {items.map((c) => (
+              <li key={c.id}>
+                {col.title(c)} · {c.etablissement} {c.annee}
+              </li>
+            ))}
+          </ul>
+          {again.length > 0 && (
+            <p style={{ color: "var(--danger, #c0392b)", marginBottom: 0 }}>
+              ⚠️ Déjà publié ou en cours, sera publié une deuxième fois : {again.map((c) => col.title(c)).join(", ")}
+            </p>
+          )}
+        </>
+      ),
+      confirmLabel: `Publier les ${items.length}`,
+    });
+    if (!ok) return;
+    try {
+      const res = await api("/api/admin/social/publish", { method: "POST", body: { theme: themeKey, items: items.map((c) => ({ id: c.id, title: col.title(c) })) } });
+      log.setEntries((e) => [...res.entries, ...(e || [])]);
+      setSelected([]);
+      toast.success(`${items.length} concours en cours de publication`, res.woken ? "En ligne d'ici quelques minutes. Suivi : ⏳ puis ✓ dans la liste." : "Le robot les publie à son prochain passage (15 minutes au plus).");
+    } catch (err) {
+      toast.error("Publication impossible", err.message);
+    }
+  }
+  async function zipSelection() {
+    const items = selected.map((id) => list.find((c) => c.id === id)).filter(Boolean);
+    const files = [{ name: "LISEZ-MOI.txt", data: BATCH_README }];
+    for (let k = 0; k < items.length; k++) {
+      const c = items[k];
+      const built = buildCarousel(c, { theme, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige: hasCorrigeOf(c, corrigeFiles) });
+      files.push(...(await carouselFiles(`${String(k + 1).padStart(2, "0")}_${c.id}`, c, built, { tone, corrigeFiles })));
+    }
+    downloadBlob(makeZip(files), `saadconcours-carrousels-${localDay(new Date())}.zip`);
+  }
+  async function publishNow() {
+    if (!(await confirm({ title: "Publier maintenant ?", body: `Le carrousel « ${col.title(item)} » sera publié sur Instagram et Facebook, avec le lien en premier commentaire sur Facebook.`, confirmLabel: "Publier" }))) return;
+    queueAuto();
   }
   async function copyComment() {
     try {
@@ -363,7 +397,7 @@ function Composer({ log }) {
         <SectionTitle>1. Quoi publier ?</SectionTitle>
         <div className="ax-chips" style={{ marginBottom: 10 }}>
           {CONTENT_KINDS.map((k) => (
-            <button key={k.key} type="button" className={`ax-toggle-chip${kind === k.key ? " on" : ""}`} onClick={() => (setKind(k.key), setItemId(""), setQ(""))}>
+            <button key={k.key} type="button" className={`ax-toggle-chip${kind === k.key ? " on" : ""}`} onClick={() => (setKind(k.key), setItemId(""), setQ(""), setSelected([]))}>
               {k.emoji} {k.label}
             </button>
           ))}
@@ -372,6 +406,14 @@ function Composer({ log }) {
           <Icon name="search" size="sm" />
           <input className="ax-input sm" placeholder="Rechercher…" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
+        {isCarousel && (
+          <div className="ax-inline" style={{ justifyContent: "space-between", marginBottom: 8, gap: 8 }}>
+            <Seg value={show} onChange={setShow} options={SHOW} />
+            <span className="ax-hint" title="Concours publiés sur Instagram ou Facebook">
+              {doneCount} / {totalCount} publiés
+            </span>
+          </div>
+        )}
         <div className="ax-pick">
           {!Array.isArray(list) ? (
             <Skeleton rows={4} height={44} />
@@ -380,18 +422,45 @@ function Composer({ log }) {
           ) : (
             candidates.map((x) => {
               const done = (log.entries || []).some((e) => e.kind === kind && e.itemId === x.id && e.status === "published");
-              return (
-                <button key={x.id} type="button" className={`ax-pick-item${item?.id === x.id ? " on" : ""}`} onClick={() => setItemId(x.id)}>
+              const button = (
+                <button type="button" className={`ax-pick-item${item?.id === x.id ? " on" : ""}`} onClick={() => setItemId(x.id)}>
                   <span style={{ minWidth: 0, flex: 1 }}>
                     <span className="t">{col.title(x)}</span>
                     <span className="m">{col.subtitle(x)}</span>
                   </span>
-                  {done && <span className="ax-pill green" title="Déjà publié sur au moins un réseau">✓</span>}
+                  {isCarousel ? <TrackPill t={track.get(x.id)} /> : done && <span className="ax-pill green" title="Déjà publié sur au moins un réseau">✓</span>}
                 </button>
+              );
+              if (!isCarousel) return <div key={x.id}>{button}</div>;
+              return (
+                <div key={x.id} className="ax-pick-row">
+                  <input type="checkbox" checked={selected.includes(x.id)} onChange={() => toggleSelect(x.id)} aria-label={`Sélectionner ${col.title(x)}`} disabled={!String(x.enonce_md || "").trim()} />
+                  {button}
+                </div>
               );
             })
           )}
         </div>
+        {isCarousel && (
+          <div className="ax-select-bar">
+            <span>
+              <strong>{selected.length}</strong> sélectionné{selected.length > 1 ? "s" : ""}
+            </span>
+            {selected.length > 0 && (
+              <button type="button" className="ax-btn ghost xs" onClick={() => setSelected([])}>
+                Vider
+              </button>
+            )}
+            <span className="ax-right ax-inline" style={{ gap: 6 }}>
+              <button type="button" className="ax-btn xs" onClick={zipSelection} disabled={!selected.length} title="Images et textes, pour publier à la main">
+                <Icon name="download" size="sm" /> ZIP
+              </button>
+              <button type="button" className="ax-btn primary sm" onClick={publishSelection} disabled={!selected.length}>
+                <Icon name="share" size="sm" /> Publier {selected.length || ""}
+              </button>
+            </span>
+          </div>
+        )}
 
         <hr className="ax-sep" />
         <SectionTitle>2. Visuel</SectionTitle>
@@ -456,8 +525,14 @@ function Composer({ log }) {
                   </>
                 )}
                 <div className="ax-btn-row">
-                  <button type="button" className="ax-btn primary" onClick={downloadCarousel} disabled={!carousel}>
-                    <Icon name="download" /> Télécharger le carrousel (ZIP)
+                  <button type="button" className="ax-btn primary" onClick={publishNow} disabled={!carousel}>
+                    <Icon name="share" size="sm" /> Publier sur Instagram + Facebook
+                  </button>
+                  <button type="button" className="ax-btn" onClick={() => setAutoPlan(true)} disabled={!carousel}>
+                    <Icon name="calendar" size="sm" /> Programmer
+                  </button>
+                  <button type="button" className="ax-btn" onClick={downloadCarousel} disabled={!carousel}>
+                    <Icon name="download" size="sm" /> ZIP
                   </button>
                   <button type="button" className="ax-btn" onClick={copyComment}>
                     <Icon name="copy" size="sm" /> Lien pour le 1er commentaire Facebook
@@ -534,8 +609,18 @@ function Composer({ log }) {
             </div>
           </>
         )}
-        {isCarousel && <BatchExport list={list} log={log} theme={theme} tone={tone} corrigeFiles={corrigeFiles} />}
       </section>
+      {autoPlan && (
+        <PlanDialog
+          auto
+          platform={{ label: "Instagram + Facebook" }}
+          onClose={() => setAutoPlan(false)}
+          onSave={(date) => {
+            queueAuto(date);
+            setAutoPlan(false);
+          }}
+        />
+      )}
       {planFor && (
         <PlanDialog
           platform={planFor}
@@ -584,6 +669,7 @@ function Planning({ log }) {
   }, [entries]);
 
   const planned = (entries || []).filter((e) => e.status === "planned").sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const failed = (entries || []).filter((e) => e.status === "failed");
   const closing = (news.data || []).filter((n) => {
     const d = daysUntil(n.date_limite);
     return !n.cloture && d !== null && d >= 0 && d <= 5 && !(entries || []).some((e) => e.itemId === n.id);
@@ -594,6 +680,16 @@ function Planning({ log }) {
       const saved = await api("/api/admin/social", { method: "POST", body: { ...e, status: "published", date: new Date().toISOString() } });
       log.setEntries((all) => all.map((x) => (x.id === e.id ? saved : x)));
       toast.success("Marqué comme publié");
+    } catch (err) {
+      toast.error("Échec", err.message);
+    }
+  }
+  // Remet une publication automatique ratée dans la file, pour maintenant.
+  async function retry(e) {
+    try {
+      const saved = await api("/api/admin/social", { method: "POST", body: { ...e, status: "planned", date: new Date().toISOString(), result: "" } });
+      log.setEntries((all) => all.map((x) => (x.id === e.id ? saved : x)));
+      toast.success("Remise en file", "Le robot réessaie à son prochain passage (15 minutes au plus).");
     } catch (err) {
       toast.error("Échec", err.message);
     }
@@ -634,7 +730,7 @@ function Planning({ log }) {
                 {list.slice(0, 4).map((e) => {
                   const p = PLATFORMS.find((x) => x.key === e.platform);
                   return (
-                    <button key={e.id} type="button" className={`ax-cal-ev ${e.status}`} style={{ background: p?.color || "#555" }} title={`${p?.label} · ${e.title}${e.status === "planned" ? " (planifié)" : ""}`} onClick={() => (e.status === "planned" ? markDone(e) : null)}>
+                    <button key={e.id} type="button" className={`ax-cal-ev ${e.status}`} style={{ background: p?.color || "#555" }} title={`${p?.label} · ${e.title}${e.status === "planned" ? (e.auto ? " (publication automatique)" : " (planifié)") : e.status === "failed" ? ` (échec : ${e.result})` : ""}`} onClick={() => (e.status === "planned" && !e.auto ? markDone(e) : null)}>
                       {e.title}
                     </button>
                   );
@@ -656,6 +752,30 @@ function Planning({ log }) {
             ))}
           </Alert>
         )}
+        {failed.length > 0 && (
+          <section className="ax-card">
+            <SectionTitle>Échecs de publication</SectionTitle>
+            <ul className="ax-list">
+              {failed.map((e) => (
+                <li key={e.id}>
+                  <PlatformLogo p={PLATFORMS.find((p) => p.key === e.platform) || PLATFORMS[0]} />
+                  <span className="ax-list-main">
+                    <span className="ax-list-title">{e.title}</span>
+                    <span className="ax-list-meta" style={{ color: "var(--danger, #c0392b)" }}>
+                      {e.result || "Erreur inconnue"}
+                    </span>
+                  </span>
+                  <button type="button" className="ax-btn xs" onClick={() => retry(e)}>
+                    Réessayer
+                  </button>
+                  <button type="button" className="ax-btn ghost icon sm" aria-label="Retirer" onClick={() => remove(e)}>
+                    <Icon name="x" size="sm" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         <section className="ax-card">
           <SectionTitle>À venir</SectionTitle>
           {!planned.length ? (
@@ -674,9 +794,15 @@ function Planning({ log }) {
                       {e.note ? ` · ${e.note}` : ""}
                     </span>
                   </span>
-                  <button type="button" className="ax-btn xs" onClick={() => markDone(e)}>
-                    Publié
-                  </button>
+                  {e.auto ? (
+                    <span className="ax-pill" title="Publié automatiquement par le robot">
+                      auto
+                    </span>
+                  ) : (
+                    <button type="button" className="ax-btn xs" onClick={() => markDone(e)}>
+                      Publié
+                    </button>
+                  )}
                   <button type="button" className="ax-btn ghost icon sm" aria-label="Retirer" onClick={() => remove(e)}>
                     <Icon name="x" size="sm" />
                   </button>

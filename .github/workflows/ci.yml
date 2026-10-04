@@ -5,7 +5,8 @@ name: Qualité (lint + build)
 # so a broken build is caught on the branch instead of in production.
 on:
   push:
-    branches: ["**"]
+    # social-media : images des publications automatiques, pas du code.
+    branches: ["**", "!social-media"]
   pull_request:
   workflow_dispatch: {}
 

@@ -755,6 +755,7 @@ a.ax-cell-title:hover { color: var(--ax-accent-ink); }
 .ax-cal-n { font-weight: 800; color: var(--text-dim); margin-bottom: 3px; }
 .ax-cal-ev { display: block; padding: 2px 5px; border-radius: 5px; margin-bottom: 2px; color: #fff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; border: none; width: 100%; text-align: left; font: inherit; font-size: 0.68rem; }
 .ax-cal-ev.planned { opacity: 0.65; outline: 1px dashed rgba(255,255,255,.7); outline-offset: -2px; }
+.ax-cal-ev.failed { background: #c0392b !important; text-decoration: line-through; }
 @media (max-width: 760px) { .ax-cal-d { min-height: 54px; } .ax-cal-ev { font-size: 0; height: 6px; padding: 0; } }
 
 /* Aperçu bannière partenaire */
@@ -795,3 +796,6 @@ a.ax-cell-title:hover { color: var(--ax-accent-ink); }
 .ax-carousel-thumb img { display: block; width: 100%; height: auto; }
 .ax-carousel-thumb span { position: absolute; left: 4px; bottom: 4px; min-width: 20px; padding: 1px 5px; border-radius: 6px; background: rgba(0, 0, 0, 0.65); color: #fff; font-size: 0.7rem; font-weight: 700; text-align: center; }
 .ax-social-stage img.ax-carousel-main { max-height: 62vh; width: auto; max-width: 100%; }
+.ax-pick-row { display: flex; align-items: center; gap: 8px; }
+.ax-pick-row > input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--ax-accent); cursor: pointer; }
+.ax-select-bar { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--ax-tint, var(--bg)); font-size: 0.85rem; position: sticky; bottom: 0; }

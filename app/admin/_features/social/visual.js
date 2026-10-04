@@ -15,7 +15,7 @@ export const THEMES = [
   { key: "urgent", label: "Urgent", bg: ["#7f1d1d", "#c2410c"], card: "rgba(255,255,255,0.09)", text: "#ffffff", dim: "rgba(255,255,255,0.82)", accent: "#fde047", chip: "rgba(255,255,255,0.16)" },
 ];
 
-export const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+export const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Noto Color Emoji"`;
 
 export function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();

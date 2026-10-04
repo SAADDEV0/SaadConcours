@@ -530,13 +530,15 @@ function drawGoogleSlide(canvas, { theme: t, query, truncated, hasCorrige, n, to
 
 // Construit toutes les images du carrousel. `facts` : textes de l'affiche
 // (ceux du studio, retouches comprises) ; `ctaOverride` : bouton retouché.
-export function buildCarousel(item, { theme, facts, ctaOverride, hasCorrige }) {
-  const measure = document.createElement("canvas").getContext("2d");
+// `createCanvas` : fourni par le script de publication automatique (Node), qui
+// n'a pas de `document`.
+export function buildCarousel(item, { theme, facts, ctaOverride, hasCorrige, createCanvas = () => document.createElement("canvas") }) {
+  const measure = createCanvas().getContext("2d");
   const { pages, truncated } = planExtrait(measure, item.enonce_md || "");
   const total = pages.length + 2;
   const kicker = [facts.kicker, item.etablissement].filter(Boolean).join(" · ");
 
-  const cover = document.createElement("canvas");
+  const cover = createCanvas();
   drawVisual(cover, {
     format: CAROUSEL_FORMAT,
     theme,
@@ -548,13 +550,13 @@ export function buildCarousel(item, { theme, facts, ctaOverride, hasCorrige }) {
   });
 
   const slides = pages.map((page, k) => {
-    const c = document.createElement("canvas");
+    const c = createCanvas();
     const last = k === pages.length - 1;
-    drawExtraitSlide(c, { theme, kicker, page, n: k + 2, total, footRight: !last ? "Suite ➜" : truncated ? "La suite ➜" : "Le corrigé ➜" });
+    drawExtraitSlide(c, { theme, kicker, page, n: k + 2, total, footRight: !last ? "Suite →" : truncated ? "La suite →" : "Le corrigé →" });
     return c;
   });
 
-  const end = document.createElement("canvas");
+  const end = createCanvas();
   drawGoogleSlide(end, { theme, query: googleQuery(item), truncated, hasCorrige, n: total, total });
 
   return { canvases: [cover, ...slides, end], truncated, extraitPages: pages.length };

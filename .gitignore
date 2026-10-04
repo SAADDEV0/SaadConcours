@@ -40,3 +40,6 @@ scripts/.r2-uploaded
 
 # Sortie de l'analyse graphify : régénérable, propre à chaque poste.
 graphify-out/
+
+# Publication automatique réseaux sociaux (outils et images générés)
+.social/

@@ -1,0 +1,111 @@
+name: Publication Instagram + Facebook
+
+# Publie les carrousels « extrait » que l'admin a cochés puis validés dans
+# /admin/social (bouton « Publier », ou « Programmer » pour une date). Le
+# robot ne choisit jamais rien lui-même : sans clic de l'admin, la file est
+# vide et il ne publie rien. Tout se passe ici et chez Meta :
+# rien ne passe par le Worker Cloudflare, donc aucun effet sur son quota.
+#
+# Toutes les 15 minutes, une première étape (quelques secondes, sans
+# checkout) regarde dans KV s'il y a quelque chose à publier ; sinon le
+# passage s'arrête là. Dépôt public : les minutes Actions sont gratuites.
+#
+# Secrets à créer (Settings > Secrets and variables > Actions) :
+#   META_PAGE_ID        identifiant de la Page Facebook
+#   META_PAGE_TOKEN     jeton d'accès de la Page (longue durée)
+#   META_IG_USER_ID     (facultatif) compte Instagram pro ; sinon déduit de la Page
+#   KV_REST_API_URL     les deux mêmes valeurs que celles du Worker (Upstash)
+#   KV_REST_API_TOKEN
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+# Un seul passage à la fois : deux passages simultanés publieraient deux fois.
+concurrency:
+  group: social-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+      KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+      META_PAGE_TOKEN: ${{ secrets.META_PAGE_TOKEN }}
+      META_IG_USER_ID: ${{ secrets.META_IG_USER_ID }}
+    steps:
+      - name: Quelque chose à publier ?
+        id: gate
+        run: |
+          if [ -z "$KV_REST_API_URL" ] || [ -z "$META_PAGE_TOKEN" ] || [ -z "$META_PAGE_ID" ]; then
+            echo "Secrets non configurés : rien à faire."
+            echo "due=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          due=$(node -e '
+            (async () => {
+              const r = await fetch(process.env.KV_REST_API_URL, { method: "POST", headers: { Authorization: "Bearer " + process.env.KV_REST_API_TOKEN }, body: JSON.stringify(["GET", "admin:social:plan"]) });
+              let v = (await r.json()).result;
+              for (let i = 0; i < 2 && typeof v === "string"; i++) v = JSON.parse(v);
+              const now = Date.now() + 120000;
+              const due = (Array.isArray(v) ? v : []).filter((e) => e.auto === true && e.status === "planned" && e.kind === "concours" && ["instagram", "facebook"].includes(e.platform) && Date.parse(e.date) <= now);
+              console.log(due.length);
+            })().catch((e) => { console.error(e.message); console.log(0); });
+          ')
+          echo "Publications dues : $due"
+          echo "due=$due" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout (sans les scans)
+        if: steps.gate.outputs.due != '0'
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            app
+            lib
+            scripts
+            public/data
+          sparse-checkout-cone-mode: true
+
+      - name: Node
+        if: steps.gate.outputs.due != '0'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Outils de dessin et polices
+        if: steps.gate.outputs.due != '0'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-roboto fonts-noto-color-emoji > /dev/null
+          npm i --no-save --no-package-lock --prefix .social @napi-rs/canvas@0 esbuild@0.25 react@19 > /dev/null
+          NODE_PATH=.social/node_modules .social/node_modules/.bin/esbuild scripts/social/publier.mjs \
+            --bundle --platform=node --format=esm --target=node22 \
+            --alias:@=. --loader:.js=jsx --jsx=automatic \
+            --external:@napi-rs/canvas --outfile=.social/publier.mjs --log-level=warning
+
+      - name: Dessiner les carrousels
+        if: steps.gate.outputs.due != '0'
+        run: node .social/publier.mjs prepare
+
+      # Instagram exige une adresse publique pour chaque image : la branche
+      # « social-media » ne contient que les images du passage en cours, et
+      # elle est réécrite à chaque fois (pas d'historique qui grossit).
+      - name: Héberger les images (branche social-media)
+        if: steps.gate.outputs.due != '0'
+        run: |
+          if [ -z "$(ls -A .social/out 2>/dev/null)" ]; then echo "Aucune image."; exit 0; fi
+          cd .social/out
+          git init -q -b social-media
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "Images du passage ${GITHUB_RUN_ID}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" social-media
+
+      - name: Publier sur Instagram et Facebook
+        if: steps.gate.outputs.due != '0'
+        run: node .social/publier.mjs publish
