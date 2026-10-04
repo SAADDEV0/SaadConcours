@@ -856,3 +856,28 @@ a.ax-cell-title:hover { color: var(--ax-accent-ink); }
 .ax-mock-text { margin: 0; padding: 6px 12px 12px; white-space: pre-wrap; word-break: break-word; }
 .ax-mock.facebook .ax-mock-text { padding: 0 12px 10px; }
 .ax-mock-more { border: none; background: none; padding: 0; color: #737373; font: inherit; cursor: pointer; }
+
+/* Studio social : éditeur des textes, un onglet par réseau. */
+.ax-cap { padding: 0; overflow: hidden; }
+.ax-cap-tabs { display: flex; gap: 4px; padding: 8px 8px 0; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; background: color-mix(in srgb, var(--text) 3%, transparent); }
+.ax-cap-tabs::-webkit-scrollbar { display: none; }
+.ax-cap-tab { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 10px; border: 1px solid transparent; border-bottom: none; border-radius: 10px 10px 0 0; background: none; color: var(--text-dim); font: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; white-space: nowrap; margin-bottom: -1px; }
+.ax-cap-tab:hover { color: var(--text); }
+.ax-cap-tab.on { background: var(--bg-card); border-color: var(--border); color: var(--text); }
+.ax-cap-tab .ax-net-logo { width: 22px; height: 22px; border-radius: 7px; font-size: 0.64rem; }
+.ax-cap-tab:not(.on) .ax-net-logo { opacity: 0.75; }
+.ax-cap-dot { display: inline-flex; align-items: center; justify-content: center; min-width: 8px; height: 8px; border-radius: 999px; background: var(--ax-accent); font-size: 0; }
+.ax-cap-dot.ok, .ax-cap-dot.bad { min-width: 16px; height: 16px; font-size: 0.62rem; font-weight: 800; color: #fff; }
+.ax-cap-dot.ok { background: var(--green, #16a34a); }
+.ax-cap-dot.bad { background: var(--red); }
+.ax-cap-body { padding: 14px 16px 6px; }
+.ax-cap-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; font-size: 0.9rem; }
+.ax-cap-text { display: block; width: 100%; resize: vertical; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); font: inherit; font-size: 0.95rem; line-height: 1.6; overflow-wrap: anywhere; scrollbar-width: thin; }
+.ax-cap-text:focus { outline: none; border-color: var(--ax-accent); box-shadow: var(--ax-ring); }
+.ax-cap-meter { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 0.75rem; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.ax-cap-meter .over { color: var(--red); font-weight: 700; }
+.ax-cap-bar { flex: 1; height: 4px; border-radius: 999px; background: color-mix(in srgb, var(--text) 10%, transparent); overflow: hidden; }
+.ax-cap-bar span { display: block; height: 100%; border-radius: inherit; transition: width 0.2s ease; }
+.ax-cap-tip { display: flex; align-items: flex-start; gap: 6px; margin: 8px 0 0; font-size: 0.78rem; color: var(--text-faint); line-height: 1.45; }
+.ax-cap-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); margin-top: 10px; }
+@media (max-width: 640px) { .ax-cap-tab .lbl { display: none; } .ax-cap-actions .ax-right { margin-left: 0; width: 100%; justify-content: center; } }

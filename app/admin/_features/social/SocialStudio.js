@@ -415,6 +415,106 @@ function Group({ title, children, open = false }) {
   );
 }
 
+/* ------------------------------ Textes par réseau ------------------------------ */
+
+// Conseil affiché sous le texte de chaque réseau.
+const NET_TIPS = {
+  facebook: (carousel) => (carousel ? "Le lien part en premier commentaire : Facebook montre moins les posts qui contiennent un lien." : "Facebook ajoute tout seul l'aperçu du lien."),
+  instagram: () => "Les liens ne sont pas cliquables : on renvoie vers la bio. 30 hashtags au maximum.",
+  whatsapp: () => "*gras* et _italique_ s'affichent à la façon WhatsApp.",
+  telegram: () => "Partagé avec l'aperçu de la page.",
+  linkedin: () => "Ton sobre : 3 à 5 hashtags suffisent.",
+  x: () => "Un lien compte toujours pour 23 caractères.",
+};
+
+// Un seul grand éditeur, un onglet par réseau : plus lisible que six petites
+// cartes avec barres de défilement.
+function CaptionEditor({ net, onNet, captions, edited, published, isCarousel, onChange, onReset, onCopy, onOpen, onShare, onPlan, onDone }) {
+  const p = PLATFORMS.find((x) => x.key === net) || PLATFORMS[0];
+  const text = captions[p.key] || "";
+  const n = countFor(p.key, text);
+  const ratio = Math.min(1, n / p.limit);
+  const over = n > p.limit;
+  const rows = Math.max(9, Math.min(22, text.split("\n").length + 2));
+  return (
+    <div className="ax-card ax-cap">
+      <div className="ax-cap-tabs" role="tablist" aria-label="Réseau">
+        {PLATFORMS.map((x) => {
+          const c = countFor(x.key, captions[x.key] || "");
+          return (
+            <button key={x.key} type="button" role="tab" aria-selected={x.key === p.key} className={`ax-cap-tab${x.key === p.key ? " on" : ""}`} onClick={() => onNet(x.key)}>
+              <PlatformLogo p={x} />
+              <span className="lbl">{x.label}</span>
+              {published[x.key] ? (
+                <span className="ax-cap-dot ok" title={`Publié ${timeAgo(published[x.key])}`}>
+                  ✓
+                </span>
+              ) : c > x.limit ? (
+                <span className="ax-cap-dot bad" title="Texte trop long">
+                  !
+                </span>
+              ) : edited[x.key] != null ? (
+                <span className="ax-cap-dot" title="Modifié à la main" />
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="ax-cap-body">
+        <div className="ax-cap-meta">
+          <strong>{p.label}</strong>
+          {edited[p.key] != null ? (
+            <>
+              <span className="ax-pill">modifié</span>
+              <button type="button" className="ax-btn ghost xs" onClick={() => onReset(p.key)}>
+                <Icon name="restore" size="sm" /> Texte automatique
+              </button>
+            </>
+          ) : (
+            <span className="ax-hint">texte automatique · modifiable</span>
+          )}
+          {published[p.key] && (
+            <span className="ax-pill green ax-right" title={dateTimeFr(published[p.key])}>
+              publié {timeAgo(published[p.key])}
+            </span>
+          )}
+        </div>
+        <textarea className="ax-cap-text" rows={rows} value={text} spellCheck onChange={(e) => onChange(p.key, e.target.value)} aria-label={`Texte ${p.label}`} />
+        <div className="ax-cap-meter">
+          <div className="ax-cap-bar">
+            <span style={{ width: `${ratio * 100}%`, background: over ? "var(--red)" : ratio > 0.85 ? "#f59e0b" : p.color }} />
+          </div>
+          <span className={over ? "over" : ""}>
+            {n.toLocaleString("fr-FR")} / {p.limit.toLocaleString("fr-FR")}
+          </span>
+        </div>
+        <p className="ax-cap-tip">
+          <Icon name="info" size="sm" /> {NET_TIPS[p.key]?.(isCarousel)}
+        </p>
+      </div>
+
+      <div className="ax-cap-actions">
+        <button type="button" className="ax-btn sm" onClick={() => onCopy(p)}>
+          <Icon name="copy" size="sm" /> Copier
+        </button>
+        <button type="button" className="ax-btn sm" onClick={() => onOpen(p)} title="Copie le texte et ouvre le réseau">
+          <Icon name="external" size="sm" /> Ouvrir {p.label}
+        </button>
+        <button type="button" className="ax-btn sm" onClick={() => onShare(p)} title="Partage natif (téléphone) : image(s) + texte">
+          <Icon name="share" size="sm" /> Partager
+        </button>
+        <button type="button" className="ax-btn sm" onClick={() => onPlan(p)}>
+          <Icon name="calendar" size="sm" /> Planifier
+        </button>
+        <button type="button" className="ax-btn primary sm ax-right" onClick={() => onDone(p)}>
+          <Icon name="check" size="sm" /> Marquer publié
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------ Composer ------------------------------ */
 
 function Composer({ log }) {
@@ -437,6 +537,7 @@ function Composer({ log }) {
   const [tags, setTags] = useState(null);
   const [mode, setMode] = useState("carrousel");
   const [preview, setPreview] = useState("image");
+  const [net, setNet] = useState("facebook");
   const [carousel, setCarousel] = useState(null);
   const [slide, setSlide] = useState(0);
   const [override, setOverride] = useState({});
@@ -1161,56 +1262,25 @@ function Composer({ log }) {
                 <textarea className="ax-textarea" rows={2} value={outro} onChange={(e) => setOutro(e.target.value)} placeholder="Ex. 📲 Abonne-toi pour recevoir chaque nouveau sujet !" />
               </Field>
             </div>
-            <div className="ax-net-grid">
-              {PLATFORMS.map((p) => {
-                const text = captions[p.key] || "";
-                const n = countFor(p.key, text);
-                return (
-                  <div className="ax-net" key={p.key}>
-                    <div className="ax-net-head">
-                      <PlatformLogo p={p} />
-                      {p.label}
-                      {texts[p.key] != null && (
-                        <span className="ax-pill" title="Texte modifié à la main">
-                          modifié
-                        </span>
-                      )}
-                      {published[p.key] && (
-                        <span className="ax-pill green ax-right" title={dateTimeFr(published[p.key])}>
-                          publié {timeAgo(published[p.key])}
-                        </span>
-                      )}
-                    </div>
-                    <textarea className="ax-textarea" value={text} onChange={(e) => setTexts((t) => ({ ...t, [p.key]: e.target.value }))} />
-                    <div className="ax-net-foot">
-                      <span className={`ax-net-count${n > p.limit ? " over" : ""}`}>
-                        {n} / {p.limit}
-                      </span>
-                      {texts[p.key] != null && (
-                        <button type="button" className="ax-btn ghost xs" title="Revenir au texte automatique" onClick={() => setTexts(({ [p.key]: _, ...rest }) => rest)}>
-                          <Icon name="restore" size="sm" />
-                        </button>
-                      )}
-                      <button type="button" className="ax-btn xs" title="Copier le texte" onClick={() => copyText(p)}>
-                        <Icon name="copy" size="sm" />
-                      </button>
-                      <button type="button" className="ax-btn xs" title="Copier le texte et ouvrir le réseau" onClick={() => open(p)}>
-                        <Icon name="external" size="sm" /> Ouvrir
-                      </button>
-                      <button type="button" className="ax-btn xs" title="Partage natif (téléphone) : image(s) + texte" onClick={async () => (await shareNative(p.key)) && record(p.key)}>
-                        <Icon name="share" size="sm" />
-                      </button>
-                      <button type="button" className="ax-btn xs" title="Planifier" onClick={() => setPlanFor(p)}>
-                        <Icon name="calendar" size="sm" />
-                      </button>
-                      <button type="button" className="ax-btn xs primary" title="Marquer comme publié" onClick={() => record(p.key)}>
-                        <Icon name="check" size="sm" />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <CaptionEditor
+              net={net}
+              onNet={(k) => {
+                setNet(k);
+                // L'aperçu « fil » suit le réseau choisi.
+                if (preview !== "image" && (k === "instagram" || k === "facebook")) setPreview(k);
+              }}
+              captions={captions}
+              edited={texts}
+              published={published}
+              isCarousel={isCarousel}
+              onChange={(k, v) => setTexts((t) => ({ ...t, [k]: v }))}
+              onReset={(k) => setTexts(({ [k]: _, ...rest }) => rest)}
+              onCopy={copyText}
+              onOpen={open}
+              onShare={async (p) => (await shareNative(p.key)) && record(p.key)}
+              onPlan={setPlanFor}
+              onDone={(p) => record(p.key)}
+            />
           </>
         )}
       </section>
