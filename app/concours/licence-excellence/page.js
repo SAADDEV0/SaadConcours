@@ -106,7 +106,7 @@ export default async function LicenceExcellencePage() {
           // sites officiels et de santé (2023). La FAQ reste lisible sur la page.
         ].filter(Boolean)}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours-le", showSearch: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours-le", showSearch: false }) }} />
 
       <div className="bac-space site-space">
         <div className="bac-wrap">

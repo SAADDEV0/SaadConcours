@@ -13,6 +13,45 @@ import {
 } from "./partnerAds";
 import boutiqueData from "../../public/data/boutique.json";
 import { isProduitVisible } from "../../lib/boutique";
+import { readChapters, lastChapter } from "./progress";
+
+const ICON_MOON = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>`;
+const ICON_SUN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`;
+
+function escapeAttr(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// Progression locale (app/_shared/progress.js) affichée sur la page :
+// - coche « lu » sur les liens de chapitres déjà ouverts (listes d'un module,
+//   colonne latérale d'un chapitre) ;
+// - bouton [data-resume-link="<chemin du module>"] (« Commencer le
+//   chapitre 1 ») qui devient « Reprendre : <dernier chapitre lu> » ;
+// - encart [data-resume="*"] (accueil) vers le dernier chapitre lu du site.
+function initProgressMarks() {
+  const read = readChapters();
+  if (!Object.keys(read).length) return;
+  document.querySelectorAll(".bac-chap-list a[href], .bac-side-chaps a[href]").forEach((a) => {
+    const path = a.getAttribute("href").split(/[?#]/)[0].replace(/\/+$/, "");
+    if (!read[path] || a.classList.contains("is-read")) return;
+    a.classList.add("is-read");
+    a.insertAdjacentHTML("beforeend", '<span class="sp-read-mark" title="Déjà lu"><span class="sr-only">(déjà lu)</span></span>');
+  });
+  document.querySelectorAll("[data-resume-link]").forEach((a) => {
+    const last = lastChapter(a.dataset.resumeLink);
+    if (!last || a.dataset.resumed === "1") return;
+    a.dataset.resumed = "1";
+    a.href = last.href;
+    a.innerHTML = `Reprendre : ${escapeAttr(last.title || "dernier chapitre lu")} →`;
+  });
+  document.querySelectorAll("[data-resume]").forEach((el) => {
+    const last = lastChapter(el.dataset.resume || "*");
+    if (!last || el.dataset.filled === "1") return;
+    el.dataset.filled = "1";
+    el.innerHTML = `<a class="sp-resume" href="${escapeAttr(last.href)}"><span class="sp-resume-kicker">Reprendre où tu t'es arrêté</span><span class="sp-resume-title">${escapeAttr(last.title || last.href)}</span><span class="sp-resume-go" aria-hidden="true">→</span></a>`;
+    el.hidden = false;
+  });
+}
 
 // La Boutique n'entre dans le menu qu'une fois un cahier publié : une boutique
 // vide (« 0 cahier, les premiers arrivent bientôt ») est une page « en
@@ -21,18 +60,33 @@ import { isProduitVisible } from "../../lib/boutique";
 // fait revenir l'entrée, sans toucher au code.
 export const BOUTIQUE_OUVERTE = Array.isArray(boutiqueData) && boutiqueData.some(isProduitVisible);
 
+// Icônes de navigation en SVG (trait, 24×24) : les emoji s'affichaient
+// différemment sous Windows, Android et iOS, à côté d'un logo vectoriel.
+const navSvg = (d) =>
+  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const NAV_ICONS = {
+  home: navSvg('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>'),
+  bac: navSvg('<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/>'),
+  fsjes: navSvg('<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c2 1.5 4 2 6 2s4-.5 6-2v-5"/><path d="M22 9v5"/>'),
+  concours: navSvg('<path d="M9 3h6l1 2h3v16H5V5h3z"/><path d="M9 11h6M9 15h4"/>'),
+  excellence: navSvg('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'),
+  eval: navSvg('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 9 1.5 1.5L12 8M8 15l1.5 1.5L12 14M14 9.5h3M14 15.5h3"/>'),
+  blog: navSvg('<path d="M4 5h12v14H6a2 2 0 0 1-2-2z"/><path d="M16 9h4v8a2 2 0 0 1-2 2"/><path d="M7 9h6M7 13h6"/>'),
+  boutique: navSvg('<path d="M5 7h14l-1 13H6z"/><path d="M9 7a3 3 0 0 1 6 0"/>'),
+};
+
 // Liens principaux du header. `icon` ne sert qu'au menu mobile.
 // L'ancien bouton « Concours ouverts » (/news) est parti avec la section le
 // 2026-09-24 : c'était une copie automatique d'almaster-maroc.com.
 const NAV_ITEMS = [
-  { key: "home", href: "/", icon: "🏠", label: "Accueil" },
+  { key: "home", href: "/", icon: NAV_ICONS.home, label: "Accueil" },
   {
     key: "cours-menu",
     label: "Cours",
     // Menu déroulant : un espace de cours par public (lycée, université).
     children: [
-      { key: "bac", href: "/bac/2bac", icon: "📘", label: "Cours Bac", desc: "Lycée · 2ᵉ Bac Sciences Économiques et Gestion" },
-      { key: "cours", href: "/cours", icon: "🎓", label: "Cours Licence FSJES", desc: "Université · modules du S1 au S6" },
+      { key: "bac", href: "/bac/2bac", icon: NAV_ICONS.bac, label: "Cours Bac", desc: "Lycée · 2ᵉ Bac Sciences Économiques et Gestion" },
+      { key: "cours", href: "/cours", icon: NAV_ICONS.fsjes, label: "Cours Licence FSJES", desc: "Université · modules du S1 au S6" },
     ],
   },
   {
@@ -40,13 +94,13 @@ const NAV_ITEMS = [
     label: "Concours",
     // Un espace de sujets par niveau d'accès, comme le menu Cours.
     children: [
-      { key: "concours", href: "/concours", icon: "📚", label: "Concours Master", desc: "Après la licence · sujets FSJES, ENCG…" },
-      { key: "concours-le", href: "/concours/licence-excellence", icon: "⭐", label: "Concours Licence d'excellence", desc: "Après le DEUG · accès en S5" },
+      { key: "concours", href: "/concours", icon: NAV_ICONS.concours, label: "Concours Master", desc: "Après la licence · sujets FSJES, ENCG…" },
+      { key: "concours-le", href: "/concours/licence-excellence", icon: NAV_ICONS.excellence, label: "Concours Licence d'excellence", desc: "Après le DEUG · accès en S5" },
     ],
   },
-  { key: "eval", href: "/evaluation", icon: "📝", label: "Évaluation" },
-  { key: "blog", href: "/blog", icon: "📰", label: "Blog" },
-  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", href: "/boutique", icon: "🛒", label: "Boutique" }] : []),
+  { key: "eval", href: "/evaluation", icon: NAV_ICONS.eval, label: "Évaluation" },
+  { key: "blog", href: "/blog", icon: NAV_ICONS.blog, label: "Blog" },
+  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", href: "/boutique", icon: NAV_ICONS.boutique, label: "Boutique" }] : []),
 ];
 
 // Liens à plat (menu mobile) : les entrées du menu déroulant y deviennent
@@ -119,7 +173,7 @@ export function chromeHtml({ active, showSearch, rails = false }) {
       </form>`
           : ""
       }
-      <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">🌙</button>
+      <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">${ICON_MOON}</button>
       <button class="nav-toggle-btn" id="navToggleBtn" title="Menu" aria-label="Ouvrir le menu" aria-expanded="false">
         <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
       </button>
@@ -597,23 +651,104 @@ export const chromeScript = function initChrome() {
     document.documentElement.setAttribute("data-theme", theme);
   })();
 
+  // Icône SVG (rendu identique sur tous les systèmes, contrairement aux
+  // emoji) et libellé qui annonce l'action, pas l'état.
   function applyThemeButton() {
     const theme = document.documentElement.getAttribute("data-theme");
     const btn = document.getElementById("themeToggle");
-    if (btn) btn.textContent = theme === "light" ? "☀️" : "🌙";
+    if (!btn) return;
+    btn.innerHTML = theme === "light" ? ICON_SUN : ICON_MOON;
+    const label = theme === "light" ? "Passer au thème sombre" : "Passer au thème clair";
+    btn.setAttribute("aria-label", label);
+    btn.title = label;
   }
 
   applyThemeButton();
   const themeBtn = document.getElementById("themeToggle");
-  if (themeBtn) {
+  if (themeBtn && themeBtn.dataset.wired !== "1") {
+    themeBtn.dataset.wired = "1";
     themeBtn.addEventListener("click", () => {
-      const current = document.documentElement.getAttribute("data-theme");
+      const root = document.documentElement;
+      const current = root.getAttribute("data-theme");
       const next = current === "light" ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
+      // Fondu limité au changement de thème (voir html.theme-anim, globals.css).
+      root.classList.add("theme-anim");
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch {}
       applyThemeButton();
+      clearTimeout(themeBtn._animTimer);
+      themeBtn._animTimer = setTimeout(() => root.classList.remove("theme-anim"), 260);
     });
   }
+
+  // Header replié en défilant vers le bas sur mobile, rendu dès qu'on
+  // remonte : il occupait ~60px fixes, plus les onglets collants en dessous.
+  // La variable --header-h (globals.css) suit, pour que ce qui colle sous le
+  // header remonte avec lui.
+  (function initHeaderAutoHide() {
+    const root = document.documentElement;
+    if (root.dataset.headerAutoHide === "1") return;
+    root.dataset.headerAutoHide = "1";
+    const mq = window.matchMedia("(max-width: 860px)");
+    let lastY = window.scrollY;
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const y = window.scrollY;
+      const menuOpen = document.getElementById("mobileNavPanel")?.classList.contains("open");
+      if (!mq.matches || menuOpen || y < 120) root.classList.remove("header-hidden");
+      else if (y > lastY + 6) root.classList.add("header-hidden");
+      else if (y < lastY - 6) root.classList.remove("header-hidden");
+      if (Math.abs(y - lastY) > 6 || y < 120) lastY = y;
+    }
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true }
+    );
+    // Un champ qui prend le focus au clavier ne doit pas rester sous un header caché.
+    document.addEventListener("focusin", (e) => {
+      if (e.target.matches?.(":focus-visible")) root.classList.remove("header-hidden");
+    });
+  })();
+
+  initProgressMarks();
+
+  // Introduction des heros repliée à 3 lignes sur téléphone (space.css) :
+  // le bouton n'est ajouté que si le texte dépasse vraiment. Le texte
+  // complet reste dans le HTML (indexé), seul l'affichage est replié.
+  (function initHeroClamp() {
+    if (!window.matchMedia("(max-width: 560px)").matches) return;
+    document.querySelectorAll(".bac-hero > p").forEach((p) => {
+      if (p.dataset.clampWired === "1") return;
+      p.dataset.clampWired = "1";
+      p.classList.add("is-clampable");
+      if (p.scrollHeight <= p.clientHeight + 2) {
+        p.classList.remove("is-clampable");
+        return;
+      }
+      if (!p.id) p.id = `hero-intro-${Math.random().toString(36).slice(2, 8)}`;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "sp-clamp-btn";
+      btn.textContent = "Lire la suite";
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-controls", p.id);
+      btn.addEventListener("click", () => {
+        const open = p.classList.toggle("is-expanded");
+        btn.textContent = open ? "Réduire" : "Lire la suite";
+        btn.setAttribute("aria-expanded", String(open));
+      });
+      p.after(btn);
+    });
+  })();
 
   // Header search box is shared markup (home, concours...) but only
   // /concours has a live results grid to filter in place (ConcoursExplorer

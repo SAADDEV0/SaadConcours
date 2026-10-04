@@ -7,6 +7,7 @@ import { clampDescription } from "../../_shared/seoText";
 import { categoryInfo } from "../../../lib/blogTaxonomy";
 import { findDuplicateBlogIds } from "../../../lib/blogDuplicates";
 import { readingTimeMinutes } from "../../_shared/blogCard";
+import { formatDateFr } from "../../_shared/format";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 import MathScripts from "../../_shared/MathScripts";
 
@@ -144,9 +145,9 @@ export default async function BlogDetailPage(props) {
           </div>
           <h1>{p.title}</h1>
           <div className="bac-hero-stats">
-            <span className="bac-stat">📅 {p.publishedAt}</span>
+            <span className="bac-stat">📅 {formatDateFr(p.publishedAt)}</span>
             {p.updatedAt && p.updatedAt !== p.publishedAt && (
-              <span className="bac-stat">🔄 Mis à jour le {p.updatedAt}</span>
+              <span className="bac-stat">🔄 Mis à jour le {formatDateFr(p.updatedAt)}</span>
             )}
             <span className="bac-stat">⏱️ {minutes} min de lecture</span>
           </div>
@@ -173,7 +174,7 @@ export default async function BlogDetailPage(props) {
                   <span className="bac-mat-icon">📰</span>
                   <span className="bac-mat-body">
                     <span className="bac-mat-name">{r.title}</span>
-                    <span className="bac-mat-meta">{r.publishedAt}</span>
+                    <span className="bac-mat-meta">{formatDateFr(r.publishedAt)}</span>
                   </span>
                 </a>
               ))}

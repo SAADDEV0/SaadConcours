@@ -24,13 +24,19 @@ export function evalCardHtml(m) {
   const nbQuestions = (m.questions || []).length;
   const nbChapitres = (m.chapters || []).length;
   const { icon, hue } = evalModuleStyle(m);
+  // Le nombre de questions est déjà dans la ligne du bas : on le retire du
+  // titre (« … (100 Questions) ») au lieu de l'écrire deux fois.
+  const titre = String(m.title || "").replace(/\s*\(\s*\d+\s*questions?\s*\)\s*$/i, "");
+  // Plus de badge « QCM corrigé » (vrai pour tous les modules) : la place
+  // sert au meilleur score de l'élève, rempli par EvaluationExplorer depuis
+  // son navigateur (vide au rendu serveur).
   const body = `
     <span class="bac-mat-icon">${icon}</span>
     <span class="bac-mat-body">
       <span class="bac-mat-name">${escapeHtml(m.module)}</span>
-      <span class="bac-mat-desc">${escapeHtml(m.title)}</span>
+      <span class="bac-mat-desc">${escapeHtml(titre)}</span>
       <span class="bac-mat-meta">
-        ${m.available ? `<span>${nbQuestions} questions</span>${nbChapitres ? `<span class="bac-dot">·</span><span>${nbChapitres} chapitres</span>` : ""}<span class="bac-badge">QCM corrigé</span>` : "<span>Bientôt disponible</span>"}
+        ${m.available ? `<span>${nbQuestions} questions</span>${nbChapitres ? `<span class="bac-dot">·</span><span>${nbChapitres} chapitres</span>` : ""}<span class="sp-best" data-best="${escapeHtml(m.id)}" hidden></span>` : "<span>Bientôt disponible</span>"}
       </span>
     </span>
     <span class="bac-mat-arrow" aria-hidden="true">→</span>`;

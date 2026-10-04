@@ -50,12 +50,13 @@ function ModuleCard({ c }) {
       <span className="bac-mat-icon">{c.icon}</span>
       <span className="bac-mat-body">
         <span className="bac-mat-name">{c.module}</span>
-        <span className="bac-mat-desc">{c.description}</span>
+        {/* Description complète dans le HTML, repliée à 3 lignes à l'affichage. */}
+        <span className="bac-mat-desc sp-desc-clamp">{c.description}</span>
+        {/* Pas de badge de semestre : les cartes sont déjà rangées sous « Semestre N ». */}
         <span className="bac-mat-meta">
           {c.available ? <span>{c.nbChapitres} chapitres</span> : <span>Bientôt disponible</span>}
           <span className="bac-dot">·</span>
           <span>{tag}</span>
-          {c.semestre && <span className="bac-badge">{c.semestre}</span>}
         </span>
       </span>
       <span className="bac-mat-arrow" aria-hidden="true">

@@ -58,6 +58,7 @@ export default async function BacMatierePage(props) {
     .map((s) => NATIONAL_SOURCES[s])
     .filter(Boolean);
   const examen = m.examen || { label: "Examens nationaux corrigés", pluriel: "Examens nationaux" };
+  const premierRedige = m.chapitres.find((c) => contenu[c.slug]);
 
   // Comme la page d'un module FSJES (app/cours/[id]/page.js) : la matière et
   // ses chapitres rédigés, les seuls qui ont une page.
@@ -117,6 +118,15 @@ export default async function BacMatierePage(props) {
                   </span>
                 )}
               </div>
+              {premierRedige && (
+                <div className="sp-hero-actions">
+                  {/* Devient « Reprendre : … » si l'élève a déjà lu un chapitre
+                     de cette matière (chromeScript, progression locale). */}
+                  <a className="sp-btn primary" href={bacChapitreHref(m, premierRedige)} data-resume-link={bacMatiereHref(m)}>
+                    Commencer le chapitre {premierRedige.numero} →
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 

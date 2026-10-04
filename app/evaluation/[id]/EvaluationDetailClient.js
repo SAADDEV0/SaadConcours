@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { chromeScript } from "../../_shared/chrome";
 import { downloadEvaluationPdf } from "../../_shared/evaluationPdf";
+import { loadEvalAnswers, saveEvalAnswers, recordEvalScore } from "../../_shared/progress";
 
 // This page is server-rendered for SEO (see page.js): the QCM description
 // and chapter list are already real text in the initial response. This
@@ -59,25 +60,57 @@ export default function EvaluationDetailClient({ quiz }) {
     const $ = (sel) => document.querySelector(sel);
 
     let currentChapter = "Tous";
-    let userAnswers = {};
     let submitted = false;
+
+    // Réponses cochées, gardées dans le navigateur à chaque clic : un
+    // rechargement, un changement de chapitre ou un onglet fermé par erreur
+    // ne fait plus perdre une série de 100 questions.
+    const saved = loadEvalAnswers(quiz.id);
+    let userAnswers = {};
+    for (const [qid, letters] of Object.entries(saved)) {
+      if (Array.isArray(letters) && letters.length) userAnswers[qid] = new Set(letters);
+    }
+    function persistAnswers() {
+      const plain = {};
+      for (const [qid, set] of Object.entries(userAnswers)) if (set.size) plain[qid] = [...set];
+      saveEvalAnswers(quiz.id, plain);
+    }
 
     function currentQuestions() {
       if (currentChapter === "Tous") return quiz.questions;
       return quiz.questions.filter((q) => q.chapter === currentChapter);
     }
 
+    function answeredCount(qs) {
+      return qs.filter((q) => userAnswers[q.id]?.size).length;
+    }
+
+    // Compteur « 12 / 100 répondues », en haut de la série et dans la barre
+    // de validation qui suit l'élève.
+    function updateProgress() {
+      const qs = currentQuestions();
+      const n = answeredCount(qs);
+      const label = `${n} / ${qs.length} répondue${n > 1 ? "s" : ""}`;
+      $("#evalProgress").textContent = label;
+      $("#evalSubmitProgress").textContent = label;
+      const bar = $("#evalSubmitFill");
+      if (bar) bar.style.width = `${qs.length ? Math.round((n / qs.length) * 100) : 0}%`;
+    }
+
+    // Vrais boutons (et non des <span> cliquables) : atteignables au clavier.
     function renderChapterChips() {
       const wrap = $("#evalChapterChips");
       wrap.innerHTML = "";
       const chips = ["Tous", ...(quiz.chapters || [])];
       chips.forEach((ch) => {
-        const chip = document.createElement("span");
+        const chip = document.createElement("button");
+        chip.type = "button";
         chip.className = "chip" + (ch === currentChapter ? " active" : "");
+        chip.setAttribute("aria-pressed", String(ch === currentChapter));
         chip.textContent = ch === "Tous" ? `Tous (${quiz.questions.length})` : ch;
+        chip.title = chip.textContent;
         chip.addEventListener("click", () => {
           currentChapter = ch;
-          userAnswers = {};
           submitted = false;
           renderChapterChips();
           renderQuestions();
@@ -88,9 +121,9 @@ export default function EvaluationDetailClient({ quiz }) {
 
     function renderQuestions() {
       const qs = currentQuestions();
-      $("#evalProgress").textContent = `${qs.length} question${qs.length > 1 ? "s" : ""}`;
       $("#evalScoreBanner").innerHTML = "";
       $("#evalSubmitBtn").style.display = "inline-flex";
+      $("#evalSubmitMeta").style.display = "";
       $("#evalRetryBtn").style.display = "none";
       $("#evalPdfBtn").style.display = "none";
       const wrap = $("#evalQuestions");
@@ -101,15 +134,19 @@ export default function EvaluationDetailClient({ quiz }) {
         card.dataset.qid = q.id;
         card.innerHTML = questionCardInner(q, idx, qs.length);
         card.querySelectorAll("input").forEach((inp) => {
+          inp.checked = Boolean(userAnswers[q.id]?.has(inp.value));
           inp.addEventListener("change", () => {
             if (submitted) return;
             if (!userAnswers[q.id]) userAnswers[q.id] = new Set();
             if (inp.checked) userAnswers[q.id].add(inp.value);
             else userAnswers[q.id].delete(inp.value);
+            persistAnswers();
+            updateProgress();
           });
         });
         wrap.appendChild(card);
       });
+      updateProgress();
     }
 
     function setsEqual(a, b) {
@@ -120,6 +157,16 @@ export default function EvaluationDetailClient({ quiz }) {
 
     function submitEval() {
       const qs = currentQuestions();
+      // Le bouton suit l'élève depuis la question 1 : un toucher involontaire
+      // ne doit pas noter une série à moitié faite.
+      const restantes = qs.length - answeredCount(qs);
+      if (restantes > 0) {
+        const msg =
+          restantes === qs.length
+            ? "Tu n'as répondu à aucune question. Afficher quand même la correction ?"
+            : `Il reste ${restantes} question${restantes > 1 ? "s" : ""} sans réponse (comptées fausses). Valider quand même ?`;
+        if (!window.confirm(msg)) return;
+      }
       submitted = true;
       let correctCount = 0;
       const chapterStats = {};
@@ -155,15 +202,23 @@ export default function EvaluationDetailClient({ quiz }) {
         .map(([ch, s]) => `<span>${escapeHtml(ch.split("—")[0].trim())} : ${s.correct}/${s.total}</span>`)
         .join("");
 
+      // Meilleur score gardé pour la série complète seulement (affiché sur
+      // la carte du module dans /evaluation).
+      const best = currentChapter === "Tous" ? recordEvalScore(quiz.id, correctCount, qs.length) : null;
+      const bestHtml =
+        best && best.pct > pct ? `<div class="eval-score-best">Ton meilleur score : ${best.correct} / ${best.total} (${best.pct} %)</div>` : "";
+
       $("#evalScoreBanner").innerHTML = `
-        <div class="eval-score-banner">
+        <div class="eval-score-banner" role="status">
           <div class="eval-score-num">${correctCount} / ${qs.length}</div>
           <div class="eval-score-sub">Score : ${pct}%</div>
+          ${bestHtml}
           <div class="eval-score-chapters">${chapterHtml}</div>
         </div>
       `;
       $("#evalScoreBanner").scrollIntoView({ behavior: "smooth", block: "start" });
       $("#evalSubmitBtn").style.display = "none";
+      $("#evalSubmitMeta").style.display = "none";
       $("#evalRetryBtn").style.display = "inline-block";
       $("#evalPdfBtn").style.display = "inline-block";
     }
@@ -174,9 +229,12 @@ export default function EvaluationDetailClient({ quiz }) {
 
     $("#evalSubmitBtn").addEventListener("click", submitEval);
     $("#evalRetryBtn").addEventListener("click", () => {
-      userAnswers = {};
+      // « À zéro » : seulement les questions de la série affichée.
+      currentQuestions().forEach((q) => delete userAnswers[q.id]);
+      persistAnswers();
       submitted = false;
       renderQuestions();
+      $("#evalQuestions").scrollIntoView({ behavior: "smooth", block: "start" });
     });
     $("#evalPdfBtn").addEventListener("click", downloadEvalPDF);
 
@@ -195,6 +253,14 @@ export default function EvaluationDetailClient({ quiz }) {
          l'identique par renderQuestions() une fois les écouteurs posés. */}
       <div id="evalQuestions" dangerouslySetInnerHTML={{ __html: questionsHtml(quiz.questions || []) }} />
       <div className="eval-submit-bar">
+        <div className="eval-submit-meta" id="evalSubmitMeta">
+          <span className="eval-submit-progress" id="evalSubmitProgress">
+            {`0 / ${(quiz.questions || []).length} répondues`}
+          </span>
+          <span className="eval-submit-track" aria-hidden="true">
+            <span className="eval-submit-fill" id="evalSubmitFill" />
+          </span>
+        </div>
         <button className="dl-btn" id="evalSubmitBtn">✅ Valider mes réponses</button>
         <button className="reset-btn" id="evalRetryBtn" style={{ display: "none" }}>🔄 Refaire l'évaluation à zéro</button>
         <button className="reset-btn" id="evalPdfBtn" style={{ display: "none" }}>⬇ Télécharger en PDF (avec réponses)</button>

@@ -1,6 +1,7 @@
 import { getPublicConcours, getSettings, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { CONCOURS_HUES } from "./_shared/concoursCard";
+import { formatDateFr } from "./_shared/format";
 import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES } from "../lib/bacProgramme";
@@ -42,9 +43,13 @@ export default async function HomePage() {
     quiz.filter((q) => q.available).reduce((n, q) => n + (q.questions || []).length, 0) +
     coursPublies.reduce((n, c) => n + fsjesModule(c).chapitres.reduce((k, ch) => k + ch.qcm.length, 0), 0);
 
-  // Storage appends new entries to the end of the array (lib/store.js
-  // addItem): tail = most recent.
-  const recentConcours = allConcours.slice(-4).reverse();
+  // Six derniers sujets par date d'ajout (deux rangées pleines de trois
+  // cartes : quatre laissaient une carte seule sur sa ligne). Sans date
+  // d'ajout, la fin du tableau reste la plus récente (lib/store.js addItem).
+  const dates = allConcours.filter((c) => c.date_ajout);
+  const recentConcours = dates.length >= 6
+    ? [...dates].sort((a, b) => b.date_ajout.localeCompare(a.date_ajout)).slice(0, 6)
+    : allConcours.slice(-6).reverse();
   const concoursLicence = allConcours.filter(isLicenceExcellence);
   const concoursMaster = allConcours.length - concoursLicence.length;
   const recentPosts = blog
@@ -98,16 +103,21 @@ export default async function HomePage() {
 
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "home", showSearch: true, rails: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "home", showSearch: false, rails: true }) }} />
 
       <div className="bac-space site-space">
         <div className="bac-wrap">
+          {/* Rempli dans le navigateur s'il y a un chapitre en cours
+             (chrome.js, initProgressMarks) : le premier geste d'un élève qui
+             revient est de reprendre là où il s'était arrêté. */}
+          <div data-resume="*" hidden />
+
           <section className="bac-hero sp-home-hero" style={{ "--hero-icon": '"🎓"' }}>
             <div className="bac-eyebrow">Bac · Licence FSJES · Licence d'excellence · Master</div>
             <h1>Cours, exercices et concours en économie & gestion au Maroc</h1>
             <p>
               SaadConcours accompagne les élèves du <strong>Bac Sciences Économiques et Gestion</strong>, les étudiants
-              en <strong>Licence FSJES</strong> et les candidats aux concours d'accès aux <strong>licences d'excellence</strong>
+              en <strong>Licence FSJES</strong> et les candidats aux concours d'accès aux <strong>licences d'excellence</strong>{" "}
               et au <strong>Master</strong> : cours
               rédigés chapitre par chapitre, exercices corrigés, résumés, QCM et sujets réels de concours — gratuitement
               et sans inscription.
@@ -123,15 +133,22 @@ export default async function HomePage() {
                 <strong>{questionsQcm}</strong> questions de QCM
               </span>
             </div>
-            <div className="sp-hero-actions">
-              <a className="sp-btn primary" href="/bac/2bac">
-                📘 Cours Bac
+            {/* Un choix de public, pas une hiérarchie : quatre boutons de même
+               poids (deux en dégradé et un en retrait laissaient croire que
+               les concours, cœur du site, étaient secondaires). */}
+            <div className="sp-hero-actions sp-audience" role="group" aria-label="Je prépare">
+              <span className="sp-audience-label">Je prépare :</span>
+              <a className="sp-btn sp-choice" href="/bac/2bac">
+                Le Bac
               </a>
-              <a className="sp-btn primary" href="/cours">
-                🎓 Cours FSJES
+              <a className="sp-btn sp-choice" href="/cours">
+                Ma Licence FSJES
               </a>
-              <a className="sp-btn" href="/concours">
-                📚 Sujets de concours
+              <a className="sp-btn sp-choice" href="/concours/licence-excellence">
+                Une Licence d&apos;excellence
+              </a>
+              <a className="sp-btn sp-choice" href="/concours">
+                Un concours Master
               </a>
             </div>
           </section>
@@ -162,7 +179,7 @@ export default async function HomePage() {
 
           <section className="bac-group">
             <h2 className="bac-section-title">S'entraîner et s'informer</h2>
-            <div className="bac-mat-grid">
+            <div className="bac-mat-grid sp-fill-grid">
               {OUTILS.map((o) => (
                 <a key={o.href} className="bac-mat-card" href={o.href} style={{ "--mat-h": o.hue }}>
                   <span className="bac-mat-icon">{o.icon}</span>
@@ -197,7 +214,7 @@ export default async function HomePage() {
                       </span>
                       <span className="bac-mat-meta">
                         {isLicenceExcellence(c) && <span className="sp-le-badge">⭐ Licence d'excellence</span>}
-                        {c.date_ajout && <span>Ajouté le {c.date_ajout}</span>}
+                        {c.date_ajout && <span>Ajouté le {formatDateFr(c.date_ajout)}</span>}
                       </span>
                     </span>
                   </a>
@@ -223,7 +240,7 @@ export default async function HomePage() {
                       <span className="bac-mat-body">
                         {cat && <span className="sp-card-kicker">{cat.label}</span>}
                         <span className="bac-mat-name">{p.title}</span>
-                        <span className="bac-mat-meta">{p.publishedAt}</span>
+                        <span className="bac-mat-meta">{formatDateFr(p.publishedAt)}</span>
                       </span>
                     </a>
                   );

@@ -4,6 +4,7 @@
 // keep both in sync, same pattern as concoursCard.js.
 
 import { escapeHtml } from "./concoursCard";
+import { formatDateFr } from "./format";
 import { categoryInfo } from "../../lib/blogTaxonomy";
 
 const WORDS_PER_MINUTE = 200;
@@ -43,9 +44,9 @@ export function blogCardHtml(post) {
     <span class="bac-mat-body">
       ${cat ? `<span class="sp-card-kicker">${escapeHtml(cat.label)}</span>` : ""}
       <span class="bac-mat-name">${escapeHtml(post.title)}</span>
-      <span class="bac-mat-desc">${escapeHtml(post.excerpt)}</span>
+      <span class="bac-mat-desc sp-desc-clamp">${escapeHtml(post.excerpt)}</span>
       <span class="bac-mat-meta">
-        <time datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(post.publishedAt || "")}</time>
+        <time datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(formatDateFr(post.publishedAt))}</time>
         <span class="bac-dot">·</span>
         <span>⏱️ ${minutes} min de lecture</span>
       </span>

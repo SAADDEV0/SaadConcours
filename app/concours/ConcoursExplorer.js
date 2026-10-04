@@ -4,18 +4,32 @@ import { useEffect } from "react";
 import { chromeScript, queueTrackEvent } from "../_shared/chrome";
 import { downloadConcoursPdf } from "../_shared/concoursPdf";
 import { FILIERE_CATEGORIES, categoryOptions, subFiliereOptions } from "../../lib/taxonomy";
-import { concoursCardHtml } from "../_shared/concoursCard";
+import { concoursCardHtml, compareConcoursRecents, anneeNum } from "../_shared/concoursCard";
+import { difficulteNote } from "../_shared/format";
+
+// Tris proposés par le <select id="sortSelect"> (ConcoursListing.js).
+// « recents » est l'ordre dans lequel le serveur a déjà rendu la grille.
+const SORTS = {
+  recents: compareConcoursRecents,
+  ajouts: (a, b) => String(b.date_ajout || "").localeCompare(String(a.date_ajout || "")) || compareConcoursRecents(a, b),
+  // Années non datées toujours en fin de liste, quel que soit le sens.
+  anciens: (a, b) => (anneeNum(a) < 0) - (anneeNum(b) < 0) || anneeNum(a) - anneeNum(b) || compareConcoursRecents(a, b),
+  facile: (a, b) => (difficulteNote(a.difficulte) ?? 9) - (difficulteNote(b.difficulte) ?? 9) || compareConcoursRecents(a, b),
+  difficile: (a, b) => (difficulteNote(b.difficulte) ?? 0) - (difficulteNote(a.difficulte) ?? 0) || compareConcoursRecents(a, b),
+};
 
 // Hydrates the server-rendered /concours page: fills the filter <select>s,
 // wires the download buttons on the already-visible cards, and only
 // replaces the grid's innerHTML once the visitor actually filters/searches
 // — the initial unfiltered list stays exactly what the server sent.
-export default function ConcoursExplorer({ initialData }) {
+export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
   useEffect(() => {
     chromeScript();
 
     const ALL = initialData || [];
     let filtered = ALL;
+    // Nombre de cartes visibles : remis à une page à chaque filtre ou tri.
+    let shown = pageSize;
 
     const $ = (sel) => document.querySelector(sel);
 
@@ -215,16 +229,42 @@ export default function ConcoursExplorer({ initialData }) {
       $("#filterApply").textContent = filtered.length ? `Voir les ${label}` : "Aucun résultat";
     }
 
+    // Bouton « Voir plus » : caché quand toutes les cartes sont visibles.
+    function syncMore() {
+      const restants = Math.max(0, filtered.length - shown);
+      $("#moreWrap").hidden = restants === 0;
+      $("#moreCount").textContent = `(${restants} restant${restants > 1 ? "s" : ""})`;
+    }
+
     function renderGrid() {
       $("#resultsCount").textContent = `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
       syncFilterPanel();
       const grid = $("#grid");
+      shown = pageSize;
       if (filtered.length === 0) {
         grid.innerHTML = `<div class="sp-empty">Aucun concours ne correspond à ces filtres.</div>`;
+        syncMore();
         return;
       }
-      grid.innerHTML = filtered.map(concoursCardHtml).join("");
+      grid.innerHTML = filtered.map((c, i) => concoursCardHtml(c, { hidden: i >= shown })).join("");
       wireDownloadButtons();
+      syncMore();
+    }
+
+    // Les cartes suivantes sont déjà dans la grille, en `hidden` : on les
+    // révèle par paquets sans rien re-rendre, et le focus passe sur la
+    // première carte révélée pour que le clavier enchaîne naturellement.
+    $("#moreBtn").onclick = () => {
+      const caches = [...document.querySelectorAll("#grid > a[hidden]")].slice(0, pageSize);
+      caches.forEach((el) => el.removeAttribute("hidden"));
+      shown += caches.length;
+      syncMore();
+      caches[0]?.focus({ preventScroll: true });
+    };
+
+    function sortFiltered() {
+      const cmp = SORTS[$("#sortSelect").value] || SORTS.recents;
+      filtered = [...filtered].sort(cmp);
     }
 
     function applyFilters() {
@@ -260,6 +300,7 @@ export default function ConcoursExplorer({ initialData }) {
         return true;
       });
 
+      sortFiltered();
       renderGrid();
 
       if (q.length >= 2 && filtered.length === 0) reportSearchMissDebounced(q);
@@ -292,6 +333,15 @@ export default function ConcoursExplorer({ initialData }) {
         $(id).addEventListener("change", applyFilters);
       });
       $("#searchInput").addEventListener("input", applyFilters);
+      // Le filtrage est instantané : « Entrée » ferme seulement le clavier mobile.
+      $("#listSearchForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        $("#searchInput").blur();
+      });
+      $("#sortSelect").addEventListener("change", () => {
+        sortFiltered();
+        renderGrid();
+      });
       $("#resetBtn").addEventListener("click", () => {
         ["#filterVille", "#filterCategorie", "#filterEtab", "#filterAnnee", "#filterModule"].forEach((id) => ($(id).value = ""));
         fillFiliereSelect("");
@@ -355,7 +405,7 @@ export default function ConcoursExplorer({ initialData }) {
     }
 
     return () => filterObserver?.disconnect();
-  }, [initialData]);
+  }, [initialData, pageSize]);
 
   return null;
 }

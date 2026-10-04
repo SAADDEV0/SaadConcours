@@ -169,7 +169,7 @@ export default async function BacChapitrePage(props) {
                 {onglets.map((o, k) => (
                   <input key={o.code} type="radio" name="bac-tab" id={`tab-${o.code}`} className="bac-tab-input" defaultChecked={k === 0} />
                 ))}
-                <div className="bac-tab-labels" role="tablist">
+                <div className="bac-tab-labels">
                   {onglets.map((o) => (
                     <label key={o.code} htmlFor={`tab-${o.code}`} className={`bac-tab-label bac-tab-label-${o.code}`}>
                       <span aria-hidden="true">{o.icon}</span> {o.label}

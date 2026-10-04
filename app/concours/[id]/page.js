@@ -3,6 +3,7 @@ import { marked } from "marked";
 import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
 import { CONCOURS_HUES } from "../../_shared/concoursCard";
+import { difficulteHtml } from "../../_shared/format";
 import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { concoursSeo } from "../../_shared/concoursSeo";
@@ -221,7 +222,9 @@ export default async function ConcoursDetailPage(props) {
             <span className="bac-stat">🏫 {c.etablissement}</span>
             <span className="bac-stat">📍 {c.ville}</span>
             <span className="bac-stat">📅 {c.annee}</span>
-            {c.difficulte && <span className="bac-stat">⭐ {c.difficulte}</span>}
+            {difficulteHtml(c.difficulte) && (
+              <span className="bac-stat" dangerouslySetInnerHTML={{ __html: difficulteHtml(c.difficulte) }} />
+            )}
             {corrigeMd && <span className="bac-dispo">✅ Corrigé disponible</span>}
           </div>
           {c.modules?.length > 0 && (
@@ -243,15 +246,38 @@ export default async function ConcoursDetailPage(props) {
         </div>
 
         <nav className="bac-tab-labels sp-anchor-tabs" aria-label="Sections du sujet">
-          <a className="bac-tab-label" href="#section-enonce">📝 Énoncé</a>
-          {corrigeHtml && <a className="bac-tab-label" href="#section-corrige">✅ Corrigé</a>}
-          {hasImages && <a className="bac-tab-label" href="#section-images">🖼️ Extraits</a>}
+          <a className="bac-tab-label" href="#section-enonce">
+            <span aria-hidden="true">📝</span> Énoncé
+          </a>
+          {hasImages && (
+            <a className="bac-tab-label" href="#section-images">
+              <span aria-hidden="true">🖼️</span> Sujet scanné
+            </a>
+          )}
+          {corrigeHtml && (
+            <a className="bac-tab-label" href="#section-corrige">
+              <span aria-hidden="true">✅</span> Corrigé
+            </a>
+          )}
         </nav>
 
         <div className="cd-card" id="section-enonce">
           <h2>Énoncé</h2>
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: enonceHtml }} />
         </div>
+
+        {/* Le sujet original juste après sa transcription, et non plus après
+           un corrigé de plusieurs milliers de pixels. */}
+        {hasImages && (
+          <div className="cd-card" id="section-images">
+            <h2>Sujet original scanné</h2>
+            <div className="cd-images">
+              {c.images.map((img) => (
+                <img key={img} src={pub(img)} alt={`Extrait scanné — ${c.etablissement} ${c.annee}`} loading="lazy" />
+              ))}
+            </div>
+          </div>
+        )}
 
         <AdSlot
           enabled={adsGloballyEnabled && settings?.adsConcoursMidEnabled}
@@ -266,21 +292,20 @@ export default async function ConcoursDetailPage(props) {
         {corrigeHtml && (
           <div className="cd-card" id="section-corrige">
             <h2>Corrigé</h2>
-            <div className="corrige-disclaimer">
-              ⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier pour réviser.
-            </div>
-            <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
-          </div>
-        )}
-
-        {hasImages && (
-          <div className="cd-card" id="section-images">
-            <h2>Extraits scannés</h2>
-            <div className="cd-images">
-              {c.images.map((img) => (
-                <img key={img} src={pub(img)} alt={`Extrait scanné — ${c.etablissement} ${c.annee}`} loading="lazy" />
-              ))}
-            </div>
+            {/* Replié par défaut : on s'entraîne sur le sujet avant de voir la
+               solution. Le texte reste dans le HTML (indexé), et le lien
+               « Corrigé » des onglets l'ouvre (ConcoursDetailClient). */}
+            <details className="sp-reveal" id="corrigeReveal">
+              <summary>
+                <span className="sp-reveal-title sp-reveal-show">👁️ Afficher le corrigé</span>
+                <span className="sp-reveal-title sp-reveal-hide">🙈 Masquer le corrigé</span>
+                <span className="sp-reveal-sub">Essaie d&apos;abord de traiter le sujet en conditions réelles.</span>
+              </summary>
+              <div className="corrige-disclaimer">
+                ⚠️ Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t&apos;y fier pour réviser.
+              </div>
+              <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
+            </details>
           </div>
         )}
 

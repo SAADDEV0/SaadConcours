@@ -1,4 +1,4 @@
-import { concoursCardHtml, concoursListItem } from "../_shared/concoursCard";
+import { concoursCardHtml, concoursListItem, compareConcoursRecents, CONCOURS_PAGE_SIZE } from "../_shared/concoursCard";
 import ConcoursExplorer from "./ConcoursExplorer";
 
 // Filtres + grille de cartes, communs aux deux pages de liste (/concours pour
@@ -10,8 +10,10 @@ import ConcoursExplorer from "./ConcoursExplorer";
 // #filterToggle, et #filterFab y ramène depuis le bas de la liste : avec plus
 // de 250 cartes, les laisser sous la grille les rendait inatteignables
 // (voir space.css).
-export default function ConcoursListing({ concours, gridTitle = "Tous les sujets", sideLinks = [] }) {
+export default function ConcoursListing({ concours: liste, gridTitle = "Tous les sujets", sideLinks = [] }) {
+  const concours = [...liste].sort(compareConcoursRecents);
   const nbResultats = `${concours.length} résultat${concours.length > 1 ? "s" : ""}`;
+  const restants = Math.max(0, concours.length - CONCOURS_PAGE_SIZE);
   return (
     <>
       <div className="bac-mat-layout sp-listing">
@@ -82,13 +84,51 @@ export default function ConcoursListing({ concours, gridTitle = "Tous les sujets
         </aside>
 
         <main className="bac-main">
+          {/* Recherche posée au-dessus de la grille qu'elle filtre, et non plus
+             dans le header : elle ne cherche que dans les concours, et le
+             header doit rester identique d'une page à l'autre. */}
+          <form className="sp-search" role="search" id="listSearchForm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input
+              type="search"
+              id="searchInput"
+              placeholder="Rechercher un master, une faculté, une ville…"
+              aria-label="Rechercher un concours par titre du master, faculté ou ville"
+              autoComplete="off"
+              enterKeyHint="search"
+            />
+          </form>
           <div className="sp-results-head">
             <h2 className="bac-section-title">{gridTitle}</h2>
             <span className="sp-count" id="resultsCount">
               {nbResultats}
             </span>
+            <label className="sp-sort">
+              <span>Trier</span>
+              <select id="sortSelect" defaultValue="recents">
+                <option value="recents">Plus récents</option>
+                <option value="ajouts">Derniers ajoutés</option>
+                <option value="anciens">Plus anciens</option>
+                <option value="facile">Plus faciles</option>
+                <option value="difficile">Plus difficiles</option>
+              </select>
+            </label>
           </div>
-          <div className="sp-card-grid" id="grid" dangerouslySetInnerHTML={{ __html: concours.map(concoursCardHtml).join("") }} />
+          <div
+            className="sp-card-grid"
+            id="grid"
+            dangerouslySetInnerHTML={{
+              __html: concours.map((c, i) => concoursCardHtml(c, { hidden: i >= CONCOURS_PAGE_SIZE })).join(""),
+            }}
+          />
+          <div className="sp-more" id="moreWrap" hidden={restants === 0}>
+            <button type="button" className="sp-btn sp-more-btn" id="moreBtn">
+              Voir plus de sujets <span id="moreCount">({restants} restants)</span>
+            </button>
+          </div>
         </main>
       </div>
 
@@ -101,7 +141,7 @@ export default function ConcoursListing({ concours, gridTitle = "Tous les sujets
       </button>
 
       {/* Données des cartes seulement : voir concoursListItem. */}
-      <ConcoursExplorer initialData={concours.map(concoursListItem)} />
+      <ConcoursExplorer initialData={concours.map(concoursListItem)} pageSize={CONCOURS_PAGE_SIZE} />
     </>
   );
 }

@@ -210,7 +210,7 @@ export default async function CoursChapitrePage(props) {
                 {ONGLETS.map((o, i) => (
                   <input key={o.code} type="radio" name="bac-tab" id={`tab-${o.code}`} className="bac-tab-input" defaultChecked={i === 0} />
                 ))}
-                <div className="bac-tab-labels" role="tablist">
+                <div className="bac-tab-labels">
                   {ONGLETS.map((o) => (
                     <label key={o.code} htmlFor={`tab-${o.code}`} className={`bac-tab-label bac-tab-label-${o.code}`}>
                       <span aria-hidden="true">{o.icon}</span> {o.label}

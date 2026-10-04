@@ -2,15 +2,15 @@
    visuellement de l'espace Licence FSJES (accent bleu). --mat-h = teinte
    propre à chaque matière (icônes, bandeaux). */
 .bac-space{
-  --accent:#10b981; --accent-dim:#134e3a;
-  --bac-grad:linear-gradient(135deg,#059669,#14b8a6);
-  --mat-color:hsl(var(--mat-h,152) 70% 55%);
+  --accent:#10b981; --accent-dim:#134e3a; --accent-fill:#047857; --accent-ink:#6ee7b7;
+  --bac-grad:linear-gradient(135deg,#047857,#0f766e);
+  --mat-color:hsl(var(--mat-h,152) 70% 68%);
   --mat-tint:color-mix(in srgb, var(--mat-color) 14%, var(--bg-card));
   --mat-line:color-mix(in srgb, var(--mat-color) 35%, var(--border));
 }
 :root[data-theme="light"] .bac-space{
-  --accent:#0e9f6e; --accent-dim:#d5f5e8;
-  --mat-color:hsl(var(--mat-h,152) 65% 40%);
+  --accent:#047857; --accent-dim:#d5f5e8; --accent-fill:#047857; --accent-ink:#047857;
+  --mat-color:hsl(var(--mat-h,152) 65% 32%);
   --mat-tint:color-mix(in srgb, var(--mat-color) 9%, var(--bg-card));
 }
 .bac-space a{color:inherit;}
@@ -18,7 +18,7 @@
 .bac-wrap{max-width:1100px; margin:0 auto; padding:24px 20px 70px;}
 .bac-space .cd-breadcrumb a:hover{color:var(--accent);}
 
-.bac-eyebrow{font-size:.74rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:6px;}
+.bac-eyebrow{font-size:.75rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:6px;}
 
 /* ---------- Hero ---------- */
 .bac-hero{
@@ -30,7 +30,7 @@
   content:"📘"; position:absolute; right:24px; top:50%; transform:translateY(-50%) rotate(-8deg);
   font-size:6rem; opacity:.14; pointer-events:none;
 }
-.bac-hero h1{font-size:1.6rem; margin:0 0 8px; max-width:720px;}
+.bac-hero h1{font-size:1.5rem; margin:0 0 8px; max-width:720px;}
 .bac-hero p{color:var(--text-dim); margin:0 0 16px; max-width:680px; line-height:1.55;}
 .bac-hero-stats{display:flex; flex-wrap:wrap; gap:8px;}
 .bac-stat{font-size:.8rem; color:var(--text-dim); padding:5px 12px; border-radius:999px; background:var(--bg); border:1px solid var(--border);}
@@ -45,23 +45,22 @@
 .bac-year-tab.active{background:var(--bac-grad); color:#fff !important; border-color:transparent;}
 .bac-year-tab.disabled{opacity:.6; cursor:not-allowed;}
 .bac-year-tab em{font-style:normal; font-size:.7rem; font-weight:600; margin-left:6px; padding:2px 7px; border-radius:999px; background:var(--bg); border:1px solid var(--border);}
-.bac-filieres{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:26px; font-size:.82rem;}
+.bac-filieres{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:26px; font-size:.8rem;}
 .bac-filieres-label{color:var(--text-faint);}
-.bac-filiere-chip{padding:4px 11px; border-radius:999px; background:var(--accent-dim); color:var(--accent); font-weight:600;}
-:root[data-theme="dark"] .bac-filiere-chip{color:#6ee7b7;}
+.bac-filiere-chip{padding:4px 11px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); font-weight:600;}
 
 /* ---------- Grille des matières ---------- */
 .bac-group{margin-bottom:30px;}
-.bac-section-title{font-size:1.05rem; margin:0 0 12px; display:flex; align-items:center; gap:10px;}
+.bac-section-title{font-size:1.1rem; margin:0 0 12px; display:flex; align-items:center; gap:10px;}
 .bac-section-title::before{content:""; width:4px; height:18px; border-radius:4px; background:var(--bac-grad);}
 .bac-mat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr)); gap:14px;}
 .bac-mat-card{
-  --mat-color:hsl(var(--mat-h) 70% 55%);
+  --mat-color:hsl(var(--mat-h) 70% 68%);
   display:flex; align-items:flex-start; gap:14px; padding:18px; border-radius:var(--radius-lg);
   background:var(--bg-card); border:1px solid var(--border); box-shadow:var(--shadow);
   text-decoration:none; transition:transform .15s ease, border-color .15s ease;
 }
-:root[data-theme="light"] .bac-mat-card{--mat-color:hsl(var(--mat-h) 65% 40%);}
+:root[data-theme="light"] .bac-mat-card{--mat-color:hsl(var(--mat-h) 65% 32%);}
 .bac-mat-card:hover{transform:translateY(-2px); border-color:var(--mat-color);}
 .bac-mat-icon{
   flex-shrink:0; width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center;
@@ -69,11 +68,10 @@
 }
 .bac-mat-body{display:flex; flex-direction:column; gap:6px; min-width:0; flex:1;}
 .bac-mat-name{font-weight:700; font-size:1rem; line-height:1.3;}
-.bac-mat-desc{font-size:.83rem; color:var(--text-dim); line-height:1.45;}
-.bac-mat-meta{display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:.76rem; color:var(--text-faint); margin-top:2px;}
+.bac-mat-desc{font-size:.85rem; color:var(--text-dim); line-height:1.45;}
+.bac-mat-meta{display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:.75rem; color:var(--text-faint); margin-top:2px;}
 .bac-dot{opacity:.6;}
-.bac-badge{margin-left:auto; padding:2px 8px; border-radius:999px; font-weight:700; font-size:.68rem; color:var(--accent); background:var(--accent-dim);}
-:root[data-theme="dark"] .bac-badge{color:#6ee7b7;}
+.bac-badge{margin-left:auto; padding:2px 8px; border-radius:999px; font-weight:700; font-size:.7rem; color:var(--accent-ink); background:var(--accent-dim);}
 .bac-mat-arrow{color:var(--text-faint); font-size:1.1rem; align-self:center; transition:transform .15s ease, color .15s ease;}
 .bac-mat-card:hover .bac-mat-arrow{transform:translateX(3px); color:var(--mat-color);}
 
@@ -93,22 +91,22 @@
 .bac-mat-layout{display:grid; grid-template-columns:260px 1fr; gap:22px; align-items:start;}
 .bac-side{position:sticky; top:84px; display:flex; flex-direction:column; gap:12px;}
 .bac-side-card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:14px;}
-.bac-side-title{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
-.bac-side-link{display:flex; justify-content:space-between; padding:8px 10px; border-radius:8px; font-size:.87rem; text-decoration:none; font-weight:600;}
-.bac-side-link span{color:var(--text-faint); font-weight:500; font-size:.78rem;}
+.bac-side-title{font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+.bac-side-link{display:flex; justify-content:space-between; padding:8px 10px; border-radius:8px; font-size:.85rem; text-decoration:none; font-weight:600;}
+.bac-side-link span{color:var(--text-faint); font-weight:500; font-size:.8rem;}
 .bac-side-link:hover{background:var(--bg); color:var(--accent);}
-.bac-soon{font-style:normal; font-size:.68rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
+.bac-soon{font-style:normal; font-size:.7rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
 
 .bac-main{min-width:0;}
 .bac-semestre{margin-bottom:28px; scroll-margin-top:84px;}
-.bac-semestre-title{display:flex; align-items:center; gap:10px; font-size:1.15rem; margin:0 0 14px;}
+.bac-semestre-title{display:flex; align-items:center; gap:10px; font-size:1.2rem; margin:0 0 14px;}
 .bac-semestre-code{
   display:inline-flex; align-items:center; justify-content:center; min-width:36px; height:28px; padding:0 8px;
   border-radius:8px; background:var(--bac-grad); color:#fff; font-size:.8rem; font-weight:800;
 }
 .bac-unite{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:14px;}
 .bac-unite-head{padding:14px 18px; background:var(--mat-tint); border-bottom:1px solid var(--border);}
-.bac-unite-num{font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--mat-color);}
+.bac-unite-num{font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--mat-color);}
 .bac-unite-head h3{margin:2px 0 0; font-size:1rem;}
 .bac-chap-list{list-style:none; margin:0; padding:0;}
 .bac-chap-list li + li{border-top:1px solid var(--border);}
@@ -117,41 +115,41 @@
 .bac-chap-row:hover .bac-chap-title{color:var(--accent);}
 .bac-chap-num{
   flex-shrink:0; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:.78rem; font-weight:800; color:var(--mat-color); border:1.5px solid var(--mat-line);
+  font-size:.8rem; font-weight:800; color:var(--mat-color); border:1.5px solid var(--mat-line);
 }
-.bac-chap-title{flex:1; font-weight:600; font-size:.93rem; min-width:0;}
+.bac-chap-title{flex:1; font-weight:600; font-size:.95rem; min-width:0;}
 .bac-chap-res{display:flex; gap:4px;}
-.bac-res-chip{font-size:.68rem; padding:2px 7px; border-radius:6px; color:var(--text-faint); background:var(--bg); border:1px solid var(--border);}
+.bac-res-chip{font-size:.7rem; padding:2px 7px; border-radius:6px; color:var(--text-faint); background:var(--bg); border:1px solid var(--border);}
 
 
 .bac-exam-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px;}
 .bac-exam{padding:12px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); text-align:center;}
-.bac-exam-year{font-size:1.15rem; font-weight:800; margin-bottom:6px;}
+.bac-exam-year{font-size:1.2rem; font-weight:800; margin-bottom:6px;}
 .bac-exam-sessions{display:flex; flex-direction:column; gap:4px;}
-.bac-exam-sessions span{font-size:.72rem; padding:3px 6px; border-radius:6px; background:var(--bg); color:var(--text-faint);}
-.bac-exam-sessions a.on{font-size:.72rem; font-weight:700; padding:3px 6px; border-radius:6px; text-decoration:none; background:var(--mat-tint); color:var(--mat-color); border:1px solid var(--mat-line);}
+.bac-exam-sessions span{font-size:.7rem; padding:3px 6px; border-radius:6px; background:var(--bg); color:var(--text-faint);}
+.bac-exam-sessions a.on{font-size:.7rem; font-weight:700; padding:3px 6px; border-radius:6px; text-decoration:none; background:var(--mat-tint); color:var(--mat-color); border:1px solid var(--mat-line);}
 .bac-exam-sessions a.on:hover{background:var(--mat-color); color:#fff;}
 /* Grille des examens nationaux : une ligne par session, un lien par PDF. */
 .bac-exam-grid-docs{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
 .bac-exam-ses{display:flex; flex-direction:column; gap:3px;}
-.bac-exam-ses-label{font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
+.bac-exam-ses-label{font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
 .bac-exam-ses-links{display:flex; flex-wrap:wrap; gap:4px;}
 .bac-exam-ses-links a.on{flex:1 1 auto;}
 
 /* ---------- Examens nationaux ---------- */
 .bac-nat-serie{margin-bottom:20px;}
 .bac-nat-serie-title{display:flex; align-items:center; gap:8px; font-size:1rem; margin:4px 0 10px;}
-.bac-nat-fil{font-size:.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:var(--mat-color); color:#fff;}
-.bac-nat-note{font-size:.84rem; color:var(--text-dim); margin:0 0 10px;}
-.bac-nat-legend{font-size:.78rem; color:var(--text-faint); margin:4px 0 0;}
+.bac-nat-fil{font-size:.7rem; font-weight:800; padding:3px 8px; border-radius:999px; background:var(--mat-color); color:#fff;}
+.bac-nat-note{font-size:.85rem; color:var(--text-dim); margin:0 0 10px;}
+.bac-nat-legend{font-size:.8rem; color:var(--text-faint); margin:4px 0 0;}
 .bac-chap-hero .bac-nat-note{margin:10px 0 0;}
 .bac-nat-source{font-size:.8rem; color:var(--text-faint); margin:0 0 8px;}
 
 /* ---------- Page chapitre ---------- */
-.bac-side-back{display:block; font-weight:700; font-size:.92rem; text-decoration:none; padding:4px 4px 10px; border-bottom:1px solid var(--border); margin-bottom:6px;}
+.bac-side-back{display:block; font-weight:700; font-size:.9rem; text-decoration:none; padding:4px 4px 10px; border-bottom:1px solid var(--border); margin-bottom:6px;}
 .bac-side-back:hover{color:var(--accent);}
 .bac-side-chaps{list-style:none; margin:0; padding:0; max-height:calc(100vh - 200px); overflow:auto;}
-.bac-side-chaps a{display:flex; gap:8px; padding:7px 8px; border-radius:8px; font-size:.82rem; line-height:1.35; text-decoration:none; color:var(--text-dim) !important;}
+.bac-side-chaps a{display:flex; gap:8px; padding:7px 8px; border-radius:8px; font-size:.8rem; line-height:1.35; text-decoration:none; color:var(--text-dim) !important;}
 .bac-side-chaps a span{flex-shrink:0; width:20px; font-weight:700; color:var(--text-faint);}
 .bac-side-chaps a:hover{background:var(--bg); color:var(--text) !important;}
 .bac-side-chaps a.active{background:var(--mat-tint); color:var(--text) !important; font-weight:600;}
@@ -159,14 +157,31 @@
 
 .bac-chap-hero{padding:22px 24px; margin-bottom:16px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--mat-tint), var(--bg-card) 75%); border:1px solid var(--mat-line);}
 .bac-chap-hero .bac-eyebrow{color:var(--mat-color);}
-.bac-chap-hero h1{font-size:1.45rem; margin:0 0 6px;}
-.bac-chap-unite{font-size:.86rem; color:var(--text-dim);}
+.bac-chap-hero h1{font-size:1.5rem; margin:0 0 6px;}
+.bac-chap-unite{font-size:.85rem; color:var(--text-dim);}
 
-.bac-tab-input{position:absolute; opacity:0; pointer-events:none;}
+/* Radios ancrés en haut du bloc d onglets : cliquer un libellé donne le focus
+   au radio, et le navigateur défilait jusqu à lui, où qu il soit. */
+.bac-tabs{position:relative;}
+.bac-tab-input{position:absolute; top:0; left:0; opacity:0; pointer-events:none;}
+/* Onglets du chapitre : toujours tous visibles (largeurs égales — l'onglet
+   QCM sortait de l'écran sur téléphone) et collants sous le header, pour
+   passer du cours aux exercices sans remonter tout le chapitre. */
+.bac-tabs > .bac-tab-labels{
+  position:sticky; top:var(--header-h); z-index:6; display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
+  gap:6px; padding:8px 0; margin:0 0 12px; background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); transition:top .2s ease;
+}
+.bac-tabs > .bac-tab-labels .bac-tab-label{display:flex; align-items:center; justify-content:center; gap:6px; text-align:center; min-height:44px;}
 .bac-tab-labels{display:flex; gap:6px; margin-bottom:12px; overflow-x:auto;}
 .bac-tab-label{
-  padding:9px 16px; border-radius:10px; font-weight:600; font-size:.88rem; cursor:pointer; white-space:nowrap;
+  padding:9px 16px; border-radius:10px; font-weight:600; font-size:.9rem; cursor:pointer; white-space:nowrap;
   background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim);
+}
+@media (max-width:560px){
+  .bac-tabs > .bac-tab-labels{gap:4px;}
+  .bac-tabs > .bac-tab-labels .bac-tab-label{flex-direction:column; gap:1px; padding:6px 2px; font-size:.75rem; line-height:1.2;}
+  .bac-tabs > .bac-tab-labels .bac-tab-label > span{font-size:1.1rem;}
 }
 .bac-tab-label:hover{color:var(--text);}
 .bac-tab-panel{display:none;}
@@ -182,7 +197,7 @@
 
 .bac-empty{text-align:center; padding:48px 20px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px dashed var(--border);}
 .bac-empty-icon{font-size:2.4rem; margin-bottom:8px;}
-.bac-empty-title{font-weight:700; font-size:1.05rem; margin-bottom:6px;}
+.bac-empty-title{font-weight:700; font-size:1.1rem; margin-bottom:6px;}
 .bac-empty p{margin:0 auto; max-width:420px; color:var(--text-dim); font-size:.9rem;}
 
 .bac-pager{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px;}
@@ -193,11 +208,22 @@
 .bac-pager-btn:hover{border-color:var(--accent);}
 
 /* ---------- Contenu rédigé ---------- */
-.bac-dispo{font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--accent-dim); color:var(--accent); white-space:nowrap; align-self:center;}
-:root[data-theme="dark"] .bac-dispo{color:#6ee7b7;}
+.bac-dispo{font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); white-space:nowrap; align-self:center;}
 .bac-res-chip.on{color:var(--text-dim); border-color:var(--mat-line);}
 
-.bac-md{line-height:1.7;}
+/* Lecture longue : texte à ~16,5px (au lieu de 14px) et lignes limitées à
+   ~72 caractères ; tableaux, formules et blocs gardent toute la largeur. */
+.bac-md{line-height:1.7; font-size:1.1rem;}
+.bac-md > :is(p, ul, ol, blockquote, h2, h3, h4, details){max-width:72ch;}
+.bac-md table{font-size:.9rem;}
+.bac-md h2{font-size:1.5rem;}
+.bac-md h3{font-size:1.2rem;}
+.bac-md h4{font-size:1.1rem;}
+@media (max-width:560px){
+  .bac-md{font-size:1.05rem;}
+  .bac-md h2{font-size:1.3rem;}
+  .bac-md h3{font-size:1.1rem;}
+}
 .bac-md h2{color:var(--text);}
 .bac-md h3{color:var(--mat-color);}
 .bac-md strong{color:var(--text);}
@@ -234,7 +260,7 @@
 
 .bac-edit-fab{
   position:fixed; right:18px; bottom:18px; z-index:60; padding:11px 18px; border-radius:999px;
-  background:var(--bac-grad, #0e9f6e); color:#fff !important; font-weight:700; font-size:.88rem; text-decoration:none;
+  background:var(--bac-grad, #0e9f6e); color:#fff !important; font-weight:700; font-size:.9rem; text-decoration:none;
   box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
 .bac-edit-fab:hover{filter:brightness(1.08);}
@@ -251,7 +277,7 @@
   .bac-hero::after{display:none;}
   .bac-hero h1{font-size:1.3rem;}
   .bac-mat-hero{flex-direction:column; padding:20px 18px;}
-  .bac-mat-hero h1, .bac-chap-hero h1{font-size:1.25rem;}
+  .bac-mat-hero h1, .bac-chap-hero h1{font-size:1.3rem;}
   .bac-chap-row{padding:12px 14px;}
   .bac-soon{display:none;}
   .bac-md{padding:18px 16px;}

@@ -58,7 +58,7 @@ export default async function ConcoursPage() {
           }),
         ]}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false }) }} />
 
       <div className="bac-space site-space">
         <div className="bac-wrap">
