@@ -4,6 +4,7 @@
 //   --recadrer   : ne garde que la feuille blanche (supprime la table, le sol, les doigts autour).
 // Toujours partir de la photo d'origine : refiligraner un webp déjà marqué superpose deux filigranes.
 import sharp from "sharp";
+import { pathToFileURL } from "node:url";
 
 const TEXTE = "saadconcours.space";
 const LARGEUR_MAX = 1600;
@@ -89,25 +90,29 @@ export async function filigraner(source, destination, { rotation = 0, recadrer =
   const { data, info } = await sharp(redim.data)
     .extend({ bottom: Math.round(tag * 1.9) + 2 * tag, background: "#ffffff" })
     .toBuffer({ resolveWithObject: true });
-  await sharp(data)
-    .composite([{ input: filigraneSvg(info.width, info.height), top: 0, left: 0 }])
-    .webp({ quality: 80 })
-    .toFile(destination);
+  const marque = sharp(data).composite([{ input: filigraneSvg(info.width, info.height), top: 0, left: 0 }]);
+  // Les quelques anciens scans en .jpg gardent leur extension (chemins déjà référencés dans concours.json).
+  await (/\.jpe?g$/i.test(destination) ? marque.jpeg({ quality: 85 }) : marque.webp({ quality: 80 })).toFile(destination);
   return info;
 }
 
-const options = { rotation: 0, recadrer: false };
-const fichiers = [];
-for (const arg of process.argv.slice(2)) {
-  if (arg === "--recadrer") options.recadrer = true;
-  else if (arg.startsWith("--rotation=")) options.rotation = Number(arg.slice("--rotation=".length)) || 0;
-  else fichiers.push(arg);
+async function main() {
+  const options = { rotation: 0, recadrer: false };
+  const fichiers = [];
+  for (const arg of process.argv.slice(2)) {
+    if (arg === "--recadrer") options.recadrer = true;
+    else if (arg.startsWith("--rotation=")) options.rotation = Number(arg.slice("--rotation=".length)) || 0;
+    else fichiers.push(arg);
+  }
+  if (fichiers.length === 0 || fichiers.length % 2 !== 0) {
+    console.error("Usage : node scripts/filigrane-scans.mjs [--rotation=90] [--recadrer] <source> <destination.webp> [...]");
+    process.exit(1);
+  }
+  for (let i = 0; i < fichiers.length; i += 2) {
+    const info = await filigraner(fichiers[i], fichiers[i + 1], options);
+    console.log(`${fichiers[i + 1]} (${info.width}×${info.height})`);
+  }
 }
-if (fichiers.length === 0 || fichiers.length % 2 !== 0) {
-  console.error("Usage : node scripts/filigrane-scans.mjs [--rotation=90] [--recadrer] <source> <destination.webp> [...]");
-  process.exit(1);
-}
-for (let i = 0; i < fichiers.length; i += 2) {
-  const info = await filigraner(fichiers[i], fichiers[i + 1], options);
-  console.log(`${fichiers[i + 1]} (${info.width}×${info.height})`);
-}
+
+// Importé par nettoyer-scans.mjs : pas de ligne de commande dans ce cas.
+if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();

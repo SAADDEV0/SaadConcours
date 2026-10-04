@@ -218,6 +218,18 @@ Règles des champs :
   (précédent : AIF Aïn Chock 2026).
   Nom : `<id>_p1.webp`, `<id>_p2.webp`… dans `public/images/<ville>/<id>/`.
 - Ne garder que les pages du sujet (pas les logos, pubs, bannières du site source).
+- Scans repris d'un autre site (avec son accord), qui portent son filigrane : depuis le 2026-10-04,
+  `node scripts/nettoyer-scans.mjs public/images/<ville>/<id>/<id>_p1.webp […]` écrase le fichier
+  par une version nettoyée puis filigranée : fond égalisé en niveaux de gris, filigranes clairs ou
+  colorés effacés, ligne « www.fsjesmaster.com » repérée par comparaison au modèle
+  `scripts/nettoyer-scans.fsjesmaster.png` puis blanchie, recadrage, puis `filigraner()`.
+  Les images qui portent déjà l'étiquette saadconcours.space sont ignorées (pas de double filigrane).
+  Relire les zones effacées (le script les affiche) : une ligne du sujet effacée → `"bande": false`
+  dans `scripts/nettoyer-scans.exceptions.json` ; une marque floue ratée et vérifiée à l'œil →
+  `"seuilBande": 0.33`. Limites : un filigrane en diagonale aussi foncé que le texte reste visible
+  en gris clair (seuil 238 ; plus bas, le texte fin des QCM disparaît, précédent CCA Agadir 2019).
+  Passage de 2026-10-04 : 684 scans traités, environ 460 marques fsjesmaster effacées, et une
+  centaine encore visible (marque collée au texte, petite ou très floue).
 
 ### C1 — Ajouter N concours depuis internet
 1. **Inventaire** : charger `concours.json`, lister les `source` (URLs) et les couples
