@@ -9,6 +9,7 @@ import { pub, trackPdfDownload } from "./chrome";
 import { formatQCM } from "./concoursFormat";
 import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
+import { drawPdfVerse } from "./pdfVerse";
 import { convertMathSpansToPlainText } from "./latexPlainText";
 import { ensureConcoursPdfScripts } from "./pdfScripts";
 
@@ -80,6 +81,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   ) {
     y = topY;
   }
+  y = await drawPdfVerse(doc, branding, y);
 
   function ensureSpace(need) {
     if (y + need > bottomLimit) {

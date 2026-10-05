@@ -625,6 +625,22 @@ a.ax-cell-title:hover { color: var(--ax-accent-ink); }
 .ax-ps-heading-color { grid-column: 2 / -1; }
 .ax-ps-heading-color .ax-input { width: 150px; }
 
+/* Verset du Coran : « SC Amiri Quran » est la police chargée par pdfVerse.js
+   pour le PDF ; la liste la reprend dès que l'aperçu l'a chargée. */
+.ax-ps-verse-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.ax-ps-verse-themes button { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 6px 8px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text-faint); font: inherit; cursor: pointer; }
+.ax-ps-verse-themes button:hover { border-color: var(--ax-line); }
+.ax-ps-verse-themes button span { font-family: "SC Amiri Quran", "Amiri", "Traditional Arabic", "Noto Naskh Arabic", serif; font-size: 1.2rem; line-height: 1.5; color: var(--text-dim); }
+.ax-ps-verse-themes button small { font-size: 0.68rem; font-weight: 700; }
+.ax-ps-verse-themes button.on { border-color: var(--ax-accent); background: var(--ax-tint); color: var(--ax-accent-ink); }
+.ax-ps-verse-themes button.on span { color: var(--text); }
+.ax-ps-verses { display: flex; flex-direction: column; gap: 6px; }
+.ax-ps-verses button { display: flex; flex-direction: column; align-items: stretch; gap: 2px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; text-align: right; cursor: pointer; }
+.ax-ps-verses button:hover { border-color: var(--ax-line); }
+.ax-ps-verses button.on { border-color: var(--ax-accent); box-shadow: var(--ax-ring); }
+.ax-ps-verses .txt { font-family: "SC Amiri Quran", "Amiri Quran", "Amiri", "Traditional Arabic", "Noto Naskh Arabic", serif; font-size: 1.08rem; line-height: 2; }
+.ax-ps-verses .ref { font-family: "SC Amiri Quran", "Amiri", "Traditional Arabic", serif; font-size: 0.8rem; color: var(--ax-accent-ink); }
+
 .ax-ps-tpls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
 .ax-ps-tpl { position: relative; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); min-width: 0; }
 .ax-ps-tpl:hover { border-color: var(--ax-line); }

@@ -15,9 +15,13 @@ export const DOC_TYPES = [
 
 const QUIZ_PREVIEW_QUESTIONS = 12;
 
-export async function buildPreviewPdf({ type, source, full, values }) {
+export async function buildPreviewPdf({ type, source, full, values, verseId }) {
   const { contentBounds, firstFurniturePage, pdfFurnitureAnchors, resolvePdfBranding } = await import("@/app/_shared/pdfTheme");
+  const { verseById } = await import("@/app/_shared/quranVerses");
   const branding = await resolvePdfBranding(values);
+  // Le verset choisi dans le studio plutôt qu'un tirage à chaque rendu :
+  // sinon il changerait à chaque réglage touché.
+  if (verseId) branding.verse.pinned = verseById(verseId);
 
   let doc;
   if (type === "concours") {

@@ -8,6 +8,7 @@
 import { trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
+import { drawPdfVerse } from "./pdfVerse";
 import { convertMathSpansToPlainText } from "./latexPlainText";
 import { ensureEvaluationPdfScripts } from "./pdfScripts";
 
@@ -51,6 +52,7 @@ export async function buildEvaluationPdf({ quiz, questions, chapter = ALL_CHAPTE
   ) {
     y = topY;
   }
+  y = await drawPdfVerse(doc, branding, y);
 
   function ensureSpace(need) {
     if (y + need > bottomLimit) {

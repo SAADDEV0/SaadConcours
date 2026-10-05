@@ -24,6 +24,7 @@
 import { trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
+import { drawPdfVerse } from "./pdfVerse";
 import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
 import { ensureCoursPdfScripts } from "./pdfScripts";
 
@@ -243,6 +244,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
   ) {
     y = topY;
   }
+  y = await drawPdfVerse(doc, branding, y);
 
   function ensureSpace(need) {
     if (y + need > bottomLimit) {

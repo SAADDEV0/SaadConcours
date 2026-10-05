@@ -19,6 +19,7 @@ import {
   PDF_MARGIN_MM_RANGE,
   PDF_WATERMARK_OPACITY_RANGE,
 } from "./pdfTheme";
+import { PDF_VERSE_THEMES } from "./quranVerses";
 
 // Every key the studio edits, with the value a brand-new install has. Also
 // what "Réinitialiser" restores, so a reset lands on exactly the same state
@@ -87,6 +88,19 @@ export const DEFAULT_PDF_SETTINGS = {
 };
 
 export const PDF_TEMPLATE_KEYS = Object.keys(DEFAULT_PDF_SETTINGS);
+
+// The Quran verse opening each PDF (pdfVerse.js). Kept out of
+// DEFAULT_PDF_SETTINGS on purpose, like the logo: it's a choice about what
+// the PDFs say, not part of a look — applying a template or resetting the
+// styling must not switch it back on or change its themes.
+export const DEFAULT_PDF_VERSE_SETTINGS = {
+  pdfVerseEnabled: true,
+  pdfVerseThemes: PDF_VERSE_THEMES.map((t) => t.value),
+  pdfVerseSize: "normal",
+  pdfVerseBoxed: true,
+};
+
+export const PDF_VERSE_KEYS = Object.keys(DEFAULT_PDF_VERSE_SETTINGS);
 
 function template(id, name, blurb, values) {
   return { id, name, blurb, builtIn: true, values: { ...DEFAULT_PDF_SETTINGS, ...values } };

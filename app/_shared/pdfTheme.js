@@ -13,6 +13,8 @@
 // Was app/_shared/pdfWatermark.js — renamed once it stopped being about
 // watermarks and became the whole PDF theme layer.
 
+import { PDF_VERSE_THEMES } from "./quranVerses";
+
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_HOST = "saadconcours.space";
 
@@ -122,6 +124,11 @@ export const PDF_COVER_RULE_WIDTH_RANGE = { min: 10, max: 150, default: 40 };
 // wants an unmistakable one.
 export const PDF_WATERMARK_OPACITY_RANGE = { min: 0.04, max: 0.6, step: 0.01, default: 0.08 };
 export const PDF_COVER_TEXT_SCALE_RANGE = { min: 0.8, max: 1.5, step: 0.05, default: 1 };
+
+// Point size of the Quran verse opening each PDF (pdfVerse.js) — Arabic with
+// full tashkeel reads small next to Latin text at the same size, hence
+// bigger values than the body text presets.
+export const PDF_VERSE_SIZE_PRESETS = { small: 13, normal: 15, large: 17.5 };
 
 // Base body-text point size — everything else (headings, table cells) scales
 // proportionally to whichever of these the admin picks.
@@ -512,6 +519,22 @@ export async function resolvePdfBranding(settings = {}) {
     // default, but restorable for anyone who liked it that way.
     cleanPage: settings.pdfCoverCleanPage !== false,
     positions: coverPositions,
+  };
+
+  // Quran verse at the top of the first content page (pdfVerse.js). On
+  // unless the studio switched it off, so it shows up without a settings
+  // save; unknown themes are ignored, and an empty list means every theme
+  // rather than silently no verse at all. `pinned` is only ever set by the
+  // studio's preview, to show a chosen verse instead of a random one.
+  const verseThemes = Array.isArray(settings.pdfVerseThemes)
+    ? settings.pdfVerseThemes.filter((t) => PDF_VERSE_THEMES.some((o) => o.value === t))
+    : [];
+  branding.verse = {
+    enabled: settings.pdfVerseEnabled !== false,
+    themes: verseThemes.length ? verseThemes : PDF_VERSE_THEMES.map((t) => t.value),
+    size: PDF_VERSE_SIZE_PRESETS[settings.pdfVerseSize] || PDF_VERSE_SIZE_PRESETS.normal,
+    boxed: settings.pdfVerseBoxed !== false,
+    pinned: null,
   };
 
   // Per-level (H1/H2/H3) overrides — unset fields fall back to the

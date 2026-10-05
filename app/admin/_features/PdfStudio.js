@@ -12,7 +12,9 @@ import { dateFr } from "../_lib/format";
 import {
   BUILT_IN_PDF_TEMPLATES,
   DEFAULT_PDF_SETTINGS,
+  DEFAULT_PDF_VERSE_SETTINGS,
   PDF_TEMPLATE_KEYS,
+  PDF_VERSE_KEYS,
   normalizeCustomTemplates,
   pickTemplateValues,
   templateMatches,
@@ -42,6 +44,7 @@ import {
   PDF_WATERMARK_OPACITY_RANGE,
   PDF_WATERMARK_STYLE_OPTIONS,
 } from "@/app/_shared/pdfTheme";
+import { PDF_VERSE_THEMES, pickVerse, verseReference, versesForThemes } from "@/app/_shared/quranVerses";
 import PdfViewer, { HandleLayer } from "./pdf/PdfViewer";
 import {
   ACCENT_PRESETS,
@@ -72,7 +75,8 @@ import { SAMPLE_CONCOURS, SAMPLE_COURS, SAMPLE_QUIZ } from "./pdf/samples";
 //  - les trois PDF du site se prévisualisent (cours, concours, évaluation) ;
 //  - les réglages sont rangés par onglets, avec un point sur ceux modifiés.
 
-const OWNED = [...PDF_TEMPLATE_KEYS, "pdfLogoDataUrl", "pdfTemplates"];
+const OWNED = [...PDF_TEMPLATE_KEYS, ...PDF_VERSE_KEYS, "pdfLogoDataUrl", "pdfTemplates"];
+const STUDIO_DEFAULTS = { ...DEFAULT_PDF_SETTINGS, ...DEFAULT_PDF_VERSE_SETTINGS };
 const COVER_KEYS = PDF_TEMPLATE_KEYS.filter((k) => k.startsWith("pdfCover") && k !== "pdfCoverLayout");
 
 const TABS = [
@@ -95,6 +99,7 @@ const TABS = [
     keys: ["pdfWatermarkEnabled", "pdfWatermarkText", "pdfWatermarkOpacity", "pdfWatermarkStyle", "pdfWatermarkRotation"],
   },
   { key: "couverture", label: "Couverture", icon: "book", title: "Page de garde", keys: COVER_KEYS },
+  { key: "verset", label: "Verset", icon: "moon", title: "Verset du Coran", keys: PDF_VERSE_KEYS },
   { key: "positions", label: "Positions", icon: "move", title: "Positions", keys: ["pdfLayout", "pdfCoverLayout"] },
 ];
 
@@ -257,6 +262,9 @@ export default function PdfStudio() {
   const [viewerDown, setViewerDown] = useState(false);
   const [frameUrl, setFrameUrl] = useState(null);
   const [logoBusy, setLogoBusy] = useState(false);
+  // Verset montré dans l'aperçu : fixé ici (au lieu d'un tirage à chaque
+  // rendu) pour qu'il ne change pas à chaque réglage touché.
+  const [verseId, setVerseId] = useState(null);
   const lastKey = useRef({ key: null, at: 0 });
   const formRef = useRef(null);
   const importRef = useRef(null);
@@ -289,9 +297,15 @@ export default function PdfStudio() {
   // place du document choisi.
   const sourcePending = sourceId !== "exemple" && !list.length && listLoading;
 
+  const verseThemes = Array.isArray(form?.pdfVerseThemes) && form.pdfVerseThemes.length ? form.pdfVerseThemes : DEFAULT_PDF_VERSE_SETTINGS.pdfVerseThemes;
+  const versePool = useMemo(() => versesForThemes(verseThemes), [verseThemes]);
+  useEffect(() => {
+    if (versePool.length && !versePool.some((v) => v.id === verseId)) setVerseId(pickVerse(verseThemes)?.id ?? null);
+  }, [versePool, verseId, verseThemes]);
+
   // ---- Formulaire ----
   const pick = useCallback((src) => {
-    const f = Object.fromEntries(OWNED.map((k) => [k, src?.[k] ?? (k in DEFAULT_PDF_SETTINGS ? DEFAULT_PDF_SETTINGS[k] : null)]));
+    const f = Object.fromEntries(OWNED.map((k) => [k, src?.[k] ?? (k in STUDIO_DEFAULTS ? STUDIO_DEFAULTS[k] : null)]));
     // Réglages enregistrés avant le curseur de marges : l'ancien préréglage
     // reste la valeur de départ, sinon l'aperçu ne montrerait pas le site.
     if (!Number.isFinite(src?.pdfMarginMm) && PDF_MARGIN_PRESETS[src?.pdfMargins]) f.pdfMarginMm = PDF_MARGIN_PRESETS[src.pdfMargins];
@@ -371,7 +385,7 @@ export default function PdfStudio() {
   // Une génération à la fois : un réglage modifié pendant un rendu relance
   // un rendu à la fin de celui-ci, avec les valeurs les plus récentes.
   const latest = useRef(null);
-  latest.current = form ? { type, source, full, values: { ...settings, ...form } } : null;
+  latest.current = form ? { type, source, full, values: { ...settings, ...form }, verseId } : null;
   const busy = useRef(false);
   const again = useRef(false);
   const runBuild = useCallback(async () => {
@@ -402,7 +416,7 @@ export default function PdfStudio() {
       setRendering(false);
     }
   }, []);
-  const renderInput = form && !sourcePending ? `${JSON.stringify(form)}|${type}|${source.id}|${full}` : "";
+  const renderInput = form && !sourcePending ? `${JSON.stringify(form)}|${type}|${source.id}|${full}|${verseId}` : "";
   const renderKey = useDebounced(renderInput, 400);
   useEffect(() => {
     if (renderKey) runBuild();
@@ -470,7 +484,7 @@ export default function PdfStudio() {
     }
   }
   async function resetLook() {
-    if (await confirm({ title: "Revenir à l'apparence d'origine ?", body: "Le logo et tes modèles sont conservés. Rien n'est publié avant « Enregistrer ».", confirmLabel: "Réinitialiser" })) {
+    if (await confirm({ title: "Revenir à l'apparence d'origine ?", body: "Le logo, le verset et tes modèles sont conservés. Rien n'est publié avant « Enregistrer ».", confirmLabel: "Réinitialiser" })) {
       applyValues({ ...DEFAULT_PDF_SETTINGS });
     }
   }
@@ -802,6 +816,72 @@ export default function PdfStudio() {
             )}
           </Panel>
         );
+
+      case "verset": {
+        const toggleTheme = (value) => {
+          const next = verseThemes.includes(value) ? verseThemes.filter((t) => t !== value) : [...verseThemes, value];
+          if (next.length) set("pdfVerseThemes", PDF_VERSE_THEMES.map((t) => t.value).filter((t) => next.includes(t)));
+        };
+        const verseOn = f.pdfVerseEnabled !== false;
+        return (
+          <Panel title="Verset du Coran" lead="Un verset en arabe en tête de chaque PDF téléchargé, avec le nom de la sourate et le numéro du verset. Un seul par PDF, tiré au hasard à chaque téléchargement.">
+            <SwitchRow label="Verset en tête des PDF" hint="En haut de la première page de contenu, après la page de garde si elle est active." checked={verseOn} onChange={(v) => set("pdfVerseEnabled", v)} />
+            {verseOn && (
+              <>
+                <Group title="Thèmes">
+                  <div className="ax-ps-verse-themes" role="group" aria-label="Thèmes des versets">
+                    {PDF_VERSE_THEMES.map((t) => {
+                      const on = verseThemes.includes(t.value);
+                      const last = on && verseThemes.length === 1;
+                      return (
+                        <button key={t.value} type="button" className={on ? "on" : ""} aria-pressed={on} onClick={() => toggleTheme(t.value)} title={last ? "Il faut garder au moins un thème" : undefined}>
+                          <span lang="ar" dir="rtl">
+                            {t.ar}
+                          </span>
+                          <small>
+                            {t.label} · {versesForThemes([t.value]).length}
+                          </small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <span className="ax-hint">Tirage au hasard parmi les {versePool.length} versets des thèmes choisis.</span>
+                </Group>
+                <Group title="Apparence">
+                  <Row label="Taille">
+                    <Seg value={f.pdfVerseSize || "normal"} onChange={(v) => set("pdfVerseSize", v)} options={PDF_FONT_SIZE_OPTIONS} ariaLabel="Taille du verset" />
+                  </Row>
+                  <SwitchRow label="Encadré teinté" hint="Sinon, un simple trait d'accent sous le verset." checked={f.pdfVerseBoxed !== false} onChange={(v) => set("pdfVerseBoxed", v)} />
+                </Group>
+                <Group
+                  title="Versets"
+                  aside={
+                    <button type="button" className="ax-btn ghost xs" onClick={() => setVerseId(pickVerse(verseThemes, { exceptId: verseId })?.id ?? null)}>
+                      <Icon name="refresh" size="sm" /> Au hasard
+                    </button>
+                  }
+                >
+                  <p className="ax-hint" style={{ marginTop: 0 }}>
+                    Clique sur un verset pour le voir dans l&apos;aperçu. Sur le site, il change à chaque téléchargement.
+                  </p>
+                  <div className="ax-ps-verses">
+                    {versePool.map((v) => (
+                      <button key={v.id} type="button" className={v.id === verseId ? "on" : ""} aria-pressed={v.id === verseId} onClick={() => setVerseId(v.id)}>
+                        <span className="txt" lang="ar" dir="rtl">
+                          {v.text}
+                        </span>
+                        <span className="ref" lang="ar" dir="rtl">
+                          {verseReference(v)}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </Group>
+              </>
+            )}
+          </Panel>
+        );
+      }
 
       case "positions":
         return (

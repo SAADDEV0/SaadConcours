@@ -140,6 +140,7 @@ Refaite en septembre 2026, au design du site public. Écrans : tableau de bord, 
 - Supprimer met l'élément dans une corbeille (KV) restaurable depuis Activité › Corbeille.
 - L'indicateur « Mise en ligne » de la barre du haut suit le workflow `deploy-cloudflare.yml` : une modification est visible sur le site à la fin du déploiement (3 à 5 min).
 - Toute route `/api/admin/*` exige une session (middleware), sauf login/logout.
+- **Studio PDF › Verset** : chaque PDF téléchargé (cours, concours, évaluation) s'ouvre sur un verset du Coran tiré au hasard parmi les thèmes cochés (patience, savoir, tristesse, joie, vie d'ici-bas), en arabe seul, avec la sourate et le numéro du verset. Actif par défaut. Le texte vient de l'édition Tanzil, jamais retapé (`app/_shared/quranVerses.js`) ; le navigateur le compose en Amiri Quran et l'insère en image dans le PDF, car jsPDF ne sait pas dessiner l'arabe (`app/_shared/pdfVerse.js`).
 
 ## Bannières partenaires (Monétisation)
 
