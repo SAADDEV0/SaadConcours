@@ -259,6 +259,17 @@ Règles des champs :
   Ne jamais élargir le masque au-delà de 3 px : sur une ligne du sujet, il emporte les mots.
   Marque noire dans un blanc : rectangle serré, rempli de la couleur du papier. Diagonale grise
   restante : `"seuil": 200` dans les exceptions.
+- Filigrane en lettres **blanches opaques** posé sur le texte (« Prof … », « whatsapp : 06… ») et logo
+  dans un cadre blanc (« L'Agrégé ») : le texte dessous est perdu. `node scripts/recomposer-scan.mjs
+  <photo> <scratchpad>/<id>_pN.webp scripts/recomposer-scan/<id>_pN.json` efface les lettres (seuil
+  relatif au papier mesuré au-dessus et au-dessous, **jamais** `papier + 10` seul : le fond d'un tableau,
+  plus clair que la page, part avec), vide les cellules et lignes touchées, redessine les traits de
+  tableau, puis **recompose le texte caché en Times New Roman** (police des sujets FSJES) : ligne de base,
+  longueur et inclinaison mesurées sur la photo (`largeur`, `angle`). Ne recomposer qu'un texte lisible en
+  partie ou certain (titre, consigne) ; sinon `[illisible sur le scan]` dans l'énoncé. Logo sur un
+  encadré tramé : `trame` (répète un morceau de fond sans texte), pas un aplat. Ensuite
+  `nettoyer-scans.mjs --source=<scratchpad>`. Précédent : CCA FSJES Fès 2024 (titre du tableau A,
+  « Soldes Débiteurs », lignes 1 du T.A.F).
 
 ### C1 — Ajouter N concours depuis internet
 1. **Inventaire** : charger `concours.json`, lister les `source` (URLs) et les couples
