@@ -249,6 +249,17 @@ Règles des champs :
   partir de sa partie intacte ; blanchir les cellules vides où le lecteur a écrit (précédent : AIFF
   Kénitra 2025).
 
+- Filigranes que `nettoyer-scans.mjs` ne voit pas (précédent : 23 concours de Fès, 2026-10-05) :
+  « masterfsjes.blogspot.com » **rose** avec un liseré sombre, « www.fsjesmaster.com » en lettres
+  **blanches** au milieu de la page, ou en noir gras posé dans un blanc du sujet. Les effacer sur la
+  photo d'origine **avant** `nettoyer-scans.mjs --source=…` : pixels roses (r > 120, r − g > 45) ou
+  lettres plus claires que le papier, plus leur liseré à 3 px, remplacés par la couleur du papier
+  voisin (70e centile, jamais du blanc pur : la photo est grise et un aplat blanc laisse un cadre).
+  Seuil du liseré **relatif au papier** (0,72 × papier) : un seuil fixe rate les photos sombres.
+  Ne jamais élargir le masque au-delà de 3 px : sur une ligne du sujet, il emporte les mots.
+  Marque noire dans un blanc : rectangle serré, rempli de la couleur du papier. Diagonale grise
+  restante : `"seuil": 200` dans les exceptions.
+
 ### C1 — Ajouter N concours depuis internet
 1. **Inventaire** : charger `concours.json`, lister les `source` (URLs) et les couples
    (établissement, master, année) déjà présents.
