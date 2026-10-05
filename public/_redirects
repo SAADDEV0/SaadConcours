@@ -8,6 +8,8 @@
 # pas le Worker »).
 #
 # Format : <chemin> <destination> 301 — une règle par ligne, chemins exacts.
+# Une nouvelle règle exacte s'ajoute AU-DESSUS de la section « Règles à motif »
+# (fin du fichier) : voir l'explication en tête de cette section.
 # À maintenir à la main (BANQUE_PROMPTS.md, recette C6).
 
 # Concours supprimés comme doublons (même épreuve publiée deux fois), le
@@ -40,3 +42,23 @@
 /cours/stats_cours/les-fondements-du-calcul-des-probabilites /cours/probas_cours/les-fondements-du-calcul-des-probabilites 301
 /cours/stats_cours/variables-aleatoires-et-lois-usuelles /cours/probas_cours/variables-aleatoires-et-lois-usuelles 301
 /cours/stats_cours/echantillonnage-et-estimation /cours/probas_cours/echantillonnage-et-estimation 301
+
+# ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
+# « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
+# font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et
+# wrangler compte comme dynamique toute règle placée APRÈS la première règle à
+# motif — une règle exacte ajoutée sous cette section consommerait ce quota.
+
+# Les fiches /news/<id> ont disparu avec la section (voir /news plus haut), mais
+# Googlebot les redemandait encore en octobre 2026 : des 404 servies par le
+# Worker, une invocation chacune.
+/news/* /concours 301
+
+# Les pages d'examen national (/bac/2bac/<matière>/examens/<id>) ont été retirées
+# le 2026-09-24 (pages minces autour d'un seul PDF) : les sujets sont désormais
+# listés, en liens directs vers les PDF, sur la page de la matière. Googlebot les
+# redemandait encore — 139 réponses 404 dans Search Console (octobre 2026).
+# À RETIRER si des pages d'examen reviennent un jour sous ce chemin : la règle
+# passerait avant elles.
+/bac/2bac/:matiere/examens/* /bac/2bac/:matiere 301
+/bac/2bac/:matiere/examens /bac/2bac/:matiere 301

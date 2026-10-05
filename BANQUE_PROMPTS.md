@@ -130,6 +130,12 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   `blogListItem`) ; le texte intégral se charge à la demande depuis `/data/*.json`.
 - Une redirection publique va dans `public/_redirects` (301 servi avant le Worker), jamais dans un
   `redirect()` Next. Le sitemap est publié en fichier statique par `scripts/prerender-to-assets.mjs`.
+  Une règle exacte s'ajoute **au-dessus** de la section « Règles à motif » (fin du fichier) : wrangler
+  compte comme dynamique (100 au plus) toute règle placée après la première règle à `*` ou `:nom`.
+  Cloudflare n'accepte que 301/302/303/307/308 (pas de 410) : une URL retirée dont le contenu vit
+  ailleurs se redirige vers cette page, plutôt que de laisser le Worker servir des 404.
+- Toute route d'image (`opengraph-image`, icône) porte `dynamic = "force-static"` (+ `generateStaticParams`
+  sous un `[id]`), comme les pages : rendue à la demande, elle dépasse les 10 ms de CPU du Worker (5XX).
 - Pages de confiance : `/a-propos` (éditeur : Saad), `/contact`, `/confidentialite`,
   `/mentions-legales`, toutes liées depuis le pied de page. Les tenir exactes quand le site change.
 
