@@ -8,8 +8,8 @@ import { BarList, Delta, ErrorState, Hero, LineChart, Seg, SectionTitle, Skeleto
 import { api, downloadText } from "../_lib/api";
 import { useJson } from "../_lib/content";
 import { COLLECTIONS } from "../_lib/collections";
-import { adminHrefForPath, labelForPath, labelForPdfItem } from "../_lib/labels";
-import { dateFr, dateTimeFr, num, timeAgo } from "../_lib/format";
+import { adminHrefForPath, describePath, describePdf, labelForPath, labelForPdfItem } from "../_lib/labels";
+import { dateFr, dateTimeFr, matchQuery, num, timeAgo } from "../_lib/format";
 import { useLocalStorage } from "../_lib/hooks";
 
 const TABS = [
@@ -179,42 +179,123 @@ export default function Statistics() {
           )}
         </section>
       )}
-      {data && tab === "journal" && (
-        <div className="ax-grid c2">
-          <section className="ax-card">
-            <SectionTitle>Dernières visites</SectionTitle>
-            <ul className="ax-list">
-              {(data.recentVisits || []).map((v, i) => (
-                <li key={i}>
-                  <span className="ax-list-main">
-                    <span className="ax-list-title">{labelForPath(v.path, content)}</span>
-                    <span className="ax-list-meta">
-                      {v.city}
-                      {v.country ? ` (${v.country})` : ""} · {dateTimeFr(v.at)}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section className="ax-card">
-            <SectionTitle>Derniers PDF</SectionTitle>
-            <ul className="ax-list">
-              {(data.recentPdf || []).map((v, i) => (
-                <li key={i}>
-                  <span className="ax-list-main">
-                    <span className="ax-list-title">{labelForPdfItem(`${v.kind}:${v.id}`, content)}</span>
-                    <span className="ax-list-meta">
-                      {v.city} · {dateTimeFr(v.at)}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-      )}
+      {data && tab === "journal" && <JournalTab visits={data.recentVisits || []} pdfs={data.recentPdf || []} content={content} />}
     </>
+  );
+}
+
+const KIND_ICONS = { concours: "graduation", cours: "book", quiz: "quiz", blog: "news", bac: "notebook", page: "file" };
+
+function dayLabel(d) {
+  const today = new Date();
+  const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+  if (d.toDateString() === today.toDateString()) return "Aujourd'hui";
+  if (d.toDateString() === yesterday.toDateString()) return "Hier";
+  return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+}
+
+// Journal : visites et téléchargements PDF mêlés dans une seule chronologie,
+// groupée par jour. Pour un concours, le titre est le master (CCA, GRH…) et
+// les pastilles donnent l'établissement, la ville et l'année du sujet.
+function JournalTab({ visits, pdfs, content }) {
+  const [filter, setFilter] = useState("all");
+  const [q, setQ] = useState("");
+
+  const rows = useMemo(() => {
+    const all = [
+      ...visits.map((v) => ({ type: "visit", at: v.at, city: v.city, country: v.country, ...describePath(v.path, content) })),
+      ...pdfs.map((v) => ({ type: "pdf", at: v.at, city: v.city, country: v.country, ...describePdf(v.kind, v.id, content) })),
+    ];
+    return all.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+  }, [visits, pdfs, content]);
+
+  const list = rows.filter((r) => (filter === "all" || r.type === filter) && matchQuery([r.title, ...r.tags, r.city].join(" "), q));
+
+  const groups = [];
+  for (const r of list) {
+    const d = new Date(r.at);
+    const key = Number.isNaN(d.getTime()) ? "?" : d.toDateString();
+    if (groups.at(-1)?.key !== key) groups.push({ key, label: key === "?" ? "Date inconnue" : dayLabel(d), rows: [] });
+    groups.at(-1).rows.push(r);
+  }
+
+  return (
+    <section className="ax-card">
+      <SectionTitle aside={`${num(visits.length)} dernières visites · ${num(pdfs.length)} derniers PDF`}>Journal en direct</SectionTitle>
+      <div className="ax-toolbar">
+        <Seg
+          ariaLabel="Type d'évènement"
+          value={filter}
+          onChange={setFilter}
+          options={[
+            { value: "all", label: `Tout (${rows.length})` },
+            { value: "visit", label: `Visites (${visits.length})` },
+            { value: "pdf", label: `PDF (${pdfs.length})` },
+          ]}
+        />
+        <div className="ax-search">
+          <Icon name="search" size="sm" />
+          <input className="ax-input" placeholder="Filtrer : master, établissement, ville…" value={q} onChange={(e) => setQ(e.target.value)} />
+        </div>
+      </div>
+      {!list.length && <p className="ax-muted">{q ? "Aucune ligne ne correspond." : "Rien d'enregistré pour l'instant."}</p>}
+      {groups.map((g) => (
+        <div key={g.key} className="ax-jr-day">
+          <h3 className="ax-jr-day-title">
+            {g.label}
+            <span>{num(g.rows.length)}</span>
+          </h3>
+          <ol className="ax-jr">
+            {g.rows.map((r, i) => (
+              <li key={i} className={`ax-jr-row ${r.type}`}>
+                <time className="ax-jr-time" dateTime={r.at} title={dateTimeFr(r.at)}>
+                  {new Date(r.at).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                </time>
+                <span className="ax-jr-ic" aria-hidden="true">
+                  <Icon name={KIND_ICONS[r.kind] || "file"} size="sm" />
+                </span>
+                <div className="ax-jr-main">
+                  {r.href ? (
+                    <a className="ax-jr-title" href={`https://www.saadconcours.space${r.href}`} target="_blank" rel="noopener noreferrer">
+                      {r.title}
+                    </a>
+                  ) : (
+                    <span className="ax-jr-title">{r.title}</span>
+                  )}
+                  {r.tags.length > 0 && (
+                    <div className="ax-jr-tags">
+                      {r.tags.map((t) => (
+                        <span key={t} className="ax-jr-tag">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="ax-jr-side">
+                  <span className={`ax-pill ${r.type === "pdf" ? "violet" : "accent"}`}>
+                    <Icon name={r.type === "pdf" ? "download" : "eye"} size="sm" />
+                    {r.type === "pdf" ? "PDF" : "Visite"}
+                  </span>
+                  <span className="ax-jr-city">
+                    <Icon name="globe" size="sm" />
+                    {r.city || "Ville inconnue"}
+                    {r.country && r.country !== "MA" ? ` (${r.country})` : ""}
+                  </span>
+                </div>
+                {r.edit ? (
+                  <Link className="ax-btn ghost icon sm ax-jr-edit" href={r.edit} aria-label="Modifier">
+                    <Icon name="edit" size="sm" />
+                  </Link>
+                ) : (
+                  <span className="ax-jr-edit" />
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </section>
   );
 }
 
