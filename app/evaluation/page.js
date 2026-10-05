@@ -4,8 +4,6 @@ import { evalCardHtml } from "../_shared/evalCard";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import EvaluationExplorer from "./EvaluationExplorer";
-import HeroArt from "../_shared/HeroArt";
-import { Icon } from "../_shared/icons";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
 // request. lib/github.js reads the data JSON with `cache: "no-store"` (
@@ -48,13 +46,11 @@ export default async function EvaluationPage() {
           }),
         ]}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval" }) }} />
 
-      <div className="bac-space site-space">
+      <div className="bac-space">
         <div className="bac-wrap">
           <section className="bac-hero">
-            <HeroArt icon="clipboard" />
-            <div className="bac-eyebrow">Entraînement · Concours blancs</div>
             <h1>Évaluation par module</h1>
             <p>
               Des concours blancs sous forme de QCM, module par module, pour t'auto-évaluer en conditions de concours
@@ -75,31 +71,23 @@ export default async function EvaluationPage() {
 
           <section className="bac-group">
             <h2 className="bac-section-title">Concours blancs par module</h2>
-            <div className="sp-card-grid" id="evalModuleGrid" dangerouslySetInnerHTML={{ __html: quiz.map(evalCardHtml).join("") }} />
+            <div className="sp-rows" id="evalModuleGrid" dangerouslySetInnerHTML={{ __html: quiz.map(evalCardHtml).join("") }} />
           </section>
 
           <section className="bac-group">
             <h2 className="bac-section-title">S'entraîner chapitre par chapitre</h2>
             <div className="bac-mat-grid">
-              <a className="bac-mat-card" href="/cours" style={{ "--mat-h": 220 }}>
-                <span className="bac-mat-icon">
-                  <Icon name="grad" size={23} />
-                </span>
+              <a className="bac-mat-card" href="/cours">
                 <span className="bac-mat-body">
                   <span className="bac-mat-name">QCM des cours de Licence FSJES</span>
                   <span className="bac-mat-desc">Un QCM corrigé à la fin de chaque chapitre, du S1 au S6 : comptabilité, finance, économie, gestion, droit.</span>
                 </span>
-                <span className="bac-mat-arrow" aria-hidden="true">→</span>
               </a>
-              <a className="bac-mat-card" href="/bac/2bac" style={{ "--mat-h": 152 }}>
-                <span className="bac-mat-icon">
-                  <Icon name="book" size={23} />
-                </span>
+              <a className="bac-mat-card" href="/bac/2bac">
                 <span className="bac-mat-body">
                   <span className="bac-mat-name">QCM du Bac Sciences Économiques & Gestion</span>
                   <span className="bac-mat-desc">Chaque chapitre du 2ᵉ Bac a son QCM corrigé, pour vérifier que la leçon est acquise.</span>
                 </span>
-                <span className="bac-mat-arrow" aria-hidden="true">→</span>
               </a>
             </div>
           </section>

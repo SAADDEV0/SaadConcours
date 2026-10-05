@@ -12,7 +12,7 @@ export function boutiqueCardHtml(p) {
   const cover = produitImage(p.couverture);
   const achetable = isProduitAchetable(p);
   return `
-  <a class="shop-card" href="/boutique/${encodeURIComponent(p.id)}" data-id="${escapeHtml(p.id)}" data-niveau="${escapeHtml(p.niveau || "")}" style="--mat-h:${niv?.hue ?? 230}">
+  <a class="shop-card" href="/boutique/${encodeURIComponent(p.id)}" data-id="${escapeHtml(p.id)}" data-niveau="${escapeHtml(p.niveau || "")}">
     <span class="shop-cover">
       ${cover ? `<img src="${escapeHtml(cover)}" alt="Couverture : ${escapeHtml(p.titre)}" loading="lazy" decoding="async">` : `<span class="shop-cover-ph" aria-hidden="true">${iconHtml(niv?.icon || "book", { size: 64, strokeWidth: 1.4 })}</span>`}
       ${p.badge ? `<span class="shop-badge">${escapeHtml(p.badge)}</span>` : ""}

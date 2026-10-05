@@ -165,9 +165,9 @@ export default async function CoursChapitrePage(props) {
         ]}
       />
       <BacChapitreClient />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours" }) }} />
 
-      <div className="bac-space site-space" style={{ "--mat-h": cat?.hue ?? 220 }}>
+      <div className="bac-space">
         <div className="bac-wrap">
           <nav className="cd-breadcrumb">
             <a href="/">Accueil</a> <span>/</span> <a href="/cours">Cours FSJES</a> <span>/</span> <a href={`/cours/${c.id}`}>{c.module}</a> <span>/</span>{" "}

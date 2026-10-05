@@ -5,7 +5,6 @@ import JsonLd from "../_shared/JsonLd";
 import ConcoursNiveauSwitch from "../_shared/ConcoursNiveauSwitch";
 import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
 import ConcoursListing from "./ConcoursListing";
-import HeroArt from "../_shared/HeroArt";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
 // request. lib/github.js reads the data JSON with `cache: "no-store"` (
@@ -59,25 +58,14 @@ export default async function ConcoursPage() {
           }),
         ]}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours" }) }} />
 
-      <div className="bac-space site-space">
+      <div className="bac-space">
         <div className="bac-wrap">
           <ConcoursNiveauSwitch active="master" counts={{ master: concours.length, [LICENCE_EXCELLENCE]: nbLicence }} />
 
           <section className="bac-hero">
-            <HeroArt icon="library" />
-            <div className="bac-eyebrow">Master · Concours d'accès</div>
             <h1>Concours d'accès aux Masters — sujets réels</h1>
-            {/* Seule page de liste sans texte sous son H1 à l'origine : ce
-               paragraphe porte la requête principale du site (« concours
-               master maroc »). */}
-            <p>
-              {concours.length} sujets de concours d'accès aux Masters économie-gestion réellement tombés dans les
-              universités marocaines (FSJES, ENCG, facultés privées), classés par ville, établissement, filière et
-              année. Chaque fiche donne l'énoncé complet, les scans du sujet original quand ils existent, un corrigé
-              indicatif lorsqu'il est disponible, et un export PDF gratuit — sans inscription.
-            </p>
             <div className="bac-hero-stats">
               <span className="bac-stat">
                 <strong>{concours.length}</strong> sujets
@@ -97,11 +85,24 @@ export default async function ConcoursPage() {
           <ConcoursListing
             concours={concours}
             sideLinks={[
-              { href: "/concours/licence-excellence", label: "Concours Licence d'excellence", icon: "⭐" },
-              { href: "/evaluation", label: "QCM d'entraînement", icon: "📝" },
-              { href: "/cours", label: "Cours Licence FSJES", icon: "📖" },
+              { href: "/concours/licence-excellence", label: "Concours Licence d'excellence" },
+              { href: "/evaluation", label: "QCM d'entraînement" },
+              { href: "/cours", label: "Cours Licence FSJES" },
             ]}
           />
+
+          {/* Texte de la page (requête principale du site, « concours master
+             maroc ») : sous la liste, qu'un élève voit en premier, mais
+             toujours dans le HTML servi. */}
+          <section className="sp-about">
+            <h2>Des sujets réellement tombés, classés et corrigés</h2>
+            <p>
+              {concours.length} sujets de concours d'accès aux Masters économie-gestion réellement tombés dans les
+              universités marocaines (FSJES, ENCG, facultés privées), classés par ville, établissement, filière et
+              année. Chaque fiche donne l'énoncé complet, les scans du sujet original quand ils existent, un corrigé
+              indicatif lorsqu'il est disponible, et un export PDF gratuit, sans inscription.
+            </p>
+          </section>
         </div>
       </div>
 

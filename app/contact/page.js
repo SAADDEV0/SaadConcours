@@ -26,7 +26,7 @@ function mailto(subject) {
 export default function ContactPage() {
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "" }) }} />
       <ChromeInit />
 
       <div className="cd-view" style={{ maxWidth: 720 }}>

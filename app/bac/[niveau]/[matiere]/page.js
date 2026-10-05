@@ -89,9 +89,9 @@ export default async function BacMatierePage(props) {
         ]}
       />
       <ChromeInit />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac" }) }} />
 
-      <div className="bac-space" style={{ "--mat-h": m.hue }}>
+      <div className="bac-space">
         <div className="bac-wrap">
           <nav className="cd-breadcrumb">
             <a href="/">Accueil</a> <span>/</span> <a href={`/bac/${niveau}`}>Cours Bac · {niv.label}</a> <span>/</span>{" "}
@@ -99,9 +99,6 @@ export default async function BacMatierePage(props) {
           </nav>
 
           <div className="bac-mat-hero">
-            <span className="bac-mat-hero-icon">
-              <Icon e={m.icon} size={32} />
-            </span>
             <div className="bac-mat-hero-body">
               <div className="bac-eyebrow">
                 {niv.label} · {niv.filieres.map((f) => f.code.toUpperCase()).join(" & ")}

@@ -1,10 +1,9 @@
 import { CONCOURS_NIVEAUX } from "@/lib/concoursNiveaux";
-import { Icon } from "./icons";
 
 // Même interrupteur que celui des cours (NiveauSwitch : Licence FSJES / Bac),
 // appliqué aux sujets de concours : Master / Licence d'excellence. Deux vraies
 // pages statiques plutôt qu'un filtre client, pour que chaque niveau ait son
-// URL, son H1 et son texte indexables.
+// URL, son H1 et son texte indexables. Contrôle segmenté (globals.css).
 export default function ConcoursNiveauSwitch({ active, counts = {} }) {
   return (
     <nav className="niveau-switch" aria-label="Niveau du concours">
@@ -16,16 +15,11 @@ export default function ConcoursNiveauSwitch({ active, counts = {} }) {
           data-niveau={n.code}
           aria-current={active === n.code ? "page" : undefined}
         >
-          <span className="niveau-switch-icon">
-            <Icon e={n.icon} size={19} />
+          <span className="niveau-switch-label">
+            {n.label}
+            {counts[n.code] != null ? ` (${counts[n.code]})` : ""}
           </span>
-          <span>
-            <span className="niveau-switch-label">
-              Concours {n.label}
-              {counts[n.code] != null ? ` (${counts[n.code]})` : ""}
-            </span>
-            <span className="niveau-switch-sub">{n.sub}</span>
-          </span>
+          <span className="niveau-switch-sub">{n.sub}</span>
         </a>
       ))}
     </nav>

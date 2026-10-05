@@ -1,265 +1,258 @@
-/* Espace Bac : même charte que le site, accent vert pour le distinguer
-   visuellement de l'espace Licence FSJES (accent bleu). --mat-h = teinte
-   propre à chaque matière (icônes, bandeaux). */
-.bac-space{
-  --accent:#10b981; --accent-dim:#134e3a; --accent-fill:#047857; --accent-ink:#6ee7b7;
-  --bac-grad:linear-gradient(135deg,#047857,#0f766e);
-  --mat-color:hsl(var(--mat-h,152) 70% 68%);
-  --mat-tint:color-mix(in srgb, var(--mat-color) 14%, var(--bg-card));
-  --mat-line:color-mix(in srgb, var(--mat-color) 35%, var(--border));
-}
-:root[data-theme="light"] .bac-space{
-  --accent:#047857; --accent-dim:#d5f5e8; --accent-fill:#047857; --accent-ink:#047857;
-  --mat-color:hsl(var(--mat-h,152) 65% 32%);
-  --mat-tint:color-mix(in srgb, var(--mat-color) 9%, var(--bg-card));
-}
+/* =====================================================================
+   Composants de contenu, partagés par tous les espaces du site (Bac,
+   Licence FSJES, concours, QCM, blog, accueil) malgré leur préfixe
+   historique bac-*. Couleurs : jetons de globals.css uniquement.
+
+   Principes : un en-tête de page est du texte posé sur la page (titre,
+   ligne de contexte, filet), pas une carte ; une carte n'encadre que ce
+   qu'on choisit (module, matière) ; une liste est une liste, à filets.
+   ===================================================================== */
+
+/* .bac-space ne porte plus de thème : --mat-color, lu par d'anciens
+   composants, vaut l'encre du site, quelle que soit la matière. */
+.bac-space{--mat-color:var(--accent); --mat-tint:var(--bg-inset); --mat-line:var(--border);}
 .bac-space a{color:inherit;}
 :where(.bac-space) [lang="ar"]{line-height:1.7;}
-.bac-wrap{max-width:1100px; margin:0 auto; padding:24px 20px 70px;}
+.bac-wrap{max-width:1100px; margin:0 auto; padding:20px 20px 64px;}
 .bac-space .cd-breadcrumb a:hover{color:var(--accent);}
 
-.bac-eyebrow{font-size:.75rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:6px;}
+/* Ligne de contexte au-dessus d'un titre (« Chapitre 2 · Semestre 1 ») :
+   du texte, pas une pastille. */
+.bac-eyebrow{display:block; font-size:.74rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; line-height:1.4;}
 
-/* ---------- Hero ---------- */
-.bac-hero{
-  position:relative; overflow:hidden; padding:28px; border-radius:var(--radius-lg);
-  background:linear-gradient(135deg, color-mix(in srgb,#10b981 16%, var(--bg-card)), var(--bg-card) 70%);
-  border:1px solid color-mix(in srgb,#10b981 30%, var(--border)); margin-bottom:22px;
-}
-.bac-hero h1{font-size:1.5rem; margin:0 0 8px; max-width:720px;}
-.bac-hero p{color:var(--text-dim); margin:0 0 16px; max-width:680px; line-height:1.55;}
-.bac-hero-stats{display:flex; flex-wrap:wrap; gap:8px;}
-.bac-stat{font-size:.8rem; color:var(--text-dim); padding:5px 12px; border-radius:999px; background:var(--bg); border:1px solid var(--border);}
-.bac-stat strong{color:var(--text);}
+/* ---------- En-têtes de page ---------- */
+.bac-hero, .bac-mat-hero, .bac-chap-hero{position:relative; padding:4px 0 20px; margin-bottom:22px; border-bottom:1px solid var(--border);}
+.bac-hero h1, .bac-mat-hero h1{font-size:1.85rem; line-height:1.18; font-weight:700; margin:0 0 10px; max-width:860px;}
+.bac-chap-hero h1{font-size:1.6rem; line-height:1.22; font-weight:700; margin:0 0 6px;}
+.bac-hero p, .bac-mat-hero p{color:var(--text-dim); font-size:1rem; line-height:1.6; margin:0 0 14px; max-width:68ch;}
+.bac-hero p strong{color:var(--text); font-weight:600;}
+.bac-mat-hero-icon{display:none;}
+.bac-chap-unite{font-size:.9rem; color:var(--text-dim);}
 
-/* ---------- Année + filières ---------- */
-.bac-year-tabs{display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+/* Chiffres clés : une ligne de texte, séparée par des points médians. */
+.bac-hero-stats{display:flex; flex-wrap:wrap; align-items:center; row-gap:4px; font-size:.88rem; color:var(--text-dim); margin:0 0 4px;}
+.bac-stat{display:inline-flex; align-items:center; gap:5px; white-space:nowrap;}
+.bac-stat strong{color:var(--text); font-weight:600; font-variant-numeric:tabular-nums;}
+.bac-stat .ic{width:15px; height:15px; color:var(--text-faint);}
+
+/* ---------- Puces (années, semestres, catégories) ---------- */
+.bac-year-tabs{display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;}
 .bac-year-tab{
-  padding:9px 20px; border-radius:999px; font-weight:700; font-size:.9rem; text-decoration:none;
+  display:inline-flex; align-items:center; gap:6px; min-height:38px; padding:0 14px; border-radius:999px;
+  font:inherit; font-weight:600; font-size:.86rem; text-decoration:none; cursor:pointer;
   border:1px solid var(--border); background:var(--bg-card); color:var(--text-dim);
+  transition:border-color .15s ease, color .15s ease;
 }
-.bac-year-tab.active{background:var(--bac-grad); color:#fff !important; border-color:transparent;}
+.bac-year-tab:hover{border-color:var(--border-strong); color:var(--text);}
+.bac-year-tab.active{background:var(--accent-fill); color:#fff !important; border-color:var(--accent-fill);}
 .bac-year-tab.disabled{opacity:.6; cursor:not-allowed;}
-.bac-year-tab em{font-style:normal; font-size:.7rem; font-weight:600; margin-left:6px; padding:2px 7px; border-radius:999px; background:var(--bg); border:1px solid var(--border);}
-.bac-filieres{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:26px; font-size:.8rem;}
+.bac-year-tab em{font-style:normal; font-size:.72rem; font-weight:600; opacity:.75;}
+.bac-year-tab .ic{width:16px; height:16px;}
+.bac-filieres{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:24px; font-size:.84rem;}
 .bac-filieres-label{color:var(--text-faint);}
-.bac-filiere-chip{padding:4px 11px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); font-weight:600;}
+.bac-filiere-chip{padding:3px 10px; border-radius:999px; background:var(--bg-inset); color:var(--text-dim); font-weight:600; border:1px solid var(--border);}
 
-/* ---------- Grille des matières ---------- */
-.bac-group{margin-bottom:30px;}
-.bac-section-title{font-size:1.1rem; margin:0 0 12px; display:flex; align-items:center; gap:10px;}
-.bac-section-title::before{content:""; width:4px; height:18px; border-radius:4px; background:var(--bac-grad);}
-.bac-mat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr)); gap:14px;}
+/* ---------- Groupes et titres de section ---------- */
+.bac-group{margin-bottom:32px;}
+.bac-section-title{font-size:1.15rem; font-weight:700; line-height:1.3; margin:0 0 14px;}
+
+/* ---------- Cartes de choix (modules, matières, niveaux) ---------- */
+.bac-mat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr)); gap:12px;}
 .bac-mat-card{
-  --mat-color:hsl(var(--mat-h) 70% 68%);
-  display:flex; align-items:flex-start; gap:14px; padding:18px; border-radius:var(--radius-lg);
-  background:var(--bg-card); border:1px solid var(--border); box-shadow:var(--shadow);
-  text-decoration:none; transition:transform .15s ease, border-color .15s ease;
+  display:flex; align-items:flex-start; gap:12px; padding:16px 18px; border-radius:var(--radius-lg);
+  background:var(--bg-card); border:1px solid var(--border); text-decoration:none; color:var(--text);
+  transition:border-color .15s ease, background-color .15s ease;
 }
-:root[data-theme="light"] .bac-mat-card{--mat-color:hsl(var(--mat-h) 65% 32%);}
-.bac-mat-card:hover{transform:translateY(-2px); border-color:var(--mat-color);}
-.bac-mat-icon{
-  flex-shrink:0; width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center;
-  font-size:1.5rem; background:color-mix(in srgb, var(--mat-color) 16%, var(--bg-card)); border:1px solid color-mix(in srgb, var(--mat-color) 35%, var(--border));
-}
-.bac-mat-body{display:flex; flex-direction:column; gap:6px; min-width:0; flex:1;}
-.bac-mat-name{font-weight:700; font-size:1rem; line-height:1.3;}
-.bac-mat-desc{font-size:.85rem; color:var(--text-dim); line-height:1.45;}
-.bac-mat-meta{display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:.75rem; color:var(--text-faint); margin-top:2px;}
-.bac-dot{opacity:.6;}
-.bac-badge{margin-left:auto; padding:2px 8px; border-radius:999px; font-weight:700; font-size:.7rem; color:var(--accent-ink); background:var(--accent-dim);}
-.bac-mat-arrow{color:var(--text-faint); font-size:1.1rem; align-self:center; transition:transform .15s ease, color .15s ease;}
-.bac-mat-card:hover .bac-mat-arrow{transform:translateX(3px); color:var(--mat-color);}
+a.bac-mat-card:hover{border-color:var(--border-strong); background:color-mix(in srgb, var(--bg-inset) 50%, var(--bg-card));}
+a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
+/* Anciennes tuiles d'icône et flèches rondes : retirées du dessin. */
+.bac-mat-icon, .bac-mat-arrow{display:none;}
+.bac-mat-body{display:flex; flex-direction:column; gap:5px; min-width:0; flex:1;}
+.bac-mat-name{font-weight:700; font-size:1rem; line-height:1.35;}
+.bac-mat-desc{font-size:.88rem; color:var(--text-dim); line-height:1.5;}
+.bac-mat-meta{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; font-size:.8rem; color:var(--text-faint); margin-top:2px;}
+.bac-dot{opacity:.7;}
+.bac-badge{padding:2px 9px; border-radius:999px; font-weight:600; font-size:.74rem; color:var(--text-dim); background:var(--bg-inset); border:1px solid var(--border);}
+.bac-dispo{display:inline-flex; align-items:center; gap:5px; font-size:.74rem; font-weight:600; padding:2px 9px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); white-space:nowrap; align-self:center;}
+.bac-dispo .ic{width:14px; height:14px;}
+.bac-soon{font-style:normal; font-size:.72rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg-inset); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
 
-/* ---------- Page matière ---------- */
-.bac-mat-hero{
-  display:flex; gap:18px; align-items:flex-start; padding:24px; margin-bottom:22px; border-radius:var(--radius-lg);
-  background:linear-gradient(135deg, var(--mat-tint), var(--bg-card) 75%); border:1px solid var(--mat-line);
-}
-.bac-mat-hero-icon{
-  flex-shrink:0; width:64px; height:64px; border-radius:18px; display:flex; align-items:center; justify-content:center;
-  font-size:2rem; background:var(--bg-card); border:1px solid var(--mat-line);
-}
-.bac-mat-hero .bac-eyebrow{color:var(--mat-color);}
-.bac-mat-hero h1{font-size:1.5rem; margin:0 0 6px;}
-.bac-mat-hero p{color:var(--text-dim); margin:0 0 14px; line-height:1.5;}
-
-.bac-mat-layout{display:grid; grid-template-columns:260px 1fr; gap:22px; align-items:start;}
-.bac-side{position:sticky; top:84px; display:flex; flex-direction:column; gap:12px;}
-.bac-side-card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:14px;}
-.bac-side-title{font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
-.bac-side-link{display:flex; justify-content:space-between; padding:8px 10px; border-radius:8px; font-size:.85rem; text-decoration:none; font-weight:600;}
+/* ---------- Page matière / module ---------- */
+.bac-mat-layout{display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; align-items:start;}
+.bac-side{position:sticky; top:calc(var(--header-h) + 20px); display:flex; flex-direction:column; gap:12px;}
+.bac-side-card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px;}
+.bac-side-title{font-size:.72rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+.bac-side-link{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--radius-sm); font-size:.88rem; text-decoration:none; font-weight:600;}
 .bac-side-link span{color:var(--text-faint); font-weight:500; font-size:.8rem;}
-.bac-side-link:hover{background:var(--bg); color:var(--accent);}
-.bac-soon{font-style:normal; font-size:.7rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
+.bac-side-link span .ic{width:16px; height:16px;}
+.bac-side-link:hover{background:var(--bg-inset); color:var(--accent);}
 
 .bac-main{min-width:0;}
-.bac-semestre{margin-bottom:28px; scroll-margin-top:84px;}
-.bac-semestre-title{display:flex; align-items:center; gap:10px; font-size:1.2rem; margin:0 0 14px;}
+.bac-semestre{margin-bottom:28px; scroll-margin-top:calc(var(--header-h) + 20px);}
+.bac-semestre-title{display:flex; align-items:center; gap:10px; font-size:1.15rem; margin:0 0 14px;}
 .bac-semestre-code{
-  display:inline-flex; align-items:center; justify-content:center; min-width:36px; height:28px; padding:0 8px;
-  border-radius:8px; background:var(--bac-grad); color:#fff; font-size:.8rem; font-weight:800;
+  display:inline-flex; align-items:center; justify-content:center; min-width:34px; height:26px; padding:0 8px;
+  border-radius:var(--radius-sm); background:var(--bg-inset); border:1px solid var(--border); color:var(--text); font-size:.78rem; font-weight:700;
 }
+.bac-semestre-code .ic{width:16px; height:16px;}
 .bac-unite{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:14px;}
-.bac-unite-head{padding:14px 18px; background:var(--mat-tint); border-bottom:1px solid var(--border);}
-.bac-unite-num{font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--mat-color);}
+.bac-unite-head{padding:12px 18px; background:var(--bg-inset); border-bottom:1px solid var(--border);}
+.bac-unite-num{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint);}
 .bac-unite-head h3{margin:2px 0 0; font-size:1rem;}
 .bac-chap-list{list-style:none; margin:0; padding:0;}
 .bac-chap-list li + li{border-top:1px solid var(--border);}
-.bac-chap-row{display:flex; align-items:center; gap:12px; padding:12px 18px; text-decoration:none;}
-.bac-chap-row:hover{background:var(--bg);}
+.bac-chap-row{display:flex; align-items:center; gap:12px; padding:12px 18px; text-decoration:none; min-height:52px;}
+.bac-chap-row:hover{background:var(--bg-inset);}
 .bac-chap-row:hover .bac-chap-title{color:var(--accent);}
 .bac-chap-num{
   flex-shrink:0; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:.8rem; font-weight:800; color:var(--mat-color); border:1.5px solid var(--mat-line);
+  font-size:.8rem; font-weight:700; color:var(--text-dim); border:1.5px solid var(--border-strong); font-variant-numeric:tabular-nums;
 }
-.bac-chap-title{flex:1; font-weight:600; font-size:.95rem; min-width:0;}
+.bac-chap-title{flex:1; font-weight:600; font-size:.95rem; min-width:0; line-height:1.4;}
 .bac-chap-res{display:flex; gap:4px;}
-.bac-res-chip{font-size:.7rem; padding:2px 7px; border-radius:6px; color:var(--text-faint); background:var(--bg); border:1px solid var(--border);}
+.bac-res-chip{font-size:.72rem; padding:2px 8px; border-radius:var(--radius-sm); color:var(--text-faint); background:var(--bg-inset); border:1px solid var(--border);}
+.bac-res-chip.on{color:var(--text-dim);}
 
-
+/* ---------- Examens nationaux ---------- */
 .bac-exam-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px;}
 .bac-exam{padding:12px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); text-align:center;}
-.bac-exam-year{font-size:1.2rem; font-weight:800; margin-bottom:6px;}
+.bac-exam-year{font-size:1.15rem; font-weight:700; margin-bottom:6px; font-variant-numeric:tabular-nums;}
 .bac-exam-sessions{display:flex; flex-direction:column; gap:4px;}
-.bac-exam-sessions span{font-size:.7rem; padding:3px 6px; border-radius:6px; background:var(--bg); color:var(--text-faint);}
-.bac-exam-sessions a.on{font-size:.7rem; font-weight:700; padding:3px 6px; border-radius:6px; text-decoration:none; background:var(--mat-tint); color:var(--mat-color); border:1px solid var(--mat-line);}
-.bac-exam-sessions a.on:hover{background:var(--mat-color); color:#fff;}
+.bac-exam-sessions span{font-size:.72rem; padding:3px 6px; border-radius:var(--radius-sm); background:var(--bg-inset); color:var(--text-faint);}
+.bac-exam-sessions a.on{font-size:.72rem; font-weight:700; padding:4px 6px; border-radius:var(--radius-sm); text-decoration:none; background:var(--accent-dim); color:var(--accent-ink);}
+.bac-exam-sessions a.on:hover{background:var(--accent-fill); color:#fff;}
 /* Grille des examens nationaux : une ligne par session, un lien par PDF. */
 .bac-exam-grid-docs{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
 .bac-exam-ses{display:flex; flex-direction:column; gap:3px;}
-.bac-exam-ses-label{font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
+.bac-exam-ses-label{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
 .bac-exam-ses-links{display:flex; flex-wrap:wrap; gap:4px;}
 .bac-exam-ses-links a.on{flex:1 1 auto;}
-
-/* ---------- Examens nationaux ---------- */
 .bac-nat-serie{margin-bottom:20px;}
 .bac-nat-serie-title{display:flex; align-items:center; gap:8px; font-size:1rem; margin:4px 0 10px;}
-.bac-nat-fil{font-size:.7rem; font-weight:800; padding:3px 8px; border-radius:999px; background:var(--mat-color); color:#fff;}
-.bac-nat-note{font-size:.85rem; color:var(--text-dim); margin:0 0 10px;}
+.bac-nat-fil{font-size:.72rem; font-weight:700; padding:3px 8px; border-radius:999px; background:var(--bg-inset); border:1px solid var(--border); color:var(--text);}
+.bac-nat-note{font-size:.86rem; color:var(--text-dim); margin:0 0 10px;}
 .bac-nat-legend{font-size:.8rem; color:var(--text-faint); margin:4px 0 0;}
 .bac-chap-hero .bac-nat-note{margin:10px 0 0;}
 .bac-nat-source{font-size:.8rem; color:var(--text-faint); margin:0 0 8px;}
 
 /* ---------- Page chapitre ---------- */
-.bac-side-back{display:block; font-weight:700; font-size:.9rem; text-decoration:none; padding:4px 4px 10px; border-bottom:1px solid var(--border); margin-bottom:6px;}
+.bac-side-back{display:flex; align-items:center; gap:8px; font-weight:700; font-size:.92rem; text-decoration:none; padding:4px 4px 10px; border-bottom:1px solid var(--border); margin-bottom:6px;}
+.bac-side-back .ic{width:18px; height:18px; color:var(--text-faint);}
 .bac-side-back:hover{color:var(--accent);}
 .bac-side-chaps{list-style:none; margin:0; padding:0; max-height:calc(100vh - 200px); overflow:auto;}
-.bac-side-chaps a{display:flex; gap:8px; padding:7px 8px; border-radius:8px; font-size:.8rem; line-height:1.35; text-decoration:none; color:var(--text-dim) !important;}
-.bac-side-chaps a span{flex-shrink:0; width:20px; font-weight:700; color:var(--text-faint);}
-.bac-side-chaps a:hover{background:var(--bg); color:var(--text) !important;}
-.bac-side-chaps a.active{background:var(--mat-tint); color:var(--text) !important; font-weight:600;}
-.bac-side-chaps a.active span{color:var(--mat-color);}
+.bac-side-chaps a{display:flex; gap:8px; padding:7px 8px; border-radius:var(--radius-sm); font-size:.84rem; line-height:1.4; text-decoration:none; color:var(--text-dim) !important;}
+.bac-side-chaps a span{flex-shrink:0; width:20px; font-weight:700; color:var(--text-faint); font-variant-numeric:tabular-nums;}
+.bac-side-chaps a:hover{background:var(--bg-inset); color:var(--text) !important;}
+.bac-side-chaps a.active{background:var(--accent-dim); color:var(--text) !important; font-weight:600;}
+.bac-side-chaps a.active span{color:var(--accent);}
 
-.bac-chap-hero{padding:22px 24px; margin-bottom:16px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--mat-tint), var(--bg-card) 75%); border:1px solid var(--mat-line);}
-.bac-chap-hero .bac-eyebrow{color:var(--mat-color);}
-.bac-chap-hero h1{font-size:1.5rem; margin:0 0 6px;}
-.bac-chap-unite{font-size:.85rem; color:var(--text-dim);}
-
-/* Radios ancrés en haut du bloc d onglets : cliquer un libellé donne le focus
-   au radio, et le navigateur défilait jusqu à lui, où qu il soit. */
+/* Onglets du chapitre (Cours · Exercices · Résumé · QCM) : contrôle segmenté
+   collant sous le header, largeurs égales — l'onglet QCM sortait de l'écran
+   sur téléphone. Les radios restent en haut du bloc : cliquer un libellé
+   donne le focus au radio, et le navigateur défilait jusqu'à lui. */
 .bac-tabs{position:relative;}
 .bac-tab-input{position:absolute; top:0; left:0; opacity:0; pointer-events:none;}
-/* Onglets du chapitre : toujours tous visibles (largeurs égales — l'onglet
-   QCM sortait de l'écran sur téléphone) et collants sous le header, pour
-   passer du cours aux exercices sans remonter tout le chapitre. */
-.bac-tabs > .bac-tab-labels{
-  position:sticky; top:var(--header-h); z-index:6; display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
-  gap:6px; padding:8px 0; margin:0 0 12px; background:color-mix(in srgb, var(--bg) 92%, transparent);
-  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); transition:top .2s ease;
+.bac-tab-labels{display:flex; gap:4px; margin-bottom:14px; overflow-x:auto;}
+.bac-tabs > .bac-tab-labels, .sp-anchor-tabs{
+  position:sticky; top:var(--header-h); z-index:6; display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:3px;
+  padding:3px; margin:0 0 16px; border-radius:var(--radius); background:var(--bg-inset); border:1px solid var(--border);
+  transition:top .2s ease;
 }
-.bac-tabs > .bac-tab-labels .bac-tab-label{display:flex; align-items:center; justify-content:center; gap:6px; text-align:center; min-height:44px;}
-.bac-tab-labels{display:flex; gap:6px; margin-bottom:12px; overflow-x:auto;}
 .bac-tab-label{
-  padding:9px 16px; border-radius:10px; font-weight:600; font-size:.9rem; cursor:pointer; white-space:nowrap;
-  background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim);
+  display:flex; align-items:center; justify-content:center; gap:7px; min-height:42px; padding:6px 14px; border-radius:8px;
+  font-weight:600; font-size:.9rem; cursor:pointer; white-space:nowrap; text-align:center; text-decoration:none;
+  background:transparent; border:1px solid transparent; color:var(--text-dim);
 }
-@media (max-width:560px){
-  .bac-tabs > .bac-tab-labels{gap:4px;}
-  .bac-tabs > .bac-tab-labels .bac-tab-label{flex-direction:column; gap:1px; padding:6px 2px; font-size:.75rem; line-height:1.2;}
-  .bac-tabs > .bac-tab-labels .bac-tab-label > span{font-size:1.1rem;}
-}
+.bac-tab-label .ic{width:18px; height:18px; color:var(--text-faint);}
 .bac-tab-label:hover{color:var(--text);}
 .bac-tab-panel{display:none;}
 #tab-cours:checked ~ .bac-tab-labels .bac-tab-label-cours,
 #tab-exercices:checked ~ .bac-tab-labels .bac-tab-label-exercices,
 #tab-resume:checked ~ .bac-tab-labels .bac-tab-label-resume,
-#tab-qcm:checked ~ .bac-tab-labels .bac-tab-label-qcm{background:var(--bac-grad); color:#fff; border-color:transparent;}
+#tab-qcm:checked ~ .bac-tab-labels .bac-tab-label-qcm,
+.sp-anchor-tabs .bac-tab-label.active{background:var(--bg-card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow);}
+#tab-cours:checked ~ .bac-tab-labels .bac-tab-label-cours .ic,
+#tab-exercices:checked ~ .bac-tab-labels .bac-tab-label-exercices .ic,
+#tab-resume:checked ~ .bac-tab-labels .bac-tab-label-resume .ic,
+#tab-qcm:checked ~ .bac-tab-labels .bac-tab-label-qcm .ic,
+.sp-anchor-tabs .bac-tab-label.active .ic{color:var(--accent);}
 #tab-cours:checked ~ .bac-tab-panel-cours,
 #tab-exercices:checked ~ .bac-tab-panel-exercices,
 #tab-resume:checked ~ .bac-tab-panel-resume,
 #tab-qcm:checked ~ .bac-tab-panel-qcm{display:block;}
-.bac-tab-input:focus-visible ~ .bac-tab-labels{outline:2px solid var(--accent); outline-offset:4px; border-radius:10px;}
+.bac-tab-input:focus-visible ~ .bac-tab-labels{outline:2px solid var(--accent); outline-offset:3px;}
+@media (max-width:560px){
+  .bac-tabs > .bac-tab-labels .bac-tab-label, .sp-anchor-tabs .bac-tab-label{flex-direction:column; gap:2px; padding:6px 2px; font-size:.74rem; line-height:1.2; min-height:48px; white-space:normal;}
+}
 
-.bac-empty{text-align:center; padding:48px 20px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px dashed var(--border);}
-.bac-empty-icon{font-size:2.4rem; margin-bottom:8px;}
-.bac-empty-title{font-weight:700; font-size:1.1rem; margin-bottom:6px;}
+.bac-empty{text-align:center; padding:44px 20px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px dashed var(--border-strong);}
+.bac-empty-icon{display:flex; justify-content:center; color:var(--text-faint); margin-bottom:8px;}
+.bac-empty-icon .ic{width:36px; height:36px;}
+.bac-empty-title{font-weight:700; font-size:1.05rem; margin-bottom:6px;}
 .bac-empty p{margin:0 auto; max-width:420px; color:var(--text-dim); font-size:.9rem;}
 
-.bac-pager{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px;}
-.bac-pager-btn{display:flex; flex-direction:column; gap:4px; padding:14px 16px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); text-decoration:none;}
+.bac-pager{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px;}
+.bac-pager-btn{display:flex; flex-direction:column; gap:4px; padding:14px 16px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); text-decoration:none; transition:border-color .15s ease;}
 .bac-pager-btn.next{text-align:right;}
-.bac-pager-btn span{font-size:.75rem; color:var(--text-faint);}
-.bac-pager-btn strong{font-size:.9rem;}
-.bac-pager-btn:hover{border-color:var(--accent);}
+.bac-pager-btn span{font-size:.78rem; color:var(--text-faint);}
+.bac-pager-btn strong{font-size:.92rem; font-weight:600;}
+.bac-pager-btn:hover{border-color:var(--border-strong);}
+.bac-pager-btn:hover strong{color:var(--accent);}
 
-/* ---------- Contenu rédigé ---------- */
-.bac-dispo{font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); white-space:nowrap; align-self:center;}
-.bac-res-chip.on{color:var(--text-dim); border-color:var(--mat-line);}
-
-/* Lecture longue : texte à ~16,5px (au lieu de 14px) et lignes limitées à
-   ~72 caractères ; tableaux, formules et blocs gardent toute la largeur. */
-.bac-md{line-height:1.7; font-size:1.1rem;}
-.bac-md > :is(p, ul, ol, blockquote, h2, h3, h4, details){max-width:72ch;}
-.bac-md table{font-size:.9rem;}
-.bac-md h2{font-size:1.5rem;}
-.bac-md h3{font-size:1.2rem;}
-.bac-md h4{font-size:1.1rem;}
-@media (max-width:560px){
-  .bac-md{font-size:1.05rem;}
-  .bac-md h2{font-size:1.3rem;}
-  .bac-md h3{font-size:1.1rem;}
-}
-.bac-md h2{color:var(--text);}
-.bac-md h3{color:var(--mat-color);}
-.bac-md strong{color:var(--text);}
-.bac-md blockquote{border-left-color:var(--mat-color);}
-.bac-md[dir="rtl"] blockquote{border-left:none; border-right:3px solid var(--mat-color); border-radius:6px 0 0 6px;}
+/* ---------- Texte rédigé (cours, exercices, résumé) ---------- */
+/* Lecture longue : Literata à ~16px, lignes d'environ 70 caractères ;
+   tableaux, formules et blocs gardent toute la largeur. */
+.bac-md{font-family:var(--font-reading); line-height:1.75; font-size:1.08rem; padding:0;}
+.bac-md > :is(p, ul, ol, blockquote, h2, h3, h4, details){max-width:70ch;}
+.bac-md table{font-size:.88rem;}
+.bac-md h2{font-size:1.45rem; color:var(--text);}
+.bac-md h3{font-size:1.15rem; color:var(--text);}
+.bac-md h4{font-size:1.02rem;}
+.bac-md strong{color:var(--text); font-weight:600;}
+.bac-md blockquote{border-left-color:var(--accent);}
+.bac-md[dir="rtl"]{font-family:var(--font);}
+.bac-md[dir="rtl"] blockquote{border-left:none; border-right:3px solid var(--accent); border-radius:var(--radius-sm) 0 0 var(--radius-sm);}
 .bac-md[dir="rtl"] ul, .bac-md[dir="rtl"] ol{padding-left:0; padding-right:1.3em;}
 .bac-md[dir="rtl"] th, .bac-md[dir="rtl"] td{text-align:right;}
-.bac-md details{margin:12px 0 22px; border:1px solid var(--mat-line); border-radius:var(--radius); background:var(--bg);}
-.bac-md summary{cursor:pointer; padding:10px 14px; font-weight:700; color:var(--accent); list-style:none;}
+.bac-md details{margin:12px 0 22px; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-card);}
+.bac-md summary{cursor:pointer; padding:10px 14px; font-family:var(--font); font-weight:600; font-size:.95rem; color:var(--accent); list-style:none;}
 .bac-md summary::-webkit-details-marker{display:none;}
-.bac-md summary::before{content:"▸ "; }
+.bac-md summary::before{content:"▸ ";}
 .bac-md details[open] summary::before{content:"▾ ";}
 .bac-md details > :not(summary){margin-left:14px; margin-right:14px;}
 .bac-md details[open]{padding-bottom:6px;}
+@media (max-width:560px){
+  .bac-md{font-size:1.04rem;}
+  .bac-md h2{font-size:1.25rem;}
+  .bac-md h3{font-size:1.08rem;}
+}
 
+/* ---------- QCM d'un chapitre ---------- */
 .bac-qcm{display:flex; flex-direction:column; gap:14px;}
 .bac-qcm-q{margin:0; padding:16px 18px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg-card);}
-.bac-qcm-q legend{display:flex; gap:10px; align-items:flex-start; font-weight:700; font-size:.95rem; padding:0; margin-bottom:10px; float:left; width:100%;}
+.bac-qcm-q legend{display:flex; gap:10px; align-items:flex-start; font-family:var(--font-reading); font-weight:600; font-size:1rem; line-height:1.5; padding:0; margin-bottom:8px; float:left; width:100%;}
 .bac-qcm-q legend + *{clear:both;}
-.bac-qcm-num{flex-shrink:0; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:.75rem; background:var(--mat-tint); color:var(--mat-color); border:1px solid var(--mat-line);}
-.bac-qcm-choix{display:flex; gap:10px; align-items:flex-start; padding:9px 12px; margin-top:6px; border-radius:8px; border:1px solid var(--border); cursor:pointer; font-size:.9rem; line-height:1.45;}
-.bac-qcm-choix input{margin-top:3px; accent-color:var(--accent);}
-.bac-qcm-choix:hover{border-color:var(--mat-line);}
-.bac-qcm-choix.sel{border-color:var(--accent); background:color-mix(in srgb, var(--accent) 8%, var(--bg-card));}
-.bac-qcm-choix.ok{border-color:#16a34a; background:color-mix(in srgb, #16a34a 14%, var(--bg-card));}
-.bac-qcm-choix.ko{border-color:#dc2626; background:color-mix(in srgb, #dc2626 12%, var(--bg-card));}
-.bac-qcm-expl{margin:10px 0 0; padding:9px 12px; border-radius:8px; background:var(--bg); font-size:.85rem; color:var(--text-dim); line-height:1.5;}
-.bac-qcm-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:14px 18px; border-radius:var(--radius-lg); background:var(--mat-tint); border:1px solid var(--mat-line);}
+.bac-qcm-num{flex-shrink:0; min-width:24px; height:24px; padding:0 6px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font); font-size:.74rem; font-weight:700; color:var(--text-dim); background:var(--bg-inset); border:1px solid var(--border); margin-top:1px;}
+.bac-qcm-choix{display:flex; gap:12px; align-items:flex-start; padding:11px 12px; min-height:48px; margin-top:6px; border-radius:var(--radius); border:1px solid var(--border); cursor:pointer; font-family:var(--font-reading); font-size:.98rem; line-height:1.5;}
+.bac-qcm-choix:hover{border-color:var(--border-strong);}
+.bac-qcm-choix.sel{border-color:var(--accent); background:var(--accent-dim);}
+.bac-qcm-choix.ok{border-color:var(--green); background:var(--green-dim);}
+.bac-qcm-choix.ko{border-color:var(--red); background:var(--red-dim);}
+/* L'explication est la voix du correcteur : filet rouge. */
+.bac-qcm-expl{margin:10px 0 0; padding:10px 12px; border-left:3px solid var(--red); border-radius:0 var(--radius-sm) var(--radius-sm) 0; background:var(--bg-inset); font-size:.9rem; color:var(--text); line-height:1.55;}
+.bac-qcm-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:14px 18px; border-radius:var(--radius-lg); background:var(--bg-inset); border:1px solid var(--border);}
 .bac-qcm-score{font-size:1rem;}
-.bac-qcm-score strong{font-size:1.3rem; color:var(--accent);}
-.bac-qcm-btn{padding:10px 20px; border-radius:10px; border:none; background:var(--bac-grad); color:#fff; font-weight:700; cursor:pointer; font-size:.9rem;}
+.bac-qcm-score strong{font-size:1.3rem; color:var(--text); font-variant-numeric:tabular-nums;}
+.bac-qcm-btn{min-height:44px; padding:0 20px; border-radius:var(--radius); border:1px solid var(--accent-fill); background:var(--accent-fill); color:#fff; font:inherit; font-weight:600; cursor:pointer; font-size:.9rem;}
 .bac-qcm-btn:disabled{opacity:.5; cursor:not-allowed;}
-.bac-qcm-btn.secondary{background:var(--bg-card); color:var(--text); border:1px solid var(--border);}
+.bac-qcm-btn.secondary{background:var(--bg-card); color:var(--text); border-color:var(--border);}
 
+/* Bouton d'édition (administrateur) : au-dessus de la barre d'onglets. */
 .bac-edit-fab{
-  position:fixed; right:18px; bottom:18px; z-index:60; padding:11px 18px; border-radius:999px;
-  background:var(--bac-grad, #0e9f6e); color:#fff !important; font-weight:700; font-size:.9rem; text-decoration:none;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  position:fixed; right:16px; bottom:calc(16px + var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); z-index:60;
+  display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px;
+  background:var(--accent-fill); color:#fff !important; font-weight:700; font-size:.9rem; text-decoration:none; box-shadow:var(--shadow-pop);
 }
-.bac-edit-fab:hover{filter:brightness(1.08);}
 
 /* ---------- Responsive ---------- */
 @media (max-width:860px){
@@ -268,15 +261,17 @@
   .bac-chap-res{display:none;}
 }
 @media (max-width:560px){
-  .bac-wrap{padding:18px 16px 60px;}
-  .bac-hero{padding:22px 18px;}
-  .bac-hero h1{font-size:1.3rem;}
-  .bac-mat-hero{flex-direction:column; padding:20px 18px;}
-  .bac-mat-hero h1, .bac-chap-hero h1{font-size:1.3rem;}
+  .bac-wrap{padding:14px 16px 48px;}
+  .bac-hero, .bac-mat-hero, .bac-chap-hero{padding-bottom:16px; margin-bottom:18px;}
+  .bac-hero h1, .bac-mat-hero h1{font-size:1.45rem;}
+  .bac-chap-hero h1{font-size:1.32rem;}
+  .bac-hero p, .bac-mat-hero p{font-size:.95rem;}
   .bac-chap-row{padding:12px 14px;}
   .bac-soon{display:none;}
-  .bac-md{padding:18px 16px;}
   .bac-qcm-q{padding:14px;}
   .bac-pager{grid-template-columns:1fr;}
   .bac-pager-btn.next{text-align:left;}
+  .bac-mat-card{padding:14px 16px;}
 }
+.bac-eyebrow a{color:inherit; text-decoration:none;}
+.bac-eyebrow a:hover{color:var(--accent); text-decoration:underline;}

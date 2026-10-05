@@ -26,7 +26,7 @@ const H2 = { fontSize: "1.1rem", marginTop: 28 };
 export default function ConfidentialitePage() {
   return (
     <>
-    <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "", showSearch: false }) }} />
+    <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "" }) }} />
     <ChromeInit />
     <div className="cd-view" style={{ maxWidth: 720 }}>
       <nav className="cd-breadcrumb">

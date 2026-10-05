@@ -77,7 +77,7 @@ export default async function AProposPage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "" }) }} />
       <ChromeInit />
 
       <div className="cd-view" style={{ maxWidth: 720 }}>

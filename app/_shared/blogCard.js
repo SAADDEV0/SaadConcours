@@ -5,7 +5,6 @@
 
 import { escapeHtml } from "./concoursCard";
 import { formatDateFr } from "./format";
-import { iconHtml } from "./icons";
 import { categoryInfo } from "../../lib/blogTaxonomy";
 
 const WORDS_PER_MINUTE = 200;
@@ -17,9 +16,6 @@ export function readingTimeMinutes(content) {
     .filter(Boolean).length;
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
-
-// Teinte par catégorie, pour garder le même code couleur que les cours.
-const BLOG_HUES = { facultes: 220, matieres: 152, comparatifs: 265, methode: 42 };
 
 // Ce que lisent une carte et les filtres de /blog. Le texte intégral des
 // articles (517 Ko de page) n'est plus envoyé : BlogExplorer le charge à la
@@ -35,22 +31,17 @@ export function blogListItem(post) {
   };
 }
 
+// Une ligne par article (liste à filets .sp-rows) : titre, chapeau sur deux
+// lignes, rubrique, date et temps de lecture.
 export function blogCardHtml(post) {
   const cat = categoryInfo(post.category);
   const minutes = post.minutes ?? readingTimeMinutes(post.content);
-  const hue = BLOG_HUES[post.category] ?? 220;
   return `
-  <a class="bac-mat-card sp-card" href="/blog/${encodeURIComponent(post.id)}" data-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || "")}" style="--mat-h:${hue}">
-    <span class="bac-mat-icon">${iconHtml(cat ? cat.emoji : "news", { size: 23 })}</span>
-    <span class="bac-mat-body">
-      ${cat ? `<span class="sp-card-kicker">${escapeHtml(cat.label)}</span>` : ""}
-      <span class="bac-mat-name">${escapeHtml(post.title)}</span>
-      <span class="bac-mat-desc sp-desc-clamp">${escapeHtml(post.excerpt)}</span>
-      <span class="bac-mat-meta">
-        <time datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(formatDateFr(post.publishedAt))}</time>
-        <span class="bac-dot">·</span>
-        <span class="sp-meta-line"><span>${iconHtml("clock", { size: 13 })}${minutes} min de lecture</span></span>
-      </span>
+  <a class="sp-row" href="/blog/${encodeURIComponent(post.id)}" data-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || "")}">
+    <span class="sp-row-main">
+      <span class="sp-row-title">${escapeHtml(post.title)}</span>
+      ${post.excerpt ? `<span class="sp-row-desc">${escapeHtml(post.excerpt)}</span>` : ""}
+      <span class="sp-row-meta">${cat ? `<span>${escapeHtml(cat.label)}</span>` : ""}<time datetime="${escapeHtml(post.publishedAt || "")}">${escapeHtml(formatDateFr(post.publishedAt))}</time><span>${minutes} min de lecture</span></span>
     </span>
   </a>`;
 }

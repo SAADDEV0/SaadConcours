@@ -124,9 +124,9 @@ export default async function BacChapitrePage(props) {
         ]}
       />
       <BacChapitreClient editId={`${niveau}/${matiere}/${chapitre}`} />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "bac" }) }} />
 
-      <div className="bac-space" style={{ "--mat-h": m.hue }}>
+      <div className="bac-space">
         <div className="bac-wrap">
           <nav className="cd-breadcrumb">
             <a href="/">Accueil</a> <span>/</span> <a href={`/bac/${niveau}`}>Cours Bac · {niv.label}</a> <span>/</span>{" "}

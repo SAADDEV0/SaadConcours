@@ -36,9 +36,6 @@ export function escapeHtml(s) {
   );
 }
 
-// Teinte de la carte par grande famille de filières (lib/taxonomy.js).
-export const CONCOURS_HUES = { FCA: 152, MRH: 22, MCL: 330, EAPP: 210, EDMQ: 265 };
-
 // Ce que lisent une carte et les filtres de /concours, et rien d'autre. La
 // liste complète (énoncés et corrigés) partait dans le HTML de /concours pour
 // hydrater ConcoursExplorer : 3,9 Mo de page. ConcoursExplorer charge
@@ -62,36 +59,31 @@ export function concoursListItem(c) {
   };
 }
 
-// `hidden` : carte rendue mais masquée (au-delà de CONCOURS_PAGE_SIZE).
-// Les badges ne signalent que l'exception : « Corrigé » et « Scan réel »
-// figuraient sur plus de 90 % des cartes et n'aidaient plus à choisir.
-export function concoursCardHtml(c, { hidden = false } = {}) {
+// Une ligne par sujet (liste à filets .sp-rows) : le titre du master, la
+// faculté et la ville, la difficulté, l'année à droite. Les matières sont sur
+// la fiche : en pastilles, elles s'empilaient et triplaient la hauteur des
+// cartes sur téléphone. Seules les exceptions sont signalées (« Sans
+// corrigé », « Sans scan ») : le reste concerne plus de 90 % des sujets.
+// `hidden` : ligne rendue mais masquée (au-delà de CONCOURS_PAGE_SIZE).
+// `dl` : bouton PDF, câblé par ConcoursExplorer (absent ailleurs).
+// `badgeNiveau` : mention « Licence d'excellence » sur les listes qui
+// mêlent les deux niveaux (accueil). `nouveau` : surligné « Nouveau ».
+export function concoursCardHtml(c, { hidden = false, dl = true, badgeNiveau = false, nouveau = false } = {}) {
   const hasImg = c.hasImg ?? (c.images || []).length > 0;
   const hasCorrige = c.hasCorrige ?? Boolean(c.corrige_md || c.corrige_from_github);
-  const masterLabel = c.master_reel || c.filiere || `${c.etablissement} — ${c.ville} — ${c.annee}`;
-  const hue = CONCOURS_HUES[c.categorie] ?? 220;
-  const modules = c.modules || [];
+  const masterLabel = c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`;
+  // « FSJES Mohammedia, Mohammedia » : la ville n'est répétée que si le nom
+  // de l'établissement ne la contient pas déjà.
+  const lieu = [c.etablissement, c.ville && !String(c.etablissement || "").includes(c.ville) ? c.ville : ""].filter(Boolean).join(", ");
   return `
-  <a class="bac-mat-card sp-card" href="/concours/${encodeURIComponent(c.id)}" data-id="${escapeHtml(c.id)}" style="--mat-h:${hue}"${hidden ? " hidden" : ""}>
-    <span class="bac-mat-icon sp-year">${escapeHtml(String(c.annee || "—"))}</span>
-    <span class="bac-mat-body">
-      <span class="bac-mat-name">${escapeHtml(masterLabel)}</span>
-      <span class="bac-mat-desc sp-meta-line"><span>${iconHtml("school", { size: 14 })}${escapeHtml(c.etablissement)}</span><span>${iconHtml("pin", { size: 14 })}${escapeHtml(c.ville)}</span></span>
-      ${
-        modules.length
-          ? `<span class="sp-chips">${modules
-              .slice(0, 4)
-              .map((m) => `<span class="bac-res-chip on">${escapeHtml(m)}</span>`)
-              .join("")}${modules.length > 4 ? `<span class="bac-res-chip">+${modules.length - 4}</span>` : ""}</span>`
-          : ""
-      }
-      <span class="bac-mat-meta">
-        ${isLicenceExcellence(c) ? `<span class="sp-le-badge">${iconHtml("star", { size: 12 })}Licence d'excellence</span>` : ""}
-        ${difficulteHtml(c.difficulte)}
-        ${hasCorrige ? "" : '<span class="sp-flag">Sans corrigé</span>'}
-        ${hasImg ? "" : '<span class="sp-flag">Sans scan</span>'}
-      </span>
+  <a class="sp-row" href="/concours/${encodeURIComponent(c.id)}" data-id="${escapeHtml(c.id)}"${hidden ? " hidden" : ""}>
+    <span class="sp-row-main">
+      <span class="sp-row-title">${escapeHtml(masterLabel)}${nouveau ? '<span class="home-new">Nouveau</span>' : ""}</span>
+      <span class="sp-row-meta"><span>${escapeHtml(lieu)}</span>${difficulteHtml(c.difficulte)}${
+        badgeNiveau && isLicenceExcellence(c) ? `<span class="sp-le-badge">${iconHtml("star", { size: 12 })}Licence d'excellence</span>` : ""
+      }${hasCorrige ? "" : '<span class="sp-flag">Sans corrigé</span>'}${hasImg ? "" : '<span class="sp-flag">Sans scan</span>'}</span>
     </span>
-    <button type="button" class="card-dl sp-card-dl" title="Télécharger l'énoncé (PDF)" aria-label="Télécharger l'énoncé en PDF">${iconHtml("file-pdf", { size: 17 })}PDF</button>
+    <span class="sp-row-year">${escapeHtml(String(c.annee || "—"))}</span>
+    ${dl ? `<button type="button" class="card-dl sp-row-dl" title="Télécharger l'énoncé (PDF)" aria-label="Télécharger l'énoncé en PDF">${iconHtml("file-pdf", { size: 17 })}<span>PDF</span></button>` : ""}
   </a>`;
 }

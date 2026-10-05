@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
 import { getAllQuiz } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
-import { evalModuleStyle } from "../../_shared/evalCard";
 import EvaluationDetailClient from "./EvaluationDetailClient";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
-import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -69,7 +67,6 @@ export default async function EvaluationDetailPage(props) {
   if (!q || !q.available) notFound();
 
   const nb = (q.questions || []).length;
-  const style = evalModuleStyle(q);
   const url = `${SITE_URL}/evaluation/${q.id}`;
   const related = getRelatedQuiz(list, q);
 
@@ -106,22 +103,19 @@ export default async function EvaluationDetailPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "eval" }) }} />
 
-      <div className="bac-space site-space" style={{ "--mat-h": style.hue }}>
+      <div className="bac-space">
       <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
-          <a href="/">Accueil</a> <span>/</span> <a href="/evaluation">Évaluation</a> <span>/</span> <span>{q.title}</span>
+          <a href="/">Accueil</a> <span>/</span> <a href="/evaluation">QCM</a> <span>/</span> <span>{q.title}</span>
         </nav>
 
         <div className="bac-chap-hero sp-detail-hero">
-          <div className="bac-eyebrow">Évaluation · Concours blanc</div>
+          <div className="bac-eyebrow">QCM d'entraînement · Concours blanc</div>
           <h1>{q.title}</h1>
           <div className="bac-hero-stats">
-            <span className="bac-stat">
-              <Icon e={style.icon} size={15} />
-              {q.module}
-            </span>
+            <span className="bac-stat">{q.module}</span>
             <span className="bac-stat">
               <strong>{nb}</strong> questions
             </span>
@@ -142,13 +136,11 @@ export default async function EvaluationDetailPage(props) {
           {q.chapters && q.chapters.length > 0 && (
             <>
               <h2>Chapitres couverts</h2>
-              <div className="sp-chips">
+              <ol className="eval-chapters">
                 {q.chapters.map((ch) => (
-                  <span className="bac-res-chip on" key={ch}>
-                    {ch}
-                  </span>
+                  <li key={ch}>{ch}</li>
                 ))}
-              </div>
+              </ol>
             </>
           )}
         </div>
@@ -161,22 +153,21 @@ export default async function EvaluationDetailPage(props) {
             style={{ width: "auto", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
             href="/evaluation"
           >
-            ← Retour à toutes les évaluations
+            ← Tous les QCM
           </a>
         </div>
 
         {related.length > 0 && (
           <section className="bac-group">
             <h2 className="bac-section-title">Autres QCM — {q.module}</h2>
-            <div className="sp-related">
+            <div className="sp-rows">
               {related.map((r) => (
-                <a key={r.id} className="bac-mat-card" href={`/evaluation/${r.id}`}>
-                  <span className="bac-mat-icon">
-                    <Icon e={evalModuleStyle(r).icon} size={23} />
-                  </span>
-                  <span className="bac-mat-body">
-                    <span className="bac-mat-name">{r.title}</span>
-                    <span className="bac-mat-meta">{r.module}</span>
+                <a key={r.id} className="sp-row" href={`/evaluation/${r.id}`}>
+                  <span className="sp-row-main">
+                    <span className="sp-row-title">{r.title}</span>
+                    <span className="sp-row-meta">
+                      <span>{r.module}</span>
+                    </span>
                   </span>
                 </a>
               ))}

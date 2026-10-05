@@ -70,6 +70,10 @@ const P = {
   crane: '<path d="M4 21h16M7 21V4l13 3M7 4 3 7h4"/><path d="M17 6.5V12M15.5 12h3v2.5h-3z"/>',
   home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>',
   "arrow-right": '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  "arrow-left": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  "chevron-right": '<path d="m9 6 6 6-6 6"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  sliders: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
   "chevron-down": '<path d="m6 9 6 6 6-6"/>',
   filter: '<path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/>',
   x: '<path d="M18 6 6 18M6 6l12 12"/>',
@@ -94,6 +98,7 @@ const EMOJI_ICON = {
   "🔍": "search", "🔎": "search", "🎯": "target", "🎒": "backpack", "🏆": "trophy", "🛒": "cart",
   "🔒": "lock", "📱": "phone", "📄": "file", "🗂": "folder", "💳": "credit-card", "⚡": "zap",
   "🎲": "dice", "💼": "briefcase", "🏠": "home",
+  "📌": "pin", "🗺": "compass", "❌": "x", "🧠": "bulb", "♻": "refresh",
 };
 
 export function iconName(nameOrEmoji) {

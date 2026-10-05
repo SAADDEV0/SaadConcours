@@ -12,17 +12,17 @@ export default function SiteError({ error, reset }) {
   }, [error]);
 
   return (
-    <main className="container" style={{ padding: "80px 0", textAlign: "center", maxWidth: 560 }}>
+    <main style={{ padding: "80px 20px", margin: "0 auto", textAlign: "center", maxWidth: 560 }}>
       <h1 style={{ fontSize: "1.6rem", marginBottom: 12 }}>Une erreur est survenue</h1>
-      <p style={{ color: "var(--muted, #667)", marginBottom: 24 }}>
-        La page n&apos;a pas pu s&apos;afficher correctement. Réessaie dans un instant — si le problème persiste,
-        signale-le nous.
+      <p style={{ color: "var(--text-dim)", marginBottom: 24 }}>
+        La page n&apos;a pas pu s&apos;afficher correctement. Réessaie dans un instant. Si le problème persiste,
+        signale-le depuis la page Contact.
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-        <button type="button" className="btn" onClick={reset}>
+        <button type="button" className="dl-btn" onClick={reset}>
           Réessayer
         </button>
-        <Link className="btn secondary" href="/">
+        <Link className="reset-btn" href="/" style={{ textDecoration: "none" }}>
           Retour à l&apos;accueil
         </Link>
       </div>

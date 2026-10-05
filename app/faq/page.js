@@ -77,7 +77,7 @@ export default function FaqPage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "faq", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "faq" }) }} />
       <ChromeInit />
 
       <div className="cd-view">

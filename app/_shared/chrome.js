@@ -19,20 +19,16 @@ import { iconHtml } from "./icons";
 const ICON_MOON = iconHtml("moon", { size: 18, strokeWidth: 2 });
 const ICON_SUN = iconHtml("sun", { size: 18, strokeWidth: 2 });
 
-// Logo (toque + livre ouvert). `gradId` distinct par exemplaire : deux <svg>
-// avec le même id dans une page se volent leur <linearGradient>.
-function brandLogoSvg(gradId) {
+// Logo (toque + livre ouvert) sur l'encre bleue de la marque, en couleur pleine.
+function brandLogoSvg() {
   return `<svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs><linearGradient id="${gradId}" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/>
-        </linearGradient></defs>
-        <rect width="64" height="64" rx="16" fill="url(#${gradId})"/>
+        <rect width="64" height="64" rx="16" fill="#2346b8"/>
         <polygon points="32,13 49,21 32,29 15,21" fill="white"/>
         <line x1="49" y1="21" x2="51" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
         <circle cx="51" cy="32.5" r="2" fill="#fbbf24"/>
         <polygon points="32,42 13,37 13,48 32,54" fill="white"/>
         <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
-        <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
+        <line x1="32" y1="42" x2="32" y2="54" stroke="#2346b8" stroke-width="1.2"/>
       </svg>`;
 }
 
@@ -114,14 +110,58 @@ const NAV_ITEMS = [
       { key: "concours-le", href: "/concours/licence-excellence", icon: NAV_ICONS.excellence, label: "Concours Licence d'excellence", desc: "Après le DEUG · accès en S5" },
     ],
   },
-  { key: "eval", href: "/evaluation", icon: NAV_ICONS.eval, label: "Évaluation" },
-  { key: "blog", href: "/blog", icon: NAV_ICONS.blog, label: "Blog" },
-  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", href: "/boutique", icon: NAV_ICONS.boutique, label: "Boutique" }] : []),
+  { key: "eval", href: "/evaluation", icon: NAV_ICONS.eval, label: "QCM", desc: "Concours blancs par module" },
+  { key: "blog", href: "/blog", icon: NAV_ICONS.blog, label: "Blog", desc: "Méthode, orientation, guides des facultés" },
+  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", href: "/boutique", icon: NAV_ICONS.boutique, label: "Boutique", desc: "Cahiers de préparation" }] : []),
 ];
 
-// Liens à plat (menu mobile) : les entrées du menu déroulant y deviennent
-// des tuiles à part entière.
-const NAV_FLAT = NAV_ITEMS.flatMap((item) => item.children || [item]);
+// Menu complet du téléphone (bouton « Menu »), rangé par familles. La barre
+// d'onglets du bas couvre les destinations de tous les jours ; ce menu donne
+// tout le reste sans rien cacher.
+const MENU_GROUPS = [
+  { titre: "Cours", items: NAV_ITEMS[1].children },
+  { titre: "Concours", items: NAV_ITEMS[2].children },
+  { titre: "S'entraîner et lire", items: NAV_ITEMS.slice(3) },
+];
+
+// Barre d'onglets du bas (téléphone et tablette) : toujours visible, sous le
+// pouce, elle montre où l'on est. « Cours » mène au dernier espace de cours
+// visité (Bac ou Licence), voir initTabbar().
+const TAB_ICON = (name) => iconHtml(name, { size: 22, strokeWidth: 1.9 });
+const TABS = [
+  { href: "/", label: "Accueil", icon: "home", keys: ["home"] },
+  { href: "/cours", label: "Cours", icon: "book-open", keys: ["bac", "cours"], cours: true },
+  { href: "/concours", label: "Concours", icon: "file", keys: ["concours", "concours-le"] },
+  { href: "/evaluation", label: "QCM", icon: "clipboard", keys: ["eval"] },
+  { href: "/recherche", label: "Recherche", icon: "search", keys: ["recherche"] },
+];
+
+function tabbarHtml(active) {
+  return `<nav class="tabbar" aria-label="Navigation rapide">
+  ${TABS.map((t) => {
+    const on = t.keys.includes(active);
+    return `<a class="tabbar-item${on ? " is-active" : ""}" href="${t.href}"${t.cours ? " data-tab-cours" : ""}${on ? ' aria-current="page"' : ""}>${TAB_ICON(t.icon)}<span>${t.label}</span></a>`;
+  }).join("")}
+</nav>`;
+}
+
+function menuSheetHtml(active) {
+  return `<div class="sheet menu-sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="sheet-head"><span class="sheet-title">Menu</span><button type="button" class="sheet-close" data-sheet-close aria-label="Fermer le menu">${iconHtml("x", { size: 20 })}</button></div>
+  ${MENU_GROUPS.map(
+    (g) => `<div class="menu-group">
+    <div class="menu-group-title">${g.titre}</div>
+    ${g.items
+      .map(
+        (item) =>
+          `<a class="menu-link${active === item.key ? " active" : ""}" href="${item.href}"${active === item.key ? ' aria-current="page"' : ""}><span class="menu-link-icon" aria-hidden="true">${item.icon}</span><span><span class="menu-link-label">${item.label}</span>${item.desc ? `<span class="menu-link-desc">${item.desc}</span>` : ""}</span></a>`
+      )
+      .join("")}
+  </div>`
+  ).join("")}
+  <div class="menu-foot"><a href="/a-propos">À propos</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></div>
+</div>`;
+}
 
 // Fires on every internal link click (nav, cards, "voir tout"...) - since
 // most navigation here is a plain <a href> full page load (not Next <Link>
@@ -135,14 +175,16 @@ const NAV_FLAT = NAV_ITEMS.flatMap((item) => item.children || [item]);
 // `data-pa-section` is the rubrique a partner banner can target (see
 // PARTNER_SECTIONS) — read by renderPartnerAds() below and by the space
 // reservation CSS in app/layout.js.
-export function chromeHtml({ active, showSearch, rails = false }) {
+// La recherche du header (ordinateur) et l'onglet « Recherche » (téléphone)
+// mènent tous deux à /recherche, qui cherche dans tout le site.
+export function chromeHtml({ active, rails = false }) {
   return `
 <div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}" data-pa-section="${sectionOfNav(active)}"></div>
 
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="/" aria-label="SaadConcours, accueil">
-      ${brandLogoSvg("logoGrad")}
+      ${brandLogoSvg()}
       <span class="brand-text">
         <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
         <span class="brand-tagline">Bac · Licence · Master</span>
@@ -168,31 +210,19 @@ export function chromeHtml({ active, showSearch, rails = false }) {
       }).join("")}
     </nav>
     <div class="header-actions">
-      ${
-        showSearch
-          ? `<form class="search-box" id="headerSearchForm" role="search">
-        <button type="submit" class="search-box-btn" aria-label="Rechercher">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        </button>
-        <input type="search" id="searchInput" placeholder="Master, faculté ou ville…" aria-label="Rechercher un concours par titre du master, faculté ou ville">
-      </form>`
-          : ""
-      }
+      <form class="search-box" action="/recherche" method="get" role="search">
+        ${iconHtml("search", { size: 16, className: "search-box-ic" })}
+        <input type="search" name="q" id="headerSearchInput" placeholder="Concours, cours, faculté…" aria-label="Rechercher dans tout le site" autocomplete="off">
+      </form>
       <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">${ICON_MOON}</button>
-      <button class="nav-toggle-btn" id="navToggleBtn" title="Menu" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+      <button class="nav-toggle-btn" id="navToggleBtn" data-sheet-open="menuSheet" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuSheet">
+        ${iconHtml("menu", { size: 20 })}<span>Menu</span>
       </button>
     </div>
   </div>
-  <div class="mobile-nav-panel" id="mobileNavPanel">
-    ${NAV_FLAT
-      .map(
-        (item) =>
-          `<a class="mobile-nav-link${active === item.key ? " active" : ""}" href="${item.href}"><span class="mobile-nav-icon" aria-hidden="true">${item.icon}</span>${item.label}</a>`
-      )
-      .join("")}
-  </div>
 </header>
+${menuSheetHtml(active)}
+${tabbarHtml(active)}
 
 <div class="pa-zone pa-zone-header" id="paHeader" data-pa-zone="header"></div>
 `;
@@ -231,7 +261,7 @@ export function footerHtml() {
   <div class="footer-inner">
     <div class="footer-brand">
       <a class="brand" href="/" aria-label="SaadConcours, accueil">
-        ${brandLogoSvg("logoGradFooter")}
+        ${brandLogoSvg()}
         <span class="brand-text">
           <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
           <span class="brand-tagline">Bac · Licence · Master</span>
@@ -743,7 +773,7 @@ export const chromeScript = function initChrome() {
     function update() {
       ticking = false;
       const y = window.scrollY;
-      const menuOpen = document.getElementById("mobileNavPanel")?.classList.contains("open");
+      const menuOpen = root.classList.contains("sheet-open");
       if (!mq.matches || menuOpen || y < 120) root.classList.remove("header-hidden");
       else if (y > lastY + 6) root.classList.add("header-hidden");
       else if (y < lastY - 6) root.classList.remove("header-hidden");
@@ -796,25 +826,9 @@ export const chromeScript = function initChrome() {
     });
   })();
 
-  // Header search box is shared markup (home, concours...) but only
-  // /concours has a live results grid to filter in place (ConcoursExplorer
-  // wires its own "input" listener for that). Everywhere else — starting
-  // with the homepage — Enter/submit sends the visitor to /concours?q=...,
-  // which ConcoursExplorer already reads on load to prefill and apply the
-  // filter (same param the old "voir tout" search-miss flow used).
-  (function initHeaderSearch() {
-    const form = document.getElementById("headerSearchForm");
-    const input = document.getElementById("searchInput");
-    if (!form || !input || form.dataset.wired === "1") return;
-    form.dataset.wired = "1";
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (window.location.pathname === "/concours") return;
-      const q = input.value.trim();
-      window.location.href = "/concours" + (q ? "?q=" + encodeURIComponent(q) : "");
-    });
-  })();
+  initSheets();
+  initTabbar();
+  markScrollables(document);
 
   (function initNavDropdowns() {
     document.querySelectorAll(".nav-dropdown").forEach((dd) => {
@@ -841,37 +855,125 @@ export const chromeScript = function initChrome() {
     });
   })();
 
-  (function initMobileNav() {
-    const toggleBtn = document.getElementById("navToggleBtn");
-    const panel = document.getElementById("mobileNavPanel");
-    if (!toggleBtn || !panel || toggleBtn.dataset.wired === "1") return;
-    toggleBtn.dataset.wired = "1";
-
-    function close() {
-      panel.classList.remove("open");
-      toggleBtn.setAttribute("aria-expanded", "false");
-    }
-    function toggle() {
-      const willOpen = !panel.classList.contains("open");
-      panel.classList.toggle("open", willOpen);
-      toggleBtn.setAttribute("aria-expanded", String(willOpen));
-    }
-
-    toggleBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggle();
-    });
-    panel.addEventListener("click", (e) => {
-      if (e.target.closest("a")) close();
-    });
-    document.addEventListener("click", (e) => {
-      if (!panel.contains(e.target) && e.target !== toggleBtn) close();
-    });
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 860) close();
-    });
-  })();
 };
+
+/* ------------------------------ Feuilles ---------------------------------
+ * Un seul mécanisme pour le menu du téléphone et les panneaux de filtres
+ * (listes de concours et de cours) : un bouton [data-sheet-open="<id>"]
+ * ouvre l'élément .sheet portant cet id, qui glisse depuis le bas de l'écran
+ * au-dessus d'un voile ; [data-sheet-close], le voile ou Échap le referment.
+ * Sur ordinateur, un panneau de filtres reste à sa place dans la page : son
+ * CSS ne le transforme en feuille qu'en dessous de 860px (classe .sheet-m).
+ * ------------------------------------------------------------------------ */
+let sheetState = null; // { sheet, opener }
+
+function sheetBackdrop() {
+  let el = document.getElementById("sheetBackdrop");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "sheetBackdrop";
+    el.className = "sheet-backdrop";
+    el.addEventListener("click", () => closeSheet());
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
+export function openSheet(id, opener) {
+  const sheet = document.getElementById(id);
+  if (!sheet) return;
+  if (sheetState) closeSheet({ restoreFocus: false });
+  sheetState = { sheet, opener: opener || null };
+  sheet.classList.add("is-open");
+  sheetBackdrop().classList.add("is-open");
+  document.documentElement.classList.add("sheet-open");
+  document.querySelectorAll(`[data-sheet-open="${id}"]`).forEach((b) => b.setAttribute("aria-expanded", "true"));
+  // Après le changement de visibilité, sinon le navigateur refuse le focus.
+  requestAnimationFrame(() => sheet.querySelector("[data-sheet-close], a[href], button, select, input")?.focus({ preventScroll: true }));
+}
+
+export function closeSheet({ restoreFocus = true } = {}) {
+  if (!sheetState) return;
+  const { sheet, opener } = sheetState;
+  sheetState = null;
+  sheet.classList.remove("is-open");
+  document.getElementById("sheetBackdrop")?.classList.remove("is-open");
+  document.documentElement.classList.remove("sheet-open");
+  document.querySelectorAll(`[data-sheet-open="${sheet.id}"]`).forEach((b) => b.setAttribute("aria-expanded", "false"));
+  if (restoreFocus) opener?.focus({ preventScroll: true });
+}
+
+function initSheets() {
+  if (document.__scSheetsWired) return;
+  document.__scSheetsWired = true;
+  document.addEventListener("click", (e) => {
+    const opener = e.target.closest("[data-sheet-open]");
+    if (opener) {
+      e.preventDefault();
+      const id = opener.getAttribute("data-sheet-open");
+      if (sheetState?.sheet.id === id) closeSheet();
+      else openSheet(id, opener);
+      return;
+    }
+    if (e.target.closest("[data-sheet-close]")) {
+      closeSheet();
+      return;
+    }
+    // Un lien suivi depuis une feuille (menu) la referme : au retour arrière,
+    // la page restaurée par le navigateur ne doit pas la montrer ouverte.
+    if (sheetState && e.target.closest(".sheet a[href]")) closeSheet({ restoreFocus: false });
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sheetState) closeSheet();
+  });
+  window.addEventListener("pageshow", () => closeSheet({ restoreFocus: false }));
+}
+
+/* ----------------------------- Barre d'onglets ----------------------------
+ * « Cours » mène au dernier espace de cours ouvert (Bac ou Licence FSJES),
+ * retenu dans le navigateur : un élève de 2ᵉ Bac ne doit pas atterrir à
+ * chaque fois sur la Licence. L'accueil peut aussi le fixer (choix du niveau).
+ * ------------------------------------------------------------------------ */
+export const COURS_SPACE_KEY = "sc_cours";
+
+function initTabbar() {
+  try {
+    const path = window.location.pathname;
+    if (path.startsWith("/bac")) localStorage.setItem(COURS_SPACE_KEY, "/bac/2bac");
+    else if (path.startsWith("/cours")) localStorage.setItem(COURS_SPACE_KEY, "/cours");
+    const space = localStorage.getItem(COURS_SPACE_KEY);
+    if (space === "/bac/2bac" || space === "/cours") {
+      document.querySelectorAll("a[data-tab-cours]").forEach((a) => a.setAttribute("href", space));
+    }
+  } catch {}
+}
+
+/* ------------------------- Contenus plus larges ---------------------------
+ * Formules et tableaux plus larges que l'écran défilent dans leur propre
+ * boîte ; sans indice, rien ne disait qu'il restait du texte à droite. La
+ * classe .is-scrollable ajoute un fondu sur le bord et une barre visible.
+ * Rappelée après le rendu KaTeX (mathMarkdown.js), qui change les largeurs.
+ * ------------------------------------------------------------------------ */
+export function markScrollables(root) {
+  if (!root || typeof window === "undefined") return;
+  const els = root.querySelectorAll(".katex-display, .enonce-content table, .cours-content table, .bac-md table, .table-scroll");
+  els.forEach((el) => {
+    const update = () => el.classList.toggle("is-scrollable", el.scrollWidth > el.clientWidth + 2 && el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+    update();
+    if (el.dataset.scrollWired === "1") return;
+    el.dataset.scrollWired = "1";
+    el.addEventListener("scroll", update, { passive: true });
+  });
+  if (!document.__scScrollablesResize) {
+    document.__scScrollablesResize = true;
+    window.addEventListener("sc:content-rendered", (e) => markScrollables(e.detail || document));
+    let t = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(t);
+      t = setTimeout(() => markScrollables(document), 150);
+    });
+  }
+}
 
 // A public asset path stored in JSON as "data/foo.json" or "images/x.png"
 // needs a leading slash now that pages live at nested routes (/cours, /admin, ...).

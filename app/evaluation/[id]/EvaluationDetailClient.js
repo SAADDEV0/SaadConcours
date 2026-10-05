@@ -29,11 +29,18 @@ function mdLiteInline(s) {
 // validation). Sert au rendu serveur de la liste complète — les questions sont
 // le contenu de la page, elles doivent être dans le HTML et pas seulement
 // ajoutées après hydratation — puis à chaque re-rendu côté client.
+// « Chapitre 1 — Introduction à la macroéconomie (Q1-Q13) » → « Chapitre 1 » :
+// le nom complet reste dans l'infobulle, la puce de chapitre le donne déjà.
+function chapitreCourt(ch) {
+  const s = String(ch || "");
+  return (s.match(/^(chapitre|partie|section|module)\s*\d+/i) || [s.split(/\s+[—–-]\s+/)[0]])[0];
+}
+
 function questionCardInner(q, idx, total) {
+  const ch = q.section || q.chapter;
   return `
-          <div class="eval-q-num">Q${idx + 1} / ${total} — ${escapeHtml(q.section || q.chapter)}</div>
+          <div class="eval-q-num"${ch ? ` title="${escapeHtml(ch)}"` : ""}>Question ${idx + 1} sur ${total}${ch ? ` · ${escapeHtml(chapitreCourt(ch))}` : ""}</div>
           <div class="eval-q-text">${mdLiteInline(q.question)}</div>
-          <div class="eval-hint">Choisis une ou plusieurs réponses — une réponse en trop compte comme fausse.</div>
           <div class="eval-opts">
             ${q.options
               .map(
@@ -92,7 +99,8 @@ export default function EvaluationDetailClient({ quiz }) {
       const qs = currentQuestions();
       const n = answeredCount(qs);
       const label = `${n} / ${qs.length} répondue${n > 1 ? "s" : ""}`;
-      $("#evalProgress").textContent = label;
+      const top = $("#evalProgress");
+      if (top) top.textContent = label;
       $("#evalSubmitProgress").textContent = label;
       const bar = $("#evalSubmitFill");
       if (bar) bar.style.width = `${qs.length ? Math.round((n / qs.length) * 100) : 0}%`;
@@ -247,8 +255,9 @@ export default function EvaluationDetailClient({ quiz }) {
     <div className="cd-card">
       <div className="eval-toolbar">
         <div className="eval-chapter-chips" id="evalChapterChips"></div>
-        <div className="eval-progress" id="evalProgress"></div>
       </div>
+      {/* La règle une seule fois, au lieu d'une ligne sous chacune des questions. */}
+      <p className="eval-hint">Plusieurs réponses peuvent être justes. Une réponse cochée en trop compte comme une erreur.</p>
       <div id="evalScoreBanner"></div>
       {/* Rendu au serveur (donc présent dans le HTML prérendu), remplacé à
          l'identique par renderQuestions() une fois les écouteurs posés. */}

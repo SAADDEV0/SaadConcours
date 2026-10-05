@@ -26,7 +26,7 @@ const DAY_KEY = "duaToastDay";
 const VIEWS_KEY = "duaToastViews";
 const MIN_VIEWS = 2;
 const SHOW_DELAY_MS = 3000;
-const AUTO_HIDE_MS = 12000;
+const AUTO_HIDE_MS = 6000;
 const QUIET_PATHS = ["/a-propos", "/contact", "/confidentialite", "/mentions-legales", "/faq"];
 
 function today() {

@@ -1,13 +1,12 @@
+// Feuilles du site public, une seule couche : jetons et chrome (globals.css),
+// composants de contenu (bac.css, partagés par tous les espaces malgré leur
+// préfixe historique bac-*), composants propres aux listes, fiches et
+// boutique (space.css). Aucune ne redessine une autre.
 import "./globals.css";
-// Composants visuels communs à toutes les sections (espace Bac, cours FSJES,
-// concours, évaluation, blog, accueil).
 import "./bac/bac.css";
 import "./_shared/space.css";
-// Couche visuelle (design « SaadConcours 2 ») : en dernier, elle redessine
-// les composants ci-dessus.
-import "./_shared/design.css";
 import Script from "next/script";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Literata, Plus_Jakarta_Sans } from "next/font/google";
 import DuaToast from "./_shared/DuaToast";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservationCss } from "./_shared/partnerAds";
@@ -17,9 +16,20 @@ import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservation
 // mise en page (métriques de repli ajustées), exposée en --font-sans.
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-sans",
+});
+
+// Police de lecture des textes longs (cours, énoncés, corrigés, articles),
+// dessinée pour la lecture sur écran. Pas de préchargement : la plupart des
+// pages (listes, accueil) n'en affichent pas une ligne.
+const literata = Literata({
+  subsets: ["latin", "latin-ext"],
+  style: ["normal", "italic"],
+  display: "swap",
+  preload: false,
+  variable: "--font-read",
 });
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -68,8 +78,15 @@ export const metadata = {
   },
 };
 
+// Barre du navigateur mobile de la couleur du fond de page (papier / nuit),
+// et viewport-fit=cover pour que la barre d'onglets du bas tienne compte de
+// la zone de geste des téléphones (env(safe-area-inset-bottom)).
 export const viewport = {
-  themeColor: "#4f46e5",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f7f9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f1115" },
+  ],
+  viewportFit: "cover",
 };
 
 const ORG_JSON_LD = {
@@ -115,7 +132,7 @@ export default async function RootLayout({ children }) {
   return (
     // suppressHydrationWarning: data-theme is stamped on by the pre-paint
     // script below, so it is always an "extra" attribute at hydration time.
-    <html lang="fr" className={jakarta.variable} suppressHydrationWarning>
+    <html lang="fr" className={`${jakarta.variable} ${literata.variable}`} suppressHydrationWarning>
       <head>
         {/* Applies the saved light/dark choice before the first paint.
            chromeScript() also sets data-theme, but only from a useEffect

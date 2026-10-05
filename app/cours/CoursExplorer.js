@@ -64,6 +64,16 @@ export default function CoursExplorer() {
       if (countEl) countEl.textContent = `${n} module${n > 1 ? "s" : ""}`;
       const empty = $("#coursEmpty");
       if (empty) empty.hidden = n > 0;
+      // Feuille des filtres (téléphone) : nombre de filtres posés sur le
+      // bouton « Filtres », nombre de modules sur le bouton de validation.
+      const actifs = [parcours, filiere, categorie].filter(Boolean).length;
+      const badge = $("#coursFilterBadge");
+      if (badge) {
+        badge.textContent = String(actifs);
+        badge.hidden = actifs === 0;
+      }
+      const apply = $("#coursApply");
+      if (apply) apply.textContent = n ? `Voir les ${n} module${n > 1 ? "s" : ""}` : "Aucun module";
     }
 
     semBtns.forEach((b) =>

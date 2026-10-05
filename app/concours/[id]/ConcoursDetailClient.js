@@ -91,13 +91,14 @@ export function ShareButton({ concours }) {
   );
 }
 
-// Exported separately, same reasoning as ShareButton — placed at the top
-// of the page next to Partager instead of only in the bottom action bar.
-export function DownloadPdfButton({ concours }) {
+// Exported separately, same reasoning as ShareButton. Sur la fiche, il vit
+// dans la barre d'onglets collante (className="sp-tab-pdf", label « PDF ») :
+// toujours à portée de doigt pendant la lecture du sujet.
+export function DownloadPdfButton({ concours, className = "dl-btn", label = "Télécharger en PDF" }) {
   return (
-    <button className="dl-btn" onClick={() => downloadConcoursPdf(concours)}>
+    <button type="button" className={className} onClick={() => downloadConcoursPdf(concours)} aria-label="Télécharger le sujet en PDF">
       <Icon name="file-pdf" size={18} />
-      Télécharger en PDF
+      {label}
     </button>
   );
 }

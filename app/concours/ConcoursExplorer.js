@@ -216,17 +216,27 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
 
     const FILTER_SELECTS = ["#filterVille", "#filterCategorie", "#filterFiliere", "#filterEtab", "#filterAnnee", "#filterModule"];
 
-    // Libellés du panneau mobile (bouton replié, badge des filtres actifs,
-    // bouton « Voir les N résultats ») : invisibles sur ordinateur.
+    // Badge du bouton « Filtres », bouton « Voir les N résultats » de la
+    // feuille (téléphone) et pastilles des filtres actifs au-dessus de la
+    // liste : un filtre posé reste visible, et se retire d'un geste.
     function syncFilterPanel() {
       const label = `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
-      const actifs = FILTER_SELECTS.filter((id) => $(id).value).length;
+      const actifs = FILTER_SELECTS.filter((id) => $(id).value);
       document.querySelectorAll(".sp-filter-badge").forEach((b) => {
-        b.textContent = String(actifs);
-        b.hidden = actifs === 0;
+        b.textContent = String(actifs.length);
+        b.hidden = actifs.length === 0;
       });
-      $(".sp-filter-count").textContent = label;
       $("#filterApply").textContent = filtered.length ? `Voir les ${label}` : "Aucun résultat";
+      const chips = $("#activeFilters");
+      if (chips) {
+        chips.innerHTML = actifs
+          .map((id) => {
+            const el = $(id);
+            const text = el.options[el.selectedIndex]?.textContent || el.value;
+            return `<button type="button" class="sp-active-chip" data-clear="${id}" aria-label="Retirer le filtre ${text.replace(/"/g, "&quot;")}">${text.replace(/</g, "&lt;")}<svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>`;
+          })
+          .join("");
+      }
     }
 
     // Bouton « Voir plus » : caché quand toutes les cartes sont visibles.
@@ -242,7 +252,7 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
       const grid = $("#grid");
       shown = pageSize;
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="sp-empty">Aucun concours ne correspond à ces filtres.</div>`;
+        grid.innerHTML = `<div class="sp-empty sp-rows-empty">Aucun sujet ne correspond. Essaie un autre mot, ou retire un filtre.</div>`;
         syncMore();
         return;
       }
@@ -348,46 +358,16 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
         $("#searchInput").value = "";
         applyFilters();
       });
-    }
-
-    // Panneau de filtres mobile (voir ConcoursListing.js / space.css). Handlers
-    // posés en propriétés et non via addEventListener : l'effet tourne deux
-    // fois en StrictMode (dev), et un double écouteur sur le bouton replierait
-    // aussitôt ce qu'il vient d'ouvrir.
-    const filterCard = $("#filterCard");
-    const filterToggle = $("#filterToggle");
-    const filterFab = $("#filterFab");
-
-    function setFilterPanelOpen(open) {
-      filterCard.classList.toggle("is-open", open);
-      filterToggle.setAttribute("aria-expanded", String(open));
-    }
-
-    // Place le haut de la carte des filtres juste sous le header collant.
-    function scrollToFilterPanel() {
-      const header = document.querySelector("header.site-header");
-      const top = filterCard.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 12;
-      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-    }
-
-    filterToggle.onclick = () => setFilterPanelOpen(!filterCard.classList.contains("is-open"));
-    $("#filterApply").onclick = () => {
-      setFilterPanelOpen(false);
-      scrollToFilterPanel();
-    };
-    filterFab.onclick = () => {
-      setFilterPanelOpen(true);
-      scrollToFilterPanel();
-    };
-
-    // Le bouton flottant n'apparaît qu'une fois la carte des filtres sortie
-    // de l'écran par le haut, c.-à-d. quand on est descendu dans la liste.
-    let filterObserver = null;
-    if ("IntersectionObserver" in window) {
-      filterObserver = new IntersectionObserver(([entry]) => {
-        filterFab.classList.toggle("is-visible", !entry.isIntersecting && entry.boundingClientRect.top < 0);
-      });
-      filterObserver.observe(filterCard);
+      // Pastille d'un filtre actif : la toucher retire ce filtre. Propriété
+      // plutôt qu'addEventListener : l'effet tourne deux fois en StrictMode.
+      $("#activeFilters").onclick = (e) => {
+        const chip = e.target.closest("[data-clear]");
+        if (!chip) return;
+        const id = chip.getAttribute("data-clear");
+        $(id).value = "";
+        if (id === "#filterCategorie") fillFiliereSelect("");
+        applyFilters();
+      };
     }
 
     initFilters();
@@ -403,8 +383,6 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
       $("#searchInput").value = q;
       applyFilters();
     }
-
-    return () => filterObserver?.disconnect();
   }, [initialData, pageSize]);
 
   return null;

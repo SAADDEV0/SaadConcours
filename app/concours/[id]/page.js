@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
-import { CONCOURS_HUES } from "../../_shared/concoursCard";
+import { concoursCardHtml } from "../../_shared/concoursCard";
 import { difficulteHtml } from "../../_shared/format";
 import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
@@ -143,6 +143,7 @@ export default async function ConcoursDetailPage(props) {
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
+  const corrigeIds = getCorrigeIdsLocal();
   const hasImages = Boolean(c.images && c.images.length > 0);
   // La source d'un sujet (c.source) reste dans concours.json pour la console,
   // mais n'est plus publiée depuis le 2026-09-26 : ni section « Source », ni
@@ -200,9 +201,9 @@ export default async function ConcoursDetailPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: isLicenceExcellence(c) ? "concours-le" : "concours", showSearch: false, rails: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: isLicenceExcellence(c) ? "concours-le" : "concours", rails: true }) }} />
 
-      <div className="bac-space site-space" style={{ "--mat-h": CONCOURS_HUES[c.categorie] ?? 220 }}>
+      <div className="bac-space">
       <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/concours">Concours</a> <span>/</span>{" "}
@@ -215,65 +216,62 @@ export default async function ConcoursDetailPage(props) {
         </nav>
 
         <div className="bac-chap-hero sp-detail-hero">
-          <div className="bac-eyebrow">
-            {niveau.long} · {c.annee}
-          </div>
+          <div className="bac-eyebrow">{niveau.long}</div>
           <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
-          <div className="bac-hero-stats">
-            <span className="bac-stat">
-              <Icon name="school" size={15} />
-              {c.etablissement}
-            </span>
-            <span className="bac-stat">
-              <Icon name="pin" size={15} />
-              {c.ville}
-            </span>
-            <span className="bac-stat">
-              <Icon name="calendar" size={15} />
-              {c.annee}
-            </span>
-            {difficulteHtml(c.difficulte) && (
-              <span className="bac-stat" dangerouslySetInnerHTML={{ __html: difficulteHtml(c.difficulte) }} />
-            )}
-            {corrigeMd && (
-              <span className="bac-dispo">
-                <Icon name="check-circle" size={14} />
-                Corrigé disponible
-              </span>
-            )}
+          <div className="sp-detail-meta">
+            <span>{c.etablissement}</span>
+            {c.ville && !String(c.etablissement || "").includes(c.ville) && <span>{c.ville}</span>}
+            <span>{c.annee}</span>
+            {difficulteHtml(c.difficulte) && <span dangerouslySetInnerHTML={{ __html: difficulteHtml(c.difficulte) }} />}
+            {corrigeMd && <span className="sp-detail-corrige">Corrigé disponible</span>}
           </div>
           {c.modules?.length > 0 && (
-            <p className="sp-chips sp-detail-modules">
-              <span className="sp-detail-modules-label">Matières :</span>
-              {c.modules.map((m) => (
-                <span key={m} className="bac-res-chip on">
-                  {m}
-                </span>
-              ))}
+            <p className="sp-detail-modules">
+              <strong>Matières :</strong> {c.modules.join(", ")}
             </p>
           )}
-          <div className="sp-hero-actions cd-head-actions">
-            <DownloadPdfButton concours={fullConcours} />
-            <ShareButton
-              concours={{ master_reel: c.master_reel, filiere: c.filiere, etablissement: c.etablissement, ville: c.ville, annee: c.annee }}
-            />
+          <div className="sp-detail-body">
+            {hasImages && (
+              <a className="sp-scan-link" href="#section-images">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={pub(c.images[0])} alt="" width={46} height={60} loading="lazy" />
+                <span>
+                  <strong>Sujet original scanné</strong>
+                  <span>
+                    {c.images.length} page{c.images.length > 1 ? "s" : ""} · voir les scans
+                  </span>
+                </span>
+              </a>
+            )}
+            <div className="sp-hero-actions cd-head-actions">
+              <ShareButton
+                concours={{ master_reel: c.master_reel, filiere: c.filiere, etablissement: c.etablissement, ville: c.ville, annee: c.annee }}
+              />
+            </div>
           </div>
         </div>
 
-        <nav className="bac-tab-labels sp-anchor-tabs" aria-label="Sections du sujet">
+        {/* Barre collante : sections du sujet et PDF, toujours à portée de
+           doigt pendant la lecture. Le « Corrigé » est à l'encre rouge. */}
+        <nav
+          className="bac-tab-labels sp-anchor-tabs has-pdf"
+          style={{ "--tabs": 1 + (hasImages ? 1 : 0) + (corrigeHtml ? 1 : 0) }}
+          aria-label="Sections du sujet"
+        >
           <a className="bac-tab-label" href="#section-enonce">
             <Icon name="file-pen" size={18} /> Énoncé
           </a>
           {hasImages && (
             <a className="bac-tab-label" href="#section-images">
-              <Icon name="image" size={18} /> Sujet scanné
+              <Icon name="image" size={18} /> Scan
             </a>
           )}
           {corrigeHtml && (
-            <a className="bac-tab-label" href="#section-corrige">
+            <a className="bac-tab-label sp-tab-corrige" href="#section-corrige">
               <Icon name="check-circle" size={18} /> Corrigé
             </a>
           )}
+          <DownloadPdfButton concours={fullConcours} className="sp-tab-pdf" label="PDF" />
         </nav>
 
         <div className="cd-card" id="section-enonce">
@@ -306,7 +304,7 @@ export default async function ConcoursDetailPage(props) {
 
         {corrigeHtml && (
           <div className="cd-card" id="section-corrige">
-            <h2>Corrigé</h2>
+            <h2 className="is-corrige">Corrigé</h2>
             {/* Replié par défaut : on s'entraîne sur le sujet avant de voir la
                solution. Le texte reste dans le HTML (indexé), et le lien
                « Corrigé » des onglets l'ouvre (ConcoursDetailClient). */}
@@ -349,19 +347,12 @@ export default async function ConcoursDetailPage(props) {
         {related.length > 0 && (
           <section className="bac-group">
             <h2 className="bac-section-title">Concours similaires</h2>
-            <div className="sp-related">
-              {related.map((r) => (
-                <a key={r.id} className="bac-mat-card" href={`/concours/${r.id}`} style={{ "--mat-h": CONCOURS_HUES[r.categorie] ?? 220 }}>
-                  <span className="bac-mat-icon sp-year">{r.annee}</span>
-                  <span className="bac-mat-body">
-                    <span className="bac-mat-name">{r.master_reel || r.filiere || `${r.etablissement} — ${r.ville}`}</span>
-                    <span className="bac-mat-meta">
-                      {r.etablissement} · {r.ville}
-                    </span>
-                  </span>
-                </a>
-              ))}
-            </div>
+            <div
+              className="sp-rows"
+              dangerouslySetInnerHTML={{
+                __html: related.map((r) => concoursCardHtml({ ...r, hasCorrige: Boolean(r.corrige_md) || corrigeIds.has(r.id) }, { dl: false })).join(""),
+              }}
+            />
           </section>
         )}
       </div>

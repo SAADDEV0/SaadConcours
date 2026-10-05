@@ -18,7 +18,7 @@ export function buildOgImage({ eyebrow, title, subtitle }) {
           width: "100%",
           height: "100%",
           padding: "70px 80px",
-          background: "linear-gradient(135deg, #0f1220 0%, #1b1f3a 55%, #2a1f4d 100%)",
+          background: "#2346b8",
           fontFamily: "sans-serif",
         }}
       >
@@ -31,17 +31,17 @@ export function buildOgImage({ eyebrow, title, subtitle }) {
               width: 56,
               height: 56,
               borderRadius: 16,
-              background: "linear-gradient(135deg,#4f46e5,#a855f7)",
+              background: "#ffffff",
               fontSize: 30,
               fontWeight: 700,
-              color: "#fff",
+              color: "#2346b8",
             }}
           >
             S
           </div>
           <div style={{ display: "flex", fontSize: 30, fontWeight: 700 }}>
             <span style={{ color: "#fff" }}>Saad</span>
-            <span style={{ color: "#c9a7ff" }}>Concours</span>
+            <span style={{ color: "#ffe45c" }}>Concours</span>
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -51,7 +51,7 @@ export function buildOgImage({ eyebrow, title, subtitle }) {
                 display: "flex",
                 fontSize: 24,
                 fontWeight: 600,
-                color: "#a5b4fc",
+                color: "#ffe45c",
                 textTransform: "uppercase",
                 letterSpacing: 2,
               }}
@@ -63,7 +63,7 @@ export function buildOgImage({ eyebrow, title, subtitle }) {
             {title}
           </div>
           {subtitle && (
-            <div style={{ display: "flex", fontSize: 27, color: "#cbd5e1", maxWidth: 920 }}>{subtitle}</div>
+            <div style={{ display: "flex", fontSize: 27, color: "#dbe3ff", maxWidth: 920 }}>{subtitle}</div>
           )}
         </div>
       </div>

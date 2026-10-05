@@ -10,7 +10,6 @@ import { readingTimeMinutes } from "../../_shared/blogCard";
 import { formatDateFr } from "../../_shared/format";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 import MathScripts from "../../_shared/MathScripts";
-import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -126,9 +125,9 @@ export default async function BlogDetailPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", showSearch: false, rails: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", rails: true }) }} />
 
-      <div className="bac-space site-space" style={{ "--mat-h": 330 }}>
+      <div className="bac-space">
       <div className="bac-wrap sp-detail">
         <nav className="cd-breadcrumb">
           <a href="/">Accueil</a> <span>/</span> <a href="/blog">Blog</a> <span>/</span> <span>{p.title}</span>
@@ -146,29 +145,21 @@ export default async function BlogDetailPage(props) {
           </div>
           <h1>{p.title}</h1>
           <div className="bac-hero-stats">
-            <span className="bac-stat">
-              <Icon name="calendar" size={15} />
-              {formatDateFr(p.publishedAt)}
-            </span>
+            <span className="bac-stat">{formatDateFr(p.publishedAt)}</span>
             {p.updatedAt && p.updatedAt !== p.publishedAt && (
-              <span className="bac-stat">
-                <Icon name="refresh" size={15} />
-                Mis à jour le {formatDateFr(p.updatedAt)}
-              </span>
+              <span className="bac-stat">Mis à jour le {formatDateFr(p.updatedAt)}</span>
             )}
-            <span className="bac-stat">
-              <Icon name="clock" size={15} />
-              {minutes} min de lecture
-            </span>
+            <span className="bac-stat">{minutes} min de lecture</span>
           </div>
           <div className="sp-hero-actions cd-head-actions">
             <ShareButton post={p} />
           </div>
         </div>
 
-        <div className="cd-card">
+        {/* L'article se lit sur la page, comme un texte, pas dans une boîte. */}
+        <article className="sp-article">
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
-        </div>
+        </article>
 
         {/* Bannière partenaire « Dans le contenu » (vide sans annonceur). */}
         <div dangerouslySetInnerHTML={{ __html: partnerZoneHtml("inline") }} />
@@ -178,15 +169,14 @@ export default async function BlogDetailPage(props) {
         {related.length > 0 && (
           <section className="bac-group">
             <h2 className="bac-section-title">À lire aussi</h2>
-            <div className="sp-related">
+            <div className="sp-rows">
               {related.map((r) => (
-                <a key={r.id} className="bac-mat-card" href={`/blog/${r.id}`}>
-                  <span className="bac-mat-icon">
-                    <Icon name="news" size={23} />
-                  </span>
-                  <span className="bac-mat-body">
-                    <span className="bac-mat-name">{r.title}</span>
-                    <span className="bac-mat-meta">{formatDateFr(r.publishedAt)}</span>
+                <a key={r.id} className="sp-row" href={`/blog/${r.id}`}>
+                  <span className="sp-row-main">
+                    <span className="sp-row-title">{r.title}</span>
+                    <span className="sp-row-meta">
+                      <span>{formatDateFr(r.publishedAt)}</span>
+                    </span>
                   </span>
                 </a>
               ))}

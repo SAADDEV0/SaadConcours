@@ -2,8 +2,6 @@ import { getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
 import BlogExplorer from "./BlogExplorer";
-import HeroArt from "../_shared/HeroArt";
-import { Icon } from "../_shared/icons";
 import { blogCardHtml, blogListItem } from "../_shared/blogCard";
 import { BLOG_CATEGORIES } from "../../lib/blogTaxonomy";
 
@@ -72,15 +70,13 @@ export default async function BlogPage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "blog" }) }} />
       <ChromeInit />
       <BlogExplorer initialData={posts.map(blogListItem)} />
 
-      <div className="bac-space site-space">
+      <div className="bac-space">
         <div className="bac-wrap">
           <section className="bac-hero">
-            <HeroArt icon="news" />
-            <div className="bac-eyebrow">Blog · Méthode et orientation</div>
             <h1>Le blog SaadConcours</h1>
             <p>
               Méthode, matières à préparer, guides des facultés et conseils pour réussir ton Bac, ta Licence et ton
@@ -101,14 +97,13 @@ export default async function BlogPage() {
               <div className="bac-year-tabs" id="blogCategoryChips" role="group" aria-label="Rubriques">
                 {categoryCounts.map((c) => (
                   <button key={c.code} type="button" className="bac-year-tab blog-cat-chip" data-category={c.code}>
-                    <Icon e={c.emoji} size={16} />
                     {c.label} <em>{c.count}</em>
                   </button>
                 ))}
               </div>
-              <input type="search" id="blogSearchInput" placeholder="Rechercher un article..." aria-label="Rechercher un article" />
+              <input type="search" id="blogSearchInput" placeholder="Rechercher un article…" aria-label="Rechercher un article" />
               <button type="button" className="sp-reset" id="blogResetBtn">
-                ✕ Réinitialiser
+                Réinitialiser
               </button>
               <span className="sp-count" id="blogResultsCount">
                 {posts.length} article{posts.length > 1 ? "s" : ""}
@@ -118,7 +113,7 @@ export default async function BlogPage() {
 
           {posts.length ? (
             <>
-              <div className="sp-card-grid" id="blogGrid" dangerouslySetInnerHTML={{ __html: posts.map(blogCardHtml).join("") }} />
+              <div className="sp-rows" id="blogGrid" dangerouslySetInnerHTML={{ __html: posts.map(blogCardHtml).join("") }} />
               <div className="sp-pagination" id="blogPagination" />
             </>
           ) : (

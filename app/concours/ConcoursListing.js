@@ -2,15 +2,16 @@ import { concoursCardHtml, concoursListItem, compareConcoursRecents, CONCOURS_PA
 import ConcoursExplorer from "./ConcoursExplorer";
 import { Icon } from "../_shared/icons";
 
-// Filtres + grille de cartes, communs aux deux pages de liste (/concours pour
-// le Master, /concours/licence-excellence). Chaque page passe sa propre liste
-// déjà filtrée par niveau : les <select> de ConcoursExplorer ne proposent donc
-// que les villes, filières et années réellement présentes dans ce niveau.
+// Recherche, filtres et liste de sujets, communs aux deux pages de liste
+// (/concours pour le Master, /concours/licence-excellence). Chaque page passe
+// sa propre liste déjà filtrée par niveau : les <select> de ConcoursExplorer
+// ne proposent donc que les villes, filières et années réellement présentes
+// dans ce niveau.
 //
-// Sur mobile, les filtres passent au-dessus de la liste, repliés derrière
-// #filterToggle, et #filterFab y ramène depuis le bas de la liste : avec plus
-// de 250 cartes, les laisser sous la grille les rendait inatteignables
-// (voir space.css).
+// Ordinateur : filtres dans la colonne de gauche. Téléphone : la liste vient
+// juste sous la recherche ; les filtres s'ouvrent dans une feuille du bas
+// (bouton « Filtres », voir openSheet dans chrome.js) et les filtres actifs
+// restent visibles en pastilles au-dessus de la liste.
 export default function ConcoursListing({ concours: liste, gridTitle = "Tous les sujets", sideLinks = [] }) {
   const concours = [...liste].sort(compareConcoursRecents);
   const nbResultats = `${concours.length} résultat${concours.length > 1 ? "s" : ""}`;
@@ -19,82 +20,76 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
     <>
       <div className="bac-mat-layout sp-listing">
         <aside className="bac-side">
-          <div className="bac-side-card sp-filter-card" id="filterCard">
-            <button type="button" className="sp-filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filterBody">
-              Filtrer les sujets
-              <span className="sp-filter-badge" hidden />
-              <span className="sp-filter-count">{nbResultats}</span>
-              <span className="sp-filter-chevron" aria-hidden="true">
-                ▾
-              </span>
-            </button>
-            <div className="bac-side-title sp-filter-title">Filtrer les sujets</div>
-            <div className="sp-filter-body" id="filterBody">
-              <label className="sp-field">
-                <span>Ville</span>
-                <select id="filterVille">
-                  <option value="">Toutes les villes</option>
-                </select>
-              </label>
-              <label className="sp-field">
-                <span>Catégorie</span>
-                <select id="filterCategorie">
-                  <option value="">Toutes les catégories</option>
-                </select>
-              </label>
-              <label className="sp-field">
-                <span>Filière</span>
-                <select id="filterFiliere">
-                  <option value="">Toutes les filières</option>
-                </select>
-              </label>
-              <label className="sp-field">
-                <span>Établissement</span>
-                <select id="filterEtab">
-                  <option value="">Tous les établissements</option>
-                </select>
-              </label>
-              <label className="sp-field">
-                <span>Année</span>
-                <select id="filterAnnee">
-                  <option value="">Toutes les années</option>
-                </select>
-              </label>
-              <label className="sp-field">
-                <span>Module requis</span>
-                <select id="filterModule">
-                  <option value="">Tous les modules</option>
-                </select>
-              </label>
-              <button type="button" className="sp-reset sp-reset-full" id="resetBtn">
-                ✕ Réinitialiser les filtres
-              </button>
-              <button type="button" className="sp-filter-apply" id="filterApply">
-                Voir les {nbResultats}
+          <div className="bac-side-card sp-filter-card sheet-m" id="filterSheet" role="dialog" aria-label="Filtrer les sujets">
+            <div className="sheet-head">
+              <span className="sheet-title">Filtrer les sujets</span>
+              <button type="button" className="sheet-close" data-sheet-close aria-label="Fermer les filtres">
+                <Icon name="x" size={20} />
               </button>
             </div>
+            <div className="bac-side-title sp-filter-title">Filtrer les sujets</div>
+            <label className="sp-field">
+              <span>Ville</span>
+              <select id="filterVille">
+                <option value="">Toutes les villes</option>
+              </select>
+            </label>
+            <label className="sp-field">
+              <span>Catégorie</span>
+              <select id="filterCategorie">
+                <option value="">Toutes les catégories</option>
+              </select>
+            </label>
+            <label className="sp-field">
+              <span>Filière</span>
+              <select id="filterFiliere">
+                <option value="">Toutes les filières</option>
+              </select>
+            </label>
+            <label className="sp-field">
+              <span>Établissement</span>
+              <select id="filterEtab">
+                <option value="">Tous les établissements</option>
+              </select>
+            </label>
+            <label className="sp-field">
+              <span>Année</span>
+              <select id="filterAnnee">
+                <option value="">Toutes les années</option>
+              </select>
+            </label>
+            <label className="sp-field">
+              <span>Module requis</span>
+              <select id="filterModule">
+                <option value="">Tous les modules</option>
+              </select>
+            </label>
+            <button type="button" className="sp-reset sp-reset-full" id="resetBtn">
+              Réinitialiser les filtres
+            </button>
+            <button type="button" className="dl-btn sheet-apply" id="filterApply" data-sheet-close>
+              Voir les {nbResultats}
+            </button>
           </div>
-          <div className="bac-side-card sp-side-more">
-            <div className="bac-side-title">Pour aller plus loin</div>
-            {sideLinks.map((l) => (
-              <a key={l.href} href={l.href} className="bac-side-link">
-                {l.label}
-                <span>
-                  <Icon e={l.icon} size={16} />
-                </span>
-              </a>
-            ))}
-          </div>
+          {sideLinks.length > 0 && (
+            <div className="bac-side-card sp-side-more">
+              <div className="bac-side-title">Pour aller plus loin</div>
+              {sideLinks.map((l) => (
+                <a key={l.href} href={l.href} className="bac-side-link">
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          )}
         </aside>
 
         <main className="bac-main">
-          {/* Recherche posée au-dessus de la grille qu'elle filtre, et non plus
-             dans le header : elle ne cherche que dans les concours, et le
-             header doit rester identique d'une page à l'autre. */}
+          {/* Recherche posée au-dessus de la liste qu'elle filtre (titre du
+             master, faculté, ville) ; /recherche cherche dans tout le site. */}
           <form className="sp-search" role="search" id="listSearchForm">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
+              <circle cx="11" cy="11" r="7.5" />
+              <path d="m21 21-4.5-4.5" />
             </svg>
             <input
               type="search"
@@ -107,12 +102,14 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
           </form>
           <div className="sp-results-head">
             <h2 className="bac-section-title">{gridTitle}</h2>
-            <span className="sp-count" id="resultsCount">
-              {nbResultats}
-            </span>
+            <button type="button" className="sp-filter-btn" data-sheet-open="filterSheet" aria-controls="filterSheet" aria-expanded="false">
+              <Icon name="sliders" size={17} />
+              Filtres
+              <span className="sp-filter-badge" hidden />
+            </button>
             <label className="sp-sort">
-              <span>Trier</span>
-              <select id="sortSelect" defaultValue="recents">
+              <span className="sr-only">Trier</span>
+              <select id="sortSelect" defaultValue="recents" aria-label="Trier les sujets">
                 <option value="recents">Plus récents</option>
                 <option value="ajouts">Derniers ajoutés</option>
                 <option value="anciens">Plus anciens</option>
@@ -120,9 +117,13 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
                 <option value="difficile">Plus difficiles</option>
               </select>
             </label>
+            <span className="sp-count" id="resultsCount" aria-live="polite">
+              {nbResultats}
+            </span>
           </div>
+          <div className="sp-active-filters" id="activeFilters" />
           <div
-            className="sp-card-grid"
+            className="sp-rows"
             id="grid"
             dangerouslySetInnerHTML={{
               __html: concours.map((c, i) => concoursCardHtml(c, { hidden: i >= CONCOURS_PAGE_SIZE })).join(""),
@@ -136,15 +137,7 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
         </main>
       </div>
 
-      <button type="button" className="sp-filter-fab" id="filterFab" aria-controls="filterBody">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-          <path d="M3 5h18l-7 8.5V19l-4 2v-7.5z" strokeLinejoin="round" />
-        </svg>
-        Filtrer
-        <span className="sp-filter-badge" hidden />
-      </button>
-
-      {/* Données des cartes seulement : voir concoursListItem. */}
+      {/* Données des lignes seulement : voir concoursListItem. */}
       <ConcoursExplorer initialData={concours.map(concoursListItem)} pageSize={CONCOURS_PAGE_SIZE} />
     </>
   );

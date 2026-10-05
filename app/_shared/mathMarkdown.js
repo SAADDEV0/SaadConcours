@@ -13,6 +13,7 @@
 // has no syntax for and which pass through marked.parse() as plain text.
 
 import { wrapAccentedMathWords } from "./latexPlainText";
+import { iconHtml, iconName } from "./icons";
 
 const OPEN = "";
 const CLOSE = "";
@@ -44,9 +45,27 @@ export function protectMath(md) {
   return { text, restore };
 }
 
+// Emoji des contenus (« 🎯 Objectifs », « ⚠️ Piège », « ✅ Bonne réponse »)
+// rendus avec le jeu d'icônes du site : le même trait sur Windows, Android et
+// iOS, aux couleurs du thème. Seul le texte entre les balises est touché
+// (jamais un attribut), et un emoji sans icône connue reste tel quel.
+const EMOJI_RE = /(\p{Extended_Pictographic})\uFE0F?/gu;
+const EMOJI_TONE = { "⚠": "ic-warn", "✅": "ic-ok", "✔": "ic-ok", "❌": "ic-ko" };
+
+export function emojiToIcons(html) {
+  return String(html || "").replace(/(^|>)([^<]*)/g, (m, open, text) =>
+    open +
+    text.replace(EMOJI_RE, (e, ch) => {
+      const name = iconName(ch);
+      if (!name) return e;
+      return iconHtml(name, { size: 18, className: `ic ic-inline${EMOJI_TONE[ch] ? ` ${EMOJI_TONE[ch]}` : ""}` });
+    })
+  );
+}
+
 export function renderMarkdownWithMath(markedInstance, md, options) {
   const { text, restore } = protectMath(md);
-  return restore(markedInstance.parse(text, options));
+  return emojiToIcons(restore(markedInstance.parse(text, options)));
 }
 
 const KATEX_DELIMITERS = [
@@ -71,6 +90,9 @@ export function renderMathWhenReady(el) {
     (function attempt() {
       if (window.renderMathInElement) {
         window.renderMathInElement(el, { delimiters: KATEX_DELIMITERS, throwOnError: false });
+        // Les formules ont maintenant leur vraie largeur : chrome.js
+        // (markScrollables) repère celles qui dépassent de l'écran.
+        window.dispatchEvent(new CustomEvent("sc:content-rendered", { detail: el }));
         resolve();
         return;
       }

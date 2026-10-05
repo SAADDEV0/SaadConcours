@@ -4,7 +4,6 @@ import ChromeInit from "../_shared/ChromeInit";
 import { boutiqueCardHtml } from "../_shared/boutiqueCard";
 import { BOUTIQUE_NIVEAUX, isProduitVisible, trierProduits } from "../../lib/boutique";
 import BoutiqueExplorer from "./BoutiqueExplorer";
-import HeroArt from "../_shared/HeroArt";
 import { Icon } from "../_shared/icons";
 
 // Prérendue au build, comme /blog : la page ne passe jamais par le Worker
@@ -53,15 +52,13 @@ export default async function BoutiquePage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "boutique", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "boutique" }) }} />
       <ChromeInit />
       <BoutiqueExplorer initialData={produits} />
 
-      <div className="bac-space site-space">
+      <div className="bac-space">
         <div className="bac-wrap">
           <section className="bac-hero">
-            <HeroArt icon="cart" />
-            <div className="bac-eyebrow">Boutique · Cahiers de préparation</div>
             <h1>Des cahiers pour réviser plus vite et mieux</h1>
             <p>
               QCM corrigés, sujets blancs et fiches de synthèse, rédigés à partir des vrais sujets de concours et des programmes

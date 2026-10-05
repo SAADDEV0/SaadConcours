@@ -103,10 +103,10 @@ export default async function ProduitPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "boutique", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "boutique" }) }} />
       <ProduitClient id={p.id} />
 
-      <div className="bac-space site-space" style={{ "--mat-h": niv?.hue ?? 230 }}>
+      <div className="bac-space">
         <div className="bac-wrap">
           <nav className="cd-breadcrumb">
             <a href="/">Accueil</a> <span>/</span> <a href="/boutique">Boutique</a> <span>/</span> <span>{p.titre}</span>

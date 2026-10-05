@@ -11,7 +11,7 @@ import ConcoursLies from "../../_shared/ConcoursLies";
 import AdSlot from "../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
-import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
+import { fsjesModule, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
 import { concoursDuModule } from "../../../lib/concoursParModule";
 import { Icon } from "../../_shared/icons";
 
@@ -126,18 +126,15 @@ export default async function CoursModulePage(props) {
     <>
       {annexe && <MathScripts />}
       <JsonLd data={[jsonLd, breadcrumbJsonLd([{ name: "Cours", path: "/cours" }, { name: c.module, path: `/cours/${c.id}` }])]} />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "cours" }) }} />
 
-      <div className="bac-space site-space" style={{ "--mat-h": cat?.hue ?? 220 }}>
+      <div className="bac-space">
         <div className="bac-wrap">
           <nav className="cd-breadcrumb">
             <a href="/">Accueil</a> <span>/</span> <a href="/cours">Cours FSJES</a> <span>/</span> <span>{c.module}</span>
           </nav>
 
           <div className="bac-mat-hero">
-            <span className="bac-mat-hero-icon">
-              <Icon e={fsjesModuleIcon(c, cat?.emoji)} size={32} />
-            </span>
             <div className="bac-mat-hero-body">
               <div className="bac-eyebrow">
                 Licence FSJES{c.semestre ? ` · ${licenceSemestreLabel(c.semestre)}` : ""}
@@ -294,23 +291,17 @@ export default async function CoursModulePage(props) {
                 <section className="bac-semestre">
                   <h2 className="bac-section-title">Autres modules</h2>
                   <div className="sp-related">
-                    {related.map((r) => {
-                      const rc = coursCategoryInfo(r.category);
-                      return (
-                        <a key={r.id} className="bac-mat-card" href={`/cours/${r.id}`} style={{ "--mat-h": rc?.hue ?? 220 }}>
-                          <span className="bac-mat-icon">
-                            <Icon e={fsjesModuleIcon(r, rc?.emoji)} size={23} />
+                    {related.map((r) => (
+                      <a key={r.id} className="bac-mat-card" href={`/cours/${r.id}`}>
+                        <span className="bac-mat-body">
+                          <span className="bac-mat-name">{r.module}</span>
+                          <span className="bac-mat-meta">
+                            {r.semestre && <span>{r.semestre}</span>}
+                            <span>{fsjesModule(r).chapitres.length} chapitres</span>
                           </span>
-                          <span className="bac-mat-body">
-                            <span className="bac-mat-name">{r.module}</span>
-                            <span className="bac-mat-meta">
-                              {r.semestre && <span>{r.semestre}</span>}
-                              <span>{fsjesModule(r).chapitres.length} chapitres</span>
-                            </span>
-                          </span>
-                        </a>
-                      );
-                    })}
+                        </span>
+                      </a>
+                    ))}
                   </div>
                 </section>
               )}

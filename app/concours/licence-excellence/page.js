@@ -5,7 +5,6 @@ import JsonLd from "../../_shared/JsonLd";
 import ConcoursNiveauSwitch from "../../_shared/ConcoursNiveauSwitch";
 import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
 import ConcoursListing from "../ConcoursListing";
-import HeroArt from "../../_shared/HeroArt";
 
 // Même contrainte que /concours : page prérendue, servie depuis les assets
 // Cloudflare sans invoquer le Worker (voir README).
@@ -107,22 +106,14 @@ export default async function LicenceExcellencePage() {
           // sites officiels et de santé (2023). La FAQ reste lisible sur la page.
         ].filter(Boolean)}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours-le", showSearch: false }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "concours-le" }) }} />
 
-      <div className="bac-space site-space">
+      <div className="bac-space">
         <div className="bac-wrap">
           <ConcoursNiveauSwitch active={LICENCE_EXCELLENCE} counts={{ master: nbMaster, [LICENCE_EXCELLENCE]: concours.length }} />
 
-          <section className="bac-hero sp-le-hero">
-            <HeroArt icon="star" />
-            <div className="bac-eyebrow">Licence d'excellence · Concours d'accès en S5</div>
+          <section className="bac-hero">
             <h1>Concours d'accès aux Licences d'Excellence — sujets réels</h1>
-            <p>
-              {concours.length} sujets de concours d'accès aux licences d'excellence en économie et gestion (comptabilité
-              et audit, finance et fiscalité, marketing digital, commerce international, entrepreneuriat…), tombés dans les
-              facultés marocaines. Énoncés complets, scans du sujet quand ils existent, corrigés indicatifs question par
-              question et export PDF gratuit, sans inscription.
-            </p>
             <div className="bac-hero-stats">
               <span className="bac-stat">
                 <strong>{concours.length}</strong> sujets
@@ -144,7 +135,17 @@ export default async function LicenceExcellencePage() {
             </div>
           </section>
 
-          <section className="sp-le-steps" aria-label="Déroulement du concours">
+          <ConcoursListing
+            concours={concours}
+            gridTitle="Sujets de licence d'excellence"
+            sideLinks={[
+              { href: "/concours", label: "Concours Master" },
+              { href: "/cours", label: "Cours Licence FSJES (S1-S4)" },
+              { href: "/evaluation", label: "QCM d'entraînement" },
+            ]}
+          />
+
+          <section className="sp-le-steps" aria-label="Déroulement du concours" style={{ marginTop: 32 }}>
             <div className="sp-le-step">
               <span className="sp-le-step-num">1</span>
               <strong>Présélection sur dossier</strong>
@@ -177,15 +178,15 @@ export default async function LicenceExcellencePage() {
             </section>
           )}
 
-          <ConcoursListing
-            concours={concours}
-            gridTitle="Sujets de licence d'excellence"
-            sideLinks={[
-              { href: "/concours", label: "Concours Master", icon: "🎓" },
-              { href: "/cours", label: "Cours Licence FSJES (S1-S4)", icon: "📖" },
-              { href: "/evaluation", label: "QCM d'entraînement", icon: "📝" },
-            ]}
-          />
+          <section className="sp-about">
+            <h2>Des sujets de licence d'excellence, avec corrigés</h2>
+            <p>
+              {concours.length} sujets de concours d'accès aux licences d'excellence en économie et gestion (comptabilité
+              et audit, finance et fiscalité, marketing digital, commerce international, entrepreneuriat…), tombés dans les
+              facultés marocaines. Énoncés complets, scans du sujet quand ils existent, corrigés indicatifs question par
+              question et export PDF gratuit, sans inscription.
+            </p>
+          </section>
 
           <section className="cd-card sp-le-faq">
             <h2>Questions fréquentes</h2>
