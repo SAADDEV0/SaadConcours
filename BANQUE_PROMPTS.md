@@ -230,6 +230,18 @@ Règles des champs :
   en gris clair (seuil 238 ; plus bas, le texte fin des QCM disparaît, précédent CCA Agadir 2019).
   Passage de 2026-10-04 : 684 scans traités, environ 460 marques fsjesmaster effacées, et une
   centaine encore visible (marque collée au texte, petite ou très floue).
+- Photos qui portent le filigrane d'un tiers (ex. « Prof … whatsapp ») **et** des annotations au
+  stylo bleu d'un ancien lecteur (soulignements, ratures, chiffres en marge) : même script, avec
+  `"encre": true` (efface le stylo bleu) et, sur une photo nette, `"seuil": 200` (filigrane gris plus
+  foncé que d'habitude) dans `nettoyer-scans.exceptions.json`. Photo collée dans le chat : la copier
+  dans le scratchpad sous le nom `<id>_pN.webp`, puis
+  `node scripts/nettoyer-scans.mjs --source=<scratchpad> public/images/<ville>/<id>/<id>_pN.webp`
+  (`--sortie=<dossier>` pour un aperçu avant d'écrire). Limites : un stylo qui raye une ligne du sujet
+  emporte le haut des lettres, et un stylo noir ne se distingue pas de l'encre imprimée. Reconstituer
+  ces passages sur la copie, avant nettoyage, avec les glyphes intacts du même scan (même date ou même
+  mot ailleurs sur la page, recalés sur la ligne de base). Un trait de tableau coupé se redessine à
+  partir de sa partie intacte ; blanchir les cellules vides où le lecteur a écrit (précédent : AIFF
+  Kénitra 2025).
 
 ### C1 — Ajouter N concours depuis internet
 1. **Inventaire** : charger `concours.json`, lister les `source` (URLs) et les couples

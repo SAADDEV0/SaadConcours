@@ -7,8 +7,9 @@
 // Les images qui portent déjà l'étiquette saadconcours.space sont ignorées : relancer le script sur
 // un fichier déjà traité ne superpose pas deux filigranes.
 // Cas que la détection rate : scripts/nettoyer-scans.exceptions.json, par nom de fichier :
-//   { "x_p1.webp": { "seuil": 235, "bande": false, "effacer": [[x0, y0, x1, y1]], "ignorer": true } }
+//   { "x_p1.webp": { "seuil": 235, "encre": true, "bande": false, "effacer": [[x0, y0, x1, y1]], "ignorer": true } }
 //   seuil : clair au-delà duquel un pixel devient papier (défaut 238 ; plus bas = efface mieux le filigrane, mais aussi le texte pâle)
+//   encre : efface aussi les annotations au stylo bleu (soulignements, ratures, chiffres en marge)
 //   bande : false pour ne pas chercher la ligne du bas ; seuilBande : score suffisant pour la marque
 //   (défaut 0,45 ; 0,33 pour les scans flous dont la marque a été vérifiée à l'œil) ; effacer : zones à blanchir, en fractions 0–1
 //   de l'image nettoyée avant recadrage ; ignorer : laisser l'image telle quelle.
@@ -46,17 +47,86 @@ async function dejaFiligrane(source) {
   return n / (info.width * info.height) > 0.15;
 }
 
+// Annotations au stylo bleu d'un ancien lecteur (soulignements, ratures, chiffres en marge) : trop
+// foncées pour couleurFiligrane. Sur l'encre imprimée, b − max(r, g) reste entre −7 et 9 (quelques
+// pixels isolés montent à 12 par la compression) ; le stylo va de 10 à 85, avec un cœur très foncé
+// qui retombe vers 8. On garde donc les taches nettement bleues d'au moins 12 px, on les prolonge de
+// 2 px dans les pixels encore un peu bleus, puis d'1 px de liseré gris laissé par la compression,
+// sans mordre sur l'encre noire voisine (précédent : AIFF Kénitra 2025).
+function encreBleue(data, w, h) {
+  const bleu = (j) => data[j * 3 + 2] - Math.max(data[j * 3], data[j * 3 + 1]);
+  const voisins = (j, f) => {
+    const x = j % w, y = (j / w) | 0;
+    for (let dy = -1; dy <= 1; dy++)
+      for (let dx = -1; dx <= 1; dx++) {
+        const u = x + dx, v = y + dy;
+        if ((dx || dy) && u >= 0 && v >= 0 && u < w && v < h) f(v * w + u);
+      }
+  };
+  const trait = new Uint8Array(w * h);
+  const vu = new Uint8Array(w * h);
+  let front = [];
+  for (let s = 0; s < w * h; s++) {
+    if (vu[s] || bleu(s) <= 12) continue;
+    const tache = [s];
+    vu[s] = 1;
+    for (let i = 0; i < tache.length; i++)
+      voisins(tache[i], (k) => { if (!vu[k] && bleu(k) > 12) { vu[k] = 1; tache.push(k); } });
+    if (tache.length < 12) continue;
+    for (const j of tache) { trait[j] = 1; front.push(j); }
+  }
+  for (let pas = 0; pas < 1; pas++) {
+    const suivant = [];
+    for (const j of front) voisins(j, (k) => { if (!trait[k] && bleu(k) > 8) { trait[k] = 1; suivant.push(k); } });
+    front = suivant;
+  }
+  const masque = trait.slice();
+  for (let y = 1; y < h - 1; y++)
+    for (let x = 1; x < w - 1; x++) {
+      const j = y * w + x;
+      if (trait[j] || !(trait[j - 1] || trait[j + 1] || trait[j - w] || trait[j + w])) continue;
+      if (Math.min(data[j * 3], data[j * 3 + 1], data[j * 3 + 2]) > 110) masque[j] = 1;
+    }
+  return masque;
+}
+
+// Sous un trait de stylo qui raye une ligne du sujet, l'encre imprimée est perdue : on la rebouche
+// quand elle reprend des deux côtés du trait (au-dessus et au-dessous, ou à gauche et à droite, à
+// moins de `portee` px), sinon le pixel devient papier.
+function reboucher(L, masque, w, h, portee = 7) {
+  const sortie = Buffer.from(L);
+  const cherche = (x, y, dx, dy) => {
+    for (let k = 1; k <= portee; k++) {
+      const u = x + dx * k, v = y + dy * k;
+      if (u < 0 || v < 0 || u >= w || v >= h) return 255;
+      if (!masque[v * w + u]) return L[v * w + u];
+    }
+    return 255;
+  };
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++) {
+      const j = y * w + x;
+      if (!masque[j]) continue;
+      const vertical = Math.max(cherche(x, y, 0, -1), cherche(x, y, 0, 1));
+      const horizontal = Math.max(cherche(x, y, -1, 0), cherche(x, y, 1, 0));
+      const v = Math.min(vertical, horizontal);
+      sortie[j] = v < 140 ? v : 255;
+    }
+  return sortie;
+}
+
 // Niveaux de gris, éclairage égalisé (division par le fond estimé), puis tout ce qui est plus clair
 // que `seuil` devient blanc : le filigrane en diagonale, plus pâle que l'encre, disparaît.
-async function niveaux(source, seuil) {
+async function niveaux(source, seuil, encre = false) {
   const { data, info } = await sharp(source).rotate().flatten({ background: "#fff" }).removeAlpha()
     .raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
-  const L = Buffer.alloc(w * h);
+  let L = Buffer.alloc(w * h);
   for (let i = 0, j = 0; j < w * h; i += 3, j++) {
     const r = data[i], g = data[i + 1], b = data[i + 2];
     L[j] = couleurFiligrane(r, g, b) ? 255 : Math.round(0.299 * r + 0.587 * g + 0.114 * b);
   }
+  if (encre) L = reboucher(L, encreBleue(data, w, h), w, h);
   // Fond : réduction, médiane (efface le texte), flou, retour à la taille.
   const fond = await sharp(L, { raw: { width: w, height: h, channels: 1 } })
     .resize(Math.max(40, Math.round(w / 6)), Math.max(40, Math.round(h / 6)), { fit: "fill" })
@@ -251,7 +321,7 @@ function blanchir(b, w, h, x0, y0, x1, y1) {
 }
 
 export async function nettoyer(source, exc = {}) {
-  const { b, w, h } = await niveaux(source, exc.seuil ?? SEUIL);
+  const { b, w, h } = await niveaux(source, exc.seuil ?? SEUIL, exc.encre);
   effacerBords(b, w, h);
   const bande = exc.bande === false ? null : await bandeFsjesmaster(b, w, h, exc.seuilBande);
   if (bande) {

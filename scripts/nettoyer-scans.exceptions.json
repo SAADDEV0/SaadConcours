@@ -154,5 +154,20 @@
   },
   "2017_Rabat_FSJES_Agdal_EconomieTerritoires_p1.webp": {
     "seuilBande": 0.33
+  },
+  "2025_Kenitra_FEG_Kenitra_Audit_p1.webp": {
+    "seuil": 200,
+    "encre": true,
+    "bande": false
+  },
+  "2025_Kenitra_FEG_Kenitra_Audit_p2.webp": {
+    "seuil": 200,
+    "encre": true,
+    "bande": false
+  },
+  "2025_Kenitra_FEG_Kenitra_Audit_p3.webp": {
+    "seuil": 200,
+    "encre": true,
+    "bande": false
   }
 }
