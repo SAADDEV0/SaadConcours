@@ -21,14 +21,14 @@
   "newsAlertsFromEmail": "alerts@saadconcours.space",
   "pdfLogoDataUrl": "",
   "pdfLogoPosition": "left",
-  "pdfAccentColor": "#0f766e",
+  "pdfAccentColor": "#4f46e5",
   "pdfTextColor": "#1a1d27",
   "pdfFontFamily": "helvetica",
   "pdfFontSize": "normal",
   "pdfLineSpacing": "normal",
   "pdfMargins": "normal",
   "pdfShowPageNumbers": true,
-  "pdfCoverPageEnabled": true,
+  "pdfCoverPageEnabled": false,
   "pdfWatermarkEnabled": true,
   "pdfWatermarkText": "SaadConcours",
   "pdfWatermarkOpacity": 0.07,
@@ -150,5 +150,15 @@
   },
   "pdfQuoteStyle": "bar",
   "pdfHeaderTitle": true,
-  "pdfPageNumberStyle": "page-n/N"
+  "pdfPageNumberStyle": "page-n/N",
+  "pdfVerseEnabled": true,
+  "pdfVerseThemes": [
+    "sabr",
+    "ilm",
+    "huzn",
+    "farah",
+    "dunya"
+  ],
+  "pdfVerseSize": "normal",
+  "pdfVerseBoxed": true
 }
