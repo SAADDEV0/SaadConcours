@@ -176,11 +176,13 @@
   "2026_Marrakech_FEG_Marrakech_EICSU_p1.webp": {
     "seuil": 222,
     "encre": true,
-    "bande": false
+    "bande": false,
+    "noir": 170
   },
   "2026_Marrakech_FEG_Marrakech_EICSU_p2.webp": {
     "seuil": 222,
     "encre": true,
-    "bande": false
+    "bande": false,
+    "noir": 170
   }
 }

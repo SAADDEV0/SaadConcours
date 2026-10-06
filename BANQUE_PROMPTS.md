@@ -249,6 +249,11 @@ Règles des champs :
   dans `scripts/nettoyer-scans.exceptions.json` ; une marque floue ratée et vérifiée à l'œil →
   `"seuilBande": 0.33`. Limites : un filigrane en diagonale aussi foncé que le texte reste visible
   en gris clair (seuil 238 ; plus bas, le texte fin des QCM disparaît, précédent CCA Agadir 2019).
+  **Texte trop clair** (photo grise, petite ou agrandie, et surtout avec un `seuil` abaissé) : le script
+  ne rend noir que ce qui est plus sombre que `noir` (60 par défaut), le reste sort gris pâle. Monter
+  `"noir": 170` dans les exceptions fonce l'encre sans faire revenir le filigrane (au-dessus de `seuil`,
+  tout reste blanc). Toujours comparer l'aperçu à la photo : le texte doit être aussi noir que l'original
+  (précédent : EICSU FEG Marrakech 2026, jugé « très éclairé » après publication).
   Passage de 2026-10-04 : 684 scans traités, environ 460 marques fsjesmaster effacées, et une
   centaine encore visible (marque collée au texte, petite ou très floue).
   **Ne pas passer `nettoyer-scans.mjs` sur mes propres photos sans filigrane tiers** : son seuil dur

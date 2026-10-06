@@ -10,6 +10,8 @@
 //   { "x_p1.webp": { "seuil": 235, "encre": true, "bande": false, "effacer": [[x0, y0, x1, y1]], "ignorer": true } }
 //   seuil : clair au-delà duquel un pixel devient papier (défaut 238 ; plus bas = efface mieux le filigrane, mais aussi le texte pâle)
 //   encre : efface aussi les annotations au stylo bleu (soulignements, ratures, chiffres en marge)
+//   noir : sombre au-dessous duquel un pixel devient noir (défaut 60 ; plus haut = encre plus foncée, pour les photos
+//   grises ou de basse résolution où le texte ressort gris clair, précédent EICSU FEG Marrakech 2026)
 //   bande : false pour ne pas chercher la ligne du bas ; seuilBande : score suffisant pour la marque
 //   (défaut 0,45 ; 0,33 pour les scans flous dont la marque a été vérifiée à l'œil) ; effacer : zones à blanchir, en fractions 0–1
 //   de l'image nettoyée avant recadrage ; ignorer : laisser l'image telle quelle.
@@ -117,7 +119,7 @@ function reboucher(L, masque, w, h, portee = 7) {
 
 // Niveaux de gris, éclairage égalisé (division par le fond estimé), puis tout ce qui est plus clair
 // que `seuil` devient blanc : le filigrane en diagonale, plus pâle que l'encre, disparaît.
-async function niveaux(source, seuil, encre = false) {
+async function niveaux(source, seuil, encre = false, noir = 60) {
   const { data, info } = await sharp(source).rotate().flatten({ background: "#fff" }).removeAlpha()
     .raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
@@ -131,7 +133,6 @@ async function niveaux(source, seuil, encre = false) {
   const fond = await sharp(L, { raw: { width: w, height: h, channels: 1 } })
     .resize(Math.max(40, Math.round(w / 6)), Math.max(40, Math.round(h / 6)), { fit: "fill" })
     .median(9).blur(4).resize(w, h, { fit: "fill", kernel: "cubic" }).extractChannel(0).raw().toBuffer();
-  const noir = 60;
   for (let j = 0; j < w * h; j++) {
     const n = Math.min(255, (L[j] * 255) / Math.max(fond[j], 40));
     const v = n >= seuil ? 1 : n <= noir ? 0 : (n - noir) / (seuil - noir);
@@ -321,7 +322,7 @@ function blanchir(b, w, h, x0, y0, x1, y1) {
 }
 
 export async function nettoyer(source, exc = {}) {
-  const { b, w, h } = await niveaux(source, exc.seuil ?? SEUIL, exc.encre);
+  const { b, w, h } = await niveaux(source, exc.seuil ?? SEUIL, exc.encre, exc.noir);
   effacerBords(b, w, h);
   const bande = exc.bande === false ? null : await bandeFsjesmaster(b, w, h, exc.seuilBande);
   if (bande) {
