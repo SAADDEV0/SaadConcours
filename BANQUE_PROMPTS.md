@@ -244,6 +244,13 @@ Règles des champs :
   en gris clair (seuil 238 ; plus bas, le texte fin des QCM disparaît, précédent CCA Agadir 2019).
   Passage de 2026-10-04 : 684 scans traités, environ 460 marques fsjesmaster effacées, et une
   centaine encore visible (marque collée au texte, petite ou très floue).
+  **Ne pas passer `nettoyer-scans.mjs` sur mes propres photos sans filigrane tiers** : son seuil dur
+  (238) blanchit le texte fin et les zones ombrées (précédent : GFC Aïn Sebaâ 2026, Q25–Q26 effacées,
+  refait le 2026-10-06). Pour une photo de téléphone (ombre, fond de tissu, petite résolution) :
+  niveaux de gris, fond égalisé (division par le fond médian/flou à 1/8), courbe douce
+  (papier ≥ 0,95 → blanc, ≤ 0,50 → noir, gamma 1,2), netteté σ 1 ; bords sombres reliés au cadre
+  effacés ; tissu ou feuille voisine blanchis par un polygone tracé à la main autour de la feuille ;
+  redresser l'inclinaison (`rotate` sur fond blanc) ; puis `filigrane-scans.mjs`.
 - Photos qui portent le filigrane d'un tiers (ex. « Prof … whatsapp ») **et** des annotations au
   stylo bleu d'un ancien lecteur (soulignements, ratures, chiffres en marge) : même script, avec
   `"encre": true` (efface le stylo bleu) et, sur une photo nette, `"seuil": 200` (filigrane gris plus
