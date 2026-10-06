@@ -27,12 +27,14 @@ const H = 1350;
 const MARGIN = 48;
 const PAPER_Y = 150;
 const PAPER_H = H - PAPER_Y - 104;
-const PAD = 46;
+// Marges de la feuille et corps du texte : la densité d'une page A4
+// (environ 85 caractères par ligne), pas celle d'une diapo.
+const PAD = 52;
 const TEXT_W = W - 2 * MARGIN - 2 * PAD;
 const AVAIL = PAPER_H - 2 * PAD;
 
-const BODY = 31;
-const LH = 44;
+const BODY = 23;
+const LH = 33;
 const INK = "#1f2433";
 const HEAD_INK = "#3730a3";
 const RULE = "#d6d9e6";
@@ -147,9 +149,9 @@ function parseRow(line) {
 
 function tableUnits(ctx, rows) {
   const cols = Math.max(...rows.map((r) => r.length));
-  const size = cols > 7 ? 19 : cols > 5 ? 21 : 24;
+  const size = cols > 7 ? 16 : cols > 5 ? 17 : 19;
   const lh = Math.round(size * 1.3);
-  const cellPad = 10;
+  const cellPad = 7;
   const cells = rows.map((r) => Array.from({ length: cols }, (_, c) => runsOf(r[c] || "")));
   // Chaque colonne reçoit au moins la largeur de son mot le plus long (pas de
   // mot coupé), puis la place restante au prorata de sa largeur naturelle.
@@ -243,20 +245,20 @@ function buildUnits(ctx, md) {
       continue;
     }
     if (inFence) {
-      units.push(...textUnits(ctx, [{ t: raw }], { size: 24, lh: 32, mono: true }));
+      units.push(...textUnits(ctx, [{ t: raw }], { size: 19, lh: 26, mono: true }));
       continue;
     }
     if (!raw.trim()) {
-      gap(16);
+      gap(10);
       continue;
     }
     if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(raw)) {
       units.push({
         kind: "rule",
-        h: 28,
+        h: 18,
         draw(ctx, x, y) {
           ctx.fillStyle = RULE;
-          ctx.fillRect(x, y + 13, TEXT_W, 2);
+          ctx.fillRect(x, y + 8, TEXT_W, 2);
         },
       });
       continue;
@@ -270,23 +272,23 @@ function buildUnits(ctx, md) {
       }
       n--;
       if (rows.length) {
-        gap(10);
+        gap(8);
         units.push(...tableUnits(ctx, rows));
-        gap(14);
+        gap(10);
       }
       continue;
     }
     const h = raw.match(/^\s*(#{1,6})\s+(.*)$/);
     if (h) {
       const depth = h[1].length;
-      const size = depth <= 2 ? 36 : depth === 3 ? 33 : 31;
-      const lh = Math.round(size * 1.28);
+      const size = depth <= 2 ? 28 : depth === 3 ? 26 : 24;
+      const lh = Math.round(size * 1.25);
       const wrapped = wrapRuns(ctx, runsOf(h[2]), TEXT_W, size, { bold: true });
-      gap(18);
+      gap(12);
       units.push({
         kind: "heading",
         sectionStart: true,
-        h: wrapped.length * lh + 8,
+        h: wrapped.length * lh + 4,
         draw(ctx, x, y) {
           wrapped.forEach((l, k) => drawLine(ctx, l, x, y + k * lh, size, HEAD_INK, { bold: true }));
         },
@@ -295,15 +297,17 @@ function buildUnits(ctx, md) {
     }
     const li = raw.match(/^(\s*)([-*+]|\d{1,2}[.)])\s+(.*)$/);
     if (li) {
-      const depth = Math.min(2, Math.floor(li[1].replace(/\t/g, "  ").length / 2));
-      const marker = /^\d/.test(li[2]) ? li[2] : depth ? "◦" : "•";
+      // Choix d'un QCM (« - **a.** … ») : rangé sous sa question, sans puce.
+      const choice = !/^\d/.test(li[2]) && /^\*\*[a-hA-H][.)]\*\*/.test(li[3]);
+      const depth = choice ? 1 : Math.min(2, Math.floor(li[1].replace(/\t/g, "  ").length / 2));
+      const marker = choice ? undefined : /^\d/.test(li[2]) ? li[2] : depth ? "◦" : "•";
       // Une question numérotée est aussi un bon endroit pour couper.
-      units.push(...textUnits(ctx, runsOf(li[3]), { indent: 40 + depth * 34, marker, section: !depth && /^\d/.test(li[2]) }));
+      units.push(...textUnits(ctx, runsOf(li[3]), { indent: 30 + depth * 26, marker, section: !depth && /^\d/.test(li[2]) }));
       continue;
     }
     const q = raw.match(/^\s*>\s?(.*)$/);
     if (q) {
-      units.push(...textUnits(ctx, runsOf(q[1]), { indent: 24, color: "#7a5a12", quote: true }));
+      units.push(...textUnits(ctx, runsOf(q[1]), { indent: 18, color: "#7a5a12", quote: true }));
       continue;
     }
     const runs = runsOf(raw);
@@ -448,14 +452,21 @@ function paper(ctx, t, x, y, w, h, r) {
   }
 }
 
-function drawExtraitSlide(canvas, { theme: t, st, kicker, page, n, total, footRight }) {
+// Une page d'énoncé : feuille à coins doux, folio en bas comme sur un sujet imprimé.
+function drawExtraitSlide(canvas, { theme: t, st, kicker, page, folio, n, total, footRight }) {
   const ctx = slideFrame(canvas, { theme: t, st, kicker, n, total, footRight });
-  paper(ctx, t, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 26);
+  paper(ctx, t, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 12);
   let y = PAPER_Y + PAD;
   for (const u of page) {
     if (u.draw) u.draw(ctx, MARGIN + PAD, y);
     y += u.h;
   }
+  ctx.font = `600 17px ${FONT}`;
+  ctx.fillStyle = "#9aa0b4";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(folio, W / 2, PAPER_Y + PAPER_H - PAD / 2);
+  ctx.textAlign = "left";
 }
 
 // Une page scannée du sujet, entière, sur sa feuille : la feuille prend les
@@ -632,7 +643,7 @@ export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride
     const last = k === pages.length - 1;
     const opts = { theme, st, kicker, n: k + 2, total, footRight: !last ? "Suite →" : truncated ? "La suite →" : "Le corrigé →" };
     if (source === "scan") drawScanSlide(c, { ...opts, img: page });
-    else drawExtraitSlide(c, { ...opts, page });
+    else drawExtraitSlide(c, { ...opts, page, folio: `${k + 1} / ${pages.length}` });
     return c;
   });
 
