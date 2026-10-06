@@ -19,6 +19,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `modifie le concours X : …` | [C5](#c5--modifier-un-concours) |
 | `supprime le concours X` | [C6](#c6--supprimer-un-concours) |
 | `crée un concours blanc <master> <fac>` | [C7](#c7--concours-blanc) |
+| `fais le design du QCM X` · `c'est un QCM` · `mets en forme tous les QCM` | [C10](#c10--mise-en-forme-des-qcm-options-en-cases) |
 | `nettoie la base concours` · `normalise les villes / établissements` | [C8](#c8--nettoyer--normaliser-la-base-concours) |
 | `ajoute le cours <module>` · `ajoute les cours du S3` | [K1](#k1--ajouter-un-cours-licence-fsjes) |
 | `complète le cours X par chapitres` · `ajoute QCM / résumés au cours X` | [K2](#k2--compléter-un-cours-par-chapitres) |
@@ -198,7 +199,10 @@ Règles des champs :
 ### Format de `enonce_md`
 - En-tête en gras : université — faculté ; master + année universitaire ; date, durée, nature de l'épreuve.
 - Consignes en italique, barème si présent, numérotation **identique au sujet**.
-- QCM : `**Question N :** …` puis options `a)`, `b)`… sur des lignes séparées.
+- QCM : `**Question N :** …` (ou `**N.** …`) puis options `a)`, `b)`… (ou `A)`, `a.`) **une par ligne,
+  chacune avec sa lettre**. C'est ce qui les affiche en cases sur la fiche (voir [C10](#c10--mise-en-forme-des-qcm-options-en-cases)) :
+  jamais d'options séparées par « / », de cases ☐ ou de tirets sans lettre, jamais deux options sur
+  une même ligne, et une proposition illisible s'écrit `c) *[absente du scan]*` plutôt que d'être sautée.
 - Tableaux du sujet → tableaux Markdown. Pas de réponse dans l'énoncé.
 
 ### Format de `corrige_md`
@@ -339,7 +343,8 @@ Règles des champs :
    référencée existe sur disque et ne montre aucun filigrane autre que saadconcours.space (vérifié
    à l'œil, page par page), miroirs identiques au JSON, `git diff --numstat` de
    `concours.json` = ajouts seulement, JSON valide. Rendu : passer `enonce_md`/`corrige_md` dans
-   `marked` (lignes `|…|` non converties en `<table>` = tableau cassé). **Avec `GITHUB_TOKEN`
+   `marked` (lignes `|…|` non converties en `<table>` = tableau cassé). QCM : `node scripts/audit-qcm.mjs <id>`
+   ne doit lister le sujet nulle part (règle de [C10](#c10--mise-en-forme-des-qcm-options-en-cases)). **Avec `GITHUB_TOKEN`
    défini, `npm run dev` ne montre pas les nouvelles fiches** : le site lit alors les données sur
    `raw.githubusercontent.com`, et elles n'apparaissent qu'après le push. Sans jeton (cas de ce poste
    en septembre 2026), `dev` et `build` lisent le dépôt local : `npm run check` contrôle alors les
@@ -446,6 +451,55 @@ les cartes, le menu Concours → « Concours Licence d'excellence » et un pilie
      International Souissi 2023).
 2. Le texte de `/concours/licence-excellence` (nombre de sujets, plage de questions, modules les plus
    fréquents, liste des établissements) est calculé depuis les données : rien à retoucher à la main.
+
+### C10 — Mise en forme des QCM (options en cases)
+**Le design de référence** : `/concours/2026_Rabat_FSJESAgdal_GFCF_ConcoursBlancSaadConcours`, où
+chaque proposition est une case encadrée avec sa lettre (`li.qcm-opt`, styles `.enonce-content
+li.qcm-opt` dans `app/globals.css`). Ce n'est pas une mise en page à écrire à la main : la fiche
+(`app/concours/[id]/page.js`) passe l'énoncé dans `formatQCM(md, { tagChoices: true })` puis
+`markQcmOptions` (`app/_shared/concoursFormat.js`), qui encadrent automatiquement les options d'un
+sujet reconnu comme QCM. **Le travail consiste donc à écrire l'énoncé dans un format que le
+formateur reconnaît** (règle « QCM » du § Format de `enonce_md`), jamais à ajouter du HTML.
+
+Ce que le formateur reconnaît (depuis le 2026-10-06) :
+- options lettrées `a)` `A)` `a.` `a:` `a -`, une par ligne, ou plusieurs sur une ligne quand il y en a
+  au moins trois (« a) … b) … c) … ») ; lignes vides entre options acceptées (précédent : GFC Aïn
+  Sebaâ 2025, options séparées par des lignes vides, **0 case** sur la fiche avant correction) ;
+- un sujet est un QCM s'il a au moins 5 jeux de 3 options ou plus ; ses questions à deux
+  propositions (Vrai / Faux, a/b) sont alors encadrées aussi, sauf en retrait (sous-questions
+  d'exercice) ;
+- lettres dans le désordre (« c, e, d, b, a ») ou suite d'une question précédente (« e, f, g, h »)
+  acceptées. Une lettre qui se répète ouvre un nouveau jeu (précédent : MRH Aïn Sebaâ 2025 Q43,
+  « a, A, B, C » imprimé ainsi, la première option reste hors case).
+
+Recette `fais le design du QCM X` / `c'est un QCM` (souvent avec l'en-tête d'un sujet collé) :
+1. Retrouver la fiche (établissement, master, année), `node scripts/audit-qcm.mjs <id>`.
+2. Fiche listée en « QCM sans cases » : réécrire les options au bon format. Cas déjà rencontrés :
+   options séparées par « / » sur la ligne de la question (CCA Souissi 2020), cases ☐ (Marketing
+   ENCG El Jadida 2023), tirets sans lettre et options en tableau `| a. … | b. … |` (Actuariat ENCG
+   Casablanca 2022 ; attention aux puces qui ne sont pas des options, ex. « aux conditions
+   suivantes : - 12 % … »), **options absentes de l'énoncé** (Actuariat Aïn Sebaâ 2017 : les relire
+   sur les scans, recette C4). Garder les lettres du sujet. Numéros de question en `**N.**` plutôt
+   qu'en `N.` en début de ligne (sinon Markdown en fait une liste numérotée).
+3. Fiche listée en « options hors case » : regarder chaque ligne affichée. Deux options collées
+   sur une ligne (« a) Oui  b) Non ») → une par ligne. Sous-questions d'exercice en retrait, sujet
+   tronqué (une seule option) : normal, ne rien faire.
+4. Si des lettres apparaissent ou changent, relire le corrigé (JSON **et** `corriges/<id>.md`, qui
+   peut porter un corrigé absent du JSON) : il doit citer les bonnes lettres. Un corrigé rédigé
+   sans les options peut citer des lettres fausses (précédent : Actuariat Aïn Sebaâ 2017, refait).
+5. Contrôle de rendu sans serveur : `formatQCM` + `marked` + `markQcmOptions` sur l'énoncé, compter
+   `class="qcm-opt"`. Le `npm run dev` d'une autre conversation qui tourne dans le même dossier
+   partage `.next` : un second serveur y renvoie des 404/500 sur les fiches ; ne pas l'arrêter, faire
+   le contrôle en Node (bundle `esbuild --loader:.js=jsx`, les modules de `app/_shared` importent du JSX).
+6. Fin de recette (§1.5). Commit : « Met en forme le QCM <master> <faculté> <année> » + ce qui a
+   été réécrit.
+
+`mets en forme tous les QCM` : `node scripts/audit-qcm.mjs` sur toute la base, traiter chaque fiche
+listée comme ci-dessus. Restent normalement listées (vérifié le 2026-10-06) : 5 études de cas
+(Finance et Banque Marrakech 2019, Économétrie Aïn Chock 2023, DEIP Mohammedia 2018, Management
+Logistique Tétouan 2019, Finance ENCG Settat, dont le QCM final n'a que 2 questions retrouvées).
+Si une règle du formateur change, la mesurer avant/après sur toute la base (nombre de cases par
+fiche) : aucune étude de cas ne doit passer en QCM.
 
 ---
 

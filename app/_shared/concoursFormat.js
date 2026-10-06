@@ -136,22 +136,47 @@ const CHOICE_MARK = "<!--c-->";
 // Maximal groups of consecutive emitted bullet lines, kept only when the group
 // runs a, b, c… from the start — that's an option set rather than a stretch of
 // unrelated bullets that happen to be adjacent.
+//
+// Beaucoup de sujets transcrits sautent une ligne entre deux options (« A) … »,
+// ligne vide, « B) … ») : une ligne vide entre deux options ne coupe donc pas
+// le groupe (précédent : GFC Aïn Sebaâ 2025, aucune option en case). Une lettre
+// déjà vue dans le groupe ouvre en revanche un nouveau jeu d'options.
+//
+// Le jeu doit contenir un « a », mais pas forcément en tête : quelques sujets
+// publiés en ligne mélangent les propositions (« c, e, d, b, a », MSRH Agdal
+// 2021) et le corrigé suit ces lettres-là. Une paire n'est retenue que si
+// c'est a/b. Sans « a », il faut au moins trois lettres qui se suivent : un
+// sujet continue parfois la lettre de la question précédente (« e, f, g, h »,
+// GFCF Agdal 2017, Q52).
+//
+// Retourne [début, fin, nombre d'options, retrait] pour chaque jeu.
 function choiceSets(out) {
   const sets = [];
   let start = -1;
-  const letterAt = (i) => (out[i].match(/^\s*- \*\*([a-j])[).:]\*\* /) || [])[1];
-  const flush = (end) => {
-    if (start >= 0 && end - start >= MIN_CHOICES && letterAt(start) === "a") {
-      sets.push([start, end]);
-    }
+  let last = -1;
+  let seen = new Set();
+  const markerAt = (i) => out[i].match(/^(\s*)- \*\*([a-j])[).:]\*\* /);
+  const flush = () => {
+    const n = seen.size;
+    const idx = [...seen].map((l) => ORDER.indexOf(l));
+    const contiguous = Math.max(...idx) - Math.min(...idx) === n - 1;
+    const ok = seen.has("a")
+      ? n >= MIN_CHOICES || (n === 2 && seen.has("b"))
+      : n >= MIN_CHOICES && contiguous;
+    if (start >= 0 && ok) sets.push([start, last + 1, n, markerAt(start)[1].length > 0]);
     start = -1;
+    seen = new Set();
   };
   for (let i = 0; i < out.length; i++) {
-    if (letterAt(i)) {
+    const m = markerAt(i);
+    if (m) {
+      if (start >= 0 && seen.has(m[2])) flush();
       if (start < 0) start = i;
-    } else flush(i);
+      last = i;
+      seen.add(m[2]);
+    } else if (!(start >= 0 && out[i].trim() === "")) flush();
   }
-  flush(out.length);
+  flush();
   return sets;
 }
 
@@ -215,12 +240,20 @@ export function formatQCM(md, { tagChoices = false } = {}) {
 
   if (tagChoices) {
     const sets = choiceSets(out);
-    if (sets.length >= MIN_CHOICE_SETS) {
-      for (const [start, end] of sets) {
+    if (sets.filter(([, , n]) => n >= MIN_CHOICES).length >= MIN_CHOICE_SETS) {
+      // Dans un QCM avéré, une paire a/b est une question à deux propositions
+      // (Vrai / Faux), sauf en retrait sous une question : ce sont alors les
+      // sous-questions d'un exercice (« a) Pour un meuble vendu… »).
+      for (const [start, end, n, indented] of sets) {
+        if (n < MIN_CHOICES && indented) continue;
         for (let i = start; i < end; i++) {
-          out[i] = out[i].replace(/^(\s*- \*\*[a-j][).:]\*\*)/, `$1${CHOICE_MARK}`);
+          // Ligne vide entre deux options : retirée, pour une liste serrée
+          // rendue comme celle d'un sujet sans ligne vide.
+          if (out[i].trim() === "") out[i] = null;
+          else out[i] = out[i].replace(/^(\s*- \*\*[a-j][).:]\*\*)/, `$1${CHOICE_MARK}`);
         }
       }
+      return out.filter((l) => l !== null).join("\n");
     }
   }
   return out.join("\n");

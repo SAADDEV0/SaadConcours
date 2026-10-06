@@ -62,7 +62,8 @@ a) Fixer le prix en fonction du coût de production, en ajoutant une marge bén�
 a) Un résumé des dépenses passées b) Un plan financier prévisionnel c) Un rapport sur les ventes d) Un document comptable annuel
 
 **20.** Quelle est la principale fonction de l'analyse des écarts dans le contrôle de gestion ?
-a) Élaborer et suivre un budget pour atteindre les objectifs de l'entreprise b) Acheter des actions de l'entreprise
+a) Élaborer et suivre un budget pour atteindre les objectifs de l'entreprise
+b) Acheter des actions de l'entreprise
 
 **21.** Quel est l'objectif de la planification stratégique dans le contrôle de gestion ?
 a) Déterminer le menu du restaurant d'entreprise b) Élaborer une vision à long terme de l'entreprise et définir ses objectifs c) Planifier les vacances des employés d) Suivre les réseaux sociaux de l'entreprise
@@ -242,3 +243,4 @@ a) Tri des résultats par ordre alphabétique b) Regroupement des lignes en fonc
 
 **80.** Quelle est la fonction de la clause « ORDER BY » dans une requête SQL ?
 a) Sélectionner toutes les colonnes d'une table b) Regrouper les résultats en fonction d'une colonne spécifiée c) Trier les résultats en fonction d'une ou plusieurs colonnes d) Supprimer des lignes de la table
+

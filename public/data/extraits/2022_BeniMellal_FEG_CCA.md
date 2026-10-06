@@ -155,7 +155,8 @@ a. 51.259 ; b. 4444,32 ; c. La réponse A est juste ; d. 32.450 ; e. Aucune rép
 a. Elle est nouvellement créée précisément dans les 24 mois qui suivent la date du début de son exploitation ; b. Elle est nouvellement créée précisément dans les 36 mois qui suivent la date du début de son exploitation ; c. Elle réalise la totalité de son chiffre d'affaires à l'export ; d. Elle réalise au moins une partie de son chiffre d'affaires à l'export ; e. Aucune réponse.
 
 **Q34.** L'Impôt sur les sociétés est calculé sur la base :
-a. Des taux proportionnels ; b. Des taux progressifs.
+a. Des taux proportionnels
+b. Des taux progressifs
 
 **Q35.** L'impôt sur les sociétés, instauré au Maroc en :
 a. 1956 ; b. 1977 ; c. 1987 ; d. 1997 ; e. Aucune réponse.

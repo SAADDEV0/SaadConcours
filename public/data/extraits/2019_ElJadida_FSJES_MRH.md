@@ -57,13 +57,16 @@ a) Entité  b) Objet  c) Association
 a) Menace Contrainte Dispersion  b) Modèle Conceptuel de Données  c) Manger Consommer Dormir  d) Modèle Constitutif de Données
 
 **17.** Que signifie entité ?
-a) Objet informatique  b) Groupe d'individus
+a) Objet informatique
+b) Groupe d'individus
 
 **18.** Dans un modèle relationnel, une table peut-elle contenir plusieurs enregistrements identiques ?
-a) Oui  b) Non
+a) Oui
+b) Non
 
 **19.** À quoi sert une cardinalité ?
 a) Compter toutes les données  b) Calculer des probabilités  c) Compter une occurrence minimum et une occurrence maximum
 
 **20.** Cocher les cardinalités possibles rencontrées lors de la conception d'un MCD :
 0,1 — 1,1 — 0,n — 1,n — 2,n — n,2
+
