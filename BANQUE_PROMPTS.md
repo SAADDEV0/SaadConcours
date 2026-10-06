@@ -223,6 +223,9 @@ Règles des champs :
   `recomposer-scan.mjs`). Chaque page est relue à l'œil après traitement ; un scan dont la marque
   d'un tiers reste visible n'est pas publié en l'état : reprendre le nettoyage, et à défaut le
   signaler dans le compte rendu.
+  **Seule exception, à ma demande (2026-10-06)** : `2025_Rabat_FSJESAgdal_MSRH` garde le filigrane
+  « LAGRANE SAID » (et sa ligne WhatsApp en bas de la page 4) sous le mien. Ne pas le nettoyer lors
+  d'un passage sur toute la base ; l'exception ne vaut pour aucun autre sujet.
 - Convertir **et filigraner** en une étape (depuis le 2026-10-04, à ma demande) :
   `node scripts/filigrane-scans.mjs <photo> public/images/<ville>/<id>/<id>_p1.webp [<photo2> …_p2.webp]`
   (webp, largeur max 1600 px, qualité 80, « saadconcours.space » en diagonale discrète + étiquette
