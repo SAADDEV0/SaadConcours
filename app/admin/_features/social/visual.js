@@ -52,7 +52,8 @@ export const DEFAULT_STYLE = {
   emoji: "", // filigrane personnalisé
   badge: "", // pastille en coin (« NOUVEAU », « GRATUIT »…)
   footer: "", // texte du pied, à la place de l'adresse du site
-  maxPages: 8, // pages d'énoncé au maximum dans un carrousel
+  maxPages: 8, // pages de sujet au maximum dans un carrousel
+  source: "scan", // carrousel : « scan » (pages scannées du sujet) ou « enonce » (texte remis en page)
   custom: { bg0: "#1e3a8a", bg1: "#7c3aed", accent: "#fbbf24" },
 };
 
@@ -78,6 +79,7 @@ export function normalizeStyle(s) {
     badge: short(src.badge, 24),
     footer: short(src.footer, 40),
     maxPages: Math.max(1, Math.min(8, Math.round(Number(src.maxPages) || d.maxPages))),
+    source: oneOf(src.source, ["scan", "enonce"], d.source),
     custom: {
       bg0: HEX.test(c.bg0) ? c.bg0 : d.custom.bg0,
       bg1: HEX.test(c.bg1) ? c.bg1 : d.custom.bg1,

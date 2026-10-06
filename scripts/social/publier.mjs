@@ -14,12 +14,12 @@
 //
 // Script source avec alias « @/… » : il est empaqueté par esbuild avant
 // d'être lancé (voir le workflow). En local, pour juste dessiner :
-//   node .social/publier.mjs render <id-du-concours>
+//   node .social/publier.mjs render <id-du-concours> [scan|enonce]
 
 import fs from "node:fs";
 import path from "node:path";
-import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
-import { buildCarousel } from "@/app/admin/_features/social/carousel";
+import { createCanvas, GlobalFonts, loadImage } from "@napi-rs/canvas";
+import { buildCarousel, scanPaths, sourceFor } from "@/app/admin/_features/social/carousel";
 import { carouselCaption, factsFor, trackedUrl } from "@/app/admin/_features/social/captions";
 import { resolveTheme } from "@/app/admin/_features/social/visual";
 
@@ -80,10 +80,37 @@ function loadContent() {
   return { list, corrigeFiles };
 }
 
+// Pages scannées du sujet. Le workflow n'extrait pas public/images (trop
+// lourd) : on prend le fichier sur le disque s'il est là (rendu local), sinon
+// sur raw.githubusercontent.com, branche main. Une page illisible est sautée.
+async function scanBytes(p) {
+  const local = path.join("public", p);
+  if (fs.existsSync(local)) return fs.readFileSync(local);
+  const repo = env("GITHUB_REPOSITORY") || "SAADDEV0/SaadConcours";
+  const url = `https://raw.githubusercontent.com/${repo}/main/public/${p.split("/").map(encodeURIComponent).join("/")}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return Buffer.from(await res.arrayBuffer());
+}
+
+async function loadScans(item, style) {
+  if (sourceFor(item, style) !== "scan") return [];
+  const out = [];
+  for (const p of scanPaths(item, style)) {
+    try {
+      out.push(await loadImage(await scanBytes(p)));
+    } catch (err) {
+      log(`  scan illisible : ${p} (${err.message})`);
+    }
+  }
+  return out;
+}
+
 // design : réglages du Studio envoyés avec la publication (style, textes de
 // l'affiche retouchés, ton, hashtags), pour dessiner exactement l'aperçu.
 async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
   const theme = resolveTheme(themeKey, design.style);
+  const scans = await loadScans(item, design.style);
   const hasCorrige = Boolean(item.corrige_md) || corrigeFiles.has(item.id);
   const { bullets, ...facts } = design.facts || {};
   const built = buildCarousel(item, {
@@ -93,6 +120,7 @@ async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
     ctaOverride: facts.cta,
     bulletsOverride: Array.isArray(bullets) ? bullets : undefined,
     hasCorrige,
+    scans,
     createCanvas: () => createCanvas(1, 1),
   });
   fs.mkdirSync(dir, { recursive: true });
@@ -103,7 +131,7 @@ async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
     fs.writeFileSync(path.join(dir, name), await built.canvases[k].encode("jpeg", 92));
     files.push(name);
   }
-  return { files, truncated: built.truncated };
+  return { files, truncated: built.truncated, scan: built.source === "scan" };
 }
 
 const safe = (id) => String(id).replace(/[^A-Za-z0-9_-]/g, "_").slice(0, 100);
@@ -133,20 +161,20 @@ async function prepare() {
   const { list, corrigeFiles } = loadContent();
   for (const g of groups) {
     const item = list.find((c) => c.id === g.itemId);
-    if (!item || !String(item.enonce_md || "").trim()) {
-      for (const e of g.entries) await patchQueue(e.id, { status: "failed", result: "Concours introuvable ou sans énoncé." });
+    if (!item || !sourceFor(item, g.design.style)) {
+      for (const e of g.entries) await patchQueue(e.id, { status: "failed", result: "Concours introuvable, ou sans énoncé ni scan." });
       continue;
     }
     const dir = `${plan.run}/${safe(item.id)}`;
-    const { files, truncated } = await renderItem(item, { themeKey: g.theme, design: g.design, corrigeFiles }, path.join(OUT, dir));
+    const { files, truncated, scan } = await renderItem(item, { themeKey: g.theme, design: g.design, corrigeFiles }, path.join(OUT, dir));
     plan.items.push({
       itemId: item.id,
       dir,
       files,
       comment: `Le corrigé détaillé ici 👉 ${trackedUrl("concours", item, "facebook")}`,
-      entries: g.entries.map((e) => ({ id: e.id, platform: e.platform, caption: e.caption || carouselCaption(e.platform, item, { truncated, tone: g.design.tone, tags: g.design.tags, outro: g.design.outro, ctx: { corrigeFiles } }) })),
+      entries: g.entries.map((e) => ({ id: e.id, platform: e.platform, caption: e.caption || carouselCaption(e.platform, item, { truncated, scan, tone: g.design.tone, tags: g.design.tags, outro: g.design.outro, ctx: { corrigeFiles } }) })),
     });
-    log(`Prêt : ${item.id} (${files.length} images${truncated ? ", sujet coupé" : ""})`);
+    log(`Prêt : ${item.id} (${files.length} images, ${scan ? "scans" : "énoncé"}${truncated ? ", sujet coupé" : ""})`);
   }
   fs.writeFileSync(PLAN, JSON.stringify(plan, null, 2));
 }
@@ -255,25 +283,26 @@ async function publish() {
 
 /* ------------------------------ Entrée ------------------------------ */
 
-async function renderOnly(id) {
+async function renderOnly(id, arg2) {
   loadFonts();
   const { list, corrigeFiles } = loadContent();
   const item = list.find((c) => c.id === id);
   if (!item) throw new Error(`Concours introuvable : ${id}`);
   const dir = path.join(OUT, "local", safe(id));
-  const { files, truncated } = await renderItem(item, { themeKey: "brand", corrigeFiles }, dir);
-  log(`${files.length} images dans ${dir}${truncated ? " (sujet coupé)" : ""}`);
+  const design = arg2 ? { style: { source: arg2 } } : {};
+  const { files, truncated, scan } = await renderItem(item, { themeKey: "brand", design, corrigeFiles }, dir);
+  log(`${files.length} images dans ${dir} (${scan ? "scans" : "énoncé"}${truncated ? ", sujet coupé" : ""})`);
 }
 
-const [cmd, arg] = process.argv.slice(2);
+const [cmd, arg, arg2] = process.argv.slice(2);
 const missing = (keys) => keys.filter((k) => !env(k));
 try {
-  if (cmd === "render") await renderOnly(arg);
+  if (cmd === "render") await renderOnly(arg, arg2);
   else if (cmd === "prepare" || cmd === "publish") {
     const need = cmd === "prepare" ? ["KV_REST_API_URL", "KV_REST_API_TOKEN"] : ["KV_REST_API_URL", "KV_REST_API_TOKEN", "META_PAGE_ID", "META_PAGE_TOKEN"];
     if (missing(need).length) throw new Error(`Secrets GitHub manquants : ${missing(need).join(", ")}`);
     await (cmd === "prepare" ? prepare() : publish());
-  } else throw new Error("Usage : publier.mjs prepare | publish | render <id>");
+  } else throw new Error("Usage : publier.mjs prepare | publish | render <id> [scan|enonce]");
 } catch (err) {
   console.error(err.message);
   process.exitCode = 1;

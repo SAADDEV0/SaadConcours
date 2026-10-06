@@ -243,7 +243,8 @@ export function googleQuery(item) {
 // Instagram ne le rend pas cliquable et Facebook montre moins les posts qui
 // sortent de Facebook. On fait chercher le site sur Google, et le lien va
 // en bio (Instagram) ou en premier commentaire (Facebook).
-export function carouselCaption(platform, item, { tone = "info", truncated = false, ctx, tags, outro = "" } = {}) {
+// scan : les images montrent les pages scannées du sujet original.
+export function carouselCaption(platform, item, { tone = "info", truncated = false, scan = false, ctx, tags, outro = "" } = {}) {
   const f = factsFor("concours", item, ctx);
   const hasCorrige = Boolean(item.corrige_md) || ctx?.corrigeFiles?.has(item.id);
   const intro = INTROS[tone]?.concours || INTROS.info.concours;
@@ -251,7 +252,9 @@ export function carouselCaption(platform, item, { tone = "info", truncated = fal
   return [
     intro,
     `${f.emoji} ${f.title}\n${f.subtitle} · ${item.annee}`,
-    `👉 ${truncated ? "Le début du sujet" : "Le sujet complet"} est dans les images (glisse ➡️)`,
+    scan
+      ? `👉 ${truncated ? "Les premières pages du sujet original sont" : "Le sujet original complet est"} dans les images (glisse ➡️)`
+      : `👉 ${truncated ? "Le début du sujet" : "Le sujet complet"} est dans les images (glisse ➡️)`,
     `✅ ${what} : gratuit sur notre site.\n🔎 Cherche sur Google : ${googleQuery(item)}\n${platform === "facebook" ? "🔗 Ou le lien en commentaire 👇" : "🔗 Ou le lien dans la bio"}`,
     outro,
     tagsOf("concours", item, tags).join(" "),

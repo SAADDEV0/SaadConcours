@@ -1,6 +1,8 @@
 // Carrousel « extrait » d'un concours, pour Instagram et Facebook :
 //   1. l'affiche du studio (master, faculté, année) ;
-//   2. l'énoncé, mis en page sur des feuilles blanches lisibles ;
+//   2. le sujet, au choix (style.source) : les pages scannées du sujet
+//      original (item.images), ou l'énoncé remis en page sur des feuilles
+//      blanches lisibles ; sans scan, on retombe sur l'énoncé, et inversement ;
 //   3. une dernière image : « cherche sur Google : saadconcours … ».
 //
 // Le sujet est donné dans le post, le corrigé reste sur le site. Un sujet
@@ -402,7 +404,8 @@ function header(ctx, t, label, st) {
   }
 }
 
-function drawExtraitSlide(canvas, { theme: t, st, kicker, page, n, total, footRight }) {
+// Fond, en-tête, ligne de contexte et pied communs aux pages du sujet.
+function slideFrame(canvas, { theme: t, st, kicker, n, total, footRight }) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
@@ -414,29 +417,7 @@ function drawExtraitSlide(canvas, { theme: t, st, kicker, page, n, total, footRi
   ctx.textBaseline = "middle";
   ctx.fillText(wrap(ctx, kicker, W - 2 * MARGIN, 1)[0] || "", MARGIN, 124);
 
-  ctx.save();
-  ctx.shadowColor = "rgba(0,0,0,.28)";
-  ctx.shadowBlur = 28;
-  ctx.shadowOffsetY = 8;
-  ctx.fillStyle = "#ffffff";
-  roundRect(ctx, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 26);
-  ctx.fill();
-  ctx.restore();
-  if (t.light) {
-    ctx.strokeStyle = RULE;
-    ctx.lineWidth = 2;
-    roundRect(ctx, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 26);
-    ctx.stroke();
-  }
-
-  let y = PAPER_Y + PAD;
-  for (const u of page) {
-    if (u.draw) u.draw(ctx, MARGIN + PAD, y);
-    y += u.h;
-  }
-
   const fy = PAPER_Y + PAPER_H + 52;
-  ctx.textBaseline = "middle";
   ctx.font = `600 26px ${FONT}`;
   ctx.fillStyle = t.dim;
   ctx.textAlign = "left";
@@ -446,6 +427,54 @@ function drawExtraitSlide(canvas, { theme: t, st, kicker, page, n, total, footRi
   ctx.textAlign = "right";
   ctx.fillText(footRight, W - MARGIN, fy);
   ctx.textAlign = "left";
+  return ctx;
+}
+
+// Feuille blanche ombrée (bordée sur un thème clair).
+function paper(ctx, t, x, y, w, h, r) {
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,.28)";
+  ctx.shadowBlur = 28;
+  ctx.shadowOffsetY = 8;
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, w, h, r);
+  ctx.fill();
+  ctx.restore();
+  if (t.light) {
+    ctx.strokeStyle = RULE;
+    ctx.lineWidth = 2;
+    roundRect(ctx, x, y, w, h, r);
+    ctx.stroke();
+  }
+}
+
+function drawExtraitSlide(canvas, { theme: t, st, kicker, page, n, total, footRight }) {
+  const ctx = slideFrame(canvas, { theme: t, st, kicker, n, total, footRight });
+  paper(ctx, t, MARGIN, PAPER_Y, W - 2 * MARGIN, PAPER_H, 26);
+  let y = PAPER_Y + PAD;
+  for (const u of page) {
+    if (u.draw) u.draw(ctx, MARGIN + PAD, y);
+    y += u.h;
+  }
+}
+
+// Une page scannée du sujet, entière, sur sa feuille : la feuille prend les
+// proportions du scan (A4 portrait le plus souvent) et se centre dans la zone.
+const SCAN_PAD = 14;
+function drawScanSlide(canvas, { theme: t, st, kicker, img, n, total, footRight }) {
+  const ctx = slideFrame(canvas, { theme: t, st, kicker, n, total, footRight });
+  const iw = img.naturalWidth || img.width;
+  const ih = img.naturalHeight || img.height;
+  const boxW = W - 2 * MARGIN;
+  const s = Math.min((boxW - 2 * SCAN_PAD) / iw, (PAPER_H - 2 * SCAN_PAD) / ih);
+  const dw = Math.round(iw * s);
+  const dh = Math.round(ih * s);
+  const x = MARGIN + Math.round((boxW - dw) / 2) - SCAN_PAD;
+  const y = PAPER_Y + Math.round((PAPER_H - dh) / 2) - SCAN_PAD;
+  paper(ctx, t, x, y, dw + 2 * SCAN_PAD, dh + 2 * SCAN_PAD, 14);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, x + SCAN_PAD, y + SCAN_PAD, dw, dh);
 }
 
 function drawSearchIcon(ctx, x, y, s, color) {
@@ -531,21 +560,60 @@ function drawGoogleSlide(canvas, { theme: t, st, query, truncated, hasCorrige, n
 /* ------------------------------ Assemblage ------------------------------ */
 
 // Points forts de l'affiche du carrousel, quand l'admin ne les a pas retouchés.
-export function carouselBullets(item, { truncated, hasCorrige }) {
-  return [truncated ? "Le début du sujet dans ce post" : "Le sujet complet dans ce post", hasCorrige ? "Corrigé détaillé gratuit sur le site" : null, item.difficulte ? `Difficulté : ${item.difficulte}` : null].filter(Boolean);
+export function carouselBullets(item, { truncated, hasCorrige, scan = false }) {
+  const what = scan ? (truncated ? "Les premières pages du sujet original" : "Le sujet original complet") : truncated ? "Le début du sujet" : "Le sujet complet";
+  return [`${what} dans ce post`, hasCorrige ? "Corrigé détaillé gratuit sur le site" : null, item.difficulte ? `Difficulté : ${item.difficulte}` : null].filter(Boolean);
+}
+
+const hasText = (item) => Boolean(String(item?.enonce_md || "").trim());
+const hasScans = (item) => (item?.images || []).some(Boolean);
+
+// Ce que montrera réellement le carrousel : le choix du style quand le
+// concours le permet, sinon l'autre forme du sujet ; null s'il n'a ni l'un
+// ni l'autre (rien à publier).
+export function sourceFor(item, style) {
+  const want = normalizeStyle(style).source;
+  if (want === "scan" && hasScans(item)) return "scan";
+  if (hasText(item)) return "enonce";
+  return hasScans(item) ? "scan" : null;
+}
+
+// Pages scannées à charger pour le carrousel (dans l'ordre, au plus maxPages).
+export function scanPaths(item, style) {
+  return (item?.images || []).filter(Boolean).slice(0, normalizeStyle(style).maxPages);
+}
+
+// Forme du sujet et coupure, sans rien dessiner : pour écrire le texte d'un
+// post avant d'avoir ses images (envoi groupé). Suppose les scans lisibles.
+export function carouselPlan(item, style, createCanvas = () => document.createElement("canvas")) {
+  const st = normalizeStyle(style);
+  const source = sourceFor(item, st);
+  if (source === "scan") return { source, truncated: (item.images || []).filter(Boolean).length > st.maxPages };
+  if (source === "enonce") return { source, truncated: planExtrait(createCanvas().getContext("2d"), item.enonce_md, st.maxPages).truncated };
+  return { source: null, truncated: false };
 }
 
 // Construit toutes les images du carrousel. `facts` : textes de l'affiche
 // (ceux du studio, retouches comprises) ; `ctaOverride` / `bulletsOverride` :
-// bouton et points forts retouchés ; `style` : mise en page (visual.js).
-// `createCanvas` : fourni par le script de publication automatique (Node), qui
-// n'a pas de `document`.
-export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride, hasCorrige, style, createCanvas = () => document.createElement("canvas") }) {
+// bouton et points forts retouchés ; `style` : mise en page (visual.js) ;
+// `scans` : images déjà chargées des pages de scanPaths() (l'appelant les
+// charge : navigateur ou Node). `createCanvas` : fourni par le script de
+// publication automatique (Node), qui n'a pas de `document`.
+export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride, hasCorrige, style, scans, createCanvas = () => document.createElement("canvas") }) {
   const st = normalizeStyle(style);
-  const measure = createCanvas().getContext("2d");
-  const { pages, truncated } = planExtrait(measure, item.enonce_md || "", st.maxPages);
+  const imgs = (scans || []).filter(Boolean);
+  // Scans demandés mais illisibles : l'énoncé prend le relais s'il existe.
+  const source = sourceFor(item, st) === "scan" && (imgs.length || !hasText(item)) ? "scan" : "enonce";
+  let pages = [];
+  let truncated = false;
+  if (source === "scan") {
+    pages = imgs;
+    truncated = imgs.length < (item.images || []).filter(Boolean).length;
+  } else {
+    ({ pages, truncated } = planExtrait(createCanvas().getContext("2d"), item.enonce_md || "", st.maxPages));
+  }
   const total = pages.length + 2;
-  const kicker = [facts.kicker, item.etablissement].filter(Boolean).join(" · ");
+  const kicker = [facts.kicker, item.etablissement, source === "scan" ? "sujet original" : null].filter(Boolean).join(" · ");
 
   const cover = createCanvas();
   drawVisual(cover, {
@@ -554,7 +622,7 @@ export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride
     style: st,
     facts: {
       ...facts,
-      bullets: bulletsOverride || carouselBullets(item, { truncated, hasCorrige }),
+      bullets: bulletsOverride || carouselBullets(item, { truncated, hasCorrige, scan: source === "scan" }),
       cta: ctaOverride || "Glisse pour voir le sujet",
     },
   });
@@ -562,12 +630,14 @@ export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride
   const slides = pages.map((page, k) => {
     const c = createCanvas();
     const last = k === pages.length - 1;
-    drawExtraitSlide(c, { theme, st, kicker, page, n: k + 2, total, footRight: !last ? "Suite →" : truncated ? "La suite →" : "Le corrigé →" });
+    const opts = { theme, st, kicker, n: k + 2, total, footRight: !last ? "Suite →" : truncated ? "La suite →" : "Le corrigé →" };
+    if (source === "scan") drawScanSlide(c, { ...opts, img: page });
+    else drawExtraitSlide(c, { ...opts, page });
     return c;
   });
 
   const end = createCanvas();
   drawGoogleSlide(end, { theme, st, query: googleQuery(item), truncated, hasCorrige, n: total, total });
 
-  return { canvases: [cover, ...slides, end], truncated, extraitPages: pages.length };
+  return { canvases: [cover, ...slides, end], truncated, extraitPages: pages.length, source };
 }

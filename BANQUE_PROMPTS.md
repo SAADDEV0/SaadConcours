@@ -777,20 +777,25 @@ demander avant toute remise en ligne (elle exigerait un contenu rédigé, pas un
 
 ### R1 — Carrousels Instagram / Facebook des concours
 Format validé le 2026-10-04 : **l'extrait est donné dans le post, le corrigé reste sur le site.**
-- Outil : `/admin/social` → type « Concours » → « Carrousel extrait » (code :
+- Outil : `/admin/social` → rail « Sujet » → type « Concours », post « Carrousel » (code :
   `app/admin/_features/social/carousel.js`). Toutes les images en portrait 1080×1350.
-- Carrousel : 1) l'affiche du studio ; 2) l'énoncé (`enonce_md`) sur des feuilles blanches,
-  **8 pages au maximum** ; 3) une image finale « Cherche sur Google : saadconcours <sigle> <fac>
-  <ville> <année> » (`googleQuery()` dans `captions.js`).
-- Sujet trop long : **pas de découpage en plusieurs posts.** On coupe au dernier début de partie
-  (exercice, dossier, question numérotée…) qui tient dans les 8 pages, et l'image finale dit
-  « La suite du sujet et le corrigé détaillé ».
+- Carrousel : 1) l'affiche du studio ; 2) le sujet, **au choix « Scans » (par défaut depuis le
+  2026-10-06 : les pages scannées `images` du sujet original, entières sur une feuille) ou
+  « Énoncé »** (`enonce_md` remis en page sur des feuilles blanches) — bascule en haut de
+  l'aperçu, gardée dans le style (`style.source`) et suivie par le robot ; sans scan on retombe
+  sur l'énoncé et inversement ; **8 pages au maximum** ; 3) une image finale « Cherche sur
+  Google : saadconcours <sigle> <fac> <ville> <année> » (`googleQuery()` dans `captions.js`).
+- Sujet trop long : **pas de découpage en plusieurs posts.** Énoncé : on coupe au dernier début
+  de partie (exercice, dossier, question numérotée…) qui tient dans les 8 pages ; scans : les
+  N premières pages. L'image finale dit alors « La suite du sujet et le corrigé détaillé ».
 - Texte du post : pas de lien. Instagram ne le rend pas cliquable (« lien dans la bio »), et
   Facebook montre moins les posts qui sortent de Facebook : le lien suivi (UTM) va **en premier
   commentaire** (`facebook-premier-commentaire.txt`).
 - **Publication sur clic, jamais sans permission** (ajoutée le 2026-10-04) : l'admin coche
-  des concours dans la liste (20 max par envoi), clique « Publier N », valide la liste dans
-  la confirmation, et tout part sur Instagram + Facebook. Aussi « Publier sur Instagram +
+  des concours dans la liste (20 max par envoi), clique « Relire et publier N » : la fenêtre
+  de relecture montre le texte Instagram et Facebook de chacun, **modifiable un par un**, avec
+  le ton et la fin de texte communs, puis « Maintenant » ou « En série » (un toutes les N
+  heures). Un texte retouché part tel quel ; les autres sont écrits par le robot. Aussi « Publier sur Instagram +
   Facebook » et « Programmer » pour le concours affiché. **Rien ne choisit ni ne publie de
   concours sans ce clic** : pas de lot automatique. Ces boutons ne font que mettre des entrées
   `auto: true` dans la file KV (`/api/admin/social/publish`, une seule requête Worker).

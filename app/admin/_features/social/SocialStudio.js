@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Icon from "../../_ui/Icon";
-import { Alert, BarList, Empty, Field, Hero, Seg, SectionTitle, Skeleton, Switch, Tabs, TagsInput, useTab } from "../../_ui/kit";
+import { Alert, BarList, Empty, Field, Menu, Seg, SectionTitle, Skeleton, Switch, TagsInput, useTab } from "../../_ui/kit";
 import { Dialog, useConfirm, useToast } from "../../_ui/feedback";
+import { Group, Panel, Row } from "../pdf/controls";
 import { useJson, useCorrigeFiles } from "../../_lib/content";
 import { COLLECTIONS } from "../../_lib/collections";
 import { assetUrl } from "../../_lib/repo";
@@ -12,12 +13,18 @@ import { api } from "../../_lib/api";
 import { dateTimeFr, daysUntil, matchQuery, timeAgo } from "../../_lib/format";
 import { CONTENT_KINDS, PLATFORMS, TONES, captionFor, carouselCaption, countFor, factsFor, googleQuery, hashtagsFor, intentUrl, trackedUrl } from "./captions";
 import { CUSTOM_THEME, DEFAULT_STYLE, FORMATS, PATTERNS, THEMES, TITLE_SIZES, canvasBlob, customTheme, drawVisual, loadImage, normalizeStyle, resolveTheme, styleDiff } from "./visual";
-import { buildCarousel, carouselBullets } from "./carousel";
+import { buildCarousel, carouselBullets, carouselPlan, scanPaths, sourceFor } from "./carousel";
 import { blobBytes, downloadBlob, makeZip } from "./zip";
 
 const MODES = [
+  { value: "carrousel", label: "Carrousel" },
   { value: "visuel", label: "Visuel seul" },
-  { value: "carrousel", label: "Carrousel extrait" },
+];
+
+// Ce que montrent les pages du carrousel entre l'affiche et l'image Google.
+const SOURCES = [
+  { value: "scan", label: "Scans", title: "Les pages scannées du sujet original" },
+  { value: "enonce", label: "Énoncé", title: "Le texte de l'énoncé, remis en page" },
 ];
 
 const ALIGNS = [
@@ -33,18 +40,44 @@ const PREVIEWS = [
 
 const BADGES = ["NOUVEAU", "GRATUIT", "CORRIGÉ", "🔥 TOP"];
 
+// Sections du panneau de gauche (même rail que le Studio PDF).
+const RAIL = [
+  { key: "sujet", label: "Sujet", icon: "list", title: "Choisir ce qu'on publie" },
+  { key: "contenu", label: "Contenu", icon: "file", title: "Type de post et textes de l'affiche" },
+  { key: "style", label: "Style", icon: "palette", title: "Couleurs, mise en page, habillage" },
+  { key: "legende", label: "Légende", icon: "type", title: "Texte du post pour chaque réseau" },
+];
+
 // Réglages retenus d'une visite à l'autre, sur cet appareil.
 const PREFS_KEY = "sc-social-prefs";
 
 const hasCorrigeOf = (item, corrigeFiles) => Boolean(item.corrige_md) || Boolean(corrigeFiles?.has(item.id));
+const masterOf = (c) => c.master_reel || c.filiere || c.id;
+
+// Pages scannées, gardées en mémoire : changer de style ne les recharge pas.
+const scanCache = new Map();
+function loadScans(paths) {
+  return Promise.all(
+    paths.map((p) => {
+      if (!scanCache.has(p)) scanCache.set(p, loadImage(assetUrl(p)).then((img) => img || (scanCache.delete(p), null)));
+      return scanCache.get(p);
+    })
+  );
+}
+
+// Carrousel d'un concours avec les textes automatiques de l'affiche (envoi groupé).
+async function buildFor(c, { theme, style, corrigeFiles }) {
+  const scans = sourceFor(c, style) === "scan" ? await loadScans(scanPaths(c, style)) : undefined;
+  return buildCarousel(c, { theme, style, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige: hasCorrigeOf(c, corrigeFiles), scans });
+}
 
 // Fichiers d'un carrousel dans le ZIP : images numérotées + textes à coller.
-async function carouselFiles(dir, item, { canvases, truncated }, { tone, outro, tags, corrigeFiles }) {
-  const opts = { tone, outro, tags, truncated, ctx: { corrigeFiles } };
+async function carouselFiles(dir, item, { canvases, truncated, source }, { tone, outro, tags, corrigeFiles, captions }) {
+  const opts = { tone, outro, tags, truncated, scan: source === "scan", ctx: { corrigeFiles } };
   const files = [];
   for (let k = 0; k < canvases.length; k++) files.push({ name: `${dir}/${String(k + 1).padStart(2, "0")}.png`, data: await blobBytes(await canvasBlob(canvases[k])) });
-  files.push({ name: `${dir}/instagram.txt`, data: carouselCaption("instagram", item, opts) });
-  files.push({ name: `${dir}/facebook.txt`, data: carouselCaption("facebook", item, opts) });
+  files.push({ name: `${dir}/instagram.txt`, data: captions?.instagram ?? carouselCaption("instagram", item, opts) });
+  files.push({ name: `${dir}/facebook.txt`, data: captions?.facebook ?? carouselCaption("facebook", item, opts) });
   files.push({ name: `${dir}/facebook-premier-commentaire.txt`, data: `Le corrigé détaillé ici 👉 ${trackedUrl("concours", item, "facebook")}` });
   return files;
 }
@@ -53,7 +86,7 @@ const BATCH_README = `Carrousels SaadConcours
 =======================
 
 Un dossier par concours :
-- 01.png, 02.png… : les images, dans l'ordre (affiche, sujet, recherche Google) ;
+- 01.png, 02.png… : les images, dans l'ordre (affiche, pages du sujet, recherche Google) ;
 - instagram.txt / facebook.txt : le texte à coller ;
 - facebook-premier-commentaire.txt : le lien, à poster en premier commentaire.
 
@@ -178,47 +211,167 @@ const RHYTHMS = [
   { value: "168", label: "1 / semaine" },
 ];
 
-// Programme une sélection en série : un concours toutes les N heures.
-function SeriesDialog({ items, again, onClose, onSave }) {
+const WHENS = [
+  { value: "now", label: "Maintenant" },
+  { value: "series", label: "En série" },
+];
+
+/* ------------------------------ Envoi groupé ------------------------------ */
+
+// Relecture d'une sélection avant envoi au robot : le texte Instagram et
+// Facebook de chaque concours (automatique, ou retouché ici), le ton et la
+// fin de texte communs, et le moment (tout de suite, ou un toutes les N heures).
+function BulkDialog({ items, track, style, initialTone, initialOutro, corrigeFiles, onClose, onSend }) {
+  const [when, setWhen] = useState("now");
   const [start, setStart] = useState(() => toLocalInput(at(1, 18)));
   const [every, setEvery] = useState("24");
+  const [tone, setTone] = useState(initialTone);
+  const [outro, setOutro] = useState(initialOutro);
+  const [edits, setEdits] = useState({});
+  const [active, setActive] = useState(items[0]?.id);
+  const [net, setNet] = useState("instagram");
+  const plans = useMemo(() => new Map(items.map((c) => [c.id, carouselPlan(c, style)])), [items, style]);
   const dates = useMemo(() => {
+    if (when !== "series") return null;
     const t0 = Date.parse(start);
     if (Number.isNaN(t0)) return [];
     return items.map((_, k) => new Date(t0 + k * Number(every) * 3600000).toISOString());
-  }, [start, every, items]);
+  }, [when, start, every, items]);
+
+  const auto = (c, p) => {
+    const pl = plans.get(c.id) || {};
+    return carouselCaption(p, c, { tone, outro, truncated: pl.truncated, scan: pl.source === "scan", ctx: { corrigeFiles } });
+  };
+  const cur = items.find((c) => c.id === active) || items[0];
+  const edited = (c, p) => edits[c.id]?.[p] != null;
+  const text = cur ? (edited(cur, net) ? edits[cur.id][net] : auto(cur, net)) : "";
+  const pf = PLATFORMS.find((p) => p.key === net);
+  const n = countFor(net, text);
+  const again = items.filter((c) => isDone(track.get(c.id)) || track.get(c.id)?.pending);
+  const editedCount = items.filter((c) => edits[c.id] && Object.keys(edits[c.id]).length).length;
+
+  function setText(v) {
+    setEdits((e) => ({ ...e, [cur.id]: { ...e[cur.id], [net]: v } }));
+  }
+  function resetText() {
+    setEdits((e) => {
+      const { [net]: _, ...rest } = e[cur.id] || {};
+      const next = { ...e };
+      if (Object.keys(rest).length) next[cur.id] = rest;
+      else delete next[cur.id];
+      return next;
+    });
+  }
+
   return (
     <Dialog
-      title={`Programmer ${items.length} concours en série`}
+      size="xwide"
+      title={`Publier ${items.length} concours`}
       onClose={onClose}
       footer={
         <>
+          <span className="ax-hint ax-bulk-foot-note">
+            {editedCount ? `${editedCount} texte${editedCount > 1 ? "s" : ""} retouché${editedCount > 1 ? "s" : ""} · ` : ""}les autres sont écrits par le robot avec ce ton et cette fin de texte.
+          </span>
           <button type="button" className="ax-btn" onClick={onClose}>
             Annuler
           </button>
-          <button type="button" className="ax-btn primary" onClick={() => onSave(dates)} disabled={!dates.length}>
-            <Icon name="calendar" size="sm" /> Programmer les {items.length}
+          <button type="button" className="ax-btn primary" disabled={when === "series" && !dates?.length} onClick={() => onSend({ dates, tone, outro, captions: edits })}>
+            <Icon name={when === "now" ? "send" : "calendar"} size="sm" /> {when === "now" ? `Publier les ${items.length}` : `Programmer les ${items.length}`}
           </button>
         </>
       }
     >
-      <p style={{ marginTop: 0 }}>Un carrousel à la fois sur Instagram et Facebook, publié par le robot, avec le style choisi dans le studio.</p>
-      <Field label="Premier envoi">
-        <QuickDates value={start} onPick={setStart} />
-        <input type="datetime-local" className="ax-input" value={start} onChange={(e) => setStart(e.target.value)} />
-      </Field>
-      <Field label="Rythme">
-        <Seg value={every} onChange={setEvery} options={RHYTHMS} />
-      </Field>
-      <ol className="ax-series">
-        {items.map((c, k) => (
-          <li key={c.id}>
-            <span>{c.title}</span>
-            <span className="ax-hint">{dates[k] ? dateTimeFr(dates[k]) : "—"}</span>
-          </li>
-        ))}
-      </ol>
-      {again.length > 0 && <p style={{ color: "var(--danger, #c0392b)", marginBottom: 0 }}>⚠️ Déjà publié ou en cours, sera publié une deuxième fois : {again.join(", ")}</p>}
+      <div className="ax-bulk-opts">
+        <Field label="Quand">
+          <Seg value={when} onChange={setWhen} options={WHENS} ariaLabel="Quand" />
+        </Field>
+        {when === "series" && (
+          <>
+            <Field label="Premier envoi">
+              <input type="datetime-local" className="ax-input sm" value={start} onChange={(e) => setStart(e.target.value)} />
+            </Field>
+            <Field label="Rythme">
+              <Seg value={every} onChange={setEvery} options={RHYTHMS} ariaLabel="Rythme" />
+            </Field>
+          </>
+        )}
+        <Field label="Ton des textes">
+          <Seg value={tone} onChange={setTone} options={TONES} ariaLabel="Ton" />
+        </Field>
+      </div>
+      {when === "series" && <QuickDates value={start} onPick={setStart} />}
+
+      <div className="ax-bulk">
+        <ol className="ax-bulk-list">
+          {items.map((c, k) => {
+            const pl = plans.get(c.id) || {};
+            const warn = again.includes(c);
+            return (
+              <li key={c.id}>
+                <button type="button" className={c.id === cur?.id ? "on" : ""} onClick={() => setActive(c.id)}>
+                  <span className="n">{k + 1}</span>
+                  <span className="b">
+                    <span className="t">{masterOf(c)}</span>
+                    <span className="m">
+                      {[c.etablissement, c.annee].filter(Boolean).join(" · ")}
+                      {dates?.[k] ? ` · ${dateTimeFr(dates[k])}` : ""}
+                    </span>
+                    <span className="tags">
+                      <span className="ax-pill">{pl.source === "scan" ? "scans" : "énoncé"}</span>
+                      {edits[c.id] && <span className="ax-pill accent">texte retouché</span>}
+                      {warn && (
+                        <span className="ax-pill amber" title="Déjà publié ou en cours : sera publié une deuxième fois">
+                          déjà publié
+                        </span>
+                      )}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+
+        {cur && (
+          <div className="ax-bulk-edit">
+            <div className="ax-bulk-head">
+              <div style={{ minWidth: 0 }}>
+                <strong>{masterOf(cur)}</strong>
+                <span className="ax-hint">{[cur.etablissement, cur.ville, cur.annee].filter(Boolean).join(" · ")}</span>
+              </div>
+              <Seg
+                value={net}
+                onChange={setNet}
+                ariaLabel="Réseau"
+                options={["instagram", "facebook"].map((k) => ({ value: k, label: `${PLATFORMS.find((p) => p.key === k).label}${edited(cur, k) ? " •" : ""}` }))}
+              />
+            </div>
+            <textarea className="ax-cap-text" rows={13} value={text} spellCheck onChange={(e) => setText(e.target.value)} aria-label={`Texte ${pf.label}`} />
+            <div className="ax-cap-meter">
+              <div className="ax-cap-bar">
+                <span style={{ width: `${Math.min(1, n / pf.limit) * 100}%`, background: n > pf.limit ? "var(--red)" : pf.color }} />
+              </div>
+              <span className={n > pf.limit ? "over" : ""}>
+                {n.toLocaleString("fr-FR")} / {pf.limit.toLocaleString("fr-FR")}
+              </span>
+            </div>
+            <div className="ax-bulk-row">
+              {edited(cur, net) ? (
+                <button type="button" className="ax-btn ghost xs" onClick={resetText}>
+                  <Icon name="restore" size="sm" /> Revenir au texte automatique
+                </button>
+              ) : (
+                <span className="ax-hint">Texte automatique : écris dedans pour le retoucher.</span>
+              )}
+              <span className="ax-hint ax-right">{NET_TIPS[net]?.(true)}</span>
+            </div>
+            <Field label="Fin de texte commune" hint="Ajoutée à la fin de tous les textes automatiques, avant les hashtags.">
+              <textarea className="ax-textarea" rows={2} value={outro} onChange={(e) => setOutro(e.target.value)} placeholder="Ex. 📲 Abonne-toi pour recevoir chaque nouveau sujet !" />
+            </Field>
+          </div>
+        )}
+      </div>
     </Dialog>
   );
 }
@@ -240,7 +393,7 @@ function NameDialog({ onClose, onSave, initial = "" }) {
         </>
       }
     >
-      <p style={{ marginTop: 0 }}>Thème, couleurs, mise en page, ton et fin de texte. Retrouvé sur tous tes appareils. Un nom déjà pris remplace l&apos;ancien style.</p>
+      <p style={{ marginTop: 0 }}>Thème, couleurs, mise en page, sujet montré, ton et fin de texte. Retrouvé sur tous tes appareils. Un nom déjà pris remplace l&apos;ancien style.</p>
       <Field label="Nom">
         <input
           className="ax-input"
@@ -406,15 +559,6 @@ function ColorField({ label, value, onChange }) {
   );
 }
 
-function Group({ title, children, open = false }) {
-  return (
-    <details className="ax-studio-group" open={open}>
-      <summary>{title}</summary>
-      <div className="ax-studio-group-body">{children}</div>
-    </details>
-  );
-}
-
 /* ------------------------------ Textes par réseau ------------------------------ */
 
 // Conseil affiché sous le texte de chaque réseau.
@@ -427,24 +571,23 @@ const NET_TIPS = {
   x: () => "Un lien compte toujours pour 23 caractères.",
 };
 
-// Un seul grand éditeur, un onglet par réseau : plus lisible que six petites
-// cartes avec barres de défilement.
+// Un éditeur, une pastille par réseau : tient dans le panneau de gauche, à
+// côté de l'aperçu du post dans le fil.
 function CaptionEditor({ net, onNet, captions, edited, published, isCarousel, onChange, onReset, onCopy, onOpen, onShare, onPlan, onDone }) {
   const p = PLATFORMS.find((x) => x.key === net) || PLATFORMS[0];
   const text = captions[p.key] || "";
   const n = countFor(p.key, text);
   const ratio = Math.min(1, n / p.limit);
   const over = n > p.limit;
-  const rows = Math.max(9, Math.min(22, text.split("\n").length + 2));
+  const rows = Math.max(10, Math.min(20, text.split("\n").length + 2));
   return (
-    <div className="ax-card ax-cap">
-      <div className="ax-cap-tabs" role="tablist" aria-label="Réseau">
+    <div className="ax-cap2">
+      <div className="ax-net-pick" role="tablist" aria-label="Réseau">
         {PLATFORMS.map((x) => {
           const c = countFor(x.key, captions[x.key] || "");
           return (
-            <button key={x.key} type="button" role="tab" aria-selected={x.key === p.key} className={`ax-cap-tab${x.key === p.key ? " on" : ""}`} onClick={() => onNet(x.key)}>
+            <button key={x.key} type="button" role="tab" aria-selected={x.key === p.key} className={x.key === p.key ? "on" : ""} onClick={() => onNet(x.key)} title={x.label} aria-label={x.label}>
               <PlatformLogo p={x} />
-              <span className="lbl">{x.label}</span>
               {published[x.key] ? (
                 <span className="ax-cap-dot ok" title={`Publié ${timeAgo(published[x.key])}`}>
                   ✓
@@ -461,54 +604,49 @@ function CaptionEditor({ net, onNet, captions, edited, published, isCarousel, on
         })}
       </div>
 
-      <div className="ax-cap-body">
-        <div className="ax-cap-meta">
-          <strong>{p.label}</strong>
-          {edited[p.key] != null ? (
-            <>
-              <span className="ax-pill">modifié</span>
-              <button type="button" className="ax-btn ghost xs" onClick={() => onReset(p.key)}>
-                <Icon name="restore" size="sm" /> Texte automatique
-              </button>
-            </>
-          ) : (
-            <span className="ax-hint">texte automatique · modifiable</span>
-          )}
-          {published[p.key] && (
-            <span className="ax-pill green ax-right" title={dateTimeFr(published[p.key])}>
-              publié {timeAgo(published[p.key])}
-            </span>
-          )}
-        </div>
-        <textarea className="ax-cap-text" rows={rows} value={text} spellCheck onChange={(e) => onChange(p.key, e.target.value)} aria-label={`Texte ${p.label}`} />
-        <div className="ax-cap-meter">
-          <div className="ax-cap-bar">
-            <span style={{ width: `${ratio * 100}%`, background: over ? "var(--red)" : ratio > 0.85 ? "#f59e0b" : p.color }} />
-          </div>
-          <span className={over ? "over" : ""}>
-            {n.toLocaleString("fr-FR")} / {p.limit.toLocaleString("fr-FR")}
+      <div className="ax-cap-meta">
+        <strong>{p.label}</strong>
+        {edited[p.key] != null ? (
+          <button type="button" className="ax-btn ghost xs" onClick={() => onReset(p.key)} title="Revenir au texte automatique">
+            <Icon name="restore" size="sm" /> Auto
+          </button>
+        ) : (
+          <span className="ax-hint">texte automatique</span>
+        )}
+        {published[p.key] && (
+          <span className="ax-pill green ax-right" title={dateTimeFr(published[p.key])}>
+            publié {timeAgo(published[p.key])}
           </span>
-        </div>
-        <p className="ax-cap-tip">
-          <Icon name="info" size="sm" /> {NET_TIPS[p.key]?.(isCarousel)}
-        </p>
+        )}
       </div>
+      <textarea className="ax-cap-text" rows={rows} value={text} spellCheck onChange={(e) => onChange(p.key, e.target.value)} aria-label={`Texte ${p.label}`} />
+      <div className="ax-cap-meter">
+        <div className="ax-cap-bar">
+          <span style={{ width: `${ratio * 100}%`, background: over ? "var(--red)" : ratio > 0.85 ? "var(--amber)" : p.color }} />
+        </div>
+        <span className={over ? "over" : ""}>
+          {n.toLocaleString("fr-FR")} / {p.limit.toLocaleString("fr-FR")}
+        </span>
+      </div>
+      <p className="ax-cap-tip">
+        <Icon name="info" size="sm" /> {NET_TIPS[p.key]?.(isCarousel)}
+      </p>
 
-      <div className="ax-cap-actions">
+      <div className="ax-cap2-actions">
         <button type="button" className="ax-btn sm" onClick={() => onCopy(p)}>
           <Icon name="copy" size="sm" /> Copier
         </button>
         <button type="button" className="ax-btn sm" onClick={() => onOpen(p)} title="Copie le texte et ouvre le réseau">
-          <Icon name="external" size="sm" /> Ouvrir {p.label}
+          <Icon name="external" size="sm" /> Ouvrir
         </button>
         <button type="button" className="ax-btn sm" onClick={() => onShare(p)} title="Partage natif (téléphone) : image(s) + texte">
           <Icon name="share" size="sm" /> Partager
         </button>
-        <button type="button" className="ax-btn sm" onClick={() => onPlan(p)}>
+        <button type="button" className="ax-btn sm" onClick={() => onPlan(p)} title="Noter une publication à faire à la main">
           <Icon name="calendar" size="sm" /> Planifier
         </button>
-        <button type="button" className="ax-btn primary sm ax-right" onClick={() => onDone(p)}>
-          <Icon name="check" size="sm" /> Marquer publié
+        <button type="button" className="ax-btn sm wide" onClick={() => onDone(p)} title="Publié à la main : l'inscrire dans l'historique">
+          <Icon name="check" size="sm" /> Marquer publié sur {p.label}
         </button>
       </div>
     </div>
@@ -521,8 +659,9 @@ function Composer({ log }) {
   const sp = useSearchParams();
   const toast = useToast();
   const confirm = useConfirm();
+  const [rail, setRail] = useState("sujet");
   const [autoPlan, setAutoPlan] = useState(false);
-  const [series, setSeries] = useState(false);
+  const [bulk, setBulk] = useState(false);
   const [selected, setSelected] = useState([]);
   const [show, setShow] = useState("todo");
   const corrigeFiles = useCorrigeFiles();
@@ -539,6 +678,7 @@ function Composer({ log }) {
   const [preview, setPreview] = useState("image");
   const [net, setNet] = useState("facebook");
   const [carousel, setCarousel] = useState(null);
+  const [building, setBuilding] = useState(false);
   const [slide, setSlide] = useState(0);
   const [override, setOverride] = useState({});
   const [texts, setTexts] = useState({});
@@ -579,6 +719,7 @@ function Composer({ log }) {
     }
   }, [themeKey, style, tone, outro, mode, format]);
 
+  const isCarousel = kind === "concours" && mode === "carrousel";
   const track = useMemo(() => trackConcours(log.entries), [log.entries]);
   const candidates = useMemo(() => {
     if (!Array.isArray(list)) return [];
@@ -588,14 +729,14 @@ function Composer({ log }) {
         ? [...pub].sort((a, b) => String(a.date_limite || "9999").localeCompare(String(b.date_limite || "9999"))).filter((n) => daysUntil(n.date_limite) === null || daysUntil(n.date_limite) >= 0)
         : [...pub].reverse();
     const shown =
-      kind === "concours" && mode === "carrousel" && show !== "all"
+      isCarousel && show !== "all"
         ? sorted.filter((x) => {
             const t = track.get(x.id);
             return show === "done" ? isDone(t) : !isDone(t) && !t?.pending;
           })
         : sorted;
     return shown.filter((x) => matchQuery(col.searchText(x), q)).slice(0, 80);
-  }, [list, kind, q, col, mode, show, track]);
+  }, [list, kind, q, col, isCarousel, show, track]);
   const doneCount = useMemo(() => (kind === "concours" && Array.isArray(list) ? list.filter((c) => col.isPublished(c) && isDone(track.get(c.id))).length : 0), [kind, list, col, track]);
   const totalCount = useMemo(() => (Array.isArray(list) ? list.filter((c) => col.isPublished(c)).length : 0), [list, col]);
 
@@ -609,7 +750,6 @@ function Composer({ log }) {
   const facts = useMemo(() => (item ? { ...factsFor(kind, item, { corrigeFiles }), ...override } : null), [item, kind, corrigeFiles, override]);
   const theme = useMemo(() => resolveTheme(themeKey, style), [themeKey, style]);
   const fmt = FORMATS.find((f) => f.key === format) || FORMATS[0];
-  const isCarousel = kind === "concours" && mode === "carrousel";
   const setSt = (patch) => (setStyle((s) => normalizeStyle({ ...s, ...patch })), setStyleId(""));
   const autoTags = useMemo(() => (item ? hashtagsFor(kind, item) : []), [item, kind]);
 
@@ -622,16 +762,28 @@ function Composer({ log }) {
 
   useEffect(() => {
     setTexts({});
-  }, [tone, mode, outro, tags]);
+  }, [tone, mode, outro, tags, style.source]);
 
+  // Carrousel : les scans se chargent d'abord (gardés en mémoire ensuite).
   useEffect(() => {
     if (!isCarousel || !facts || !item) {
       setCarousel(null);
       return;
     }
-    const built = buildCarousel(item, { theme, style, facts, ctaOverride: override.cta, bulletsOverride: override.bullets, hasCorrige: hasCorrigeOf(item, corrigeFiles) });
-    setCarousel({ ...built, thumbs: built.canvases.map((c) => c.toDataURL("image/png")) });
-    setSlide((s) => Math.min(s, built.canvases.length - 1));
+    let alive = true;
+    (async () => {
+      const wantScans = sourceFor(item, style) === "scan";
+      if (wantScans) setBuilding(true);
+      const scans = wantScans ? await loadScans(scanPaths(item, style)) : undefined;
+      if (!alive) return;
+      const built = buildCarousel(item, { theme, style, facts, ctaOverride: override.cta, bulletsOverride: override.bullets, hasCorrige: hasCorrigeOf(item, corrigeFiles), scans });
+      setCarousel({ ...built, itemId: item.id, thumbs: built.canvases.map((c) => c.toDataURL("image/png")) });
+      setSlide((s) => Math.min(s, built.canvases.length - 1));
+      setBuilding(false);
+    })();
+    return () => {
+      alive = false;
+    };
   }, [isCarousel, item, facts, theme, style, override.cta, override.bullets, corrigeFiles]);
 
   useEffect(() => {
@@ -657,7 +809,7 @@ function Composer({ log }) {
   useEffect(() => {
     if (!isCarousel || !slides) return;
     function onKey(e) {
-      if (e.target.closest?.("input, textarea, select, [contenteditable]") || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.target.closest?.("input, textarea, select, [contenteditable], .ax-overlay") || e.altKey || e.ctrlKey || e.metaKey) return;
       if (e.key === "ArrowRight") setSlide((s) => Math.min(slides - 1, s + 1));
       if (e.key === "ArrowLeft") setSlide((s) => Math.max(0, s - 1));
     }
@@ -666,12 +818,13 @@ function Composer({ log }) {
   }, [isCarousel, slides]);
 
   const truncated = Boolean(carousel?.truncated);
+  const scanShown = carousel?.source === "scan";
   const captions = useMemo(() => {
     if (!item) return {};
     const opts = { tone, outro, tags: tags ?? undefined, ctx: { corrigeFiles } };
-    const auto = (p) => (isCarousel && (p === "instagram" || p === "facebook") ? carouselCaption(p, item, { ...opts, truncated }) : captionFor(p, kind, item, opts));
+    const auto = (p) => (isCarousel && (p === "instagram" || p === "facebook") ? carouselCaption(p, item, { ...opts, truncated, scan: scanShown }) : captionFor(p, kind, item, opts));
     return Object.fromEntries(PLATFORMS.map((p) => [p.key, texts[p.key] ?? auto(p.key)]));
-  }, [item, kind, tone, outro, tags, texts, corrigeFiles, isCarousel, truncated]);
+  }, [item, kind, tone, outro, tags, texts, corrigeFiles, isCarousel, truncated, scanShown]);
 
   // Réglages qui partent avec une publication automatique : le robot dessine
   // et écrit exactement ce que montre l'aperçu.
@@ -686,12 +839,8 @@ function Composer({ log }) {
 
   async function downloadCarousel() {
     const dir = `saadconcours-${String(item.id).slice(0, 60)}`;
-    const files = await carouselFiles(dir, item, carousel, { tone, outro, tags: tags ?? undefined, corrigeFiles });
     // Textes retouchés dans le studio : ce sont eux qu'on veut coller.
-    for (const f of files) {
-      if (f.name.endsWith("/instagram.txt")) f.data = captions.instagram;
-      if (f.name.endsWith("/facebook.txt")) f.data = captions.facebook;
-    }
+    const files = await carouselFiles(dir, item, carousel, { tone, outro, tags: tags ?? undefined, corrigeFiles, captions: { instagram: captions.instagram, facebook: captions.facebook } });
     downloadBlob(makeZip(files), `${dir}.zip`);
   }
   async function downloadSlide() {
@@ -700,8 +849,8 @@ function Composer({ log }) {
   }
   // Publication automatique (GitHub Actions → Meta) : seuls les textes
   // retouchés à la main partent d'ici ; sinon le robot écrit le texte d'après
-  // son propre rendu (sujet complet ou coupé), avec le ton et les hashtags
-  // choisis ici.
+  // son propre rendu (sujet complet ou coupé, scans ou énoncé), avec le ton
+  // et les hashtags choisis ici.
   async function queueAuto(date) {
     const edited = Object.fromEntries(["instagram", "facebook"].filter((p) => texts[p] != null).map((p) => [p, texts[p]]));
     try {
@@ -716,63 +865,45 @@ function Composer({ log }) {
       toast.error("Publication impossible", err.message);
     }
   }
+  const canCarousel = (x) => Boolean(sourceFor(x, style));
   function toggleSelect(id) {
     if (!selected.includes(id) && selected.length >= MAX_SELECTION) return toast.info(`${MAX_SELECTION} concours au maximum par envoi`);
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
   }
   // Coche d'un coup les premiers concours de la liste affichée.
   function selectVisible() {
-    const ids = candidates.filter((x) => String(x.enonce_md || "").trim()).map((x) => x.id);
+    const ids = candidates.filter(canCarousel).map((x) => x.id);
     setSelected((s) => [...new Set([...s, ...ids])].slice(0, MAX_SELECTION));
   }
   const selectedItems = useMemo(() => (Array.isArray(list) ? selected.map((id) => list.find((c) => c.id === id)).filter(Boolean) : []), [selected, list]);
-  const selectedAgain = selectedItems.filter((c) => isDone(track.get(c.id)) || track.get(c.id)?.pending);
 
-  async function sendSelection(dates) {
+  // Envoi groupé, après relecture des textes (BulkDialog) : un texte retouché
+  // part tel quel, les autres sont écrits par le robot avec ce ton et cette fin.
+  async function sendSelection({ dates, tone: bTone, outro: bOutro, captions: edits }) {
     try {
       const res = await api("/api/admin/social/publish", {
         method: "POST",
-        body: { theme: themeKey, design: designFor({ withItem: false }), items: selectedItems.map((c, k) => ({ id: c.id, title: col.title(c), date: dates?.[k] })) },
+        body: {
+          theme: themeKey,
+          design: { ...designFor({ withItem: false }), tone: bTone, outro: bOutro || undefined },
+          items: selectedItems.map((c, k) => ({ id: c.id, title: col.title(c), date: dates?.[k], captions: edits[c.id] || {} })),
+        },
       });
       log.setEntries((e) => [...res.entries, ...(e || [])]);
       const n = selectedItems.length;
       setSelected([]);
+      setBulk(false);
       if (dates) toast.success(`${n} concours programmés`, `Du ${dateTimeFr(dates[0])} au ${dateTimeFr(dates[dates.length - 1])}.`);
       else toast.success(`${n} concours en cours de publication`, res.woken ? "En ligne d'ici quelques minutes. Suivi : ⏳ puis ✓ dans la liste." : "Le robot les publie à son prochain passage (15 minutes au plus).");
     } catch (err) {
       toast.error("Publication impossible", err.message);
     }
   }
-  async function publishSelection() {
-    if (!selectedItems.length) return;
-    const ok = await confirm({
-      title: `Publier ${selectedItems.length} concours ?`,
-      body: (
-        <>
-          <p style={{ marginTop: 0 }}>Chacun en carrousel sur Instagram et sur Facebook, avec le lien en premier commentaire sur Facebook :</p>
-          <ul style={{ margin: "0 0 8px", paddingLeft: 18 }}>
-            {selectedItems.map((c) => (
-              <li key={c.id}>
-                {col.title(c)} · {c.etablissement} {c.annee}
-              </li>
-            ))}
-          </ul>
-          {selectedAgain.length > 0 && (
-            <p style={{ color: "var(--danger, #c0392b)", marginBottom: 0 }}>
-              ⚠️ Déjà publié ou en cours, sera publié une deuxième fois : {selectedAgain.map((c) => col.title(c)).join(", ")}
-            </p>
-          )}
-        </>
-      ),
-      confirmLabel: `Publier les ${selectedItems.length}`,
-    });
-    if (ok) sendSelection();
-  }
   async function zipSelection() {
     const files = [{ name: "LISEZ-MOI.txt", data: BATCH_README }];
     for (let k = 0; k < selectedItems.length; k++) {
       const c = selectedItems[k];
-      const built = buildCarousel(c, { theme, style, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige: hasCorrigeOf(c, corrigeFiles) });
+      const built = await buildFor(c, { theme, style, corrigeFiles });
       files.push(...(await carouselFiles(`${String(k + 1).padStart(2, "0")}_${c.id}`, c, built, { tone, outro, corrigeFiles })));
     }
     downloadBlob(makeZip(files), `saadconcours-carrousels-${localDay(new Date())}.zip`);
@@ -898,9 +1029,10 @@ function Composer({ log }) {
       toast.error("Suppression impossible", err.message);
     }
   }
+  // Remet l'apparence par défaut, sans toucher au sujet montré (scans / énoncé).
   function resetStyle() {
     setThemeKey("brand");
-    setStyle(DEFAULT_STYLE);
+    setStyle((s) => normalizeStyle({ source: s.source }));
     setStyleId("");
   }
   async function pickPhoto(file) {
@@ -910,207 +1042,138 @@ function Composer({ log }) {
     if (img) setPhoto(img);
     else toast.error("Image illisible", "Choisis un fichier JPEG, PNG ou WebP.");
   }
+  function pickRail(k) {
+    setRail(k);
+    // La légende se relit dans le fil, là où le réseau la coupe.
+    if (k === "legende" && preview === "image") setPreview(net === "facebook" ? "facebook" : "instagram");
+  }
 
-  const defaultBullets = facts ? (isCarousel ? carouselBullets(item, { truncated, hasCorrige: hasCorrigeOf(item, corrigeFiles) }) : facts.bullets || []) : [];
+  const defaultBullets = facts ? (isCarousel ? carouselBullets(item, { truncated, hasCorrige: hasCorrigeOf(item, corrigeFiles), scan: scanShown }) : facts.bullets || []) : [];
   const bulletsText = (override.bullets ?? defaultBullets).join("\n");
-  const styleChanged = themeKey !== "brand" || Object.keys(styleDiff(style)).length > 0;
+  const styleChanged = themeKey !== "brand" || Object.keys(styleDiff({ ...style, source: DEFAULT_STYLE.source })).length > 0;
   const currentSrc = isCarousel ? carousel?.thumbs[slide] : visualSrc;
+  const fallback = isCarousel && carousel && carousel.itemId === item?.id && carousel.source !== style.source;
 
-  return (
-    <div className="ax-studio">
-      <aside className="ax-card ax-studio-panel">
-        <SectionTitle>1. Quoi publier ?</SectionTitle>
-        <div className="ax-chips" style={{ marginBottom: 10 }}>
+  /* ---- Panneaux ---- */
+
+  function renderSujet() {
+    return (
+      <div className="ax-ss-sujet">
+        <div className="ax-chips ax-ss-kinds" role="radiogroup" aria-label="Type de contenu">
           {CONTENT_KINDS.map((k) => (
-            <button key={k.key} type="button" className={`ax-toggle-chip${kind === k.key ? " on" : ""}`} onClick={() => (setKind(k.key), setItemId(""), setQ(""), setSelected([]))}>
-              {k.emoji} {k.label}
+            <button key={k.key} type="button" role="radio" aria-checked={kind === k.key} className={`ax-toggle-chip${kind === k.key ? " on" : ""}`} onClick={() => (setKind(k.key), setItemId(""), setQ(""), setSelected([]))}>
+              {k.label}
             </button>
           ))}
         </div>
-        <div className="ax-search" style={{ marginBottom: 8 }}>
+        <div className="ax-search">
           <Icon name="search" size="sm" />
-          <input className="ax-input sm" placeholder="Rechercher…" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input className="ax-input sm" placeholder="Master, faculté, ville, année…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Rechercher" />
         </div>
         {isCarousel && (
-          <div className="ax-inline" style={{ justifyContent: "space-between", marginBottom: 8, gap: 8, display: "flex" }}>
-            <Seg value={show} onChange={setShow} options={SHOW} />
+          <div className="ax-ss-filter">
+            <Seg value={show} onChange={setShow} options={SHOW} ariaLabel="Filtre" />
             <span className="ax-hint" title="Concours publiés sur Instagram ou Facebook">
               {doneCount} / {totalCount} publiés
             </span>
           </div>
         )}
-        <div className="ax-pick">
+        <div className="ax-ss-list">
           {!Array.isArray(list) ? (
-            <Skeleton rows={4} height={44} />
+            <Skeleton rows={6} height={48} />
           ) : !candidates.length ? (
-            <p className="ax-muted">Rien à publier dans cette catégorie.</p>
+            <p className="ax-muted">Rien à publier ici.</p>
           ) : (
             candidates.map((x) => {
+              const on = item?.id === x.id;
+              const concours = kind === "concours";
               const done = (log.entries || []).some((e) => e.kind === kind && e.itemId === x.id && e.status === "published");
-              const button = (
-                <button type="button" className={`ax-pick-item${item?.id === x.id ? " on" : ""}`} onClick={() => setItemId(x.id)}>
-                  <span style={{ minWidth: 0, flex: 1 }}>
-                    <span className="t">{col.title(x)}</span>
-                    <span className="m">{col.subtitle(x)}</span>
-                  </span>
-                  {isCarousel ? <TrackPill t={track.get(x.id)} /> : done && <span className="ax-pill green" title="Déjà publié sur au moins un réseau">✓</span>}
-                </button>
-              );
-              if (!isCarousel) return <div key={x.id}>{button}</div>;
+              const src = isCarousel ? sourceFor(x, style) : null;
               return (
-                <div key={x.id} className="ax-pick-row">
-                  <input type="checkbox" checked={selected.includes(x.id)} onChange={() => toggleSelect(x.id)} aria-label={`Sélectionner ${col.title(x)}`} disabled={!String(x.enonce_md || "").trim()} />
-                  {button}
+                <div key={x.id} className={`ax-ss-row${on ? " on" : ""}`}>
+                  {isCarousel && <input type="checkbox" checked={selected.includes(x.id)} onChange={() => toggleSelect(x.id)} aria-label={`Sélectionner ${col.title(x)}`} disabled={!src} />}
+                  <button type="button" className="ax-ss-item" onClick={() => setItemId(x.id)} aria-current={on || undefined}>
+                    <span className="t">{concours ? masterOf(x) : col.title(x)}</span>
+                    <span className="m">{concours ? [x.etablissement, x.annee, x.ville].filter(Boolean).join(" · ") : col.subtitle(x)}</span>
+                  </button>
+                  {isCarousel && style.source === "scan" && src === "enonce" && (
+                    <span className="ax-pill" title="Pas de scan : le carrousel montrera l'énoncé">
+                      texte
+                    </span>
+                  )}
+                  {isCarousel ? <TrackPill t={track.get(x.id)} /> : done && <span className="ax-pill green" title="Déjà publié sur au moins un réseau">✓</span>}
                 </div>
               );
             })
           )}
         </div>
         {isCarousel && (
-          <div className="ax-select-bar">
-            <span>
-              <strong>{selected.length}</strong> sélectionné{selected.length > 1 ? "s" : ""}
-            </span>
-            {selected.length > 0 ? (
-              <button type="button" className="ax-btn ghost xs" onClick={() => setSelected([])}>
-                Vider
+          <div className="ax-ss-bulk">
+            <div className="ax-ss-bulk-count">
+              <span>
+                <strong>{selected.length}</strong> sélectionné{selected.length > 1 ? "s" : ""}
+                <span className="ax-hint"> · {MAX_SELECTION} max</span>
+              </span>
+              {selected.length > 0 ? (
+                <button type="button" className="ax-btn ghost xs" onClick={() => setSelected([])}>
+                  Vider
+                </button>
+              ) : (
+                <button type="button" className="ax-btn ghost xs" onClick={selectVisible} disabled={!candidates.length} title={`Cocher les ${MAX_SELECTION} premiers de la liste`}>
+                  Tout cocher
+                </button>
+              )}
+            </div>
+            <div className="ax-ss-bulk-actions">
+              <button type="button" className="ax-btn sm icon" onClick={zipSelection} disabled={!selected.length} title="Images et textes en ZIP, pour publier à la main" aria-label="Télécharger la sélection en ZIP">
+                <Icon name="download" size="sm" />
               </button>
-            ) : (
-              <button type="button" className="ax-btn ghost xs" onClick={selectVisible} disabled={!candidates.length} title={`Cocher les ${MAX_SELECTION} premiers de la liste`}>
-                Tout cocher
+              <button type="button" className="ax-btn primary sm" onClick={() => setBulk(true)} disabled={!selected.length}>
+                <Icon name="send" size="sm" /> Relire et publier{selected.length ? ` ${selected.length}` : ""}
               </button>
-            )}
-            <span className="ax-right ax-inline" style={{ gap: 6 }}>
-              <button type="button" className="ax-btn xs" onClick={zipSelection} disabled={!selected.length} title="Images et textes, pour publier à la main">
-                <Icon name="download" size="sm" /> ZIP
-              </button>
-              <button type="button" className="ax-btn xs" onClick={() => setSeries(true)} disabled={!selected.length} title="Programmer la sélection en série (1 par jour…)">
-                <Icon name="calendar" size="sm" /> Étaler
-              </button>
-              <button type="button" className="ax-btn primary sm" onClick={publishSelection} disabled={!selected.length}>
-                <Icon name="share" size="sm" /> Publier {selected.length || ""}
-              </button>
-            </span>
+            </div>
           </div>
         )}
+      </div>
+    );
+  }
 
-        <hr className="ax-sep" />
-        <SectionTitle aside={styleChanged ? <button type="button" className="ax-btn ghost xs" onClick={resetStyle}><Icon name="restore" size="sm" /> Défaut</button> : null}>2. Style</SectionTitle>
-        <div className="ax-style-bar">
-          <select className="ax-input sm" value={styleId} onChange={(e) => applyStyle(e.target.value)} aria-label="Styles enregistrés">
-            <option value="">{savedStyles.length ? "Styles enregistrés…" : "Aucun style enregistré"}</option>
-            {savedStyles.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-          <button type="button" className="ax-btn sm" onClick={() => setNaming(true)} title="Enregistrer le style actuel">
-            <Icon name="save" size="sm" />
-          </button>
-          {styleId && (
-            <button type="button" className="ax-btn ghost icon sm" onClick={deleteStyle} aria-label="Supprimer ce style">
-              <Icon name="trash" size="sm" />
-            </button>
-          )}
-        </div>
+  function renderContenu() {
+    return (
+      <Panel title="Contenu" lead="Le type de post et les textes écrits sur l'affiche (première image).">
         {kind === "concours" && (
-          <Field label="Type de publication" hint={isCarousel ? `Affiche + énoncé (${style.maxPages} page${style.maxPages > 1 ? "s" : ""} max) + « cherche sur Google ». Format portrait 4:5.` : undefined}>
-            <Seg value={mode} onChange={setMode} options={MODES} />
-          </Field>
+          <Group title="Publication">
+            <Row label="Type de post" hint={isCarousel ? "Affiche, pages du sujet, puis « cherche sur Google ». Portrait 4:5." : "Une seule image, au format de ton choix."}>
+              <Seg value={mode} onChange={setMode} options={MODES} ariaLabel="Type de post" />
+            </Row>
+            {isCarousel && (
+              <>
+                <Row label="Sujet montré" hint="Aussi en haut de l'aperçu. Sans scan, le carrousel montre l'énoncé (et inversement).">
+                  <Seg value={style.source} onChange={(v) => setSt({ source: v })} options={SOURCES} ariaLabel="Sujet montré" />
+                </Row>
+                <Row label={style.source === "scan" ? "Pages scannées au maximum" : "Pages d'énoncé au maximum"} aside={<strong>{style.maxPages}</strong>} hint="Moins de pages = un post plus court ; la suite est sur le site.">
+                  <input type="range" min={1} max={8} value={style.maxPages} onChange={(e) => setSt({ maxPages: Number(e.target.value) })} className="ax-range" />
+                </Row>
+              </>
+            )}
+          </Group>
         )}
         {!isCarousel && (
-          <Field label="Format">
-            <Seg value={format} onChange={setFormat} options={FORMATS.map((f) => ({ value: f.key, label: f.label, title: f.hint }))} />
-          </Field>
+          <Group title="Format">
+            <Seg value={format} onChange={setFormat} options={FORMATS.map((f) => ({ value: f.key, label: f.label, title: f.hint }))} ariaLabel="Format" />
+          </Group>
         )}
-
-        <Group title="🎨 Couleurs et fond" open>
-          <ThemePicker value={themeKey} onChange={(k) => (setThemeKey(k), setStyleId(""))} style={style} />
-          {themeKey === CUSTOM_THEME.key && (
-            <div className="ax-colorrow">
-              <ColorField label="Haut" value={style.custom.bg0} onChange={(v) => setSt({ custom: { ...style.custom, bg0: v } })} />
-              <ColorField label="Bas" value={style.custom.bg1} onChange={(v) => setSt({ custom: { ...style.custom, bg1: v } })} />
-              <ColorField label="Accent" value={style.custom.accent} onChange={(v) => setSt({ custom: { ...style.custom, accent: v } })} />
-            </div>
-          )}
-          <Field label="Motif">
-            <Seg value={style.pattern} onChange={(v) => setSt({ pattern: v })} options={PATTERNS} />
-          </Field>
-          {!isCarousel && (
-            <Field label="Photo de fond" hint="Voilée aux couleurs du thème. Reste sur cet appareil.">
-              <div className="ax-inline">
-                <label className="ax-btn sm">
-                  <Icon name="image" size="sm" /> {photo ? "Changer" : "Choisir"}
-                  <input type="file" accept="image/*" hidden onChange={(e) => (pickPhoto(e.target.files?.[0]), (e.target.value = ""))} />
-                </label>
-                {photo && (
-                  <button type="button" className="ax-btn ghost sm" onClick={() => setPhoto(null)}>
-                    <Icon name="x" size="sm" /> Retirer
-                  </button>
-                )}
-              </div>
-            </Field>
-          )}
-        </Group>
-
-        <Group title="📐 Mise en page">
-          <Field label="Alignement">
-            <Seg value={style.align} onChange={(v) => setSt({ align: v })} options={ALIGNS} />
-          </Field>
-          <Field label="Taille du titre">
-            <Seg value={style.titleSize} onChange={(v) => setSt({ titleSize: v })} options={TITLE_SIZES.map((t) => ({ value: t.value, label: t.label }))} />
-          </Field>
-          <div className="ax-switches">
-            <Switch checked={style.brand} onChange={(v) => setSt({ brand: v })} label="Logo" />
-            <Switch checked={style.url} onChange={(v) => setSt({ url: v })} label="Pied de page" />
-            <Switch checked={style.bullets} onChange={(v) => setSt({ bullets: v })} label="Points forts" />
-            <Switch checked={style.watermark} onChange={(v) => setSt({ watermark: v })} label="Filigrane" />
-          </div>
-          {isCarousel && (
-            <Field label="Pages d'énoncé au maximum" aside={<strong>{style.maxPages}</strong>} hint="Moins de pages = un post plus court, la suite est sur le site.">
-              <input type="range" min={1} max={8} value={style.maxPages} onChange={(e) => setSt({ maxPages: Number(e.target.value) })} className="ax-range" />
-            </Field>
-          )}
-        </Group>
-
-        <Group title="🏷️ Badge, filigrane, pied">
-          <Field label="Badge en coin">
-            <input className="ax-input sm" value={style.badge} maxLength={24} onChange={(e) => setSt({ badge: e.target.value })} placeholder="Aucun" />
-            <div className="ax-chips" style={{ marginTop: 6 }}>
-              {BADGES.map((b) => (
-                <button key={b} type="button" className={`ax-toggle-chip${style.badge === b ? " on" : ""}`} onClick={() => setSt({ badge: style.badge === b ? "" : b })}>
-                  {b}
-                </button>
-              ))}
-            </div>
-          </Field>
-          {style.watermark && (
-            <Field label="Emoji en filigrane">
-              <input className="ax-input sm" value={style.emoji} maxLength={8} onChange={(e) => setSt({ emoji: e.target.value })} placeholder={facts?.emoji || "🎓"} />
-            </Field>
-          )}
-          {style.url && (
-            <Field label="Texte du pied de page">
-              <input className="ax-input sm" value={style.footer} maxLength={40} onChange={(e) => setSt({ footer: e.target.value })} placeholder="saadconcours.space" />
-            </Field>
-          )}
-        </Group>
-
         {facts && (
-          <>
-            <hr className="ax-sep" />
-            <SectionTitle
-              aside={
-                Object.keys(override).length > 0 ? (
-                  <button type="button" className="ax-btn ghost xs" onClick={() => setOverride({})}>
-                    <Icon name="restore" size="sm" /> Auto
-                  </button>
-                ) : null
-              }
-            >
-              3. Textes de l&apos;affiche
-            </SectionTitle>
+          <Group
+            title="Textes de l'affiche"
+            aside={
+              Object.keys(override).length > 0 ? (
+                <button type="button" className="ax-btn ghost xs" onClick={() => setOverride({})}>
+                  <Icon name="restore" size="sm" /> Automatique
+                </button>
+              ) : null
+            }
+          >
             <Field label="Sur-titre">
               <input className="ax-input sm" value={facts.kicker || ""} onChange={(e) => setOverride((o) => ({ ...o, kicker: e.target.value }))} />
             </Field>
@@ -1134,134 +1197,136 @@ function Composer({ log }) {
             <Field label="Bouton">
               <input className="ax-input sm" value={isCarousel ? override.cta ?? "Glisse pour voir le sujet" : facts.cta || ""} onChange={(e) => setOverride((o) => ({ ...o, cta: e.target.value }))} />
             </Field>
-          </>
+          </Group>
         )}
-      </aside>
+      </Panel>
+    );
+  }
 
-      <section className="ax-stack">
-        {!item ? (
-          <Empty icon="📣" title="Choisis un contenu à publier" />
-        ) : (
-          <>
-            <div className="ax-inline" style={{ justifyContent: "space-between", display: "flex", flexWrap: "wrap", gap: 8 }}>
-              <Seg value={preview} onChange={setPreview} options={PREVIEWS} ariaLabel="Aperçu" />
-              {isCarousel && carousel && (
-                <span className="ax-hint">
-                  Image {slide + 1} / {carousel.canvases.length} · ← → pour feuilleter
-                </span>
-              )}
-            </div>
-
-            {preview !== "image" ? (
-              <div className="ax-social-stage">
-                <FeedMock
-                  key={`${preview}-${item.id}`}
-                  platform={preview}
-                  src={currentSrc}
-                  caption={captions[preview] || ""}
-                  n={isCarousel ? slide : 0}
-                  total={isCarousel ? carousel?.canvases.length || 1 : 1}
-                  onPrev={() => setSlide((s) => Math.max(0, s - 1))}
-                  onNext={() => setSlide((s) => Math.min(slides - 1, s + 1))}
-                />
-              </div>
-            ) : isCarousel ? (
-              <div className="ax-social-stage ax-stage-nav">
-                {carousel ? <img src={carousel.thumbs[slide]} alt={`Image ${slide + 1}`} className="ax-social-canvas ax-carousel-main" /> : <Skeleton rows={1} height={420} />}
-                {carousel && slide > 0 && (
-                  <button type="button" className="ax-stage-arrow prev" onClick={() => setSlide((s) => s - 1)} aria-label="Image précédente">
-                    <Icon name="chevronLeft" />
-                  </button>
-                )}
-                {carousel && slide < slides - 1 && (
-                  <button type="button" className="ax-stage-arrow next" onClick={() => setSlide((s) => s + 1)} aria-label="Image suivante">
-                    <Icon name="chevronRight" />
-                  </button>
-                )}
-              </div>
-            ) : null}
-            {!isCarousel && (
-              <div className="ax-social-stage" style={preview !== "image" ? { display: "none" } : undefined}>
-                <canvas ref={canvasRef} className="ax-social-canvas" />
-              </div>
+  function renderStyle() {
+    return (
+      <Panel title="Style" lead="Retenu sur cet appareil ; enregistre-le pour le retrouver partout.">
+        <Group
+          title="Styles enregistrés"
+          aside={
+            styleChanged ? (
+              <button type="button" className="ax-btn ghost xs" onClick={resetStyle}>
+                <Icon name="restore" size="sm" /> Par défaut
+              </button>
+            ) : null
+          }
+        >
+          <div className="ax-style-bar">
+            <select className="ax-input sm" value={styleId} onChange={(e) => applyStyle(e.target.value)} aria-label="Styles enregistrés">
+              <option value="">{savedStyles.length ? "Choisir un style…" : "Aucun style enregistré"}</option>
+              {savedStyles.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+            <button type="button" className="ax-btn sm" onClick={() => setNaming(true)} title="Enregistrer le style actuel">
+              <Icon name="save" size="sm" /> Enregistrer
+            </button>
+            {styleId && (
+              <button type="button" className="ax-btn ghost icon sm" onClick={deleteStyle} aria-label="Supprimer ce style">
+                <Icon name="trash" size="sm" />
+              </button>
             )}
+          </div>
+        </Group>
 
-            {isCarousel ? (
-              <>
-                {carousel && (
-                  <>
-                    <div className="ax-carousel-strip">
-                      {carousel.thumbs.map((src, k) => (
-                        <button key={k} type="button" className={`ax-carousel-thumb${k === slide ? " on" : ""}`} onClick={() => setSlide(k)} aria-label={`Image ${k + 1}`}>
-                          <img src={src} alt="" />
-                          <span>{k + 1}</span>
-                        </button>
-                      ))}
-                    </div>
-                    <p className="ax-hint" style={{ margin: 0 }}>
-                      {carousel.canvases.length} images · {carousel.extraitPages} page{carousel.extraitPages > 1 ? "s" : ""} d&apos;énoncé
-                      {carousel.truncated ? " · sujet long : coupé au début d'une partie, la suite est sur le site" : " · sujet complet"} · recherche Google : « {googleQuery(item)} »
-                    </p>
-                  </>
-                )}
-                <div className="ax-btn-row">
-                  <button type="button" className="ax-btn primary" onClick={publishNow} disabled={!carousel}>
-                    <Icon name="share" size="sm" /> Publier sur Instagram + Facebook
-                  </button>
-                  <button type="button" className="ax-btn" onClick={() => setAutoPlan(true)} disabled={!carousel}>
-                    <Icon name="calendar" size="sm" /> Programmer
-                  </button>
-                  <button type="button" className="ax-btn" onClick={downloadCarousel} disabled={!carousel}>
-                    <Icon name="download" size="sm" /> ZIP
-                  </button>
-                  <button type="button" className="ax-btn" onClick={downloadSlide} disabled={!carousel} title="Télécharger l'image affichée">
-                    <Icon name="image" size="sm" /> Image {slide + 1}
-                  </button>
-                  <button type="button" className="ax-btn" onClick={copyImage} disabled={!carousel} title="Copier l'image affichée">
-                    <Icon name="copy" size="sm" />
-                  </button>
-                  <button type="button" className="ax-btn" onClick={copyComment}>
-                    <Icon name="link" size="sm" /> Lien 1er commentaire FB
-                  </button>
-                  <a className="ax-btn" href={col.publicUrl(item)} target="_blank" rel="noopener noreferrer">
-                    <Icon name="external" size="sm" /> Voir la page
-                  </a>
-                </div>
-              </>
-            ) : (
-              <div className="ax-btn-row">
-                <button type="button" className="ax-btn primary" onClick={download}>
-                  <Icon name="download" /> Télécharger l&apos;image
-                </button>
-                <button type="button" className="ax-btn" onClick={downloadAllFormats} title="Carré, portrait, story et paysage + les textes">
-                  <Icon name="layers" size="sm" /> Tous les formats (ZIP)
-                </button>
-                <button type="button" className="ax-btn" onClick={copyImage}>
-                  <Icon name="copy" size="sm" /> Copier l&apos;image
-                </button>
-                <a className="ax-btn" href={col.publicUrl(item)} target="_blank" rel="noopener noreferrer">
-                  <Icon name="external" size="sm" /> Voir la page
-                </a>
-              </div>
-            )}
-
-            <SectionTitle aside="liens suivis par réseau (utm_source) · textes modifiables">4. Textes par réseau</SectionTitle>
-            <div className="ax-card ax-caption-opts">
-              <Field label="Ton">
-                <Seg value={tone} onChange={setTone} options={TONES} />
-              </Field>
-              <Field label="Hashtags" hint={tags ? undefined : "Automatiques pour ce contenu. Entrée pour en ajouter, × pour en retirer."}>
-                <TagsInput value={tags ?? autoTags} onChange={(v) => setTags(v.map((t) => (t.startsWith("#") ? t : `#${t.replace(/\s+/g, "")}`)))} placeholder="#ConcoursMaster" />
-                {tags && (
-                  <button type="button" className="ax-btn ghost xs" style={{ alignSelf: "flex-start" }} onClick={() => setTags(null)}>
-                    <Icon name="restore" size="sm" /> Hashtags automatiques
-                  </button>
-                )}
-              </Field>
-              <Field label="Fin de texte" hint="Ajoutée à tous les posts, avant les hashtags. Retenue sur cet appareil.">
-                <textarea className="ax-textarea" rows={2} value={outro} onChange={(e) => setOutro(e.target.value)} placeholder="Ex. 📲 Abonne-toi pour recevoir chaque nouveau sujet !" />
-              </Field>
+        <Group title="Couleurs et fond">
+          <ThemePicker value={themeKey} onChange={(k) => (setThemeKey(k), setStyleId(""))} style={style} />
+          {themeKey === CUSTOM_THEME.key && (
+            <div className="ax-colorrow">
+              <ColorField label="Haut" value={style.custom.bg0} onChange={(v) => setSt({ custom: { ...style.custom, bg0: v } })} />
+              <ColorField label="Bas" value={style.custom.bg1} onChange={(v) => setSt({ custom: { ...style.custom, bg1: v } })} />
+              <ColorField label="Accent" value={style.custom.accent} onChange={(v) => setSt({ custom: { ...style.custom, accent: v } })} />
             </div>
+          )}
+          <Row label="Motif">
+            <Seg value={style.pattern} onChange={(v) => setSt({ pattern: v })} options={PATTERNS} ariaLabel="Motif" />
+          </Row>
+          {!isCarousel && (
+            <Row label="Photo de fond" hint="Voilée aux couleurs du thème. Reste sur cet appareil.">
+              <div className="ax-inline">
+                <label className="ax-btn sm">
+                  <Icon name="image" size="sm" /> {photo ? "Changer" : "Choisir"}
+                  <input type="file" accept="image/*" hidden onChange={(e) => (pickPhoto(e.target.files?.[0]), (e.target.value = ""))} />
+                </label>
+                {photo && (
+                  <button type="button" className="ax-btn ghost sm" onClick={() => setPhoto(null)}>
+                    <Icon name="x" size="sm" /> Retirer
+                  </button>
+                )}
+              </div>
+            </Row>
+          )}
+        </Group>
+
+        <Group title="Mise en page">
+          <Row label="Alignement">
+            <Seg value={style.align} onChange={(v) => setSt({ align: v })} options={ALIGNS} ariaLabel="Alignement" />
+          </Row>
+          <Row label="Taille du titre">
+            <Seg value={style.titleSize} onChange={(v) => setSt({ titleSize: v })} options={TITLE_SIZES.map((t) => ({ value: t.value, label: t.label }))} ariaLabel="Taille du titre" />
+          </Row>
+          <div className="ax-switches">
+            <Switch checked={style.brand} onChange={(v) => setSt({ brand: v })} label="Logo" />
+            <Switch checked={style.url} onChange={(v) => setSt({ url: v })} label="Pied de page" />
+            <Switch checked={style.bullets} onChange={(v) => setSt({ bullets: v })} label="Points forts" />
+            <Switch checked={style.watermark} onChange={(v) => setSt({ watermark: v })} label="Filigrane" />
+          </div>
+        </Group>
+
+        <Group title="Habillage">
+          <Field label="Badge en coin">
+            <input className="ax-input sm" value={style.badge} maxLength={24} onChange={(e) => setSt({ badge: e.target.value })} placeholder="Aucun" />
+            <div className="ax-chips" style={{ marginTop: 6 }}>
+              {BADGES.map((b) => (
+                <button key={b} type="button" className={`ax-toggle-chip${style.badge === b ? " on" : ""}`} onClick={() => setSt({ badge: style.badge === b ? "" : b })}>
+                  {b}
+                </button>
+              ))}
+            </div>
+          </Field>
+          {style.watermark && (
+            <Field label="Emoji en filigrane">
+              <input className="ax-input sm" value={style.emoji} maxLength={8} onChange={(e) => setSt({ emoji: e.target.value })} placeholder={facts?.emoji || "🎓"} />
+            </Field>
+          )}
+          {style.url && (
+            <Field label="Texte du pied de page">
+              <input className="ax-input sm" value={style.footer} maxLength={40} onChange={(e) => setSt({ footer: e.target.value })} placeholder="saadconcours.space" />
+            </Field>
+          )}
+        </Group>
+      </Panel>
+    );
+  }
+
+  function renderLegende() {
+    return (
+      <Panel title="Légende" lead="Le texte du post pour chaque réseau, avec un lien suivi (utm_source). Modifiable à la main.">
+        <Group title="Pour tous les réseaux">
+          <Row label="Ton">
+            <Seg value={tone} onChange={setTone} options={TONES} ariaLabel="Ton" />
+          </Row>
+          <Field label="Hashtags" hint={tags ? undefined : "Automatiques pour ce contenu. Entrée pour en ajouter, × pour en retirer."}>
+            <TagsInput value={tags ?? autoTags} onChange={(v) => setTags(v.map((t) => (t.startsWith("#") ? t : `#${t.replace(/\s+/g, "")}`)))} placeholder="#ConcoursMaster" />
+            {tags && (
+              <button type="button" className="ax-btn ghost xs" style={{ alignSelf: "flex-start" }} onClick={() => setTags(null)}>
+                <Icon name="restore" size="sm" /> Hashtags automatiques
+              </button>
+            )}
+          </Field>
+          <Field label="Fin de texte" hint="Ajoutée à tous les posts, avant les hashtags. Retenue sur cet appareil.">
+            <textarea className="ax-textarea" rows={2} value={outro} onChange={(e) => setOutro(e.target.value)} placeholder="Ex. 📲 Abonne-toi pour recevoir chaque nouveau sujet !" />
+          </Field>
+        </Group>
+        {item && (
+          <Group title="Par réseau">
             <CaptionEditor
               net={net}
               onNet={(k) => {
@@ -1281,9 +1346,165 @@ function Composer({ log }) {
               onPlan={setPlanFor}
               onDone={(p) => record(p.key)}
             />
+          </Group>
+        )}
+      </Panel>
+    );
+  }
+
+  const panels = { sujet: renderSujet, contenu: renderContenu, style: renderStyle, legende: renderLegende };
+  const activeRail = RAIL.find((r) => r.key === rail) || RAIL[0];
+  const pagesLabel = carousel ? `${carousel.extraitPages} page${carousel.extraitPages > 1 ? "s" : ""} ${scanShown ? `scannée${carousel.extraitPages > 1 ? "s" : ""}` : "d'énoncé"}` : "";
+
+  return (
+    <div className="ax-ss">
+      <aside className="ax-ps-side" aria-label="Réglages du post">
+        <nav className="ax-ps-rail" role="tablist" aria-label="Sections">
+          {RAIL.map((r) => (
+            <button key={r.key} type="button" role="tab" aria-selected={rail === r.key} className={rail === r.key ? "on" : ""} onClick={() => pickRail(r.key)} title={r.title}>
+              <Icon name={r.icon} />
+              <span>{r.label}</span>
+              {r.key === "sujet" && selected.length > 0 && <i className="ax-ss-rail-count">{selected.length}</i>}
+              {r.key === "legende" && Object.keys(texts).length > 0 && <i className="ax-ps-mod" aria-label="modifié" />}
+            </button>
+          ))}
+        </nav>
+        <div className={`ax-ps-body${rail === "sujet" ? " ax-ss-body-list" : ""}`} role="tabpanel" aria-label={activeRail.title}>
+          {panels[activeRail.key]()}
+        </div>
+      </aside>
+
+      <section className="ax-ps-view ax-ss-view" aria-label="Aperçu du post">
+        <div className="ax-ps-toolbar">
+          {isCarousel && <Seg value={style.source} onChange={(v) => setSt({ source: v })} options={SOURCES} ariaLabel="Sujet montré" />}
+          <Seg value={preview} onChange={setPreview} options={PREVIEWS} ariaLabel="Aperçu" />
+          <div className="ax-ps-tools">
+            {building && (
+              <span className="ax-hint ax-inline">
+                <Icon name="loader" size="sm" /> Scans…
+              </span>
+            )}
+            {isCarousel && carousel && (
+              <span className="ax-hint ax-nowrap" title="← → pour feuilleter">
+                {slide + 1} / {carousel.canvases.length}
+              </span>
+            )}
+            {item && (
+              <a className="ax-btn sm icon" href={col.publicUrl(item)} target="_blank" rel="noopener noreferrer" title="Voir la page sur le site" aria-label="Voir la page sur le site">
+                <Icon name="external" size="sm" />
+              </a>
+            )}
+          </div>
+        </div>
+
+        {!item ? (
+          <div className="ax-ss-stage">
+            <Empty icon={<Icon name="megaphone" size="lg" />} title="Choisis un contenu à publier" />
+          </div>
+        ) : (
+          <>
+            <div className={`ax-ss-stage${preview !== "image" ? " feed" : ""}`}>
+              {preview !== "image" ? (
+                <FeedMock
+                  key={`${preview}-${item.id}`}
+                  platform={preview}
+                  src={currentSrc}
+                  caption={captions[preview] || ""}
+                  n={isCarousel ? slide : 0}
+                  total={isCarousel ? carousel?.canvases.length || 1 : 1}
+                  onPrev={() => setSlide((s) => Math.max(0, s - 1))}
+                  onNext={() => setSlide((s) => Math.min(slides - 1, s + 1))}
+                />
+              ) : isCarousel ? (
+                carousel ? (
+                  <>
+                    <img src={carousel.thumbs[slide]} alt={`Image ${slide + 1}`} className="ax-ss-main" />
+                    {slide > 0 && (
+                      <button type="button" className="ax-stage-arrow prev" onClick={() => setSlide((s) => s - 1)} aria-label="Image précédente">
+                        <Icon name="chevronLeft" />
+                      </button>
+                    )}
+                    {slide < slides - 1 && (
+                      <button type="button" className="ax-stage-arrow next" onClick={() => setSlide((s) => s + 1)} aria-label="Image suivante">
+                        <Icon name="chevronRight" />
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <div className="ax-skel ax-ss-skel" />
+                )
+              ) : null}
+              {!isCarousel && <canvas ref={canvasRef} className="ax-ss-main" style={preview !== "image" ? { display: "none" } : undefined} />}
+            </div>
+
+            {isCarousel && carousel && (
+              <div className="ax-carousel-strip ax-ss-strip">
+                {carousel.thumbs.map((src, k) => (
+                  <button key={k} type="button" className={`ax-carousel-thumb${k === slide ? " on" : ""}`} onClick={() => setSlide(k)} aria-label={`Image ${k + 1}`}>
+                    <img src={src} alt="" />
+                    <span>{k + 1}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="ax-ss-actions">
+              {isCarousel ? (
+                <>
+                  <p className="ax-ss-info">
+                    {carousel ? (
+                      <>
+                        {carousel.canvases.length} images · {pagesLabel} · {truncated ? "sujet coupé, la suite est sur le site" : "sujet complet"}
+                        {fallback && <span className="ax-ss-warn">{style.source === "scan" ? "Pas de scan pour ce concours : énoncé utilisé." : "Pas d'énoncé pour ce concours : scans utilisés."}</span>}
+                        <span className="ax-ss-sub">Recherche Google : « {googleQuery(item)} »</span>
+                      </>
+                    ) : (
+                      "Préparation des images…"
+                    )}
+                  </p>
+                  <div className="ax-ss-buttons">
+                    <Menu
+                      label="Télécharger, copier"
+                      items={[
+                        { label: "Tout en ZIP (images + textes)", icon: "download", onClick: downloadCarousel, disabled: !carousel },
+                        { label: `Télécharger l'image ${slide + 1}`, icon: "image", onClick: downloadSlide, disabled: !carousel },
+                        { label: `Copier l'image ${slide + 1}`, icon: "copy", onClick: copyImage, disabled: !carousel },
+                        "-",
+                        { label: "Copier le lien du 1er commentaire Facebook", icon: "link", onClick: copyComment },
+                      ]}
+                    />
+                    <button type="button" className="ax-btn" onClick={() => setAutoPlan(true)} disabled={!carousel}>
+                      <Icon name="calendar" size="sm" /> Programmer
+                    </button>
+                    <button type="button" className="ax-btn primary" onClick={publishNow} disabled={!carousel}>
+                      <Icon name="send" size="sm" /> Publier sur Instagram + Facebook
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="ax-ss-info">
+                    {fmt.label} · {fmt.w} × {fmt.h} px<span className="ax-ss-sub">{fmt.hint}</span>
+                  </p>
+                  <div className="ax-ss-buttons">
+                    <Menu
+                      label="Plus d'actions"
+                      items={[
+                        { label: "Tous les formats en ZIP (+ textes)", icon: "layers", onClick: downloadAllFormats },
+                        { label: "Copier l'image", icon: "copy", onClick: copyImage },
+                      ]}
+                    />
+                    <button type="button" className="ax-btn primary" onClick={download}>
+                      <Icon name="download" size="sm" /> Télécharger l&apos;image
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </>
         )}
       </section>
+
       {autoPlan && (
         <PlanDialog
           auto
@@ -1295,16 +1516,8 @@ function Composer({ log }) {
           }}
         />
       )}
-      {series && (
-        <SeriesDialog
-          items={selectedItems.map((c) => ({ id: c.id, title: col.title(c) }))}
-          again={selectedAgain.map((c) => col.title(c))}
-          onClose={() => setSeries(false)}
-          onSave={(dates) => {
-            sendSelection(dates);
-            setSeries(false);
-          }}
-        />
+      {bulk && selectedItems.length > 0 && (
+        <BulkDialog items={selectedItems} track={track} style={style} initialTone={tone} initialOutro={outro} corrigeFiles={corrigeFiles} onClose={() => setBulk(false)} onSend={sendSelection} />
       )}
       {planFor && (
         <PlanDialog
@@ -1550,7 +1763,7 @@ function Planning({ log }) {
           </SectionTitle>
           {!planned.length ? (
             <p className="ax-muted" style={{ margin: 0 }}>
-              Rien de planifié. Depuis le composer, « Programmer » ou « Étaler » une sélection.
+              Rien de planifié. Depuis le composer : « Programmer » un post, ou « Relire et publier » une sélection en série.
             </p>
           ) : (
             <ul className="ax-list">
@@ -1633,10 +1846,28 @@ export default function SocialStudio() {
   const planned = (log.entries || []).filter((e) => e.status === "planned").length;
   return (
     <>
-      <Hero icon="📣" eyebrow="Diffusion · Réseaux sociaux" title="Studio social">
-        Choisis un contenu, règle le style (thème, couleurs, mise en page, badge) et le ton : le studio fabrique le visuel et un texte adapté à chaque réseau, avec un lien suivi. Publie en un clic, programme, ou étale une sélection sur plusieurs jours.
-      </Hero>
-      <Tabs tabs={TABS.map((t) => (t.key === "planning" && planned ? { ...t, count: planned } : t))} value={tab} onChange={setTab} />
+      <div className="ax-editor-head">
+        <div className="ax-editor-title">
+          <h1>Studio social</h1>
+          <p>
+            <span>Carrousels et visuels pour Instagram, Facebook et les autres réseaux : publiés par le robot, programmés, ou à la main.</span>
+          </p>
+        </div>
+        <Seg
+          value={tab}
+          onChange={setTab}
+          ariaLabel="Vue"
+          options={TABS.map((t) => ({
+            value: t.key,
+            label: (
+              <span className="ax-inline">
+                <Icon name={t.icon} size="sm" /> {t.label}
+                {t.key === "planning" && planned > 0 && <span className="ax-pill">{planned}</span>}
+              </span>
+            ),
+          }))}
+        />
+      </div>
       {tab === "composer" ? <Composer log={log} /> : <Planning log={log} />}
     </>
   );
