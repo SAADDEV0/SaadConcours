@@ -2,6 +2,13 @@ import "./admin.css";
 import MathScripts from "../_shared/MathScripts";
 import { getSettings } from "@/lib/store";
 
+// Jamais prérendue : scripts/prerender-to-assets.mjs refuse toute page /admin
+// en HTML statique (les assets passent avant middleware.js). Jusqu'ici, la
+// lecture de getSettings() par l'API GitHub rendait la console dynamique par
+// effet de bord ; depuis qu'elle lit le checkout pendant le build, il faut le
+// dire explicitement.
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: { template: "%s · Console SaadConcours", absolute: "Console SaadConcours" },
   robots: { index: false, follow: false },
