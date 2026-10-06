@@ -31,7 +31,9 @@ export default async function Image(props) {
     return buildOgImage({ eyebrow: "SaadConcours", title: "Concours introuvable" });
   }
   return buildOgImage({
-    eyebrow: `${c.ville} · ${c.annee}`,
+    // « Fès · Non précisée » sur la carte quand l'année est inconnue : on
+    // n'affiche l'année que si c'en est une.
+    eyebrow: [c.ville, /\d{4}/.test(String(c.annee || "")) ? c.annee : null].filter(Boolean).join(" · "),
     title: c.master_reel || c.filiere || c.etablissement,
     subtitle: c.etablissement,
   });

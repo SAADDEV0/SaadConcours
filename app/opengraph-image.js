@@ -6,8 +6,8 @@ export const alt = "SaadConcours — Cours Bac, Licence FSJES et concours Master
 
 export default async function Image() {
   return buildOgImage({
-    eyebrow: "SaadConcours",
+    eyebrow: "Économie et gestion · Maroc",
     title: "Cours Bac, Licence FSJES et concours Master",
-    subtitle: "Cours chapitre par chapitre, exercices corrigés, QCM et sujets réels de concours — économie et gestion au Maroc",
+    subtitle: "Du Bac SEG à la Licence S1–S6, jusqu’aux sujets réels des concours d’accès au Master",
   });
 }

@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Same logo mark as app/icon.js / app/apple-icon.js, parameterized for the
 // PWA manifest's larger icon sizes (192/512) — kept in one place so the
 // mark can't drift between the favicon and the installable-app icon.
-function logoSvg(px, { maskable = false } = {}) {
+export function logoSvg(px, { maskable = false } = {}) {
   // Maskable icons get cropped into a circle/rounded-square by the OS, so
   // the artwork needs to stay inside the ~80% "safe zone" instead of
   // touching the edges like the plain favicon does.
