@@ -19,7 +19,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createCanvas, GlobalFonts, loadImage } from "@napi-rs/canvas";
-import { buildCarousel, scanPaths, sourceFor } from "@/app/admin/_features/social/carousel";
+// mathjax-full reste hors du paquet esbuild (--external, comme @napi-rs/canvas) :
+// son code CommonJS se détecte avec eval("require"), qui casse en ESM.
+import { mathjax } from "mathjax-full/js/mathjax.js";
+import { TeX } from "mathjax-full/js/input/tex.js";
+import { SVG } from "mathjax-full/js/output/svg.js";
+import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor.js";
+import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html.js";
+import { AllPackages } from "mathjax-full/js/input/tex/AllPackages.js";
+import { buildCarousel, mathSpans, mathSvgEntry, scanPaths, sourceFor } from "@/app/admin/_features/social/carousel";
+import { wrapAccentedMathWords } from "@/app/_shared/latexPlainText";
 import { carouselCaption, factsFor, trackedUrl } from "@/app/admin/_features/social/captions";
 import { resolveTheme } from "@/app/admin/_features/social/visual";
 
@@ -106,11 +115,45 @@ async function loadScans(item, style) {
   return out;
 }
 
+// Formules de l'énoncé : MathJax (le même moteur que le Studio, dans le
+// navigateur) les compose en SVG, que @napi-rs/canvas charge comme images.
+// Une formule en erreur est laissée de côté : elle s'écrit en texte brut.
+let mathDoc = null;
+let mathAdaptor = null;
+function texToSvg(tex, display) {
+  if (!mathDoc) {
+    mathAdaptor = liteAdaptor();
+    RegisterHTMLHandler(mathAdaptor);
+    mathDoc = mathjax.document("", { InputJax: new TeX({ packages: AllPackages }), OutputJax: new SVG({ fontCache: "none" }) });
+  }
+  const html = mathAdaptor.outerHTML(mathDoc.convert(wrapAccentedMathWords(tex), { display }));
+  if (/data-mjx-error|<merror|mjx-merror/.test(html)) return null;
+  const start = html.indexOf("<svg");
+  const end = html.lastIndexOf("</svg>");
+  return start < 0 || end < 0 ? null : html.slice(start, end + 6);
+}
+
+async function loadMath(item, style) {
+  if (sourceFor(item, style) !== "enonce") return null;
+  const map = new Map();
+  for (const { key, tex, display } of mathSpans(item.enonce_md)) {
+    try {
+      const svg = texToSvg(tex, display);
+      const entry = svg && mathSvgEntry(svg);
+      if (entry) map.set(key, { ...entry, img: await loadImage(Buffer.from(entry.svg)) });
+    } catch (err) {
+      log(`  formule en texte brut : ${tex.slice(0, 60)} (${err.message})`);
+    }
+  }
+  return map;
+}
+
 // design : réglages du Studio envoyés avec la publication (style, textes de
 // l'affiche retouchés, ton, hashtags), pour dessiner exactement l'aperçu.
 async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
   const theme = resolveTheme(themeKey, design.style);
   const scans = await loadScans(item, design.style);
+  const math = await loadMath(item, design.style);
   const hasCorrige = Boolean(item.corrige_md) || corrigeFiles.has(item.id);
   const { bullets, ...facts } = design.facts || {};
   const built = buildCarousel(item, {
@@ -121,6 +164,7 @@ async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
     bulletsOverride: Array.isArray(bullets) ? bullets : undefined,
     hasCorrige,
     scans,
+    math,
     createCanvas: () => createCanvas(1, 1),
   });
   fs.mkdirSync(dir, { recursive: true });

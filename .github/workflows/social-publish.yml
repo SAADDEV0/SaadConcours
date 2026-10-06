@@ -83,11 +83,11 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq fonts-roboto fonts-noto-color-emoji > /dev/null
-          npm i --no-save --no-package-lock --prefix .social @napi-rs/canvas@0 esbuild@0.25 react@19 > /dev/null
+          npm i --no-save --no-package-lock --prefix .social @napi-rs/canvas@0 mathjax-full@3 esbuild@0.25 react@19 > /dev/null
           NODE_PATH=.social/node_modules .social/node_modules/.bin/esbuild scripts/social/publier.mjs \
             --bundle --platform=node --format=esm --target=node22 \
             --alias:@=. --loader:.js=jsx --jsx=automatic \
-            --external:@napi-rs/canvas --outfile=.social/publier.mjs --log-level=warning
+            --external:@napi-rs/canvas --external:mathjax-full --outfile=.social/publier.mjs --log-level=warning
 
       - name: Dessiner les carrousels
         if: steps.gate.outputs.due != '0'

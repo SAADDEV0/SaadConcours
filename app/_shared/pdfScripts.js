@@ -81,6 +81,12 @@ function ensureMathJax() {
   return loadScript(MATHJAX_URL);
 }
 
+// Studio social : les formules des énoncés sont composées par MathJax puis
+// dessinées dans les images du carrousel (app/admin/_features/social/carousel.js).
+export function ensureMathScripts() {
+  return ensureMathJax();
+}
+
 function ensureMarked() {
   return loadScript(MARKED_URL);
 }

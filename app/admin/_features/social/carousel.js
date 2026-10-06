@@ -14,7 +14,7 @@
 // le carrousel au format de la première.
 
 import { formatQCM } from "@/app/_shared/concoursFormat";
-import { convertMathSpansToPlainText } from "@/app/_shared/latexPlainText";
+import { convertMathSpansToPlainText, latexToPlainText } from "@/app/_shared/latexPlainText";
 import { FONT, FORMATS, drawLogo, drawVisual, fitTitle, normalizeStyle, paintBackground, roundRect, wrap } from "./visual";
 import { googleQuery } from "./captions";
 
@@ -42,6 +42,80 @@ const RULE = "#d6d9e6";
 // Début d'une partie : c'est là qu'on peut couper un sujet trop long.
 const SECTION_RE = /^(exercice|partie|dossier|[ée]preuve|question|volet|cas|sujet|annexe|section|document|probl[eè]me|th[eè]me|[IVX]{1,4}\s*[.\-–)]|\d{1,3}\s*[.)\-–]\s)/i;
 
+/* ------------------------------ Formules ------------------------------ */
+// Les formules ($…$, $$…$$) sont composées par MathJax en SVG, puis dessinées
+// dans le texte comme des mots insécables, alignées sur la ligne de base.
+// MathJax tourne chez l'appelant (navigateur du Studio, ou Node pour le
+// robot) : il passe à buildCarousel une Map clé → formule chargée, les clés
+// venant de mathSpans(). Une formule absente de la Map (MathJax indisponible,
+// commande inconnue) retombe sur sa conversion en texte brut.
+
+const MATH_RE = /\$\$([\s\S]+?)\$\$|\$((?:\\\$|[^$])+?)\$/g;
+const DISPLAY_LINE = /^\s*\$\$([\s\S]+?)\$\$\s*$/;
+// Les glyphes TeX ont un œil plus petit que la police du texte.
+const MATH_SCALE = 1.12;
+// Taille de référence du SVG rastérisé (côté Node) : réduit au dessin, il reste net.
+const MATH_RASTER = 72;
+
+const mathKey = (tex, display) => `${display ? "D" : "I"}:${tex}`;
+
+// Un bloc $$ … $$ écrit sur plusieurs lignes devient une seule ligne.
+function joinDisplayBlocks(lines) {
+  const out = [];
+  const odd = (l) => (l.match(/\$\$/g) || []).length % 2 === 1;
+  for (let i = 0; i < lines.length; i++) {
+    if (odd(lines[i])) {
+      let j = i + 1;
+      while (j < lines.length && j - i < 30 && !odd(lines[j])) j++;
+      if (j < lines.length && odd(lines[j])) {
+        out.push(lines.slice(i, j + 1).join(" "));
+        i = j;
+        continue;
+      }
+    }
+    out.push(lines[i]);
+  }
+  return out;
+}
+
+const sourceLines = (md) => joinDisplayBlocks(formatQCM(md || "").split("\n"));
+
+// Formules à composer pour un énoncé : [{ key, tex, display }].
+export function mathSpans(md) {
+  const out = new Map();
+  for (const line of sourceLines(md)) {
+    const d = line.match(DISPLAY_LINE);
+    if (d) {
+      out.set(mathKey(d[1].trim(), true), { tex: d[1].trim(), display: true });
+      continue;
+    }
+    for (const m of line.matchAll(MATH_RE)) {
+      const tex = (m[1] ?? m[2]).trim();
+      if (tex) out.set(mathKey(tex, false), { tex, display: false });
+    }
+  }
+  return [...out].map(([key, v]) => ({ key, ...v }));
+}
+
+// SVG de MathJax prêt à charger comme image : taille en px fixée, encre du
+// texte à la place de currentColor. w, h, asc : largeur, hauteur et hauteur
+// au-dessus de la ligne de base, en em (1 em = 1000 unités du viewBox).
+export function mathSvgEntry(svg) {
+  const src = String(svg || "");
+  const vb = (src.match(/viewBox="([^"]+)"/)?.[1] || "").trim().split(/[\s,]+/).map(Number);
+  if (vb.length !== 4 || vb.some((n) => !Number.isFinite(n)) || vb[2] <= 0 || vb[3] <= 0) return null;
+  const head = src.match(/<svg\b[^>]*>/)?.[0];
+  if (!head) return null;
+  const w = vb[2] / 1000;
+  const h = vb[3] / 1000;
+  const ns = /xmlns=/.test(head) ? "" : ' xmlns="http://www.w3.org/2000/svg"';
+  const tag = head.replace(/\s(width|height|style)="[^"]*"/g, "").replace(/^<svg/, `<svg width="${(w * MATH_RASTER).toFixed(2)}" height="${(h * MATH_RASTER).toFixed(2)}"${ns}`);
+  return { svg: src.replace(head, tag).replace(/currentColor/g, INK), w, h, asc: -vb[1] / 1000 };
+}
+
+// Formules de l'énoncé en cours de mise en page (buildUnits est synchrone).
+let MATH = null;
+
 /* ------------------------------ Texte enrichi ------------------------------ */
 
 function cleanInline(s) {
@@ -60,10 +134,18 @@ function cleanInline(s) {
 }
 
 // Morceaux de texte avec leur style : **gras**, *italique* ou _italique_.
+// Une formule composée devient un morceau { m: formule, t: texte de secours }.
 function runsOf(s) {
+  const found = [];
+  const src = String(s).replace(MATH_RE, (whole, d, i) => {
+    const entry = MATH?.get(mathKey((d ?? i).trim(), false));
+    if (!entry) return whole;
+    found.push({ m: entry, t: latexToPlainText(whole) });
+    return `\u0002${found.length - 1}\u0003`;
+  });
   const out = [];
   let bold = false;
-  for (const part of cleanInline(s).split("**")) {
+  for (const part of cleanInline(src).split("**")) {
     if (part) {
       let last = 0;
       for (const m of part.matchAll(/(^|[\s(«])[*_](?=\S)([^*_\n]+?)(?<=\S)[*_](?=$|[\s).,;:!?»])/g)) {
@@ -76,7 +158,15 @@ function runsOf(s) {
     }
     bold = !bold;
   }
-  return out.map((r) => ({ ...r, t: r.t.replace(/\u0001/g, "*") }));
+  const runs = [];
+  for (const r of out) {
+    for (const piece of r.t.replace(/\u0001/g, "*").split(/(\u0002\d+\u0003)/)) {
+      if (!piece) continue;
+      const k = piece.match(/^\u0002(\d+)\u0003$/);
+      runs.push(k ? { ...r, ...found[Number(k[1])] } : { ...r, t: piece });
+    }
+  }
+  return runs;
 }
 
 const plain = (runs) => runs.map((r) => r.t).join("");
@@ -86,10 +176,26 @@ function fontFor(r, size, { bold = false, mono = false } = {}) {
   return `${r.i ? "italic " : ""}${r.b || bold ? 700 : 400} ${size}px ${FONT}`;
 }
 
-// Coupe des morceaux stylés en lignes de largeur `maxW`.
-function wrapRuns(ctx, runs, maxW, size, opts) {
+// Hauteur de la ligne de base sous le haut du texte (textBaseline « top »).
+const ascents = new Map();
+function ascentOf(ctx, size, opts) {
+  const font = fontFor({}, size, opts);
+  if (!ascents.has(font)) {
+    ctx.font = font;
+    ctx.textBaseline = "top";
+    ascents.set(font, ctx.measureText("H").actualBoundingBoxDescent || size * 0.74);
+  }
+  return ascents.get(font);
+}
+
+// Coupe des morceaux stylés en lignes de largeur `maxW`. `maxH` : hauteur
+// au-delà de laquelle une formule est réduite (cellules de tableau, titres).
+function wrapRuns(ctx, runs, maxW, size, opts = {}) {
   const words = [];
-  for (const r of runs) for (const t of r.t.split(/([ \t\n]+)/)) if (t) words.push({ ...r, t: /^[ \t\n]+$/.test(t) ? " " : t });
+  for (const r of runs) {
+    if (r.m) words.push({ ...r });
+    else for (const t of r.t.split(/([ \t\n]+)/)) if (t) words.push({ ...r, t: /^[ \t\n]+$/.test(t) ? " " : t });
+  }
   const lines = [];
   let line = [];
   let x = 0;
@@ -100,6 +206,16 @@ function wrapRuns(ctx, runs, maxW, size, opts) {
     x = 0;
   };
   for (const w of words) {
+    if (w.m) {
+      let k = size * MATH_SCALE;
+      if (opts.maxH && w.m.h * k > opts.maxH) k = opts.maxH / w.m.h;
+      if (w.m.w * k > maxW) k = maxW / w.m.w;
+      const ww = w.m.w * k;
+      if (x + ww > maxW && line.length) push();
+      line.push({ ...w, w: ww, k });
+      x += ww;
+      continue;
+    }
     ctx.font = fontFor(w, size, opts);
     if (w.t === " ") {
       if (line.length) {
@@ -129,12 +245,30 @@ function wrapRuns(ctx, runs, maxW, size, opts) {
   return lines.length ? lines : [[]];
 }
 
+// Hauteurs d'une ligne au-dessus et au-dessous de sa ligne de base.
+function lineMetrics(ctx, line, size, opts) {
+  let asc = ascentOf(ctx, size, opts);
+  let desc = size * 0.28;
+  for (const w of line) {
+    if (!w.m) continue;
+    asc = Math.max(asc, w.m.asc * w.k);
+    desc = Math.max(desc, (w.m.h - w.m.asc) * w.k);
+  }
+  return { asc, desc };
+}
+
+// y : haut du texte (textBaseline « top ») ; les formules suivent sa ligne de base.
 function drawLine(ctx, line, x, y, size, color, opts) {
+  const base = y + ascentOf(ctx, size, opts);
   ctx.textBaseline = "top";
   ctx.fillStyle = color;
   for (const w of line) {
-    ctx.font = fontFor(w, size, opts);
-    ctx.fillText(w.t, x, y);
+    if (w.m) {
+      if (w.m.img) ctx.drawImage(w.m.img, x, base - w.m.asc * w.k, w.w, w.m.h * w.k);
+    } else {
+      ctx.font = fontFor(w, size, opts);
+      ctx.fillText(w.t, x, y);
+    }
     x += w.w;
   }
 }
@@ -176,7 +310,7 @@ function tableUnits(ctx, rows) {
 
   const table = {};
   const units = cells.map((r, i) => {
-    const wrapped = r.map((runs, c) => wrapRuns(ctx, runs, widths[c] - 2 * cellPad, size, { bold: i === 0 }));
+    const wrapped = r.map((runs, c) => wrapRuns(ctx, runs, widths[c] - 2 * cellPad, size, { bold: i === 0, maxH: lh }));
     const h = Math.max(...wrapped.map((l) => l.length)) * lh + 2 * cellPad - 4;
     return {
       kind: "row",
@@ -209,31 +343,48 @@ function tableUnits(ctx, rows) {
 }
 
 function textUnits(ctx, runs, { indent = 0, marker, size = BODY, lh = LH, color = INK, bold = false, mono = false, quote = false, section = false }) {
-  const lines = wrapRuns(ctx, runs, TEXT_W - indent, size, { bold, mono });
-  return lines.map((line, k) => ({
-    kind: "text",
-    sectionStart: section && k === 0,
-    h: lh,
-    draw(ctx, x, y) {
-      if (quote) {
-        ctx.fillStyle = "#e3c27a";
-        ctx.fillRect(x + 2, y + 2, 5, lh - 4);
-      }
-      if (marker && k === 0) {
-        ctx.font = `700 ${size}px ${FONT}`;
-        ctx.fillStyle = HEAD_INK;
-        ctx.textBaseline = "top";
-        ctx.textAlign = "right";
-        ctx.fillText(marker, x + indent - 12, y);
-        ctx.textAlign = "left";
-      }
-      drawLine(ctx, line, x + indent, y + (lh - size) / 2 - 2, size, color, { bold, mono });
-    },
-  }));
+  const opts = { bold, mono };
+  const lines = wrapRuns(ctx, runs, TEXT_W - indent, size, opts);
+  const tAsc = ascentOf(ctx, size, opts);
+  return lines.map((line, k) => {
+    // Une formule haute (somme, fraction) agrandit sa ligne, sans toucher aux autres.
+    const { asc, desc } = lineMetrics(ctx, line, size, opts);
+    const h = Math.max(lh, Math.ceil(asc + desc + 8));
+    const top = h === lh ? (lh - size) / 2 - 2 : (h - asc - desc) / 2 + asc - tAsc;
+    return {
+      kind: "text",
+      sectionStart: section && k === 0,
+      h,
+      draw(ctx, x, y) {
+        if (quote) {
+          ctx.fillStyle = "#e3c27a";
+          ctx.fillRect(x + 2, y + 2, 5, h - 4);
+        }
+        if (marker && k === 0) {
+          ctx.font = `700 ${size}px ${FONT}`;
+          ctx.fillStyle = HEAD_INK;
+          ctx.textBaseline = "top";
+          ctx.textAlign = "right";
+          ctx.fillText(marker, x + indent - 12, y + top);
+          ctx.textAlign = "left";
+        }
+        drawLine(ctx, line, x + indent, y + top, size, color, opts);
+      },
+    };
+  });
 }
 
-function buildUnits(ctx, md) {
-  const lines = formatQCM(md || "").split("\n");
+// `math` : formules déjà composées (voir mathSpans), ou rien.
+function buildUnits(ctx, md, math) {
+  MATH = math || null;
+  try {
+    return unitsOf(ctx, sourceLines(md));
+  } finally {
+    MATH = null;
+  }
+}
+
+function unitsOf(ctx, lines) {
   const units = [];
   const gap = (h) => units.push({ kind: "gap", h });
   let inFence = false;
@@ -250,6 +401,24 @@ function buildUnits(ctx, md) {
     }
     if (!raw.trim()) {
       gap(10);
+      continue;
+    }
+    // Formule seule sur sa ligne : centrée, en grand (style « display »).
+    const display = raw.match(DISPLAY_LINE);
+    const entry = display && MATH?.get(mathKey(display[1].trim(), true));
+    if (entry) {
+      const k = Math.min(BODY * MATH_SCALE, TEXT_W / entry.w);
+      const w = entry.w * k;
+      const h = entry.h * k;
+      gap(6);
+      units.push({
+        kind: "math",
+        h: Math.ceil(h) + 8,
+        draw(ctx, x, y) {
+          if (entry.img) ctx.drawImage(entry.img, x + (TEXT_W - w) / 2, y + 4, w, h);
+        },
+      });
+      gap(6);
       continue;
     }
     if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(raw)) {
@@ -370,8 +539,8 @@ function paginate(units) {
 }
 
 // Pages d'énoncé du carrousel, et si le sujet a dû être coupé.
-export function planExtrait(ctx, md, max = MAX_EXTRAIT_SLIDES) {
-  const units = buildUnits(ctx, md);
+export function planExtrait(ctx, md, max = MAX_EXTRAIT_SLIDES, math) {
+  const units = buildUnits(ctx, md, math);
   const pages = paginate(units);
   if (pages.length <= max) return { pages, truncated: false };
 
@@ -608,9 +777,11 @@ export function carouselPlan(item, style, createCanvas = () => document.createEl
 // (ceux du studio, retouches comprises) ; `ctaOverride` / `bulletsOverride` :
 // bouton et points forts retouchés ; `style` : mise en page (visual.js) ;
 // `scans` : images déjà chargées des pages de scanPaths() (l'appelant les
-// charge : navigateur ou Node). `createCanvas` : fourni par le script de
+// charge : navigateur ou Node) ; `math` : formules de l'énoncé composées par
+// MathJax (Map clé → { img, w, h, asc }, clés de mathSpans()), sinon elles
+// sont écrites en texte brut. `createCanvas` : fourni par le script de
 // publication automatique (Node), qui n'a pas de `document`.
-export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride, hasCorrige, style, scans, createCanvas = () => document.createElement("canvas") }) {
+export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride, hasCorrige, style, scans, math, createCanvas = () => document.createElement("canvas") }) {
   const st = normalizeStyle(style);
   const imgs = (scans || []).filter(Boolean);
   // Scans demandés mais illisibles : l'énoncé prend le relais s'il existe.
@@ -621,7 +792,7 @@ export function buildCarousel(item, { theme, facts, ctaOverride, bulletsOverride
     pages = imgs;
     truncated = imgs.length < (item.images || []).filter(Boolean).length;
   } else {
-    ({ pages, truncated } = planExtrait(createCanvas().getContext("2d"), item.enonce_md || "", st.maxPages));
+    ({ pages, truncated } = planExtrait(createCanvas().getContext("2d"), item.enonce_md || "", st.maxPages, math));
   }
   const total = pages.length + 2;
   const kicker = [facts.kicker, item.etablissement, source === "scan" ? "sujet original" : null].filter(Boolean).join(" · ");

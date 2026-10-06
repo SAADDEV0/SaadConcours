@@ -13,7 +13,9 @@ import { api } from "../../_lib/api";
 import { dateTimeFr, daysUntil, matchQuery, timeAgo } from "../../_lib/format";
 import { CONTENT_KINDS, PLATFORMS, TONES, captionFor, carouselCaption, countFor, factsFor, googleQuery, hashtagsFor, intentUrl, trackedUrl } from "./captions";
 import { CUSTOM_THEME, DEFAULT_STYLE, FORMATS, PATTERNS, THEMES, TITLE_SIZES, canvasBlob, customTheme, drawVisual, loadImage, normalizeStyle, resolveTheme, styleDiff } from "./visual";
-import { buildCarousel, carouselBullets, carouselPlan, scanPaths, sourceFor } from "./carousel";
+import { buildCarousel, carouselBullets, carouselPlan, mathSpans, mathSvgEntry, scanPaths, sourceFor } from "./carousel";
+import { ensureMathScripts } from "@/app/_shared/pdfScripts";
+import { wrapAccentedMathWords } from "@/app/_shared/latexPlainText";
 import { blobBytes, downloadBlob, makeZip } from "./zip";
 
 const MODES = [
@@ -65,10 +67,47 @@ function loadScans(paths) {
   );
 }
 
+// Formules de l'énoncé composées par MathJax (celui du Studio PDF), une à la
+// fois (MathJax ne supporte pas les appels simultanés), gardées en mémoire.
+const mathCache = new Map();
+let mathQueue = Promise.resolve();
+function typeset(tex, display) {
+  const run = mathQueue.then(async () => {
+    const node = await window.MathJax.tex2svgPromise(wrapAccentedMathWords(tex), { display });
+    const svg = node.querySelector("svg");
+    if (!svg || node.querySelector("[data-mjx-error], merror")) return null;
+    const entry = mathSvgEntry(svg.outerHTML);
+    const img = entry && (await loadImage(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(entry.svg)}`));
+    return img ? { ...entry, img } : null;
+  });
+  mathQueue = run.catch(() => null);
+  return run.catch(() => null);
+}
+async function loadMath(item, style) {
+  if (sourceFor(item, style) !== "enonce") return undefined;
+  const spans = mathSpans(item.enonce_md);
+  if (!spans.length) return undefined;
+  try {
+    await ensureMathScripts();
+    await window.MathJax?.startup?.promise;
+  } catch {
+    return undefined; // MathJax injoignable : formules en texte brut
+  }
+  if (!window.MathJax?.tex2svgPromise) return undefined;
+  const map = new Map();
+  for (const { key, tex, display } of spans) {
+    if (!mathCache.has(key)) mathCache.set(key, typeset(tex, display));
+    const entry = await mathCache.get(key);
+    if (entry) map.set(key, entry);
+  }
+  return map;
+}
+
 // Carrousel d'un concours avec les textes automatiques de l'affiche (envoi groupé).
 async function buildFor(c, { theme, style, corrigeFiles }) {
   const scans = sourceFor(c, style) === "scan" ? await loadScans(scanPaths(c, style)) : undefined;
-  return buildCarousel(c, { theme, style, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige: hasCorrigeOf(c, corrigeFiles), scans });
+  const math = await loadMath(c, style);
+  return buildCarousel(c, { theme, style, facts: factsFor("concours", c, { corrigeFiles }), hasCorrige: hasCorrigeOf(c, corrigeFiles), scans, math });
 }
 
 // Fichiers d'un carrousel dans le ZIP : images numérotées + textes à coller.
@@ -773,10 +812,11 @@ function Composer({ log }) {
     let alive = true;
     (async () => {
       const wantScans = sourceFor(item, style) === "scan";
-      if (wantScans) setBuilding(true);
+      setBuilding(true);
       const scans = wantScans ? await loadScans(scanPaths(item, style)) : undefined;
+      const math = await loadMath(item, style);
       if (!alive) return;
-      const built = buildCarousel(item, { theme, style, facts, ctaOverride: override.cta, bulletsOverride: override.bullets, hasCorrige: hasCorrigeOf(item, corrigeFiles), scans });
+      const built = buildCarousel(item, { theme, style, facts, ctaOverride: override.cta, bulletsOverride: override.bullets, hasCorrige: hasCorrigeOf(item, corrigeFiles), scans, math });
       setCarousel({ ...built, itemId: item.id, thumbs: built.canvases.map((c) => c.toDataURL("image/png")) });
       setSlide((s) => Math.min(s, built.canvases.length - 1));
       setBuilding(false);
@@ -1381,7 +1421,7 @@ function Composer({ log }) {
           <div className="ax-ps-tools">
             {building && (
               <span className="ax-hint ax-inline">
-                <Icon name="loader" size="sm" /> Scans…
+                <Icon name="loader" size="sm" /> Préparation…
               </span>
             )}
             {isCarousel && carousel && (
