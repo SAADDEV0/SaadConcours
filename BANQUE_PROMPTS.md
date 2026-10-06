@@ -211,6 +211,14 @@ Règles des champs :
 - Barème négatif : le rappeler et conseiller la stratégie de réponse.
 
 ### Scans (images)
+- **Règle absolue (à ma demande, 2026-10-06)** : un scan publié ne porte **que mon filigrane**
+  saadconcours.space. Tout autre filigrane, logo ou adresse de site est effacé avant publication,
+  **en priorité ceux de fsjesmaster** (« www.fsjesmaster.com », « masterfsjes.blogspot.com », en
+  noir, gris, blanc, rose ou en diagonale), puis ceux des autres sites, profs ou groupes WhatsApp.
+  Méthodes ci-dessous (`nettoyer-scans.mjs`, effacement sur la photo d'origine,
+  `recomposer-scan.mjs`). Chaque page est relue à l'œil après traitement ; un scan dont la marque
+  d'un tiers reste visible n'est pas publié en l'état : reprendre le nettoyage, et à défaut le
+  signaler dans le compte rendu.
 - Convertir **et filigraner** en une étape (depuis le 2026-10-04, à ma demande) :
   `node scripts/filigrane-scans.mjs <photo> public/images/<ville>/<id>/<id>_p1.webp [<photo2> …_p2.webp]`
   (webp, largeur max 1600 px, qualité 80, « saadconcours.space » en diagonale discrète + étiquette
@@ -315,12 +323,14 @@ Règles des champs :
    qui décide.
 4. Écarter : sujets illisibles, simples annonces d'inscription, listes de résultats, doublons.
    Si moins de N sujets valides existent, livrer ce qui existe et le dire.
-5. Pour **chaque** sujet retenu : télécharger les scans → webp → lire les images →
+5. Pour **chaque** sujet retenu : télécharger les scans → effacer les filigranes d'autres sites
+   (fsjesmaster surtout) et filigraner saadconcours.space (§ Scans, règle absolue) → lire les images →
    transcrire `enonce_md` → rédiger `corrige_md` (§ formats ci-dessus) → remplir tous les champs.
 6. Écrire les N entrées dans `concours.json` + les miroirs `extraits/<id>.md` et
    `corriges/<id>.md` (copie exacte de `enonce_md` / `corrige_md`, terminée par `\n`).
 7. Contrôles : chaque `id` unique, `filiere` ∈ taxonomie, `categorie` cohérente, chaque image
-   référencée existe sur disque, miroirs identiques au JSON, `git diff --numstat` de
+   référencée existe sur disque et ne montre aucun filigrane autre que saadconcours.space (vérifié
+   à l'œil, page par page), miroirs identiques au JSON, `git diff --numstat` de
    `concours.json` = ajouts seulement, JSON valide. Rendu : passer `enonce_md`/`corrige_md` dans
    `marked` (lignes `|…|` non converties en `<table>` = tableau cassé). **Avec `GITHUB_TOKEN`
    défini, `npm run dev` ne montre pas les nouvelles fiches** : le site lit alors les données sur
