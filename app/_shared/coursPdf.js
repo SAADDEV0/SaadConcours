@@ -194,6 +194,11 @@ function flattenInline(tokens, style, store, runs) {
       runs.push({ text: stripUnsupportedGlyphs(unescapeEntities(t.text)), bold: style.bold, italic: style.italic, code: true });
     } else if (t.type === "link" || t.type === "image") {
       flattenInline(getInlineTokens(t), style, store, runs);
+    } else if (t.type === "text" && Array.isArray(t.tokens) && t.tokens.length) {
+      // A tight list item's content is a block-level "text" token whose .text
+      // is the raw markdown ("**Études** : …") and whose .tokens hold the
+      // parsed strong/em runs — reading .text printed the "**" in the PDF.
+      flattenInline(t.tokens, style, store, runs);
     } else {
       splitMathSegments(t.text || "", store).forEach((seg) => {
         runs.push({ text: seg.text, bold: style.bold, italic: style.italic || seg.math, math: seg.math, display: seg.display, svg: seg.svg });
