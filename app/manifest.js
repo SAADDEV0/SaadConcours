@@ -6,8 +6,8 @@ export default function manifest() {
       "Cours du Bac Sciences Économiques et de la Licence FSJES chapitre par chapitre, exercices corrigés, QCM et sujets réels de concours Master au Maroc.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0f1115",
-    theme_color: "#2346b8",
+    background_color: "#13141f",
+    theme_color: "#4f46e5",
     lang: "fr",
     icons: [
       { src: "/icon-192", sizes: "192x192", type: "image/png", purpose: "any" },

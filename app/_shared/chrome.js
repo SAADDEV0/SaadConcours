@@ -19,16 +19,17 @@ import { iconHtml } from "./icons";
 const ICON_MOON = iconHtml("moon", { size: 18, strokeWidth: 2 });
 const ICON_SUN = iconHtml("sun", { size: 18, strokeWidth: 2 });
 
-// Logo (toque + livre ouvert) sur l'encre bleue de la marque, en couleur pleine.
+// Logo (toque + livre ouvert) sur le dégradé indigo → violet d'origine de la marque.
 function brandLogoSvg() {
   return `<svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="64" height="64" rx="16" fill="#2346b8"/>
+        <defs><linearGradient id="brandg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+        <rect width="64" height="64" rx="16" fill="url(#brandg)"/>
         <polygon points="32,13 49,21 32,29 15,21" fill="white"/>
         <line x1="49" y1="21" x2="51" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
         <circle cx="51" cy="32.5" r="2" fill="#fbbf24"/>
         <polygon points="32,42 13,37 13,48 32,54" fill="white"/>
         <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
-        <line x1="32" y1="42" x2="32" y2="54" stroke="#2346b8" stroke-width="1.2"/>
+        <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
       </svg>`;
 }
 

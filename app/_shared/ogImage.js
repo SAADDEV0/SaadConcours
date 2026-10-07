@@ -13,7 +13,7 @@ import { logoSvg } from "./appIcon";
 export const ogImageSize = { width: 1200, height: 630 };
 export const ogImageContentType = "image/png";
 
-const INK = "#2346b8";
+const INK = "#4f46e5";
 const TEXT = "#16181d";
 const TEXT_DIM = "#4a5160";
 const PAPER = "#ffffff";

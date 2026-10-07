@@ -25,19 +25,19 @@
 html{scroll-behavior:smooth; font-size:93.75%;}
 
 :root{
-  --bg:#0f1115; --bg-elev:#14171c; --bg-card:#171a20; --bg-inset:#1d2129;
-  --border:#262a33; --border-strong:#343a46;
-  --text:#eceef2; --text-dim:#a9afbc; --text-faint:#8b92a1;
-  --accent:#93abff; --accent-dim:#1c2440; --accent-fill:#3354d1; --accent-ink:#c3d0ff;
-  --red:#ff8f86; --red-dim:#3a1d1f;
-  --green:#5fd38d; --green-dim:#17332a;
-  --amber:#f0b94d; --amber-dim:#3a2e14;
+  --bg:#13141f; --bg-elev:#191b29; --bg-card:#1d2031; --bg-inset:#25283b;
+  --border:#2d3148; --border-strong:#3d4262;
+  --text:#eceef8; --text-dim:#b2b6cd; --text-faint:#9297b2;
+  --accent:#9ea5ff; --accent-dim:#2f3372; --accent-fill:#4f46e5; --accent-ink:#c7cbff;
+  --red:#ff8f86; --red-dim:#3d2030;
+  --green:#5fd38d; --green-dim:#183632;
+  --amber:#f0b94d; --amber-dim:#3b3020;
   --hl:#ffe45c;
   /* Anciens noms encore lus par la console (admin.css) : alignés sur l'encre. */
   --violet:var(--accent); --violet-dim:var(--accent-dim); --violet-ink:var(--accent-ink);
   --radius-sm:6px; --radius:10px; --radius-lg:16px;
-  --shadow:0 1px 2px rgba(0,0,0,.35);
-  --shadow-pop:0 20px 50px -12px rgba(0,0,0,.65);
+  --shadow:0 1px 2px rgba(5,6,15,.45);
+  --shadow-pop:0 20px 50px -12px rgba(5,6,15,.7);
   --shadow-hover:var(--shadow);
   --font: var(--font-sans, ui-sans-serif), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-reading: var(--font-read, Georgia), Georgia, "Times New Roman", serif;
@@ -55,7 +55,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
     --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#eff1f5;
     --border:#e3e6ec; --border-strong:#cfd4dd;
     --text:#16181d; --text-dim:#4a5160; --text-faint:#687083;
-    --accent:#2346b8; --accent-dim:#e8edfb; --accent-fill:#2346b8; --accent-ink:#1d3a99;
+    --accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
     --red:#c0262d; --red-dim:#fbeaea;
     --green:#17803d; --green-dim:#e0f3e6;
     --amber:#8a5a00; --amber-dim:#fdf3dc;
@@ -68,7 +68,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#eff1f5;
   --border:#e3e6ec; --border-strong:#cfd4dd;
   --text:#16181d; --text-dim:#4a5160; --text-faint:#687083;
-  --accent:#2346b8; --accent-dim:#e8edfb; --accent-fill:#2346b8; --accent-ink:#1d3a99;
+  --accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
   --red:#c0262d; --red-dim:#fbeaea;
   --green:#17803d; --green-dim:#e0f3e6;
   --amber:#8a5a00; --amber-dim:#fdf3dc;
@@ -77,15 +77,15 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   color-scheme:light;
 }
 :root[data-theme="dark"]{
-  --bg:#0f1115; --bg-elev:#14171c; --bg-card:#171a20; --bg-inset:#1d2129;
-  --border:#262a33; --border-strong:#343a46;
-  --text:#eceef2; --text-dim:#a9afbc; --text-faint:#8b92a1;
-  --accent:#93abff; --accent-dim:#1c2440; --accent-fill:#3354d1; --accent-ink:#c3d0ff;
-  --red:#ff8f86; --red-dim:#3a1d1f;
-  --green:#5fd38d; --green-dim:#17332a;
-  --amber:#f0b94d; --amber-dim:#3a2e14;
-  --shadow:0 1px 2px rgba(0,0,0,.35);
-  --shadow-pop:0 20px 50px -12px rgba(0,0,0,.65);
+  --bg:#13141f; --bg-elev:#191b29; --bg-card:#1d2031; --bg-inset:#25283b;
+  --border:#2d3148; --border-strong:#3d4262;
+  --text:#eceef8; --text-dim:#b2b6cd; --text-faint:#9297b2;
+  --accent:#9ea5ff; --accent-dim:#2f3372; --accent-fill:#4f46e5; --accent-ink:#c7cbff;
+  --red:#ff8f86; --red-dim:#3d2030;
+  --green:#5fd38d; --green-dim:#183632;
+  --amber:#f0b94d; --amber-dim:#3b3020;
+  --shadow:0 1px 2px rgba(5,6,15,.45);
+  --shadow-pop:0 20px 50px -12px rgba(5,6,15,.7);
   color-scheme:dark;
 }
 /* Admin palette tokens (Zenith) and all .admin-* rules now live in
