@@ -226,6 +226,20 @@ Règles des champs :
   **Seule exception, à ma demande (2026-10-06)** : `2025_Rabat_FSJESAgdal_MSRH` garde le filigrane
   « LAGRANE SAID » (et sa ligne WhatsApp en bas de la page 4) sous le mien. Ne pas le nettoyer lors
   d'un passage sur toute la base ; l'exception ne vaut pour aucun autre sujet.
+- **Lisibilité d'abord (à ma demande, 2026-10-07) : je veux voir le scan, jamais un scan blanchi.**
+  Le texte publié doit être **au moins aussi noir et lisible que sur la photo d'origine**, sur
+  chaque ligne. Une page où des mots pâlissent ou disparaissent ne part pas, même sans filigrane
+  tiers. Avant d'écrire dans `public/images`, faire un aperçu (`--sortie=` ou le scratchpad), le
+  comparer à la photo page par page, et en cas de doute garder le texte, quitte à laisser des
+  traces pâles du filigrane (à signaler dans le compte rendu). Si l'effacement du filigrane et
+  la lisibilité s'opposent, **la lisibilité gagne**.
+  Précédent : EMS Aït Melloul 2024. Avec `nettoyer-scans.mjs` et `"seuil": 200`, la page 1 (photo
+  grise, impression pâle, surligneur jaune, stylo bleu) ressortait illisible. Ce type de photo
+  passe par `node scripts/nettoyer-photo.mjs <photo> <scratchpad>/<id>_pN.png "<zones>" [blanc]
+  [noir]`, puis `filigrane-scans.mjs`. Ce script ne prend pas de seuil fixe : canal max (le jaune
+  disparaît), fond égalisé, stylo bleu effacé, encre foncée par une courbe. La ligne
+  « www.fsjesmaster.com » du bas s'efface par les rectangles `zones`. Réglage 200 / 130 par défaut
+  (le filigrane gris en diagonale disparaît) ; 212 / 165 pour une impression pâle.
 - Convertir **et filigraner** en une étape (depuis le 2026-10-04, à ma demande) :
   `node scripts/filigrane-scans.mjs <photo> public/images/<ville>/<id>/<id>_p1.webp [<photo2> …_p2.webp]`
   (webp, largeur max 1600 px, qualité 80, « saadconcours.space » en diagonale discrète + étiquette
