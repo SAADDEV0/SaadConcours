@@ -381,6 +381,12 @@ sujet (année, faculté), les déduire de l'en-tête ; à défaut, **demander**.
   transcrire quand même, `images: []`, et le signaler dans `notions_cles` et le compte rendu
   (précédent : AIF Aïn Chock 2025, questionnaires B et C). Pour publier les scans, me demander
   de déposer les fichiers (ex. dans `C:\Users\saad\Downloads`) puis les filigraner.
+- **PDF scanné** : sur ce poste, `Read` ne lit pas les pages d'un PDF (pdftoppm absent), et un chemin
+  accentué du Bureau (« Document numérisé 23.pdf ») peut être introuvable pour lui. Copier le PDF dans
+  le scratchpad avec un joker Bash (`cp ~/Desktop/Document\ num*23.pdf …`), puis extraire en Node les
+  flux `/Subtype /Image` en `DCTDecode` (un JPEG par page, `/Length` donne la taille) et les lire.
+  Scan à plat sans filigrane tiers : `filigrane-scans.mjs --recadrer` directement sur ces JPEG
+  (précédent : LCI FP Larache 2025).
 - **Sujet déjà en base** (même faculté, master, année, mêmes questions) : ne pas créer de doublon.
   Compléter la fiche existante : remplacer ses scans par les photos fournies (filigranées, recadrées ;
   surtout si les anciens portent le filigrane d'un autre site), relire l'énoncé, rédiger le corrigé
