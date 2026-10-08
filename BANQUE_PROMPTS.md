@@ -828,6 +828,19 @@ Modèle : cahier GFC Aïn Sebaâ et cahier AIF Aïn Chock (article
      source est partagée ;
    - une fiche en brouillon (sujet incomplet) peut servir de source au cahier, mais l'article ne
      la lie pas (pas de page publique) ; une reconstitution non officielle est nommée comme telle.
+6. Précédent LCI FP Larache (`scripts/cahier-pdf/lci-larache/`, 2026-10-08) : partir du dossier
+   **CCA** (le plus récent), pas de l'AIF.
+   - master jeune (2 sessions, 140 QCM) : le cahier reprend **toutes** les questions ; contrôle
+     automatique avant le rendu : chaque `Qn` des deux sujets présent une fois, et la lettre de
+     `qcm.mjs` comparée à celle des corrigés en base (motif `**Qn — X.**`) ;
+   - « notions qui retombent » entre sessions : indiquer la bonne lettre de chaque session (le jury
+     change la lettre : argument fort de l'article) ;
+   - formule LaTeX trop large (plusieurs égalités en `\qquad`) : elle déborde à droite sans erreur
+     KaTeX. La couper avec `\begin{gathered} … \\ … \end{gathered}` et relire la page au `snap.mjs` ;
+   - `.page.fin { break-inside: avoid; }` dans `style.css`, sinon la ligne © part seule sur une page ;
+   - **dédicace** demandée (amis qui passent le concours) : pleine page en grand juste après la
+     couverture (`section.page.dedicace`, styles en fin de `style.css`) + un mot sur la page de fin.
+     Le nombre de pages change : mettre à jour l'article (bouton et lien de téléchargement).
 
 ---
 
