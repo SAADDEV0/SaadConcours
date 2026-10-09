@@ -12,6 +12,7 @@ import AdSlot from "../../_shared/AdSlot";
 import MathScripts from "../../_shared/MathScripts";
 import { isLicenceExcellence, niveauInfo, niveauOf } from "@/lib/concoursNiveaux";
 import { Icon } from "../../_shared/icons";
+import { modulesDuConcours } from "@/lib/concoursParModule";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -143,6 +144,7 @@ export default async function ConcoursDetailPage(props) {
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
+  const modulesLies = modulesDuConcours(c);
   const corrigeIds = getCorrigeIdsLocal();
   const hasImages = Boolean(c.images && c.images.length > 0);
   // La source d'un sujet (c.source) reste dans concours.json pour la console,
@@ -343,6 +345,25 @@ export default async function ConcoursDetailPage(props) {
            fiche, là pour alimenter un balisage FAQPage que Google n'affiche
            plus hors sites officiels et de santé depuis 2023. Les matières et
            la difficulté sont affichées dans l'en-tête de la fiche. */}
+
+        {modulesLies.length > 0 && (
+          <section className="bac-group">
+            <h2 className="bac-section-title">Réviser les matières de ce sujet</h2>
+            <div className="sp-related">
+              {modulesLies.map((m) => (
+                <a key={m.id} className="bac-mat-card" href={`/cours/${m.id}`}>
+                  <span className="bac-mat-body">
+                    <span className="bac-mat-name">{m.module}</span>
+                    <span className="bac-mat-meta">
+                      <span>Cours Licence FSJES</span>
+                      {m.semestre && <span>{m.semestre}</span>}
+                    </span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         {related.length > 0 && (
           <section className="bac-group">

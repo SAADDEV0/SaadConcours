@@ -581,8 +581,9 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
 6. Contrôle : ouvrir `/cours/<id>` en local (`npm run dev`) et vérifier que les chapitres sont détectés.
 7. Ajouter l'`id` du module dans `MOTIFS` (`lib/concoursParModule.js`) avec les mots-clés des épreuves
    de concours correspondantes : c'est ce qui affiche « Sujets de concours avec une épreuve de … »
-   sur le module et ses chapitres — et ce qui donne aux pages concours les liens dont Google a besoin
-   pour venir les explorer.
+   sur le module et ses chapitres, et « Réviser les matières de ce sujet » sur les fiches concours
+   concernées. Ces liens dans les deux sens sont ce qui amène Google à explorer les pages concours
+   et les pages de cours. Sans cette étape, le nouveau module n'a aucun lien depuis les concours.
 8. Fin de recette. Si un article de blog « valider le Sx » existe, y ajouter le lien.
 
 ### K2 — Compléter un cours par chapitres
