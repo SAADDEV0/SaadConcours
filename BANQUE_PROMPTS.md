@@ -478,6 +478,35 @@ de « Je prépare… », sa section sur l'accueil (derniers sujets) et sa colonn
      a des pièces jointes `/attachments/…-jpg.N/` et souvent un PDF dont les pages sont des JPEG
      **compressés en Flate** (`/FlateDecode /DCTDecode`) : extraire le flux puis `zlib.inflateSync`.
      fsjesmaster.com n'a **aucun** sujet de LE (vérifié en septembre 2026).
+     **semistre est épuisé depuis le 2026-10-10** : ses 13 fils sont en base ou écartés (le fil
+     « Information et Communication » n'a pas de faculté identifiable ; le fil `.162` renvoie vers
+     les fils `.161` et `.166`). Ses « quiz » LE Finance Agdal sont des ressaisies sans année.
+   - **Sources suivantes : Studocu, puis Scribd** (précédent : 10 sujets 2023-2024 ajoutés le
+     2026-10-10). Recherche dans le navigateur intégré : `studocu.com/row/search/<mots>` (requêtes
+     utiles : « licence d'excellence concours », « councour d'excellence ») et
+     `scribd.com/search?query=…`, puis lire les `a[href*="/document/"]`.
+     - Studocu : les pages sont des images `doc-assets.studocu.com/<hash>/html/bgN.png?Policy=…` ;
+       l'URL signée de `bg1.png` vaut pour toutes les pages du document (`bg2.png`, `bg3.png`… avec
+       la même requête), même celles affichées floutées. Elles sont entourées de bandes blanches
+       (les rogner) et d'un filet noir en bas.
+     - Scribd : `curl` de la page `scribd.com/document/<id>/x` donne les `…/pages/N-xxx.jsonp`
+       (gzip) ; chacun contient l'URL `html.scribd.com/…/images/N-xxx.jpg` (remplacer l'hôte par
+       `html.scribdassets.com`, en-tête `Referer: https://www.scribd.com/`). Beaucoup de documents
+       Scribd sont des annonces, des listes de candidats ou des « sujets types » inventés : à écarter.
+     - Toujours vérifier la faculté par l'en-tête ou, à défaut, par la liste officielle des
+       licences d'excellence de la faculté (précédent : Meknès, archive Wayback de
+       `fsjes-umi.ac.ma/wp-content/uploads/2024/08/Licence-PE-Master.pdf`). Un titre Studocu se
+       trompe souvent d'école (« ENCG Tanger » pour un sujet de la FSJES Meknès).
+     - Même faculté, même session, plusieurs licences : une fiche par licence. Sujet recyclé d'une
+       année sur l'autre (CCA Souissi 2023 et 2024, 38 questions sur 40 identiques) : deux fiches,
+       qui renvoient l'une à l'autre.
+   - Marques à effacer sur ces photos : texte rouge « Pr … / rejoindre groupe whatsapp » posé sur
+     le sujet, encart blanc « Le petit économiste », pied « Scanné avec CamScanner ». Le rouge
+     s'efface par couleur (r > 140, r − g > 70, r − b > 60, plus le liseré rose et le halo cyan
+     de la compression JPEG), remplacé par le papier voisin (60e centile par bloc de 12 px, lissé),
+     **pas** par diffusion depuis les bords (elle étale le noir du texte voisin). Les mots du sujet
+     masqués par le rouge se recomposent en Times New Roman (même méthode que `recomposer-scan.mjs`).
+     Ne pas effacer les pastilles vertes ou coches d'un candidat quand elles touchent les lettres.
    - `filiere` : la sous-filière de `lib/taxonomy.js` la plus proche de la licence (LE CCA →
      CCA ; Ingénierie comptable, fiscale et financière → Fiscalité & Gestion Financière ; Marketing
      digital → Marketing Digital & E-Commerce ; Entrepreneuriat / management de projet →
