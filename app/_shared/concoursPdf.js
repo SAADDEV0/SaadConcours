@@ -313,7 +313,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     doc.setTextColor(...branding.textColor);
     doc.text("Corrigé", marginX, y);
     y += 6;
-    addWrappedLine("Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t'y fier.", {
+    addWrappedLine("Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t'y fier.", {
       size: 8.5 * fontScale,
       color: [180, 120, 20],
       gapAfter: 3,

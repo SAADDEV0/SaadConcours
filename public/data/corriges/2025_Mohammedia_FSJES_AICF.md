@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Mohammedia n'a été retrouvé pour ce concours.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Mohammedia n'a été retrouvé pour ce concours.
 
 1. **d.** Toutes les réponses ci-dessus (traitements et salaires, profits fonciers, revenus professionnels et revenus agricoles selon régime sont bien des catégories de l'IR marocain).
 2. **b.** Principe des droits constatés (rattachement d'une charge/produit dès la réception/émission du document, indépendamment du paiement).

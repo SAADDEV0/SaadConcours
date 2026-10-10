@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Ibn Zohr Agadir n'a été retrouvé pour ce concours. Le scan source (`public/images/Agadir/2019_Agadir_FSJES_CGSI_FEIF/`) porte des réponses pointées à la main par un candidat : elles ont servi d'indication, mais **chaque réponse a été re-raisonnée** (CGNC, CGI, analyse financière, gestion des stocks, audit) et plusieurs divergent des marques du scan — elles sont signalées. QCM à réponses multiples.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Ibn Zohr Agadir n'a été retrouvé pour ce concours. Le scan source (`public/images/Agadir/2019_Agadir_FSJES_CGSI_FEIF/`) porte des réponses pointées à la main par un candidat : elles ont servi d'indication, mais **chaque réponse a été re-raisonnée** (CGNC, CGI, analyse financière, gestion des stocks, audit) et plusieurs divergent des marques du scan — elles sont signalées. QCM à réponses multiples.
 
 ### PARTIE I — Comptabilité générale
 

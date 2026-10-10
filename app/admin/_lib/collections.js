@@ -203,7 +203,7 @@ const concours = {
     },
     {
       title: "Corrigé",
-      hint: "Rédigé par IA et relu : le site l'affiche avec un bandeau d'avertissement.",
+      hint: "Le site l'affiche avec le bandeau « Corrigé proposé par SaadConcours, pas une correction officielle ». Ne jamais y écrire que le corrigé est fait par l'IA.",
       fields: [{ key: "corrige_md", label: "Corrigé (Markdown + LaTeX)", type: "markdown", full: true, rows: 22 }],
     },
     {

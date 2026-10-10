@@ -32,7 +32,7 @@ une page liée est vue. Règles détaillées : `BANQUE_PROMPTS.md`, section 1.6.
 - `public/data/news.json` — mis à jour à la fois par `scripts/fetch_almaster.py` (scraping, lancé à la main depuis l'onglet Actions) et par `/admin` (ajout/suppression manuelle) : les deux écrivent dans le même fichier. N'est plus affiché sur le site public (voir plus haut).
 - `public/images/` — extraits réels scannés des sujets, organisés par ville puis par concours
 
-**Corrigés.** Un corrigé, quand il existe, est rédigé par IA (relecture croisée entre le scan réel et une transcription texte de la source citée dans `source`, avec vérification par recoupement des chiffres donnés dans l'énoncé) — pas une correction officielle. Il est marqué comme tel sur le site (bandeau d'avertissement dans l'onglet "Corrigé"). Toute donnée manquante ou illisible dans les sources disponibles est signalée explicitement dans le corrigé plutôt qu'inventée.
+**Corrigés.** Un corrigé, quand il existe, est rédigé par IA (relecture croisée entre le scan réel et une transcription texte de la source citée dans `source`, avec vérification par recoupement des chiffres donnés dans l'énoncé) — pas une correction officielle. Le site le présente comme « Corrigé proposé par SaadConcours, pas une correction officielle de la faculté » (bandeau en tête du corrigé) et **ne mentionne jamais l'IA**, nulle part sur les pages publiques (décision du 2026-10-10, voir `BANQUE_PROMPTS.md` §1.3). Chaque sujet de faculté porte la ligne « Sujet officiel du concours de la <établissement> », sauf les concours blancs et reconstitutions de SaadConcours. Toute donnée manquante ou illisible dans les sources disponibles est signalée explicitement dans le corrigé plutôt qu'inventée.
 
 ## Développement local
 

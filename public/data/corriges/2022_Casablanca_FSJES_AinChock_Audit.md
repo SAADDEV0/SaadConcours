@@ -1,6 +1,6 @@
 ## Q.C.M. — Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Cette épreuve partage plusieurs questions avec le concours « FSJES Ain Chock — Audit 2023 » également disponible sur ce site, avec quelques montants différents. Certains points restent incertains (Q1, Q11, Q17, Q19, Q20 fiscalité) — voir notes. Relecture humaine fortement recommandée.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Cette épreuve partage plusieurs questions avec le concours « FSJES Ain Chock — Audit 2023 » également disponible sur ce site, avec quelques montants différents. Certains points restent incertains (Q1, Q11, Q17, Q19, Q20 fiscalité) — voir notes. À vérifier avec soin.
 
 ### Épreuve 1 — Techniques comptables
 

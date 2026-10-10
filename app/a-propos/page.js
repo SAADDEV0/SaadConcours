@@ -152,10 +152,9 @@ export default async function AProposPage() {
         <h2 style={H2}>Comment les corrigés sont rédigés</h2>
         <p style={P}>
           Les facultés ne publient presque jamais de corrigé officiel. Les corrigés de SaadConcours sont donc rédigés
-          avec l&apos;aide d&apos;une intelligence artificielle, à partir du scan réel et de sa transcription, puis
-          vérifiés en recoupant les chiffres avec ceux de l&apos;énoncé (totaux d&apos;un bilan, cohérence d&apos;un
-          calcul d&apos;annuité, etc.). Ils sont signalés comme tels, avec un bandeau sur chaque corrigé : ce sont
-          des corrections indicatives pour s&apos;entraîner, pas des barèmes officiels. Toute donnée manquante dans
+          à partir du scan réel et de sa transcription, puis vérifiés en recoupant les chiffres avec ceux de
+          l&apos;énoncé (totaux d&apos;un bilan, cohérence d&apos;un calcul d&apos;annuité, etc.). Un bandeau le
+          rappelle sur chaque corrigé : ce sont des corrections indicatives pour s&apos;entraîner, pas des barèmes officiels. Toute donnée manquante dans
           la source est indiquée explicitement plutôt qu&apos;inventée.
         </p>
 

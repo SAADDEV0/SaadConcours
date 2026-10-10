@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Cette épreuve de spécialité (Master FACG) est la même que celle du concours « FSJES Meknès — Master Audit 2023 » également disponible sur ce site (sujet commun à plusieurs filières lors de cette session du 19/09/2023) — le corrigé ci-dessous est donc identique sur le fond. Pas de correction officielle publiée trouvée. Relecture humaine recommandée.
+> Cette épreuve de spécialité (Master FACG) est la même que celle du concours « FSJES Meknès — Master Audit 2023 » également disponible sur ce site (sujet commun à plusieurs filières lors de cette session du 19/09/2023) — le corrigé ci-dessous est donc identique sur le fond. Pas de correction officielle publiée trouvée. À vérifier avant de t'y fier pour réviser.
 
 ### Sujet d'ordre général — Transformation digitale et performance des entreprises marocaines
 

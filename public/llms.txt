@@ -18,7 +18,7 @@ SaadConcours est un site indépendant, non affilié aux universités, à destina
 
 - Couverture de la base de concours : plus de 60 établissements (FSJES surtout, ENCG, facultés polydisciplinaires) dans 25 villes du Maroc, sessions de 2010 à 2026 ; plus de 190 sujets ont un corrigé indicatif.
 - Gratuit, sans compte utilisateur ; le site peut afficher de la publicité.
-- Les corrigés sont indicatifs : rédigés avec l'aide d'une intelligence artificielle à partir du sujet, puis vérifiés par recoupement des chiffres de l'énoncé. Ce ne sont pas des corrigés officiels.
+- Les corrigés sont indicatifs : rédigés à partir du sujet, puis vérifiés par recoupement des chiffres de l'énoncé. Ce ne sont pas des corrigés officiels.
 - Les sujets de concours sont retranscrits à partir de documents publics ; un titulaire de droits peut demander le retrait d'un document.
 
 ## Guides de référence

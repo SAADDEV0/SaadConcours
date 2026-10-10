@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Oujda n'a été retrouvé pour ce concours. Les calculs ci-dessous sont vérifiés à partir des seules données de l'énoncé ; là où une donnée manque (ex. exercice 2014), le manque est signalé plutôt qu'une valeur inventée.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Oujda n'a été retrouvé pour ce concours. Les calculs ci-dessous sont vérifiés à partir des seules données de l'énoncé ; là où une donnée manque (ex. exercice 2014), le manque est signalé plutôt qu'une valeur inventée.
 
 ## Gestion comptable et financière
 

@@ -1,6 +1,6 @@
 ## Q.C.M. — Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. QCM à réponses multiples (plusieurs lettres correctes possibles par question). Relecture humaine recommandée.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. QCM à réponses multiples (plusieurs lettres correctes possibles par question). À vérifier avant de t'y fier pour réviser.
 
 | Q | Réponse(s) | Justification courte |
 |---|---|---|

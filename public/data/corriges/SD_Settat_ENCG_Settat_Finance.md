@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Le QCM (partie III) est incomplet dans la source disponible (seules 2 questions visibles, la suite manque) — voir note dédiée. Relecture humaine recommandée sur les hypothèses de calendrier des flux du projet d'investissement (partie II).
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Le QCM (partie III) est incomplet dans la source disponible (seules 2 questions visibles, la suite manque) — voir note dédiée. À vérifier sur les hypothèses de calendrier des flux du projet d'investissement (partie II).
 
 ### I. Entreprise EMBALEX (en milliers de dh)
 

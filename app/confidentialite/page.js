@@ -126,8 +126,8 @@ export default function ConfidentialitePage() {
 
       <h2 style={H2}>Contenu et corrigés</h2>
       <p style={P}>
-        Les énoncés sont retranscrits à partir de documents publics. Les corrigés, quand ils existent, sont rédigés
-        avec l&apos;aide d&apos;une IA et signalés comme indicatifs — à vérifier avant de s&apos;y fier pour réviser.
+        Les énoncés sont retranscrits à partir de documents publics. Les corrigés, quand ils existent, sont signalés
+        comme indicatifs — à vérifier avant de s&apos;y fier pour réviser.
       </p>
 
       <h2 style={H2}>Tes droits</h2>

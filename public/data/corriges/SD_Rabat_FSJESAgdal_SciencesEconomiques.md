@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Agdal n'a été retrouvé pour ce concours. Sujet de dissertation économique au choix (un sujet à traiter parmi les deux) ; plans de réponse structurés proposés ci-dessous, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Agdal n'a été retrouvé pour ce concours. Sujet de dissertation économique au choix (un sujet à traiter parmi les deux) ; plans de réponse structurés proposés ci-dessous, sans grille de notation officielle publiée.
 
 ## Sujet n°1 — Mondialisation et inégalités de développement
 

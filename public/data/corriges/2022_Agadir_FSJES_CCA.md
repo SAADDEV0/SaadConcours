@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Ibn Zohr Agadir n'a été retrouvé pour ce concours. Le scan source (`public/images/Agadir/2022_Agadir_FSJES_CCA/`) porte quelques réponses cochées à la main par un candidat sur les deux exercices : elles ont servi d'indication, mais **tous les calculs ont été refaits** et plusieurs divergent des marques du scan. QCM à réponses multiples : « chaque question comprend des affirmations dont une ou plusieurs sont exactes ».
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Ibn Zohr Agadir n'a été retrouvé pour ce concours. Le scan source (`public/images/Agadir/2022_Agadir_FSJES_CCA/`) porte quelques réponses cochées à la main par un candidat sur les deux exercices : elles ont servi d'indication, mais **tous les calculs ont été refaits** et plusieurs divergent des marques du scan. QCM à réponses multiples : « chaque question comprend des affirmations dont une ou plusieurs sont exactes ».
 
 ### Partie 1 — Audit (Q1 à Q37)
 

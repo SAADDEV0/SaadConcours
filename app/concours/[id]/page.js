@@ -58,6 +58,25 @@ async function resolveCorrigeMd(c) {
   return c.corrige_md || (await getCorrigeFile(c.id));
 }
 
+// Un concours blanc ou une reconstitution rédigés par SaadConcours ne sont pas
+// des sujets de faculté : pas de ligne « Sujet officiel » pour eux.
+function estSujetOfficiel(c) {
+  return !/concours ?blanc|entra[iî]nement|reconstitution|non officiel/i.test(`${c.id} ${c.master_reel || ""}`);
+}
+
+// « de la FSJES Ain Chock (Casablanca), session 2024 » : la ville seulement si
+// le nom de l'établissement ne la contient pas déjà (comme les pastilles), la
+// session seulement si l'année est connue (pas « SD » ni « non précisée »).
+function officielDe(c) {
+  const etab = String(c.etablissement || "").trim();
+  const article = /^[aeiouéèêh]/i.test(etab) ? "l'" : "la ";
+  const session = /^\d{4}/.test(String(c.annee)) ? `, session ${c.annee}` : "";
+  if (!c.ville || etab.includes(c.ville)) return `du concours de ${article}${etab}${session}.`;
+  // « FSJES Ait Melloul (Ibn Zohr) » → « (Ibn Zohr, Agadir) », pas deux parenthèses.
+  const lieu = etab.endsWith(")") ? `${etab.slice(0, -1)}, ${c.ville})` : `${etab} (${c.ville})`;
+  return `du concours de ${article}${lieu}${session}.`;
+}
+
 // Titre et description : voir app/_shared/concoursSeo.js (tenir en 65 / 155
 // caractères, jamais deux fiches identiques). Le H1 de la page garde le nom
 // complet du master, sans établissement ni année : les pastilles juste en
@@ -227,6 +246,11 @@ export default async function ConcoursDetailPage(props) {
             {difficulteHtml(c.difficulte) && <span dangerouslySetInnerHTML={{ __html: difficulteHtml(c.difficulte) }} />}
             {corrigeMd && <span className="sp-detail-corrige">Corrigé disponible</span>}
           </div>
+          {estSujetOfficiel(c) && (
+            <p className="sp-detail-modules">
+              <strong>Sujet officiel</strong> {officielDe(c)}
+            </p>
+          )}
           {c.modules?.length > 0 && (
             <p className="sp-detail-modules">
               <strong>Matières :</strong> {c.modules.join(", ")}
@@ -324,7 +348,7 @@ export default async function ConcoursDetailPage(props) {
               </summary>
               <div className="corrige-disclaimer">
                 <Icon name="alert" size={18} />
-                <span>Corrigé indicatif (relecture humaine non garantie) — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
+                <span>Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
               </div>
               <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
             </details>

@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Mohammedia n'a été retrouvé pour ce concours.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Mohammedia n'a été retrouvé pour ce concours.
 
 ## I. Définitions
 

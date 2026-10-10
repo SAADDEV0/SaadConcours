@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Épreuve très dense (4 dossiers, 7 cas) : certains points comportent des hypothèses de convention (arrondi, prorata, traitement du différé d'intérêt) explicitement signalées — relecture humaine fortement recommandée avant usage en révision. Le taux/durée d'amortissement du matériel de transport et de bureau (Cas 2) n'étant pas donné dans l'énoncé transcrit, ce point précis reste non chiffrable.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Épreuve très dense (4 dossiers, 7 cas) : certains points comportent des hypothèses de convention (arrondi, prorata, traitement du différé d'intérêt) explicitement signalées — vérifie ces points avant de t'en servir pour réviser. Le taux/durée d'amortissement du matériel de transport et de bureau (Cas 2) n'étant pas donné dans l'énoncé transcrit, ce point précis reste non chiffrable.
 
 ## DOSSIER 1 — GESTION COMPTABLE
 

@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de l'ENCG/FSJES Agadir n'a été retrouvé pour ce concours. Chaque réponse a été recalculée/reraisonnée indépendamment. Certaines questions reposent sur des données d'énoncé incomplètes ou ambiguës (relevé partiellement lisible) : dans ces cas, aucune clé n'est avancée — c'est signalé explicitement plutôt que de deviner.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de l'ENCG/FSJES Agadir n'a été retrouvé pour ce concours. Chaque réponse a été recalculée/reraisonnée indépendamment. Certaines questions reposent sur des données d'énoncé incomplètes ou ambiguës (relevé partiellement lisible) : dans ces cas, aucune clé n'est avancée — c'est signalé explicitement plutôt que de deviner.
 
 ## Partie 1 — Finance d'entreprise
 

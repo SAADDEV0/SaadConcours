@@ -83,6 +83,12 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
   `[illisible sur le scan]` ou signaler l'hypothèse retenue. Si le sujet lui-même contient une
   erreur, la signaler et donner les deux lectures (précédent : CCAF 2019 Aïn Sebaâ).
 - Vérifier chaque calcul d'un corrigé (refaire les calculs avec Node si besoin).
+- **Ne jamais écrire que quelque chose est fait par l'IA** sur le site public : ni « rédigé par IA »,
+  ni « avec l'aide d'une intelligence artificielle », ni « relecture humaine recommandée / non
+  garantie » (décision du 2026-10-10). Un corrigé est « proposé par SaadConcours », non officiel ;
+  pour signaler un doute, écrire « À vérifier, notamment … ». L'IA reste un sujet normal dans les
+  énoncés et les cours (marketing, GRH, numérique). Ne pas non plus prétendre à une relecture
+  qui n'a pas eu lieu (« relu par un professeur », etc.).
 
 ### 1.4 Ne pas casser le site
 - Pas de page publique dynamique (`cookies()`, `headers()`, `searchParams`, `force-dynamic`,

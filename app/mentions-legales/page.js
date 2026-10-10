@@ -69,8 +69,8 @@ export default function MentionsLegalesPage() {
 
         <h2 style={H2}>Exactitude des contenus</h2>
         <p style={P}>
-          Les corrigés sont indicatifs : ils sont rédigés avec l&apos;aide d&apos;une intelligence artificielle, puis
-          vérifiés en recoupant les chiffres de l&apos;énoncé, et ne remplacent pas une correction officielle. Pour les
+          Les corrigés sont indicatifs : ils sont vérifiés en recoupant les chiffres de l&apos;énoncé, et ne
+          remplacent pas une correction officielle. Pour les
           dates de candidature, les conditions d&apos;admission et les résultats, seule l&apos;annonce officielle de
           l&apos;établissement fait foi. Une erreur repérée ? Elle peut être signalée depuis la page{" "}
           <a href="/contact">Contact</a> et elle est corrigée.

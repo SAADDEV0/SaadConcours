@@ -1,6 +1,6 @@
 ## Q.C.M. — Corrigé
 
-> Corrigé indicatif rédigé à partir de l'énoncé transcrit (pas de correction officielle publiée trouvée pour cette session) — relecture humaine recommandée avant de t'y fier pour réviser.
+> Corrigé indicatif rédigé à partir de l'énoncé transcrit (pas de correction officielle publiée trouvée pour cette session) — vérifie les calculs avant de t'y fier pour réviser.
 
 | Q | Réponse(s) | Justification |
 |---|---|---|

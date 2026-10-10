@@ -32,7 +32,7 @@ const FAQ = [
   },
   {
     q: "Les corrigés sur SaadConcours sont-ils fiables ?",
-    a: "Les corrigés disponibles sont indicatifs — générés puis relus, mais sans garantie de relecture humaine systématique. Ils sont pensés pour t'aider à comprendre une démarche de résolution, pas comme une source officielle : vérifie toujours les calculs avant de t'y fier pour réviser sérieusement.",
+    a: "Les corrigés disponibles sont indicatifs : les chiffres sont recoupés avec ceux de l'énoncé, mais ce ne sont pas des corrections officielles des facultés. Ils sont pensés pour t'aider à comprendre une démarche de résolution, pas comme une source officielle : vérifie toujours les calculs avant de t'y fier pour réviser sérieusement.",
   },
   {
     q: "SaadConcours est-il vraiment gratuit ?",

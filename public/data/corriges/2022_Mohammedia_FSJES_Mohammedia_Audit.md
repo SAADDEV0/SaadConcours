@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Relecture humaine recommandée, notamment sur le Cas N°3 (actualisation).
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. À vérifier, notamment sur le Cas N°3 (actualisation).
 
 ### Cas N°1 — Augmentation de capital et droit de souscription
 

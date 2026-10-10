@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Aïn Chock n'a été retrouvé pour ce concours. Sujet de commentaire de texte économique ; plan de réponse structuré proposé ci-dessous, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Aïn Chock n'a été retrouvé pour ce concours. Sujet de commentaire de texte économique ; plan de réponse structuré proposé ci-dessous, sans grille de notation officielle publiée.
 
 **Analyse du sujet :** le texte pose la question du financement extérieur du Maroc dans un contexte de déficits jumeaux (budgétaire et courant) au tournant des années 2011-2012, et de la stratégie de diversification des sources de financement vers les investisseurs du Golfe, sous la garantie implicite d'une ligne de précaution du FMI.
 

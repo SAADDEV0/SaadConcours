@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Le bilan de l'exercice N (exercice 3) n'a pas pu être retranscrit depuis la source consultée : seuls les calculs sur N-1 peuvent être fournis. Relecture humaine recommandée.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Le bilan de l'exercice N (exercice 3) n'a pas pu être retranscrit depuis la source consultée : seuls les calculs sur N-1 peuvent être fournis. À vérifier avant de t'y fier pour réviser.
 
 ### Exercice 1 (06/20) — Fiscalité et théorie administrative
 

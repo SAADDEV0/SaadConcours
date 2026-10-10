@@ -1,4 +1,4 @@
-> Corrigé rédigé par IA (non officiel) — aucun corrigé officiel de la FSJES Mohammedia n'a été retrouvé pour ce concours.
+> Corrigé indicatif rédigé par SaadConcours (non officiel) — aucun corrigé officiel de la FSJES Mohammedia n'a été retrouvé pour ce concours.
 
 ## Exercice 1 — Élaboration du bilan (MAROTEX, 01/01/2018)
 

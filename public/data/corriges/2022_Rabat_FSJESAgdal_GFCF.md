@@ -1,6 +1,6 @@
 ## Q.C.M. — Corrigé indicatif (81 questions, une seule réponse par question)
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Cette épreuve est la version 2022 du même test que « FSJES Agdal GFCF 2023 » disponible sur ce site (structure identique, questions largement similaires). Quelques questions (46, 48, 62, 72, 74, 81) comportent une ambiguïté signalée explicitement. Relecture humaine recommandée.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Cette épreuve est la version 2022 du même test que « FSJES Agdal GFCF 2023 » disponible sur ce site (structure identique, questions largement similaires). Quelques questions (46, 48, 62, 72, 74, 81) comportent une ambiguïté signalée explicitement. À vérifier avant de t'y fier pour réviser.
 
 | Q | Rép. | Q | Rép. | Q | Rép. | Q | Rép. |
 |---|---|---|---|---|---|---|---|

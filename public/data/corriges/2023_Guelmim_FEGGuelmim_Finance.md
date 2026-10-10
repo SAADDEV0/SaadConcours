@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée pour cette session. Épreuve de dissertation/questions de cours : ce corrigé propose une trame de réponse structurée, pas une réponse unique figée. Relecture humaine recommandée.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée pour cette session. Épreuve de dissertation/questions de cours : ce corrigé propose une trame de réponse structurée, pas une réponse unique figée. À vérifier avant de t'y fier pour réviser.
 
 ### Partie 1
 

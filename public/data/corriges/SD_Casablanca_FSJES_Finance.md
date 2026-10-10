@@ -1,6 +1,6 @@
 ## Corrigé indicatif
 
-> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Barème IS supposé (le document ne précise pas l'année exacte de la session) : tranches 10 % (≤300 000), 20 % (300 001–1 000 000), 31 % (>1 000 000) ; taux de cotisation minimale 0,25 %. Relecture humaine recommandée si un barème différent s'applique à ta session.
+> Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Barème IS supposé (le document ne précise pas l'année exacte de la session) : tranches 10 % (≤300 000), 20 % (300 001–1 000 000), 31 % (>1 000 000) ; taux de cotisation minimale 0,25 %. À vérifier si un barème différent s'applique à ta session.
 
 ### Partie 1 — Cas Analyse financière
 
