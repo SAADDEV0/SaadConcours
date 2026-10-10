@@ -16,7 +16,8 @@ import {
   licenceParcoursLabel,
   licenceSemestreLabel,
 } from "@/lib/coursTaxonomy";
-import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, niveauOf } from "@/lib/concoursNiveaux";
+import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, MASTER, POST_BAC, niveauOf } from "@/lib/concoursNiveaux";
+import { ENCG_SEMESTRES, encgSemestreLabel } from "@/lib/encgTaxonomy";
 import { BOUTIQUE_NIVEAUX, BOUTIQUE_BADGES, BOUTIQUE_DEVISES, boutiqueNiveau, formatPrix } from "@/lib/boutique";
 import { BLOG_CATEGORIES, categoryLabel as blogCategoryLabel } from "@/lib/blogTaxonomy";
 import { normalize, randomId, slugify, todayIso, wordCount, daysUntil } from "./format";
@@ -93,7 +94,7 @@ const concours = {
   href: "/admin/concours",
   publicUrl: (c) => `${SITE}/concours/${encodeURIComponent(c.id)}`,
   hydrate: (c) => ({ ...c, niveau: niveauOf(c) }),
-  title: (c) => [niveauOf(c) === LICENCE_EXCELLENCE ? "⭐" : "", c.etablissement, c.annee].filter(Boolean).join(" · ") || c.id,
+  title: (c) => [niveauOf(c) === LICENCE_EXCELLENCE ? "⭐" : niveauOf(c) === POST_BAC ? "🎓" : "", c.etablissement, c.annee].filter(Boolean).join(" · ") || c.id,
   subtitle: (c) => [c.master_reel || c.filiere, c.ville].filter(Boolean).join(" — "),
   isPublished: (c) => c.statut !== "brouillon",
   setPublished: (c, on) => {
@@ -228,7 +229,7 @@ const concours = {
   prepare(item, { isNew, list }) {
     const out = { ...item, annee: String(item.annee ?? "").trim() };
     // Master = absence du champ, comme les 260 premières fiches.
-    if (out.niveau !== LICENCE_EXCELLENCE) delete out.niveau;
+    if (!out.niveau || out.niveau === MASTER) delete out.niveau;
     if (out.filiere && !out.categorie) out.categorie = categoryOf(out.filiere) || "";
     if (!out.date_ajout && isNew) out.date_ajout = todayIso();
     out.modules = (out.modules || []).map((m) => String(m).trim()).filter(Boolean);
@@ -346,6 +347,60 @@ const cours = {
     ]);
   },
   auditLabel: (c) => c.title || c.module,
+};
+
+/* ------------------------------ Cours ENCG ------------------------------ */
+
+// Même forme que cours.json (lib/encg.js) ; pages /encg/<id>/<chapitre>.
+const encg = {
+  ...cours,
+  key: "encg",
+  path: "data/encg.json",
+  label: "Cours ENCG",
+  emoji: "🏫",
+  href: "/admin/encg",
+  publicUrl: (c) => `${SITE}/encg/${encodeURIComponent(c.id)}`,
+  subtitle: (c) => [encgSemestreLabel(c.semestre), c.option, coursCategoryLabel(c.category)].filter(Boolean).join(" · "),
+  searchText: (c) => [c.id, c.module, c.title, c.description, c.semestre, c.option].join(" "),
+  filters: [
+    { key: "semestre", label: "Semestre", options: opt(ENCG_SEMESTRES), get: (c) => c.semestre },
+    { key: "category", label: "Catégorie", options: COURS_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })), get: (c) => c.category },
+  ],
+  empty: () => ({ module: "", title: "", description: "", category: "", semestre: "", option: "", content: "", available: false }),
+  groups: [
+    {
+      title: "Présentation",
+      fields: [
+        { key: "module", label: "Module", type: "text", required: true, placeholder: "Comptabilité générale" },
+        { key: "title", label: "Titre de la fiche", type: "text", required: true, placeholder: "Cours — Comptabilité générale (ENCG S1)" },
+        { key: "description", label: "Description (SEO et cartes)", type: "textarea", rows: 2, full: true, counter: [120, 160] },
+        { key: "category", label: "Catégorie", type: "select", options: COURS_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })) },
+        { key: "semestre", label: "Semestre", type: "select", options: opt(ENCG_SEMESTRES) },
+        { key: "option", label: "Option / spécialisation (dernières années)", type: "text", placeholder: "Audit et contrôle de gestion", suggest: "option" },
+      ],
+    },
+    {
+      title: "Contenu",
+      hint: "Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/encg/<module>/<chapitre>). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié.",
+      fields: [{ key: "content", label: "Cours complet (Markdown + LaTeX)", type: "markdown", required: true, full: true, rows: 28 }],
+    },
+  ],
+  prepare(item, { isNew, list }) {
+    const out = { ...item };
+    if (isNew && !out.id) out.id = uniqueId([slugify(out.module, "-"), String(out.semestre || "").toLowerCase()].filter(Boolean).join("-"), new Set(list.map((x) => x.id)));
+    return out;
+  },
+  quality(c) {
+    const chapitres = (String(c.content || "").match(/^# CHAPITRE \d+\s*[—–-]/gm) || []).length;
+    return checks([
+      [c.module && c.title, "Module et titre", "red"],
+      [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
+      [wordCount(c.content) > 400, "Contenu rédigé", "red"],
+      [c.description && c.description.length >= 80, "Description d'au moins 80 caractères"],
+      [c.category, "Catégorie"],
+      [c.semestre, "Semestre"],
+    ]);
+  },
 };
 
 /* ------------------------------ Évaluations ------------------------------ */
@@ -701,8 +756,8 @@ const boutique = {
   auditLabel: (p) => p.titre,
 };
 
-export const COLLECTIONS = { concours, cours, quiz, blog, news, boutique };
-export const COLLECTION_LIST = [concours, cours, quiz, blog, news, boutique];
+export const COLLECTIONS = { concours, cours, encg, quiz, blog, news, boutique };
+export const COLLECTION_LIST = [concours, cours, encg, quiz, blog, news, boutique];
 
 export function collectionByKey(key) {
   return COLLECTIONS[key] || null;

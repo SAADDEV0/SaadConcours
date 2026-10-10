@@ -1,10 +1,11 @@
-import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllEncg, getAllQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
 import { isProduitVisible } from "@/lib/boutique";
 import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
-import { isLicenceExcellence, isMaster } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
+import { encgModule, encgModuleHref, encgChapitreHref, isEncgPublie } from "@/lib/encg";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -32,9 +33,10 @@ export default async function sitemap() {
   // Fetched up front because the listing routes below now carry a real
   // lastModified derived from the freshest item they actually list — same
   // rule as the per-item entries: only emit a date when it's true.
-  const [concours, cours, quiz, blog, boutique] = await Promise.all([
+  const [concours, cours, encg, quiz, blog, boutique] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
+    getAllEncg().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
     getAllBoutique().catch(() => []),
@@ -42,6 +44,8 @@ export default async function sitemap() {
 
   const concoursUpdated = latestDate(concours.filter(isMaster), "date_ajout");
   const licenceUpdated = latestDate(concours.filter(isLicenceExcellence), "date_ajout");
+  const postBac = concours.filter(isPostBac);
+  const encgPublies = encg.filter(isEncgPublie);
   const blogUpdated = latestDate(blog, "publishedAt");
   // The homepage surfaces the latest concours and the latest blog posts, so it
   // is as fresh as the freshest of them.
@@ -55,6 +59,9 @@ export default async function sitemap() {
     { path: "", changeFrequency: "daily", priority: 1, lastModified: homeUpdated },
     { path: "/concours", changeFrequency: "weekly", priority: 0.9, lastModified: concoursUpdated },
     { path: "/concours/licence-excellence", changeFrequency: "weekly", priority: 0.8, lastModified: licenceUpdated },
+    // Espace ENCG : chaque page seulement avec son contenu (lib/espaces.js).
+    ...(postBac.length ? [{ path: "/concours/post-bac", changeFrequency: "weekly", priority: 0.8, lastModified: latestDate(postBac, "date_ajout") }] : []),
+    ...(encgPublies.length ? [{ path: "/encg", changeFrequency: "weekly", priority: 0.8 }] : []),
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },
     { path: "/evaluation", changeFrequency: "weekly", priority: 0.8 },
@@ -90,6 +97,11 @@ export default async function sitemap() {
       { url: `${SITE_URL}/cours/${c.id}`, changeFrequency: "monthly", priority: 0.6 },
       ...fsjesModule(c).chapitres.map((ch) => ({ url: `${SITE_URL}${fsjesChapitreHref(c, ch)}`, changeFrequency: "monthly", priority: 0.5 })),
     ]);
+
+  const encgRoutes = encgPublies.flatMap((c) => [
+    { url: `${SITE_URL}${encgModuleHref(c)}`, changeFrequency: "monthly", priority: 0.6 },
+    ...encgModule(c).chapitres.map((ch) => ({ url: `${SITE_URL}${encgChapitreHref(c, ch)}`, changeFrequency: "monthly", priority: 0.5 })),
+  ]);
 
   const quizRoutes = quiz
     .filter((q) => q.available)
@@ -133,5 +145,5 @@ export default async function sitemap() {
     ...(p.dateAjout ? { lastModified: p.dateAjout } : {}),
   }));
 
-  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...quizRoutes, ...blogRoutes, ...boutiqueRoutes, ...bacRoutes];
+  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...encgRoutes, ...quizRoutes, ...blogRoutes, ...boutiqueRoutes, ...bacRoutes];
 }

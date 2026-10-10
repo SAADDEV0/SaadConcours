@@ -7,6 +7,7 @@ Application Next.js multi-pages :
 - `/` — Accueil (présentation, accès aux sections)
 - `/bac/2bac` — Cours du 2ème Bac SEG par matière et chapitre ; examens nationaux listés sur la page de chaque matière (la 1ère Bac est masquée tant qu'elle n'est pas rédigée)
 - `/cours` — Cours de Licence FSJES par module et chapitre
+- `/encg` — Cours de l'ENCG du S1 au S10 par module et chapitre (`public/data/encg.json`) ; `/concours/post-bac` — sujets du concours d'accès aux ENCG (TAFEM). Les deux forment l'espace ENCG et ne s'affichent qu'avec du contenu publié
 - `/concours` — Concours (filtres, recherche, rendu Markdown/LaTeX, galerie d'images, export PDF, corrigé quand disponible)
 - `/evaluation` — QCM d'auto-évaluation par module
 - `/blog` — Articles de méthode et d'orientation
@@ -18,8 +19,10 @@ site public le 24/09/2026 pour la demande AdSense ; `public/data/news.json` et l
 
 ## Design et sections : où toucher quoi
 
-- **Espaces** (`lib/espaces.js`) : un public = un espace (Bac, Licence FSJES, Licence
-  d'excellence, Master ; Post-bac et ENCG déclarés, éteints tant qu'ils sont vides). Le header,
+- **Espaces** (`lib/espaces.js`) : un public = un espace (Bac, ENCG, Licence FSJES, Licence
+  d'excellence, Master). Un onglet peut dépendre d'un contenu (`contenu`) : il n'apparaît qu'une
+  fois ce contenu publié, calculé au build (`lib/contenusPublies.mjs` → `SC_CONTENUS`). L'espace
+  ENCG (concours TAFEM, cours S1 → S10) s'ouvre ainsi tout seul au premier sujet ou module publié. Le header,
   la barre d'espace, le menu, la barre du bas, le pied de page et l'accueil se construisent depuis
   ce registre. Ajouter une section : recette X1 de `BANQUE_PROMPTS.md`.
 - **Couleurs et mise en page** : jetons en tête de `app/globals.css` (indigo de marque, rouge des

@@ -11,7 +11,9 @@ import { Icon } from "../../_shared/icons";
 // lives in the hero so it's visible without scrolling — wired imperatively
 // by id rather than rendered here. Shows the admin edit shortcut the same
 // way BacChapitreClient does (only on the admin's own browser).
-export default function CoursDetailClient({ cours }) {
+// `source` : fichier qui porte le Markdown du module (les cours ENCG vivent
+// dans encg.json) ; `editHref` : écran de la console qui le modifie.
+export default function CoursDetailClient({ cours, source = "/data/cours.json", editHref = "/admin/cours" }) {
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export default function CoursDetailClient({ cours }) {
       if (pdfBtn.disabled) return;
       pdfBtn.disabled = true;
       try {
-        const list = await fetch("/data/cours.json").then((r) => r.json());
+        const list = await fetch(source).then((r) => r.json());
         const complet = list.find((x) => x.id === cours.id);
         if (complet) await downloadCoursPdf({ ...cours, content: complet.content });
       } catch {
@@ -40,11 +42,11 @@ export default function CoursDetailClient({ cours }) {
       setAdmin(localStorage.getItem("sc_no_track") === "1");
     } catch {}
     return () => pdfBtn?.removeEventListener("click", onPdf);
-  }, [cours]);
+  }, [cours, source]);
 
   if (!admin) return null;
   return (
-    <a className="bac-edit-fab" href="/admin/cours">
+    <a className="bac-edit-fab" href={editHref}>
       <Icon name="pen" size={17} />
       Modifier ce module
     </a>

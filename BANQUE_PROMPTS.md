@@ -24,6 +24,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute le cours <module>` · `ajoute les cours du S3` | [K1](#k1--ajouter-un-cours-licence-fsjes) |
 | `complète le cours X par chapitres` · `ajoute QCM / résumés au cours X` | [K2](#k2--compléter-un-cours-par-chapitres) |
 | `modifie / réécris le cours X` · `supprime le cours X` | [K3](#k3--modifier-ou-supprimer-un-cours) |
+| `ajoute le cours ENCG <module> S3` · `ajoute les cours ENCG du S1` | [K4](#k4--cours-encg-s1-à-s10) |
 | `rédige les chapitres Bac de <matière> <niveau>` | [B1](#b1--rédiger-des-chapitres-bac) |
 | `ajoute les nationaux (bac)` · `ajoute les nationaux 2026` | [B2](#b2--examens-nationaux-2ème-bac) |
 | `ajoute une évaluation <module>` · `ajoute un QCM de 100 questions en X` | [E1](#e1--ajouter-une-évaluation-qcm) |
@@ -35,8 +36,8 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-gumroad) |
 | `poste les concours` · `prépare les posts Instagram / Facebook` · `carrousels de la semaine` | [R1](#r1--carrousels-instagram--facebook-des-concours) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
-| `ajoute la section post-bac` · `ouvre l'espace ENCG` · `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
-| `ajoute 10 concours ENCG` · `ajoute des concours post-bac ISCAE` | [X2](#x2--concours-post-bac-encg-iscae) |
+| `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
+| `ajoute 10 concours TAFEM` · `ajoute ce sujet TAFEM` · `ajoute des concours post-bac ENCG` | [X2](#x2--concours-post-bac-tafem-encg) |
 | `ajoute un emplacement de pub` · `déplace la pub de X` | [X3](#x3--emplacements-publicitaires-adsense) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
 | `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
@@ -57,6 +58,7 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 | Contenu | Fichier(s) | Taxonomie / conventions |
 |---|---|---|
 | Concours | `public/data/concours.json` + miroirs `public/data/extraits/<id>.md`, `public/data/corriges/<id>.md` + scans `public/images/<Ville>/<id>/` | `lib/taxonomy.js` |
+| Cours ENCG (S1 → S10) | `public/data/encg.json` + compléments `lib/encgContenu/<id>.js` (déclarés dans `lib/encgContenu/index.js`) | `lib/encgTaxonomy.js`, découpage : `lib/encg.js` (même convention que FSJES) |
 | Cours Licence FSJES | `public/data/cours.json` + compléments `lib/fsjesContenu/<module>.js` (déclarés dans `lib/fsjesContenu/index.js`) | `lib/coursTaxonomy.js`, découpage : `lib/fsjesChapitres.js` |
 | Cours Bac | `lib/bacContenu/<niveau>/<fichier>.js` (déclarés dans `lib/bacContenu/index.js`) ; surcharges admin dans `public/data/bac.json` | `lib/bacProgramme.js` |
 | Examens nationaux Bac | `lib/bacNationaux.json` (catalogue) + PDF `public/bac/nationaux/<se|sgc|commun>/<matière>/<année>-<session>-<sujet|corrige>.pdf` | `lib/bacNationaux.js` |
@@ -662,6 +664,26 @@ Tous les cours sont réécrits sur ce modèle ; tout nouveau cours doit le suivr
 
 ---
 
+### K4 — Cours ENCG (S1 à S10)
+Espace ENCG (`lib/espaces.js`, clé `encg`, couleur sky), onglet « Cours S1 → S10 » : pages `/encg`,
+`/encg/<id>`, `/encg/<id>/<chapitre>`. L'onglet **s'ouvre tout seul** au premier module publié :
+`next.config.mjs` calcule `SC_CONTENUS` au build (`lib/contenusPublies.mjs`). Rien à retoucher dans le
+code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'est publié.
+- **Schéma** (`encg.json`, même forme que `cours.json`) : `id` (`<module-en-tirets>-s<N>`, ex.
+  `comptabilite-generale-s1`, fixe l'URL), `module`, `title` (« Cours — Comptabilité générale (ENCG S1) »),
+  `description` (120-160 caractères), `category` (codes de `COURS_CATEGORIES`), `semestre` (`S1`…`S10`),
+  `option` (texte libre, dernières années : « Audit et contrôle de gestion »), `content`, `available`.
+- **Markdown** : convention FSJES (`# CHAPITRE N — TITRE`, `## ✏️ EXERCICE N` / `## ✅ CORRECTION N`,
+  annexe `# 🧾` / `# 📝`), norme « cours détaillé » de la section K. En plus : `## ⚡ RÉSUMÉ` dans un
+  chapitre remplit l'onglet Résumé. Un QCM de chapitre ne s'écrit que dans `lib/encgContenu/<id>.js`
+  (format K2), déclaré dans `SUPPLEMENTS` de `lib/encgContenu/index.js`.
+- **Publié** = `available: true` **et** au moins un `# CHAPITRE N — …` (`isEncgPublie`, `lib/encg.js`).
+  Un chapitre n'affiche que les onglets qui ont du contenu (jamais d'onglet « en préparation »).
+- Console : Contenu › Cours ENCG (l'aide du champ Contenu rappelle la convention).
+- Contexte : programme réel du module à l'ENCG ; les intitulés d'option changent d'une école à
+  l'autre (n'en présenter aucun comme national). Contrôle et fin de recette comme K1 ; mettre à jour
+  `public/llms.txt` au premier module publié (règle 1.8).
+
 ## B. BAC (Sciences Économiques & Gestion)
 
 ### B1 — Rédiger des chapitres Bac
@@ -945,17 +967,19 @@ Une suppression en masse (« supprime tous les … ») → **montrer la liste et
 
 ## X. SECTIONS DU SITE (espaces, publicité)
 
-Le site est rangé par **espaces** (un public = un espace : Bac, Licence FSJES, Licence
-d'excellence, Master…), décrits dans un seul fichier, `lib/espaces.js`. Le header, le menu du
-téléphone, la barre d'espace sous le header, la barre d'onglets du bas, le pied de page et
-« Je prépare… » + les sections de l'accueil se construisent depuis ce registre. Aucun composant
+Le site est rangé par **espaces** (un public = un espace : Bac, ENCG, Licence FSJES, Licence
+d'excellence, Master), décrits dans un seul fichier, `lib/espaces.js`. Le header, le menu du
+téléphone, la barre d'espace sous le header, le pied de page et « Je prépare… » + les sections
+de l'accueil se construisent depuis ce registre. Aucun composant
 ne nomme un espace : en ajouter un ne demande **aucune retouche du chrome**.
 
 ### X1 — Ajouter une section (un espace)
 1. **Contenu d'abord.** Un espace ne s'allume qu'avec du contenu publié (règle AdSense §1.6 :
    jamais de rubrique « bientôt »). Préparer les fiches en brouillon si besoin.
-2. **Registre** `lib/espaces.js` : une entrée (ou passer `enabled: true` pour `postbac` et `encg`,
-   déjà déclarés). Champs : `key`, `label` (header, court), `long`, `audience` (« Après le Bac »),
+2. **Registre** `lib/espaces.js` : une entrée. Un onglet qui porte `contenu: "<clé>"` ne s'affiche
+   qu'avec ce contenu publié (clé calculée au build par `lib/contenusPublies.mjs`, inscrite dans
+   `SC_CONTENUS` par `next.config.mjs`) ; un espace sans onglet visible disparaît. C'est ce qui
+   permet de construire une section avant son contenu (précédent : ENCG, 2026-10-10). Champs : `key`, `label` (header, court), `long`, `audience` (« Après le Bac »),
    `couleur` (indigo, orange, teal, gold, rose, sky — jamais rouge ni vert), `desc` (une phrase,
    sans répéter l'audience), `hub`, `tabs` (`keys` = valeurs de `active` passées à `chromeHtml`
    par les pages de l'onglet), `cours` / `sujets` / `entrainement` (destinations de la barre du bas).
@@ -974,16 +998,21 @@ ne nomme un espace : en ajouter un ne demande **aucune retouche du chrome**.
    des bannières partenaires (`PARTNER_SECTIONS`, `app/_shared/partnerAds.js`).
 7. `npm run check` (l'audit de contenu suit les liens du nouvel espace), puis P1.
 
-### X2 — Concours post-bac (ENCG, ISCAE)
-Économie et gestion **uniquement** (ENCG/TAFEM, ISCAE, et équivalents en gestion). Même fichier
-`concours.json`, même schéma que C1, avec `"niveau": "post_bac"` (`lib/concoursNiveaux.js`) : ces
-fiches n'apparaissent ni sur `/concours` (Master) ni sur `/concours/licence-excellence`.
-1. Rassembler les sujets (même exigence que C1 : sujet réel, transcription, corrigé, scans).
-   `id` : `<annee>_<Ville>_<Ecole>_PB_<Epreuve>` (ex. `2025_Settat_ENCG_PB_TAFEM`).
-2. Première fois seulement : créer `app/concours/post-bac/page.js` en copiant
-   `app/concours/licence-excellence/page.js` (filtre `niveauOf(c) === POST_BAC`, titre, texte,
-   FAQ propres), passer l'espace `postbac` à `enabled: true` (X1), ajouter l'URL au sitemap.
-3. Les fiches détaillées existent déjà (`/concours/<id>`) et prennent l'onglet « concours-pb ».
+### X2 — Concours post-bac (TAFEM, ENCG)
+Concours d'accès en 1ʳᵉ année des ENCG (TAFEM), onglet « Concours TAFEM » de l'espace ENCG. Même
+fichier `concours.json`, même schéma et même déroulé que C1/C2, avec `"niveau": "post_bac"`
+(`lib/concoursNiveaux.js`) : ces fiches n'apparaissent ni sur `/concours` (Master) ni sur
+`/concours/licence-excellence`, mais sur `/concours/post-bac` (déjà construite).
+1. `id` : `<annee>_<Ville>_ENCG_PB_TAFEM` (ex. `2025_Settat_ENCG_PB_TAFEM`) ; `etablissement` :
+   « ENCG <Ville> » ; `master_reel` : « TAFEM » ou l'intitulé exact de l'épreuve ; `modules` : les
+   matières du sujet (elles alimentent « Ce que testent les épreuves ») ; `filiere` / `categorie` vides
+   (taxonomie Master, sans objet ici).
+2. Console : choisir « Concours d'accès à l'ENCG (TAFEM) » dans « Niveau du concours » (l'enregistrement
+   garde `post_bac` depuis le 2026-10-10 ; avant, la console le remplaçait par Master).
+3. Le premier sujet publié ouvre l'onglet et l'espace (`SC_CONTENUS`), ajoute `/concours/post-bac` au
+   sitemap et retire son `noindex` : rien d'autre à faire. La fiche dit « pas une correction officielle
+   de l'école » et ne propose pas de cours FSJES à réviser.
+4. Ne jamais inventer le format du TAFEM : les textes de la page sont calculés sur les sujets en base.
 
 ### X3 — Emplacements publicitaires (AdSense)
 Les emplacements sont listés dans `app/_shared/adPlacements.js` (clé, page, format, hauteur

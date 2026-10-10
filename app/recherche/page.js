@@ -1,6 +1,9 @@
-import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllEncg, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
-import { isLicenceExcellence } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isPostBac } from "@/lib/concoursNiveaux";
+import { encgModule, encgModuleHref, encgChapitreHref, isEncgPublie } from "../../lib/encg";
+import { encgSemestreLabel } from "../../lib/encgTaxonomy";
+import { contenuOuvert } from "../../lib/espaces";
 import { categoryLabel } from "../../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref, bacChapitreHref } from "../../lib/bacProgramme";
 import { licenceSemestreLabel } from "../../lib/coursTaxonomy";
@@ -33,9 +36,10 @@ function entree(k, t, s, u, x = "") {
 }
 
 export default async function RecherchePage() {
-  const [concours, cours, quiz, blog] = await Promise.all([
+  const [concours, cours, encg, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
+    getAllEncg().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
@@ -47,9 +51,9 @@ export default async function RecherchePage() {
       entree(
         "concours",
         c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`,
-        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : ""}`,
+        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isPostBac(c) ? " · Concours post-bac" : ""}`,
         `/concours/${encodeURIComponent(c.id)}`,
-        [c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : "master"].filter(Boolean).join(" ")
+        [c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isPostBac(c) ? "post bac encg tafem" : "master"].filter(Boolean).join(" ")
       )
     );
   }
@@ -59,6 +63,13 @@ export default async function RecherchePage() {
     index.push(entree("cours", c.module, ["Licence FSJES", sem, `${chapitres.length} chapitres`].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.id)}`, c.description || ""));
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · Chapitre ${ch.numero}`, fsjesChapitreHref(c, ch)));
+    }
+  }
+  for (const c of encg.filter(isEncgPublie)) {
+    const { chapitres } = encgModule(c);
+    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), `${chapitres.length} chapitres`].filter(Boolean).join(" · "), encgModuleHref(c), [c.description, c.option, "encg"].filter(Boolean).join(" ")));
+    for (const ch of chapitres) {
+      index.push(entree("chapitre", ch.titre, `${c.module} · ENCG · Chapitre ${ch.numero}`, encgChapitreHref(c, ch)));
     }
   }
   for (const m of BAC_MATIERES.filter((x) => x.niveau === "2bac")) {
@@ -141,6 +152,18 @@ export default async function RecherchePage() {
                   <strong>Licence d&apos;excellence</strong>
                   <span>Concours d&apos;accès en S5</span>
                 </a>
+                {contenuOuvert("concours-post-bac") && (
+                  <a className="home-link" href="/concours/post-bac">
+                    <strong>Concours ENCG (TAFEM)</strong>
+                    <span>Sujets d&apos;accès après le Bac</span>
+                  </a>
+                )}
+                {contenuOuvert("encg-cours") && (
+                  <a className="home-link" href="/encg">
+                    <strong>Cours ENCG</strong>
+                    <span>Modules du S1 au S10</span>
+                  </a>
+                )}
                 <a className="home-link" href="/cours">
                   <strong>Cours Licence FSJES</strong>
                   <span>Modules du S1 au S6</span>

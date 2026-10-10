@@ -358,6 +358,9 @@
 .home-subhead h3{margin:0; font-size:1rem; font-weight:700;}
 .home-subhead a, .home-more{font-size:.88rem; font-weight:600; color:var(--accent); text-decoration:none; white-space:nowrap;}
 .home-subhead a:hover, .home-more:hover{text-decoration:underline;}
+/* Hub ENCG (app/encg/page.js) : derniers sujets TAFEM sous la liste des modules. */
+.sp-encg-tafem{margin-top:32px;}
+.sp-encg-tafem .home-subhead .bac-section-title{margin:0;}
 .home-more{display:inline-flex; align-items:center; gap:6px; margin-top:16px;}
 
 .home-links{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap:10px;}

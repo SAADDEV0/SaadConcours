@@ -165,7 +165,9 @@ export default async function ConcoursDetailPage(props) {
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
-  const modulesLies = modulesDuConcours(c);
+  // Les modules liés sont des cours de Licence FSJES : sans objet pour un
+  // candidat à l'ENCG qui sort du Bac.
+  const modulesLies = niveauOf(c) === POST_BAC ? [] : modulesDuConcours(c);
   const corrigeIds = getCorrigeIdsLocal();
   const hasImages = Boolean(c.images && c.images.length > 0);
   // La source d'un sujet (c.source) reste dans concours.json pour la console,
@@ -345,7 +347,7 @@ export default async function ConcoursDetailPage(props) {
               </summary>
               <div className="corrige-disclaimer">
                 <Icon name="alert" size={18} />
-                <span>Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
+                <span>Corrigé proposé par SaadConcours, pas une correction officielle {niveauOf(c) === POST_BAC ? "de l'école" : "de la faculté"} — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
               </div>
               <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
             </details>

@@ -1,8 +1,10 @@
-import { getPublicConcours, getSettings, getAllCours, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
-import { isLicenceExcellence, isMaster } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
+import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
+import { encgModule, isEncgPublie } from "../lib/encg";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref } from "../lib/bacProgramme";
 import { LICENCE_SEMESTRES } from "../lib/coursTaxonomy";
@@ -43,10 +45,11 @@ function nombre(n) {
 }
 
 export default async function HomePage() {
-  const [allConcours, settings, cours, quiz, blog] = await Promise.all([
+  const [allConcours, settings, cours, encg, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getSettings().catch(() => null),
     getAllCours().catch(() => []),
+    getAllEncg().catch(() => []),
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
@@ -80,6 +83,12 @@ export default async function HomePage() {
     .filter((p) => p.available)
     .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
     .slice(0, 4);
+  // Espace ENCG : sujets TAFEM (niveau post_bac) et cours S1 → S10.
+  const tafem = allConcours.filter(isPostBac);
+  const recentsTafem = [...tafem].sort((a, b) => String(b.annee).localeCompare(String(a.annee)) || String(b.date_ajout || "").localeCompare(String(a.date_ajout || ""))).slice(0, 4);
+  const encgPublies = encg.filter(isEncgPublie);
+  const chapitresEncg = encgPublies.reduce((n, c) => n + encgModule(c).chapitres.length, 0);
+  const semestresEncg = ENCG_SEMESTRES.map((s) => ({ ...s, n: encgPublies.filter((c) => c.semestre === s.code).length })).filter((s) => s.n > 0);
   const modulesParSemestre = Object.fromEntries(LICENCE_SEMESTRES.map((s) => [s.code, coursPublies.filter((c) => c.semestre === s.code).length]));
 
   const ligneSujet = (c) =>
@@ -91,6 +100,13 @@ export default async function HomePage() {
     licence: {
       ligne: `${coursPublies.length} modules · ${chapitresFsjes} chapitres corrigés`,
       chiffres: [[coursPublies.length, "modules"], [chapitresFsjes, "chapitres"], [quizPublies.length, "concours blancs"]],
+    },
+    encg: {
+      ligne: [tafem.length && `${tafem.length} sujets TAFEM`, encgPublies.length && `${encgPublies.length} modules du S1 au S10`].filter(Boolean).join(" · "),
+      chiffres: [
+        ...(tafem.length ? [[tafem.length, "sujets TAFEM"]] : []),
+        ...(encgPublies.length ? [[encgPublies.length, "modules"], [chapitresEncg, "chapitres"]] : []),
+      ],
     },
     excellence: {
       ligne: `${licenceExc.length} sujets réels · accès en S5 après le DEUG`,
@@ -140,6 +156,31 @@ export default async function HomePage() {
             <span>Les concours d&apos;accès en S5 ont leur propre espace, juste en dessous</span>
           </a>
         </div>
+      </>
+    ),
+    encg: (
+      <>
+        {recentsTafem.length > 0 && (
+          <>
+            <div className="home-subhead">
+              <h3>Sujets du concours TAFEM</h3>
+              <a href="/concours/post-bac">Tous les sujets</a>
+            </div>
+            <div className="sp-rows" dangerouslySetInnerHTML={{ __html: recentsTafem.map(ligneSujet).join("") }} />
+          </>
+        )}
+        {semestresEncg.length > 0 && (
+          <div className="home-links home-links-semestres">
+            {semestresEncg.map((s) => (
+              <a key={s.code} className="home-link" href={`/encg?semestre=${s.code}`}>
+                <strong>{s.label}</strong>
+                <span>
+                  {s.n} module{s.n > 1 ? "s" : ""} · {encgAnneeLabel(s.code)}
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
       </>
     ),
     excellence: (

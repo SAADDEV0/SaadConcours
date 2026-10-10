@@ -1,5 +1,11 @@
+import { contenusPublies } from "./lib/contenusPublies.mjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Onglets d'espace ouverts par leur contenu (cours ENCG, sujets TAFEM) :
+  // voir lib/contenusPublies.mjs et lib/espaces.js.
+  env: { SC_CONTENUS: contenusPublies() },
+
   // lib/store.js reads `path.join(process.cwd(), "public", relPath)`. That
   // path is dynamic, so Next's file tracer can't tell which files it needs
   // and conservatively pulls all of public/ into EVERY server function.
