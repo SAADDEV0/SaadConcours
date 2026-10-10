@@ -1,9 +1,9 @@
-import { getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getCorrigeIdsLocal, getSettings } from "@/lib/store";
+import AdSlot from "../../_shared/AdSlot";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
 import JsonLd from "../../_shared/JsonLd";
-import ConcoursNiveauSwitch from "../../_shared/ConcoursNiveauSwitch";
-import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 import ConcoursListing from "../ConcoursListing";
 
 // Même contrainte que /concours : page prérendue, servie depuis les assets
@@ -67,12 +67,12 @@ function buildFaq({ total, nbQcm, etabs, qcmRange }) {
 
 export default async function LicenceExcellencePage() {
   const tous = await getPublicConcours().catch(() => []);
+  const settings = await getSettings().catch(() => null);
   // Corrigés présents seulement en fichier : même drapeau que sur /concours.
   const corrigeIds = getCorrigeIdsLocal();
   const concours = tous
     .filter(isLicenceExcellence)
     .map((c) => (!c.corrige_md && corrigeIds.has(c.id) ? { ...c, corrige_from_github: true } : c));
-  const nbMaster = tous.length - concours.length;
   const etabs = [...new Set(concours.map((c) => c.etablissement).filter(Boolean))].sort((a, b) => a.localeCompare(b, "fr"));
   const nbEtabs = etabs.length;
   const nbVilles = new Set(concours.map((c) => c.ville).filter(Boolean)).size;
@@ -110,7 +110,6 @@ export default async function LicenceExcellencePage() {
 
       <div className="bac-space">
         <div className="bac-wrap">
-          <ConcoursNiveauSwitch active={LICENCE_EXCELLENCE} counts={{ master: nbMaster, [LICENCE_EXCELLENCE]: concours.length }} />
 
           <section className="bac-hero">
             <h1>Concours d'accès aux Licences d'Excellence — sujets réels</h1>
@@ -177,6 +176,8 @@ export default async function LicenceExcellencePage() {
               </div>
             </section>
           )}
+
+          <AdSlot settings={settings} placement="list_bottom" />
 
           <section className="sp-about">
             <h2>Des sujets de licence d'excellence, avec corrigés</h2>

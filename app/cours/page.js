@@ -5,7 +5,6 @@ import { fsjesModule } from "../../lib/fsjesChapitres";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
-import NiveauSwitch from "../_shared/NiveauSwitch";
 import { Icon } from "../_shared/icons";
 
 // Served as prerendered HTML instead of rendered per request. lib/github.js
@@ -104,7 +103,6 @@ export default async function CoursPage() {
 
       <div className="bac-space">
         <div className="bac-wrap">
-          <NiveauSwitch active="fsjes" />
 
           <section className="bac-hero">
             <h1>Cours Licence Économie & Gestion</h1>

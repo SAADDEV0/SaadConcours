@@ -35,6 +35,9 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-gumroad) |
 | `poste les concours` · `prépare les posts Instagram / Facebook` · `carrousels de la semaine` | [R1](#r1--carrousels-instagram--facebook-des-concours) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
+| `ajoute la section post-bac` · `ouvre l'espace ENCG` · `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
+| `ajoute 10 concours ENCG` · `ajoute des concours post-bac ISCAE` | [X2](#x2--concours-post-bac-encg-iscae) |
+| `ajoute un emplacement de pub` · `déplace la pub de X` | [X3](#x3--emplacements-publicitaires-adsense) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
 | `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
 | `vérifie` · `publie` · `push` · `déploie` | [P1](#p1--vérifier-committer-publier) |
@@ -464,8 +467,9 @@ Problèmes connus : villes en double (`Meknes`/`Meknès`, `Kenitra`/`Kénitra`, 
 ### C9 — Concours de licence d'excellence
 Licences d'excellence (parcours sélectifs, accès en **S5 après le DEUG**) : même fichier
 `concours.json`, même schéma, avec `"niveau": "licence_excellence"`. Le site les affiche sur
-`/concours/licence-excellence` (et plus sur `/concours`, réservé au Master), avec un badge ⭐ sur
-les cartes, le menu Concours → « Concours Licence d'excellence » et un pilier sur l'accueil.
+`/concours/licence-excellence` (et plus sur `/concours`, réservé au Master). Depuis le 2026-10-10
+c'est un **espace à part** (`lib/espaces.js`, clé `excellence`, couleur or) : entrée du header,
+de « Je prépare… », sa section sur l'accueil (derniers sujets) et sa colonne de pied de page.
 1. Même déroulé que C1, avec ces spécificités :
    - **Source principale** : forum semistre.com, section « Concours d'accès aux licences d'excellences »
      (`https://semistre.com/forums/concours-dacces-aux-licences-dexcellences.31/page-N`). Chaque fil
@@ -938,6 +942,58 @@ du type (C6, K3, E2, A2, N1). Toujours nettoyer les liens internes qui pointaien
 Une suppression en masse (« supprime tous les … ») → **montrer la liste et attendre mon accord**.
 
 ---
+
+## X. SECTIONS DU SITE (espaces, publicité)
+
+Le site est rangé par **espaces** (un public = un espace : Bac, Licence FSJES, Licence
+d'excellence, Master…), décrits dans un seul fichier, `lib/espaces.js`. Le header, le menu du
+téléphone, la barre d'espace sous le header, la barre d'onglets du bas, le pied de page et
+« Je prépare… » + les sections de l'accueil se construisent depuis ce registre. Aucun composant
+ne nomme un espace : en ajouter un ne demande **aucune retouche du chrome**.
+
+### X1 — Ajouter une section (un espace)
+1. **Contenu d'abord.** Un espace ne s'allume qu'avec du contenu publié (règle AdSense §1.6 :
+   jamais de rubrique « bientôt »). Préparer les fiches en brouillon si besoin.
+2. **Registre** `lib/espaces.js` : une entrée (ou passer `enabled: true` pour `postbac` et `encg`,
+   déjà déclarés). Champs : `key`, `label` (header, court), `long`, `audience` (« Après le Bac »),
+   `couleur` (indigo, orange, teal, gold, rose, sky — jamais rouge ni vert), `desc` (une phrase,
+   sans répéter l'audience), `hub`, `tabs` (`keys` = valeurs de `active` passées à `chromeHtml`
+   par les pages de l'onglet), `cours` / `sujets` / `entrainement` (destinations de la barre du bas).
+   L'ordre du tableau = l'ordre du parcours, repris partout.
+3. **Pages** : la page hub et ses pages filles, prérendues (`force-static`, voir README « une page
+   publique n'invoque pas le Worker »), avec `chromeHtml({ active: "<clé d'onglet>" })`.
+   S'inspirer de la page la plus proche : liste de concours → `app/concours/licence-excellence/page.js`
+   (+ `ConcoursListing`) ; cours par module → `app/cours/`.
+4. **Accueil** (`app/page.js`) : sans rien faire, l'espace a une section générique (ses onglets).
+   Pour un vrai contenu, ajouter son entrée dans `RESUME` (ligne de « Je prépare… » + 3 chiffres)
+   et dans `SECTIONS` (liens ou derniers éléments).
+5. **Console** : si l'espace a un nouveau fichier de données, ajouter sa collection dans
+   `app/admin/_lib/collections.js` et son entrée dans `app/admin/_lib/nav.js` (le formulaire, la
+   liste, la recherche Ctrl K et la corbeille suivent).
+6. **Sitemap** (`app/sitemap.js`), **recherche** (`app/recherche/page.js`) et rubrique ciblable
+   des bannières partenaires (`PARTNER_SECTIONS`, `app/_shared/partnerAds.js`).
+7. `npm run check` (l'audit de contenu suit les liens du nouvel espace), puis P1.
+
+### X2 — Concours post-bac (ENCG, ISCAE)
+Économie et gestion **uniquement** (ENCG/TAFEM, ISCAE, et équivalents en gestion). Même fichier
+`concours.json`, même schéma que C1, avec `"niveau": "post_bac"` (`lib/concoursNiveaux.js`) : ces
+fiches n'apparaissent ni sur `/concours` (Master) ni sur `/concours/licence-excellence`.
+1. Rassembler les sujets (même exigence que C1 : sujet réel, transcription, corrigé, scans).
+   `id` : `<annee>_<Ville>_<Ecole>_PB_<Epreuve>` (ex. `2025_Settat_ENCG_PB_TAFEM`).
+2. Première fois seulement : créer `app/concours/post-bac/page.js` en copiant
+   `app/concours/licence-excellence/page.js` (filtre `niveauOf(c) === POST_BAC`, titre, texte,
+   FAQ propres), passer l'espace `postbac` à `enabled: true` (X1), ajouter l'URL au sitemap.
+3. Les fiches détaillées existent déjà (`/concours/<id>`) et prennent l'onglet « concours-pb ».
+
+### X3 — Emplacements publicitaires (AdSense)
+Les emplacements sont listés dans `app/_shared/adPlacements.js` (clé, page, format, hauteur
+réservée, champs de settings). Une page pose `<AdSlot settings={settings} placement="…" />` ; la
+console (Monétisation › Google AdSense) construit son formulaire depuis la même liste.
+- **Ajouter** : une entrée dans `AD_PLACEMENTS` (nouveaux champs `ads<Nom>Enabled` / `ads<Nom>Slot`),
+  puis le `<AdSlot>` dans la page. Rien d'autre.
+- **Règles** : jamais au-dessus du H1 ; entre deux parties naturelles, jamais au milieu d'un QCM ;
+  au plus 3 blocs par page (colonne latérale comprise) ; colonne latérale = grand écran seulement.
+- Un bloc réserve sa hauteur (pas de saut de page) et se replie si Google n'a rien à servir.
 
 ## M. MAINTENANCE
 

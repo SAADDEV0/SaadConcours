@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllBlog } from "@/lib/store";
+import { getAllBlog, getSettings } from "@/lib/store";
+import AdSlot from "../../_shared/AdSlot";
 import { chromeHtml, footerHtml, partnerZoneHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { clampDescription } from "../../_shared/seoText";
@@ -81,6 +82,7 @@ export default async function BlogDetailPage(props) {
   if (!p || !p.available) notFound();
 
   const contentHtml = renderMarkdownWithMath(marked, p.content || "");
+  const settings = await getSettings().catch(() => null);
   const url = `${SITE_URL}/blog/${p.id}`;
   const related = getRelatedPosts(list, p);
   const cat = categoryInfo(p.category);
@@ -160,6 +162,8 @@ export default async function BlogDetailPage(props) {
         <article className="sp-article">
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </article>
+
+        <AdSlot settings={settings} placement="article_bottom" />
 
         {/* Bannière partenaire « Dans le contenu » (vide sans annonceur). */}
         <div dangerouslySetInnerHTML={{ __html: partnerZoneHtml("inline") }} />

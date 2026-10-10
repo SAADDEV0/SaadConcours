@@ -1,9 +1,9 @@
-import { getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getCorrigeIdsLocal, getSettings } from "@/lib/store";
+import AdSlot from "../_shared/AdSlot";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
-import ConcoursNiveauSwitch from "../_shared/ConcoursNiveauSwitch";
-import { isLicenceExcellence, LICENCE_EXCELLENCE } from "@/lib/concoursNiveaux";
+import { isMaster } from "@/lib/concoursNiveaux";
 import ConcoursListing from "./ConcoursListing";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
@@ -27,6 +27,7 @@ export const revalidate = false;
 // the visitor actually filters (or lands with a ?q= link).
 export default async function ConcoursPage() {
   const tous = await getPublicConcours().catch(() => []);
+  const settings = await getSettings().catch(() => null);
   // Un corrigé peut n'exister qu'en fichier (public/data/corriges/<id>.md) :
   // sans ce drapeau, la carte n'affichait pas « Corrigé » et le compteur du
   // haut de page oubliait ces sujets.
@@ -34,9 +35,8 @@ export default async function ConcoursPage() {
   // Les concours de licence d'excellence ont leur propre page
   // (/concours/licence-excellence) : celle-ci ne liste que le Master.
   const concours = tous
-    .filter((c) => !isLicenceExcellence(c))
+    .filter(isMaster)
     .map((c) => (!c.corrige_md && corrigeIds.has(c.id) ? { ...c, corrige_from_github: true } : c));
-  const nbLicence = tous.length - concours.length;
   const nbEtabs = new Set(concours.map((c) => c.etablissement).filter(Boolean)).size;
   const nbVilles = new Set(concours.map((c) => c.ville).filter(Boolean)).size;
   const nbCorriges = concours.filter((c) => c.corrige_md || c.corrige_from_github).length;
@@ -62,7 +62,6 @@ export default async function ConcoursPage() {
 
       <div className="bac-space">
         <div className="bac-wrap">
-          <ConcoursNiveauSwitch active="master" counts={{ master: concours.length, [LICENCE_EXCELLENCE]: nbLicence }} />
 
           <section className="bac-hero">
             <h1>Concours d'accès aux Masters — sujets réels</h1>
@@ -94,6 +93,8 @@ export default async function ConcoursPage() {
           {/* Texte de la page (requête principale du site, « concours master
              maroc ») : sous la liste, qu'un élève voit en premier, mais
              toujours dans le HTML servi. */}
+          <AdSlot settings={settings} placement="list_bottom" />
+
           <section className="sp-about">
             <h2>Des sujets réellement tombés, classés et corrigés</h2>
             <p>

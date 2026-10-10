@@ -109,7 +109,6 @@ export default async function CoursModulePage(props) {
   const annexeMd = annexe.startsWith("# ") ? annexe.replace(/^## /gm, "### ").replace(/^# /gm, "## ") : annexe;
   const annexeHtml = annexe ? renderMarkdownWithMath(marked, annexeMd) : "";
   const settings = await getSettings().catch(() => null);
-  const adsActives = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -259,12 +258,7 @@ export default async function CoursModulePage(props) {
                 ))}
               </section>
 
-              <AdSlot
-                enabled={adsActives && settings?.adsCoursModuleEnabled}
-                publisherId={settings?.adsPublisherId}
-                slotId={settings?.adsCoursModuleSlot}
-                label="Publicité — page du module"
-              />
+              <AdSlot settings={settings} placement="cours_module" />
 
               {annexe && (
                 <section id="formulaire" className="bac-semestre">

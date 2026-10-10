@@ -4,7 +4,7 @@ import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
-import { isLicenceExcellence } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMaster } from "@/lib/concoursNiveaux";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -40,7 +40,7 @@ export default async function sitemap() {
     getAllBoutique().catch(() => []),
   ]);
 
-  const concoursUpdated = latestDate(concours.filter((c) => !isLicenceExcellence(c)), "date_ajout");
+  const concoursUpdated = latestDate(concours.filter(isMaster), "date_ajout");
   const licenceUpdated = latestDate(concours.filter(isLicenceExcellence), "date_ajout");
   const blogUpdated = latestDate(blog, "publishedAt");
   // The homepage surfaces the latest concours and the latest blog posts, so it

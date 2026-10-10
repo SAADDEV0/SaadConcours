@@ -1,4 +1,5 @@
-import { getAllQuiz } from "@/lib/store";
+import { getAllQuiz, getSettings } from "@/lib/store";
+import AdSlot from "../_shared/AdSlot";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { evalCardHtml } from "../_shared/evalCard";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
@@ -27,6 +28,7 @@ export const revalidate = false;
 // — exactly like a concours/cours card navigates to its own page.
 export default async function EvaluationPage() {
   const quiz = await getAllQuiz().catch(() => []);
+  const settings = await getSettings().catch(() => null);
   const disponibles = quiz.filter((q) => q.available);
   const nbQuestions = disponibles.reduce((n, q) => n + (q.questions || []).length, 0);
 
@@ -73,6 +75,8 @@ export default async function EvaluationPage() {
             <h2 className="bac-section-title">Concours blancs par module</h2>
             <div className="sp-rows" id="evalModuleGrid" dangerouslySetInnerHTML={{ __html: quiz.map(evalCardHtml).join("") }} />
           </section>
+
+          <AdSlot settings={settings} placement="list_bottom" />
 
           <section className="bac-group">
             <h2 className="bac-section-title">S'entraîner chapitre par chapitre</h2>

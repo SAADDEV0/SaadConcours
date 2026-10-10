@@ -1,23 +1,30 @@
 /* =====================================================================
-   SaadConcours — jetons, base et chrome (header, menu, barre d'onglets,
-   pied de page) + styles de contenu partagés.
+   SaadConcours — système de design du site public.
+
+   Ce fichier porte les jetons (couleurs, typographie, espacements,
+   largeurs), la base et le chrome (header, barre d'espace, menu, barre
+   d'onglets du bas, pied de page) + les styles de contenu partagés.
+   bac.css (composants de contenu) et space.css (listes, fiches, accueil)
+   n'utilisent que ces jetons ; aucune feuille n'en redessine une autre.
 
    Charte « stylo bleu, stylo rouge » : les copies d'examen s'écrivent à
-   l'encre bleue et se corrigent au rouge.
-   - --accent (encre)      seule couleur de marque : liens, boutons, onglet
-                           actif, anneau de focus, filtre sélectionné ;
-   - --red (correction)    la voix du correcteur : corrigé, corrections,
-                           mauvaise réponse d'un QCM. Jamais décoratif ;
-   - --green               seulement une bonne réponse de QCM ;
-   - --hl (surligneur)     en fond uniquement : « Nouveau », correspondance
-                           de recherche ;
-   - --amber               avertissements (corrigé indicatif).
-   Pas de dégradé, pas de halo, pas de teinte par catégorie.
+   l'encre et se corrigent au rouge.
+   - --accent (encre indigo)  seule couleur de marque : liens, boutons,
+                              onglet actif, anneau de focus ;
+   - --red (correction)       corrigé, corrections, mauvaise réponse. Jamais
+                              décoratif ;
+   - --green                  seulement une bonne réponse de QCM ;
+   - --hl (surligneur)        en fond uniquement : « Nouveau », recherche ;
+   - --amber                  avertissements.
+   Pas de dégradé (sauf le logo), pas de halo, pas de teinte par catégorie.
    Contrastes vérifiés (WCAG AA, 4,5:1) dans les deux thèmes.
 
-   Rayons : --radius-sm (6), --radius (10), --radius-lg (16), et 999px
-   pour les pastilles. Ombres : --shadow (posée) et --shadow-pop (menus,
-   feuilles). Points de rupture : 560, 860, 1100px.
+   Échelles :
+   - texte   --fs-xs … --fs-3xl (base 15 px, suit le réglage du navigateur) ;
+   - espaces --sp-1 (4) … --sp-9 (96) ;
+   - rayons  --radius-sm (6), --radius (10), --radius-lg (14), 999px ;
+   - largeurs --w-read (lecture), --w-page (pages), --w-wide (chrome) ;
+   - ruptures 560 (téléphone), 860 (header mobile), 1024 (menu), 1180.
    ===================================================================== */
 
 /* 93.75 % = 15px avec le réglage par défaut du navigateur, mais suit la
@@ -33,10 +40,21 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --green:#5fd38d; --green-dim:#183632;
   --amber:#f0b94d; --amber-dim:#3b3020;
   --hl:#ffe45c;
+  /* Bande teintée (sections alternées de l'accueil) : une touche d'encre
+     dans le fond, pas une couleur de plus. */
+  --bg-band:color-mix(in srgb, var(--accent-fill) 7%, var(--bg));
   /* Anciens noms encore lus par la console (admin.css) : alignés sur l'encre. */
   --violet:var(--accent); --violet-dim:var(--accent-dim); --violet-ink:var(--accent-ink);
-  --radius-sm:6px; --radius:10px; --radius-lg:16px;
+
+  --fs-xs:.75rem; --fs-sm:.8667rem; --fs-base:1rem; --fs-md:1.0667rem; --fs-lg:1.2rem;
+  --fs-xl:1.4667rem; --fs-2xl:clamp(1.5rem, 1.25rem + 1vw, 1.9rem); --fs-3xl:clamp(1.85rem, 1.35rem + 2.1vw, 2.75rem);
+  --lh-tight:1.18; --lh-snug:1.35; --lh-body:1.6;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px;
+  --w-read:740px; --w-page:1180px; --w-wide:1180px; --gutter:24px;
+
+  --radius-sm:6px; --radius:10px; --radius-lg:14px;
   --shadow:0 1px 2px rgba(5,6,15,.45);
+  --shadow-md:0 1px 2px rgba(5,6,15,.4), 0 8px 24px -12px rgba(5,6,15,.6);
   --shadow-pop:0 20px 50px -12px rgba(5,6,15,.7);
   --shadow-hover:var(--shadow);
   --font: var(--font-sans, ui-sans-serif), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -44,35 +62,40 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   /* Hauteur du header collant, lue par tout ce qui colle en dessous
      (onglets, sommaires). Passe à 0 quand le header se replie (mobile). */
-  --header-h:61px;
-  /* Hauteur de la barre d'onglets du bas : 0 sur ordinateur. */
+  --header-h:65px;
+  /* Ancienne barre d'onglets du bas (retirée) : gardé à 0, encore lu par
+     les éléments ancrés en bas (toast, barre de validation des QCM). */
   --tabbar-h:0px;
   --focus-ring:0 0 0 3px color-mix(in srgb, var(--accent) 40%, transparent);
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
-    --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#eff1f5;
+    --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#f0f1f5;
     --border:#e3e6ec; --border-strong:#cfd4dd;
-    --text:#16181d; --text-dim:#4a5160; --text-faint:#687083;
-    --accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
+    --text:#14161c; --text-dim:#4a5160; --text-faint:#677083;
+    --accent:#4338ca; --accent-dim:#e8e9ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
     --red:#c0262d; --red-dim:#fbeaea;
     --green:#17803d; --green-dim:#e0f3e6;
     --amber:#8a5a00; --amber-dim:#fdf3dc;
+    --bg-band:#eef0fa;
     --shadow:0 1px 2px rgba(16,24,40,.06);
+    --shadow-md:0 1px 2px rgba(16,24,40,.05), 0 8px 24px -12px rgba(16,24,40,.18);
     --shadow-pop:0 20px 50px -12px rgba(16,24,40,.28);
     color-scheme:light;
   }
 }
 :root[data-theme="light"]{
-  --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#eff1f5;
+  --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#f0f1f5;
   --border:#e3e6ec; --border-strong:#cfd4dd;
-  --text:#16181d; --text-dim:#4a5160; --text-faint:#687083;
-  --accent:#4338ca; --accent-dim:#e6e7ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
+  --text:#14161c; --text-dim:#4a5160; --text-faint:#677083;
+  --accent:#4338ca; --accent-dim:#e8e9ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
   --red:#c0262d; --red-dim:#fbeaea;
   --green:#17803d; --green-dim:#e0f3e6;
   --amber:#8a5a00; --amber-dim:#fdf3dc;
+  --bg-band:#eef0fa;
   --shadow:0 1px 2px rgba(16,24,40,.06);
+  --shadow-md:0 1px 2px rgba(16,24,40,.05), 0 8px 24px -12px rgba(16,24,40,.18);
   --shadow-pop:0 20px 50px -12px rgba(16,24,40,.28);
   color-scheme:light;
 }
@@ -84,13 +107,68 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --red:#ff8f86; --red-dim:#3d2030;
   --green:#5fd38d; --green-dim:#183632;
   --amber:#f0b94d; --amber-dim:#3b3020;
+  --bg-band:color-mix(in srgb, var(--accent-fill) 7%, var(--bg));
   --shadow:0 1px 2px rgba(5,6,15,.45);
+  --shadow-md:0 1px 2px rgba(5,6,15,.4), 0 8px 24px -12px rgba(5,6,15,.6);
   --shadow-pop:0 20px 50px -12px rgba(5,6,15,.7);
   color-scheme:dark;
 }
-/* Admin palette tokens (Zenith) and all .admin-* rules now live in
- * app/admin/admin.css, imported only by the admin route — keeps this
- * stylesheet, which every public page pays for, focused on the public site. */
+/* ---------- Couleurs des espaces ----------
+   L'indigo reste la couleur de la marque et des actions. Chaque espace a en
+   plus sa couleur de repère (lib/espaces.js, champ `couleur`) : surtitre,
+   repère, chiffres et bouton de sa section sur l'accueil, liseré dans « Je
+   prépare… », soulignement dans le header et la barre d'espace. Elle dit où
+   l'on est ; elle ne décore pas. Jamais de rouge (réservé aux corrections)
+   ni de vert (bonne réponse). Contrastes AA : texte --c-* sur fond clair,
+   texte blanc sur --c-*-fill.
+   Une classe .esp-c-<couleur> pose --esp (texte), --esp-fill (fond plein)
+   et --esp-tint (fond de section). */
+:root{
+  --c-orange:#fdba74; --c-orange-fill:#c2410c; --c-orange-tint:color-mix(in srgb, #c2410c 9%, var(--bg));
+  --c-teal:#5eead4; --c-teal-fill:#0f766e; --c-teal-tint:color-mix(in srgb, #0f766e 11%, var(--bg));
+  --c-gold:#fcd34d; --c-gold-fill:#a16207; --c-gold-tint:color-mix(in srgb, #a16207 10%, var(--bg));
+  --c-rose:#f9a8d4; --c-rose-fill:#be185d; --c-rose-tint:color-mix(in srgb, #be185d 9%, var(--bg));
+  --c-sky:#7dd3fc; --c-sky-fill:#0369a1; --c-sky-tint:color-mix(in srgb, #0369a1 11%, var(--bg));
+  --c-indigo-tint:color-mix(in srgb, var(--accent-fill) 10%, var(--bg));
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --c-orange:#c2410c; --c-orange-tint:#fff5ee;
+    --c-teal:#0f766e; --c-teal-tint:#edf8f5;
+    --c-gold:#a16207; --c-gold-tint:#fdf8e7;
+    --c-rose:#be185d; --c-rose-tint:#fdf1f6;
+    --c-sky:#0369a1; --c-sky-tint:#edf6fc;
+    --c-indigo-tint:#f0f1fd;
+  }
+}
+:root[data-theme="light"]{
+  --c-orange:#c2410c; --c-orange-tint:#fff5ee;
+  --c-teal:#0f766e; --c-teal-tint:#edf8f5;
+  --c-gold:#a16207; --c-gold-tint:#fdf8e7;
+  --c-rose:#be185d; --c-rose-tint:#fdf1f6;
+  --c-sky:#0369a1; --c-sky-tint:#edf6fc;
+  --c-indigo-tint:#f0f1fd;
+}
+:root[data-theme="dark"]{
+  --c-orange:#fdba74; --c-orange-tint:color-mix(in srgb, #c2410c 9%, var(--bg));
+  --c-teal:#5eead4; --c-teal-tint:color-mix(in srgb, #0f766e 11%, var(--bg));
+  --c-gold:#fcd34d; --c-gold-tint:color-mix(in srgb, #a16207 10%, var(--bg));
+  --c-rose:#f9a8d4; --c-rose-tint:color-mix(in srgb, #be185d 9%, var(--bg));
+  --c-sky:#7dd3fc; --c-sky-tint:color-mix(in srgb, #0369a1 11%, var(--bg));
+  --c-indigo-tint:color-mix(in srgb, var(--accent-fill) 10%, var(--bg));
+}
+.esp-c-indigo{--esp:var(--accent); --esp-fill:var(--accent-fill); --esp-tint:var(--c-indigo-tint);}
+.esp-c-orange{--esp:var(--c-orange); --esp-fill:var(--c-orange-fill); --esp-tint:var(--c-orange-tint);}
+.esp-c-teal{--esp:var(--c-teal); --esp-fill:var(--c-teal-fill); --esp-tint:var(--c-teal-tint);}
+.esp-c-gold{--esp:var(--c-gold); --esp-fill:var(--c-gold-fill); --esp-tint:var(--c-gold-tint);}
+.esp-c-rose{--esp:var(--c-rose); --esp-fill:var(--c-rose-fill); --esp-tint:var(--c-rose-tint);}
+.esp-c-sky{--esp:var(--c-sky); --esp-fill:var(--c-sky-fill); --esp-tint:var(--c-sky-tint);}
+/* Repère rond devant le nom d'un espace (menu, barre d'espace, pied de page). */
+.esp-dot{display:inline-block; flex-shrink:0; width:8px; height:8px; border-radius:50%; background:var(--esp-fill, var(--accent-fill)); margin-right:8px; vertical-align:1px;}
+
+/* Admin palette tokens and all .ax-* rules live in app/admin/admin.css,
+ * imported only by the admin route — keeps this stylesheet, which every
+ * public page pays for, focused on the public site. */
 
 /* Fondu de couleurs seulement pendant un changement de thème (classe posée
    quelques centaines de ms par le bouton, voir chrome.js) : en permanence sur
@@ -109,126 +187,150 @@ input:focus-visible, select:focus-visible, textarea:focus-visible{outline:none; 
 }
 html,body{margin:0;padding:0;}
 body{
-  background:var(--bg); color:var(--text); font-family:var(--font);
-  line-height:1.6; min-height:100vh;
+  background:var(--bg); color:var(--text); font-family:var(--font); font-size:var(--fs-base);
+  line-height:var(--lh-body); min-height:100vh;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
 }
-a{color:var(--accent);}
+a{color:var(--accent); text-underline-offset:2px;}
 ::selection{background:color-mix(in srgb, var(--hl) 55%, transparent); color:var(--text);}
-h1,h2,h3,h4{letter-spacing:-.01em; text-wrap:balance;}
+h1,h2,h3,h4{letter-spacing:-.015em; text-wrap:balance;}
+p{text-wrap:pretty;}
 mark{background:color-mix(in srgb, var(--hl) 70%, transparent); color:var(--text); padding:0 .1em; border-radius:2px;}
+img{max-width:100%;}
 .ic-wrap{display:inline-flex; align-items:center; justify-content:center; line-height:0; flex-shrink:0;}
 .ic{display:block; flex-shrink:0;}
 .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;}
 /* Feuille ouverte (menu, filtres) : la page dessous ne défile plus. */
 html.sheet-open, html.sheet-open body{overflow:hidden;}
+.skip-link{position:fixed; left:12px; top:-60px; z-index:200; padding:10px 14px; border-radius:var(--radius); background:var(--bg-elev); border:1px solid var(--border); color:var(--text); font-weight:600; text-decoration:none;}
+.skip-link:focus{top:12px;}
+#contenu{display:block; scroll-margin-top:var(--header-h);}
 
 
 /* ---------- Header ---------- */
-/* Une seule ligne : logo · liens texte · recherche · thème. La page active
-   est signalée par un trait sous son lien, comme un onglet. */
+/* Une ligne : logo · espaces | outils · recherche · thème. La page active est
+   soulignée, comme un onglet. Les espaces viennent de lib/espaces.js. */
 header.site-header{
   position:sticky; top:0; z-index:50;
   background:var(--bg-elev);
   border-bottom:1px solid var(--border);
-  padding:env(safe-area-inset-top, 0px) 24px 0;
+  padding:env(safe-area-inset-top, 0px) var(--gutter) 0;
   transition:transform .2s ease;
 }
 /* Header replié (mobile, en défilant vers le bas — voir chrome.js). */
 html.header-hidden{--header-h:0px;}
 html.header-hidden header.site-header{transform:translateY(-100%);}
 @media (prefers-reduced-motion: reduce){ header.site-header{transition:none;} }
-.header-inner{max-width:1240px; margin:0 auto; height:60px; display:flex; align-items:stretch; gap:28px;}
+.header-inner{max-width:var(--w-wide); margin:0 auto; height:64px; display:flex; align-items:stretch; gap:28px;}
 
 .brand{display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0;}
-.brand-logo{width:30px; height:30px; border-radius:8px; flex-shrink:0; display:block;}
+.brand-logo{width:32px; height:32px; border-radius:9px; flex-shrink:0; display:block;}
 .brand-text{display:flex; flex-direction:column; line-height:1.1;}
-.brand-name{font-weight:700; font-size:1.07rem; letter-spacing:-.01em; white-space:nowrap;}
+.brand-name{font-weight:800; font-size:1.1rem; letter-spacing:-.02em; white-space:nowrap;}
 .brand-saad{color:var(--text);}
 .brand-concours{color:var(--accent);}
-.brand-tagline{font-size:.66rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); white-space:nowrap; margin-top:3px;}
+.brand-tagline{font-size:.64rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); white-space:nowrap; margin-top:3px;}
 
-.view-nav{display:flex; align-items:stretch; gap:2px;}
-.view-nav-btn{
+.site-nav{display:flex; align-items:stretch; gap:2px;}
+.nav-link{
   position:relative; display:flex; align-items:center; padding:0 12px; text-decoration:none;
-  color:var(--text-dim); font-size:.9rem; font-weight:600; white-space:nowrap;
+  color:var(--text-dim); font-size:.93rem; font-weight:600; white-space:nowrap;
   transition:color .15s ease;
 }
-.view-nav-btn:hover{color:var(--text);}
-.view-nav-btn::after{
-  content:""; position:absolute; left:12px; right:12px; bottom:-1px; height:2px;
-  background:var(--accent); transform:scaleX(0); transition:transform .18s ease;
+.nav-link:hover{color:var(--text);}
+.nav-link::after{
+  content:""; position:absolute; left:12px; right:12px; bottom:-1px; height:3px; border-radius:3px 3px 0 0;
+  background:var(--esp-fill, var(--accent)); transform:scaleX(0); transition:transform .18s ease;
 }
-.view-nav-btn.active{color:var(--text);}
-.view-nav-btn.active::after{transform:scaleX(1);}
-
-/* Menus déroulants « Cours » et « Concours » : survol, focus clavier ou clic. */
-.nav-dropdown{position:relative; display:flex;}
-.nav-dropdown-btn{background:none; border:none; cursor:pointer; font-family:inherit; gap:4px;}
-.nav-caret{width:12px; height:12px; transition:transform .18s ease;}
-.nav-dropdown-menu{
-  position:absolute; top:calc(100% - 4px); left:-8px; min-width:300px; padding:6px;
-  background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-pop);
-  opacity:0; visibility:hidden; transform:translateY(-4px);
-  transition:opacity .15s ease, transform .15s ease, visibility .15s;
-}
-.nav-dropdown:hover .nav-dropdown-menu,
-.nav-dropdown:focus-within .nav-dropdown-menu,
-.nav-dropdown.open .nav-dropdown-menu{opacity:1; visibility:visible; transform:none;}
-.nav-dropdown:hover .nav-caret, .nav-dropdown.open .nav-caret{transform:rotate(180deg);}
-.nav-dropdown-item{display:flex; align-items:flex-start; gap:12px; padding:10px 12px; border-radius:var(--radius); text-decoration:none; color:var(--text);}
-.nav-dropdown-item:hover{background:var(--bg-inset);}
-.nav-dropdown-item.active{background:var(--accent-dim);}
-.nav-dropdown-icon{flex-shrink:0; display:flex; padding-top:2px; color:var(--accent);}
-.nav-dropdown-label{display:block; font-weight:600; font-size:.9rem;}
-.nav-dropdown-desc{display:block; font-size:.78rem; color:var(--text-dim); margin-top:1px;}
+.nav-link.active{color:var(--text);}
+.nav-link.active::after{transform:scaleX(1);}
+.site-nav-sep{align-self:center; width:1px; height:22px; margin:0 10px; background:var(--border);}
 
 .header-actions{display:flex; align-items:center; gap:10px; margin-left:auto; flex-shrink:0;}
 
-/* Recherche du header (ordinateur) : envoie vers /recherche?q=… */
-.search-box{position:relative; display:flex; align-items:center; width:260px;}
-.search-box-ic{position:absolute; left:11px; color:var(--text-faint); pointer-events:none;}
+/* Recherche du header (ordinateur) : envoie vers /recherche?q=… ; « / » la
+   met au point (chrome.js). */
+.search-box{position:relative; display:flex; align-items:center; width:290px;}
+.search-box-ic{position:absolute; left:12px; color:var(--text-faint); pointer-events:none;}
 .search-box input{
-  width:100%; height:38px; padding:0 12px 0 34px; border-radius:var(--radius); border:1px solid var(--border);
-  background:var(--bg); color:var(--text); font:inherit; font-size:.86rem;
+  width:100%; height:40px; padding:0 34px 0 36px; border-radius:var(--radius); border:1px solid var(--border);
+  background:var(--bg-inset); color:var(--text); font:inherit; font-size:.88rem;
+  transition:border-color .15s ease, background-color .15s ease;
 }
+.search-box input:hover{border-color:var(--border-strong);}
+.search-box input:focus{background:var(--bg-card);}
 .search-box input::placeholder{color:var(--text-faint);}
+.search-box-kbd{
+  position:absolute; right:9px; min-width:20px; height:20px; padding:0 5px; border-radius:5px; border:1px solid var(--border-strong);
+  background:var(--bg-card); color:var(--text-faint); font:600 .72rem/18px var(--font); text-align:center; pointer-events:none;
+}
+.search-box input:focus ~ .search-box-kbd{display:none;}
 
 .theme-toggle, .nav-toggle-btn{
-  height:38px; border-radius:var(--radius); border:1px solid var(--border); background:transparent;
+  height:40px; border-radius:var(--radius); border:1px solid var(--border); background:transparent;
   color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
-  flex-shrink:0; font:inherit; font-size:.86rem; font-weight:600; transition:border-color .15s ease, color .15s ease;
+  flex-shrink:0; font:inherit; font-size:.88rem; font-weight:600; transition:border-color .15s ease, color .15s ease;
 }
-.theme-toggle{width:38px;}
+.theme-toggle{width:40px;}
 .theme-toggle:hover, .nav-toggle-btn:hover{border-color:var(--border-strong); color:var(--text);}
 .nav-toggle-btn{display:none; padding:0 12px;}
 
-@media (max-width:1240px){
+@media (max-width:1180px){
   .header-inner{gap:18px;}
-  .view-nav-btn{padding:0 10px;}
-  .search-box{width:200px;}
+  .nav-link{padding:0 9px;}
+  .nav-link::after{left:9px; right:9px;}
+  .site-nav-sep{margin:0 6px;}
+  .search-box{width:210px;}
   .brand-tagline{display:none;}
 }
-@media (max-width:1100px){
-  .view-nav{display:none;}
+@media (max-width:1024px){
+  .site-nav{display:none;}
   .nav-toggle-btn{display:flex;}
-  .search-box{width:240px;}
+  .search-box{width:260px;}
   .brand-tagline{display:block;}
 }
 @media (max-width:860px){
-  header.site-header{padding-left:16px; padding-right:16px;}
+  :root{--gutter:16px;}
   .header-inner{height:56px; gap:10px; align-items:center;}
-  /* La recherche passe dans la barre d'onglets du bas (Recherche). */
+  /* La barre de recherche laisse place au bouton loupe (.search-btn). */
   .search-box{display:none;}
   .header-actions{gap:8px;}
 }
-@media (max-width:380px){
-  .brand-tagline{display:none;}
-}
+@media (max-width:380px){ .brand-tagline{display:none;} }
 @media (max-width:340px){
   .nav-toggle-btn span{display:none;}
-  .nav-toggle-btn{width:38px; padding:0;}
+  .nav-toggle-btn{width:40px; padding:0;}
+}
+
+
+/* ---------- Barre d'espace ---------- */
+/* Sous le header, sur toute page d'un espace : son nom puis ses onglets
+   (lib/espaces.js). Défile de côté sur téléphone, ne colle pas. */
+.espace-bar{background:var(--bg-elev); border-bottom:1px solid var(--border); padding:0 var(--gutter);}
+.espace-bar-inner{
+  max-width:var(--w-wide); margin:0 auto; height:46px; display:flex; align-items:stretch; gap:18px;
+  overflow-x:auto; scrollbar-width:none;
+}
+.espace-bar-inner::-webkit-scrollbar{display:none;}
+.espace-bar-name{
+  display:flex; align-items:center; flex-shrink:0; padding-right:18px; margin:11px 0; border-right:1px solid var(--border);
+  font-weight:700; font-size:.9rem; color:var(--text); text-decoration:none; white-space:nowrap;
+}
+.espace-bar-name:hover{color:var(--esp, var(--accent));}
+.espace-bar-tabs{display:flex; align-items:stretch; gap:2px;}
+.espace-bar-tab{
+  position:relative; display:flex; align-items:center; padding:0 10px; white-space:nowrap; text-decoration:none;
+  font-size:.88rem; font-weight:600; color:var(--text-dim);
+}
+.espace-bar-tab:hover{color:var(--text);}
+.espace-bar-tab.active{color:var(--esp, var(--accent));}
+.espace-bar-tab.active::after{content:""; position:absolute; left:10px; right:10px; bottom:0; height:2px; border-radius:2px 2px 0 0; background:var(--esp-fill, var(--accent));}
+.espace-bar{border-top:3px solid var(--esp-fill, transparent);}
+@media (max-width:560px){
+  .espace-bar-inner{height:44px; gap:12px;}
+  .espace-bar-name{padding-right:12px; font-size:.86rem;}
+  .espace-bar-tab{font-size:.84rem; padding:0 8px;}
 }
 
 
@@ -243,7 +345,7 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
 .sheet-backdrop.is-open{opacity:1; visibility:visible;}
 .sheet{
   position:fixed; left:0; right:0; bottom:0; z-index:90;
-  max-height:min(86vh, 760px); overflow-y:auto; overscroll-behavior:contain;
+  max-height:min(88vh, 780px); overflow-y:auto; overscroll-behavior:contain;
   background:var(--bg-elev); border-top:1px solid var(--border);
   border-radius:var(--radius-lg) var(--radius-lg) 0 0; box-shadow:var(--shadow-pop);
   padding:4px 16px calc(18px + env(safe-area-inset-bottom, 0px));
@@ -262,48 +364,89 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
 .sheet-close:hover{background:var(--bg-inset); color:var(--text);}
 @media (prefers-reduced-motion: reduce){ .sheet, .sheet-backdrop{transition:none;} }
 
-/* Le menu : feuille du bas sur téléphone, panneau sous le header au-delà. */
+/* Le menu. Téléphone : panneau plein écran qui glisse depuis la droite —
+   c'est toute la navigation du mobile (recherche, espaces, outils, thème).
+   À partir de 640px : panneau sous le header, à droite. */
+.menu-sheet{padding-top:0;}
+.menu-sheet .sheet-head{padding:8px 8px 8px 16px;}
+.menu-brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); font-weight:700; font-size:.95rem;}
+.menu-brand .brand-logo{width:28px; height:28px; border-radius:8px;}
+@media (max-width:639px){
+  .menu-sheet{
+    top:0; bottom:0; left:0; right:0; max-height:none; height:100%; height:100dvh; border-radius:0; border-top:none;
+    padding:0 16px calc(28px + env(safe-area-inset-bottom, 0px));
+    transform:translateX(100%); transition:transform .26s cubic-bezier(.2,.8,.2,1), visibility .26s;
+  }
+  .menu-sheet.is-open{transform:none;}
+  .menu-sheet .sheet-head{padding-top:calc(8px + env(safe-area-inset-top, 0px)); min-height:56px;}
+}
 @media (min-width:640px){
   .menu-sheet{
-    left:auto; right:16px; bottom:auto; top:calc(var(--header-h) + 8px); width:380px; max-height:calc(100vh - var(--header-h) - 24px);
+    left:auto; right:16px; bottom:auto; top:calc(var(--header-h) + 8px); width:400px; max-height:calc(100vh - var(--header-h) - 24px);
     border:1px solid var(--border); border-radius:var(--radius-lg); padding-bottom:12px;
     transform:translateY(-6px); opacity:0; transition:transform .18s ease, opacity .18s ease, visibility .18s;
   }
-  .menu-sheet.is-open{opacity:1;}
+  .menu-sheet.is-open{opacity:1; transform:none;}
 }
-.menu-group{padding:8px 0 4px;}
+.menu-search{position:relative; margin:12px 0 4px;}
+.menu-search-ic{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-faint); pointer-events:none;}
+.menu-search input{
+  width:100%; height:50px; padding:0 14px 0 44px; border-radius:var(--radius); border:1px solid var(--border);
+  background:var(--bg-inset); color:var(--text); font:inherit; font-size:1rem;
+}
+.menu-search input::placeholder{color:var(--text-faint);}
+.menu-label{margin:18px 0 6px; padding:0 4px; font-size:.72rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-faint);}
+.menu-group{padding:0;}
 .menu-group + .menu-group{border-top:1px solid var(--border);}
-.menu-group-title{font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); padding:6px 4px 4px;}
-.menu-link{display:flex; align-items:flex-start; gap:12px; padding:10px 8px; border-radius:var(--radius); text-decoration:none; color:var(--text); min-height:48px;}
-.menu-link:hover{background:var(--bg-inset);}
-.menu-link.active{background:var(--accent-dim);}
-.menu-link-icon{display:flex; padding-top:1px; color:var(--accent);}
-.menu-link-label{display:block; font-weight:600; font-size:.95rem;}
-.menu-link-desc{display:block; font-size:.8rem; color:var(--text-dim); margin-top:1px;}
-.menu-foot{display:flex; gap:18px; padding:12px 8px 2px; border-top:1px solid var(--border); font-size:.86rem;}
-.menu-foot a{color:var(--text-dim); text-decoration:none;}
-.menu-foot a:hover{color:var(--text);}
+.menu-espace{
+  position:relative; display:flex; flex-direction:column; gap:2px; padding:12px 12px 12px 18px; border-radius:var(--radius);
+  text-decoration:none; color:var(--text); min-height:56px;
+}
+/* Liseré de la couleur de l'espace, comme « Je prépare… » sur l'accueil. */
+.menu-espace::before{content:""; position:absolute; left:4px; top:14px; bottom:14px; width:3px; border-radius:3px; background:var(--esp-fill, var(--accent-fill));}
+.menu-group-outils .menu-espace{padding-left:12px;}
+.menu-group-outils .menu-espace::before{display:none;}
+.menu-group-outils .menu-espace + .menu-espace{border-top:1px solid var(--border); border-radius:0;}
+.menu-espace:hover{background:var(--bg-inset);}
+.menu-espace.active{background:var(--esp-tint, var(--accent-dim));}
+.menu-espace-name{font-weight:700; font-size:1.02rem;}
+.menu-espace-name .esp-dot{display:none;}
+.menu-espace-desc{font-size:.82rem; color:var(--text-dim); line-height:1.4;}
+.menu-sublinks{display:flex; flex-wrap:wrap; gap:6px; padding:0 12px 12px 18px;}
+/* Sous-liens seulement pour l'espace de la page : le menu reste court, le
+   nom d'un autre espace mène à son hub. */
+.menu-group:not(:has(.menu-espace.active)) .menu-sublinks{display:none;}
+@media (max-width:639px){ .menu-espace-desc{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;} }
+.menu-sublink{
+  display:inline-flex; align-items:center; min-height:36px; padding:0 13px; border-radius:999px; border:1px solid var(--border);
+  font-size:.84rem; font-weight:600; color:var(--text-dim); text-decoration:none; background:var(--bg-card);
+}
+.menu-sublink:hover{border-color:var(--border-strong); color:var(--text);}
+.menu-sublink.active{border-color:var(--esp-fill, var(--accent)); color:var(--esp, var(--accent));}
+.menu-foot{display:flex; flex-direction:column; gap:14px; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);}
+.menu-theme{
+  display:flex; align-items:center; gap:12px; width:100%; min-height:48px; padding:0 14px; border-radius:var(--radius);
+  border:1px solid var(--border); background:var(--bg-card); color:var(--text); font:inherit; font-size:.95rem; font-weight:600; cursor:pointer;
+}
+.menu-theme:hover{border-color:var(--border-strong);}
+.menu-theme .ic{color:var(--text-dim);}
+.menu-foot-links{display:flex; gap:20px; padding:0 4px; font-size:.88rem;}
+.menu-foot-links a{color:var(--text-dim); text-decoration:none;}
+.menu-foot-links a:hover{color:var(--text);}
+/* Sur ordinateur le thème est dans le header : pas de doublon dans le menu. */
+@media (min-width:861px){ .menu-theme{display:none;} }
 
-
-/* ---------- Barre d'onglets du bas (téléphone) ---------- */
-.tabbar{display:none;}
+/* Bouton de recherche du header (téléphone : la barre de recherche du header
+   est masquée sous 860px). */
+.search-btn{
+  display:none; width:40px; height:40px; align-items:center; justify-content:center; flex-shrink:0;
+  border-radius:var(--radius); border:1px solid var(--border); color:var(--text-dim); text-decoration:none;
+}
+.search-btn:hover{border-color:var(--border-strong); color:var(--text);}
 @media (max-width:860px){
-  :root{--tabbar-h:58px;}
-  .tabbar{
-    position:fixed; left:0; right:0; bottom:0; z-index:60; display:grid; grid-template-columns:repeat(5, 1fr);
-    height:calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); padding-bottom:env(safe-area-inset-bottom, 0px);
-    background:var(--bg-elev); border-top:1px solid var(--border);
-  }
-  .tabbar-item{
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-width:0;
-    font-size:.7rem; font-weight:600; color:var(--text-faint); text-decoration:none; -webkit-tap-highlight-color:transparent;
-  }
-  .tabbar-item span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;}
-  .tabbar-item.is-active{color:var(--accent);}
-  .tabbar-item:active{background:var(--bg-inset);}
-  /* Le bas de chaque page (pied de page, barres collantes) reste au-dessus
-     de la barre d'onglets. */
-  body:has(.tabbar){padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));}
+  .search-btn{display:flex;}
+  /* Le thème passe dans le menu : header = logo, recherche, menu. */
+  .header-actions .theme-toggle{display:none;}
 }
 
 
@@ -453,9 +596,27 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
 .empty-state{padding:60px 20px; text-align:center; color:var(--text-faint);}
 
 
-/* ---------- Publicité ---------- */
-.ad-slot{background:var(--bg-elev); border:1px dashed var(--border); border-radius:var(--radius); padding:10px; margin:0 0 18px; text-align:center; overflow:hidden;}
-.ad-slot-label{display:block; font-size:.7rem; letter-spacing:.04em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px;}
+/* ---------- Publicité (AdSense) ---------- */
+/* Emplacements définis dans app/_shared/adPlacements.js, rendus par AdSlot.
+   La hauteur réservée vient du format de l'emplacement (--ad-reserve-m /
+   --ad-reserve-d) : la page ne saute pas quand l'annonce arrive. Un bloc que
+   Google laisse vide (data-ad-status="unfilled") se replie entièrement. */
+.ad-slot{
+  position:relative; margin:var(--sp-5) 0; padding:22px 0 0; text-align:center; overflow:hidden;
+  min-height:calc(var(--ad-reserve-m, 280px) + 22px); border-top:1px solid var(--border);
+}
+.ad-slot-label{
+  position:absolute; top:6px; left:0; right:0; font-size:.68rem; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--text-faint); line-height:1;
+}
+.ad-slot ins.adsbygoogle{margin:0 auto;}
+.ad-slot:has(ins[data-ad-status="unfilled"]){display:none;}
+@media (min-width:861px){ .ad-slot{min-height:calc(var(--ad-reserve-d, 120px) + 22px);} }
+/* Colonne latérale : grand écran seulement, collante sous le header. */
+.ad-slot-vertical{display:none;}
+@media (min-width:1100px){
+  .ad-slot-vertical{display:block; position:sticky; top:calc(var(--header-h) + 16px); margin:0; border-top:none; width:300px;}
+}
 
 /* Bannières partenaires (régie maison, pas AdSense) — voir
  * app/_shared/partnerAds.js. Les zones sont vides dans le HTML et remplies
@@ -563,14 +724,19 @@ a.pa-banner-text:hover .pa-text-cta{filter:brightness(1.08);}
 
 
 /* ---------- Pied de page ---------- */
+/* Marque, une colonne par espace (lib/espaces.js), puis le site : la grille
+   accueille un espace de plus sans retouche. */
 footer.site-footer{
-  margin-top:48px; padding:40px 20px 26px; font-size:.86rem; color:var(--text-dim);
+  margin-top:var(--sp-8); padding:48px var(--gutter) 26px; font-size:.88rem; color:var(--text-dim);
   border-top:1px solid var(--border); background:var(--bg-elev);
 }
-.footer-inner{max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1.6fr repeat(3, 1fr); gap:32px;}
-.footer-brand .brand{margin-bottom:12px;}
+.footer-inner{
+  max-width:var(--w-wide); margin:0 auto; display:grid; gap:32px;
+  grid-template-columns:minmax(240px, 1.5fr) repeat(auto-fit, minmax(150px, 1fr));
+}
+.footer-brand .brand{margin-bottom:14px;}
 .footer-brand .brand-tagline{display:block;}
-.footer-brand p{margin:0 0 16px; max-width:340px; line-height:1.6;}
+.footer-brand p{margin:0 0 16px; max-width:330px; line-height:1.6;}
 .footer-social{display:flex; gap:10px;}
 .footer-social-link{
   width:36px; height:36px; border-radius:var(--radius); display:flex; align-items:center; justify-content:center;
@@ -578,42 +744,22 @@ footer.site-footer{
 }
 .footer-social-link svg{width:16px; height:16px;}
 .footer-social-link:hover{color:var(--accent); border-color:var(--accent);}
-.footer-col h2{margin:0 0 12px; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint);}
-.footer-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+.footer-col h2{margin:0 0 14px; font-size:.86rem; font-weight:700; color:var(--text); letter-spacing:0;}
+.footer-col h2 a{color:inherit; text-decoration:none;}
+.footer-col h2 a:hover{color:var(--accent);}
+.footer-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;}
 .footer-col a{color:var(--text-dim); text-decoration:none;}
 .footer-col a:hover{color:var(--accent);}
 .footer-bottom{
-  max-width:1100px; margin:32px auto 0; padding-top:18px; border-top:1px solid var(--border);
-  display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 20px; font-size:.76rem; color:var(--text-faint);
+  max-width:var(--w-wide); margin:36px auto 0; padding-top:18px; border-top:1px solid var(--border);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 20px; font-size:.78rem; color:var(--text-faint);
 }
 .footer-bottom a{color:var(--text-faint); text-decoration:underline; text-underline-offset:2px;}
 .footer-bottom a:hover{color:var(--text-dim);}
 @media (max-width:860px){
-  footer.site-footer{padding:32px 16px 22px;}
-  .footer-inner{grid-template-columns:1fr 1fr; gap:26px 20px;}
+  footer.site-footer{padding:36px var(--gutter) 22px;}
+  .footer-inner{grid-template-columns:1fr 1fr; gap:28px 20px;}
   .footer-brand{grid-column:1 / -1;}
-}
-
-
-/* ---------- Sélecteur de niveau (Licence FSJES / Bac, Master / Licence d'excellence) ---------- */
-/* Un contrôle segmenté : rail neutre, segment actif en relief. */
-.niveau-switch{
-  display:inline-flex; gap:2px; padding:3px; margin:0 0 18px; border-radius:var(--radius);
-  background:var(--bg-inset); border:1px solid var(--border); max-width:100%;
-}
-.niveau-switch-btn{
-  display:flex; flex-direction:column; justify-content:center; padding:6px 14px; border-radius:8px; min-width:0;
-  text-decoration:none; color:var(--text-dim); border:1px solid transparent;
-}
-.niveau-switch-btn:hover{color:var(--text);}
-.niveau-switch-btn.active{background:var(--bg-card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow);}
-.niveau-switch-label{display:block; font-weight:600; font-size:.88rem; white-space:nowrap;}
-.niveau-switch-sub{display:block; font-size:.72rem; color:var(--text-faint); white-space:nowrap;}
-@media (max-width:560px){
-  .niveau-switch{display:flex;}
-  .niveau-switch-btn{flex:1; padding:7px 8px; text-align:center; align-items:center;}
-  .niveau-switch-label{font-size:.84rem; white-space:normal;}
-  .niveau-switch-sub{display:none;}
 }
 
 

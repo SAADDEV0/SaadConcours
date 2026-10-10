@@ -6,9 +6,9 @@ import BrandLogo from "../../_shared/BrandLogo";
 import Icon from "../_ui/Icon";
 
 const FEATURES = [
-  ["📝", "Concours, cours, QCM et blog dans un seul éditeur, avec aperçu LaTeX en direct"],
-  ["🚀", "Chaque enregistrement = un commit, et le suivi de la mise en ligne"],
-  ["📣", "Studio réseaux sociaux et studio PDF intégrés"],
+  ["edit", "Concours, cours, QCM et blog dans un seul éditeur, avec aperçu LaTeX en direct"],
+  ["git", "Chaque enregistrement = un commit, et le suivi de la mise en ligne"],
+  ["share", "Studio réseaux sociaux et studio PDF intégrés"],
 ];
 
 function LoginForm() {
@@ -58,13 +58,13 @@ function LoginForm() {
           <div className="ax-login-feats">
             {FEATURES.map(([e, t]) => (
               <div className="ax-login-feat" key={t}>
-                <span>{e}</span>
+                <Icon name={e} />
                 <span>{t}</span>
               </div>
             ))}
           </div>
         </div>
-        <span style={{ fontSize: "0.78rem", opacity: 0.55 }}>Console v6 · accès réservé</span>
+        <span style={{ fontSize: "0.78rem", opacity: 0.55 }}>Console v8 · accès réservé</span>
       </aside>
       <main className="ax-login-form">
         <div className="ax-login-box">

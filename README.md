@@ -11,10 +11,24 @@ Application Next.js multi-pages :
 - `/evaluation` — QCM d'auto-évaluation par module
 - `/blog` — Articles de méthode et d'orientation
 - `/boutique` — Cahiers de préparation vendus sur Gumroad (le site présente, Gumroad encaisse et livre le PDF) ; absente du menu tant qu'aucun cahier n'est publié
-- `/admin` — Console d'administration v6 (voir « La console d'administration » plus bas), protégée par mot de passe
+- `/admin` — Console d'administration v7 (voir « La console d'administration » plus bas), protégée par mot de passe
 
 La section « Concours ouverts » (`/news`, copie automatique d'almaster-maroc.com) a été retirée du
 site public le 24/09/2026 pour la demande AdSense ; `public/data/news.json` et le scraper restent.
+
+## Design et sections : où toucher quoi
+
+- **Espaces** (`lib/espaces.js`) : un public = un espace (Bac, Licence FSJES, Licence
+  d'excellence, Master ; Post-bac et ENCG déclarés, éteints tant qu'ils sont vides). Le header,
+  la barre d'espace, le menu, la barre du bas, le pied de page et l'accueil se construisent depuis
+  ce registre. Ajouter une section : recette X1 de `BANQUE_PROMPTS.md`.
+- **Couleurs et mise en page** : jetons en tête de `app/globals.css` (indigo de marque, rouge des
+  corrigés, une couleur de repère par espace via `.esp-c-*`, échelles de texte, d'espaces et de
+  largeurs). `bac.css` (contenu) et `space.css` (listes, fiches, accueil) n'utilisent que ces
+  jetons ; la console (`app/admin/admin.css`) aussi.
+- **Publicité** : emplacements AdSense dans `app/_shared/adPlacements.js` (rendus par `AdSlot`,
+  hauteur réservée, repli si vide), formulaire de la console généré depuis la même liste. Recette X3.
+- **Niveaux de concours** (`lib/concoursNiveaux.js`) : Master, Licence d'excellence, Post-bac.
 
 ## Garde-fou AdSense (« low value content »)
 
@@ -130,9 +144,9 @@ rabat sur les fichiers du build et `/admin` ne peut pas écrire.
 - **GitHub Actions** : `ci.yml` (lint, build, garde-fou AdSense sur chaque push), `deploy-cloudflare.yml` (ci-dessus) et `update-news.yml` (scraping almaster). Ce dernier n'a plus de cron depuis le 04/10/2026, puisque ses données ne sont plus affichées : il se lance à la main. L'envoi d'emails aux abonnés a été retiré du site (septembre 2026) : la liste s'exporte en CSV depuis la console vers une plateforme d'emailing externe.
 - **GitHub Pages est désactivé.**
 
-## La console d'administration (`/admin`, v6)
+## La console d'administration (`/admin`, v7)
 
-Refaite en septembre 2026, au design du site public. Écrans : tableau de bord, concours (liste, éditeur, couverture & qualité, import groupé), cours Licence, cours Bac, évaluations, blog, concours ouverts, boutique, studio social, studio PDF, abonnés, statistiques, monétisation, activité & corbeille, réglages. Recherche globale : `Ctrl K`.
+Refaite en septembre 2026, re-skinnée le 2026-10-10 sur les jetons du site public (plus de dégradés ni d'emoji). Écrans : tableau de bord, concours (liste, éditeur, couverture & qualité, import groupé), cours Licence, cours Bac, évaluations, blog, concours ouverts, boutique, studio social, studio PDF, abonnés, statistiques, monétisation, activité & corbeille, réglages. Recherche globale : `Ctrl K`.
 
 **Comment elle écrit dans le dépôt.** Le Worker n'a que 10 ms de CPU : il ne parse plus jamais les gros fichiers. Le navigateur lit `public/data/*.json` sur le CDN de GitHub (adressé par hash de commit), applique la modification lui-même, envoie le résultat en blob, et `/api/admin/repo/commit` crée **un seul commit** pour tous les fichiers touchés (JSON + miroirs Markdown + images), refusé (409) si le fichier a changé entre-temps — la console recharge et réessaie. Voir `lib/githubGit.js` et `app/admin/_lib/repo.js`.
 

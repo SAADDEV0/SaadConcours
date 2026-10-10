@@ -130,7 +130,6 @@ export default async function CoursChapitrePage(props) {
   const url = `${SITE_URL}${fsjesChapitreHref(c, ch)}`;
   const coursRendu = ch.cours ? avecAncres(md(ch.cours)) : null;
   const settings = await getSettings().catch(() => null);
-  const adsActives = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -262,12 +261,7 @@ export default async function CoursChapitrePage(props) {
                 })}
               </div>
 
-              <AdSlot
-                enabled={adsActives && settings?.adsCoursChapitreEnabled}
-                publisherId={settings?.adsPublisherId}
-                slotId={settings?.adsCoursChapitreSlot}
-                label="Publicité — chapitre de cours"
-              />
+              <AdSlot settings={settings} placement="cours_chapitre" />
 
               <ConcoursLies
                 titre="S'entraîner sur des sujets réels"

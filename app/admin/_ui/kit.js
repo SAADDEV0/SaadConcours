@@ -9,9 +9,13 @@ import { useOnClickOutside } from "../_lib/hooks";
 
 /* ------------------------------ En-têtes ------------------------------ */
 
-export function Hero({ icon = "🎓", eyebrow, title, children, actions, stats }) {
+// En-tête de page : surtitre, titre, une phrase, actions à droite, chiffres
+// en dessous. `icon` est accepté pour compatibilité mais n'est plus dessiné
+// (les emoji en filigrane ont quitté la console).
+// eslint-disable-next-line no-unused-vars
+export function Hero({ icon, eyebrow, title, children, actions, stats }) {
   return (
-    <section className="ax-hero" style={{ "--hero-icon": `"${icon}"` }}>
+    <section className="ax-hero">
       <div className="ax-hero-row">
         <div style={{ minWidth: 0 }}>
           {eyebrow && <div className="ax-eyebrow">{eyebrow}</div>}
@@ -94,10 +98,15 @@ export function Seg({ options, value, onChange, ariaLabel }) {
 
 /* ------------------------------ États ------------------------------ */
 
-export function Empty({ icon = "🗂️", title, children, action }) {
+// État vide. `icon` : nom d'icône de la console, ou élément React. Les
+// anciens emoji passés par les écrans sont traduits (EMPTY_ICONS).
+const EMPTY_ICONS = { "🔎": "search", "📭": "mail", "🗑️": "trash", "✅": "checkCircle", "📘": "book", "🪧": "megaphone", "🗂️": "folder" };
+
+export function Empty({ icon = "folder", title, children, action }) {
+  const drawn = typeof icon === "string" ? <Icon name={EMPTY_ICONS[icon] || (/^[a-zA-Z]+$/.test(icon) ? icon : "folder")} size="lg" /> : icon;
   return (
     <div className="ax-empty">
-      <div className="ax-empty-icon">{icon}</div>
+      <div className="ax-empty-icon">{drawn}</div>
       <h3>{title}</h3>
       {children && <p>{children}</p>}
       {action}

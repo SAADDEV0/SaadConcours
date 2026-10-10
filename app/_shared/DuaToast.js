@@ -29,6 +29,18 @@ const SHOW_DELAY_MS = 3000;
 const AUTO_HIDE_MS = 6000;
 const QUIET_PATHS = ["/a-propos", "/contact", "/confidentialite", "/mentions-legales", "/faq"];
 
+// Police Amiri chargée seulement quand le rappel va s'afficher : elle était
+// liée en <link> bloquant dans le <head> de chaque page, pour une carte que
+// la plupart des visites ne montrent jamais.
+function loadAmiri() {
+  if (document.getElementById("amiri-font")) return;
+  const link = document.createElement("link");
+  link.id = "amiri-font";
+  link.rel = "stylesheet";
+  link.href = "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap";
+  document.head.appendChild(link);
+}
+
 function today() {
   const d = new Date();
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -50,6 +62,7 @@ export default function DuaToast() {
       return;
     }
     if (views < MIN_VIEWS || QUIET_PATHS.includes(pathname)) return;
+    loadAmiri();
     const t = setTimeout(() => {
       try {
         localStorage.setItem(DAY_KEY, today());

@@ -10,7 +10,10 @@ import { concoursSeo } from "../../_shared/concoursSeo";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 import MathScripts from "../../_shared/MathScripts";
-import { isLicenceExcellence, niveauInfo, niveauOf } from "@/lib/concoursNiveaux";
+import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, POST_BAC } from "@/lib/concoursNiveaux";
+
+// Onglet du header et de la barre d'espace (lib/espaces.js) selon le niveau.
+const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [POST_BAC]: "concours-pb" };
 import { Icon } from "../../_shared/icons";
 import { modulesDuConcours } from "@/lib/concoursParModule";
 
@@ -37,7 +40,7 @@ function getRelatedConcours(list, current, limit = 4) {
   // fourni) sur n'importe quel sujet du niveau, pour ne jamais laisser le
   // bloc vide.
   const sameFiliere = others.filter((x) => x.filiere === current.filiere);
-  const fallback = isLicenceExcellence(current) ? others : [];
+  const fallback = isMaster(current) ? [] : others;
   const seen = new Set();
   const related = [];
   for (const x of [...sameMaster, ...sameEtab, ...sameFiliere, ...fallback]) {
@@ -155,7 +158,6 @@ export default async function ConcoursDetailPage(props) {
   if (!c) notFound();
 
   const settings = await getSettings().catch(() => null);
-  const adsGloballyEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
 
   const enonceHtml = renderEnonce(c.enonce_md || "*Énoncé non disponible.*");
   const corrigeMd = await resolveCorrigeMd(c);
@@ -178,6 +180,7 @@ export default async function ConcoursDetailPage(props) {
   const { title, description } = await seoDe(c, list);
 
   const niveau = niveauInfo(niveauOf(c));
+  const shareInfo = { master_reel: c.master_reel, filiere: c.filiere, etablissement: c.etablissement, ville: c.ville, annee: c.annee };
 
   // Lu par Google et par les moteurs de réponse IA (ChatGPT, Perplexity,
   // Gemini…) : de quoi citer la fiche sans la deviner — matières évaluées,
@@ -191,7 +194,7 @@ export default async function ConcoursDetailPage(props) {
     inLanguage: "fr",
     isAccessibleForFree: true,
     learningResourceType: corrigeHtml ? ["Sujet d'examen", "Corrigé indicatif"] : ["Sujet d'examen"],
-    educationalLevel: isLicenceExcellence(c) ? "Licence" : "Master",
+    educationalLevel: niveau.educationalLevel,
     ...(c.modules?.length ? { assesses: c.modules } : {}),
     keywords: [...new Set([masterLabel, c.filiere, c.etablissement, c.ville, String(c.annee)].filter(Boolean))].join(", "),
     ...(c.date_ajout ? { datePublished: c.date_ajout } : {}),
@@ -222,20 +225,21 @@ export default async function ConcoursDetailPage(props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: isLicenceExcellence(c) ? "concours-le" : "concours", rails: true }) }} />
+      <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: ACTIVE_DU_NIVEAU[niveauOf(c)] || "concours", rails: true }) }} />
 
       <div className="bac-space">
-      <div className="bac-wrap sp-detail">
-        <nav className="cd-breadcrumb">
-          <a href="/">Accueil</a> <span>/</span> <a href="/concours">Concours</a> <span>/</span>{" "}
-          {isLicenceExcellence(c) && (
-            <>
-              <a href={niveau.href}>{niveau.label}</a> <span>/</span>{" "}
-            </>
-          )}
-          <span>{c.etablissement} {c.annee}</span>
+      <div className="bac-wrap">
+        <nav className="cd-breadcrumb" aria-label="Fil d'Ariane">
+          <a href="/">Accueil</a> <span>/</span> <a href={niveau.href}>{niveau.label === "Master" ? "Concours Master" : `Concours ${niveau.label}`}</a>{" "}
+          <span>/</span> <span>{c.etablissement} {c.annee}</span>
         </nav>
 
+        {/* Deux colonnes sur grand écran : la fiche, et à droite le résumé
+           du sujet (PDF, partage, sommaire) puis la colonne publicitaire.
+           En dessous de 1100 px, la colonne disparaît : ses actions sont
+           déjà dans l'en-tête et la barre d'onglets collante. */}
+        <div className="sp-layout">
+        <div className="sp-layout-main sp-detail">
         <div className="bac-chap-hero sp-detail-hero">
           <div className="bac-eyebrow">{niveau.long}</div>
           <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
@@ -256,7 +260,7 @@ export default async function ConcoursDetailPage(props) {
               <strong>Matières :</strong> {c.modules.join(", ")}
             </p>
           )}
-          <div className="sp-detail-body">
+          <div className="sp-detail-body sp-hide-wide">
             {hasImages && (
               <a className="sp-scan-link" href="#section-images">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -270,9 +274,7 @@ export default async function ConcoursDetailPage(props) {
               </a>
             )}
             <div className="sp-hero-actions cd-head-actions">
-              <ShareButton
-                concours={{ master_reel: c.master_reel, filiere: c.filiere, etablissement: c.etablissement, ville: c.ville, annee: c.annee }}
-              />
+              <ShareButton concours={shareInfo} />
             </div>
           </div>
         </div>
@@ -318,12 +320,7 @@ export default async function ConcoursDetailPage(props) {
           </div>
         )}
 
-        <AdSlot
-          enabled={adsGloballyEnabled && settings?.adsConcoursMidEnabled}
-          publisherId={settings?.adsPublisherId}
-          slotId={settings?.adsConcoursMidSlot}
-          label="Publicité — entre énoncé et corrigé"
-        />
+        <AdSlot settings={settings} placement="concours_mid" />
 
         {/* Bannière partenaire « Dans le contenu » (vide sans annonceur). */}
         <div dangerouslySetInnerHTML={{ __html: partnerZoneHtml("inline") }} />
@@ -355,12 +352,7 @@ export default async function ConcoursDetailPage(props) {
           </div>
         )}
 
-        <AdSlot
-          enabled={adsGloballyEnabled && settings?.adsConcoursBottomEnabled}
-          publisherId={settings?.adsPublisherId}
-          slotId={settings?.adsConcoursBottomSlot}
-          label="Publicité — bas de page"
-        />
+        <AdSlot settings={settings} placement="concours_bottom" />
 
         <ConcoursDetailClient concours={{ id: c.id }} />
 
@@ -371,7 +363,7 @@ export default async function ConcoursDetailPage(props) {
            la difficulté sont affichées dans l'en-tête de la fiche. */}
 
         {modulesLies.length > 0 && (
-          <section className="bac-group">
+          <section className="bac-group" id="section-modules">
             <h2 className="bac-section-title">Réviser les matières de ce sujet</h2>
             <div className="sp-related">
               {modulesLies.map((m) => (
@@ -390,7 +382,7 @@ export default async function ConcoursDetailPage(props) {
         )}
 
         {related.length > 0 && (
-          <section className="bac-group">
+          <section className="bac-group" id="section-similaires">
             <h2 className="bac-section-title">Concours similaires</h2>
             <div
               className="sp-rows"
@@ -400,6 +392,67 @@ export default async function ConcoursDetailPage(props) {
             />
           </section>
         )}
+        </div>
+
+        <aside className="sp-layout-aside" aria-label="Résumé du sujet">
+          <div className="sp-aside-card">
+            <h2 className="sp-aside-title">Ce sujet</h2>
+            <dl className="sp-facts">
+              <div>
+                <dt>Établissement</dt>
+                <dd>{c.etablissement}</dd>
+              </div>
+              {c.ville && (
+                <div>
+                  <dt>Ville</dt>
+                  <dd>{c.ville}</dd>
+                </div>
+              )}
+              <div>
+                <dt>Session</dt>
+                <dd>{c.annee}</dd>
+              </div>
+              {difficulteHtml(c.difficulte) && (
+                <div>
+                  <dt>Difficulté</dt>
+                  <dd dangerouslySetInnerHTML={{ __html: difficulteHtml(c.difficulte) }} />
+                </div>
+              )}
+              <div>
+                <dt>Corrigé</dt>
+                <dd className={corrigeMd ? "is-corrige" : undefined}>{corrigeMd ? "Disponible" : "Pas encore"}</dd>
+              </div>
+              {hasImages && (
+                <div>
+                  <dt>Scan original</dt>
+                  <dd>
+                    {c.images.length} page{c.images.length > 1 ? "s" : ""}
+                  </dd>
+                </div>
+              )}
+            </dl>
+            <div className="sp-aside-actions">
+              <DownloadPdfButton concours={fullConcours} label="Télécharger le PDF" />
+              <ShareButton concours={shareInfo} />
+            </div>
+          </div>
+          <div className="sp-aside-sticky">
+            <nav className="sp-aside-card sp-toc" aria-label="Sur cette page">
+              <h2 className="sp-aside-title">Sur cette page</h2>
+              <a href="#section-enonce">Énoncé</a>
+              {hasImages && <a href="#section-images">Sujet original scanné</a>}
+              {corrigeHtml && (
+                <a className="is-corrige" href="#section-corrige">
+                  Corrigé
+                </a>
+              )}
+              {modulesLies.length > 0 && <a href="#section-modules">Réviser les matières</a>}
+              {related.length > 0 && <a href="#section-similaires">Concours similaires</a>}
+            </nav>
+            <AdSlot settings={settings} placement="sidebar" />
+          </div>
+        </aside>
+        </div>
       </div>
       </div>
 

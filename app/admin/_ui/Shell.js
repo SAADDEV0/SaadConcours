@@ -82,6 +82,7 @@ function useBadges() {
   return badges;
 }
 
+// eslint-disable-next-line no-unused-vars
 function Sidebar({ open, onNavigate, onSearch }) {
   const pathname = usePathname();
   const current = activeItem(pathname);
@@ -102,14 +103,9 @@ function Sidebar({ open, onNavigate, onSearch }) {
           <span className="ax-brand-name">
             Saad<b>Concours</b>
           </span>
-          <span className="ax-brand-sub">Console d&apos;administration</span>
+          <span className="ax-brand-sub">Console</span>
         </span>
       </Link>
-      <button type="button" className="ax-search-btn" onClick={onSearch}>
-        <Icon name="search" size="sm" />
-        <span>Rechercher…</span>
-        <span className="ax-kbd">Ctrl K</span>
-      </button>
       {NAV.map((section, i) => (
         <div className="ax-nav-group" key={section.label || i}>
           {section.label && <div className="ax-nav-label">{section.label}</div>}
@@ -245,10 +241,12 @@ export default function Shell({ children }) {
               </button>
               <Crumbs />
               <div className="ax-top-actions">
-                <DeployStatus />
-                <button type="button" className="ax-btn icon sm" onClick={() => setPalette(true)} aria-label="Rechercher (Ctrl K)" title="Rechercher (Ctrl K)">
-                  <Icon name="search" />
+                <button type="button" className="ax-top-search" onClick={() => setPalette(true)} aria-label="Rechercher (Ctrl K)">
+                  <Icon name="search" size="sm" />
+                  <span>Rechercher un contenu, une page…</span>
+                  <span className="ax-kbd">Ctrl K</span>
                 </button>
+                <DeployStatus />
                 <button type="button" className="ax-btn icon sm" onClick={toggle} aria-label="Changer de thème" title="Thème clair / sombre">
                   <Icon name={theme === "light" ? "moon" : "sun"} />
                 </button>
@@ -269,13 +267,13 @@ export default function Shell({ children }) {
 export function PageSkeleton() {
   return (
     <div className="ax-stack" aria-busy="true" aria-label="Chargement">
-      <div className="ax-skel" style={{ height: 120, borderRadius: 18 }} />
+      <div className="ax-skel" style={{ height: 56, borderRadius: 10 }} />
       <div className="ax-grid c4">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="ax-skel" style={{ height: 96, borderRadius: 18 }} />
+          <div key={i} className="ax-skel" style={{ height: 84, borderRadius: 12 }} />
         ))}
       </div>
-      <div className="ax-skel" style={{ height: 320, borderRadius: 18 }} />
+      <div className="ax-skel" style={{ height: 280, borderRadius: 12 }} />
     </div>
   );
 }

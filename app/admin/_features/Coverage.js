@@ -113,7 +113,7 @@ export default function Coverage() {
         icon="🗺️"
         eyebrow="Concours · Pilotage"
         title="Couverture & qualité des données"
-        actions={<Seg ariaLabel="Niveau" value={niveau} onChange={setNiveau} options={[{ value: "tous", label: "Tous" }, ...CONCOURS_NIVEAUX.map((n) => ({ value: n.code, label: `${n.icon} ${n.label}` }))]} />}
+        actions={<Seg ariaLabel="Niveau" value={niveau} onChange={setNiveau} options={[{ value: "tous", label: "Tous" }, ...CONCOURS_NIVEAUX.map((n) => ({ value: n.code, label: n.label }))]} />}
       >
         Où le site est riche, où il manque des sujets, et les incohérences qui éclatent les filtres publics en doublons.
       </Hero>

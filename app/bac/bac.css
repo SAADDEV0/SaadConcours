@@ -13,7 +13,7 @@
 .bac-space{--mat-color:var(--accent); --mat-tint:var(--bg-inset); --mat-line:var(--border);}
 .bac-space a{color:inherit;}
 :where(.bac-space) [lang="ar"]{line-height:1.7;}
-.bac-wrap{max-width:1100px; margin:0 auto; padding:20px 20px 64px;}
+.bac-wrap{max-width:var(--w-page); margin:0 auto; padding:24px var(--gutter) 64px;}
 .bac-space .cd-breadcrumb a:hover{color:var(--accent);}
 
 /* Ligne de contexte au-dessus d'un titre (« Chapitre 2 · Semestre 1 ») :
@@ -22,8 +22,9 @@
 
 /* ---------- En-têtes de page ---------- */
 .bac-hero, .bac-mat-hero, .bac-chap-hero{position:relative; padding:4px 0 20px; margin-bottom:22px; border-bottom:1px solid var(--border);}
-.bac-hero h1, .bac-mat-hero h1{font-size:1.85rem; line-height:1.18; font-weight:700; margin:0 0 10px; max-width:860px;}
-.bac-chap-hero h1{font-size:1.6rem; line-height:1.22; font-weight:700; margin:0 0 6px;}
+/* Titres de page : même voix que le titre de l'accueil (gras 800, serré). */
+.bac-hero h1, .bac-mat-hero h1{font-size:clamp(1.8rem, 1.4rem + 1.4vw, 2.35rem); line-height:1.1; font-weight:800; letter-spacing:-.028em; margin:0 0 12px; max-width:860px;}
+.bac-chap-hero h1{font-size:clamp(1.6rem, 1.3rem + 1vw, 2rem); line-height:1.15; font-weight:800; letter-spacing:-.025em; margin:0 0 8px;}
 .bac-hero p, .bac-mat-hero p{color:var(--text-dim); font-size:1rem; line-height:1.6; margin:0 0 14px; max-width:68ch;}
 .bac-hero p strong{color:var(--text); font-weight:600;}
 .bac-mat-hero-icon{display:none;}
@@ -261,10 +262,10 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
   .bac-chap-res{display:none;}
 }
 @media (max-width:560px){
-  .bac-wrap{padding:14px 16px 48px;}
+  .bac-wrap{padding:16px var(--gutter) 48px;}
   .bac-hero, .bac-mat-hero, .bac-chap-hero{padding-bottom:16px; margin-bottom:18px;}
-  .bac-hero h1, .bac-mat-hero h1{font-size:1.45rem;}
-  .bac-chap-hero h1{font-size:1.32rem;}
+  .bac-hero h1, .bac-mat-hero h1{font-size:1.85rem;}
+  .bac-chap-hero h1{font-size:1.6rem;}
   .bac-hero p, .bac-mat-hero p{font-size:.95rem;}
   .bac-chap-row{padding:12px 14px;}
   .bac-soon{display:none;}

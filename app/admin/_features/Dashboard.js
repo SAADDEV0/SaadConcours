@@ -61,7 +61,7 @@ export default function Dashboard() {
     });
     if (closing.length)
       items.push({
-        icon: "⏰",
+        icon: "clock",
         tone: "red",
         title: `${plural(closing.length, "concours ferme", "concours ferment")} sous 3 jours`,
         desc: closing.slice(0, 3).map((x) => x.titre).join(" · "),
@@ -71,7 +71,7 @@ export default function Dashboard() {
     const expired = n.filter((x) => !x.cloture && daysUntil(x.date_limite) !== null && daysUntil(x.date_limite) < 0);
     if (expired.length)
       items.push({
-        icon: "🧹",
+        icon: "megaphone",
         title: `${plural(expired.length, "annonce")} dont la date limite est passée`,
         desc: "Toujours marquées « ouvertes » sur le site : à clôturer.",
         href: "/admin/annonces?etat=ouvert",
@@ -80,32 +80,32 @@ export default function Dashboard() {
     const c = concours.data || [];
     const drafts = c.filter((x) => x.statut === "brouillon");
     if (drafts.length)
-      items.push({ icon: "📝", title: `${plural(drafts.length, "concours")} en brouillon`, desc: "Invisibles sur le site tant qu'ils ne sont pas publiés.", href: "/admin/concours?statut=brouillon", cta: "Voir" });
+      items.push({ icon: "edit", title: `${plural(drafts.length, "concours")} en brouillon`, desc: "Invisibles sur le site tant qu'ils ne sont pas publiés.", href: "/admin/concours?statut=brouillon", cta: "Voir" });
     if (corrigeFiles) {
       const sans = c.filter((x) => !x.corrige_md && !corrigeFiles.has(x.id));
       if (sans.length)
-        items.push({ icon: "✍️", title: `${plural(sans.length, "concours")} sans corrigé`, desc: "Le corrigé est ce qui fait revenir les visiteurs.", href: "/admin/concours?corrige=non", cta: "Rédiger" });
+        items.push({ icon: "checkCircle", title: `${plural(sans.length, "concours")} sans corrigé`, desc: "Le corrigé est ce qui fait revenir les visiteurs.", href: "/admin/concours?corrige=non", cta: "Rédiger" });
     }
     const sansScan = c.filter((x) => !(x.images || []).length);
-    if (sansScan.length) items.push({ icon: "🖼️", title: `${plural(sansScan.length, "concours")} sans scan du sujet`, desc: "Les scans rassurent sur l'authenticité du sujet.", href: "/admin/concours?scans=non", cta: "Compléter" });
+    if (sansScan.length) items.push({ icon: "image", title: `${plural(sansScan.length, "concours")} sans scan du sujet`, desc: "Les scans rassurent sur l'authenticité du sujet.", href: "/admin/concours?scans=non", cta: "Compléter" });
     const misses = (m?.searchMisses || []).filter((x) => x.score >= 2);
     if (misses.length)
       items.push({
-        icon: "🔎",
+        icon: "search",
         title: `${plural(misses.length, "recherche")} sans résultat`,
         desc: misses.slice(0, 4).map((x) => `« ${x.member} »`).join(", "),
         href: "/admin/statistiques?onglet=recherches",
         cta: "Analyser",
       });
     if (deploy.state === "fail")
-      items.unshift({ icon: "🚨", tone: "red", title: "Le dernier déploiement a échoué", desc: "Les dernières modifications ne sont pas en ligne.", href: "/admin/activite?onglet=deploiements", cta: "Voir" });
+      items.unshift({ icon: "alert", tone: "red", title: "Le dernier déploiement a échoué", desc: "Les dernières modifications ne sont pas en ligne.", href: "/admin/activite?onglet=deploiements", cta: "Voir" });
     return items;
   }, [news.data, concours.data, corrigeFiles, m, deploy.state]);
 
   const series = m?.metrics
     ? [
-        { name: "Visites", color: "#4f8cff", area: true, points: m.metrics.visits.points },
-        { name: "PDF téléchargés", color: "#a855f7", area: true, points: m.metrics.pdf.points },
+        { name: "Visites", color: "var(--accent-fill)", area: true, points: m.metrics.visits.points },
+        { name: "PDF téléchargés", color: "#0d9488", area: true, points: m.metrics.pdf.points },
       ]
     : null;
 
@@ -174,7 +174,7 @@ export default function Dashboard() {
           value={m ? num(m.metrics?.pdf.total) : "…"}
           foot={m?.metrics && (<><Delta value={m.metrics.pdf.deltaPct} /> · {String(m.metrics.conversionPct).replace(".", ",")} % des visites</>)}
           spark={m?.metrics?.pdf.points.map((p) => p.value)}
-          color="#a855f7"
+          color="#0d9488"
           href="/admin/statistiques?onglet=pdf"
         />
         <Stat icon="zap" label="Aujourd'hui" value={m?.totals ? num(m.totals.visitsToday) : "…"} foot={m?.totals && `visites · ${num(m.totals.pdfToday)} PDF`} />
@@ -211,7 +211,9 @@ export default function Dashboard() {
             <div className="ax-todo">
               {todo.map((t) => (
                 <Link className="ax-todo-item" href={t.href} key={t.title}>
-                  <span className="ax-todo-icon">{t.icon}</span>
+                  <span className={`ax-todo-icon${t.tone === "red" ? " red" : ""}`}>
+                    <Icon name={t.icon} />
+                  </span>
                   <span className="ax-todo-main">
                     <span className="ax-todo-title" style={t.tone === "red" ? { color: "var(--red)" } : undefined}>
                       {t.title}
@@ -261,15 +263,17 @@ export default function Dashboard() {
       <SectionTitle>Raccourcis</SectionTitle>
       <div className="ax-quick">
         {[
-          ["📝", "Nouveau concours", "Énoncé, corrigé, scans", "/admin/concours/editer?nouveau=1"],
-          ["📦", "Import groupé", "JSON ou CSV, un seul commit", "/admin/concours/import"],
-          ["✍️", "Nouvel article", "Blog et référencement", "/admin/blog/editer?nouveau=1"],
-          ["📣", "Studio social", "Visuel + textes par réseau", "/admin/social"],
-          ["🖨️", "Studio PDF", "Apparence des PDF du site", "/admin/pdf"],
-          ["🗑️", "Corbeille", "Restaurer un élément supprimé", "/admin/activite?onglet=corbeille"],
+          ["plus", "Nouveau concours", "Énoncé, corrigé, scans", "/admin/concours/editer?nouveau=1"],
+          ["upload", "Import groupé", "JSON ou CSV, un seul commit", "/admin/concours/import"],
+          ["news", "Nouvel article", "Blog et référencement", "/admin/blog/editer?nouveau=1"],
+          ["share", "Studio social", "Visuel + textes par réseau", "/admin/social"],
+          ["palette", "Studio PDF", "Apparence des PDF du site", "/admin/pdf"],
+          ["trash", "Corbeille", "Restaurer un élément supprimé", "/admin/activite?onglet=corbeille"],
         ].map(([e, t, d, h]) => (
           <Link key={t} href={h}>
-            <span className="ax-quick-icon">{e}</span>
+            <span className="ax-quick-icon">
+              <Icon name={e} />
+            </span>
             <strong>{t}</strong>
             <span>{d}</span>
           </Link>

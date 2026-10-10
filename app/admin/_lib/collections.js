@@ -111,7 +111,7 @@ const concours = {
     { value: "score", label: "Qualité (faible d'abord)", fn: null },
   ],
   filters: [
-    { key: "niveau", label: "Niveau", options: CONCOURS_NIVEAUX.map((n) => ({ value: n.code, label: `${n.icon} ${n.label}` })), get: (c) => niveauOf(c) },
+    { key: "niveau", label: "Niveau", options: CONCOURS_NIVEAUX.map((n) => ({ value: n.code, label: n.label })), get: (c) => niveauOf(c) },
     { key: "categorie", label: "Catégorie", options: opt(FILIERE_CATEGORIES), get: (c) => c.categorie },
     { key: "annee", label: "Année", dynamic: true, get: (c) => c.annee },
     { key: "ville", label: "Ville", dynamic: true, get: (c) => c.ville },
@@ -172,7 +172,7 @@ const concours = {
           key: "niveau",
           label: "Niveau du concours",
           type: "select",
-          options: CONCOURS_NIVEAUX.map((n) => ({ value: n.code, label: `${n.icon} ${n.long}` })),
+          options: CONCOURS_NIVEAUX.map((n) => ({ value: n.code, label: n.long })),
         },
         { key: "annee", label: "Année du concours", type: "text", required: true, placeholder: "2025", width: "sm" },
         { key: "ville", label: "Ville", type: "text", required: true, placeholder: "Rabat", suggest: "ville" },

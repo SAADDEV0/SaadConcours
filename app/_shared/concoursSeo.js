@@ -18,7 +18,7 @@
 // Deux fiches ne partagent jamais un titre ni une description : les
 // collisions sont résolues sur la liste entière (« Formation initiale »,
 // « sujet 2 »). « Formation continue » figure toujours dans le titre.
-import { isLicenceExcellence } from "../../lib/concoursNiveaux";
+import { niveauLabel } from "../../lib/concoursNiveaux";
 import { DESCRIPTION_MAX, fitTitle, clampDescription } from "./seoText";
 
 const propre = (s) => String(s || "").replace(/\s+/g, " ").trim();
@@ -75,7 +75,7 @@ function libelles(c) {
 }
 
 function formes(c, hasCorrige, precision = "") {
-  const niveau = isLicenceExcellence(c) ? "Licence d'excellence" : "Master";
+  const niveau = niveauLabel(c);
   const [lieuLong, lieuCourt = lieuLong] = lieux(c);
   const annee = /^\d{4}$/.test(String(c.annee)) ? ` ${c.annee}` : "";
   const p = precision ? ` (${precision})` : "";

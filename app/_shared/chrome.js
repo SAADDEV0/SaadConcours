@@ -15,6 +15,7 @@ import boutiqueData from "../../public/data/boutique.json";
 import { isProduitVisible } from "../../lib/boutique";
 import { readChapters, lastChapter } from "./progress";
 import { iconHtml } from "./icons";
+import { ESPACES_ACTIFS, OUTILS, espaceOfActive, espaceByKey, espaceOfPath, espaceClass } from "../../lib/espaces";
 
 const ICON_MOON = iconHtml("moon", { size: 18, strokeWidth: 2 });
 const ICON_SUN = iconHtml("sun", { size: 18, strokeWidth: 2 });
@@ -75,156 +76,124 @@ function initProgressMarks() {
 // fait revenir l'entrée, sans toucher au code.
 export const BOUTIQUE_OUVERTE = Array.isArray(boutiqueData) && boutiqueData.some(isProduitVisible);
 
-// Icônes de navigation : même jeu que le reste du site (icons.js).
-const navIcon = (name) => iconHtml(name, { size: 20 });
-const NAV_ICONS = {
-  home: navIcon("home"),
-  bac: navIcon("book"),
-  fsjes: navIcon("grad"),
-  concours: navIcon("library"),
-  excellence: navIcon("star"),
-  eval: navIcon("clipboard"),
-  blog: navIcon("news"),
-  boutique: navIcon("cart"),
-};
-
-// Liens principaux du header. `icon` ne sert qu'au menu mobile.
-// L'ancien bouton « Concours ouverts » (/news) est parti avec la section le
-// 2026-09-24 : c'était une copie automatique d'almaster-maroc.com.
-const NAV_ITEMS = [
-  { key: "home", href: "/", icon: NAV_ICONS.home, label: "Accueil" },
-  {
-    key: "cours-menu",
-    label: "Cours",
-    // Menu déroulant : un espace de cours par public (lycée, université).
-    children: [
-      { key: "bac", href: "/bac/2bac", icon: NAV_ICONS.bac, label: "Cours Bac", desc: "Lycée · 2ᵉ Bac Sciences Économiques et Gestion" },
-      { key: "cours", href: "/cours", icon: NAV_ICONS.fsjes, label: "Cours Licence FSJES", desc: "Université · modules du S1 au S6" },
-    ],
-  },
-  {
-    key: "concours-menu",
-    label: "Concours",
-    // Un espace de sujets par niveau d'accès, comme le menu Cours.
-    children: [
-      { key: "concours", href: "/concours", icon: NAV_ICONS.concours, label: "Concours Master", desc: "Après la licence · sujets FSJES, ENCG…" },
-      { key: "concours-le", href: "/concours/licence-excellence", icon: NAV_ICONS.excellence, label: "Concours Licence d'excellence", desc: "Après le DEUG · accès en S5" },
-    ],
-  },
-  { key: "eval", href: "/evaluation", icon: NAV_ICONS.eval, label: "QCM", desc: "Concours blancs par module" },
-  { key: "blog", href: "/blog", icon: NAV_ICONS.blog, label: "Blog", desc: "Méthode, orientation, guides des facultés" },
-  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", href: "/boutique", icon: NAV_ICONS.boutique, label: "Boutique", desc: "Cahiers de préparation" }] : []),
+/* ------------------------------ Navigation --------------------------------
+ * Tout vient du registre des espaces (lib/espaces.js) : ajouter un espace
+ * l'ajoute au header, au menu, à la barre d'espace et au pied de page. Rien ici ne nomme un espace.
+ *
+ * - Header (ordinateur) : les espaces, puis les outils communs (QCM, Blog),
+ *   la recherche et le thème. Pas de menu déroulant (pénible au doigt, il
+ *   cache les choix) : la page active est soulignée.
+ * - Barre d'espace : sous le header, sur toute page qui appartient à un
+ *   espace — nom de l'espace puis ses onglets. Répond à « où suis-je, que
+ *   puis-je faire ici ».
+ * - Menu (bouton « Menu », téléphone et tablette) : recherche, puis un groupe
+ *   par espace, les outils et le thème. Plein écran sur téléphone : c'est la
+ *   navigation du mobile (la barre d'onglets du bas a été retirée le
+ *   2026-10-10 à la demande de Saad).
+ * ------------------------------------------------------------------------ */
+const OUTILS_VISIBLES = [
+  ...OUTILS,
+  ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", label: "Boutique", long: "Boutique", desc: "Cahiers de préparation", href: "/boutique" }] : []),
 ];
 
-// Menu complet du téléphone (bouton « Menu »), rangé par familles. La barre
-// d'onglets du bas couvre les destinations de tous les jours ; ce menu donne
-// tout le reste sans rien cacher.
-const MENU_GROUPS = [
-  { titre: "Cours", items: NAV_ITEMS[1].children },
-  { titre: "Concours", items: NAV_ITEMS[2].children },
-  { titre: "S'entraîner et lire", items: NAV_ITEMS.slice(3) },
-];
+function isActiveEspace(espace, active) {
+  return espace.tabs.some((t) => t.keys.includes(active));
+}
 
-// Barre d'onglets du bas (téléphone et tablette) : toujours visible, sous le
-// pouce, elle montre où l'on est. « Cours » mène au dernier espace de cours
-// visité (Bac ou Licence), voir initTabbar().
-const TAB_ICON = (name) => iconHtml(name, { size: 22, strokeWidth: 1.9 });
-const TABS = [
-  { href: "/", label: "Accueil", icon: "home", keys: ["home"] },
-  { href: "/cours", label: "Cours", icon: "book-open", keys: ["bac", "cours"], cours: true },
-  { href: "/concours", label: "Concours", icon: "file", keys: ["concours", "concours-le"] },
-  { href: "/evaluation", label: "QCM", icon: "clipboard", keys: ["eval"] },
-  { href: "/recherche", label: "Recherche", icon: "search", keys: ["recherche"] },
-];
+function navLink({ href, label, on, cls = "nav-link" }) {
+  return `<a class="${cls}${on ? " active" : ""}" href="${href}"${on ? ' aria-current="page"' : ""}>${label}</a>`;
+}
 
-function tabbarHtml(active) {
-  return `<nav class="tabbar" aria-label="Navigation rapide">
-  ${TABS.map((t) => {
-    const on = t.keys.includes(active);
-    return `<a class="tabbar-item${on ? " is-active" : ""}" href="${t.href}"${t.cours ? " data-tab-cours" : ""}${on ? ' aria-current="page"' : ""}>${TAB_ICON(t.icon)}<span>${t.label}</span></a>`;
-  }).join("")}
+function headerNavHtml(active) {
+  const espaces = ESPACES_ACTIFS.map((e) => navLink({ href: e.hub, label: e.label, on: isActiveEspace(e, active), cls: `nav-link ${espaceClass(e)}` })).join("");
+  const outils = OUTILS_VISIBLES.map((o) => navLink({ href: o.href, label: o.label, on: active === o.key })).join("");
+  return `<nav class="site-nav" aria-label="Navigation principale">${espaces}<span class="site-nav-sep" aria-hidden="true"></span>${outils}</nav>`;
+}
+
+// Barre d'espace : absente du HTML hors d'un espace.
+function espaceBarHtml(active) {
+  const espace = espaceOfActive(active);
+  if (!espace) return "";
+  return `<nav class="espace-bar ${espaceClass(espace)}" aria-label="${escapeAttr(espace.long)}">
+  <div class="espace-bar-inner">
+    <a class="espace-bar-name" href="${espace.hub}"><span class="esp-dot" aria-hidden="true"></span>${escapeAttr(espace.long)}</a>
+    <div class="espace-bar-tabs">
+      ${espace.tabs.map((t) => navLink({ href: t.href, label: escapeAttr(t.label), on: t.keys.includes(active), cls: "espace-bar-tab" })).join("")}
+    </div>
+  </div>
 </nav>`;
 }
 
 function menuSheetHtml(active) {
-  return `<div class="sheet menu-sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
-  <div class="sheet-head"><span class="sheet-title">Menu</span><button type="button" class="sheet-close" data-sheet-close aria-label="Fermer le menu">${iconHtml("x", { size: 20 })}</button></div>
-  ${MENU_GROUPS.map(
-    (g) => `<div class="menu-group">
-    <div class="menu-group-title">${g.titre}</div>
-    ${g.items
-      .map(
-        (item) =>
-          `<a class="menu-link${active === item.key ? " active" : ""}" href="${item.href}"${active === item.key ? ' aria-current="page"' : ""}><span class="menu-link-icon" aria-hidden="true">${item.icon}</span><span><span class="menu-link-label">${item.label}</span>${item.desc ? `<span class="menu-link-desc">${item.desc}</span>` : ""}</span></a>`
-      )
-      .join("")}
+  const espaces = ESPACES_ACTIFS.map(
+    (e) => `<div class="menu-group ${espaceClass(e)}">
+    <a class="menu-espace${isActiveEspace(e, active) ? " active" : ""}" href="${e.hub}">
+      <span class="menu-espace-name"><span class="esp-dot" aria-hidden="true"></span>${escapeAttr(e.long)}</span>
+      <span class="menu-espace-desc">${escapeAttr(e.desc)}</span>
+    </a>
+    ${e.tabs.length > 1 ? `<div class="menu-sublinks">${e.tabs.map((t) => navLink({ href: t.href, label: escapeAttr(t.label), on: t.keys.includes(active), cls: "menu-sublink" })).join("")}</div>` : ""}
   </div>`
-  ).join("")}
-  <div class="menu-foot"><a href="/a-propos">À propos</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></div>
+  ).join("");
+  const outils = OUTILS_VISIBLES.map(
+    (o) => `<a class="menu-espace${active === o.key ? " active" : ""}" href="${o.href}"><span class="menu-espace-name">${escapeAttr(o.long)}</span><span class="menu-espace-desc">${escapeAttr(o.desc)}</span></a>`
+  ).join("");
+  return `<div class="sheet menu-sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="sheet-head"><a class="menu-brand" href="/">${brandLogoSvg()}<span>Accueil</span></a><button type="button" class="sheet-close" data-sheet-close aria-label="Fermer le menu">${iconHtml("x", { size: 22 })}</button></div>
+  <form class="menu-search" action="/recherche" method="get" role="search">
+    ${iconHtml("search", { size: 18, className: "menu-search-ic" })}
+    <input type="search" name="q" placeholder="Un concours, une faculté, un cours…" aria-label="Rechercher dans tout le site" autocomplete="off" enterkeyhint="search">
+  </form>
+  <div class="menu-label">Je prépare…</div>
+  ${espaces}
+  <div class="menu-label">S'entraîner et lire</div>
+  <div class="menu-group menu-group-outils">${outils}</div>
+  <div class="menu-foot">
+    <button type="button" class="menu-theme" data-theme-toggle>${ICON_MOON}<span class="menu-theme-label">Thème sombre</span></button>
+    <nav class="menu-foot-links" aria-label="Le site"><a href="/a-propos">À propos</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></nav>
+  </div>
 </div>`;
 }
 
-// Fires on every internal link click (nav, cards, "voir tout"...) - since
-// most navigation here is a plain <a href> full page load (not Next <Link>
-// client transitions), this is the only loading feedback we can actually
-// show before the browser tears the page down to fetch the next one.
-// `rails` opts a page into the left/right partner-ad columns — accueil and
-// the three individual-item detail pages (concours, cours, article de blog)
-// only. Every listing page (/concours, /cours, /blog, /evaluation, /news,
-// /faq) omits it: it's the request that scoped rails to "une page sélectionnée"
-// and explicitly not "la page initiale" of any section.
-// `data-pa-section` is the rubrique a partner banner can target (see
-// PARTNER_SECTIONS) — read by renderPartnerAds() below and by the space
-// reservation CSS in app/layout.js.
-// La recherche du header (ordinateur) et l'onglet « Recherche » (téléphone)
-// mènent tous deux à /recherche, qui cherche dans tout le site.
-export function chromeHtml({ active, rails = false }) {
-  return `
-<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}" data-pa-section="${sectionOfNav(active)}"></div>
-
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="/" aria-label="SaadConcours, accueil">
+function brandHtml() {
+  return `<a class="brand" href="/" aria-label="SaadConcours, accueil">
       ${brandLogoSvg()}
       <span class="brand-text">
         <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
-        <span class="brand-tagline">Bac · Licence · Master</span>
+        <span class="brand-tagline">Du Bac au Master</span>
       </span>
-    </a>
-    <nav class="view-nav" aria-label="Navigation principale">
-      ${NAV_ITEMS.map((item) => {
-        if (!item.children) {
-          return `<a class="view-nav-btn${active === item.key ? " active" : ""}" href="${item.href}"${active === item.key ? ' aria-current="page"' : ""}>${item.label}</a>`;
-        }
-        const isActive = item.children.some((c) => c.key === active);
-        return `<div class="nav-dropdown">
-        <button type="button" class="view-nav-btn nav-dropdown-btn${isActive ? " active" : ""}" aria-haspopup="true" aria-expanded="false">${item.label}<svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="nav-dropdown-menu" role="menu">
-          ${item.children
-            .map(
-              (c) =>
-                `<a class="nav-dropdown-item${active === c.key ? " active" : ""}" role="menuitem" href="${c.href}"${active === c.key ? ' aria-current="page"' : ""}><span class="nav-dropdown-icon" aria-hidden="true">${c.icon}</span><span><span class="nav-dropdown-label">${c.label}</span><span class="nav-dropdown-desc">${c.desc}</span></span></a>`
-            )
-            .join("")}
-        </div>
-      </div>`;
-      }).join("")}
-    </nav>
+    </a>`;
+}
+
+// `rails` opts a page into the left/right partner-ad columns — accueil and
+// the individual-item detail pages (concours, article de blog) only.
+// `data-pa-section` is the rubrique a partner banner can target (see
+// PARTNER_SECTIONS) — read by renderPartnerAds() below and by the space
+// reservation CSS in app/layout.js.
+export function chromeHtml({ active, rails = false }) {
+  return `
+<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}" data-pa-section="${sectionOfNav(active)}"></div>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="site-header">
+  <div class="header-inner">
+    ${brandHtml()}
+    ${headerNavHtml(active)}
     <div class="header-actions">
       <form class="search-box" action="/recherche" method="get" role="search">
         ${iconHtml("search", { size: 16, className: "search-box-ic" })}
-        <input type="search" name="q" id="headerSearchInput" placeholder="Concours, cours, faculté…" aria-label="Rechercher dans tout le site" autocomplete="off">
+        <input type="search" name="q" id="headerSearchInput" placeholder="Rechercher un concours, un cours…" aria-label="Rechercher dans tout le site" autocomplete="off">
+        <kbd class="search-box-kbd" aria-hidden="true">/</kbd>
       </form>
-      <button class="theme-toggle" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">${ICON_MOON}</button>
+      <a class="search-btn" href="/recherche" aria-label="Rechercher">${iconHtml("search", { size: 20 })}</a>
+      <button class="theme-toggle" id="themeToggle" data-theme-toggle title="Changer de thème" aria-label="Changer de thème">${ICON_MOON}</button>
       <button class="nav-toggle-btn" id="navToggleBtn" data-sheet-open="menuSheet" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuSheet">
         ${iconHtml("menu", { size: 20 })}<span>Menu</span>
       </button>
     </div>
   </div>
 </header>
+${espaceBarHtml(active)}
 ${menuSheetHtml(active)}
-${tabbarHtml(active)}
-
+<span id="contenu" tabindex="-1"></span>
 <div class="pa-zone pa-zone-header" id="paHeader" data-pa-zone="header"></div>
 `;
 }
@@ -249,50 +218,35 @@ export function spinnerHtml(label) {
 `;
 }
 
-// Shared footer with a social-links row — icons are hidden by default and
-// only shown once initSocialLinks() (below) confirms a URL is actually set
-// for that network, so an unconfigured link never flashes then disappears.
-// Pied de page en colonnes : marque + réseaux, puis les familles de pages
-// (cours, concours, site) et une barre légale.
+// Pied de page : la marque, une colonne par espace (ses onglets), puis le
+// site. Généré depuis lib/espaces.js comme le header. Les icônes des réseaux
+// ne s'affichent qu'une fois l'adresse confirmée (renderSocialLinks), pour
+// qu'un réseau non configuré n'apparaisse jamais un instant.
 export function footerHtml() {
   const annee = new Date().getFullYear();
+  const colonnes = ESPACES_ACTIFS.map(
+    (e) => `<nav class="footer-col ${espaceClass(e)}" aria-label="${escapeAttr(e.long)}">
+      <h2><a href="${e.hub}"><span class="esp-dot" aria-hidden="true"></span>${escapeAttr(e.long)}</a></h2>
+      <ul>${e.tabs.map((t) => `<li><a href="${t.href}">${escapeAttr(t.label)}</a></li>`).join("")}</ul>
+    </nav>`
+  ).join("");
   return `
 <div class="pa-zone pa-zone-footer" id="paFooter" data-pa-zone="footer"></div>
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <a class="brand" href="/" aria-label="SaadConcours, accueil">
-        ${brandLogoSvg()}
-        <span class="brand-text">
-          <span class="brand-name"><span class="brand-saad">Saad</span><span class="brand-concours">Concours</span></span>
-          <span class="brand-tagline">Bac · Licence · Master</span>
-        </span>
-      </a>
-      <p class="footer-text">Cours du Bac Sciences Économiques et de la Licence FSJES, sujets réels de concours Master — corrigés indicatifs, sources publiques citées sur chaque fiche. Gratuit et sans inscription.</p>
+      ${brandHtml()}
+      <p class="footer-text">Cours, sujets réels de concours et corrigés en économie et gestion au Maroc, du Bac au Master. Gratuit et sans inscription.</p>
       <div class="footer-social" id="footerSocial"></div>
     </div>
-    <nav class="footer-col" aria-label="Cours">
-      <h2>Cours</h2>
-      <ul>
-        <li><a href="/bac/2bac">Cours Bac Éco &amp; Gestion</a></li>
-        <li><a href="/cours">Cours Licence FSJES</a></li>
-        <li><a href="/evaluation">QCM d'entraînement</a></li>
-      </ul>
-    </nav>
-    <nav class="footer-col" aria-label="Concours">
-      <h2>Concours</h2>
-      <ul>
-        <li><a href="/concours">Concours Master</a></li>
-        <li><a href="/concours/licence-excellence">Licence d'excellence</a></li>
-        <li><a href="/blog">Blog &amp; méthode</a></li>
-      </ul>
-    </nav>
+    ${colonnes}
     <nav class="footer-col" aria-label="SaadConcours">
       <h2>SaadConcours</h2>
       <ul>
+        ${OUTILS_VISIBLES.map((o) => `<li><a href="${o.href}">${escapeAttr(o.long)}</a></li>`).join("")}
         <li><a href="/a-propos">À propos</a></li>
-        <li><a href="/contact">Contact</a></li>
         <li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
     </nav>
   </div>
@@ -731,23 +685,28 @@ export const chromeScript = function initChrome() {
   // Icône SVG (rendu identique sur tous les systèmes, contrairement aux
   // emoji) et libellé qui annonce l'action, pas l'état.
   function applyThemeButton() {
-    const theme = document.documentElement.getAttribute("data-theme");
-    const btn = document.getElementById("themeToggle");
-    if (!btn) return;
-    btn.innerHTML = theme === "light" ? ICON_SUN : ICON_MOON;
-    const label = theme === "light" ? "Passer au thème sombre" : "Passer au thème clair";
-    btn.setAttribute("aria-label", label);
-    btn.title = label;
+    const light = document.documentElement.getAttribute("data-theme") === "light";
+    const label = light ? "Passer au thème sombre" : "Passer au thème clair";
+    document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+      const text = btn.querySelector(".menu-theme-label");
+      if (text) {
+        // Bouton du menu : icône + libellé de l'action.
+        btn.innerHTML = (light ? ICON_MOON : ICON_SUN) + `<span class="menu-theme-label">${light ? "Thème sombre" : "Thème clair"}</span>`;
+      } else {
+        btn.innerHTML = light ? ICON_SUN : ICON_MOON;
+        btn.title = label;
+      }
+      btn.setAttribute("aria-label", label);
+    });
   }
 
   applyThemeButton();
-  const themeBtn = document.getElementById("themeToggle");
-  if (themeBtn && themeBtn.dataset.wired !== "1") {
-    themeBtn.dataset.wired = "1";
-    themeBtn.addEventListener("click", () => {
+  if (!document.__scThemeWired) {
+    document.__scThemeWired = true;
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest?.("[data-theme-toggle]")) return;
       const root = document.documentElement;
-      const current = root.getAttribute("data-theme");
-      const next = current === "light" ? "dark" : "light";
+      const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
       // Fondu limité au changement de thème (voir html.theme-anim, globals.css).
       root.classList.add("theme-anim");
       root.setAttribute("data-theme", next);
@@ -755,8 +714,8 @@ export const chromeScript = function initChrome() {
         localStorage.setItem("theme", next);
       } catch {}
       applyThemeButton();
-      clearTimeout(themeBtn._animTimer);
-      themeBtn._animTimer = setTimeout(() => root.classList.remove("theme-anim"), 260);
+      clearTimeout(document.__scThemeTimer);
+      document.__scThemeTimer = setTimeout(() => root.classList.remove("theme-anim"), 260);
     });
   }
 
@@ -828,34 +787,23 @@ export const chromeScript = function initChrome() {
   })();
 
   initSheets();
-  initTabbar();
+  initEspaceMemory();
   markScrollables(document);
 
-  (function initNavDropdowns() {
-    document.querySelectorAll(".nav-dropdown").forEach((dd) => {
-      const btn = dd.querySelector(".nav-dropdown-btn");
-      if (!btn || btn.dataset.wired === "1") return;
-      btn.dataset.wired = "1";
-      const setOpen = (open) => {
-        dd.classList.toggle("open", open);
-        btn.setAttribute("aria-expanded", String(open));
-      };
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        setOpen(!dd.classList.contains("open"));
-      });
-      dd.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          setOpen(false);
-          btn.focus();
-        }
-      });
-      document.addEventListener("click", (e) => {
-        if (!dd.contains(e.target)) setOpen(false);
-      });
+  // « / » ouvre la recherche du header (ordinateur), comme sur la plupart des
+  // sites de documentation ; ignoré pendant la saisie dans un champ.
+  (function initSearchShortcut() {
+    if (document.__scSearchKey) return;
+    document.__scSearchKey = true;
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.target.closest?.("input, textarea, select, [contenteditable]")) return;
+      const input = document.getElementById("headerSearchInput");
+      if (!input || !input.offsetParent) return;
+      e.preventDefault();
+      input.focus();
     });
   })();
-
 };
 
 /* ------------------------------ Feuilles ---------------------------------
@@ -930,23 +878,42 @@ function initSheets() {
   window.addEventListener("pageshow", () => closeSheet({ restoreFocus: false }));
 }
 
-/* ----------------------------- Barre d'onglets ----------------------------
- * « Cours » mène au dernier espace de cours ouvert (Bac ou Licence FSJES),
- * retenu dans le navigateur : un élève de 2ᵉ Bac ne doit pas atterrir à
- * chaque fois sur la Licence. L'accueil peut aussi le fixer (choix du niveau).
+/* --------------------------- Espace retenu -------------------------------
+ * L'espace du visiteur (sc_espace) alimente le repère « Ton espace » de
+ * « Je prépare… » sur l'accueil. Ce qui le retient :
+ * - un choix explicite (accueil, header, menu) ;
+ * - l'ouverture du hub d'un espace ;
+ * - n'importe quelle page d'un espace tant qu'aucun espace n'est retenu.
+ * Une seule fiche ouverte depuis Google ne remplace donc pas un choix fait.
+ * L'ancien sc_cours (Bac ou Licence) est repris une fois puis oublié.
  * ------------------------------------------------------------------------ */
-export const COURS_SPACE_KEY = "sc_cours";
+export const ESPACE_KEY = "sc_espace";
 
-function initTabbar() {
+export function retenirEspace(key) {
   try {
-    const path = window.location.pathname;
-    if (path.startsWith("/bac")) localStorage.setItem(COURS_SPACE_KEY, "/bac/2bac");
-    else if (path.startsWith("/cours")) localStorage.setItem(COURS_SPACE_KEY, "/cours");
-    const space = localStorage.getItem(COURS_SPACE_KEY);
-    if (space === "/bac/2bac" || space === "/cours") {
-      document.querySelectorAll("a[data-tab-cours]").forEach((a) => a.setAttribute("href", space));
-    }
+    if (espaceByKey(key)) localStorage.setItem(ESPACE_KEY, key);
   } catch {}
+}
+
+function initEspaceMemory() {
+  try {
+    const legacy = localStorage.getItem("sc_cours");
+    if (legacy) {
+      if (!localStorage.getItem(ESPACE_KEY)) localStorage.setItem(ESPACE_KEY, legacy.startsWith("/bac") ? "bac" : "licence");
+      localStorage.removeItem("sc_cours");
+    }
+    const path = window.location.pathname.replace(/\/+$/, "") || "/";
+    const ici = espaceOfPath(path);
+    if (ici && (path === ici.hub || !localStorage.getItem(ESPACE_KEY))) localStorage.setItem(ESPACE_KEY, ici.key);
+  } catch {}
+  if (document.__scEspaceClicks) return;
+  document.__scEspaceClicks = true;
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest?.(".site-nav a, .menu-espace, [data-espace]");
+    if (!a) return;
+    const key = a.dataset.espace || espaceOfPath(a.getAttribute("href"))?.key;
+    if (key) retenirEspace(key);
+  });
 }
 
 /* ------------------------- Contenus plus larges ---------------------------

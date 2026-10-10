@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
-import NiveauSwitch from "../../_shared/NiveauSwitch";
 import ChromeInit from "../../_shared/ChromeInit";
 import { BAC_NIVEAUX, BAC_GROUPES, bacNiveauInfo, bacMatieres, bacMatiereHref, bacTextDir } from "../../../lib/bacProgramme";
 import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
@@ -82,7 +81,6 @@ export default async function BacNiveauPage(props) {
 
       <div className="bac-space">
         <div className="bac-wrap">
-          <NiveauSwitch active="bac" />
 
           <section className="bac-hero">
             <h1>Cours {info.label} Sciences Économiques & Gestion</h1>

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "../_ui/Icon";
 import { Alert, Empty, ErrorState, Field, Hero, Seg, SectionTitle, Skeleton, Sparkline, Switch, Tabs, useTab } from "../_ui/kit";
 import { Drawer, useConfirm, useToast } from "../_ui/feedback";
 import { useSettingsForm, SETTINGS_PATH } from "../_lib/settings";
+import { AD_FORMATS, AD_PLACEMENTS, AD_SETTING_KEYS } from "@/app/_shared/adPlacements";
 import { useJson } from "../_lib/content";
 import { assetUrl, mutateJson, bytesToBase64 } from "../_lib/repo";
 import { api } from "../_lib/api";
@@ -32,30 +33,49 @@ const TABS = [
   { key: "adsense", label: "Google AdSense", icon: "coins" },
 ];
 
-const SLOTS = [
-  { enabledKey: "adsHomeBannerEnabled", slotKey: "adsHomeBannerSlot", title: "Accueil — bannière", desc: "Sous le titre de la page d'accueil." },
-  { enabledKey: "adsConcoursMidEnabled", slotKey: "adsConcoursMidSlot", title: "Fiche concours — entre énoncé et corrigé", desc: "Un seul bloc entre les deux sections." },
-  { enabledKey: "adsConcoursBottomEnabled", slotKey: "adsConcoursBottomSlot", title: "Fiche concours — bas de page", desc: "Après les scans, avant les concours similaires." },
-  { enabledKey: "adsCoursChapitreEnabled", slotKey: "adsCoursChapitreSlot", title: "Chapitre de cours FSJES", desc: "Sous les onglets Cours / Exercices / Résumé / QCM, avant les sujets de concours." },
-  { enabledKey: "adsCoursModuleEnabled", slotKey: "adsCoursModuleSlot", title: "Page d'un module FSJES", desc: "Sous la liste des chapitres, avant la synthèse du module." },
-];
+// Emplacements AdSense : app/_shared/adPlacements.js est la seule liste. Un
+// emplacement ajouté là-bas apparaît ici, groupé par page, sans retouche.
+const PAGES_ADS = [...new Set(AD_PLACEMENTS.map((p) => p.page))];
 
 function AdSense() {
-  const keys = useMemo(() => ["adsEnabled", "adsPublisherId", ...SLOTS.flatMap((s) => [s.enabledKey, s.slotKey])], []);
-  const s = useSettingsForm(keys);
+  const s = useSettingsForm(AD_SETTING_KEYS);
   const toast = useToast();
   if (s.error) return <ErrorState error={s.error} onRetry={s.reload} />;
   if (!s.form) return <Skeleton rows={5} />;
-  const pubOk = !s.form.adsPublisherId || /^ca-pub-\d{10,}$/.test(s.form.adsPublisherId);
+  const pubOk = !s.form.adsPublisherId || /^ca-pub-d{10,}$/.test(s.form.adsPublisherId);
+  const actifs = AD_PLACEMENTS.filter((p) => s.form[p.enabledKey] && String(s.form[p.slotKey] || "").trim()).length;
   return (
     <div className="ax-grid main-side">
       <section className="ax-card">
-        <SectionTitle>Emplacements</SectionTitle>
-        {SLOTS.map((slot) => (
-          <div key={slot.slotKey} className="ax-card pad-sm" style={{ marginBottom: 10, background: "var(--bg)" }}>
-            <Switch checked={s.form[slot.enabledKey]} onChange={(v) => s.set(slot.enabledKey, v)} label={slot.title} />
-            <p className="ax-hint" style={{ margin: "6px 0 8px" }}>{slot.desc}</p>
-            <input className="ax-input sm ax-mono" placeholder="ID du bloc (data-ad-slot), ex. 1234567890" value={s.form[slot.slotKey] || ""} onChange={(e) => s.set(slot.slotKey, e.target.value.trim())} disabled={!s.form[slot.enabledKey]} />
+        <SectionTitle aside={`${actifs} / ${AD_PLACEMENTS.length} actifs`}>Emplacements</SectionTitle>
+        <p className="ax-sub">
+          Chaque bloc réserve sa hauteur (la page ne saute pas) et se replie si Google n&apos;a rien à afficher. Au plus trois blocs par page,
+          jamais au-dessus du titre.
+        </p>
+        {PAGES_ADS.map((page) => (
+          <div key={page} className="ax-ad-group">
+            <h3 className="ax-ad-page">{page}</h3>
+            {AD_PLACEMENTS.filter((p) => p.page === page).map((p) => {
+              const on = Boolean(s.form[p.enabledKey]);
+              const fmt = AD_FORMATS[p.format];
+              return (
+                <div key={p.key} className={`ax-ad-slot${on ? " on" : ""}`}>
+                  <div className="ax-ad-slot-head">
+                    <Switch checked={on} onChange={(v) => s.set(p.enabledKey, v)} label={p.title} />
+                    <span className="ax-pill">{fmt.label}</span>
+                  </div>
+                  <p className="ax-hint">{p.desc}</p>
+                  <input
+                    className="ax-input sm ax-mono"
+                    placeholder="ID du bloc (data-ad-slot), ex. 1234567890"
+                    value={s.form[p.slotKey] || ""}
+                    onChange={(e) => s.set(p.slotKey, e.target.value.trim())}
+                    disabled={!on}
+                    aria-label={`ID du bloc — ${p.title}`}
+                  />
+                </div>
+              );
+            })}
           </div>
         ))}
       </section>
@@ -81,6 +101,24 @@ function AdSense() {
           >
             <Icon name="save" /> Enregistrer
           </button>
+        </section>
+        <section className="ax-card">
+          <SectionTitle>Plan d&apos;une fiche concours</SectionTitle>
+          <div className="ax-ad-map" aria-hidden="true">
+            <div className="ax-ad-map-main">
+              <span className="b">Titre et infos du sujet</span>
+              <span className="b tall">Énoncé</span>
+              <span className={`ad${s.form.adsConcoursMidEnabled ? " on" : ""}`}>Entre énoncé et corrigé</span>
+              <span className="b tall">Corrigé</span>
+              <span className={`ad${s.form.adsConcoursBottomEnabled ? " on" : ""}`}>Fin de fiche</span>
+              <span className="b">Concours similaires</span>
+            </div>
+            <div className="ax-ad-map-side">
+              <span className="b">Résumé · PDF</span>
+              <span className={`ad tall${s.form.adsSidebarEnabled ? " on" : ""}`}>Colonne latérale</span>
+            </div>
+          </div>
+          <p className="ax-hint" style={{ marginTop: 10 }}>En couleur : emplacements allumés. La colonne latérale n&apos;existe que sur grand écran.</p>
         </section>
         <Alert tone="info">Le fichier ads.txt du site doit contenir le même identifiant éditeur, sinon Google limite la diffusion.</Alert>
       </aside>
