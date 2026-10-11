@@ -51,7 +51,47 @@
   "adsCoursModuleEnabled": false,
   "adsCoursModuleSlot": "",
   "partnerAdsEnabled": true,
-  "partnerAds": [],
+  "partnerAds": [
+    {
+      "id": "pa_mv3upff022lq",
+      "name": "Amin Ghadoui",
+      "contact": "+212614109008",
+      "image": "images/partenaires/amin-ghadoui-mv3ush0j.webp",
+      "w": 1600,
+      "h": 400,
+      "imageMobile": "",
+      "mw": "",
+      "mh": "",
+      "logo": "",
+      "link": "https://wa.link/roho97",
+      "alt": "",
+      "title": "",
+      "description": "",
+      "cta": "",
+      "colors": {
+        "bg": "",
+        "fg": "",
+        "accent": ""
+      },
+      "placements": [
+        "header",
+        "footer"
+      ],
+      "sections": [
+        "home",
+        "cours",
+        "concours"
+      ],
+      "device": "all",
+      "weight": 1,
+      "utm": false,
+      "utmCampaign": "",
+      "active": true,
+      "startDate": "",
+      "endDate": "",
+      "note": ""
+    }
+  ],
   "pdfMarginMm": 18,
   "pdfBorderEnabled": false,
   "pdfBorderColor": "#4f46e5",
