@@ -29,8 +29,9 @@ SaadConcours est un site indépendant, non affilié aux universités, à destina
 - [Quelle moyenne faut-il pour intégrer un master](https://www.saadconcours.space/blog/quelle_moyenne_faut_il_pour_integrer_un_master_au_maroc)
 - [Note éliminatoire au concours de master](https://www.saadconcours.space/blog/note_eliminatoire_au_concours_de_master_comment_ca_marche)
 - [Les 5 masters les plus difficiles au Maroc](https://www.saadconcours.space/blog/les_5_masters_les_plus_difficiles_au_maroc): classement calculé sur la difficulté des sujets de la base.
-- [Master CCA ou master Finance](https://www.saadconcours.space/blog/master_cca_vs_master_finance_lequel_choisir)
-- [FSJES ou ENCG pour un master](https://www.saadconcours.space/blog/fsjes_vs_encg_quelles_differences_pour_ton_master)
+- [CCA, GFCF, Finance ou Actuariat : quel master choisir](https://www.saadconcours.space/blog/master_cca_vs_master_finance_lequel_choisir)
+- [GRH, Marketing ou Entrepreneuriat : quel master choisir](https://www.saadconcours.space/blog/master_grh_vs_entrepreneuriat_lequel_choisir)
+- [FSJES, ENCG, Master Spécialisé, public ou privé](https://www.saadconcours.space/blog/master_public_vs_master_prive_au_maroc_que_choisir)
 - [Dossier de candidature au master : la checklist](https://www.saadconcours.space/blog/dossier_de_candidature_au_master_checklist)
 
 ## Pages utiles

@@ -446,7 +446,8 @@ le miroir correspondant ; si `id` ou `ville` change, déplacer le dossier d'imag
 épreuve publiée deux fois : scans identiques octet pour octet (hash), même URL source, énoncé
 recouvert à > 75 % (bardeaux de 5 mots). Des masters d'une même faculté qui partagent **une**
 page de tronc commun (Meknès 2022/2023) ne sont pas des doublons, ni deux sujets de même titre
-dont les textes diffèrent (`SD_…AinChock_CCA` / `CCA2`). Garder la fiche au corrigé le plus
+dont les textes diffèrent (`SD_…AinChock_CCA` / `CCA2`). Une session qui reprend une partie des
+questions d'une autre année n'est pas un doublon non plus : on la garde (décision du 2026-10-11). Garder la fiche au corrigé le plus
 complet et à la source la plus précise ; montrer la liste avant de supprimer (précédent :
 12 doublons supprimés le 2026-09-26).
 
@@ -832,6 +833,12 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
 1. **Vérifier l'absence de doublon** : pas d'article existant sur le même sujet ; sinon proposer
    de le mettre à jour (A2). Le site désindexe automatiquement un article qui recopie > 30 % d'un
    autre (`lib/blogDuplicates.js`) : **pas de gabarit recyclé**, contenu écrit spécifiquement.
+   **Comparatifs** : un seul article par domaine, jamais de « Master X vs Master Y » deux à deux
+   (fusion du 2026-10-11) : finance et comptabilité → `master_cca_vs_master_finance_lequel_choisir`,
+   management → `master_grh_vs_entrepreneuriat_lequel_choisir`, type d'établissement (FSJES, ENCG,
+   Master Spécialisé, public ou privé) → `master_public_vs_master_prive_au_maroc_que_choisir`. Un
+   nouveau master s'ajoute à l'article de son domaine. Les guides par faculté (« préparer le master X
+   de la faculté Y », avec ou sans cahier PDF) sont voulus : on les enrichit, on ne les supprime pas.
 2. **Fondé sur les données du site** : analyser les concours en base (modules qui reviennent,
    format d'épreuve, difficulté, questions recyclées d'une année à l'autre) et donner des chiffres
    (« Comptabilité analytique : 8 sessions sur 8 »). C'est ce qui distingue l'article (AdSense).

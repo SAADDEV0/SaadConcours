@@ -43,6 +43,15 @@
 /cours/stats_cours/variables-aleatoires-et-lois-usuelles /cours/probas_cours/variables-aleatoires-et-lois-usuelles 301
 /cours/stats_cours/echantillonnage-et-estimation /cours/probas_cours/echantillonnage-et-estimation 301
 
+# Comparatifs « X vs Y » fusionnés par domaine le 2026-10-11 : chaque ancien
+# article renvoie vers le comparatif qui reprend son contenu.
+/blog/master_actuariat_vs_master_finance_lequel_choisir /blog/master_cca_vs_master_finance_lequel_choisir 301
+/blog/master_cca_vs_master_gfcf_quelles_differences /blog/master_cca_vs_master_finance_lequel_choisir 301
+/blog/master_finance_vs_master_gfcf_lequel_choisir /blog/master_cca_vs_master_finance_lequel_choisir 301
+/blog/master_grh_vs_marketing_lequel_choisir /blog/master_grh_vs_entrepreneuriat_lequel_choisir 301
+/blog/fsjes_vs_encg_quelles_differences_pour_ton_master /blog/master_public_vs_master_prive_au_maroc_que_choisir 301
+/blog/master_vs_master_specialise_quelles_differences /blog/master_public_vs_master_prive_au_maroc_que_choisir 301
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et
