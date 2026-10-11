@@ -93,6 +93,7 @@ export const MOBILE_QUERY = `(max-width: ${MOBILE_MAX_WIDTH}px)`;
 export const LABEL_POSITIONS = [
   { key: "above", label: "Au-dessus du visuel" },
   { key: "overlay", label: "Sur le visuel (coin haut gauche)" },
+  { key: "none", label: "Aucune mention" },
 ];
 
 export const DEFAULT_ROTATION_SEC = 12;
@@ -106,7 +107,7 @@ export function partnerAdsOptions(settings) {
   return {
     rotationSec: Number.isFinite(sec) && sec >= 5 && sec <= 120 ? Math.round(sec) : DEFAULT_ROTATION_SEC,
     label: label || DEFAULT_LABEL,
-    labelPosition: settings?.partnerAdsLabelPosition === "overlay" ? "overlay" : "above",
+    labelPosition: ["overlay", "none"].includes(settings?.partnerAdsLabelPosition) ? settings.partnerAdsLabelPosition : "above",
   };
 }
 
@@ -435,10 +436,10 @@ export function partnerAdHtml(ad, placement, { label = DEFAULT_LABEL, labelPosit
       (href ? `<span class="pa-text-cta">${esc(ad.cta || "En savoir plus")} →</span>` : "");
   }
 
-  const pos = labelPosition === "overlay" ? "overlay" : "above";
+  const pos = ["overlay", "none"].includes(labelPosition) ? labelPosition : "above";
   return (
-    `<div class="pa-unit pa-unit-${esc(placement)} pa-label-${pos}" data-ad-id="${esc(ad.id)}">` +
-    `<span class="pa-tag">${esc(label)}</span>` +
+    `<div class="pa-unit pa-unit-${esc(placement)} pa-label-${pos}${src ? " pa-unit-img" : ""}" data-ad-id="${esc(ad.id)}">` +
+    (pos === "none" ? "" : `<span class="pa-tag">${esc(label)}</span>`) +
     `<${tag} class="pa-banner${src ? "" : " pa-banner-text"}"${attrs}${src ? "" : colorVars(ad.colors)}>${body}</${tag}>` +
     `</div>`
   );

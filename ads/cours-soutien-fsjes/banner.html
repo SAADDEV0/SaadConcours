@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Cours de soutien FSJES</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Literata:ital,opsz,wght@1,7..72,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+/* Bannière « Cours de soutien FSJES » — charte du site : cahier « stylo bleu »,
+   indigo de la marque, teal de l'espace Licence (FSJES), surligneur jaune,
+   vert WhatsApp pour l'appel à l'action. Pas de dégradé.
+   Format choisi par le hash : #carre (1080×1080), #story (1080×1920),
+   #paysage (1200×628). */
+:root{
+  --paper:#fbfaf6; --rule:#dfe3f3; --margin:#f2b8b5;
+  --ink:#1e1b4b; --indigo:#4338ca; --teal:#0f766e; --teal-tint:#e3f4f0;
+  --hl:#fde68a; --text:#3b3f5c; --wa:#25d366; --wa-dark:#128c4a;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{background:#d9dbe6;}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif; color:var(--ink);}
+
+.ad{
+  position:relative; overflow:hidden; background:var(--paper);
+  /* lignes de cahier */
+  background-image:repeating-linear-gradient(to bottom, transparent 0 59px, var(--rule) 59px 61px);
+  display:flex; flex-direction:column;
+}
+.ad::before{ /* marge rouge du cahier */
+  content:""; position:absolute; top:0; bottom:0; left:var(--mx); width:3px; background:var(--margin);
+}
+.inner{position:relative; display:flex; flex-direction:column; height:100%; padding:var(--pad) var(--pad) var(--pad) calc(var(--mx) + var(--gap));}
+
+.top{display:flex; align-items:center; justify-content:space-between; gap:20px;}
+.tag{
+  display:inline-flex; align-items:center; gap:12px; padding:12px 22px; border-radius:999px;
+  background:var(--teal-tint); color:var(--teal); font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:var(--tag); white-space:nowrap;
+  border:2px solid color-mix(in srgb, var(--teal) 30%, transparent);
+}
+.tag i{width:12px; height:12px; border-radius:50%; background:var(--teal); display:block;}
+.brand{display:flex; align-items:center; gap:12px; font-weight:800; font-size:var(--brand); color:var(--ink);}
+.brand svg{width:calc(var(--brand) * 1.9); height:calc(var(--brand) * 1.9);}
+
+h1{font-weight:800; line-height:.98; letter-spacing:-.035em; font-size:var(--h1); margin-top:var(--h1-mt);}
+h1 .l1{display:block; color:var(--indigo);}
+h1 .l2{display:inline-block; position:relative; isolation:isolate; color:var(--teal); margin-top:.08em;}
+h1 .l2::before{ /* coup de surligneur */
+  content:""; position:absolute; z-index:-1; left:-.08em; right:-.12em; bottom:.06em; height:.42em;
+  background:var(--hl); transform:rotate(-1.2deg); border-radius:.08em;
+}
+h1 .l2 span{position:relative;}
+
+.lead{
+  font-family:"Literata",Georgia,serif; font-style:italic; font-weight:500; color:var(--text);
+  font-size:var(--lead); line-height:1.4; margin-top:var(--lead-mt); max-width:var(--lead-w);
+}
+.lead u{text-decoration:none; background-image:linear-gradient(#dc2626,#dc2626); background-size:100% 4px; background-repeat:no-repeat; background-position:0 92%;}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--chip-gap); margin-top:var(--chips-mt);}
+.chips span{
+  padding:var(--chip-py) var(--chip-px); border-radius:14px; background:#fff; border:2px solid #d6d9ec;
+  font-weight:700; font-size:var(--chip); color:var(--ink);
+}
+
+.points{list-style:none; display:flex; flex-direction:column; gap:var(--pt-gap); margin-top:var(--points-mt);}
+.points li{display:flex; align-items:center; gap:18px; font-weight:600; font-size:var(--pt); color:var(--text);}
+.points li b{color:var(--ink);}
+.points svg{width:calc(var(--pt) * 1.25); height:calc(var(--pt) * 1.25); flex-shrink:0; color:var(--indigo);}
+
+.spacer{flex:1; min-height:var(--cta-mt, 36px);}
+
+.cta{
+  display:flex; align-items:center; gap:var(--cta-gap); background:var(--wa); color:#fff;
+  border-radius:32px; padding:var(--cta-p); box-shadow:0 10px 0 var(--wa-dark);
+}
+.cta .wa{width:var(--wa-ic); height:var(--wa-ic); flex-shrink:0;}
+.cta-txt{flex:1; min-width:0;}
+.cta-txt small{display:block; font-weight:700; font-size:var(--cta-s); opacity:.95;}
+.cta-txt strong{display:block; font-weight:800; font-size:var(--cta-n); letter-spacing:-.01em; white-space:nowrap; margin-top:4px;}
+.qr{background:#fff; border-radius:18px; padding:12px; width:var(--qr); height:var(--qr); flex-shrink:0;}
+.qr svg{width:100%; height:100%; display:block;}
+.qr-hint{font-size:var(--cta-s); font-weight:600; color:var(--text); margin-top:16px; text-align:right;}
+
+/* ----- Carré 1080×1080 ----- */
+.carre{width:1080px; height:1080px;
+  --pad:70px; --mx:96px; --gap:56px; --tag:22px; --brand:26px;
+  --h1:112px; --h1-mt:64px; --lead:34px; --lead-mt:34px; --lead-w:820px;
+  --chip:24px; --chip-py:9px; --chip-px:18px; --chip-gap:12px; --chips-mt:40px;
+  --cta-gap:26px; --cta-p:26px 26px 26px 34px; --wa-ic:84px; --cta-s:25px; --cta-n:50px; --qr:150px;
+}
+.carre .points{display:none;}
+/* ----- Story 1080×1920 ----- */
+.story{width:1080px; height:1920px;
+  --pad:90px; --mx:96px; --gap:56px; --tag:24px; --brand:28px;
+  --h1:140px; --h1-mt:64px; --lead:40px; --lead-mt:36px; --lead-w:820px;
+  --chip:29px; --chip-py:12px; --chip-px:24px; --chip-gap:14px; --chips-mt:40px;
+  --pt:33px; --pt-gap:22px; --points-mt:44px;
+  --cta-gap:24px; --cta-p:34px 40px 40px; --wa-ic:92px; --cta-s:30px; --cta-n:58px; --qr:200px; --cta-mt:40px;
+}
+/* ----- Paysage 1200×628 ----- */
+.paysage{width:1200px; height:628px;
+  --pad:50px; --mx:64px; --gap:40px; --tag:17px; --brand:20px;
+  --h1:84px; --h1-mt:30px; --lead:24px; --lead-mt:18px; --lead-w:560px;
+  --chip:18px; --chip-py:8px; --chip-px:15px; --chip-gap:9px; --chips-mt:24px;
+  --cta-gap:18px; --cta-p:22px; --wa-ic:62px; --cta-s:19px; --cta-n:34px; --qr:170px;
+}
+.paysage .inner{display:grid; grid-template-columns:1fr 400px; grid-template-rows:auto 1fr; column-gap:40px;}
+.paysage .top{grid-column:1 / -1;}
+.paysage .left{grid-column:1;}
+.paysage .right{grid-column:2; display:flex; flex-direction:column; justify-content:flex-end;}
+.paysage .points, .paysage .spacer{display:none;}
+.paysage .cta, .story .cta{flex-direction:column; align-items:stretch; text-align:left; border-radius:26px;}
+.paysage .cta-head, .story .cta-head{display:flex; align-items:center; gap:20px;}
+.paysage .qr, .story .qr{align-self:center; margin-top:4px;}
+.cta-head{display:contents;}
+.story .spacer{flex:0 0 90px;}
+.paysage .cta-head, .story .cta-head{display:flex;}
+</style>
+</head>
+<body>
+<div class="ad" id="ad">
+  <div class="inner">
+    <div class="top">
+      <span class="tag"><i></i>FSJES · Économie &amp; Gestion</span>
+      <span class="brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <defs><linearGradient id="brandg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          <rect width="64" height="64" rx="16" fill="url(#brandg)"/>
+          <polygon points="32,13 49,21 32,29 15,21" fill="white"/>
+          <line x1="49" y1="21" x2="51" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="51" cy="32.5" r="2" fill="#fbbf24"/>
+          <polygon points="32,42 13,37 13,48 32,54" fill="white"/>
+          <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
+          <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
+        </svg>
+        SaadConcours
+      </span>
+    </div>
+
+    <div class="left">
+      <h1><span class="l1">Cours de soutien</span><span class="l2"><span>FSJES</span></span></h1>
+      <p class="lead">Tu bloques sur un module&nbsp;? On reprend le cours pas à pas, avec des exercices <u>corrigés</u>.</p>
+      <div class="chips">
+        <span>Comptabilité</span><span>Microéconomie</span><span>Macroéconomie</span>
+        <span>Statistique</span><span>Maths financières</span><span>Gestion</span>
+      </div>
+      <ul class="points">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Semestres S1 à S6</b></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Explications claires</b> et méthode d'examen</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Exercices et examens</b> corrigés ensemble</span></li>
+      </ul>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="right">
+      <div class="cta">
+        <div class="cta-head">
+          <svg class="wa" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.6.7 1.9.8 2 .1.2.1.4 0 .6-.1.2-.2.4-.3.5-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.3.7-.2.3.1 1.8.8 2.1.9.3.2.5.2.6.4.1.2.1.9-.1 1.5Z"/></svg>
+          <div class="cta-txt">
+            <small>Contactez-moi sur WhatsApp</small>
+            <strong>+212 7 13 87 53 27</strong>
+          </div>
+        </div>
+        <div class="qr" id="qr"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var f = (location.hash || "#carre").slice(1);
+  document.getElementById("ad").classList.add(["carre","story","paysage"].indexOf(f) >= 0 ? f : "carre");
+  try {
+    var q = qrcode(0, "M");
+    q.addData("https://wa.me/212713875327");
+    q.make();
+    document.getElementById("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  } catch (e) { document.getElementById("qr").style.display = "none"; }
+</script>
+</body>
+</html>

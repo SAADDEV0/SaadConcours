@@ -684,6 +684,12 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
  * de manger l'écran. */
 .pa-unit-header .pa-banner img, .pa-unit-footer .pa-banner img{max-height:120px; object-fit:contain;}
 .pa-unit-inline .pa-banner img{max-height:250px; object-fit:contain;}
+/* Bannière image hors rails : le bloc (mention + cadre) prend la largeur de
+ * l'image telle qu'affichée, centré. Un visuel qui n'a pas le ratio du cadre
+ * (ex. 1600×400 plafonné à 120 px de haut) ne laisse ainsi aucun vide blanc
+ * de part et d'autre. */
+.pa-zone .pa-unit-img{width:fit-content; max-width:min(970px, 100%);}
+.pa-zone .pa-unit-img .pa-banner img{width:auto; max-width:100%;}
 /* Encart texte (sans visuel) : couleurs réglables par bannière depuis la
  * console (--pa-bg, --pa-fg, --pa-accent), sinon celles du thème. */
 .pa-unit .pa-banner-text{
@@ -883,6 +889,28 @@ footer.site-footer{
 .egm-skip{display:block; margin:16px auto 0; background:none; border:none; color:var(--text-faint); font-size:.8rem; text-decoration:underline; cursor:pointer; padding:4px;}
 .egm-skip:hover{color:var(--text-dim);}
 
+
+/* ---------- Bouton WhatsApp flottant (chrome.js → whatsappFabHtml) ---------- */
+/* Vert WhatsApp (couleur de la marque tierce, reconnue d'un coup d'oeil) en
+ * bas à droite ; libellé « Cours de soutien » sur ordinateur, rond seul sur
+ * téléphone. Caché quand une barre collante occupe déjà le bas (QCM) et
+ * remonté au-dessus du bouton d'édition admin. */
+.wa-fab{
+  position:fixed; right:16px; bottom:calc(16px + var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); z-index:50;
+  display:inline-flex; align-items:center; gap:8px; height:52px; min-width:52px; padding:0 14px; border-radius:999px;
+  background:#25d366; color:#fff !important; font-weight:700; font-size:.92rem; text-decoration:none !important;
+  box-shadow:0 6px 18px -6px rgba(0,0,0,.45); transition:transform .15s, background .15s;
+}
+.wa-fab svg{width:26px; height:26px; flex-shrink:0;}
+.wa-fab:hover{background:#1ebe5b; transform:translateY(-2px);}
+.wa-fab:focus-visible{outline:none; box-shadow:0 0 0 3px #fff, 0 0 0 6px #25d366;}
+@media (max-width:640px){
+  .wa-fab{width:52px; padding:0; justify-content:center;}
+  .wa-fab-label{display:none;}
+}
+body:has(.eval-submit-bar) .wa-fab, body:has(.sheet-m.is-open) .wa-fab{display:none;}
+body:has(.wa-fab) .bac-edit-fab{bottom:calc(80px + var(--tabbar-h) + env(safe-area-inset-bottom, 0px));}
+@media print{ .wa-fab{display:none;} }
 
 /* ---------- Rappel du'a (app/_shared/DuaToast.js) ---------- */
 /* Petite carte en bas à gauche, sans voile, au-dessus de la barre d'onglets

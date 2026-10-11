@@ -653,7 +653,7 @@ function PartnerOptions() {
         <Field label="Rotation (secondes)" error={secOk ? "" : "Entre 5 et 120 secondes."} hint="Quand plusieurs bannières partagent un emplacement.">
           <input type="number" min={5} max={120} className="ax-input" value={sec} onChange={(e) => s.set("partnerAdsRotationSec", e.target.value === "" ? "" : Number(e.target.value))} />
         </Field>
-        <Field label="Mention" hint="Obligatoire : signale au visiteur qu'il s'agit d'une publicité.">
+        <Field label="Mention" hint="Signale au visiteur qu'il s'agit d'une publicité (recommandé). Peut être masquée avec « Aucune mention ».">
           <input className="ax-input" maxLength={24} value={s.form.partnerAdsLabel ?? ""} placeholder={DEFAULT_LABEL} onChange={(e) => s.set("partnerAdsLabel", e.target.value)} />
         </Field>
         <Field label="Position de la mention">

@@ -127,6 +127,8 @@ export default async function RootLayout({ children }) {
   // balise du tout quand les réglages n'ont pas pu être lus au build — le
   // navigateur se rabat alors sur /api/settings. « < » échappé : le JSON ne
   // doit jamais pouvoir fermer la balise <script>.
+  // Bouton WhatsApp flottant (posé par footerHtml) masqué depuis les réglages.
+  const hideWhatsappFab = settings?.whatsappFabEnabled === false;
   const partnerAdsJson = settings
     ? JSON.stringify(publicPartnerAdsConfig(settings) || { partnerAdsEnabled: false }).replace(/</g, "\\u003c")
     : null;
@@ -159,6 +161,7 @@ export default async function RootLayout({ children }) {
         {/* katex.min.css is injected client-side by chromeScript() instead of
            linked here — a render-blocking stylesheet on every single page
            (most of which show no math at all) was hurting LCP site-wide. */}
+        {hideWhatsappFab && <style>{".wa-fab{display:none!important}"}</style>}
         {partnerAdReservation && (
           <style
             // eslint-disable-next-line react/no-danger

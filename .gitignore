@@ -43,3 +43,7 @@ graphify-out/
 
 # Publication automatique réseaux sociaux (outils et images générés)
 .social/
+
+# Données de l'application mobile, régénérées à chaque build
+# (scripts/build-app-data.mjs, « prebuild »).
+public/app-data/

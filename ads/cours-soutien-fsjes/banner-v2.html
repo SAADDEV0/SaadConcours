@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Cours de soutien FSJES</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+/* Bannière v2 « Cours de soutien FSJES » : fond indigo nuit uni, accroche
+   en questions surlignées, titre géant, appel WhatsApp vert. Pas de dégradé
+   (hors logo). Format par le hash : #carre 1080×1080, #story 1080×1920,
+   #paysage 1200×628. */
+:root{
+  --bg:#1e1b4b; --bg-2:#272463; --line:rgba(255,255,255,.05);
+  --white:#fff; --soft:#c7d2fe; --teal:#5eead4; --hl:#fde047; --ink:#1e1b4b;
+  --wa:#25d366; --wa-dark:#128c4a;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{background:#111;}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif; color:var(--white);}
+
+.ad{
+  position:relative; overflow:hidden; background-color:var(--bg);
+  /* papier quadrillé très discret */
+  background-image:
+    linear-gradient(var(--line) 2px, transparent 2px),
+    linear-gradient(90deg, var(--line) 2px, transparent 2px);
+  background-size:var(--sq) var(--sq);
+}
+.inner{position:relative; height:100%; display:flex; flex-direction:column; padding:var(--pad);}
+
+.top{display:flex; align-items:center; justify-content:space-between;}
+.sticker{
+  display:inline-block; background:var(--hl); color:var(--ink); font-weight:800; text-transform:uppercase;
+  letter-spacing:.06em; font-size:var(--stk); padding:.55em 1em; border-radius:10px; transform:rotate(-3deg);
+  box-shadow:6px 6px 0 rgba(0,0,0,.28);
+}
+.brand{display:flex; align-items:center; gap:.5em; font-weight:800; font-size:var(--brand);}
+.brand svg{width:1.9em; height:1.9em;}
+
+.hook{margin-top:var(--hook-mt); font-weight:700; font-size:var(--hook); line-height:1.2; color:var(--soft);}
+.qs{display:flex; flex-wrap:wrap; gap:var(--q-gap); margin-top:.35em;}
+.qs span{
+  background:var(--white); color:var(--ink); font-weight:800; padding:.12em .45em; border-radius:12px;
+}
+.qs span:nth-child(2){transform:rotate(-2deg);}
+.qs span:nth-child(3){transform:rotate(1.5deg);}
+
+h1{margin-top:var(--h1-mt); font-weight:800; letter-spacing:-.04em; line-height:.92;}
+h1 .a{display:block; font-size:var(--h1a);}
+h1 .b{display:block; font-size:var(--h1b); color:var(--teal); letter-spacing:-.05em;}
+
+.pts{list-style:none; display:flex; flex-wrap:wrap; gap:var(--pt-gap) calc(var(--pt-gap) * 2); margin-top:var(--pts-mt); font-size:var(--pt); font-weight:600; color:var(--soft);}
+.pts li{display:flex; align-items:center; gap:.45em;}
+.pts li::before{content:""; width:.5em; height:.5em; border-radius:50%; background:var(--hl); flex-shrink:0;}
+
+.spacer{flex:1; min-height:var(--cta-mt);}
+
+.cta{display:flex; align-items:center; gap:var(--cta-gap); background:var(--wa); border-radius:28px; padding:var(--cta-p); box-shadow:0 10px 0 var(--wa-dark);}
+.cta .wa{width:var(--wa-ic); height:var(--wa-ic); flex-shrink:0;}
+.cta-txt{flex:1; min-width:0;}
+.cta-txt small{display:block; font-weight:700; font-size:var(--cta-s);}
+.cta-txt strong{display:block; font-weight:800; font-size:var(--cta-n); white-space:nowrap; letter-spacing:-.01em; margin-top:2px;}
+.qr{background:#fff; border-radius:16px; padding:11px; width:var(--qr); height:var(--qr); flex-shrink:0;}
+.qr svg{width:100%; height:100%; display:block;}
+.cta-head{display:contents;}
+
+/* ----- Carré ----- */
+.carre{width:1080px; height:1080px; --sq:54px;
+  --pad:72px; --stk:24px; --brand:26px;
+  --hook-mt:58px; --hook:46px; --q-gap:16px;
+  --h1-mt:38px; --h1a:96px; --h1b:178px;
+  --pt:28px; --pt-gap:14px; --pts-mt:26px;
+  --cta-mt:36px; --cta-gap:24px; --cta-p:22px 22px 22px 32px; --wa-ic:78px; --cta-s:24px; --cta-n:48px; --qr:138px;
+}
+/* ----- Story ----- */
+.story{width:1080px; height:1920px; --sq:60px;
+  --pad:96px 84px; --stk:28px; --brand:30px;
+  --hook-mt:150px; --hook:62px; --q-gap:20px;
+  --h1-mt:80px; --h1a:118px; --h1b:232px;
+  --pt:36px; --pt-gap:22px; --pts-mt:48px;
+  --cta-mt:90px; --cta-gap:22px; --cta-p:34px 40px 40px; --wa-ic:90px; --cta-s:30px; --cta-n:58px; --qr:210px;
+}
+.pts{flex-direction:column;}
+.story .spacer{flex:0 0 var(--cta-mt);}
+.story .cta, .paysage .cta{flex-direction:column; align-items:stretch;}
+.story .cta-head, .paysage .cta-head{display:flex; align-items:center; gap:20px;}
+.story .qr, .paysage .qr{align-self:center;}
+/* ----- Paysage ----- */
+.paysage{width:1200px; height:628px; --sq:40px;
+  --pad:46px 52px; --stk:17px; --brand:19px;
+  --hook-mt:26px; --hook:30px; --q-gap:10px;
+  --h1-mt:22px; --h1a:62px; --h1b:118px;
+  --pt:19px; --pt-gap:8px; --pts-mt:16px;
+  --cta-gap:16px; --cta-p:22px; --wa-ic:58px; --cta-s:18px; --cta-n:32px; --qr:168px;
+}
+.paysage .inner{display:grid; grid-template-columns:1fr 380px; grid-template-rows:auto 1fr; column-gap:44px;}
+.paysage .top{grid-column:1 / -1;}
+.paysage .right{display:flex; flex-direction:column; justify-content:flex-end;}
+.paysage .spacer{display:none;}
+</style>
+</head>
+<body>
+<div class="ad" id="ad">
+  <div class="inner">
+    <div class="top">
+      <span class="sticker">Inscriptions ouvertes</span>
+      <span class="brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <defs><linearGradient id="brandg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          <rect width="64" height="64" rx="16" fill="url(#brandg)"/>
+          <polygon points="32,13 49,21 32,29 15,21" fill="white"/>
+          <line x1="49" y1="21" x2="51" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="51" cy="32.5" r="2" fill="#fbbf24"/>
+          <polygon points="32,42 13,37 13,48 32,54" fill="white"/>
+          <polygon points="32,42 51,37 51,48 32,54" fill="white"/>
+          <line x1="32" y1="42" x2="32" y2="54" stroke="#4f46e5" stroke-width="1.2"/>
+        </svg>
+        SaadConcours
+      </span>
+    </div>
+
+    <div class="left">
+      <p class="hook">Bloqué(e) en…
+        <span class="qs"><span>Compta ?</span><span>Micro ?</span><span>Stat ?</span></span>
+      </p>
+      <h1><span class="a">Cours de soutien</span><span class="b">FSJES</span></h1>
+      <ul class="pts">
+        <li>Le cours repris pas à pas</li>
+        <li>Exercices et examens corrigés</li>
+        <li>Méthode pour réussir l'examen</li>
+      </ul>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="right">
+      <div class="cta">
+        <div class="cta-head">
+          <svg class="wa" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.6.7 1.9.8 2 .1.2.1.4 0 .6-.1.2-.2.4-.3.5-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.3.7-.2.3.1 1.8.8 2.1.9.3.2.5.2.6.4.1.2.1.9-.1 1.5Z"/></svg>
+          <div class="cta-txt">
+            <small>Écris-moi sur WhatsApp</small>
+            <strong>+212 7 13 87 53 27</strong>
+          </div>
+        </div>
+        <div class="qr" id="qr"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var f = (location.hash || "#carre").slice(1);
+  document.getElementById("ad").classList.add(["carre","story","paysage"].indexOf(f) >= 0 ? f : "carre");
+  try {
+    var q = qrcode(0, "M");
+    q.addData("https://wa.me/212713875327");
+    q.make();
+    document.getElementById("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  } catch (e) { document.getElementById("qr").style.display = "none"; }
+</script>
+</body>
+</html>
