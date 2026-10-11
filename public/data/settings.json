@@ -160,5 +160,6 @@
     "dunya"
   ],
   "pdfVerseSize": "normal",
-  "pdfVerseBoxed": true
+  "pdfVerseBoxed": true,
+  "scansMasques": true
 }
