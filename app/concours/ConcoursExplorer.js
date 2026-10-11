@@ -44,7 +44,11 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
         fullPromise = fetch("/data/concours.json")
           .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
           .then((list) => {
-            fullById = new Map(list.map((c) => [c.id, c]));
+            // Le fichier statique garde les chemins des scans : on suit la
+            // carte rendue au build, qui sait s'ils sont masqués (réglage
+            // `scansMasques`), pour qu'un PDF n'en contienne pas.
+            const hasImg = new Map(ALL.map((c) => [c.id, c.hasImg]));
+            fullById = new Map(list.map((c) => [c.id, hasImg.get(c.id) === false ? { ...c, images: [] } : c]));
             return fullById;
           })
           .catch(() => {

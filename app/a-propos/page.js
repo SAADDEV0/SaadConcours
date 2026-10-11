@@ -67,6 +67,7 @@ export default async function AProposPage() {
       url: SITE_URL,
       email: "saadconcours.space@gmail.com",
       founder: { "@type": "Person", name: "Saad" },
+      parentOrganization: { "@type": "Organization", name: "SaadGroup" },
     },
   };
 
@@ -95,7 +96,7 @@ export default async function AProposPage() {
 
         <h2 style={H2}>Qui tient le site</h2>
         <p style={P}>
-          SaadConcours est créé et tenu par Saad, qui en assure seul l&apos;édition : choix des sujets et des cours
+          SaadConcours fait partie de SaadGroup. Il est créé et tenu par Saad, qui en assure l&apos;édition : choix des sujets et des cours
           publiés, mises à jour, corrections des erreurs signalées et réponses aux messages envoyés depuis la page{" "}
           <a href="/contact">Contact</a>. Les informations légales (éditeur, hébergeur) sont sur la page{" "}
           <a href="/mentions-legales">Mentions légales</a>.

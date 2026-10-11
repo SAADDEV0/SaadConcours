@@ -2,7 +2,7 @@
 
 > Site gratuit d'économie et de gestion au Maroc, du lycée au master : cours du 2ème Bac Sciences Économiques et Gestion, cours de Licence FSJES (S1 à S6) chapitre par chapitre, et base de plus de 270 sujets réels de concours d'accès aux licences d'excellence et aux masters, avec corrigés indicatifs et QCM.
 
-SaadConcours est un site indépendant, non affilié aux universités, à destination des élèves du Bac Sciences Économiques et Gestion, des étudiants en Licence FSJES et des candidats aux concours d'accès aux masters spécialisés en économie-gestion (CCA, GFCF, Finance, Fiscalité, Audit, Marketing, GRH...). Le site est édité et tenu par Saad, seul administrateur, et mis à jour régulièrement.
+SaadConcours est un site indépendant, non affilié aux universités, à destination des élèves du Bac Sciences Économiques et Gestion, des étudiants en Licence FSJES et des candidats aux concours d'accès aux masters spécialisés en économie-gestion (CCA, GFCF, Finance, Fiscalité, Audit, Marketing, GRH...). Le site fait partie de SaadGroup ; il est édité et tenu par Saad, et mis à jour régulièrement.
 
 ## Contenu du site
 

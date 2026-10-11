@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 const EMAIL = "saadconcours.space@gmail.com";
-const MISE_A_JOUR = "26 septembre 2026";
+const MISE_A_JOUR = "11 octobre 2026";
 
 export const metadata = {
   title: "Mentions légales et conditions d'utilisation",
@@ -35,8 +35,8 @@ export default function MentionsLegalesPage() {
 
         <h2 style={H2}>Éditeur du site</h2>
         <p style={P}>
-          SaadConcours (www.saadconcours.space) est un site indépendant édité par Saad, à titre personnel, qui en est
-          aussi le directeur de la publication. Il n&apos;est affilié à aucune université, faculté ou école. Contact :{" "}
+          SaadConcours (www.saadconcours.space) est un site indépendant de SaadGroup, édité par Saad, qui en est aussi le
+          directeur de la publication. Il n&apos;est affilié à aucune université, faculté ou école. Contact :{" "}
           <a href={`mailto:${EMAIL}`}>{EMAIL}</a> ou la page <a href="/contact">Contact</a>.
         </p>
 

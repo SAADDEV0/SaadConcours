@@ -86,7 +86,49 @@ function General() {
         </Field>
         <SaveBar s={s} label="Google Analytics" />
       </section>
+      <Scans />
     </div>
+  );
+}
+
+// Un clic masque (ou réaffiche) les scans de tous les sujets sur le site
+// public : fiche, liste, PDF. concours.json et les images ne bougent pas, le
+// réglage `scansMasques` est lu au build (getPublicConcours, lib/store.js).
+function Scans() {
+  const settings = useJson("data/settings.json");
+  const toast = useToast();
+  const [busy, setBusy] = useState(false);
+  if (!settings.data) return <Skeleton rows={3} />;
+  const masques = Boolean(settings.data.scansMasques);
+
+  async function basculer() {
+    setBusy(true);
+    try {
+      await patchSettings((cur) => ({ ...cur, scansMasques: !masques }), masques ? "scans réaffichés" : "scans masqués");
+      await settings.reload();
+      toast.success(masques ? "Scans réaffichés" : "Scans masqués", "Appliqué au site au prochain déploiement (~4 min).");
+    } catch (err) {
+      toast.error("Enregistrement impossible", err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="ax-card">
+      <SectionTitle>Scans des sujets</SectionTitle>
+      <p className="ax-sub">
+        Masque d&apos;un coup les scans de tous les concours sur le site public (fiche, liste, PDF). L&apos;énoncé transcrit et le corrigé restent. Rien n&apos;est supprimé : un clic les réaffiche.
+      </p>
+      <p className="ax-mt">
+        <span className={`ax-pill ${masques ? "amber" : "green"}`}>{masques ? "Scans masqués" : "Scans affichés"}</span>
+      </p>
+      <div className="ax-btn-row ax-mt">
+        <button type="button" className={`ax-btn${masques ? "" : " danger"}`} onClick={basculer} disabled={busy}>
+          <Icon name={busy ? "loader" : masques ? "eye" : "eyeOff"} size="sm" /> {masques ? "Réafficher tous les scans" : "Masquer tous les scans"}
+        </button>
+      </div>
+    </section>
   );
 }
 

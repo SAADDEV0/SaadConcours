@@ -55,6 +55,7 @@ export function concoursListItem(c) {
     ...(c.date_ajout ? { date_ajout: c.date_ajout } : {}),
     ...(c.niveau ? { niveau: c.niveau } : {}),
     hasImg: (c.images || []).length > 0,
+    ...(c.scansMasques ? { scansMasques: true } : {}),
     hasCorrige: Boolean(c.corrige_md || c.corrige_from_github),
   };
 }
@@ -81,7 +82,7 @@ export function concoursCardHtml(c, { hidden = false, dl = true, badgeNiveau = f
       <span class="sp-row-title">${escapeHtml(masterLabel)}${nouveau ? '<span class="home-new">Nouveau</span>' : ""}</span>
       <span class="sp-row-meta"><span>${escapeHtml(lieu)}</span>${difficulteHtml(c.difficulte)}${
         badgeNiveau && isLicenceExcellence(c) ? `<span class="sp-le-badge">${iconHtml("star", { size: 12 })}Licence d'excellence</span>` : ""
-      }${hasCorrige ? "" : '<span class="sp-flag">Sans corrigé</span>'}${hasImg ? "" : '<span class="sp-flag">Sans scan</span>'}</span>
+      }${hasCorrige ? "" : '<span class="sp-flag">Sans corrigé</span>'}${hasImg || c.scansMasques ? "" : '<span class="sp-flag">Sans scan</span>'}</span>
     </span>
     <span class="sp-row-year">${escapeHtml(String(c.annee || "—"))}</span>
     ${dl ? `<button type="button" class="card-dl sp-row-dl" title="Télécharger l'énoncé (PDF)" aria-label="Télécharger l'énoncé en PDF">${iconHtml("file-pdf", { size: 17 })}<span>PDF</span></button>` : ""}
