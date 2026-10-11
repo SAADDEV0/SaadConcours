@@ -79,8 +79,10 @@ export const metadata = {
 };
 
 // Barre du navigateur mobile de la couleur du fond de page (papier / nuit),
-// et viewport-fit=cover pour que la barre d'onglets du bas tienne compte de
-// la zone de geste des téléphones (env(safe-area-inset-bottom)).
+// d'après le système ; chromeScript() la recale sur le thème choisi (voir
+// syncThemeColor). Et viewport-fit=cover pour que la barre d'onglets du bas
+// tienne compte de la zone de geste des téléphones
+// (env(safe-area-inset-bottom)).
 export const viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f6f7f9" },
@@ -137,8 +139,7 @@ export default async function RootLayout({ children }) {
         {/* Applies the saved light/dark choice before the first paint.
            chromeScript() also sets data-theme, but only from a useEffect
            after hydration — so anyone reading in dark mode on a light OS got
-           a full-page white flash on every single navigation, and the cours
-           reader flashed the site palette before its reading theme landed. */}
+           a full-page white flash on every single navigation. */}
         <script
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{

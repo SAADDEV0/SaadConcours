@@ -148,7 +148,7 @@ function menuSheetHtml(active) {
   <div class="menu-label">S'entraîner et lire</div>
   <div class="menu-group menu-group-outils">${outils}</div>
   <div class="menu-foot">
-    <button type="button" class="menu-theme" data-theme-toggle>${ICON_MOON}<span class="menu-theme-label">Thème sombre</span></button>
+    <button type="button" class="menu-theme" data-theme-toggle>${ICON_SUN}<span class="menu-theme-label">Thème clair</span></button>
     <nav class="menu-foot-links" aria-label="Le site"><a href="/a-propos">À propos</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></nav>
   </div>
 </div>`;
@@ -184,7 +184,7 @@ export function chromeHtml({ active, rails = false }) {
         <kbd class="search-box-kbd" aria-hidden="true">/</kbd>
       </form>
       <a class="search-btn" href="/recherche" aria-label="Rechercher">${iconHtml("search", { size: 20 })}</a>
-      <button class="theme-toggle" id="themeToggle" data-theme-toggle title="Changer de thème" aria-label="Changer de thème">${ICON_MOON}</button>
+      <button class="theme-toggle" id="themeToggle" data-theme-toggle title="Changer de thème" aria-label="Changer de thème">${ICON_SUN}</button>
       <button class="nav-toggle-btn" id="navToggleBtn" data-sheet-open="menuSheet" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuSheet">
         ${iconHtml("menu", { size: 20 })}<span>Menu</span>
       </button>
@@ -680,10 +680,19 @@ export const chromeScript = function initChrome() {
     const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
     const theme = saved || (prefersLight ? "light" : "dark");
     document.documentElement.setAttribute("data-theme", theme);
+    syncThemeColor();
   })();
 
+  // Barre du navigateur mobile : les <meta name="theme-color"> du layout
+  // suivent le réglage du système ; on les aligne sur le thème choisi ici.
+  function syncThemeColor() {
+    const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (bg) document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", bg));
+  }
+
   // Icône SVG (rendu identique sur tous les systèmes, contrairement aux
-  // emoji) et libellé qui annonce l'action, pas l'état.
+  // emoji) et libellé qui annoncent l'action, pas l'état — le balisage
+  // serveur part du thème sombre, celui par défaut.
   function applyThemeButton() {
     const light = document.documentElement.getAttribute("data-theme") === "light";
     const label = light ? "Passer au thème sombre" : "Passer au thème clair";
@@ -693,7 +702,7 @@ export const chromeScript = function initChrome() {
         // Bouton du menu : icône + libellé de l'action.
         btn.innerHTML = (light ? ICON_MOON : ICON_SUN) + `<span class="menu-theme-label">${light ? "Thème sombre" : "Thème clair"}</span>`;
       } else {
-        btn.innerHTML = light ? ICON_SUN : ICON_MOON;
+        btn.innerHTML = light ? ICON_MOON : ICON_SUN;
         btn.title = label;
       }
       btn.setAttribute("aria-label", label);
@@ -714,6 +723,7 @@ export const chromeScript = function initChrome() {
         localStorage.setItem("theme", next);
       } catch {}
       applyThemeButton();
+      syncThemeColor();
       clearTimeout(document.__scThemeTimer);
       document.__scThemeTimer = setTimeout(() => root.classList.remove("theme-anim"), 260);
     });

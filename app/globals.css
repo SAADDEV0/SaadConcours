@@ -99,20 +99,8 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --shadow-pop:0 20px 50px -12px rgba(16,24,40,.28);
   color-scheme:light;
 }
-:root[data-theme="dark"]{
-  --bg:#13141f; --bg-elev:#191b29; --bg-card:#1d2031; --bg-inset:#25283b;
-  --border:#2d3148; --border-strong:#3d4262;
-  --text:#eceef8; --text-dim:#b2b6cd; --text-faint:#9297b2;
-  --accent:#9ea5ff; --accent-dim:#2f3372; --accent-fill:#4f46e5; --accent-ink:#c7cbff;
-  --red:#ff8f86; --red-dim:#3d2030;
-  --green:#5fd38d; --green-dim:#183632;
-  --amber:#f0b94d; --amber-dim:#3b3020;
-  --bg-band:color-mix(in srgb, var(--accent-fill) 7%, var(--bg));
-  --shadow:0 1px 2px rgba(5,6,15,.45);
-  --shadow-md:0 1px 2px rgba(5,6,15,.4), 0 8px 24px -12px rgba(5,6,15,.6);
-  --shadow-pop:0 20px 50px -12px rgba(5,6,15,.7);
-  color-scheme:dark;
-}
+/* Pas de bloc [data-theme="dark"] : le sombre est la valeur de :root, et les
+   deux blocs clairs ci-dessus excluent data-theme="dark". */
 /* ---------- Couleurs des espaces ----------
    L'indigo reste la couleur de la marque et des actions. Chaque espace a en
    plus sa couleur de repère (lib/espaces.js, champ `couleur`) : surtitre,
@@ -193,10 +181,12 @@ body{
   text-rendering:optimizeLegibility;
 }
 a{color:var(--accent); text-underline-offset:2px;}
-::selection{background:color-mix(in srgb, var(--hl) 55%, transparent); color:var(--text);}
+/* Surligneur : encre foncée dans les deux thèmes, comme « Nouveau » — le
+   --text clair du sombre tombait à 2:1 sur le jaune. */
+::selection{background:color-mix(in srgb, var(--hl) 55%, transparent); color:#16181d;}
 h1,h2,h3,h4{letter-spacing:-.015em; text-wrap:balance;}
 p{text-wrap:pretty;}
-mark{background:color-mix(in srgb, var(--hl) 70%, transparent); color:var(--text); padding:0 .1em; border-radius:2px;}
+mark{background:color-mix(in srgb, var(--hl) 70%, transparent); color:#16181d; padding:0 .1em; border-radius:2px;}
 img{max-width:100%;}
 .ic-wrap{display:inline-flex; align-items:center; justify-content:center; line-height:0; flex-shrink:0;}
 .ic{display:block; flex-shrink:0;}
