@@ -18,7 +18,7 @@
 
 /* Ligne de contexte au-dessus d'un titre (« Chapitre 2 · Semestre 1 ») :
    du texte, pas une pastille. */
-.bac-eyebrow{display:block; font-size:.74rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; line-height:1.4;}
+.bac-eyebrow{display:block; font-size:.74rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; line-height:1.4;}
 
 /* ---------- En-têtes de page ---------- */
 .bac-hero, .bac-mat-hero, .bac-chap-hero{position:relative; padding:4px 0 20px; margin-bottom:22px; border-bottom:1px solid var(--border);}
@@ -30,10 +30,20 @@
 .bac-mat-hero-icon{display:none;}
 .bac-chap-unite{font-size:.9rem; color:var(--text-dim);}
 
+/* Couleur de la page (« Couleur de page », globals.css) : l'en-tête d'une
+   liste est posé sur un bandeau teinté pleine largeur, comme les sections
+   de l'accueil (fond uni étendu par box-shadow, rogné en hauteur) ; celui
+   d'une fiche garde son filet, marqué d'un trait de couleur. */
+.bac-wrap > .bac-hero:first-child{
+  margin-top:-24px; padding-top:30px; padding-bottom:24px; border-bottom:none;
+  background:var(--page-tint); box-shadow:0 0 0 100vmax var(--page-tint); clip-path:inset(0 -100vmax);
+}
+.bac-mat-hero::after, .bac-chap-hero::after{content:""; position:absolute; left:0; bottom:-2px; width:56px; height:3px; border-radius:3px; background:var(--accent-fill);}
+
 /* Chiffres clés : une ligne de texte, séparée par des points médians. */
 .bac-hero-stats{display:flex; flex-wrap:wrap; align-items:center; row-gap:4px; font-size:.88rem; color:var(--text-dim); margin:0 0 4px;}
 .bac-stat{display:inline-flex; align-items:center; gap:5px; white-space:nowrap;}
-.bac-stat strong{color:var(--text); font-weight:600; font-variant-numeric:tabular-nums;}
+.bac-stat strong{color:var(--accent); font-weight:800; font-variant-numeric:tabular-nums;}
 .bac-stat .ic{width:15px; height:15px; color:var(--text-faint);}
 
 /* ---------- Puces (années, semestres, catégories) ---------- */
@@ -55,7 +65,8 @@
 
 /* ---------- Groupes et titres de section ---------- */
 .bac-group{margin-bottom:32px;}
-.bac-section-title{font-size:1.15rem; font-weight:700; line-height:1.3; margin:0 0 14px;}
+.bac-section-title{display:flex; align-items:center; gap:10px; font-size:1.15rem; font-weight:700; line-height:1.3; margin:0 0 14px;}
+.bac-section-title::before{content:""; flex-shrink:0; width:4px; height:1.05em; border-radius:4px; background:var(--accent-fill);}
 
 /* ---------- Cartes de choix (modules, matières, niveaux) ---------- */
 .bac-mat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr)); gap:12px;}
@@ -64,7 +75,7 @@
   background:var(--bg-card); border:1px solid var(--border); text-decoration:none; color:var(--text);
   transition:border-color .15s ease, background-color .15s ease;
 }
-a.bac-mat-card:hover{border-color:var(--border-strong); background:color-mix(in srgb, var(--bg-inset) 50%, var(--bg-card));}
+a.bac-mat-card:hover{border-color:color-mix(in srgb, var(--accent-fill) 55%, var(--border)); background:color-mix(in srgb, var(--bg-inset) 50%, var(--bg-card));}
 a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 /* Anciennes tuiles d'icône et flèches rondes : retirées du dessin. */
 .bac-mat-icon, .bac-mat-arrow{display:none;}
@@ -93,18 +104,19 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 .bac-semestre-title{display:flex; align-items:center; gap:10px; font-size:1.15rem; margin:0 0 14px;}
 .bac-semestre-code{
   display:inline-flex; align-items:center; justify-content:center; min-width:34px; height:26px; padding:0 8px;
-  border-radius:var(--radius-sm); background:var(--bg-inset); border:1px solid var(--border); color:var(--text); font-size:.78rem; font-weight:700;
+  border-radius:var(--radius-sm); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent-fill) 30%, transparent); color:var(--accent-ink); font-size:.78rem; font-weight:700;
 }
 .bac-semestre-code .ic{width:16px; height:16px;}
 .bac-unite{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:14px;}
 .bac-unite-head{padding:12px 18px; background:var(--bg-inset); border-bottom:1px solid var(--border);}
-.bac-unite-num{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint);}
+.bac-unite-num{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
 .bac-unite-head h3{margin:2px 0 0; font-size:1rem;}
 .bac-chap-list{list-style:none; margin:0; padding:0;}
 .bac-chap-list li + li{border-top:1px solid var(--border);}
 .bac-chap-row{display:flex; align-items:center; gap:12px; padding:12px 18px; text-decoration:none; min-height:52px;}
 .bac-chap-row:hover{background:var(--bg-inset);}
 .bac-chap-row:hover .bac-chap-title{color:var(--accent);}
+.bac-chap-row:hover .bac-chap-num{border-color:var(--accent-fill); color:var(--accent);}
 .bac-chap-num{
   flex-shrink:0; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
   font-size:.8rem; font-weight:700; color:var(--text-dim); border:1.5px solid var(--border-strong); font-variant-numeric:tabular-nums;

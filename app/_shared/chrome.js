@@ -15,7 +15,7 @@ import boutiqueData from "../../public/data/boutique.json";
 import { isProduitVisible } from "../../lib/boutique";
 import { readChapters, lastChapter } from "./progress";
 import { iconHtml } from "./icons";
-import { ESPACES_ACTIFS, OUTILS, espaceOfActive, espaceByKey, espaceOfPath, espaceClass } from "../../lib/espaces";
+import { ESPACES_ACTIFS, OUTILS, espaceOfActive, espaceByKey, espaceOfPath, espaceClass, couleurOfActive } from "../../lib/espaces";
 
 const ICON_MOON = iconHtml("moon", { size: 18, strokeWidth: 2 });
 const ICON_SUN = iconHtml("sun", { size: 18, strokeWidth: 2 });
@@ -106,7 +106,7 @@ function navLink({ href, label, on, cls = "nav-link" }) {
 
 function headerNavHtml(active) {
   const espaces = ESPACES_ACTIFS.map((e) => navLink({ href: e.hub, label: e.label, on: isActiveEspace(e, active), cls: `nav-link ${espaceClass(e)}` })).join("");
-  const outils = OUTILS_VISIBLES.map((o) => navLink({ href: o.href, label: o.label, on: active === o.key })).join("");
+  const outils = OUTILS_VISIBLES.map((o) => navLink({ href: o.href, label: o.label, on: active === o.key, cls: `nav-link${o.couleur ? ` ${espaceClass(o)}` : ""}` })).join("");
   return `<nav class="site-nav" aria-label="Navigation principale">${espaces}<span class="site-nav-sep" aria-hidden="true"></span>${outils}</nav>`;
 }
 
@@ -135,7 +135,7 @@ function menuSheetHtml(active) {
   </div>`
   ).join("");
   const outils = OUTILS_VISIBLES.map(
-    (o) => `<a class="menu-espace${active === o.key ? " active" : ""}" href="${o.href}"><span class="menu-espace-name">${escapeAttr(o.long)}</span><span class="menu-espace-desc">${escapeAttr(o.desc)}</span></a>`
+    (o) => `<a class="menu-espace${o.couleur ? ` ${espaceClass(o)}` : ""}${active === o.key ? " active" : ""}" href="${o.href}"><span class="menu-espace-name">${escapeAttr(o.long)}</span><span class="menu-espace-desc">${escapeAttr(o.desc)}</span></a>`
   ).join("");
   return `<div class="sheet menu-sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="sheet-head"><a class="menu-brand" href="/">${brandLogoSvg()}<span>Accueil</span></a><button type="button" class="sheet-close" data-sheet-close aria-label="Fermer le menu">${iconHtml("x", { size: 22 })}</button></div>
@@ -168,10 +168,11 @@ function brandHtml() {
 // the individual-item detail pages (concours, article de blog) only.
 // `data-pa-section` is the rubrique a partner banner can target (see
 // PARTNER_SECTIONS) — read by renderPartnerAds() below and by the space
-// reservation CSS in app/layout.js.
+// reservation CSS in app/layout.js. `data-couleur` : couleur du contenu de la
+// page (couleurOfActive, lib/espaces.js), lue par globals.css.
 export function chromeHtml({ active, rails = false }) {
   return `
-<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}" data-pa-section="${sectionOfNav(active)}"></div>
+<div id="topProgressBar" data-pa-rails="${rails ? "1" : "0"}" data-pa-section="${sectionOfNav(active)}" data-couleur="${couleurOfActive(active)}"></div>
 <a class="skip-link" href="#contenu">Aller au contenu</a>
 <header class="site-header">
   <div class="header-inner">

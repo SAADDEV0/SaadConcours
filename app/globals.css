@@ -17,6 +17,8 @@
    - --hl (surligneur)        en fond uniquement : « Nouveau », recherche ;
    - --amber                  avertissements.
    Pas de dégradé (sauf le logo), pas de halo, pas de teinte par catégorie.
+   Chaque espace a en plus une couleur de repère qui teinte ses pages
+   (voir « Couleurs d'espace » et « Couleur de page » plus bas).
    Contrastes vérifiés (WCAG AA, 4,5:1) dans les deux thèmes.
 
    Échelles :
@@ -118,6 +120,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --c-rose:#f9a8d4; --c-rose-fill:#be185d; --c-rose-tint:color-mix(in srgb, #be185d 9%, var(--bg));
   --c-sky:#7dd3fc; --c-sky-fill:#0369a1; --c-sky-tint:color-mix(in srgb, #0369a1 11%, var(--bg));
   --c-indigo-tint:color-mix(in srgb, var(--accent-fill) 10%, var(--bg));
+  --c-dim-pct:30%;
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
@@ -127,6 +130,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
     --c-rose:#be185d; --c-rose-tint:#fdf1f6;
     --c-sky:#0369a1; --c-sky-tint:#edf6fc;
     --c-indigo-tint:#f0f1fd;
+    --c-dim-pct:13%;
   }
 }
 :root[data-theme="light"]{
@@ -136,6 +140,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --c-rose:#be185d; --c-rose-tint:#fdf1f6;
   --c-sky:#0369a1; --c-sky-tint:#edf6fc;
   --c-indigo-tint:#f0f1fd;
+  --c-dim-pct:13%;
 }
 :root[data-theme="dark"]{
   --c-orange:#fdba74; --c-orange-tint:color-mix(in srgb, #c2410c 9%, var(--bg));
@@ -144,6 +149,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --c-rose:#f9a8d4; --c-rose-tint:color-mix(in srgb, #be185d 9%, var(--bg));
   --c-sky:#7dd3fc; --c-sky-tint:color-mix(in srgb, #0369a1 11%, var(--bg));
   --c-indigo-tint:color-mix(in srgb, var(--accent-fill) 10%, var(--bg));
+  --c-dim-pct:30%;
 }
 .esp-c-indigo{--esp:var(--accent); --esp-fill:var(--accent-fill); --esp-tint:var(--c-indigo-tint);}
 .esp-c-orange{--esp:var(--c-orange); --esp-fill:var(--c-orange-fill); --esp-tint:var(--c-orange-tint);}
@@ -151,6 +157,25 @@ html{scroll-behavior:smooth; font-size:93.75%;}
 .esp-c-gold{--esp:var(--c-gold); --esp-fill:var(--c-gold-fill); --esp-tint:var(--c-gold-tint);}
 .esp-c-rose{--esp:var(--c-rose); --esp-fill:var(--c-rose-fill); --esp-tint:var(--c-rose-tint);}
 .esp-c-sky{--esp:var(--c-sky); --esp-fill:var(--c-sky-fill); --esp-tint:var(--c-sky-tint);}
+/* Couleur de page. Une page d'espace (ou d'outil coloré : QCM) porte sa
+   couleur sur tout son contenu, pas seulement dans le header : chromeHtml()
+   pose data-couleur sur #topProgressBar et, ici, le contenu (.bac-space,
+   .cd-view) reçoit cette couleur à la place de l'indigo — liens, boutons,
+   onglet actif, pastilles, chiffres, repères et bandeau d'en-tête (bac.css).
+   Le chrome (header, menu, pied de page) reste indigo : c'est la marque.
+   Navigateur sans :has() : la page reste indigo. Rouge et vert inchangés. */
+body:has(#topProgressBar[data-couleur="orange"]){--pg:var(--c-orange); --pg-fill:var(--c-orange-fill); --pg-tint:var(--c-orange-tint);}
+body:has(#topProgressBar[data-couleur="teal"]){--pg:var(--c-teal); --pg-fill:var(--c-teal-fill); --pg-tint:var(--c-teal-tint);}
+body:has(#topProgressBar[data-couleur="gold"]){--pg:var(--c-gold); --pg-fill:var(--c-gold-fill); --pg-tint:var(--c-gold-tint);}
+body:has(#topProgressBar[data-couleur="rose"]){--pg:var(--c-rose); --pg-fill:var(--c-rose-fill); --pg-tint:var(--c-rose-tint);}
+body:has(#topProgressBar[data-couleur="sky"]){--pg:var(--c-sky); --pg-fill:var(--c-sky-fill); --pg-tint:var(--c-sky-tint);}
+:is(.bac-space, .cd-view){--page-tint:var(--c-indigo-tint);}
+body:has(#topProgressBar[data-couleur]:not([data-couleur="indigo"])) :is(.bac-space, .cd-view){
+  --accent:var(--pg); --accent-ink:var(--pg); --accent-fill:var(--pg-fill);
+  --accent-dim:color-mix(in srgb, var(--pg-fill) var(--c-dim-pct), var(--bg));
+  --page-tint:var(--pg-tint);
+  --focus-ring:0 0 0 3px color-mix(in srgb, var(--pg) 40%, transparent);
+}
 /* Repère rond devant le nom d'un espace (menu, barre d'espace, pied de page). */
 .esp-dot{display:inline-block; flex-shrink:0; width:8px; height:8px; border-radius:50%; background:var(--esp-fill, var(--accent-fill)); margin-right:8px; vertical-align:1px;}
 
