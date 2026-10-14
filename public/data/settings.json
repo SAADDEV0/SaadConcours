@@ -202,5 +202,5 @@
   "pdfVerseSize": "normal",
   "pdfVerseBoxed": true,
   "scansMasques": true,
-  "whatsappFabEnabled": false
+  "whatsappFabEnabled": true
 }
