@@ -619,6 +619,10 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    dans une autre filière : ne jamais le dupliquer. Mettre `filiere` à `""` (commun au parcours)
    et ajouter une ligne d'en-tête qui donne les deux intitulés. Précédent : « Introduction à
    l'économétrie » (S5 EIL) = `econometrie_cours`, octobre 2026.
+   Un intitulé peut être couvert par deux modules existants : « Économie internationale » (S5
+   Économétrie appliquée) = `introecoint_cours` + `theoriescomint_cours`, passés à `filiere: ""`,
+   chacun avec la ligne d'en-tête qui renvoie à l'autre. Filière Économétrie appliquée (S5) publiée
+   le 2026-10-14 : `microapprof_cours`, `iaro_cours`, `comptanat_cours` + ces modules communs.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
