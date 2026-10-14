@@ -615,7 +615,10 @@ fiche) : aucune étude de cas ne doit passer en QCM.
 Chaque chapitre = cours → au moins un exercice → correction détaillée.
 
 ### K1 — Ajouter un cours (Licence FSJES)
-1. Vérifier que le module n'existe pas déjà (`module` / `id`).
+1. Vérifier que le module n'existe pas déjà (`module` / `id`), y compris sous un autre intitulé
+   dans une autre filière : ne jamais le dupliquer. Mettre `filiere` à `""` (commun au parcours)
+   et ajouter une ligne d'en-tête qui donne les deux intitulés. Précédent : « Introduction à
+   l'économétrie » (S5 EIL) = `econometrie_cours`, octobre 2026.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
