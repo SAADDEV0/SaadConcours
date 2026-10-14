@@ -80,6 +80,11 @@ export default async function CoursPage() {
   const cours = (await getAllCours().catch(() => [])).sort(coursSortComparator);
   const publies = cours.filter((c) => c.available);
   const totalChapitres = publies.reduce((n, c) => n + fsjesModule(c).chapitres.length, 0);
+  // Modules du S1-S2 communs aux deux parcours, cités dans le texte du bas.
+  const basesS1S2 = publies
+    .filter((c) => (c.semestre === "S1" || c.semestre === "S2") && !c.parcours && !c.filiere)
+    .map((c) => c.module.toLowerCase())
+    .join(", ");
   const groupes = [
     ...LICENCE_SEMESTRES.map((s) => ({ code: s.code, label: `${s.label}${s.specialisation ? " — Spécialisation" : ""}`, list: cours.filter((c) => c.semestre === s.code) })),
     { code: "", label: "Autres modules", list: cours.filter((c) => !c.semestre) },
@@ -91,9 +96,9 @@ export default async function CoursPage() {
         data={[
           breadcrumbJsonLd([{ name: "Cours", path: "/cours" }]),
           collectionJsonLd({
-            name: "Cours de Licence FSJES par module et par chapitre",
+            name: "Cours FSJES S1 à S6 par module et par chapitre",
             description:
-              "Cours de Licence FSJES Économie & Gestion découpés en chapitres (comptabilité, analyse financière, management, marketing, macroéconomie...) : cours, exercices corrigés, résumé et QCM.",
+              "Cours FSJES de Licence Économie & Gestion découpés en chapitres (comptabilité, analyse financière, management, marketing, macroéconomie...) : cours, exercices corrigés, résumé et QCM.",
             path: "/cours",
             items: publies.map((c) => ({ name: c.module, path: `/cours/${encodeURIComponent(c.id)}` })),
           }),
@@ -105,8 +110,8 @@ export default async function CoursPage() {
         <div className="bac-wrap">
 
           <section className="bac-hero">
-            <h1>Cours Licence Économie & Gestion</h1>
-            <p>Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
+            <h1>Cours FSJES : Licence Économie & Gestion, S1 à S6</h1>
+            <p>Les cours de la FSJES rangés par semestre. Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
             <div className="bac-hero-stats">
               <span className="bac-stat">
                 <strong>{publies.length}</strong> modules
@@ -195,6 +200,29 @@ export default async function CoursPage() {
           <div className="sp-empty" id="coursEmpty" hidden>
             Aucun module ne correspond à ces filtres.
           </div>
+
+          <section className="sp-about">
+            <h2>Les cours de la FSJES, semestre par semestre</h2>
+            <p>
+              La Licence Économie et Gestion des FSJES (facultés des sciences juridiques, économiques et sociales) se fait en six
+              semestres. Le S1 et le S2 posent les bases{basesS1S2 && <> : {basesS1S2}</>}. Dès le début, une partie des modules
+              diffère selon le parcours <strong>Gestion</strong> ou <strong>Économie</strong> ; au S5 et au S6, chaque étudiant suit
+              une filière ({LICENCE_FILIERES.map((f) => f.label).join(", ")}).
+            </p>
+            <p>
+              Les cours suivent le programme national de la Licence, commun aux FSJES du Maroc : Agadir, Casablanca, Fès, Marrakech,
+              Meknès, Oujda, Rabat, Settat, Tanger, Tétouan… L&apos;ordre des chapitres peut changer d&apos;un professeur à
+              l&apos;autre, mais les notions sont les mêmes. Chaque chapitre réunit le cours expliqué, des exercices avec leur
+              corrigé détaillé, un résumé à relire avant l&apos;examen et un QCM pour vérifier ce qui est acquis. Tout est gratuit
+              et sans inscription.
+            </p>
+            <p>
+              Pour s&apos;entraîner sur tout un module, les <a href="/evaluation">QCM d&apos;évaluation</a> reprennent le programme
+              en conditions d&apos;examen. Après le S4, les{" "}
+              <a href="/concours/licence-excellence">sujets des concours de licence d&apos;excellence</a> montrent ce qui est
+              demandé pour l&apos;accès en S5.
+            </p>
+          </section>
         </div>
       </div>
 

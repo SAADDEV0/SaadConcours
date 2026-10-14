@@ -1,11 +1,13 @@
 export const metadata = {
   // See app/concours/layout.js for why this is kept short — the root
   // template appends " | SaadConcours" on top of whatever's here.
-  title: "Cours Licence FSJES par module et par chapitre",
+  // « Cours FSJES » en tête : c'est la requête tapée telle quelle dans Google.
+  // 43 caractères + « | SaadConcours » = 58, sous la limite de seoText.js.
+  title: "Cours FSJES S1 à S6 avec exercices corrigés",
   description:
-    "Cours de Licence FSJES Économie & Gestion (S1 à S6) découpés en chapitres : cours, exercices corrigés, résumé et QCM pour chaque chapitre.",
+    "Cours FSJES Économie et Gestion du S1 au S6, module par module : chaque chapitre avec le cours, des exercices corrigés, un résumé et un QCM. Gratuit.",
   alternates: { canonical: "/cours" },
-  openGraph: { title: "Cours Licence FSJES — SaadConcours", url: "/cours" },
+  openGraph: { title: "Cours FSJES S1 à S6 — SaadConcours", url: "/cours" },
 };
 
 export default function CoursLayout({ children }) {

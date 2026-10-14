@@ -136,6 +136,9 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   (`app/_shared/seoText.js`) plutôt qu'une chaîne libre. Fiches concours : `app/_shared/concoursSeo.js`
   (titres et descriptions uniques, calculés sur toute la liste). Blog : champ `seoTitle` quand le
   titre de l'article dépasse 65 caractères (le H1 garde `title`).
+- Page d'entrée d'un espace : la requête que tapent les élèves, telle quelle, ouvre le titre **et**
+  le H1 (`/cours` → « Cours FSJES … », 2026-10-14), et un bloc `sp-about` en bas de page explique
+  l'organisation (semestres, parcours, filières) à partir des données, pas d'un texte figé.
 - Pas de balisage `FAQPage` ni `SearchAction` : Google ne les affiche plus pour ce site. Une FAQ
   reste une section visible normale.
 - Une page de liste n'envoie au navigateur que les données de ses cartes (`concoursListItem`,
