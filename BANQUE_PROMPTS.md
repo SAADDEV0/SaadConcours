@@ -711,7 +711,13 @@ code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'e
   Un chapitre n'affiche que les onglets qui ont du contenu (jamais d'onglet « en préparation »).
 - Console : Contenu › Cours ENCG (l'aide du champ Contenu rappelle la convention).
 - Contexte : programme réel du module à l'ENCG ; les intitulés d'option changent d'une école à
-  l'autre (n'en présenter aucun comme national). Contrôle et fin de recette comme K1 ; mettre à jour
+  l'autre (n'en présenter aucun comme national).
+- **Pas de doublon avec la Licence** : un module ENCG qui recoupe un cours FSJES (comptabilité
+  générale, microéconomie…) se rédige à part, avec ses propres entreprises, fonctions et chiffres ;
+  ne jamais reprendre un chapitre FSJES. Tronc commun du S1 constaté (Tanger, Agadir, Kénitra) :
+  comptabilité générale, microéconomie, management, mathématiques, droit, langues ; le découpage
+  S1/S2 varie selon l'école, le dire dans l'en-tête du module. Publiés : `comptabilite-generale-s1`,
+  `microeconomie-s1` (octobre 2026). Contrôle et fin de recette comme K1 ; mettre à jour
   `public/llms.txt` au premier module publié (règle 1.8).
 
 ## B. BAC (Sciences Économiques & Gestion)
