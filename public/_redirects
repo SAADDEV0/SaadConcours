@@ -52,6 +52,33 @@
 /blog/fsjes_vs_encg_quelles_differences_pour_ton_master /blog/master_public_vs_master_prive_au_maroc_que_choisir 301
 /blog/master_vs_master_specialise_quelles_differences /blog/master_public_vs_master_prive_au_maroc_que_choisir 301
 
+# Cours ENCG retirés le 2026-10-15 : la comptabilité générale et la
+# microéconomie du S1 doublaient les cours de la Licence FSJES (même programme,
+# risque « low value content » AdSense). Le module ENCG renvoie désormais au
+# cours FSJES (champ `renvoi`, BANQUE_PROMPTS K4) ; chaque ancienne page mène
+# au chapitre FSJES qui traite le même sujet.
+/encg/comptabilite-generale-s1 /cours/comptagen1_cours 301
+/encg/comptabilite-generale-s1/l-information-comptable-et-son-cadre-au-maroc /cours/comptagen1_cours/introduction-a-la-comptabilite-generale 301
+/encg/comptabilite-generale-s1/le-bilan-image-du-patrimoine /cours/comptagen1_cours/le-patrimoine-et-le-bilan 301
+/encg/comptabilite-generale-s1/le-cpc-et-la-formation-du-resultat /cours/comptagen1_cours/le-compte-de-produits-et-charges-cpc 301
+/encg/comptabilite-generale-s1/le-compte-la-partie-double-et-le-plan-comptable /cours/comptagen1_cours/le-compte-et-la-partie-double 301
+/encg/comptabilite-generale-s1/le-circuit-comptable-du-justificatif-a-la-balance /cours/comptagen1_cours/l-organisation-comptable 301
+/encg/comptabilite-generale-s1/la-tva-dans-les-operations-courantes /cours/comptagen1_cours/la-taxe-sur-la-valeur-ajoutee-tva 301
+/encg/comptabilite-generale-s1/les-achats-et-les-ventes-la-facture /cours/comptagen1_cours/la-facturation-doit 301
+/encg/comptabilite-generale-s1/les-avoirs-et-les-emballages-consignes /cours/comptagen1_cours/la-facture-d-avoir-et-les-emballages 301
+/encg/comptabilite-generale-s1/les-reglements-et-les-effets-de-commerce /cours/comptagen1_cours/les-reglements-et-les-effets-de-commerce 301
+/encg/comptabilite-generale-s1/l-acquisition-des-immobilisations /cours/comptagen1_cours 301
+/encg/microeconomie-s1 /cours/micro_cours 301
+/encg/microeconomie-s1/l-objet-de-la-microeconomie-et-la-demarche-de-l-economiste /cours/micro_cours/introduction-objet-agents-et-marche 301
+/encg/microeconomie-s1/l-offre-la-demande-et-l-equilibre-du-marche /cours/micro_cours/l-equilibre-du-marche-les-elasticites-et-l-intervention-de-l-etat 301
+/encg/microeconomie-s1/les-elasticites /cours/micro_cours/l-equilibre-du-marche-les-elasticites-et-l-intervention-de-l-etat 301
+/encg/microeconomie-s1/les-preferences-et-l-utilite-du-consommateur /cours/micro_cours/la-theorie-du-consommateur-utilite-et-preferences 301
+/encg/microeconomie-s1/la-contrainte-budgetaire-et-le-choix-optimal /cours/micro_cours/la-contrainte-budgetaire-et-l-equilibre-du-consommateur 301
+/encg/microeconomie-s1/la-demande-individuelle-et-les-effets-d-un-changement-de-prix /cours/micro_cours/la-contrainte-budgetaire-et-l-equilibre-du-consommateur 301
+/encg/microeconomie-s1/la-production /cours/micro_cours/la-theorie-du-producteur-production-et-productivites 301
+/encg/microeconomie-s1/les-couts-de-production /cours/micro_cours/les-couts-de-production 301
+/encg/microeconomie-s1/l-entreprise-en-concurrence-pure-et-parfaite /cours/micro_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et

@@ -4,7 +4,7 @@ import { concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
 import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
-import { encgModule, isEncgPublie } from "../lib/encg";
+import { encgModule, encgRenvois, isEncgPublie } from "../lib/encg";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref } from "../lib/bacProgramme";
 import { LICENCE_SEMESTRES } from "../lib/coursTaxonomy";
@@ -86,8 +86,10 @@ export default async function HomePage() {
   // Espace ENCG : sujets TAFEM (niveau post_bac) et cours S1 → S10.
   const tafem = allConcours.filter(isPostBac);
   const recentsTafem = [...tafem].sort((a, b) => String(b.annee).localeCompare(String(a.annee)) || String(b.date_ajout || "").localeCompare(String(a.date_ajout || ""))).slice(0, 4);
-  const encgPublies = encg.filter(isEncgPublie);
-  const chapitresEncg = encgPublies.reduce((n, c) => n + encgModule(c).chapitres.length, 0);
+  // Modules rédigés pour l'ENCG + modules communs qui renvoient au cours FSJES
+  // (lib/encg.js) ; seuls les premiers ont des chapitres à eux.
+  const encgPublies = [...encg.filter(isEncgPublie), ...encgRenvois(encg, cours)];
+  const chapitresEncg = encgPublies.reduce((n, c) => n + (c.cible ? 0 : encgModule(c).chapitres.length), 0);
   const semestresEncg = ENCG_SEMESTRES.map((s) => ({ ...s, n: encgPublies.filter((c) => c.semestre === s.code).length })).filter((s) => s.n > 0);
   const modulesParSemestre = Object.fromEntries(LICENCE_SEMESTRES.map((s) => [s.code, coursPublies.filter((c) => c.semestre === s.code).length]));
 
@@ -105,7 +107,8 @@ export default async function HomePage() {
       ligne: [tafem.length && `${tafem.length} sujets TAFEM`, encgPublies.length && `${encgPublies.length} modules du S1 au S10`].filter(Boolean).join(" · "),
       chiffres: [
         ...(tafem.length ? [[tafem.length, "sujets TAFEM"]] : []),
-        ...(encgPublies.length ? [[encgPublies.length, "modules"], [chapitresEncg, "chapitres"]] : []),
+        ...(encgPublies.length ? [[encgPublies.length, "modules"]] : []),
+        ...(chapitresEncg ? [[chapitresEncg, "chapitres"]] : []),
       ],
     },
     excellence: {

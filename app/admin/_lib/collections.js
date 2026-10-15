@@ -360,14 +360,14 @@ const encg = {
   label: "Cours ENCG",
   emoji: "🏫",
   href: "/admin/encg",
-  publicUrl: (c) => `${SITE}/encg/${encodeURIComponent(c.id)}`,
-  subtitle: (c) => [encgSemestreLabel(c.semestre), c.option, coursCategoryLabel(c.category)].filter(Boolean).join(" · "),
+  publicUrl: (c) => (c.renvoi ? `${SITE}/cours/${encodeURIComponent(c.renvoi)}` : `${SITE}/encg/${encodeURIComponent(c.id)}`),
+  subtitle: (c) => [encgSemestreLabel(c.semestre), c.option, c.renvoi && `renvoi → ${c.renvoi}`, coursCategoryLabel(c.category)].filter(Boolean).join(" · "),
   searchText: (c) => [c.id, c.module, c.title, c.description, c.semestre, c.option].join(" "),
   filters: [
     { key: "semestre", label: "Semestre", options: opt(ENCG_SEMESTRES), get: (c) => c.semestre },
     { key: "category", label: "Catégorie", options: COURS_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })), get: (c) => c.category },
   ],
-  empty: () => ({ module: "", title: "", description: "", category: "", semestre: "", option: "", content: "", available: false }),
+  empty: () => ({ module: "", title: "", description: "", category: "", semestre: "", option: "", renvoi: "", content: "", available: false }),
   groups: [
     {
       title: "Présentation",
@@ -381,9 +381,14 @@ const encg = {
       ],
     },
     {
+      title: "Module commun avec la Licence",
+      hint: "Si ce module existe déjà dans les cours FSJES (comptabilité générale, microéconomie, mathématiques…), ne pas le réécrire : mettre ici l'id du cours FSJES (ex. comptagen1_cours) et laisser le contenu vide. La carte du module mène alors au cours de la Licence : un seul cours par matière sur le site (règle AdSense).",
+      fields: [{ key: "renvoi", label: "Id du cours FSJES (renvoi)", type: "text", placeholder: "comptagen1_cours" }],
+    },
+    {
       title: "Contenu",
-      hint: "Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/encg/<module>/<chapitre>). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié.",
-      fields: [{ key: "content", label: "Cours complet (Markdown + LaTeX)", type: "markdown", required: true, full: true, rows: 28 }],
+      hint: "Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/encg/<module>/<chapitre>). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié. Vide pour un module en renvoi.",
+      fields: [{ key: "content", label: "Cours complet (Markdown + LaTeX)", type: "markdown", full: true, rows: 28 }],
     },
   ],
   prepare(item, { isNew, list }) {
@@ -395,8 +400,12 @@ const encg = {
     const chapitres = (String(c.content || "").match(/^# CHAPITRE \d+\s*[—–-]/gm) || []).length;
     return checks([
       [c.module && c.title, "Module et titre", "red"],
-      [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
-      [wordCount(c.content) > 400, "Contenu rédigé", "red"],
+      ...(c.renvoi
+        ? [[!chapitres, "Renvoi vers la Licence : pas de cours ENCG en plus (doublon)", "red"]]
+        : [
+            [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
+            [wordCount(c.content) > 400, "Contenu rédigé", "red"],
+          ]),
       [c.description && c.description.length >= 80, "Description d'au moins 80 caractères"],
       [c.category, "Catégorie"],
       [c.semestre, "Semestre"],

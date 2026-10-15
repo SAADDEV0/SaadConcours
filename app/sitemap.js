@@ -5,7 +5,7 @@ import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
 import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
-import { encgModule, encgModuleHref, encgChapitreHref, isEncgPublie } from "@/lib/encg";
+import { encgModule, encgModuleHref, encgChapitreHref, encgRenvois, isEncgPublie } from "@/lib/encg";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie } from "@/lib/droit";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -65,7 +65,8 @@ export default async function sitemap() {
     { path: "/concours/licence-excellence", changeFrequency: "weekly", priority: 0.8, lastModified: licenceUpdated },
     // Espace ENCG : chaque page seulement avec son contenu (lib/espaces.js).
     ...(postBac.length ? [{ path: "/concours/post-bac", changeFrequency: "weekly", priority: 0.8, lastModified: latestDate(postBac, "date_ajout") }] : []),
-    ...(encgPublies.length ? [{ path: "/encg", changeFrequency: "weekly", priority: 0.8 }] : []),
+    // Les modules en renvoi n'ont pas de page : seul /encg les liste.
+    ...(encgPublies.length || encgRenvois(encg, cours).length ? [{ path: "/encg", changeFrequency: "weekly", priority: 0.8 }] : []),
     ...(droitPublies.length ? [{ path: "/droit", changeFrequency: "weekly", priority: 0.8 }] : []),
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },

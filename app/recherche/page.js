@@ -1,7 +1,7 @@
 import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { isLicenceExcellence, isPostBac } from "@/lib/concoursNiveaux";
-import { encgModule, encgModuleHref, encgChapitreHref, isEncgPublie } from "../../lib/encg";
+import { encgModule, encgModuleHref, encgChapitreHref, encgRenvois, isEncgPublie } from "../../lib/encg";
 import { encgSemestreLabel } from "../../lib/encgTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie } from "../../lib/droit";
 import { droitRangLabelFr } from "../../lib/droitTaxonomy";
@@ -74,6 +74,10 @@ export default async function RecherchePage() {
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · ENCG · Chapitre ${ch.numero}`, encgChapitreHref(c, ch)));
     }
+  }
+  // Module ENCG commun avec la Licence : une entrée qui mène au cours FSJES.
+  for (const c of encgRenvois(encg, cours)) {
+    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "encg"].filter(Boolean).join(" ")));
   }
   for (const c of droit.filter(isDroitPublie)) {
     const { chapitres } = droitModule(c);

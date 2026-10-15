@@ -128,6 +128,13 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   (ex. examens nationaux sur la page de la matière), jamais seul sur sa page.
 - Pas de contenu copié ou récupéré automatiquement d'un autre site (scraping), sous aucune forme.
 - Pas de gabarit recyclé d'une page à l'autre (voir A1 pour le blog).
+- **Un seul cours par matière sur tout le site** (décision du 2026-10-15) : une matière déjà
+  traitée dans un espace (Licence FSJES, ENCG, Droit, Bac) n'est jamais réécrite dans un autre,
+  même avec d'autres exemples. Deux cours proches sur le même programme = contenu en double aux
+  yeux d'AdSense. L'espace qui arrive en second **renvoie** au cours existant (ENCG : champ
+  `renvoi`, recette K4) ; seul un module propre à l'espace se rédige. Mesuré le 2026-10-15 sur
+  les deux cours ENCG du S1 récrits « à part » : même plan chapitre par chapitre que le cours
+  FSJES et 3 à 7 % de passages identiques (tableaux du CPC, classes du PCGE, formules) — retirés.
 - Contrôle : `npm run check` = lint + build + `scripts/audit-contenu.mjs` (aussi lancé en CI). Il
   parcourt le site construit depuis l'accueil et échoue sur une page « Bientôt / en préparation »,
   une page de moins de 120 mots ou un lien interne cassé. **Ne pas l'affaiblir pour le faire
@@ -624,6 +631,8 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    dans une autre filière : ne jamais le dupliquer. Mettre `filiere` à `""` (commun au parcours)
    et ajouter une ligne d'en-tête qui donne les deux intitulés. Précédent : « Introduction à
    l'économétrie » (S5 EIL) = `econometrie_cours`, octobre 2026.
+   Vérifier aussi `encg.json` et `droit.json` : si la matière y a déjà un cours rédigé, ne pas
+   en écrire un second (règle 1.6) — me le signaler et proposer de faire de l'un un renvoi.
    Un intitulé peut être couvert par deux modules existants : « Économie internationale » (S5
    Économétrie appliquée) = `introecoint_cours` + `theoriescomint_cours`, passés à `filiere: ""`,
    chacun avec la ligne d'en-tête qui renvoie à l'autre. Filière Économétrie appliquée (S5) publiée
@@ -724,13 +733,27 @@ code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'e
 - Console : Contenu › Cours ENCG (l'aide du champ Contenu rappelle la convention).
 - Contexte : programme réel du module à l'ENCG ; les intitulés d'option changent d'une école à
   l'autre (n'en présenter aucun comme national).
-- **Pas de doublon avec la Licence** : un module ENCG qui recoupe un cours FSJES (comptabilité
-  générale, microéconomie…) se rédige à part, avec ses propres entreprises, fonctions et chiffres ;
-  ne jamais reprendre un chapitre FSJES. Tronc commun du S1 constaté (Tanger, Agadir, Kénitra) :
-  comptabilité générale, microéconomie, management, mathématiques, droit, langues ; le découpage
-  S1/S2 varie selon l'école, le dire dans l'en-tête du module. Publiés : `comptabilite-generale-s1`,
-  `microeconomie-s1` (octobre 2026). Contrôle et fin de recette comme K1 ; mettre à jour
-  `public/llms.txt` au premier module publié (règle 1.8).
+- **Pas de doublon avec la Licence : renvoi, jamais réécriture** (règle 1.6, 2026-10-15). Avant
+  de rédiger un module ENCG, chercher dans `cours.json` (et `droit.json`) un cours qui couvre le
+  même programme, sous n'importe quel intitulé. S'il existe : fiche de **renvoi** dans
+  `encg.json` — `renvoi: "<id FSJES>"`, `content: ""`, `available: true`, `module`, `semestre`,
+  `category` et une `description` propre (120-160 caractères) qui dit que le programme est
+  commun. Le module n'a alors aucune page `/encg/<id>` : sa carte sur `/encg`, la recherche et
+  l'accueil mènent à `/cours/<id FSJES>` (`encgRenvois`, `lib/encg.js`). Un renvoi vers un cours
+  FSJES non publié est ignoré. Si un chapitre propre à l'ENCG manque au cours FSJES, l'ajouter au
+  cours FSJES (K3) plutôt que d'ouvrir un cours ENCG. On ne rédige un cours ENCG que pour un module
+  **absent** du site (ex. techniques de vente, négociation, commerce international propre à
+  l'ENCG…), et on le dit dans le compte rendu.
+- Renvois en place (S1, tronc commun constaté à Tanger, Agadir, Kénitra) :
+  `comptabilite-generale-s1` → `comptagen1_cours`, `microeconomie-s1` → `micro_cours`,
+  `management-s1` → `introgestion_cours`, `mathematiques-s1` → `maths_cours`, `droit-s1` →
+  `introdroit_cours`, `langues-s1` → `languessoft_cours`. Les deux cours ENCG rédigés en
+  octobre 2026 (compta, micro) ont été retirés le 2026-10-15 ; leurs anciennes adresses ont une
+  301 vers le chapitre FSJES équivalent (`public/_redirects`, règles exactes au-dessus des règles
+  à motif). Retirer un module rédigé = même chose : 301 du module et de chaque chapitre.
+- Le découpage S1/S2 varie selon l'école : le dire dans l'en-tête d'un module rédigé. Contrôle et
+  fin de recette comme K1 ; mettre à jour `public/llms.txt` quand la liste des modules change
+  (règle 1.8).
 ### K5 — Cours de Droit (espace construit en silence)
 Espace Droit (`lib/espaces.js`, clé `droit`, couleur violet), créé le 2026-10-15 : pages `/droit`,
 `/droit/<id>`, `/droit/<id>/<chapitre>`, console Contenu › Cours Droit. **Fermé tant que
@@ -755,6 +778,11 @@ cours au fil de l'eau sans rien montrer.
   Un cours en arabe garde les marqueurs français (`# CHAPITRE N — <titre arabe>`, `## ✏️ EXERCICE`,
   `## ✅ CORRECTION`) : la page passe en RTL ; l'adresse d'un chapitre au titre arabe est
   `chapitre-N`.
+- **Doublons avec la Licence FSJES** (règle 1.6) : `cours.json` a déjà `introdroit_cours`
+  (introduction à l'étude du droit, S1), `droitsocietes_cours` et `droitaffaires_cours`. Ne pas
+  rédiger leur équivalent en français dans l'espace Droit : me le signaler avant (un mécanisme de
+  renvoi comme celui de l'ENCG est à construire pour `droit.json`). Un cours en arabe sur la même
+  matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
   pénal, procédure civile et pénale, lois organiques) ; vérifier chaque article cité.
 - **Avant le lancement** (« fix SEO, fix AdSense ») : relire en `npm run dev` ; titres et

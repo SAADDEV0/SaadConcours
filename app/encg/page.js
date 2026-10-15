@@ -1,4 +1,4 @@
-import { getAllEncg, getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
+import { getAllEncg, getAllCours, getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { concoursCardHtml, compareConcoursRecents } from "../_shared/concoursCard";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
@@ -6,7 +6,8 @@ import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "../cours/CoursExplorer";
 import { Icon } from "../_shared/icons";
 import { ENCG_CATEGORIES, ENCG_SEMESTRES, encgAnneeLabel, encgSortComparator } from "../../lib/encgTaxonomy";
-import { encgModule, encgModuleHref, isEncgPublie } from "../../lib/encg";
+import { encgModule, encgModuleHref, encgRenvois, isEncgPublie } from "../../lib/encg";
+import { fsjesModule } from "../../lib/fsjesChapitres";
 import { isPostBac } from "../../lib/concoursNiveaux";
 
 // Prérendue au build, comme /cours (voir README : une page publique
@@ -17,9 +18,11 @@ export const revalidate = false;
 const PATH = "/encg";
 
 async function donnees() {
-  const [modules, concours] = await Promise.all([getAllEncg(), getPublicConcours().catch(() => [])]);
+  const [modules, cours, concours] = await Promise.all([getAllEncg(), getAllCours().catch(() => []), getPublicConcours().catch(() => [])]);
   return {
-    modules: modules.filter(isEncgPublie).sort(encgSortComparator),
+    // Modules rédigés pour l'ENCG, puis modules communs avec la Licence, qui
+    // renvoient au cours FSJES (lib/encg.js, encgRenvois) : une seule liste.
+    modules: [...modules.filter(isEncgPublie), ...encgRenvois(modules, cours)].sort(encgSortComparator),
     tafem: concours.filter(isPostBac).sort(compareConcoursRecents),
   };
 }
@@ -34,12 +37,13 @@ export async function generateMetadata() {
 
 // Mêmes attributs data-* que les cartes de /cours : CoursExplorer filtre les
 // deux pages (semestre, matière, recherche).
+// Une carte de renvoi mène au cours FSJES et le dit.
 function ModuleCard({ c }) {
-  const { chapitres } = encgModule(c);
-  const search = [c.module, c.title, c.description, c.option, ...chapitres.map((x) => x.titre)].join(" ").toLowerCase();
+  const { chapitres } = c.cible ? fsjesModule(c.cible) : encgModule(c);
+  const search = [c.module, c.title, c.description, c.option, c.cible?.module, ...chapitres.map((x) => x.titre)].join(" ").toLowerCase();
   return (
     <a
-      href={encgModuleHref(c)}
+      href={c.cible ? `/cours/${encodeURIComponent(c.cible.id)}` : encgModuleHref(c)}
       className="bac-mat-card"
       data-semestre={c.semestre || ""}
       data-category={c.category || ""}
@@ -53,7 +57,7 @@ function ModuleCard({ c }) {
         <span className="bac-mat-meta">
           <span>{chapitres.length} chapitres</span>
           <span className="bac-dot">·</span>
-          <span>{c.option || encgAnneeLabel(c.semestre) || "ENCG"}</span>
+          <span>{c.cible ? "Cours de la Licence FSJES" : c.option || encgAnneeLabel(c.semestre) || "ENCG"}</span>
         </span>
       </span>
     </a>
@@ -63,7 +67,8 @@ function ModuleCard({ c }) {
 export default async function EncgPage() {
   const { modules, tafem } = await donnees();
   const corrigeIds = getCorrigeIdsLocal();
-  const totalChapitres = modules.reduce((n, c) => n + encgModule(c).chapitres.length, 0);
+  const totalChapitres = modules.reduce((n, c) => n + (c.cible ? fsjesModule(c.cible) : encgModule(c)).chapitres.length, 0);
+  const communs = modules.filter((c) => c.cible).length;
   const semestres = ENCG_SEMESTRES.filter((s) => modules.some((c) => c.semestre === s.code));
   const groupes = [
     ...semestres.map((s) => ({ code: s.code, label: `${s.label} · ${encgAnneeLabel(s.code)}`, list: modules.filter((c) => c.semestre === s.code) })),
@@ -80,7 +85,7 @@ export default async function EncgPage() {
             name: "Cours de l'ENCG du S1 au S10 par module et par chapitre",
             description: "Cours de l'École nationale de commerce et de gestion, du S1 au S10, découpés en chapitres avec exercices corrigés.",
             path: PATH,
-            items: modules.map((c) => ({ name: c.module, path: encgModuleHref(c) })),
+            items: modules.map((c) => ({ name: c.module, path: c.cible ? `/cours/${encodeURIComponent(c.cible.id)}` : encgModuleHref(c) })),
           }),
         ]}
       />
@@ -200,6 +205,14 @@ export default async function EncgPage() {
               Tout est gratuit et sans inscription.
               {tafem.length > 0 && " Pour préparer l'entrée à l'ENCG, les sujets réels du concours TAFEM sont réunis sur leur propre page, avec leurs corrigés."}
             </p>
+            {communs > 0 && (
+              <p>
+                Une bonne partie des premiers semestres de l&apos;ENCG recoupe ceux de la Licence en économie et gestion des FSJES :
+                la comptabilité générale, la microéconomie ou les mathématiques s&apos;y enseignent avec les mêmes notions de base. Pour
+                ces modules, le site n&apos;a qu&apos;un seul cours, celui de la Licence, et la carte du module y mène directement : le
+                programme commun y est traité chapitre par chapitre, avec ses exercices corrigés.
+              </p>
+            )}
           </section>
         </div>
       </div>
