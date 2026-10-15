@@ -119,6 +119,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --c-gold:#fcd34d; --c-gold-fill:#a16207; --c-gold-tint:color-mix(in srgb, #a16207 10%, var(--bg));
   --c-rose:#f9a8d4; --c-rose-fill:#be185d; --c-rose-tint:color-mix(in srgb, #be185d 9%, var(--bg));
   --c-sky:#7dd3fc; --c-sky-fill:#0369a1; --c-sky-tint:color-mix(in srgb, #0369a1 11%, var(--bg));
+  --c-violet:#d8b4fe; --c-violet-fill:#7e22ce; --c-violet-tint:color-mix(in srgb, #7e22ce 10%, var(--bg));
   --c-indigo-tint:color-mix(in srgb, var(--accent-fill) 10%, var(--bg));
   --c-dim-pct:30%;
 }
@@ -129,6 +130,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
     --c-gold:#a16207; --c-gold-tint:#fdf8e7;
     --c-rose:#be185d; --c-rose-tint:#fdf1f6;
     --c-sky:#0369a1; --c-sky-tint:#edf6fc;
+    --c-violet:#7e22ce; --c-violet-tint:#f7f0fd;
     --c-indigo-tint:#f0f1fd;
     --c-dim-pct:13%;
   }
@@ -139,6 +141,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --c-gold:#a16207; --c-gold-tint:#fdf8e7;
   --c-rose:#be185d; --c-rose-tint:#fdf1f6;
   --c-sky:#0369a1; --c-sky-tint:#edf6fc;
+  --c-violet:#7e22ce; --c-violet-tint:#f7f0fd;
   --c-indigo-tint:#f0f1fd;
   --c-dim-pct:13%;
 }
@@ -148,6 +151,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   --c-gold:#fcd34d; --c-gold-tint:color-mix(in srgb, #a16207 10%, var(--bg));
   --c-rose:#f9a8d4; --c-rose-tint:color-mix(in srgb, #be185d 9%, var(--bg));
   --c-sky:#7dd3fc; --c-sky-tint:color-mix(in srgb, #0369a1 11%, var(--bg));
+  --c-violet:#d8b4fe; --c-violet-tint:color-mix(in srgb, #7e22ce 10%, var(--bg));
   --c-indigo-tint:color-mix(in srgb, var(--accent-fill) 10%, var(--bg));
   --c-dim-pct:30%;
 }
@@ -157,6 +161,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
 .esp-c-gold{--esp:var(--c-gold); --esp-fill:var(--c-gold-fill); --esp-tint:var(--c-gold-tint);}
 .esp-c-rose{--esp:var(--c-rose); --esp-fill:var(--c-rose-fill); --esp-tint:var(--c-rose-tint);}
 .esp-c-sky{--esp:var(--c-sky); --esp-fill:var(--c-sky-fill); --esp-tint:var(--c-sky-tint);}
+.esp-c-violet{--esp:var(--c-violet); --esp-fill:var(--c-violet-fill); --esp-tint:var(--c-violet-tint);}
 /* Couleur de page. Une page d'espace (ou d'outil coloré : QCM) porte sa
    couleur sur tout son contenu, pas seulement dans le header : chromeHtml()
    pose data-couleur sur #topProgressBar et, ici, le contenu (.bac-space,
@@ -169,6 +174,7 @@ body:has(#topProgressBar[data-couleur="teal"]){--pg:var(--c-teal); --pg-fill:var
 body:has(#topProgressBar[data-couleur="gold"]){--pg:var(--c-gold); --pg-fill:var(--c-gold-fill); --pg-tint:var(--c-gold-tint);}
 body:has(#topProgressBar[data-couleur="rose"]){--pg:var(--c-rose); --pg-fill:var(--c-rose-fill); --pg-tint:var(--c-rose-tint);}
 body:has(#topProgressBar[data-couleur="sky"]){--pg:var(--c-sky); --pg-fill:var(--c-sky-fill); --pg-tint:var(--c-sky-tint);}
+body:has(#topProgressBar[data-couleur="violet"]){--pg:var(--c-violet); --pg-fill:var(--c-violet-fill); --pg-tint:var(--c-violet-tint);}
 :is(.bac-space, .cd-view){--page-tint:var(--c-indigo-tint);}
 body:has(#topProgressBar[data-couleur]:not([data-couleur="indigo"])) :is(.bac-space, .cd-view){
   --accent:var(--pg); --accent-ink:var(--pg); --accent-fill:var(--pg-fill);

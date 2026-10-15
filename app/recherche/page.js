@@ -1,8 +1,10 @@
-import { getPublicConcours, getAllCours, getAllEncg, getAllQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { isLicenceExcellence, isPostBac } from "@/lib/concoursNiveaux";
 import { encgModule, encgModuleHref, encgChapitreHref, isEncgPublie } from "../../lib/encg";
 import { encgSemestreLabel } from "../../lib/encgTaxonomy";
+import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie } from "../../lib/droit";
+import { droitRangLabelFr } from "../../lib/droitTaxonomy";
 import { contenuOuvert } from "../../lib/espaces";
 import { categoryLabel } from "../../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref, bacChapitreHref } from "../../lib/bacProgramme";
@@ -36,10 +38,11 @@ function entree(k, t, s, u, x = "") {
 }
 
 export default async function RecherchePage() {
-  const [concours, cours, encg, quiz, blog] = await Promise.all([
+  const [concours, cours, encg, droit, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     getAllEncg().catch(() => []),
+    droitOuvert() ? getAllDroit().catch(() => []) : [],
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
@@ -70,6 +73,13 @@ export default async function RecherchePage() {
     index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), `${chapitres.length} chapitres`].filter(Boolean).join(" · "), encgModuleHref(c), [c.description, c.option, "encg"].filter(Boolean).join(" ")));
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · ENCG · Chapitre ${ch.numero}`, encgChapitreHref(c, ch)));
+    }
+  }
+  for (const c of droit.filter(isDroitPublie)) {
+    const { chapitres } = droitModule(c);
+    index.push(entree("cours", c.module, ["Droit", c.semestre, droitRangLabelFr(c), `${chapitres.length} chapitres`].filter(Boolean).join(" · "), droitModuleHref(c), [c.description, "droit"].filter(Boolean).join(" ")));
+    for (const ch of chapitres) {
+      index.push(entree("chapitre", ch.titre, `${c.module} · Droit · Chapitre ${ch.numero}`, droitChapitreHref(c, ch)));
     }
   }
   for (const m of BAC_MATIERES.filter((x) => x.niveau === "2bac")) {
@@ -168,6 +178,12 @@ export default async function RecherchePage() {
                   <strong>Cours Licence FSJES</strong>
                   <span>Modules du S1 au S6</span>
                 </a>
+                {contenuOuvert("droit-cours") && (
+                  <a className="home-link" href="/droit">
+                    <strong>Cours de Droit</strong>
+                    <span>Tronc commun, droit privé et droit public</span>
+                  </a>
+                )}
                 <a className="home-link" href="/bac/2bac">
                   <strong>Cours 2ᵉ Bac SEG</strong>
                   <span>Toutes les matières</span>

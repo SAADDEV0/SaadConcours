@@ -25,6 +25,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `complète le cours X par chapitres` · `ajoute QCM / résumés au cours X` | [K2](#k2--compléter-un-cours-par-chapitres) |
 | `modifie / réécris le cours X` · `supprime le cours X` | [K3](#k3--modifier-ou-supprimer-un-cours) |
 | `ajoute le cours ENCG <module> S3` · `ajoute les cours ENCG du S1` | [K4](#k4--cours-encg-s1-à-s10) |
+| `ajoute le cours de droit <module>` · `ajoute les cours du tronc commun droit` · `lance la section droit` | [K5](#k5--cours-de-droit-espace-construit-en-silence) |
 | `rédige les chapitres Bac de <matière> <niveau>` | [B1](#b1--rédiger-des-chapitres-bac) |
 | `ajoute les nationaux (bac)` · `ajoute les nationaux 2026` | [B2](#b2--examens-nationaux-2ème-bac) |
 | `ajoute une évaluation <module>` · `ajoute un QCM de 100 questions en X` | [E1](#e1--ajouter-une-évaluation-qcm) |
@@ -58,6 +59,7 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 | Contenu | Fichier(s) | Taxonomie / conventions |
 |---|---|---|
 | Concours | `public/data/concours.json` + miroirs `public/data/extraits/<id>.md`, `public/data/corriges/<id>.md` + scans `public/images/<Ville>/<id>/` | `lib/taxonomy.js` |
+| Cours de Droit (S1 → S6, FR/AR) | `public/data/droit.json` + compléments `lib/droitContenu/<id>.js` (déclarés dans `lib/droitContenu/index.js`) | `lib/droitTaxonomy.js`, découpage : `lib/droit.js` (même convention que FSJES) |
 | Cours ENCG (S1 → S10) | `public/data/encg.json` + compléments `lib/encgContenu/<id>.js` (déclarés dans `lib/encgContenu/index.js`) | `lib/encgTaxonomy.js`, découpage : `lib/encg.js` (même convention que FSJES) |
 | Cours Licence FSJES | `public/data/cours.json` + compléments `lib/fsjesContenu/<module>.js` (déclarés dans `lib/fsjesContenu/index.js`) | `lib/coursTaxonomy.js`, découpage : `lib/fsjesChapitres.js` |
 | Cours Bac | `lib/bacContenu/<niveau>/<fichier>.js` (déclarés dans `lib/bacContenu/index.js`) ; surcharges admin dans `public/data/bac.json` | `lib/bacProgramme.js` |
@@ -729,6 +731,38 @@ code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'e
   S1/S2 varie selon l'école, le dire dans l'en-tête du module. Publiés : `comptabilite-generale-s1`,
   `microeconomie-s1` (octobre 2026). Contrôle et fin de recette comme K1 ; mettre à jour
   `public/llms.txt` au premier module publié (règle 1.8).
+### K5 — Cours de Droit (espace construit en silence)
+Espace Droit (`lib/espaces.js`, clé `droit`, couleur violet), créé le 2026-10-15 : pages `/droit`,
+`/droit/<id>`, `/droit/<id>/<chapitre>`, console Contenu › Cours Droit. **Fermé tant que
+`DROIT_LANCE = false`** (`lib/contenusPublies.mjs`) : même avec des modules publiés, un build de
+production ne génère aucune page de module ni de chapitre (`/droit` reste une page vide en
+`noindex`), ni lien, ni entrée de sitemap ou de recherche. `npm run dev` ouvre l'espace dès le
+premier module publié (aperçu) : c'est là qu'on relit. On peut donc committer et pousser les
+cours au fil de l'eau sans rien montrer.
+- **Structure** (`lib/droitTaxonomy.js`) : d'abord le **tronc commun** (`filiere: ""`), puis la
+  filière et son parcours. Deux langues, chacune ses filières :
+  français — Droit privé (Droit financier et des affaires ; Métiers du droit et de la justice),
+  Droit public (Études politiques et internationales ; Science politique et droit
+  constitutionnel ; Géopolitique et veille stratégique) ; arabe — القانون الخاص (العلوم الجنائية
+  والأمنية ; المهن القانونية والقضائية ; قانون المال والأعمال), القانون العام (المنازعات العمومية
+  والتدقيق المالي والهندسة الضريبية ; الإدارة والتنمية). Intitulés de la FSJES Aïn Chock.
+- **Schéma** (`droit.json`) : `id` (`<module-en-tirets>-s<N>`, fixe l'URL), `module`, `title`,
+  `description` (120-160 caractères), `langue` (`fr`/`ar`), `semestre` (`S1`…`S6`), `filiere`
+  (`""`, `prive`, `public`, `prive-ar`, `public-ar`), `parcours` (`""` = commun à la filière, sinon
+  un code de la taxonomie), `content`, `available`.
+- **Markdown** : convention FSJES et norme « cours détaillé » (section K), `## ⚡ RÉSUMÉ` possible,
+  QCM et exercices en plus dans `lib/droitContenu/<id>.js` (format K2), déclaré dans `SUPPLEMENTS`.
+  Un cours en arabe garde les marqueurs français (`# CHAPITRE N — <titre arabe>`, `## ✏️ EXERCICE`,
+  `## ✅ CORRECTION`) : la page passe en RTL ; l'adresse d'un chapitre au titre arabe est
+  `chapitre-N`.
+- Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
+  pénal, procédure civile et pénale, lois organiques) ; vérifier chaque article cité.
+- **Avant le lancement** (« fix SEO, fix AdSense ») : relire en `npm run dev` ; titres et
+  descriptions (règle 1.7) ; bloc `sp-about` de `app/droit/page.js` calculé sur les données ;
+  `MOTIFS` (`lib/concoursParModule.js`) si des concours de droit existent.
+- **Lancer** (`lance la section droit`) : `DROIT_LANCE = true` ; entrée `RESUME` + `SECTIONS` de
+  l'accueil (`app/page.js`, X1 étape 4) ; `public/llms.txt` (règle 1.8) ; `npm run check` (l'audit
+  suit alors les liens de l'espace) ; P1. Le sitemap, la recherche et le header suivent seuls.
 
 ## B. BAC (Sciences Économiques & Gestion)
 
@@ -1031,7 +1065,9 @@ ne nomme un espace : en ajouter un ne demande **aucune retouche du chrome**.
 2. **Registre** `lib/espaces.js` : une entrée. Un onglet qui porte `contenu: "<clé>"` ne s'affiche
    qu'avec ce contenu publié (clé calculée au build par `lib/contenusPublies.mjs`, inscrite dans
    `SC_CONTENUS` par `next.config.mjs`) ; un espace sans onglet visible disparaît. C'est ce qui
-   permet de construire une section avant son contenu (précédent : ENCG, 2026-10-10). Champs : `key`, `label` (header, court), `long`, `audience` (« Après le Bac »),
+   permet de construire une section avant son contenu (précédent : ENCG, 2026-10-10). Pour la garder
+   fermée même avec du contenu publié, un drapeau de lancement dans `lib/contenusPublies.mjs`
+   (précédent : Droit, `DROIT_LANCE`, 2026-10-15, recette K5). Champs : `key`, `label` (header, court), `long`, `audience` (« Après le Bac »),
    `couleur` (indigo, orange, teal, gold, rose, sky — jamais rouge ni vert), `desc` (une phrase,
    sans répéter l'audience), `hub`, `tabs` (`keys` = valeurs de `active` passées à `chromeHtml`
    par les pages de l'onglet), `cours` / `sujets` / `entrainement` (destinations de la barre du bas).

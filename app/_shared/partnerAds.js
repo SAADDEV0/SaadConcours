@@ -63,6 +63,7 @@ export const PARTNER_SECTIONS = [
   { key: "concours-pb", label: "Concours ENCG (TAFEM)" },
   { key: "cours", label: "Cours Licence FSJES" },
   { key: "encg", label: "Cours ENCG" },
+  { key: "droit", label: "Cours de Droit" },
   { key: "bac", label: "Cours Bac" },
   { key: "eval", label: "Évaluation (QCM)" },
   { key: "blog", label: "Blog" },

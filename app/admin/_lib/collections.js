@@ -18,6 +18,7 @@ import {
 } from "@/lib/coursTaxonomy";
 import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, MASTER, POST_BAC, niveauOf } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgSemestreLabel } from "@/lib/encgTaxonomy";
+import { DROIT_FILIERES, DROIT_LANGUES, DROIT_SEMESTRES, droitFilieresFor, droitLangueInfo, droitParcoursFor, droitRangLabelFr } from "@/lib/droitTaxonomy";
 import { BOUTIQUE_NIVEAUX, BOUTIQUE_BADGES, BOUTIQUE_DEVISES, boutiqueNiveau, formatPrix } from "@/lib/boutique";
 import { BLOG_CATEGORIES, categoryLabel as blogCategoryLabel } from "@/lib/blogTaxonomy";
 import { normalize, randomId, slugify, todayIso, wordCount, daysUntil } from "./format";
@@ -403,6 +404,80 @@ const encg = {
   },
 };
 
+/* ------------------------------ Cours Droit ------------------------------ */
+
+// Même forme que encg.json, plus langue / filière / parcours
+// (lib/droitTaxonomy.js) ; pages /droit/<id>/<chapitre>. L'espace reste
+// fermé sur le site tant que DROIT_LANCE est à false (lib/contenusPublies.mjs).
+const droit = {
+  ...encg,
+  key: "droit",
+  path: "data/droit.json",
+  label: "Cours Droit",
+  emoji: "⚖️",
+  href: "/admin/droit",
+  publicUrl: (c) => `${SITE}/droit/${encodeURIComponent(c.id)}`,
+  subtitle: (c) => [c.semestre, droitRangLabelFr(c), droitLangueInfo(c.langue).court].filter(Boolean).join(" · "),
+  searchText: (c) => [c.id, c.module, c.title, c.description, c.semestre, droitRangLabelFr(c)].join(" "),
+  filters: [
+    { key: "langue", label: "Langue", options: DROIT_LANGUES.map((l) => ({ value: l.code, label: l.court })), get: (c) => c.langue || "fr" },
+    { key: "semestre", label: "Semestre", options: opt(DROIT_SEMESTRES), get: (c) => c.semestre },
+    { key: "filiere", label: "Filière", options: [{ value: "", label: "Tronc commun" }, ...DROIT_FILIERES.map((f) => ({ value: f.code, label: f.fr || f.label }))], get: (c) => c.filiere || "" },
+  ],
+  columns: [
+    { key: "semestre", label: "Semestre", width: 80, render: (c) => <span className="ax-pill accent">{c.semestre || "—"}</span> },
+    { key: "rang", label: "Rang", render: (c) => droitRangLabelFr(c) },
+    { key: "len", label: "Longueur", render: (c) => <span className="ax-muted">{Math.round(wordCount(c.content) / 100) / 10} k mots</span> },
+  ],
+  empty: () => ({ module: "", title: "", description: "", langue: "fr", semestre: "", filiere: "", parcours: "", content: "", available: false }),
+  groups: [
+    {
+      title: "Présentation",
+      fields: [
+        { key: "module", label: "Module", type: "text", required: true, placeholder: "Droit des obligations" },
+        { key: "title", label: "Titre de la fiche", type: "text", required: true, placeholder: "Cours — Droit des obligations (S2)" },
+        { key: "description", label: "Description (SEO et cartes)", type: "textarea", rows: 2, full: true, counter: [120, 160] },
+        {
+          key: "langue",
+          label: "Langue",
+          type: "select",
+          options: DROIT_LANGUES.map((l) => ({ value: l.code, label: l.label })),
+          onChange: (f) => ({ ...f, filiere: "", parcours: "" }),
+        },
+        { key: "semestre", label: "Semestre", type: "select", options: opt(DROIT_SEMESTRES) },
+        {
+          key: "filiere",
+          label: "Filière",
+          type: "select",
+          optionsFor: (f) => [{ value: "", label: "Tronc commun" }, ...droitFilieresFor(f.langue).map((x) => ({ value: x.code, label: x.label }))],
+          onChange: (f) => ({ ...f, parcours: "" }),
+        },
+        {
+          key: "parcours",
+          label: "Parcours",
+          type: "select",
+          optionsFor: (f) => [{ value: "", label: "Commun à la filière" }, ...droitParcoursFor(f.filiere).map((x) => ({ value: x.code, label: x.label }))],
+        },
+      ],
+    },
+    {
+      title: "Contenu",
+      hint: "Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/droit/<module>/<chapitre>), même pour un cours en arabe (le titre du chapitre peut être en arabe). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié.",
+      fields: [{ key: "content", label: "Cours complet (Markdown)", type: "markdown", required: true, full: true, rows: 28 }],
+    },
+  ],
+  quality(c) {
+    const chapitres = (String(c.content || "").match(/^# CHAPITRE \d+\s*[—–-]/gm) || []).length;
+    return checks([
+      [c.module && c.title, "Module et titre", "red"],
+      [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
+      [wordCount(c.content) > 400, "Contenu rédigé", "red"],
+      [c.description && c.description.length >= 80, "Description d'au moins 80 caractères"],
+      [c.semestre, "Semestre"],
+    ]);
+  },
+};
+
 /* ------------------------------ Évaluations ------------------------------ */
 
 const quiz = {
@@ -756,8 +831,8 @@ const boutique = {
   auditLabel: (p) => p.titre,
 };
 
-export const COLLECTIONS = { concours, cours, encg, quiz, blog, news, boutique };
-export const COLLECTION_LIST = [concours, cours, encg, quiz, blog, news, boutique];
+export const COLLECTIONS = { concours, cours, encg, droit, quiz, blog, news, boutique };
+export const COLLECTION_LIST = [concours, cours, encg, droit, quiz, blog, news, boutique];
 
 export function collectionByKey(key) {
   return COLLECTIONS[key] || null;

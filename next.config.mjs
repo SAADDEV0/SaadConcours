@@ -1,10 +1,8 @@
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
 import { contenusPublies } from "./lib/contenusPublies.mjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Onglets d'espace ouverts par leur contenu (cours ENCG, sujets TAFEM) :
-  // voir lib/contenusPublies.mjs et lib/espaces.js.
-  env: { SC_CONTENUS: contenusPublies() },
 
   // lib/store.js reads `path.join(process.cwd(), "public", relPath)`. That
   // path is dynamic, so Next's file tracer can't tell which files it needs
@@ -42,4 +40,9 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// Onglets d'espace ouverts par leur contenu (cours ENCG, sujets TAFEM, cours
+// de Droit) : voir lib/contenusPublies.mjs et lib/espaces.js. `next dev`
+// ouvre aussi les espaces construits en silence (aperçu avant lancement).
+export default function config(phase) {
+  return { ...nextConfig, env: { SC_CONTENUS: contenusPublies({ apercu: phase === PHASE_DEVELOPMENT_SERVER }) } };
+}
