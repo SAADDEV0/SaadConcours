@@ -6,7 +6,7 @@
     "description": "Introduction à l'étude du droit (S1) : règle de droit, sources du droit marocain, personnes et droits subjectifs. Programme commun avec la Licence FSJES.",
     "langue": "fr",
     "semestre": "S1",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "renvoi": "introdroit_cours",
     "content": "",
@@ -19,7 +19,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S1",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -43,7 +43,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S1",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -55,7 +55,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S1",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -67,7 +67,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S2",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -92,7 +92,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S2",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -104,7 +104,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S2",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -116,7 +116,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S2",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -128,7 +128,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S3",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -140,7 +140,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S3",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -164,7 +164,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S3",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -176,7 +176,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S3",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -201,7 +201,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S4",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -213,7 +213,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S4",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -225,7 +225,7 @@
     "description": "",
     "langue": "fr",
     "semestre": "S4",
-    "filiere": "prive",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -237,7 +237,56 @@
     "description": "",
     "langue": "fr",
     "semestre": "S4",
-    "filiere": "prive",
+    "filiere": "",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "introduction-economie-gestion-s1",
+    "module": "Introduction à l'économie et à la gestion",
+    "title": "Cours — Introduction à l'économie et à la gestion (Droit S1)",
+    "description": "Introduction à l'économie et à la gestion (Droit public, S1) : notions de base de l'économie et de l'entreprise, traitées dans les cours de la Licence FSJES.",
+    "langue": "fr",
+    "semestre": "S1",
+    "filiere": "public",
+    "parcours": "",
+    "renvoi": "introeco_cours",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "grands-systemes-constitutionnels-s2",
+    "module": "Les grands systèmes constitutionnels",
+    "title": "Cours — Les grands systèmes constitutionnels (Droit S2)",
+    "description": "",
+    "langue": "fr",
+    "semestre": "S2",
+    "filiere": "public",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "droit-international-public-s3",
+    "module": "Droit international public",
+    "title": "Cours — Droit international public (Droit S3)",
+    "description": "",
+    "langue": "fr",
+    "semestre": "S3",
+    "filiere": "public",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "histoire-idees-politiques-s4",
+    "module": "Histoire des idées politiques",
+    "title": "Cours — Histoire des idées politiques (Droit S4)",
+    "description": "",
+    "langue": "fr",
+    "semestre": "S4",
+    "filiere": "public",
     "parcours": "",
     "content": "",
     "available": false

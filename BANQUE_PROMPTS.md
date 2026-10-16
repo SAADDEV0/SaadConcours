@@ -778,21 +778,30 @@ cours au fil de l'eau sans rien montrer.
   Un cours en arabe garde les marqueurs français (`# CHAPITRE N — <titre arabe>`, `## ✏️ EXERCICE`,
   `## ✅ CORRECTION`) : la page passe en RTL ; l'adresse d'un chapitre au titre arabe est
   `chapitre-N`.
-- **Programme déjà saisi** (2026-10-16, noms seuls : `available: false`, `content` vide) : Droit privé
-  (`filiere: "prive"`) S1 → S4, 5 modules par semestre. S1 : Introduction à l'étude du droit,
-  Introduction à l'étude du droit musulman, Sociologie du droit, Théorie générale du droit
-  constitutionnel, Introduction à la science politique. S2 : Théorie générale des obligations,
-  Droit commercial fondamental, Droit pénal général, Introduction aux relations internationales,
-  L'organisation administrative. S3 : Droit de la famille, Droit social, Droit pénal spécial,
-  Finances publiques, L'action administrative. S4 : Droit des sociétés, Organisation judiciaire,
-  Droit foncier, Contentieux administratif, Droits de l'homme et libertés publiques.
+- **Programme déjà saisi** (2026-10-16, noms seuls : `available: false`, `content` vide), S1 → S4
+  en français. Un module au même intitulé en droit privé et en droit public est au **tronc commun**
+  (`filiere: ""`, un seul cours) ; seuls les autres portent leur filière. Langues, soft skills,
+  digital skills et culture & art skills ne sont pas saisis (demande du 2026-10-16).
+  - Tronc commun — S1 : Introduction à l'étude du droit (renvoi), Introduction à l'étude du droit
+    musulman, Théorie générale du droit constitutionnel, Introduction à la science politique.
+    S2 : Théorie générale des obligations (en droit public : « Théorie des obligations et des
+    contrats », le cours couvre les deux), Droit pénal général, Introduction aux relations
+    internationales, L'organisation administrative. S3 : Droit de la famille, Droit social,
+    Finances publiques, L'action administrative. S4 : Organisation judiciaire, Droit foncier,
+    Contentieux administratif (en droit public : « … et financier », le cours traite aussi le
+    contentieux financier), Droits de l'homme et libertés publiques.
+  - Droit privé : Sociologie du droit (S1), Droit commercial fondamental (S2, renvoi), Droit pénal
+    spécial (S3), Droit des sociétés (S4, renvoi).
+  - Droit public : Introduction à l'économie et à la gestion (S1, renvoi), Les grands systèmes
+    constitutionnels (S2), Droit international public (S3), Histoire des idées politiques (S4).
   « ajoute le cours X » remplit la fiche existante (même `id`) au lieu d'en créer une.
 - **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
   se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,
   `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
   cours FSJES, sans page `/droit/<id>` (`droitRenvois`, `lib/droit.js`, comme l'ENCG). En place
   depuis le 2026-10-16 : Introduction à l'étude du droit → `introdroit_cours`, Droit commercial
-  fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`. Organisation
+  fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`, Introduction à
+  l'économie et à la gestion → `introeco_cours` (la partie gestion est dans `introgestion_cours`). Organisation
   judiciaire (S4) reste à rédiger : `introdroit_cours` n'en a qu'un chapitre. Un cours en arabe
   sur la même matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
