@@ -3,13 +3,14 @@
     "id": "introduction-etude-droit-s1",
     "module": "Introduction à l'étude du droit",
     "title": "Cours — Introduction à l'étude du droit (Droit S1)",
-    "description": "",
+    "description": "Introduction à l'étude du droit (S1) : règle de droit, sources du droit marocain, personnes et droits subjectifs. Programme commun avec la Licence FSJES.",
     "langue": "fr",
     "semestre": "S1",
     "filiere": "prive",
     "parcours": "",
+    "renvoi": "introdroit_cours",
     "content": "",
-    "available": false
+    "available": true
   },
   {
     "id": "introduction-etude-droit-musulman-s1",
@@ -75,13 +76,14 @@
     "id": "droit-commercial-fondamental-s2",
     "module": "Droit commercial fondamental",
     "title": "Cours — Droit commercial fondamental (Droit S2)",
-    "description": "",
+    "description": "Droit commercial fondamental (S2) : actes de commerce, commerçant, fonds de commerce et effets de commerce, traités dans le cours de la Licence FSJES.",
     "langue": "fr",
     "semestre": "S2",
     "filiere": "prive",
     "parcours": "",
+    "renvoi": "droitaffaires_cours",
     "content": "",
-    "available": false
+    "available": true
   },
   {
     "id": "droit-penal-general-s2",
@@ -183,13 +185,14 @@
     "id": "droit-societes-s4",
     "module": "Droit des sociétés",
     "title": "Cours — Droit des sociétés (Droit S4)",
-    "description": "",
+    "description": "Droit des sociétés (S4) : contrat de société, personnalité morale, sociétés de personnes, SARL et SA. Programme commun avec la Licence FSJES.",
     "langue": "fr",
     "semestre": "S4",
     "filiere": "prive",
     "parcours": "",
+    "renvoi": "droitsocietes_cours",
     "content": "",
-    "available": false
+    "available": true
   },
   {
     "id": "organisation-judiciaire-s4",

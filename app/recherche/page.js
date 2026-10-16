@@ -3,7 +3,7 @@ import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { isLicenceExcellence, isPostBac } from "@/lib/concoursNiveaux";
 import { encgModule, encgModuleHref, encgChapitreHref, encgRenvois, isEncgPublie } from "../../lib/encg";
 import { encgSemestreLabel } from "../../lib/encgTaxonomy";
-import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie } from "../../lib/droit";
+import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { droitRangLabelFr } from "../../lib/droitTaxonomy";
 import { contenuOuvert } from "../../lib/espaces";
 import { categoryLabel } from "../../lib/blogTaxonomy";
@@ -85,6 +85,10 @@ export default async function RecherchePage() {
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · Droit · Chapitre ${ch.numero}`, droitChapitreHref(c, ch)));
     }
+  }
+  // Module de Droit commun avec la Licence : une entrée qui mène au cours FSJES.
+  for (const c of droitRenvois(droit, cours)) {
+    index.push(entree("cours", c.module, ["Droit", c.semestre, "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
   }
   for (const m of BAC_MATIERES.filter((x) => x.niveau === "2bac")) {
     index.push(entree("cours", m.nom, `2ᵉ Bac SEG · ${m.chapitres.length} chapitres`, bacMatiereHref(m), m.description || ""));

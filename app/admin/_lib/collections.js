@@ -425,8 +425,8 @@ const droit = {
   label: "Cours Droit",
   emoji: "⚖️",
   href: "/admin/droit",
-  publicUrl: (c) => `${SITE}/droit/${encodeURIComponent(c.id)}`,
-  subtitle: (c) => [c.semestre, droitRangLabelFr(c), droitLangueInfo(c.langue).court].filter(Boolean).join(" · "),
+  publicUrl: (c) => (c.renvoi ? `${SITE}/cours/${encodeURIComponent(c.renvoi)}` : `${SITE}/droit/${encodeURIComponent(c.id)}`),
+  subtitle: (c) => [c.semestre, droitRangLabelFr(c), droitLangueInfo(c.langue).court, c.renvoi && `renvoi → ${c.renvoi}`].filter(Boolean).join(" · "),
   searchText: (c) => [c.id, c.module, c.title, c.description, c.semestre, droitRangLabelFr(c)].join(" "),
   filters: [
     { key: "langue", label: "Langue", options: DROIT_LANGUES.map((l) => ({ value: l.code, label: l.court })), get: (c) => c.langue || "fr" },
@@ -438,7 +438,7 @@ const droit = {
     { key: "rang", label: "Rang", render: (c) => droitRangLabelFr(c) },
     { key: "len", label: "Longueur", render: (c) => <span className="ax-muted">{Math.round(wordCount(c.content) / 100) / 10} k mots</span> },
   ],
-  empty: () => ({ module: "", title: "", description: "", langue: "fr", semestre: "", filiere: "", parcours: "", content: "", available: false }),
+  empty: () => ({ module: "", title: "", description: "", langue: "fr", semestre: "", filiere: "", parcours: "", renvoi: "", content: "", available: false }),
   groups: [
     {
       title: "Présentation",
@@ -470,17 +470,26 @@ const droit = {
       ],
     },
     {
+      title: "Module commun avec la Licence",
+      hint: "Si la matière a déjà un cours dans la Licence FSJES (introduction à l'étude du droit, droit des sociétés…), ne pas la réécrire : mettre ici l'id du cours FSJES (ex. introdroit_cours) et laisser le contenu vide. La carte du module mène alors au cours de la Licence : un seul cours par matière sur le site (règle AdSense).",
+      fields: [{ key: "renvoi", label: "Id du cours FSJES (renvoi)", type: "text", placeholder: "introdroit_cours" }],
+    },
+    {
       title: "Contenu",
-      hint: "Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/droit/<module>/<chapitre>), même pour un cours en arabe (le titre du chapitre peut être en arabe). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié.",
-      fields: [{ key: "content", label: "Cours complet (Markdown)", type: "markdown", required: true, full: true, rows: 28 }],
+      hint: "Vide pour un module en renvoi. Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/droit/<module>/<chapitre>), même pour un cours en arabe (le titre du chapitre peut être en arabe). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié.",
+      fields: [{ key: "content", label: "Cours complet (Markdown)", type: "markdown", full: true, rows: 28 }],
     },
   ],
   quality(c) {
     const chapitres = (String(c.content || "").match(/^# CHAPITRE \d+\s*[—–-]/gm) || []).length;
     return checks([
       [c.module && c.title, "Module et titre", "red"],
-      [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
-      [wordCount(c.content) > 400, "Contenu rédigé", "red"],
+      ...(c.renvoi
+        ? [[!chapitres, "Renvoi vers la Licence : pas de cours de Droit en plus (doublon)", "red"]]
+        : [
+            [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
+            [wordCount(c.content) > 400, "Contenu rédigé", "red"],
+          ]),
       [c.description && c.description.length >= 80, "Description d'au moins 80 caractères"],
       [c.semestre, "Semestre"],
     ]);

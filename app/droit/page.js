@@ -1,11 +1,12 @@
-import { getAllDroit } from "@/lib/store";
+import { getAllDroit, getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "../cours/CoursExplorer";
 import { Icon } from "../_shared/icons";
 import { DROIT_LANGUES, DROIT_SEMESTRES, TRONC_COMMUN, droitFilieresFor, droitRangLabel, droitSortComparator } from "../../lib/droitTaxonomy";
-import { droitModule, droitModuleHref, droitOuvert, isDroitPublie } from "../../lib/droit";
+import { droitModule, droitModuleHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
+import { fsjesModule } from "../../lib/fsjesChapitres";
 
 // Prérendue au build, comme /cours (voir README : une page publique
 // n'invoque pas le Worker).
@@ -18,7 +19,10 @@ const PATH = "/droit";
 // lib/contenusPublies.mjs), la page ne liste rien et n'est liée nulle part.
 async function donnees() {
   if (!droitOuvert()) return { modules: [] };
-  return { modules: (await getAllDroit()).filter(isDroitPublie).sort(droitSortComparator) };
+  const [droit, cours] = await Promise.all([getAllDroit(), getAllCours().catch(() => [])]);
+  // Modules rédigés pour le Droit, puis ceux qui renvoient au cours FSJES de
+  // la même matière (lib/droit.js, droitRenvois) : une seule liste.
+  return { modules: [...droit.filter(isDroitPublie), ...droitRenvois(droit, cours)].sort(droitSortComparator) };
 }
 
 // Titre et description : app/droit/layout.js. Sans module publié (ou avant le
@@ -63,13 +67,14 @@ function groupes(modules) {
 // Mêmes attributs data-* que les cartes de /cours : CoursExplorer filtre les
 // deux pages. Ici « parcours » porte la langue et « filiere » la filière
 // (un module du tronc commun, sans filière, reste visible avec chacune).
+// Une carte de renvoi mène au cours FSJES et le dit.
 function ModuleCard({ c }) {
-  const { chapitres } = droitModule(c);
+  const { chapitres } = c.cible ? fsjesModule(c.cible) : droitModule(c);
   const ar = c.langue === "ar";
-  const search = [c.module, c.title, c.description, droitRangLabel(c), ...chapitres.map((x) => x.titre)].join(" ").toLowerCase();
+  const search = [c.module, c.title, c.description, droitRangLabel(c), c.cible?.module, ...chapitres.map((x) => x.titre)].join(" ").toLowerCase();
   return (
     <a
-      href={droitModuleHref(c)}
+      href={moduleHref(c)}
       className="bac-mat-card"
       data-semestre={c.semestre || ""}
       data-category=""
@@ -86,15 +91,26 @@ function ModuleCard({ c }) {
           <span>{c.semestre || "Licence"}</span>
           <span className="bac-dot">·</span>
           <span>{chapitres.length} chapitres</span>
+          {c.cible && (
+            <>
+              <span className="bac-dot">·</span>
+              <span>Cours de la Licence FSJES</span>
+            </>
+          )}
         </span>
       </span>
     </a>
   );
 }
 
+function moduleHref(c) {
+  return c.cible ? `/cours/${encodeURIComponent(c.cible.id)}` : droitModuleHref(c);
+}
+
 export default async function DroitPage() {
   const { modules } = await donnees();
-  const totalChapitres = modules.reduce((n, c) => n + droitModule(c).chapitres.length, 0);
+  const totalChapitres = modules.reduce((n, c) => n + (c.cible ? fsjesModule(c.cible) : droitModule(c)).chapitres.length, 0);
+  const communs = modules.filter((c) => c.cible);
   const semestres = DROIT_SEMESTRES.filter((s) => modules.some((c) => c.semestre === s.code));
   const langues = DROIT_LANGUES.filter((l) => modules.some((c) => (c.langue || "fr") === l.code));
   const filieres = langues.flatMap((l) => droitFilieresFor(l.code)).filter((f) => modules.some((c) => c.filiere === f.code));
@@ -109,7 +125,7 @@ export default async function DroitPage() {
             name: "Cours de la licence de Droit (FSJES) du S1 au S6",
             description: "Cours de droit du tronc commun puis des filières droit privé et droit public, découpés en chapitres avec exercices corrigés.",
             path: PATH,
-            items: modules.map((c) => ({ name: c.module, path: droitModuleHref(c) })),
+            items: modules.map((c) => ({ name: c.module, path: moduleHref(c) })),
           }),
         ]}
       />
@@ -225,6 +241,13 @@ export default async function DroitPage() {
               est rangé à sa place et découpé en chapitres : le cours expliqué, puis des exercices avec leur corrigé détaillé, et le
               module entier en PDF. Tout est gratuit et sans inscription.
             </p>
+            {communs.length > 0 && (
+              <p>
+                Quelques matières de la licence de Droit s&apos;enseignent aussi en licence d&apos;économie et gestion des FSJES (
+                {communs.map((c) => c.module.toLowerCase()).join(", ")}). Pour elles, le site n&apos;a qu&apos;un seul cours, celui de la
+                Licence FSJES, et la carte du module y mène directement.
+              </p>
+            )}
           </section>
         </div>
       </div>

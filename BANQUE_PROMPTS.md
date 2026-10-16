@@ -787,11 +787,14 @@ cours au fil de l'eau sans rien montrer.
   Finances publiques, L'action administrative. S4 : Droit des sociétés, Organisation judiciaire,
   Droit foncier, Contentieux administratif, Droits de l'homme et libertés publiques.
   « ajoute le cours X » remplit la fiche existante (même `id`) au lieu d'en créer une.
-- **Doublons avec la Licence FSJES** (règle 1.6) : `cours.json` a déjà `introdroit_cours`
-  (introduction à l'étude du droit, S1), `droitsocietes_cours` et `droitaffaires_cours`. Ne pas
-  rédiger leur équivalent en français dans l'espace Droit : me le signaler avant (un mécanisme de
-  renvoi comme celui de l'ENCG est à construire pour `droit.json`). Un cours en arabe sur la même
-  matière n'est pas un doublon de texte.
+- **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
+  se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,
+  `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
+  cours FSJES, sans page `/droit/<id>` (`droitRenvois`, `lib/droit.js`, comme l'ENCG). En place
+  depuis le 2026-10-16 : Introduction à l'étude du droit → `introdroit_cours`, Droit commercial
+  fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`. Organisation
+  judiciaire (S4) reste à rédiger : `introdroit_cours` n'en a qu'un chapitre. Un cours en arabe
+  sur la même matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
   pénal, procédure civile et pénale, lois organiques) ; vérifier chaque article cité.
 - **Avant le lancement** (« fix SEO, fix AdSense ») : relire en `npm run dev` ; titres et
