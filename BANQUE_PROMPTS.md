@@ -778,6 +778,15 @@ cours au fil de l'eau sans rien montrer.
   Un cours en arabe garde les marqueurs français (`# CHAPITRE N — <titre arabe>`, `## ✏️ EXERCICE`,
   `## ✅ CORRECTION`) : la page passe en RTL ; l'adresse d'un chapitre au titre arabe est
   `chapitre-N`.
+- **Programme déjà saisi** (2026-10-16, noms seuls : `available: false`, `content` vide) : Droit privé
+  (`filiere: "prive"`) S1 → S4, 5 modules par semestre. S1 : Introduction à l'étude du droit,
+  Introduction à l'étude du droit musulman, Sociologie du droit, Théorie générale du droit
+  constitutionnel, Introduction à la science politique. S2 : Théorie générale des obligations,
+  Droit commercial fondamental, Droit pénal général, Introduction aux relations internationales,
+  L'organisation administrative. S3 : Droit de la famille, Droit social, Droit pénal spécial,
+  Finances publiques, L'action administrative. S4 : Droit des sociétés, Organisation judiciaire,
+  Droit foncier, Contentieux administratif, Droits de l'homme et libertés publiques.
+  « ajoute le cours X » remplit la fiche existante (même `id`) au lieu d'en créer une.
 - **Doublons avec la Licence FSJES** (règle 1.6) : `cours.json` a déjà `introdroit_cours`
   (introduction à l'étude du droit, S1), `droitsocietes_cours` et `droitaffaires_cours`. Ne pas
   rédiger leur équivalent en français dans l'espace Droit : me le signaler avant (un mécanisme de

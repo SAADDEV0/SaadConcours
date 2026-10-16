@@ -42,8 +42,15 @@ function groupes(modules) {
     const sansSemestre = deLaLangue.filter((c) => !c.filiere && !c.semestre);
     if (sansSemestre.length) out.push({ cle: `${l.code}-tc`, langue: l, titre: TRONC_COMMUN[l.code], list: sansSemestre });
     for (const f of droitFilieresFor(l.code)) {
+      // Modules communs à la filière : un groupe par semestre (S1 → S4 en
+      // droit privé), puis ceux sans semestre.
       const communs = deLaLangue.filter((c) => c.filiere === f.code && !c.parcours);
-      if (communs.length) out.push({ cle: `${f.code}`, langue: l, titre: f.label, list: communs });
+      for (const s of DROIT_SEMESTRES) {
+        const list = communs.filter((c) => c.semestre === s.code);
+        if (list.length) out.push({ cle: `${f.code}-${s.code}`, langue: l, titre: `${f.label} · ${s.code}`, list });
+      }
+      const communsSansSemestre = communs.filter((c) => !c.semestre);
+      if (communsSansSemestre.length) out.push({ cle: `${f.code}`, langue: l, titre: f.label, list: communsSansSemestre });
       for (const p of f.parcours) {
         const list = deLaLangue.filter((c) => c.filiere === f.code && c.parcours === p.code);
         if (list.length) out.push({ cle: `${f.code}-${p.code}`, langue: l, titre: `${f.label} · ${p.label}`, list });
