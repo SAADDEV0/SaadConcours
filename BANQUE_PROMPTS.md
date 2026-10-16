@@ -807,6 +807,16 @@ cours au fil de l'eau sans rien montrer.
     القانون الدولي العام (S3)، تاريخ الفكر السياسي وقانون المساطر (S4).
     Pas de renvoi vers la Licence FSJES (cours en arabe, pas un doublon de texte).
   « ajoute le cours X » remplit la fiche existante (même `id`) au lieu d'en créer une.
+- **Rédigés** (2026-10-17, « ajoute les cours S1 de droit privé ») : tout le S1 de droit privé en
+  français. Théorie générale du droit constitutionnel, Introduction à la science politique,
+  Introduction à l'étude du droit musulman (tronc commun) et Sociologie du droit (`prive`), 7 chapitres
+  chacun avec compléments (résumé, exercices 2 et 3, 10 QCM). Un module qui relève du tronc commun sert
+  aux deux filières : « les cours S1 de droit public » ne demanderont plus que le renvoi Introduction à
+  l'économie et à la gestion (`available: false` à passer à `true`). Procédure : celle de la norme
+  « cours détaillé » (scratchpad `k/<id>/head.md`, `cNN.md`, `sNN.js`, `annexe.md`), assemblée par un
+  script qui écrit `content`, `description`, `available`, le fichier `lib/droitContenu/<id>.js` et sa
+  ligne dans `index.js`, puis contrôle chapitres, mots, exercices, QCM et descriptions. Les chiffres
+  d'enquête sans source publique vérifiée sont présentés comme « données fictives ».
 - **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
   se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,
   `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
