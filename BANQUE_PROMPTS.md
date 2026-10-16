@@ -794,15 +794,18 @@ cours au fil de l'eau sans rien montrer.
     spécial (S3), Droit des sociétés (S4, renvoi).
   - Droit public : Introduction à l'économie et à la gestion (S1, renvoi), Les grands systèmes
     constitutionnels (S2), Droit international public (S3), Histoire des idées politiques (S4).
-  - القانون الخاص (`langue: "ar"`, `filiere: "prive-ar"`, id `<module-en-français>-ar-s<N>`), saisi
-    le 2026-10-16, sans langues ni مهارات : S1 مدخل لدراسة القانون، مدخل لدراسة الشريعة، علم الاجتماع
-    القانوني، النظرية العامة للقانون الدستوري، مدخل إلى علم السياسة ؛ S2 النظرية العامة للالتزامات
-    والعقود، القانون التجاري الأساسي، القانون الجنائي العام، مدخل للعلاقات الدولية، مدخل إلى القانون
-    الإداري والتنظيم الإداري ؛ S3 قانون الأسرة، القانون الاجتماعي، القانون الجنائي الخاص، المالية العامة،
-    النشاط الإداري ؛ S4 قانون الشركات، التنظيم القضائي، القانون العقاري، المنازعات الإدارية، حقوق
-    الإنسان والحريات العامة. Pas de renvoi vers la Licence FSJES (cours en arabe, pas un doublon de
-    texte). Quand le programme de القانون العام arrivera, passer les modules au même intitulé au tronc
-    commun arabe (`filiere: ""`, `langue: "ar"`), comme pour le français.
+  - En arabe (`langue: "ar"`, id `<module-en-français>-ar-s<N>`), saisi le 2026-10-16 sans
+    langues ni مهارات. Même règle : intitulé commun aux deux filières = tronc commun arabe
+    (`filiere: ""`). Tronc commun — S1 مدخل لدراسة القانون، مدخل لدراسة الشريعة، النظرية العامة
+    للقانون الدستوري، مدخل إلى علم السياسة ؛ S2 النظرية العامة للالتزامات والعقود، القانون الجنائي
+    العام، مدخل للعلاقات الدولية، مدخل إلى القانون الإداري والتنظيم الإداري ؛ S3 قانون الأسرة،
+    القانون الاجتماعي، المالية العامة، النشاط الإداري ؛ S4 التنظيم القضائي، المنازعات الإدارية، حقوق
+    الإنسان والحريات العامة (« حقوق الإنسان والحريات » en droit public).
+    القانون الخاص (`prive-ar`) : علم الاجتماع القانوني (S1)، القانون التجاري الأساسي (S2)، القانون
+    الجنائي الخاص (S3)، قانون الشركات والقانون العقاري (S4).
+    القانون العام (`public-ar`) : مدخل لدراسة الاقتصاد والتدبير (S1)، الأنظمة الدستورية الكبرى (S2)،
+    القانون الدولي العام (S3)، تاريخ الفكر السياسي وقانون المساطر (S4).
+    Pas de renvoi vers la Licence FSJES (cours en arabe, pas un doublon de texte).
   « ajoute le cours X » remplit la fiche existante (même `id`) au lieu d'en créer une.
 - **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
   se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,

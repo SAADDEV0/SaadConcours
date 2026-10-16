@@ -298,7 +298,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S1",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -310,7 +310,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S1",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -334,7 +334,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S1",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -346,7 +346,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S1",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -358,7 +358,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S2",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -382,7 +382,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S2",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -394,7 +394,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S2",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -406,7 +406,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S2",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -418,7 +418,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S3",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -430,7 +430,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S3",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -454,7 +454,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S3",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -466,7 +466,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S3",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -490,7 +490,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S4",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -514,7 +514,7 @@
     "description": "",
     "langue": "ar",
     "semestre": "S4",
-    "filiere": "prive-ar",
+    "filiere": "",
     "parcours": "",
     "content": "",
     "available": false
@@ -526,7 +526,67 @@
     "description": "",
     "langue": "ar",
     "semestre": "S4",
-    "filiere": "prive-ar",
+    "filiere": "",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "introduction-economie-gestion-ar-s1",
+    "module": "مدخل لدراسة الاقتصاد والتدبير",
+    "title": "دروس مدخل لدراسة الاقتصاد والتدبير — S1",
+    "description": "",
+    "langue": "ar",
+    "semestre": "S1",
+    "filiere": "public-ar",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "grands-systemes-constitutionnels-ar-s2",
+    "module": "الأنظمة الدستورية الكبرى",
+    "title": "دروس الأنظمة الدستورية الكبرى — S2",
+    "description": "",
+    "langue": "ar",
+    "semestre": "S2",
+    "filiere": "public-ar",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "droit-international-public-ar-s3",
+    "module": "القانون الدولي العام",
+    "title": "دروس القانون الدولي العام — S3",
+    "description": "",
+    "langue": "ar",
+    "semestre": "S3",
+    "filiere": "public-ar",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "histoire-pensee-politique-ar-s4",
+    "module": "تاريخ الفكر السياسي",
+    "title": "دروس تاريخ الفكر السياسي — S4",
+    "description": "",
+    "langue": "ar",
+    "semestre": "S4",
+    "filiere": "public-ar",
+    "parcours": "",
+    "content": "",
+    "available": false
+  },
+  {
+    "id": "droit-procedures-ar-s4",
+    "module": "قانون المساطر",
+    "title": "دروس قانون المساطر — S4",
+    "description": "",
+    "langue": "ar",
+    "semestre": "S4",
+    "filiere": "public-ar",
     "parcours": "",
     "content": "",
     "available": false
