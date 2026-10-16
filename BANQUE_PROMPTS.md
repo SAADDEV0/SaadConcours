@@ -811,8 +811,9 @@ cours au fil de l'eau sans rien montrer.
   français. Théorie générale du droit constitutionnel, Introduction à la science politique,
   Introduction à l'étude du droit musulman (tronc commun) et Sociologie du droit (`prive`), 7 chapitres
   chacun avec compléments (résumé, exercices 2 et 3, 10 QCM). Un module qui relève du tronc commun sert
-  aux deux filières : « les cours S1 de droit public » ne demanderont plus que le renvoi Introduction à
-  l'économie et à la gestion (`available: false` à passer à `true`). Procédure : celle de la norme
+  aux deux filières : le S1 de droit public est donc aussi complet depuis l'activation, le même jour,
+  du renvoi Introduction à l'économie et à la gestion → `introeco_cours`. Pour un autre semestre, ne
+  rédiger que les modules propres à la filière demandée et ceux du tronc commun encore vides. Procédure : celle de la norme
   « cours détaillé » (scratchpad `k/<id>/head.md`, `cNN.md`, `sNN.js`, `annexe.md`), assemblée par un
   script qui écrit `content`, `description`, `available`, le fichier `lib/droitContenu/<id>.js` et sa
   ligne dans `index.js`, puis contrôle chapitres, mots, exercices, QCM et descriptions. Les chiffres
