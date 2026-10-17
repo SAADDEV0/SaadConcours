@@ -818,6 +818,16 @@ cours au fil de l'eau sans rien montrer.
   script qui écrit `content`, `description`, `available`, le fichier `lib/droitContenu/<id>.js` et sa
   ligne dans `index.js`, puis contrôle chapitres, mots, exercices, QCM et descriptions. Les chiffres
   d'enquête sans source publique vérifiée sont présentés comme « données fictives ».
+- **Rédigés en arabe** (2026-10-17, « ajoute les cours de القانون الخاص s1 ») : tout le S1 de
+  القانون الخاص — مدخل لدراسة القانون، مدخل لدراسة الشريعة، النظرية العامة للقانون الدستوري، مدخل إلى
+  علم السياسة (tronc commun arabe) et علم الاجتماع القانوني (`prive-ar`). Le S1 de القانون العام ne
+  demande plus que مدخل لدراسة الاقتصاد والتدبير (cours en arabe à rédiger : pas de renvoi possible).
+  Règles pour l'arabe : rédiger directement en arabe (plan et cas pratiques propres, pas une traduction
+  du cours français) ; marqueurs du Markdown en français (`# CHAPITRE N — <titre arabe>`,
+  `## ✏️ EXERCICE`, `### Exercice N` dans les compléments, `Voir le corrigé` dans `<details>`) ;
+  chiffres occidentaux ; « الأسدس » pour le semestre, « الفصل » pour le chapitre. Seuil de longueur :
+  **1 000 mots arabes** par chapitre (l'arabe compte environ 20 % de mots de moins que le français pour
+  le même contenu) ; viser 1 100 dès le premier jet, sinon il faut rallonger chaque chapitre.
 - **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
   se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,
   `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
