@@ -373,7 +373,7 @@ export default async function ConcoursDetailPage(props) {
                   <span className="bac-mat-body">
                     <span className="bac-mat-name">{m.module}</span>
                     <span className="bac-mat-meta">
-                      <span>Cours Licence FSJES</span>
+                      <span>Cours Licence Éco-Gestion</span>
                       {m.semestre && <span>{m.semestre}</span>}
                     </span>
                   </span>

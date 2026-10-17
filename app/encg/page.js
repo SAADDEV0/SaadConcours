@@ -6,7 +6,7 @@ import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "../cours/CoursExplorer";
 import { Icon } from "../_shared/icons";
 import { ENCG_CATEGORIES, ENCG_SEMESTRES, encgAnneeLabel, encgSortComparator } from "../../lib/encgTaxonomy";
-import { encgModule, encgModuleHref, encgRenvois, isEncgPublie } from "../../lib/encg";
+import { encgModule, encgModuleHref, encgOuvert, encgRenvois, isEncgPublie } from "../../lib/encg";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { isPostBac } from "../../lib/concoursNiveaux";
 
@@ -17,7 +17,10 @@ export const revalidate = false;
 
 const PATH = "/encg";
 
+// Espace caché (ENCG_LANCE, lib/contenusPublies.mjs) : la page ne liste rien
+// et n'est liée nulle part ; /encg redirige vers /cours (public/_redirects).
 async function donnees() {
+  if (!encgOuvert()) return { modules: [], tafem: [] };
   const [modules, cours, concours] = await Promise.all([getAllEncg(), getAllCours().catch(() => []), getPublicConcours().catch(() => [])]);
   return {
     // Modules rédigés pour l'ENCG, puis modules communs avec la Licence, qui
@@ -57,7 +60,7 @@ function ModuleCard({ c }) {
         <span className="bac-mat-meta">
           <span>{chapitres.length} chapitres</span>
           <span className="bac-dot">·</span>
-          <span>{c.cible ? "Cours de la Licence FSJES" : c.option || encgAnneeLabel(c.semestre) || "ENCG"}</span>
+          <span>{c.cible ? "Cours de la Licence Éco-Gestion" : c.option || encgAnneeLabel(c.semestre) || "ENCG"}</span>
         </span>
       </span>
     </a>

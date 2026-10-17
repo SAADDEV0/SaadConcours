@@ -5,7 +5,8 @@ import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
 import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
-import { encgModule, encgModuleHref, encgChapitreHref, encgRenvois, isEncgPublie } from "@/lib/encg";
+import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, encgRenvois, isEncgPublie } from "@/lib/encg";
+import { contenuOuvert } from "@/lib/espaces";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "@/lib/droit";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -46,8 +47,9 @@ export default async function sitemap() {
 
   const concoursUpdated = latestDate(concours.filter(isMaster), "date_ajout");
   const licenceUpdated = latestDate(concours.filter(isLicenceExcellence), "date_ajout");
-  const postBac = concours.filter(isPostBac);
-  const encgPublies = encg.filter(isEncgPublie);
+  // Espace ENCG : rien tant qu'il est caché (ENCG_LANCE, lib/contenusPublies.mjs).
+  const postBac = contenuOuvert("concours-post-bac") ? concours.filter(isPostBac) : [];
+  const encgPublies = encgOuvert() ? encg.filter(isEncgPublie) : [];
   // Espace Droit : rien avant son lancement (DROIT_LANCE, lib/contenusPublies.mjs).
   const droitPublies = droitOuvert() ? droit.filter(isDroitPublie) : [];
   const blogUpdated = latestDate(blog, "publishedAt");
@@ -66,7 +68,7 @@ export default async function sitemap() {
     // Espace ENCG : chaque page seulement avec son contenu (lib/espaces.js).
     ...(postBac.length ? [{ path: "/concours/post-bac", changeFrequency: "weekly", priority: 0.8, lastModified: latestDate(postBac, "date_ajout") }] : []),
     // Les modules en renvoi n'ont pas de page : seul /encg les liste.
-    ...(encgPublies.length || encgRenvois(encg, cours).length ? [{ path: "/encg", changeFrequency: "weekly", priority: 0.8 }] : []),
+    ...(encgPublies.length || (encgOuvert() && encgRenvois(encg, cours).length) ? [{ path: "/encg", changeFrequency: "weekly", priority: 0.8 }] : []),
     // Les modules en renvoi n'ont pas de page : seul /droit les liste.
     ...(droitPublies.length || (droitOuvert() && droitRenvois(droit, cours).length) ? [{ path: "/droit", changeFrequency: "weekly", priority: 0.8 }] : []),
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },

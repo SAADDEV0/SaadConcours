@@ -11,7 +11,7 @@ import BacChapitreClient from "../../../bac/BacChapitreClient";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { encgCategoryInfo, encgSemestreLabel } from "../../../../lib/encgTaxonomy";
-import { encgModule, encgModuleHref, encgChapitreHref, encgModuleIcon, isEncgPublie } from "../../../../lib/encg";
+import { encgModule, encgModuleHref, encgChapitreHref, encgModuleIcon, encgOuvert, isEncgPublie } from "../../../../lib/encg";
 import { slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { Icon } from "../../../_shared/icons";
 
@@ -32,7 +32,7 @@ const ONGLETS = [
 ];
 
 async function findChapitre(id, slug) {
-  const list = (await getAllEncg()).filter(isEncgPublie);
+  const list = encgOuvert() ? (await getAllEncg()).filter(isEncgPublie) : [];
   const c = list.find((x) => x.id === id);
   if (!c) return null;
   const { chapitres } = encgModule(c);
@@ -43,6 +43,7 @@ async function findChapitre(id, slug) {
 
 export async function generateStaticParams() {
   try {
+    if (!encgOuvert()) return [];
     return (await getAllEncg())
       .filter(isEncgPublie)
       .flatMap((c) => encgModule(c).chapitres.map((ch) => ({ id: c.id, chapitre: ch.slug })));

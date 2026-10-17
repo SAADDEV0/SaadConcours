@@ -63,6 +63,9 @@ export async function generateStaticParams() {
 function titreSeo(c, ch, list) {
   const sem = c.semestre ? ` ${c.semestre}` : "";
   const partage = list.some((x) => x.id !== c.id && droitModule(x).chapitres.some((k) => k.titre === ch.titre));
+  if (c.langue === "ar") {
+    return fitTitle([`${ch.titre}: درس وتمارين مصححة — ${c.module}${sem}`, `${ch.titre} — ${c.module}${sem}`, `${ch.titre} — ${c.module}`, ch.titre]);
+  }
   return fitTitle([
     `${ch.titre} : cours et exercices corrigés — ${c.module}${sem}`,
     `${ch.titre} — ${c.module}${sem}`,
@@ -73,6 +76,9 @@ function titreSeo(c, ch, list) {
 
 function descriptionSeo(c, ch) {
   if (ch.description) return clampDescription(ch.description);
+  if (c.langue === "ar") {
+    return clampDescription(`${c.module}${c.semestre ? ` (${c.semestre})` : ""}، الفصل ${ch.numero}: ${ch.titre}. شرح الدرس مع تمارين مصححة.`);
+  }
   return clampDescription(
     `${c.module} (licence de Droit${c.semestre ? `, ${c.semestre}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours expliqué et exercices corrigés.`
   );

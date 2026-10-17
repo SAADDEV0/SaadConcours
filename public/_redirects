@@ -79,6 +79,12 @@
 /encg/microeconomie-s1/les-couts-de-production /cours/micro_cours/les-couts-de-production 301
 /encg/microeconomie-s1/l-entreprise-en-concurrence-pure-et-parfaite /cours/micro_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
 
+# Espace ENCG caché le 2026-10-17 (ENCG_LANCE = false, lib/contenusPublies.mjs) :
+# /encg était dans le sitemap, ses visiteurs arrivent sur les cours de la
+# Licence, où renvoyaient déjà tous ses modules. 302 : temporaire, à retirer au
+# relancement de l'espace (BANQUE_PROMPTS, recette K4).
+/encg /cours 302
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et

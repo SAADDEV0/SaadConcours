@@ -1,4 +1,5 @@
-import { getPublicConcours, getAllCours, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllDroit, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { droitModule, droitOuvert, isDroitPublie } from "../../lib/droit";
 import { BAC_MATIERES } from "../../lib/bacProgramme";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
@@ -15,7 +16,7 @@ const SITE_URL = "https://www.saadconcours.space";
 export const metadata = {
   title: "À propos",
   description:
-    "Qui tient SaadConcours, ce que couvrent les cours du Bac et de la Licence FSJES, d'où viennent les sujets de concours et comment les corrigés sont rédigés.",
+    "Qui tient SaadConcours, ce que couvrent ses cours (Bac, économie-gestion, droit), d'où viennent les sujets de concours et comment sont faits les corrigés.",
   alternates: { canonical: "/a-propos" },
 };
 
@@ -26,9 +27,10 @@ const H2 = { fontSize: "1.1rem", marginTop: 28 };
 // serves — an About page that overstates the catalogue is exactly the kind of
 // thing a quality review checks against the rest of the site.
 async function getFigures() {
-  const [concours, cours, quiz, blog] = await Promise.all([
+  const [concours, cours, droit, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
+    droitOuvert() ? getAllDroit().catch(() => []) : [],
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
@@ -45,6 +47,9 @@ async function getFigures() {
     anneeMax: annees.length ? Math.max(...annees) : null,
     cours: cours.filter((c) => c.available).length,
     chapitresFsjes: cours.filter((c) => c.available).reduce((n, c) => n + fsjesModule(c).chapitres.length, 0),
+    droit: droit.filter(isDroitPublie).length,
+    chapitresDroit: droit.filter(isDroitPublie).reduce((n, c) => n + droitModule(c).chapitres.length, 0),
+    droitArabe: droit.some((c) => isDroitPublie(c) && c.langue === "ar"),
     matieresBac: BAC_MATIERES.filter((m) => m.niveau === "2bac").length,
     chapitresBac: BAC_MATIERES.filter((m) => m.niveau === "2bac").reduce((n, m) => n + m.chapitres.length, 0),
     quiz: quiz.filter((q) => q.available).length,
@@ -88,9 +93,9 @@ export default async function AProposPage() {
 
         <h1 style={{ fontSize: "1.5rem", marginBottom: 6 }}>À propos de SaadConcours</h1>
         <p style={P}>
-          SaadConcours est un site indépendant consacré à l&apos;économie et à la gestion au Maroc, du lycée au
-          master : des cours du Bac Sciences Économiques et Gestion et de la Licence FSJES rédigés chapitre par
-          chapitre, avec exercices corrigés, résumés et QCM, et les sujets réels des concours d&apos;accès aux
+          SaadConcours est un site indépendant consacré aux études d&apos;économie, de gestion et de droit au Maroc, du
+          lycée au master : des cours du Bac Sciences Économiques et Gestion, de la Licence Économie et Gestion (FEG,
+          ex-FSJES){f.droit > 0 && " et de la licence de Droit (FSJP, ex-FSJES)"} rédigés chapitre par chapitre, avec exercices corrigés, résumés et QCM, et les sujets réels des concours d&apos;accès aux
           masters — FSJES, ENCG, facultés polydisciplinaires — pour s&apos;y préparer.
         </p>
 
@@ -126,9 +131,15 @@ export default async function AProposPage() {
             et {f.chapitresBac} chapitres, avec cours, exercices, résumé et QCM ;
           </li>
           <li>
-            les <a href="/cours">cours de Licence FSJES</a> : {f.cours} modules du S1 au S6 découpés en{" "}
-            {f.chapitresFsjes} chapitres, chacun avec son cours, ses exercices corrigés, son résumé et son QCM ;
+            les <a href="/cours">cours de la Licence Économie et Gestion</a> (FEG, ex-FSJES) : {f.cours} modules du S1 au S6
+            découpés en {f.chapitresFsjes} chapitres, chacun avec son cours, ses exercices corrigés, son résumé et son QCM ;
           </li>
+          {f.droit > 0 && (
+            <li>
+              les <a href="/droit">cours de Droit</a> (FSJP, ex-FSJES) : {f.droit} modules{f.droitArabe ? " en français et en arabe" : ""}{" "}
+              découpés en {f.chapitresDroit} chapitres, avec exercices corrigés, résumé et QCM ;
+            </li>
+          )}
           <li>
             <a href="/evaluation">{f.quiz} QCM d&apos;auto-évaluation</a> totalisant {f.questions} questions
             corrigées ;

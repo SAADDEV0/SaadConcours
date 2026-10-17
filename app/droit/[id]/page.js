@@ -47,9 +47,20 @@ export async function generateMetadata(props) {
   const { c } = await findModule(params.id);
   if (!c) return {};
   const sem = c.semestre ? `${c.semestre} ` : "";
-  const title = fitTitle([`${c.module} — Cours de Droit ${sem}par chapitre`, `${c.module} — Cours de Droit ${sem}`.trim(), `${c.module} — Droit`]);
+  // Module en arabe : titre et description en arabe, la langue de la
+  // recherche de ses étudiants (la description de la fiche l'est déjà).
+  const title =
+    c.langue === "ar"
+      ? fitTitle([`${c.module} ${sem}— دروس وتمارين مصححة`, `${c.module} ${sem}— دروس القانون`, c.module])
+      : fitTitle([`${c.module} — Cours de Droit ${sem}par chapitre`, `${c.module} — Cours de Droit ${sem}`.trim(), `${c.module} — Droit`]);
   const description = clampDescription(
-    `${c.module} (licence de Droit${c.semestre ? `, ${c.semestre}` : ""}, ${droitRangLabel(c)}) : cours et exercices corrigés, chapitre par chapitre. ${c.description || ""}`
+    c.langue === "ar"
+      ? c.description || `${c.module} ${sem}: دروس الإجازة في القانون مع تمارين مصححة.`
+      : // La description de la fiche dit déjà module et semestre : elle passe
+        // avant la phrase générique, que clampDescription couperait sinon.
+        [`${c.description} Cours et exercices corrigés, chapitre par chapitre.`, `${c.description} Cours et exercices corrigés.`, c.description].find(
+          (d) => c.description && d.length <= 155
+        ) || `${c.module} (licence de Droit${c.semestre ? `, ${c.semestre}` : ""}, ${droitRangLabel(c)}) : cours et exercices corrigés, chapitre par chapitre. ${c.description || ""}`
   );
   const url = `${SITE_URL}${droitModuleHref(c)}`;
   return {

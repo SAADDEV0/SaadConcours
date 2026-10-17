@@ -31,6 +31,10 @@ const FAQ = [
     a: "Ce sont tous des masters spécialisés en économie-gestion, avec un cœur commun (comptabilité, analyse financière) mais un angle différent : CCA (Comptabilité Contrôle Audit) et Audit insistent sur le contrôle et la certification des comptes, GFCF (Gestion Financière et Comptable des Entreprises) et Finance sur la gestion financière d'entreprise, Fiscalité sur le droit fiscal et l'optimisation fiscale. Les matières du concours d'accès se recoupent beaucoup d'une filière à l'autre.",
   },
   {
+    q: "FSJES, FEG, FSJP : quelle différence ?",
+    a: "Les FSJES (facultés des sciences juridiques, économiques et sociales) réunissaient l'économie, la gestion et le droit. Elles se séparent en deux facultés : la FEG (faculté d'économie et de gestion), qui reprend la licence Économie et Gestion, et la FSJP (faculté des sciences juridiques et politiques), qui reprend le droit. Selon l'université, la séparation est faite ou en cours, et les deux noms circulent encore. Sur SaadConcours, les cours d'économie et de gestion sont dans la rubrique Éco-Gestion, ceux de droit (en français et en arabe) dans la rubrique Droit ; les concours de master gardent le nom de l'établissement qui les a organisés.",
+  },
+  {
     q: "Les corrigés sur SaadConcours sont-ils fiables ?",
     a: "Les corrigés disponibles sont indicatifs : les chiffres sont recoupés avec ceux de l'énoncé, mais ce ne sont pas des corrections officielles des facultés. Ils sont pensés pour t'aider à comprendre une démarche de résolution, pas comme une source officielle : vérifie toujours les calculs avant de t'y fier pour réviser sérieusement.",
   },

@@ -1,10 +1,12 @@
-import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
 import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
-import { encgModule, encgRenvois, isEncgPublie } from "../lib/encg";
+import { encgModule, encgOuvert, encgRenvois, isEncgPublie } from "../lib/encg";
+import { droitModule, droitModuleHref, droitOuvert, droitRenvois, isDroitPublie } from "../lib/droit";
+import { DROIT_LANGUES, DROIT_SEMESTRES, droitSortComparator } from "../lib/droitTaxonomy";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref } from "../lib/bacProgramme";
 import { LICENCE_SEMESTRES } from "../lib/coursTaxonomy";
@@ -45,11 +47,12 @@ function nombre(n) {
 }
 
 export default async function HomePage() {
-  const [allConcours, settings, cours, encg, quiz, blog] = await Promise.all([
+  const [allConcours, settings, cours, encg, droit, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getSettings().catch(() => null),
     getAllCours().catch(() => []),
-    getAllEncg().catch(() => []),
+    encgOuvert() ? getAllEncg().catch(() => []) : [],
+    droitOuvert() ? getAllDroit().catch(() => []) : [],
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
@@ -61,9 +64,6 @@ export default async function HomePage() {
   const matieresBac = BAC_MATIERES.filter((m) => m.niveau === "2bac");
   const chapitresBac = matieresBac.reduce((n, m) => n + m.chapitres.length, 0);
   const quizPublies = quiz.filter((q) => q.available);
-  const questionsQcm =
-    quizPublies.reduce((n, q) => n + (q.questions || []).length, 0) +
-    coursPublies.reduce((n, c) => n + fsjesModule(c).chapitres.reduce((k, ch) => k + ch.qcm.length, 0), 0);
 
   const master = allConcours.filter(isMaster);
   const licenceExc = allConcours.filter(isLicenceExcellence);
@@ -91,6 +91,17 @@ export default async function HomePage() {
   const encgPublies = [...encg.filter(isEncgPublie), ...encgRenvois(encg, cours)];
   const chapitresEncg = encgPublies.reduce((n, c) => n + (c.cible ? 0 : encgModule(c).chapitres.length), 0);
   const semestresEncg = ENCG_SEMESTRES.map((s) => ({ ...s, n: encgPublies.filter((c) => c.semestre === s.code).length })).filter((s) => s.n > 0);
+  // Espace Droit : modules rédigés (français et arabe) + modules qui renvoient
+  // au cours de la Licence Éco-Gestion (lib/droit.js).
+  const droitRediges = droit.filter(isDroitPublie);
+  const droitModules = [...droitRediges, ...droitRenvois(droit, cours)].sort(droitSortComparator);
+  const chapitresDroit = droitRediges.reduce((n, c) => n + droitModule(c).chapitres.length, 0);
+  const languesDroit = DROIT_LANGUES.filter((l) => droitRediges.some((c) => (c.langue || "fr") === l.code));
+  const semestresDroit = DROIT_SEMESTRES.filter((s) => droitModules.some((c) => c.semestre === s.code));
+  const questionsQcm =
+    quizPublies.reduce((n, q) => n + (q.questions || []).length, 0) +
+    coursPublies.reduce((n, c) => n + fsjesModule(c).chapitres.reduce((k, ch) => k + ch.qcm.length, 0), 0) +
+    droitRediges.reduce((n, c) => n + droitModule(c).chapitres.reduce((k, ch) => k + ch.qcm.length, 0), 0);
   const modulesParSemestre = Object.fromEntries(LICENCE_SEMESTRES.map((s) => [s.code, coursPublies.filter((c) => c.semestre === s.code).length]));
 
   const ligneSujet = (c) =>
@@ -110,6 +121,10 @@ export default async function HomePage() {
         ...(encgPublies.length ? [[encgPublies.length, "modules"]] : []),
         ...(chapitresEncg ? [[chapitresEncg, "chapitres"]] : []),
       ],
+    },
+    droit: {
+      ligne: [`${droitModules.length} modules · ${chapitresDroit} chapitres`, languesDroit.length > 1 && "français et arabe"].filter(Boolean).join(" · "),
+      chiffres: [[droitModules.length, "modules"], [chapitresDroit, "chapitres"], [languesDroit.length, languesDroit.length > 1 ? "langues" : "langue"]],
     },
     excellence: {
       ligne: `${licenceExc.length} sujets réels · accès en S5 après le DEUG`,
@@ -186,6 +201,37 @@ export default async function HomePage() {
         )}
       </>
     ),
+    droit: (
+      <>
+        <div className="home-links home-links-semestres">
+          {languesDroit.flatMap((l) =>
+            semestresDroit.map((s) => {
+              const n = droitModules.filter((c) => (c.langue || "fr") === l.code && c.semestre === s.code).length;
+              return n > 0 ? (
+                <a key={`${l.code}-${s.code}`} className="home-link" href={`/droit?semestre=${s.code}&parcours=${l.code}`}>
+                  <strong>
+                    {s.label} · {l.code === "ar" ? "arabe" : "français"}
+                  </strong>
+                  <span>
+                    {n} module{n > 1 ? "s" : ""}
+                  </span>
+                </a>
+              ) : null;
+            })
+          )}
+        </div>
+        <div className="home-links home-links-wide">
+          {droitRediges.slice(0, 4).map((c) => (
+            <a key={c.id} className="home-link" href={droitModuleHref(c)} dir={c.langue === "ar" ? "rtl" : undefined} lang={c.langue === "ar" ? "ar" : undefined}>
+              <strong>{c.module}</strong>
+              <span>
+                {c.semestre} · {droitModule(c).chapitres.length} {c.langue === "ar" ? "فصول" : "chapitres"}
+              </span>
+            </a>
+          ))}
+        </div>
+      </>
+    ),
     excellence: (
       <>
         <div className="home-subhead">
@@ -224,11 +270,12 @@ export default async function HomePage() {
         <section className="home-hero">
           <div className="home-wrap home-hero-grid">
             <div className="home-hero-main">
-              <p className="home-kicker">Économie et gestion · Maroc</p>
+              <p className="home-kicker">Économie, gestion et droit · Maroc</p>
               <h1>Cours, sujets réels de concours et corrigés, du Bac au Master.</h1>
               <p className="home-lead">
-                Les cours du Bac et de la Licence FSJES, {nombre(allConcours.length)} sujets de concours réellement tombés et
-                leurs corrigés détaillés, {nombre(questionsQcm)} questions de QCM. Gratuit, sans inscription.
+                Les cours du Bac, de la Licence d&apos;économie et gestion (FEG, ex-FSJES){droitModules.length > 0 && " et de la licence de Droit (FSJP)"},{" "}
+                {nombre(allConcours.length)} sujets de concours réellement tombés et leurs corrigés détaillés, {nombre(questionsQcm)} questions de
+                QCM. Gratuit, sans inscription.
               </p>
               <form className="home-search" action="/recherche" method="get" role="search">
                 <Icon name="search" size={18} />
@@ -288,7 +335,7 @@ export default async function HomePage() {
               </div>
               <div className="esp-c-teal">
                 <dt>chapitres de cours</dt>
-                <dd>{nombre(chapitresBac + chapitresFsjes)}</dd>
+                <dd>{nombre(chapitresBac + chapitresFsjes + chapitresDroit)}</dd>
               </div>
               <div className="esp-c-orange">
                 <dt>questions de QCM</dt>
@@ -393,14 +440,20 @@ export default async function HomePage() {
         </section>
 
         <section className="home-wrap sp-about home-about">
-          <h2>Une plateforme pour tout le parcours en économie et gestion</h2>
+          <h2>Une plateforme pour tout le parcours, de l&apos;économie au droit</h2>
           <p>
             Au <strong>lycée</strong>, les cours du Bac Sciences Économiques et Sciences de Gestion Comptable suivent le
             programme officiel marocain, matière par matière et chapitre par chapitre, avec les examens nationaux. À
-            l&apos;<strong>université</strong>, les cours de Licence FSJES couvrent les modules du tronc commun (S1 à S4) et des
-            filières de spécialisation (S5-S6). Après le DEUG, les sujets des concours de <strong>licence d&apos;excellence</strong>{" "}
+            l&apos;<strong>université</strong>, les FSJES se séparent en deux facultés : la FEG (économie et gestion) et la FSJP
+            (sciences juridiques et politiques). Les cours de la Licence Éco-Gestion couvrent les modules du tronc commun (S1 à S4)
+            et des filières de spécialisation (S5-S6).
+            {droitModules.length > 0 &&
+              ` Ceux de la licence de Droit suivent le tronc commun puis les filières droit privé et droit public, ${
+                languesDroit.length > 1 ? "en français et en arabe" : "en français"
+              }.`}{" "}
+            Après le DEUG, les sujets des concours de <strong>licence d&apos;excellence</strong>{" "}
             préparent l&apos;accès direct en S5 ; pour le <strong>Master</strong>, la base de sujets réels et les QCM permettent de
-            préparer les concours d&apos;accès des FSJES et des ENCG en conditions réelles.
+            préparer les concours d&apos;accès des FSJES, des FEG et des ENCG en conditions réelles.
           </p>
         </section>
       </main>

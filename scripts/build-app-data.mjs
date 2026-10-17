@@ -34,6 +34,7 @@ import { BAC_GROUPES, BAC_MATIERES_PUBLIEES, BAC_NIVEAUX } from "../lib/bacProgr
 import { bacMatiereContenu } from "../lib/bacContenu/index.js";
 import { fsjesModule, fsjesModuleIcon } from "../lib/fsjesChapitres.js";
 import { encgModule } from "../lib/encg.js";
+import { ENCG_LANCE } from "../lib/contenusPublies.mjs";
 import { FILIERE_CATEGORIES } from "../lib/taxonomy.js";
 import { CONCOURS_NIVEAUX } from "../lib/concoursNiveaux.js";
 import { COURS_CATEGORIES, LICENCE_FILIERES, LICENCE_PARCOURS, LICENCE_SEMESTRES, coursSortComparator } from "../lib/coursTaxonomy.js";
@@ -207,7 +208,8 @@ for (const c of readJson("cours.json", []).filter((x) => x.available).sort(cours
   const decoupe = fsjesModule(c);
   if (decoupe.chapitres.length) coursIndex.push(moduleIndex(c, decoupe, "licence"));
 }
-for (const c of readJson("encg.json", []).filter((x) => x.available)) {
+// Espace ENCG caché (ENCG_LANCE) : ses modules restent hors de l'appli aussi.
+for (const c of ENCG_LANCE ? readJson("encg.json", []).filter((x) => x.available) : []) {
   const decoupe = encgModule(c);
   if (decoupe.chapitres.length) coursIndex.push(moduleIndex(c, decoupe, "encg"));
 }

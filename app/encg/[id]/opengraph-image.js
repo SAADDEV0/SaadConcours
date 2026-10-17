@@ -1,5 +1,5 @@
 import { getAllEncg } from "@/lib/store";
-import { isEncgPublie } from "@/lib/encg";
+import { encgOuvert, isEncgPublie } from "@/lib/encg";
 import { buildOgImage, ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 
 export const size = ogImageSize;
@@ -12,6 +12,7 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   try {
+    if (!encgOuvert()) return [];
     return (await getAllEncg()).filter(isEncgPublie).map((c) => ({ id: c.id }));
   } catch {
     return [];

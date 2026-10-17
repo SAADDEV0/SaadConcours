@@ -24,8 +24,8 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute le cours <module>` · `ajoute les cours du S3` | [K1](#k1--ajouter-un-cours-licence-fsjes) |
 | `complète le cours X par chapitres` · `ajoute QCM / résumés au cours X` | [K2](#k2--compléter-un-cours-par-chapitres) |
 | `modifie / réécris le cours X` · `supprime le cours X` | [K3](#k3--modifier-ou-supprimer-un-cours) |
-| `ajoute le cours ENCG <module> S3` · `ajoute les cours ENCG du S1` | [K4](#k4--cours-encg-s1-à-s10) |
-| `ajoute le cours de droit <module>` · `ajoute les cours du tronc commun droit` · `lance la section droit` | [K5](#k5--cours-de-droit-espace-construit-en-silence) |
+| `ajoute le cours ENCG <module> S3` · `ajoute les cours ENCG du S1` · `relance la section ENCG` | [K4](#k4--cours-encg-s1-à-s10) |
+| `ajoute le cours de droit <module>` · `ajoute les cours du tronc commun droit` · `ajoute les cours S2 de droit` | [K5](#k5--cours-de-droit-fsjp-ex-fsjes) |
 | `rédige les chapitres Bac de <matière> <niveau>` | [B1](#b1--rédiger-des-chapitres-bac) |
 | `ajoute les nationaux (bac)` · `ajoute les nationaux 2026` | [B2](#b2--examens-nationaux-2ème-bac) |
 | `ajoute une évaluation <module>` · `ajoute un QCM de 100 questions en X` | [E1](#e1--ajouter-une-évaluation-qcm) |
@@ -720,6 +720,12 @@ Espace ENCG (`lib/espaces.js`, clé `encg`, couleur sky), onglet « Cours S1 →
 `/encg/<id>`, `/encg/<id>/<chapitre>`. L'onglet **s'ouvre tout seul** au premier module publié :
 `next.config.mjs` calcule `SC_CONTENUS` au build (`lib/contenusPublies.mjs`). Rien à retoucher dans le
 code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'est publié.
+**Caché depuis le 2026-10-17** (« cache la section de l'ENCG pour l'instant ») : `ENCG_LANCE = false`
+(`lib/contenusPublies.mjs`) ferme les deux onglets (cours et concours TAFEM) en production, même avec du
+contenu publié — ni page de module, ni lien, ni sitemap, ni recherche, ni sujet TAFEM (`isConcoursPublic`,
+`lib/store.js`), ni module dans l'appli ; `/encg` a une 302 vers `/cours` (`public/_redirects`). `npm run dev`
+montre toujours l'espace. On peut continuer à rédiger. **Relancer** (« relance / affiche la section ENCG ») :
+`ENCG_LANCE = true`, retirer la 302 de `/encg`, remettre l'ENCG dans `public/llms.txt`, `npm run check`, P1.
 - **Schéma** (`encg.json`, même forme que `cours.json`) : `id` (`<module-en-tirets>-s<N>`, ex.
   `comptabilite-generale-s1`, fixe l'URL), `module`, `title` (« Cours — Comptabilité générale (ENCG S1) »),
   `description` (120-160 caractères), `category` (codes de `COURS_CATEGORIES`), `semestre` (`S1`…`S10`),
@@ -754,14 +760,19 @@ code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'e
 - Le découpage S1/S2 varie selon l'école : le dire dans l'en-tête d'un module rédigé. Contrôle et
   fin de recette comme K1 ; mettre à jour `public/llms.txt` quand la liste des modules change
   (règle 1.8).
-### K5 — Cours de Droit (espace construit en silence)
+### K5 — Cours de Droit (FSJP, ex-FSJES)
 Espace Droit (`lib/espaces.js`, clé `droit`, couleur violet), créé le 2026-10-15 : pages `/droit`,
-`/droit/<id>`, `/droit/<id>/<chapitre>`, console Contenu › Cours Droit. **Fermé tant que
-`DROIT_LANCE = false`** (`lib/contenusPublies.mjs`) : même avec des modules publiés, un build de
-production ne génère aucune page de module ni de chapitre (`/droit` reste une page vide en
-`noindex`), ni lien, ni entrée de sitemap ou de recherche. `npm run dev` ouvre l'espace dès le
-premier module publié (aperçu) : c'est là qu'on relit. On peut donc committer et pousser les
-cours au fil de l'eau sans rien montrer.
+`/droit/<id>`, `/droit/<id>/<chapitre>`, console Contenu › Cours Droit. **Lancé le 2026-10-17**
+(`DROIT_LANCE = true`, `lib/contenusPublies.mjs`, avec le S1 rédigé en français et en arabe) : un
+module publié est en ligne au déploiement suivant (pages, sitemap, recherche, accueil). Le titre et
+le H1 de `/droit` se calculent sur les semestres publiés (« Cours de droit FSJES et FSJP S1 (FR et
+arabe) ») : rien à retoucher quand un semestre s'ajoute. Une page de module ou de chapitre en arabe a
+son titre et sa description en arabe. Relire en `npm run dev` avant de committer.
+- **Noms des facultés** (2026-10-17) : les FSJES se séparent en FEG (économie et gestion, espace
+  « Éco-Gestion », `/cours`) et FSJP (droit, `/droit`). Sur le site : « Licence Éco-Gestion (FEG) »,
+  « Licence de Droit (FSJP) », « ex-FSJES » dans les textes ; le mot **FSJES reste dans les titres
+  SEO** (« Cours FSJES et FEG… », « Cours de droit FSJES et FSJP… ») tant que les étudiants le
+  tapent. Les concours gardent le nom de l'établissement qui les a organisés (pas de renommage).
 - **Structure** (`lib/droitTaxonomy.js`) : d'abord le **tronc commun** (`filiere: ""`), puis la
   filière et son parcours. Deux langues, chacune ses filières :
   français — Droit privé (Droit financier et des affaires ; Métiers du droit et de la justice),
@@ -839,12 +850,11 @@ cours au fil de l'eau sans rien montrer.
   sur la même matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
   pénal, procédure civile et pénale, lois organiques) ; vérifier chaque article cité.
-- **Avant le lancement** (« fix SEO, fix AdSense ») : relire en `npm run dev` ; titres et
-  descriptions (règle 1.7) ; bloc `sp-about` de `app/droit/page.js` calculé sur les données ;
-  `MOTIFS` (`lib/concoursParModule.js`) si des concours de droit existent.
-- **Lancer** (`lance la section droit`) : `DROIT_LANCE = true` ; entrée `RESUME` + `SECTIONS` de
-  l'accueil (`app/page.js`, X1 étape 4) ; `public/llms.txt` (règle 1.8) ; `npm run check` (l'audit
-  suit alors les liens de l'espace) ; P1. Le sitemap, la recherche et le header suivent seuls.
+- **Fait au lancement** (2026-10-17) : `RESUME` + `SECTIONS` de l'accueil (liens par semestre et
+  langue, quatre premiers modules), chapitres et QCM de Droit dans les chiffres de l'accueil, `/a-propos`,
+  `/faq` (FSJES, FEG, FSJP), titre et description du site, manifeste, image de partage, `llms.txt`.
+  Quand un semestre s'ajoute : mettre à jour la liste des modules dans `public/llms.txt` (règle 1.8).
+  `MOTIFS` (`lib/concoursParModule.js`) si des concours de droit entrent un jour dans la base.
 
 ## B. BAC (Sciences Économiques & Gestion)
 

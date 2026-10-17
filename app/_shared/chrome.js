@@ -251,7 +251,7 @@ export function footerHtml() {
   <div class="footer-inner">
     <div class="footer-brand">
       ${brandHtml()}
-      <p class="footer-text">Cours, sujets réels de concours et corrigés en économie et gestion au Maroc, du Bac au Master. Gratuit et sans inscription.</p>
+      <p class="footer-text">Cours, sujets réels de concours et corrigés en économie, gestion et droit au Maroc, du Bac au Master. Gratuit et sans inscription.</p>
       <div class="footer-social" id="footerSocial"></div>
     </div>
     ${colonnes}

@@ -1,9 +1,9 @@
 export default function manifest() {
   return {
-    name: "SaadConcours — Cours Bac, FSJES et concours Master",
+    name: "SaadConcours — Cours Bac, FSJES, droit et concours Master",
     short_name: "SaadConcours",
     description:
-      "Cours du Bac Sciences Économiques et de la Licence FSJES chapitre par chapitre, exercices corrigés, QCM et sujets réels de concours Master au Maroc.",
+      "Cours du Bac Sciences Économiques, des licences d'économie-gestion (FEG, ex-FSJES) et de droit (FSJP), exercices corrigés, QCM et concours Master au Maroc.",
     start_url: "/",
     display: "standalone",
     background_color: "#13141f",

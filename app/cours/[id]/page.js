@@ -50,7 +50,7 @@ export async function generateMetadata(props) {
   // c.description fait jusqu'à 300 caractères : la phrase utile d'abord,
   // bornée à 155 (seoText.js).
   const description = clampDescription(
-    `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}) : cours, exercices corrigés, résumé et QCM par chapitre. ${c.description || ""}`
+    `${c.module} (Licence FSJES/FEG${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}) : cours, exercices corrigés, résumé et QCM par chapitre. ${c.description || ""}`
   );
   const url = `${SITE_URL}/cours/${c.id}`;
 
@@ -114,7 +114,7 @@ export default async function CoursModulePage(props) {
     "@context": "https://schema.org",
     "@type": "Course",
     name: c.module,
-    description: c.description || `Cours de ${c.module} — Licence FSJES`,
+    description: c.description || `Cours de ${c.module} — Licence Économie et Gestion (FEG, ex-FSJES)`,
     url,
     educationalLevel: "Licence",
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
@@ -136,7 +136,7 @@ export default async function CoursModulePage(props) {
           <div className="bac-mat-hero">
             <div className="bac-mat-hero-body">
               <div className="bac-eyebrow">
-                Licence FSJES{c.semestre ? ` · ${licenceSemestreLabel(c.semestre)}` : ""}
+                Licence Éco-Gestion{c.semestre ? ` · ${licenceSemestreLabel(c.semestre)}` : ""}
                 {c.parcours ? ` · Parcours ${licenceParcoursLabel(c.parcours)}` : " · Tronc commun"}
               </div>
               <h1>{c.module}</h1>

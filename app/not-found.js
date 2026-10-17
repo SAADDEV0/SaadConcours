@@ -31,7 +31,7 @@ export default function NotFound() {
               <span>Tous les sujets</span>
             </a>
             <a className="home-link" href="/cours">
-              <strong>Cours Licence FSJES</strong>
+              <strong>Cours Licence Éco-Gestion</strong>
               <span>Du S1 au S6</span>
             </a>
             <a className="home-link" href="/bac/2bac">

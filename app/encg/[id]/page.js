@@ -10,7 +10,7 @@ import CoursDetailClient from "../../cours/[id]/CoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { encgCategoryInfo, encgSemestreLabel, encgAnneeLabel } from "../../../lib/encgTaxonomy";
-import { encgModule, encgModuleHref, encgChapitreHref, isEncgPublie } from "../../../lib/encg";
+import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, isEncgPublie } from "../../../lib/encg";
 import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -22,7 +22,7 @@ const RESSOURCES = [
 ];
 
 async function findModule(id) {
-  const list = (await getAllEncg()).filter(isEncgPublie);
+  const list = encgOuvert() ? (await getAllEncg()).filter(isEncgPublie) : [];
   return { c: list.find((x) => x.id === id) || null, list };
 }
 
@@ -60,6 +60,7 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   try {
+    if (!encgOuvert()) return [];
     return (await getAllEncg()).filter(isEncgPublie).map((c) => ({ id: c.id }));
   } catch {
     return [];

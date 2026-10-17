@@ -1,7 +1,7 @@
 import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { isLicenceExcellence, isPostBac } from "@/lib/concoursNiveaux";
-import { encgModule, encgModuleHref, encgChapitreHref, encgRenvois, isEncgPublie } from "../../lib/encg";
+import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, encgRenvois, isEncgPublie } from "../../lib/encg";
 import { encgSemestreLabel } from "../../lib/encgTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { droitRangLabelFr } from "../../lib/droitTaxonomy";
@@ -22,7 +22,7 @@ export const revalidate = false;
 
 export const metadata = {
   title: "Rechercher un concours, un cours ou un QCM",
-  description: "Recherche dans tous les sujets de concours, cours du Bac et de la Licence FSJES, QCM et articles de SaadConcours.",
+  description: "Recherche dans tous les sujets de concours, cours du Bac, d'économie-gestion et de droit, QCM et articles de SaadConcours.",
   alternates: { canonical: "/recherche" },
   // Page d'outil : utile aux visiteurs, sans contenu propre à indexer.
   robots: { index: false, follow: true },
@@ -41,7 +41,7 @@ export default async function RecherchePage() {
   const [concours, cours, encg, droit, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
-    getAllEncg().catch(() => []),
+    encgOuvert() ? getAllEncg().catch(() => []) : [],
     droitOuvert() ? getAllDroit().catch(() => []) : [],
     getAllQuiz().catch(() => []),
     getAllBlog().catch(() => []),
@@ -63,7 +63,7 @@ export default async function RecherchePage() {
   for (const c of cours.filter((x) => x.available)) {
     const { chapitres } = fsjesModule(c);
     const sem = c.semestre ? licenceSemestreLabel(c.semestre) : "";
-    index.push(entree("cours", c.module, ["Licence FSJES", sem, `${chapitres.length} chapitres`].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.id)}`, c.description || ""));
+    index.push(entree("cours", c.module, ["Licence Éco-Gestion", sem, `${chapitres.length} chapitres`].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.id)}`, c.description || ""));
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · Chapitre ${ch.numero}`, fsjesChapitreHref(c, ch)));
     }
@@ -77,7 +77,7 @@ export default async function RecherchePage() {
   }
   // Module ENCG commun avec la Licence : une entrée qui mène au cours FSJES.
   for (const c of encgRenvois(encg, cours)) {
-    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "encg"].filter(Boolean).join(" ")));
+    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), "cours de la Licence Éco-Gestion"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "encg"].filter(Boolean).join(" ")));
   }
   for (const c of droit.filter(isDroitPublie)) {
     const { chapitres } = droitModule(c);
@@ -88,7 +88,7 @@ export default async function RecherchePage() {
   }
   // Module de Droit commun avec la Licence : une entrée qui mène au cours FSJES.
   for (const c of droitRenvois(droit, cours)) {
-    index.push(entree("cours", c.module, ["Droit", c.semestre, "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
+    index.push(entree("cours", c.module, ["Droit", c.semestre, "cours de la Licence Éco-Gestion"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
   }
   for (const m of BAC_MATIERES.filter((x) => x.niveau === "2bac")) {
     index.push(entree("cours", m.nom, `2ᵉ Bac SEG · ${m.chapitres.length} chapitres`, bacMatiereHref(m), m.description || ""));
@@ -150,7 +150,7 @@ export default async function RecherchePage() {
               <p className="sr-help">
                 Tape le nom d&apos;un master (CCA, Finance, Audit, GRH, Marketing), d&apos;une faculté (FSJES Aïn
                 Chock, ENCG Settat), d&apos;une ville ou d&apos;une année : la recherche couvre les {nbConcours} sujets
-                de concours, les {nbCours} cours du Bac et de la Licence FSJES et leurs {nbChapitres} chapitres, les QCM
+                de concours, les {nbCours} cours du Bac, de la Licence et du Droit et leurs {nbChapitres} chapitres, les QCM
                 d&apos;entraînement et les articles du blog. Plusieurs mots se combinent : « CCA Agadir 2023 » ne garde
                 que les sujets qui contiennent les trois. Les accents et les majuscules ne comptent pas, et les petits
                 mots (« de », « la », « du ») sont ignorés. Pour un cours, cherche une notion du programme : « bilan »,
@@ -183,7 +183,7 @@ export default async function RecherchePage() {
                   </a>
                 )}
                 <a className="home-link" href="/cours">
-                  <strong>Cours Licence FSJES</strong>
+                  <strong>Cours Licence Éco-Gestion</strong>
                   <span>Modules du S1 au S6</span>
                 </a>
                 {contenuOuvert("droit-cours") && (
