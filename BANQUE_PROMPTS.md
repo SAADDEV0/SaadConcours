@@ -148,6 +148,10 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
 - Page d'entrée d'un espace : la requête que tapent les élèves, telle quelle, ouvre le titre **et**
   le H1 (`/cours` → « Cours FSJES … », 2026-10-14), et un bloc `sp-about` en bas de page explique
   l'organisation (semestres, parcours, filières) à partir des données, pas d'un texte figé.
+- Chapitres de Droit (2026-10-18) : un titre de chapitre > 65 caractères garde sa tête (avant
+  « : ») dans la balise `<title>` ; écrire donc les titres longs en « Tête : détails ». Un module FR
+  et son équivalent AR se lient l'un à l'autre (`droitEquivalent`, `lib/droit.js`) : si l'id arabe
+  n'est pas l'id français avec `-ar-` avant le semestre, l'ajouter à `EQUIVALENT_AR`.
 - Pas de balisage `FAQPage` ni `SearchAction` : Google ne les affiche plus pour ce site. Une FAQ
   reste une section visible normale.
 - Une page de liste n'envoie au navigateur que les données de ses cartes (`concoursListItem`,
