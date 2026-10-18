@@ -935,3 +935,19 @@ body:has(.wa-fab) .bac-edit-fab{bottom:calc(80px + var(--tabbar-h) + env(safe-ar
 }
 .dua-toast-close:hover{color:var(--text); background:var(--bg-inset);}
 @media (prefers-reduced-motion:reduce){ .dua-toast{transition:none;} }
+
+/* Écriture arabe : police dédiée, interligne plus large (les lettres
+   descendent plus bas que le latin), pas d'italique ni d'espacement
+   de lettres qui casseraient les liaisons. */
+:root{
+  --font-ar: var(--font-ar-sans, "Segoe UI"), "Noto Sans Arabic", Tahoma, sans-serif;
+  --font-ar-reading: var(--font-ar-read, "Traditional Arabic"), "Noto Naskh Arabic", "Amiri", serif;
+}
+:lang(ar), [dir="rtl"]{font-family:var(--font-ar); letter-spacing:0; line-height:1.85;}
+:lang(ar) :is(em, i, cite){font-style:normal; font-weight:600;}
+:is(.enonce-content, .cours-content, .bac-md, .eval-q-text, .bac-qcm-q legend, .bac-qcm-choix):is(:lang(ar), [dir="rtl"]),
+:is(:lang(ar), [dir="rtl"]) :is(.enonce-content, .cours-content, .bac-md, .eval-q-text, .bac-qcm-choix){
+  font-family:var(--font-ar-reading); font-size:1.12em; line-height:2; word-spacing:.04em;
+}
+:is(:lang(ar), [dir="rtl"]) :is(h1, h2, h3, h4){font-family:var(--font-ar); line-height:1.5; letter-spacing:0;}
+:is(:lang(ar), [dir="rtl"]) :is(code, pre){font-family:var(--font-mono);}

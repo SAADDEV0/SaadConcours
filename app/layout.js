@@ -6,7 +6,7 @@ import "./globals.css";
 import "./bac/bac.css";
 import "./_shared/space.css";
 import Script from "next/script";
-import { Literata, Plus_Jakarta_Sans } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Literata, Noto_Naskh_Arabic, Plus_Jakarta_Sans } from "next/font/google";
 import DuaToast from "./_shared/DuaToast";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservationCss } from "./_shared/partnerAds";
@@ -30,6 +30,25 @@ const literata = Literata({
   display: "swap",
   preload: false,
   variable: "--font-read",
+});
+
+// Polices arabes (cours de droit en arabe…) : IBM Plex Sans Arabic pour
+// l'interface, Noto Naskh Arabic pour la lecture des textes longs.
+// Pas de préchargement : seules les pages en arabe les affichent.
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  preload: false,
+  variable: "--font-ar-sans",
+});
+
+const naskhArabic = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  preload: false,
+  variable: "--font-ar-read",
 });
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -138,7 +157,7 @@ export default async function RootLayout({ children }) {
   return (
     // suppressHydrationWarning: data-theme is stamped on by the pre-paint
     // script below, so it is always an "extra" attribute at hydration time.
-    <html lang="fr" className={`${jakarta.variable} ${literata.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={`${jakarta.variable} ${literata.variable} ${plexArabic.variable} ${naskhArabic.variable}`} suppressHydrationWarning>
       <head>
         {/* Applies the saved light/dark choice before the first paint.
            chromeScript() also sets data-theme, but only from a useEffect

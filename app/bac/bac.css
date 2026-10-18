@@ -223,7 +223,7 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 .bac-md h4{font-size:1.02rem;}
 .bac-md strong{color:var(--text); font-weight:600;}
 .bac-md blockquote{border-left-color:var(--accent);}
-.bac-md[dir="rtl"]{font-family:var(--font);}
+.bac-md[dir="rtl"]{font-family:var(--font-ar-reading);}
 .bac-md[dir="rtl"] blockquote{border-left:none; border-right:3px solid var(--accent); border-radius:var(--radius-sm) 0 0 var(--radius-sm);}
 .bac-md[dir="rtl"] ul, .bac-md[dir="rtl"] ol{padding-left:0; padding-right:1.3em;}
 .bac-md[dir="rtl"] th, .bac-md[dir="rtl"] td{text-align:right;}
