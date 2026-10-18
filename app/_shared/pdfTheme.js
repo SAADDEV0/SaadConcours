@@ -232,15 +232,18 @@ const PDF_TEXT_REPLACE_RE = new RegExp(`[${Object.keys(PDF_TEXT_REPLACEMENTS).jo
 // CP1252 extras (curly quotes, dashes, œ/Œ, €, …) jsPDF encodes natively.
 const CP1252_EXTRAS = "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ";
 const PDF_TEXT_ALLOWED_RE = new RegExp(`[^\\n\\x20-\\x7E\\xA0-\\xFF${CP1252_EXTRAS}]`, "gu");
+// Same, plus the Arabic blocks — for a document that embeds the Arabic font
+// (see pdfArabic.js).
+const PDF_TEXT_ALLOWED_AR_RE = new RegExp(`[^\\n\\x20-\\x7E\\xA0-\\xFF${CP1252_EXTRAS}\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF]`, "gu");
 
 // Makes any string safe to hand to doc.text(). Also collapses the runs of
 // blanks a dropped emoji leaves behind, so removing decoration doesn't
-// leave a visible gap mid-sentence.
-export function sanitizePdfText(input) {
+// leave a visible gap mid-sentence. `arabic` keeps Arabic letters.
+export function sanitizePdfText(input, { arabic = false } = {}) {
   if (input === null || input === undefined) return "";
   return String(input)
     .replace(PDF_TEXT_REPLACE_RE, (ch) => PDF_TEXT_REPLACEMENTS[ch] ?? "")
-    .replace(PDF_TEXT_ALLOWED_RE, "")
+    .replace(arabic ? PDF_TEXT_ALLOWED_AR_RE : PDF_TEXT_ALLOWED_RE, "")
     .replace(/[ \t]{2,}/g, " ");
 }
 
@@ -799,7 +802,7 @@ export function addSiteHeader(doc, branding = {}, meta = {}) {
   const customPos = branding.positions?.logo;
   const block = headerBlock(doc, branding);
   const origin = headerBlockOrigin(branding, block, pageW, pageH);
-  const runningTitle = branding.headerTitle ? sanitizePdfText(meta.title).replace(/\s+/g, " ").trim() : "";
+  const runningTitle = branding.headerTitle ? sanitizePdfText(meta.title, { arabic: !!branding.arabicFont }).replace(/\s+/g, " ").trim() : "";
 
   for (let i = firstFurniturePage(branding); i <= pageCount; i++) {
     doc.setPage(i);
@@ -829,7 +832,7 @@ function drawRunningTitle(doc, branding, title, block, origin, pageW) {
       ? pageW - marginX - (origin.x + block.w) - 8
       : origin.x - marginX - 8;
   if (available < 25) return;
-  doc.setFont(branding.fontFamily || "helvetica", "normal");
+  doc.setFont(branding.arabicFont || branding.fontFamily || "helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(130, 138, 155);
   const text = fitText(doc, title, available);
@@ -942,7 +945,8 @@ export function addPageFurniture(doc, branding = {}, meta = {}) {
 // seamlessly, and a quote that breaks across pages is handled for free.
 //   top/height — the line box, in mm; x — where the quote's bar sits;
 //   width — the text column the tinted box has to cover.
-export function drawQuoteLine(doc, branding, { x, top, height, width }) {
+// `barRight` puts the bar on the band's right edge (right-to-left text).
+export function drawQuoteLine(doc, branding, { x, top, height, width, barRight = false }) {
   const style = branding.quoteStyle || "bar";
   if (style === "plain") return;
   const accent = branding.accentColor || DEFAULT_ACCENT_RGB;
@@ -951,5 +955,5 @@ export function drawQuoteLine(doc, branding, { x, top, height, width }) {
     doc.rect(x, top, width, height, "F");
   }
   doc.setFillColor(...accent);
-  doc.rect(x, top, 0.9, height, "F");
+  doc.rect(barRight ? x + width - 0.9 : x, top, 0.9, height, "F");
 }

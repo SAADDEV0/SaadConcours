@@ -298,7 +298,7 @@ export default async function DroitModulePage(props) {
         </div>
       </div>
 
-      <CoursDetailClient cours={{ id: c.id, module: c.module, title: c.title, description: c.description }} source="/data/droit.json" editHref="/admin/droit" />
+      <CoursDetailClient cours={{ id: c.id, module: c.module, title: c.title, description: c.description, langue: c.langue }} source="/data/droit.json" editHref="/admin/droit" />
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />
     </>
   );

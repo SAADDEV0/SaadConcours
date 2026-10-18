@@ -1,3 +1,4 @@
 # Jamais de conversion de fins de ligne sur les PDF : core.autocrlf les
 # corrompt quand Git les prend pour du texte (aucun octet nul en tête).
 *.pdf binary
+*.ttf binary

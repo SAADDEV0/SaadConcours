@@ -67,9 +67,9 @@ export function drawCoverPage(doc, branding, content = {}) {
   const drawText = (key, lines, { size, bold = false, color, italic = false }) => {
     // Cover titles come from the content (a module name, a concours title),
     // so they get the same UTF-16 protection as body text.
-    const list = (Array.isArray(lines) ? lines : [lines]).map(sanitizePdfText).filter((l) => l.trim());
+    const list = (Array.isArray(lines) ? lines : [lines]).map((l) => sanitizePdfText(l, { arabic: !!branding.arabicFont })).filter((l) => l.trim());
     if (!list.length) return;
-    doc.setFont(font, bold ? "bold" : italic ? "italic" : "normal");
+    doc.setFont(branding.arabicFont || font, bold ? "bold" : italic ? "italic" : "normal");
     doc.setFontSize(size);
     doc.setTextColor(...color);
     const x = xOf(key);

@@ -27,6 +27,7 @@ import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
 import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
 import { ensureCoursPdfScripts } from "./pdfScripts";
+import { ARABIC_FONT, hasArabic, loadArabicPdfFont } from "./pdfArabic";
 
 const MATH_OPEN = "";
 const MATH_CLOSE = "";
@@ -72,7 +73,9 @@ function stashMath(md) {
 // and arrows the corrigés are full of, which used to flip whole lines into
 // UTF-16 (see sanitizePdfText in pdfTheme.js). Kept as a thin alias so the
 // call sites below still read as "make this drawable".
-const stripUnsupportedGlyphs = sanitizePdfText;
+// An Arabic module keeps its Arabic letters (the flag rides on the math
+// store, which every parsing helper below already receives).
+const stripUnsupportedGlyphs = (text, store) => sanitizePdfText(text, { arabic: !!store?.arabic });
 
 const HTML_ENTITIES = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&nbsp;": " " };
 function unescapeEntities(s) {
@@ -173,12 +176,12 @@ function splitMathSegments(rawText, store) {
   const re = new RegExp(MATH_RE.source, "g");
   let m;
   while ((m = re.exec(text))) {
-    if (m.index > lastIndex) parts.push({ math: false, text: stripUnsupportedGlyphs(text.slice(lastIndex, m.index)) });
+    if (m.index > lastIndex) parts.push({ math: false, text: stripUnsupportedGlyphs(text.slice(lastIndex, m.index), store) });
     const entry = store[Number(m[1])];
-    parts.push({ math: true, display: entry.display, svg: entry.svg, text: stripUnsupportedGlyphs(latexToPlainText(entry.raw)) });
+    parts.push({ math: true, display: entry.display, svg: entry.svg, text: stripUnsupportedGlyphs(latexToPlainText(entry.raw), store) });
     lastIndex = m.index + m[0].length;
   }
-  if (lastIndex < text.length) parts.push({ math: false, text: stripUnsupportedGlyphs(text.slice(lastIndex)) });
+  if (lastIndex < text.length) parts.push({ math: false, text: stripUnsupportedGlyphs(text.slice(lastIndex), store) });
   return parts;
 }
 
@@ -191,7 +194,7 @@ function flattenInline(tokens, style, store, runs) {
     } else if (t.type === "del") {
       flattenInline(getInlineTokens(t), style, store, runs);
     } else if (t.type === "codespan") {
-      runs.push({ text: stripUnsupportedGlyphs(unescapeEntities(t.text)), bold: style.bold, italic: style.italic, code: true });
+      runs.push({ text: stripUnsupportedGlyphs(unescapeEntities(t.text), store), bold: style.bold, italic: style.italic, code: true });
     } else if (t.type === "link" || t.type === "image") {
       flattenInline(getInlineTokens(t), style, store, runs);
     } else if (t.type === "text" && Array.isArray(t.tokens) && t.tokens.length) {
@@ -226,7 +229,16 @@ export async function buildCoursPdf(cours, brandingOverride) {
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const bodyFont = branding.fontFamily || "helvetica";
+  // Module en arabe (cours de droit…) : police arabe embarquée et mise en page
+  // de droite à gauche — lignes calées à droite, retraits et barre de
+  // citation côté droit, colonnes des tableaux inversées (see pdfArabic.js).
+  // The header logo, footer and page numbers keep the branding font.
+  const rtl = cours.langue === "ar" || hasArabic(cours.module) || hasArabic(cours.title);
+  if (rtl) {
+    await loadArabicPdfFont(doc);
+    branding = { ...branding, arabicFont: ARABIC_FONT };
+  }
+  const bodyFont = rtl ? ARABIC_FONT : branding.fontFamily || "helvetica";
   const baseFontSize = branding.fontSize || 10.5;
   const fontScale = baseFontSize / 10.5; // headings/tables/code scale proportionally to the chosen body size
   const lineSpacing = branding.lineSpacing || 1;
@@ -276,7 +288,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
 
     const setStyle = (w) => {
       const style = w.bold && w.italic ? "bolditalic" : w.bold ? "bold" : w.italic ? "italic" : "normal";
-      doc.setFont(w.code ? "courier" : font, style);
+      doc.setFont(w.code && !rtl ? "courier" : font, style);
       doc.setFontSize(size);
     };
     const sameStyle = (a, b) => a.bold === b.bold && a.italic === b.italic && a.code === b.code;
@@ -327,9 +339,58 @@ export async function buildCoursPdf(cours, brandingOverride) {
       // Inside a blockquote, the accent bar / tinted band of this line goes
       // down first so the text is drawn on top of it (see drawQuoteLine).
       if (quote) {
-        drawQuoteLine(doc, branding, { x: quote.x, top: y - size * PT_TO_MM * 0.78, height: effLineHeight, width: marginX + maxWidth - quote.x });
+        const top = y - size * PT_TO_MM * 0.78;
+        if (rtl) drawQuoteLine(doc, branding, { x: marginX, top, height: effLineHeight, width: quote.right - marginX, barRight: true });
+        else drawQuoteLine(doc, branding, { x: quote.x, top, height: effLineHeight, width: marginX + maxWidth - quote.x });
       }
       doc.setTextColor(...color);
+      if (rtl) {
+        await drawLineRtl();
+      } else {
+        await drawLineLtr();
+      }
+      y += effLineHeight;
+      line = [];
+      lineWidth = 0;
+    }
+
+    // Consecutive same-style words of the line, merged into one string —
+    // `end` is the index of the last word taken.
+    function segmentAt(i) {
+      let j = i;
+      let text = line[i].text;
+      while (!line[j].isSvg && line[j].space && j + 1 < line.length && !line[j + 1].isSvg && sameStyle(line[j], line[j + 1])) {
+        j++;
+        text += " " + line[j].text;
+      }
+      return { text, end: j };
+    }
+
+    // Right to left: segments are placed from the right edge leftwards, each
+    // one put in visual order by the doc.text() wrapper of pdfArabic.js. The
+    // embedded font's metrics are exact, so no anti-drift padding here.
+    async function drawLineRtl() {
+      let x = marginX + maxWidth - indent;
+      let i = 0;
+      while (i < line.length) {
+        if (line[i].isSvg) {
+          const { svg } = line[i];
+          x -= svg.wMM;
+          await doc.svg(svg.svg.cloneNode(true), { x, y: y - svg.ascentMM, width: svg.wMM, height: svg.hMM });
+          x -= line[i].space ? spaceW : 0;
+          i++;
+          continue;
+        }
+        const { text, end } = segmentAt(i);
+        setStyle(line[i]);
+        x -= doc.getTextWidth(text);
+        doc.text(text, x, y);
+        x -= line[end].space ? spaceW : 0;
+        i = end + 1;
+      }
+    }
+
+    async function drawLineLtr() {
       let x = x0;
       let i = 0;
       while (i < line.length) {
@@ -340,12 +401,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
           i++;
           continue;
         }
-        let j = i;
-        let segText = line[i].text;
-        while (!line[j].isSvg && line[j].space && j + 1 < line.length && !line[j + 1].isSvg && sameStyle(line[j], line[j + 1])) {
-          j++;
-          segText += " " + line[j].text;
-        }
+        const { text: segText, end: j } = segmentAt(i);
         setStyle(line[i]);
         doc.text(segText, x, y);
         const segW = doc.getTextWidth(segText);
@@ -359,9 +415,6 @@ export async function buildCoursPdf(cours, brandingOverride) {
         x += segW + (line[j].space ? spaceW + segW * 0.015 + 0.15 : 0);
         i = j + 1;
       }
-      y += effLineHeight;
-      line = [];
-      lineWidth = 0;
     }
 
     // Gap actually consumed to the left of `w` when the line is drawn —
@@ -379,7 +432,12 @@ export async function buildCoursPdf(cours, brandingOverride) {
         setStyle(w);
         wWidth = doc.getTextWidth(w.text);
       }
-      if (line.length && lineWidth + gapBefore(wWidth) + wWidth > usableWidth) {
+      // Only break where the source has a space: a word glued to the previous
+      // one across a style change ("**mot**)") stays on its line instead of
+      // sending a lone ")" to the next.
+      const prev = line[line.length - 1];
+      const canBreak = prev && (prev.space || prev.isSvg || w.isSvg);
+      if (canBreak && lineWidth + gapBefore(wWidth) + wWidth > usableWidth) {
         await flushLine();
       }
       lineWidth += (line.length ? gapBefore(wWidth) : 0) + wWidth;
@@ -390,11 +448,13 @@ export async function buildCoursPdf(cours, brandingOverride) {
   }
 
   function addTable(table, indent = 0) {
-    const head = [table.header.map((cell) => runsToPlainText(flattenInline(getInlineTokens(cell), {}, table.__store, [])))];
-    const body = table.rows.map((row) => row.map((cell) => runsToPlainText(flattenInline(getInlineTokens(cell), {}, table.__store, []))));
+    // Right to left, the first column is drawn on the right.
+    const order = (cells) => (rtl ? [...cells].reverse() : cells);
+    const head = [order(table.header).map((cell) => runsToPlainText(flattenInline(getInlineTokens(cell), {}, table.__store, [])))];
+    const body = table.rows.map((row) => order(row).map((cell) => runsToPlainText(flattenInline(getInlineTokens(cell), {}, table.__store, []))));
     const columnStyles = {};
-    table.header.forEach((cell, idx) => {
-      if (cell.align) columnStyles[idx] = { halign: cell.align };
+    order(table.header).forEach((cell, idx) => {
+      if (cell.align) columnStyles[idx] = { halign: rtl && cell.align === "left" ? "right" : cell.align };
     });
     ensureSpace(20);
     doc.autoTable({
@@ -405,7 +465,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
       margin: { left: marginX + indent, right: marginX, top: topY, bottom: pageH - bottomLimit },
       head,
       body,
-      styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor },
+      styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor, halign: rtl ? "right" : "left" },
       headStyles: { fillColor: branding.accentColor, textColor: 255 },
       columnStyles,
       theme: "grid",
@@ -443,7 +503,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
           size,
           indent,
           color: headingStyle ? headingStyle.color : branding.textColor,
-          font: headingStyle ? headingStyle.fontFamily : bodyFont,
+          font: headingStyle && !rtl ? headingStyle.fontFamily : bodyFont,
           gapAfter: token.depth === 1 ? 3 : 2.2,
         });
         break;
@@ -495,7 +555,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
       case "blockquote": {
         // The bar sits 1mm into the quote's 6mm indent. A nested quote keeps
         // the outer one's bar: one bar reads cleaner than a staircase.
-        const quote = ctx.quote || { x: marginX + indent + 1 };
+        const quote = ctx.quote || (rtl ? { right: marginX + maxWidth - indent - 1 } : { x: marginX + indent + 1 });
         for (const child of token.tokens || []) {
           await renderBlock(child, { ...ctx, indent: indent + 6, color: [95, 100, 112], quote });
         }
@@ -539,6 +599,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
   }
 
   const { text: stashed, store } = stashMath(cours.content || "");
+  store.arabic = rtl;
   await prerenderMathSvgs(store);
   const tokens = window.marked.lexer(stashed);
   for (const t of tokens) {
