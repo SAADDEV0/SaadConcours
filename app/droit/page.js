@@ -4,7 +4,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "../cours/CoursExplorer";
 import { Icon } from "../_shared/icons";
-import { DROIT_LANGUES, DROIT_SEMESTRES, TRONC_COMMUN, droitFilieresFor, droitRangLabel, droitSortComparator } from "../../lib/droitTaxonomy";
+import { DROIT_LANGUES, DROIT_SEMESTRES, droitFilieresFor, droitRangLabel, droitSortComparator } from "../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { clampDescription, fitTitle } from "../_shared/seoText";
@@ -27,7 +27,7 @@ async function donnees() {
 }
 
 // Semestres couverts par un cours rédigé, pour le titre : « S1 », « S1 et
-// S2 », « S1 à S4 ». Une carte de renvoi (cours de la Licence Éco-Gestion)
+// S2 », « S1 à S4 ». Une carte de renvoi (cours d'économie et gestion)
 // ne compte pas : le titre ne promet que les cours de droit de la page.
 function plage(modules) {
   const rediges = modules.filter((c) => !c.cible);
@@ -36,8 +36,7 @@ function plage(modules) {
 }
 
 // Titre et description calculés sur les modules publiés (« Cours de droit »
-// en tête : la requête des étudiants ; FSJES et FSJP, l'ancien et le nouveau
-// nom de la faculté). Repli : app/droit/layout.js. Sans module publié (ou
+// FSJES en tête : la requête des étudiants). Repli : app/droit/layout.js. Sans module publié (ou
 // avant le lancement), la page reste hors de l'index.
 export async function generateMetadata() {
   const { modules } = await donnees();
@@ -45,49 +44,27 @@ export async function generateMetadata() {
   const s = plage(modules);
   const ar = modules.some((c) => c.langue === "ar");
   // ≤ 50 : le modèle « | SaadConcours » s'ajoute (seoText.js).
-  const title = fitTitle([`Cours de droit FSJES et FSJP ${s}${ar ? " (FR et arabe)" : ""}`, `Cours de droit FSJES et FSJP ${s}`], 50);
+  const title = fitTitle([`Cours de Droit FSJES ${s}${ar ? " (FR et arabe)" : ""}`, `Cours de Droit FSJES ${s}`], 50);
   const description = clampDescription(
-    `Cours de droit ${s} (FSJP, ex-FSJES) : tronc commun, droit privé et droit public${ar ? ", en français et en arabe" : ""}, avec exercices corrigés et QCM.`
+    `Cours de Droit FSJES ${s} rangés par semestre : tronc commun, droit privé et droit public${ar ? ", en français et en arabe" : ""}, avec exercices corrigés et QCM.`
   );
   return { title, description, openGraph: { title: `${title} — SaadConcours`, description, url: PATH } };
 }
 
-// Une section par rang : le tronc commun semestre par semestre, puis chaque
-// filière (modules communs à la filière, puis un groupe par parcours) ; le
-// français d'abord, l'arabe ensuite.
+// Comme /cours : une section par semestre, la filière et la langue sur la
+// carte. Dans un semestre, l'ordre de droitSortComparator : le français puis
+// l'arabe, le tronc commun puis les filières.
 function groupes(modules) {
-  const out = [];
-  for (const l of DROIT_LANGUES) {
-    const deLaLangue = modules.filter((c) => (c.langue || "fr") === l.code);
-    for (const s of DROIT_SEMESTRES) {
-      const list = deLaLangue.filter((c) => !c.filiere && c.semestre === s.code);
-      if (list.length) out.push({ cle: `${l.code}-tc-${s.code}`, langue: l, titre: `${TRONC_COMMUN[l.code]} · ${s.code}`, list });
-    }
-    const sansSemestre = deLaLangue.filter((c) => !c.filiere && !c.semestre);
-    if (sansSemestre.length) out.push({ cle: `${l.code}-tc`, langue: l, titre: TRONC_COMMUN[l.code], list: sansSemestre });
-    for (const f of droitFilieresFor(l.code)) {
-      // Modules communs à la filière : un groupe par semestre (S1 → S4 en
-      // droit privé), puis ceux sans semestre.
-      const communs = deLaLangue.filter((c) => c.filiere === f.code && !c.parcours);
-      for (const s of DROIT_SEMESTRES) {
-        const list = communs.filter((c) => c.semestre === s.code);
-        if (list.length) out.push({ cle: `${f.code}-${s.code}`, langue: l, titre: `${f.label} · ${s.code}`, list });
-      }
-      const communsSansSemestre = communs.filter((c) => !c.semestre);
-      if (communsSansSemestre.length) out.push({ cle: `${f.code}`, langue: l, titre: f.label, list: communsSansSemestre });
-      for (const p of f.parcours) {
-        const list = deLaLangue.filter((c) => c.filiere === f.code && c.parcours === p.code);
-        if (list.length) out.push({ cle: `${f.code}-${p.code}`, langue: l, titre: `${f.label} · ${p.label}`, list });
-      }
-    }
-  }
-  return out;
+  return [
+    ...DROIT_SEMESTRES.map((s) => ({ cle: s.code, titre: s.label, list: modules.filter((c) => c.semestre === s.code) })),
+    { cle: "", titre: "Autres modules", list: modules.filter((c) => !c.semestre) },
+  ].filter((g) => g.list.length);
 }
 
 // Mêmes attributs data-* que les cartes de /cours : CoursExplorer filtre les
 // deux pages. Ici « parcours » porte la langue et « filiere » la filière
 // (un module du tronc commun, sans filière, reste visible avec chacune).
-// Une carte de renvoi mène au cours FSJES et le dit.
+// Une carte de renvoi mène au cours d'économie et gestion et le dit.
 function ModuleCard({ c }) {
   const { chapitres } = c.cible ? fsjesModule(c.cible) : droitModule(c);
   const ar = c.langue === "ar";
@@ -107,16 +84,11 @@ function ModuleCard({ c }) {
       <span className="bac-mat-body">
         <span className="bac-mat-name">{c.module}</span>
         <span className="bac-mat-desc sp-desc-clamp">{c.description}</span>
+        {/* Pas de badge de semestre : les cartes sont déjà rangées sous « Semestre N ». */}
         <span className="bac-mat-meta">
-          <span>{c.semestre || "Licence"}</span>
+          <span>{chapitres.length} {ar ? "فصول" : "chapitres"}</span>
           <span className="bac-dot">·</span>
-          <span>{chapitres.length} chapitres</span>
-          {c.cible && (
-            <>
-              <span className="bac-dot">·</span>
-              <span>Cours de la Licence Éco-Gestion</span>
-            </>
-          )}
+          <span>{c.cible ? "Même cours qu'en économie et gestion" : droitRangLabel(c)}</span>
         </span>
       </span>
     </a>
@@ -142,7 +114,7 @@ export default async function DroitPage() {
         data={[
           breadcrumbJsonLd([{ name: "Cours de Droit", path: PATH }]),
           collectionJsonLd({
-            name: "Cours de la licence de Droit (FSJP, ex-FSJES)",
+            name: "Cours de la licence de Droit (FSJES)",
             description: "Cours de droit du tronc commun puis des filières droit privé et droit public, découpés en chapitres avec exercices corrigés.",
             path: PATH,
             items: modules.map((c) => ({ name: c.module, path: moduleHref(c) })),
@@ -154,10 +126,10 @@ export default async function DroitPage() {
       <div className="bac-space">
         <div className="bac-wrap">
           <section className="bac-hero">
-            <h1>Cours de droit FSJES et FSJP{modules.length > 0 && ` : licence de Droit ${plage(modules)}`}</h1>
+            <h1>Cours de Droit FSJES{modules.length > 0 && ` : licence de Droit ${plage(modules)}`}</h1>
             <p>
-              La licence de Droit de la FSJP (ex-FSJES) module par module : d&apos;abord le tronc commun, puis la filière droit privé
-              ou droit public et son parcours. Chaque module est découpé en chapitres : le cours, des exercices corrigés, un résumé et
+              Les cours de la licence de Droit de la FSJES rangés par semestre : le tronc commun, puis la filière droit privé ou
+              droit public et son parcours. Chaque module est découpé en chapitres : le cours, des exercices corrigés, un résumé et
               un QCM, et le cours complet en PDF.
             </p>
             {langues.length > 1 && (
@@ -241,10 +213,8 @@ export default async function DroitPage() {
           )}
 
           {liste.map((g) => (
-            <section key={g.cle} className="bac-group" data-groupe={g.cle}>
-              <h2 className="bac-section-title" dir={g.langue.code === "ar" ? "rtl" : undefined} lang={g.langue.lang}>
-                {g.titre}
-              </h2>
+            <section key={g.cle || "autres"} className="bac-group" data-groupe={g.cle}>
+              <h2 className="bac-section-title">{g.titre}</h2>
               <div className="bac-mat-grid">
                 {g.list.map((c) => (
                   <ModuleCard key={c.id} c={c} />
@@ -259,20 +229,20 @@ export default async function DroitPage() {
           <section className="sp-about">
             <h2>Suivre la licence de Droit semestre par semestre</h2>
             <p>
-              La licence de Droit dure trois ans, soit six semestres. Elle s&apos;enseignait dans les FSJES, qui se séparent en deux
-              facultés : la FSJP (faculté des sciences juridiques et politiques) reprend le droit, la FEG l&apos;économie et la gestion. Les premiers semestres forment un tronc commun, qui
+              La licence de Droit des FSJES (facultés des sciences juridiques, économiques et sociales) dure trois ans, soit six
+              semestres. Les premiers semestres forment un tronc commun, qui
               pose les bases du droit privé et du droit public. L&apos;étudiant choisit ensuite sa filière, droit privé ou droit
               public, puis un parcours : affaires et finance, métiers de la justice, études politiques et internationales, science
               politique, géopolitique. Le droit s&apos;enseigne en français et en arabe, avec des filières propres à chaque langue.
               {filieres.length > 0 && ` Filières couvertes ici : ${filieres.map((f) => f.fr || f.label).join(", ")}.`} Chaque module
-              est rangé à sa place et découpé en chapitres : le cours expliqué, puis des exercices avec leur corrigé détaillé, et le
+              est rangé sous son semestre et découpé en chapitres : le cours expliqué, puis des exercices avec leur corrigé détaillé, et le
               module entier en PDF. Tout est gratuit et sans inscription.
             </p>
             {communs.length > 0 && (
               <p>
-                Quelques matières de la licence de Droit s&apos;enseignent aussi en licence d&apos;économie et gestion (FEG, ex-FSJES) (
+                Quelques matières de la licence de Droit s&apos;enseignent aussi en licence d&apos;économie et gestion de la FSJES (
                 {communs.map((c) => c.module.toLowerCase()).join(", ")}). Pour elles, le site n&apos;a qu&apos;un seul cours, celui de la
-                Licence Éco-Gestion, et la carte du module y mène directement.
+                Licence Économie et Gestion, et la carte du module y mène directement.
               </p>
             )}
           </section>

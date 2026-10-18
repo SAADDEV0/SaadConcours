@@ -83,7 +83,7 @@ export default async function EvaluationPage() {
             <div className="bac-mat-grid">
               <a className="bac-mat-card" href="/cours">
                 <span className="bac-mat-body">
-                  <span className="bac-mat-name">QCM des cours de Licence Éco-Gestion</span>
+                  <span className="bac-mat-name">QCM des cours de Licence FSJES</span>
                   <span className="bac-mat-desc">Un QCM corrigé à la fin de chaque chapitre, du S1 au S6 : comptabilité, finance, économie, gestion, droit.</span>
                 </span>
               </a>

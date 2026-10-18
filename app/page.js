@@ -92,7 +92,7 @@ export default async function HomePage() {
   const chapitresEncg = encgPublies.reduce((n, c) => n + (c.cible ? 0 : encgModule(c).chapitres.length), 0);
   const semestresEncg = ENCG_SEMESTRES.map((s) => ({ ...s, n: encgPublies.filter((c) => c.semestre === s.code).length })).filter((s) => s.n > 0);
   // Espace Droit : modules rédigés (français et arabe) + modules qui renvoient
-  // au cours de la Licence Éco-Gestion (lib/droit.js).
+  // au cours de la Licence FSJES (lib/droit.js).
   const droitRediges = droit.filter(isDroitPublie);
   const droitModules = [...droitRediges, ...droitRenvois(droit, cours)].sort(droitSortComparator);
   const chapitresDroit = droitRediges.reduce((n, c) => n + droitModule(c).chapitres.length, 0);
@@ -204,21 +204,17 @@ export default async function HomePage() {
     droit: (
       <>
         <div className="home-links home-links-semestres">
-          {languesDroit.flatMap((l) =>
-            semestresDroit.map((s) => {
-              const n = droitModules.filter((c) => (c.langue || "fr") === l.code && c.semestre === s.code).length;
-              return n > 0 ? (
-                <a key={`${l.code}-${s.code}`} className="home-link" href={`/droit?semestre=${s.code}&parcours=${l.code}`}>
-                  <strong>
-                    {s.label} · {l.code === "ar" ? "arabe" : "français"}
-                  </strong>
-                  <span>
-                    {n} module{n > 1 ? "s" : ""}
-                  </span>
-                </a>
-              ) : null;
-            })
-          )}
+          {semestresDroit.map((s) => {
+            const n = droitModules.filter((c) => c.semestre === s.code).length;
+            return (
+              <a key={s.code} className="home-link" href={`/droit?semestre=${s.code}`}>
+                <strong>{s.label}</strong>
+                <span>
+                  {n} module{n > 1 ? "s" : ""}
+                </span>
+              </a>
+            );
+          })}
         </div>
         <div className="home-links home-links-wide">
           {droitRediges.slice(0, 4).map((c) => (
@@ -273,7 +269,7 @@ export default async function HomePage() {
               <p className="home-kicker">Économie, gestion et droit · Maroc</p>
               <h1>Cours, sujets réels de concours et corrigés, du Bac au Master.</h1>
               <p className="home-lead">
-                Les cours du Bac, de la Licence d&apos;économie et gestion (FEG, ex-FSJES){droitModules.length > 0 && " et de la licence de Droit (FSJP)"},{" "}
+                Les cours du Bac, de la Licence FSJES{droitModules.length > 0 && " (économie, gestion et droit)"},{" "}
                 {nombre(allConcours.length)} sujets de concours réellement tombés et leurs corrigés détaillés, {nombre(questionsQcm)} questions de
                 QCM. Gratuit, sans inscription.
               </p>
@@ -444,8 +440,7 @@ export default async function HomePage() {
           <p>
             Au <strong>lycée</strong>, les cours du Bac Sciences Économiques et Sciences de Gestion Comptable suivent le
             programme officiel marocain, matière par matière et chapitre par chapitre, avec les examens nationaux. À
-            l&apos;<strong>université</strong>, les FSJES se séparent en deux facultés : la FEG (économie et gestion) et la FSJP
-            (sciences juridiques et politiques). Les cours de la Licence Éco-Gestion couvrent les modules du tronc commun (S1 à S4)
+            l&apos;<strong>université</strong>, les cours de Licence FSJES en économie et gestion couvrent les modules du tronc commun (S1 à S4)
             et des filières de spécialisation (S5-S6).
             {droitModules.length > 0 &&
               ` Ceux de la licence de Droit suivent le tronc commun puis les filières droit privé et droit public, ${
@@ -453,7 +448,7 @@ export default async function HomePage() {
               }.`}{" "}
             Après le DEUG, les sujets des concours de <strong>licence d&apos;excellence</strong>{" "}
             préparent l&apos;accès direct en S5 ; pour le <strong>Master</strong>, la base de sujets réels et les QCM permettent de
-            préparer les concours d&apos;accès des FSJES, des FEG et des ENCG en conditions réelles.
+            préparer les concours d&apos;accès des FSJES et des ENCG en conditions réelles.
           </p>
         </section>
       </main>

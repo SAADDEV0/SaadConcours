@@ -39,7 +39,7 @@ export default async function Image(props) {
     return buildOgImage({
       eyebrow: `Cours de Droit${c.semestre ? ` · ${c.semestre}` : ""} · en arabe`,
       title: `Cours de droit en arabe — ${droitRangLabelFr(c)}`,
-      subtitle: "Licence de Droit (FSJP, ex-FSJES) : cours, exercices corrigés, résumé et QCM",
+      subtitle: "Licence de Droit (FSJES) : cours, exercices corrigés, résumé et QCM",
     });
   }
   return buildOgImage({

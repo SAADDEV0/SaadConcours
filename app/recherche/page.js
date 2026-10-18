@@ -63,7 +63,7 @@ export default async function RecherchePage() {
   for (const c of cours.filter((x) => x.available)) {
     const { chapitres } = fsjesModule(c);
     const sem = c.semestre ? licenceSemestreLabel(c.semestre) : "";
-    index.push(entree("cours", c.module, ["Licence Éco-Gestion", sem, `${chapitres.length} chapitres`].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.id)}`, c.description || ""));
+    index.push(entree("cours", c.module, ["Licence FSJES", sem, `${chapitres.length} chapitres`].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.id)}`, c.description || ""));
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · Chapitre ${ch.numero}`, fsjesChapitreHref(c, ch)));
     }
@@ -77,7 +77,7 @@ export default async function RecherchePage() {
   }
   // Module ENCG commun avec la Licence : une entrée qui mène au cours FSJES.
   for (const c of encgRenvois(encg, cours)) {
-    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), "cours de la Licence Éco-Gestion"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "encg"].filter(Boolean).join(" ")));
+    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "encg"].filter(Boolean).join(" ")));
   }
   for (const c of droit.filter(isDroitPublie)) {
     const { chapitres } = droitModule(c);
@@ -88,7 +88,7 @@ export default async function RecherchePage() {
   }
   // Module de Droit commun avec la Licence : une entrée qui mène au cours FSJES.
   for (const c of droitRenvois(droit, cours)) {
-    index.push(entree("cours", c.module, ["Droit", c.semestre, "cours de la Licence Éco-Gestion"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
+    index.push(entree("cours", c.module, ["Droit", c.semestre, "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
   }
   for (const m of BAC_MATIERES.filter((x) => x.niveau === "2bac")) {
     index.push(entree("cours", m.nom, `2ᵉ Bac SEG · ${m.chapitres.length} chapitres`, bacMatiereHref(m), m.description || ""));
@@ -183,7 +183,7 @@ export default async function RecherchePage() {
                   </a>
                 )}
                 <a className="home-link" href="/cours">
-                  <strong>Cours Licence Éco-Gestion</strong>
+                  <strong>Cours Licence FSJES</strong>
                   <span>Modules du S1 au S6</span>
                 </a>
                 {contenuOuvert("droit-cours") && (

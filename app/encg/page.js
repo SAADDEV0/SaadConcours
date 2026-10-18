@@ -60,7 +60,7 @@ function ModuleCard({ c }) {
         <span className="bac-mat-meta">
           <span>{chapitres.length} chapitres</span>
           <span className="bac-dot">·</span>
-          <span>{c.cible ? "Cours de la Licence Éco-Gestion" : c.option || encgAnneeLabel(c.semestre) || "ENCG"}</span>
+          <span>{c.cible ? "Cours de la Licence FSJES" : c.option || encgAnneeLabel(c.semestre) || "ENCG"}</span>
         </span>
       </span>
     </a>

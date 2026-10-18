@@ -760,19 +760,22 @@ montre toujours l'espace. On peut continuer à rédiger. **Relancer** (« relanc
 - Le découpage S1/S2 varie selon l'école : le dire dans l'en-tête d'un module rédigé. Contrôle et
   fin de recette comme K1 ; mettre à jour `public/llms.txt` quand la liste des modules change
   (règle 1.8).
-### K5 — Cours de Droit (FSJP, ex-FSJES)
+### K5 — Cours de Droit (FSJES)
 Espace Droit (`lib/espaces.js`, clé `droit`, couleur violet), créé le 2026-10-15 : pages `/droit`,
 `/droit/<id>`, `/droit/<id>/<chapitre>`, console Contenu › Cours Droit. **Lancé le 2026-10-17**
 (`DROIT_LANCE = true`, `lib/contenusPublies.mjs`, avec le S1 rédigé en français et en arabe) : un
 module publié est en ligne au déploiement suivant (pages, sitemap, recherche, accueil). Le titre et
-le H1 de `/droit` se calculent sur les semestres publiés (« Cours de droit FSJES et FSJP S1 (FR et
+le H1 de `/droit` se calculent sur les semestres publiés (« Cours de Droit FSJES S1 à S4 (FR et
 arabe) ») : rien à retoucher quand un semestre s'ajoute. Une page de module ou de chapitre en arabe a
 son titre et sa description en arabe. Relire en `npm run dev` avant de committer.
-- **Noms des facultés** (2026-10-17) : les FSJES se séparent en FEG (économie et gestion, espace
-  « Éco-Gestion », `/cours`) et FSJP (droit, `/droit`). Sur le site : « Licence Éco-Gestion (FEG) »,
-  « Licence de Droit (FSJP) », « ex-FSJES » dans les textes ; le mot **FSJES reste dans les titres
-  SEO** (« Cours FSJES et FEG… », « Cours de droit FSJES et FSJP… ») tant que les étudiants le
-  tapent. Les concours gardent le nom de l'établissement qui les a organisés (pas de renommage).
+- **Noms des facultés** (2026-10-18, Saad n'a pas aimé la séparation FEG / FSJP) : partout
+  **« FSJES »** — « Licence FSJES » (`/cours`), « Licence de Droit (FSJES) » (`/droit`). Pas de
+  « FEG », « FSJP », « ex-FSJES » ni « Éco-Gestion » dans les textes du site. Les concours et news
+  gardent le nom de l'établissement qui les a organisés (FEG Taza, FSJP Safi… : pas de renommage).
+- **Présentation de `/droit`** (2026-10-18) : comme `/cours`, **une section par semestre**
+  (« Semestre 1 »…) ; la filière ou le tronc commun s'affiche sur la carte, la langue et la filière
+  sont des filtres. Jamais de sections « Tronc commun · S1 », « Droit privé · S1 », par langue ou
+  par parcours. Sur l'accueil : un lien par semestre, pas par semestre et langue.
 - **Structure** (`lib/droitTaxonomy.js`) : d'abord le **tronc commun** (`filiere: ""`), puis la
   filière et son parcours. Deux langues, chacune ses filières :
   français — Droit privé (Droit financier et des affaires ; Métiers du droit et de la justice),
@@ -850,9 +853,9 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   sur la même matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
   pénal, procédure civile et pénale, lois organiques) ; vérifier chaque article cité.
-- **Fait au lancement** (2026-10-17) : `RESUME` + `SECTIONS` de l'accueil (liens par semestre et
-  langue, quatre premiers modules), chapitres et QCM de Droit dans les chiffres de l'accueil, `/a-propos`,
-  `/faq` (FSJES, FEG, FSJP), titre et description du site, manifeste, image de partage, `llms.txt`.
+- **Fait au lancement** (2026-10-17) : `RESUME` + `SECTIONS` de l'accueil (un lien par semestre,
+  quatre premiers modules), chapitres et QCM de Droit dans les chiffres de l'accueil, `/a-propos`,
+  `/faq`, titre et description du site, manifeste, image de partage, `llms.txt`.
   Quand un semestre s'ajoute : mettre à jour la liste des modules dans `public/llms.txt` (règle 1.8).
   `MOTIFS` (`lib/concoursParModule.js`) si des concours de droit entrent un jour dans la base.
 

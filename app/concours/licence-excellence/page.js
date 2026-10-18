@@ -139,7 +139,7 @@ export default async function LicenceExcellencePage() {
             gridTitle="Sujets de licence d'excellence"
             sideLinks={[
               { href: "/concours", label: "Concours Master" },
-              { href: "/cours", label: "Cours Licence Éco-Gestion (S1-S4)" },
+              { href: "/cours", label: "Cours Licence FSJES (S1-S4)" },
               { href: "/evaluation", label: "QCM d'entraînement" },
             ]}
           />

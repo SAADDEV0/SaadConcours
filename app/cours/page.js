@@ -2,7 +2,6 @@ import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator, licenceParcoursLabel, licenceFiliereLabel } from "../../lib/coursTaxonomy";
 import { fsjesModule } from "../../lib/fsjesChapitres";
-import { droitOuvert } from "../../lib/droit";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
@@ -97,9 +96,9 @@ export default async function CoursPage() {
         data={[
           breadcrumbJsonLd([{ name: "Cours", path: "/cours" }]),
           collectionJsonLd({
-            name: "Cours FSJES et FEG S1 à S6 par module et par chapitre",
+            name: "Cours FSJES S1 à S6 par module et par chapitre",
             description:
-              "Cours FSJES et FEG de Licence Économie & Gestion découpés en chapitres (comptabilité, analyse financière, management, marketing, macroéconomie...) : cours, exercices corrigés, résumé et QCM.",
+              "Cours FSJES de Licence Économie & Gestion découpés en chapitres (comptabilité, analyse financière, management, marketing, macroéconomie...) : cours, exercices corrigés, résumé et QCM.",
             path: "/cours",
             items: publies.map((c) => ({ name: c.module, path: `/cours/${encodeURIComponent(c.id)}` })),
           }),
@@ -111,8 +110,8 @@ export default async function CoursPage() {
         <div className="bac-wrap">
 
           <section className="bac-hero">
-            <h1>Cours FSJES et FEG : Licence Économie & Gestion, S1 à S6</h1>
-            <p>Les cours de la Licence Économie et Gestion (FEG, ex-FSJES) rangés par semestre. Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
+            <h1>Cours FSJES : Licence Économie & Gestion, S1 à S6</h1>
+            <p>Les cours de la FSJES rangés par semestre. Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
             <div className="bac-hero-stats">
               <span className="bac-stat">
                 <strong>{publies.length}</strong> modules
@@ -203,24 +202,14 @@ export default async function CoursPage() {
           </div>
 
           <section className="sp-about">
-            <h2>Les cours de la FSJES et de la FEG, semestre par semestre</h2>
+            <h2>Les cours de la FSJES, semestre par semestre</h2>
             <p>
-              Les FSJES (facultés des sciences juridiques, économiques et sociales) se séparent en deux facultés : la{" "}
-              <strong>FEG</strong>, faculté d&apos;économie et de gestion, qui reprend la Licence Économie et Gestion, et la{" "}
-              <strong>FSJP</strong>, faculté des sciences juridiques et politiques, qui reprend le droit{droitOuvert() && (
-                <>
-                  {" "}(voir les <a href="/droit">cours de Droit</a>)
-                </>
-              )}
-              . Les cours ci-dessous suivent les modules de la licence, quel que soit le nom de la faculté.
-            </p>
-            <p>
-              La Licence Économie et Gestion se fait en six semestres. Le S1 et le S2 posent les bases{basesS1S2 && <> : {basesS1S2}</>}. Dès le début, une partie des modules
+              La Licence Économie et Gestion des FSJES (facultés des sciences juridiques, économiques et sociales) se fait en six semestres. Le S1 et le S2 posent les bases{basesS1S2 && <> : {basesS1S2}</>}. Dès le début, une partie des modules
               diffère selon le parcours <strong>Gestion</strong> ou <strong>Économie</strong> ; au S5 et au S6, chaque étudiant suit
               une filière ({LICENCE_FILIERES.map((f) => f.label).join(", ")}).
             </p>
             <p>
-              Les cours suivent le programme national de la Licence, commun aux FSJES et aux FEG du Maroc : Agadir, Casablanca, Fès, Marrakech,
+              Les cours suivent le programme national de la Licence, commun aux FSJES du Maroc : Agadir, Casablanca, Fès, Marrakech,
               Meknès, Oujda, Rabat, Settat, Tanger, Tétouan… L&apos;ordre des chapitres peut changer d&apos;un professeur à
               l&apos;autre, mais les notions sont les mêmes. Chaque chapitre réunit le cours expliqué, des exercices avec leur
               corrigé détaillé, un résumé à relire avant l&apos;examen et un QCM pour vérifier ce qui est acquis. Tout est gratuit

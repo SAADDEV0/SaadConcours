@@ -35,11 +35,10 @@ const literata = Literata({
 const SITE_URL = "https://www.saadconcours.space";
 const SITE_NAME = "SaadConcours";
 // ≤ 65 et ≤ 155 caractères : voir app/_shared/seoText.js.
-// FSJES (requête des élèves) + droit : depuis la séparation des FSJES en FEG
-// (économie et gestion) et FSJP (droit), le site couvre les deux (2026-10-17).
-const SITE_TITLE = "SaadConcours — Cours Bac, FSJES, FEG, droit et concours Master";
+// FSJES (requête des élèves) : économie-gestion, et droit depuis le 2026-10-17.
+const SITE_TITLE = "SaadConcours — Cours Bac, FSJES, droit et concours Master";
 const SITE_DESCRIPTION =
-  "Cours gratuits du Bac SEG, de la licence d'économie-gestion (FEG, ex-FSJES) et de droit (FSJP), QCM et sujets réels des concours Master au Maroc corrigés.";
+  "Cours gratuits du Bac SEG, de la Licence FSJES en économie-gestion et en droit, QCM et sujets réels des concours Master au Maroc corrigés.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -47,8 +46,8 @@ export const metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     "cours bac sciences économiques", "2 bac sciences économiques et gestion", "cours comptabilité bac maroc", "exercices corrigés bac eco",
-    "cours fsjes", "cours feg", "licence économie gestion maroc", "cours s1 fsjes", "exercices corrigés fsjes",
-    "cours droit fsjes", "cours fsjp", "cours droit s1", "droit constitutionnel s1", "دروس القانون s1",
+    "cours fsjes", "licence économie gestion maroc", "cours s1 fsjes", "exercices corrigés fsjes",
+    "cours droit fsjes", "cours droit s1", "droit constitutionnel s1", "دروس القانون s1",
     "concours master maroc", "master économie gestion maroc", "concours accès master fsjes encg", "sujets concours master",
   ],
   alternates: { canonical: "/" },

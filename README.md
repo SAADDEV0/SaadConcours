@@ -6,8 +6,8 @@ Application Next.js multi-pages :
 
 - `/` — Accueil (présentation, accès aux sections)
 - `/bac/2bac` — Cours du 2ème Bac SEG par matière et chapitre ; examens nationaux listés sur la page de chaque matière (la 1ère Bac est masquée tant qu'elle n'est pas rédigée)
-- `/cours` — Cours de la Licence Éco-Gestion (FEG, ex-FSJES) par module et chapitre
-- `/droit` — Cours de la licence de Droit (FSJP, ex-FSJES), tronc commun puis filières, en français et en arabe (`public/data/droit.json`), lancé le 2026-10-17
+- `/cours` — Cours de la Licence FSJES par module et chapitre
+- `/droit` — Cours de la licence de Droit (FSJES) par semestre, tronc commun puis filières, en français et en arabe (`public/data/droit.json`), lancé le 2026-10-17
 - `/encg` — Cours de l'ENCG du S1 au S10 par module et chapitre (`public/data/encg.json`) ; `/concours/post-bac` — sujets du concours d'accès aux ENCG (TAFEM). Les deux forment l'espace ENCG et ne s'affichent qu'avec du contenu publié ; **caché depuis le 2026-10-17** (`ENCG_LANCE = false`, `lib/contenusPublies.mjs`, recette K4)
 - `/concours` — Concours (filtres, recherche, rendu Markdown/LaTeX, galerie d'images, export PDF, corrigé quand disponible)
 - `/evaluation` — QCM d'auto-évaluation par module

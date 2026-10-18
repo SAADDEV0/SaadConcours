@@ -86,7 +86,7 @@ export default async function ConcoursPage() {
             sideLinks={[
               { href: "/concours/licence-excellence", label: "Concours Licence d'excellence" },
               { href: "/evaluation", label: "QCM d'entraînement" },
-              { href: "/cours", label: "Cours Licence Éco-Gestion (FEG)" },
+              { href: "/cours", label: "Cours Licence FSJES" },
             ]}
           />
 

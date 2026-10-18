@@ -69,7 +69,7 @@ function titreSeo(c, ch, list = []) {
 function descriptionSeo(c, ch) {
   if (ch.description) return clampDescription(ch.description);
   return clampDescription(
-    `${c.module} (Licence FSJES/FEG${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours, exercices corrigés, résumé et QCM.`
+    `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}), chapitre ${ch.numero} : ${ch.titre}. Cours, exercices corrigés, résumé et QCM.`
   );
 }
 
@@ -141,7 +141,7 @@ export default async function CoursChapitrePage(props) {
     inLanguage: "fr",
     isAccessibleForFree: true,
     learningResourceType: ["Cours", "Exercices corrigés", "Résumé", "QCM"],
-    educationalLevel: `Licence Économie et Gestion${c.semestre ? ` — ${licenceSemestreLabel(c.semestre)}` : ""}`,
+    educationalLevel: `Licence FSJES${c.semestre ? ` — ${licenceSemestreLabel(c.semestre)}` : ""}`,
     teaches: coursRendu?.sommaire.length ? coursRendu.sommaire.map((s) => s.texte) : ch.titre,
     audience: { "@type": "EducationalAudience", educationalRole: "student" },
     position: ch.numero,

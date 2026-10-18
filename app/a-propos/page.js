@@ -94,8 +94,7 @@ export default async function AProposPage() {
         <h1 style={{ fontSize: "1.5rem", marginBottom: 6 }}>À propos de SaadConcours</h1>
         <p style={P}>
           SaadConcours est un site indépendant consacré aux études d&apos;économie, de gestion et de droit au Maroc, du
-          lycée au master : des cours du Bac Sciences Économiques et Gestion, de la Licence Économie et Gestion (FEG,
-          ex-FSJES){f.droit > 0 && " et de la licence de Droit (FSJP, ex-FSJES)"} rédigés chapitre par chapitre, avec exercices corrigés, résumés et QCM, et les sujets réels des concours d&apos;accès aux
+          lycée au master : des cours du Bac Sciences Économiques et Gestion, de la Licence FSJES en économie et gestion{f.droit > 0 && " et en droit"} rédigés chapitre par chapitre, avec exercices corrigés, résumés et QCM, et les sujets réels des concours d&apos;accès aux
           masters — FSJES, ENCG, facultés polydisciplinaires — pour s&apos;y préparer.
         </p>
 
@@ -131,12 +130,12 @@ export default async function AProposPage() {
             et {f.chapitresBac} chapitres, avec cours, exercices, résumé et QCM ;
           </li>
           <li>
-            les <a href="/cours">cours de la Licence Économie et Gestion</a> (FEG, ex-FSJES) : {f.cours} modules du S1 au S6
+            les <a href="/cours">cours de la Licence Économie et Gestion</a> (FSJES) : {f.cours} modules du S1 au S6
             découpés en {f.chapitresFsjes} chapitres, chacun avec son cours, ses exercices corrigés, son résumé et son QCM ;
           </li>
           {f.droit > 0 && (
             <li>
-              les <a href="/droit">cours de Droit</a> (FSJP, ex-FSJES) : {f.droit} modules{f.droitArabe ? " en français et en arabe" : ""}{" "}
+              les <a href="/droit">cours de Droit</a> (FSJES) : {f.droit} modules{f.droitArabe ? " en français et en arabe" : ""}{" "}
               découpés en {f.chapitresDroit} chapitres, avec exercices corrigés, résumé et QCM ;
             </li>
           )}

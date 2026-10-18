@@ -22,7 +22,7 @@ export async function generateMetadata() {
   return {
     title: "Cahiers de préparation Bac, Licence et Master",
     description:
-      "Cahiers de préparation en PDF pour le Bac, la Licence (FSJES, FEG) et les concours Master au Maroc : QCM corrigés, sujets blancs et fiches de révision.",
+      "Cahiers de préparation en PDF pour le Bac, la Licence FSJES et les concours Master au Maroc : QCM corrigés, sujets blancs et fiches de révision.",
     alternates: { canonical: `${SITE_URL}/boutique` },
     ...(ouverte ? {} : { robots: { index: false, follow: true } }),
   };

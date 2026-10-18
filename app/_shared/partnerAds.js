@@ -61,7 +61,7 @@ export const PARTNER_SECTIONS = [
   { key: "concours", label: "Concours Master" },
   { key: "concours-le", label: "Licence d'excellence" },
   { key: "concours-pb", label: "Concours ENCG (TAFEM)" },
-  { key: "cours", label: "Cours Licence Éco-Gestion" },
+  { key: "cours", label: "Cours Licence FSJES" },
   { key: "encg", label: "Cours ENCG" },
   { key: "droit", label: "Cours de Droit" },
   { key: "bac", label: "Cours Bac" },
