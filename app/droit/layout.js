@@ -7,7 +7,7 @@ export const metadata = {
   description:
     "Cours de la licence de Droit (FSJES) du S1 au S6 : tronc commun, puis droit privé et droit public, en français et en arabe, avec exercices corrigés.",
   alternates: { canonical: "/droit" },
-  openGraph: { title: "Cours de Droit FSJES du S1 au S6 — SaadConcours", url: "/droit" },
+  openGraph: { title: "Cours de Droit FSJES — SaadConcours", url: "/droit", images: ["/opengraph-image"] },
 };
 
 export default function DroitLayout({ children }) {

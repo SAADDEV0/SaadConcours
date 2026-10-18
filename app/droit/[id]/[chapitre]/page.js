@@ -11,7 +11,7 @@ import BacChapitreClient from "../../../bac/BacChapitreClient";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { droitLangueInfo, droitRangLabel } from "../../../../lib/droitTaxonomy";
-import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droitOuvert, isDroitPublie } from "../../../../lib/droit";
+import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droitOuvert, isDroitPublie, droitEquivalent } from "../../../../lib/droit";
 import { slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { Icon } from "../../../_shared/icons";
 
@@ -60,17 +60,35 @@ export async function generateStaticParams() {
 // Même règle que les chapitres FSJES : la forme longue tant qu'elle tient en
 // 65 caractères, le nom du module dès qu'un autre module a un chapitre du
 // même titre (deux pages ne partagent pas un titre).
+// Un titre de chapitre trop long (« Les atteintes aux biens par fraude :
+// escroquerie, abus de confiance… ») garde sa tête, avant les deux-points,
+// plutôt que de dépasser 65 caractères.
 function titreSeo(c, ch, list) {
   const sem = c.semestre ? ` ${c.semestre}` : "";
   const partage = list.some((x) => x.id !== c.id && droitModule(x).chapitres.some((k) => k.titre === ch.titre));
+  const teteDe = (t) => t.split(/\s?:\s/)[0].trim();
+  const tete = teteDe(ch.titre);
+  // Pas de tête partagée avec un autre chapitre du module (titres uniques).
+  const unique = !droitModule(c).chapitres.some((k) => k.slug !== ch.slug && teteDe(k.titre) === tete);
+  const court = tete.length >= 10 && tete !== ch.titre && unique ? tete : null;
   if (c.langue === "ar") {
-    return fitTitle([`${ch.titre}: درس وتمارين مصححة — ${c.module}${sem}`, `${ch.titre} — ${c.module}${sem}`, `${ch.titre} — ${c.module}`, ch.titre]);
+    return fitTitle([
+      `${ch.titre}: درس وتمارين مصححة — ${c.module}${sem}`,
+      `${ch.titre} — ${c.module}${sem}`,
+      `${ch.titre} — ${c.module}`,
+      court && `${court} — ${c.module}${sem}`,
+      court && `${court}: درس وتمارين مصححة${sem}`,
+      court || ch.titre,
+    ]);
   }
   return fitTitle([
     `${ch.titre} : cours et exercices corrigés — ${c.module}${sem}`,
     `${ch.titre} — ${c.module}${sem}`,
     !partage && `${ch.titre} : cours de Droit${sem}`,
-    partage ? `${ch.titre} — ${c.module}` : ch.titre,
+    partage && `${ch.titre} — ${c.module}`,
+    court && `${court} — ${c.module}${sem}`,
+    court && `${court} : cours de Droit${sem}`,
+    court || ch.titre,
   ]);
 }
 
@@ -134,7 +152,8 @@ export default async function DroitChapitrePage(props) {
   const { id, chapitre } = await props.params;
   const found = await findChapitre(id, chapitre);
   if (!found) notFound();
-  const { c, chapitres, ch, prev, next } = found;
+  const { c, list, chapitres, ch, prev, next } = found;
+  const equivalent = droitEquivalent(c, list);
   const langue = droitLangueInfo(c.langue);
   const ar = langue.code === "ar";
   const rtl = ar ? "rtl" : undefined;
@@ -203,6 +222,11 @@ export default async function DroitChapitrePage(props) {
                     </li>
                   ))}
                 </ol>
+                {equivalent && (
+                  <a href={droitModuleHref(equivalent)} className="bac-side-link" lang={equivalent.langue === "ar" ? "ar" : "fr"} dir={equivalent.langue === "ar" ? "rtl" : undefined}>
+                    {equivalent.langue === "ar" ? `الدرس بالعربية: ${equivalent.module}` : `Ce cours en français : ${equivalent.module}`}
+                  </a>
+                )}
               </div>
             </aside>
 

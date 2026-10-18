@@ -49,7 +49,7 @@ export async function generateMetadata() {
   const description = clampDescription(
     `Cours de Droit FSJES ${s} rangés par semestre : tronc commun, droit privé et droit public${ar ? ", en français et en arabe" : ""}, avec exercices corrigés et QCM.`
   );
-  return { title, description, openGraph: { title: `${title} — SaadConcours`, description, url: PATH } };
+  return { title, description, openGraph: { title: `${title} — SaadConcours`, description, url: PATH, images: ["/opengraph-image"] } };
 }
 
 // Comme /cours : une section par semestre, la filière et la langue sur la

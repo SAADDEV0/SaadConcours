@@ -10,7 +10,7 @@ import CoursDetailClient from "../../cours/[id]/CoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { droitLangueInfo, droitRangLabel } from "../../../lib/droitTaxonomy";
-import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie } from "../../../lib/droit";
+import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie, droitEquivalent } from "../../../lib/droit";
 import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -51,7 +51,14 @@ export async function generateMetadata(props) {
   // recherche de ses étudiants (la description de la fiche l'est déjà).
   const title =
     c.langue === "ar"
-      ? fitTitle([`${c.module} ${sem}— دروس وتمارين مصححة`, `${c.module} ${sem}— دروس القانون`, c.module])
+      ? // « FSJES » et « PDF » : les mots que tapent les étudiants (le cours
+        // complet se télécharge en PDF depuis la page).
+        fitTitle([
+          `${c.module} ${sem}FSJES — دروس وتمارين مصححة PDF`,
+          `${c.module} ${sem}FSJES — دروس وتمارين مصححة`,
+          `${c.module} ${sem}— دروس وتمارين مصححة`,
+          c.module,
+        ])
       : fitTitle([`${c.module} — Cours de Droit ${sem}par chapitre`, `${c.module} — Cours de Droit ${sem}`.trim(), `${c.module} — Droit`]);
   const description = clampDescription(
     c.langue === "ar"
@@ -111,6 +118,7 @@ export default async function DroitModulePage(props) {
   const { chapitres, annexe } = droitModule(c);
   const href = droitModuleHref(c);
   const related = getRelated(list, c);
+  const equivalent = droitEquivalent(c, list);
   const nbExercices = chapitres.reduce((n, x) => n + x.nbExercices, 0);
   const nbQcm = chapitres.reduce((n, x) => n + x.qcm.length, 0);
   const annexeMd = annexe.startsWith("# ") ? annexe.replace(/^## /gm, "### ").replace(/^# /gm, "## ") : annexe;
@@ -208,6 +216,11 @@ export default async function DroitModulePage(props) {
                 <div className="sp-side-info">
                   Langue <strong>{langue.court}</strong>
                 </div>
+                {equivalent && (
+                  <a href={droitModuleHref(equivalent)} className="bac-side-link" lang={equivalent.langue === "ar" ? "ar" : "fr"} dir={equivalent.langue === "ar" ? "rtl" : undefined}>
+                    {equivalent.langue === "ar" ? `الدرس بالعربية: ${equivalent.module}` : `Ce cours en français : ${equivalent.module}`}
+                  </a>
+                )}
               </div>
             </aside>
 
