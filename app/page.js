@@ -5,7 +5,7 @@ import { formatDateFr } from "./_shared/format";
 import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
 import { encgModule, encgOuvert, encgRenvois, isEncgPublie } from "../lib/encg";
-import { droitModule, droitModuleHref, droitOuvert, droitRenvois, isDroitPublie } from "../lib/droit";
+import { droitModule, droitOuvert, droitRenvois, isDroitPublie } from "../lib/droit";
 import { DROIT_LANGUES, DROIT_SEMESTRES, droitSortComparator } from "../lib/droitTaxonomy";
 import { categoryInfo } from "../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref } from "../lib/bacProgramme";
@@ -110,9 +110,16 @@ export default async function HomePage() {
   // Ligne de « Je prépare… » et chiffres de chaque espace.
   const RESUME = {
     bac: { ligne: `${matieresBac.length} matières · ${chapitresBac} chapitres`, chiffres: [[matieresBac.length, "matières"], [chapitresBac, "chapitres"]] },
+    // Le Droit fait partie de la Licence (lib/espaces.js) : ses modules et
+    // chapitres s'ajoutent à ceux de l'économie-gestion.
     licence: {
-      ligne: `${coursPublies.length} modules · ${chapitresFsjes} chapitres corrigés`,
-      chiffres: [[coursPublies.length, "modules"], [chapitresFsjes, "chapitres"], [quizPublies.length, "concours blancs"]],
+      ligne: [
+        `${coursPublies.length + droitModules.length} modules · ${chapitresFsjes + chapitresDroit} chapitres corrigés`,
+        droitModules.length > 0 && "économie, gestion et droit",
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      chiffres: [[coursPublies.length + droitModules.length, "modules"], [chapitresFsjes + chapitresDroit, "chapitres"], [quizPublies.length, "concours blancs"]],
     },
     encg: {
       ligne: [tafem.length && `${tafem.length} sujets TAFEM`, encgPublies.length && `${encgPublies.length} modules du S1 au S10`].filter(Boolean).join(" · "),
@@ -121,10 +128,6 @@ export default async function HomePage() {
         ...(encgPublies.length ? [[encgPublies.length, "modules"]] : []),
         ...(chapitresEncg ? [[chapitresEncg, "chapitres"]] : []),
       ],
-    },
-    droit: {
-      ligne: [`${droitModules.length} modules · ${chapitresDroit} chapitres`, languesDroit.length > 1 && "français et arabe"].filter(Boolean).join(" · "),
-      chiffres: [[droitModules.length, "modules"], [chapitresDroit, "chapitres"], [languesDroit.length, languesDroit.length > 1 ? "langues" : "langue"]],
     },
     excellence: {
       ligne: `${licenceExc.length} sujets réels · accès en S5 après le DEUG`,
@@ -153,6 +156,12 @@ export default async function HomePage() {
     ),
     licence: (
       <>
+        {droitModules.length > 0 && (
+          <div className="home-subhead">
+            <h3>Économie et gestion</h3>
+            <a href="/cours">Tous les cours</a>
+          </div>
+        )}
         <div className="home-links home-links-semestres">
           {LICENCE_SEMESTRES.filter((s) => modulesParSemestre[s.code] > 0).map((s) => (
             <a key={s.code} className="home-link" href={`/cours?semestre=${s.code}`}>
@@ -164,6 +173,27 @@ export default async function HomePage() {
             </a>
           ))}
         </div>
+        {droitModules.length > 0 && (
+          <>
+            <div className="home-subhead">
+              <h3>Droit{languesDroit.length > 1 ? " · français et arabe" : ""}</h3>
+              <a href="/droit">Tous les cours</a>
+            </div>
+            <div className="home-links home-links-semestres">
+              {semestresDroit.map((s) => {
+                const n = droitModules.filter((c) => c.semestre === s.code).length;
+                return (
+                  <a key={s.code} className="home-link" href={`/droit?semestre=${s.code}`}>
+                    <strong>{s.label}</strong>
+                    <span>
+                      {n} module{n > 1 ? "s" : ""}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </>
+        )}
         <div className="home-links home-links-wide">
           <a className="home-link" href="/evaluation">
             <strong>QCM d&apos;entraînement par module</strong>
@@ -199,33 +229,6 @@ export default async function HomePage() {
             ))}
           </div>
         )}
-      </>
-    ),
-    droit: (
-      <>
-        <div className="home-links home-links-semestres">
-          {semestresDroit.map((s) => {
-            const n = droitModules.filter((c) => c.semestre === s.code).length;
-            return (
-              <a key={s.code} className="home-link" href={`/droit?semestre=${s.code}`}>
-                <strong>{s.label}</strong>
-                <span>
-                  {n} module{n > 1 ? "s" : ""}
-                </span>
-              </a>
-            );
-          })}
-        </div>
-        <div className="home-links home-links-wide">
-          {droitRediges.slice(0, 4).map((c) => (
-            <a key={c.id} className="home-link" href={droitModuleHref(c)} dir={c.langue === "ar" ? "rtl" : undefined} lang={c.langue === "ar" ? "ar" : undefined}>
-              <strong>{c.module}</strong>
-              <span>
-                {c.semestre} · {droitModule(c).chapitres.length} {c.langue === "ar" ? "فصول" : "chapitres"}
-              </span>
-            </a>
-          ))}
-        </div>
       </>
     ),
     excellence: (

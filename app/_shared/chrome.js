@@ -928,6 +928,8 @@ function initEspaceMemory() {
       if (!localStorage.getItem(ESPACE_KEY)) localStorage.setItem(ESPACE_KEY, legacy.startsWith("/bac") ? "bac" : "licence");
       localStorage.removeItem("sc_cours");
     }
+    // L'espace Droit a rejoint la Licence (2026-10-18).
+    if (localStorage.getItem(ESPACE_KEY) === "droit") localStorage.setItem(ESPACE_KEY, "licence");
     const path = window.location.pathname.replace(/\/+$/, "") || "/";
     const ici = espaceOfPath(path);
     if (ici && (path === ici.hub || !localStorage.getItem(ESPACE_KEY))) localStorage.setItem(ESPACE_KEY, ici.key);

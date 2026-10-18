@@ -772,6 +772,11 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   **« FSJES »** — « Licence FSJES » (`/cours`), « Licence de Droit (FSJES) » (`/droit`). Pas de
   « FEG », « FSJP », « ex-FSJES » ni « Éco-Gestion » dans les textes du site. Les concours et news
   gardent le nom de l'établissement qui les a organisés (FEG Taza, FSJP Safi… : pas de renommage).
+- **Droit = onglet de la Licence** (2026-10-18, Saad n'a pas aimé la séparation Licence / Droit) :
+  plus d'espace `droit` dans `lib/espaces.js`. L'espace `licence` (« Licence FSJES », teal) a les
+  onglets « Économie et gestion » (`/cours`), « Droit » (`/droit`) et « QCM par module » ; sur
+  l'accueil, une seule carte et une seule section Licence (chiffres additionnés, sous-titres
+  « Économie et gestion » puis « Droit »). Ne jamais recréer d'entrée « Droit » dans le menu.
 - **Présentation de `/droit`** (2026-10-18) : comme `/cours`, **une section par semestre**
   (« Semestre 1 »…) ; la filière ou le tronc commun s'affiche sur la carte, la langue et la filière
   sont des filtres. Jamais de sections « Tronc commun · S1 », « Droit privé · S1 », par langue ou
