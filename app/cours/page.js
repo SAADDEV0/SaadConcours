@@ -7,6 +7,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
 import { Icon } from "../_shared/icons";
+import LicenceSwitch from "../_shared/LicenceSwitch";
 
 // Served as prerendered HTML instead of rendered per request. lib/github.js
 // reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
@@ -111,6 +112,7 @@ export default async function CoursPage() {
         <div className="bac-wrap">
 
           <section className="bac-hero">
+            <LicenceSwitch actif="cours" />
             <h1>Cours FSJES : Licence Économie & Gestion, S1 à S6</h1>
             <p>Les cours de la FSJES rangés par semestre. Chaque module est découpé en chapitres, comme en amphi. Pour chaque chapitre : le cours, des exercices corrigés, un résumé et un QCM, puis le formulaire final du module.</p>
             <div className="bac-hero-stats">

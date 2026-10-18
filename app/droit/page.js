@@ -4,6 +4,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "../cours/CoursExplorer";
 import { Icon } from "../_shared/icons";
+import LicenceSwitch from "../_shared/LicenceSwitch";
 import { DROIT_LANGUES, DROIT_SEMESTRES, droitFilieresFor, droitRangLabel, droitSortComparator } from "../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { fsjesModule } from "../../lib/fsjesChapitres";
@@ -126,6 +127,7 @@ export default async function DroitPage() {
       <div className="bac-space">
         <div className="bac-wrap">
           <section className="bac-hero">
+            <LicenceSwitch actif="droit" />
             <h1>Cours de Droit FSJES{modules.length > 0 && ` : licence de Droit ${plage(modules)}`}</h1>
             <p>
               Les cours de la licence de Droit de la FSJES rangés par semestre : le tronc commun, puis la filière droit privé ou
