@@ -66,7 +66,7 @@ export const metadata = {
   keywords: [
     "cours bac sciences économiques", "2 bac sciences économiques et gestion", "cours comptabilité bac maroc", "exercices corrigés bac eco",
     "cours fsjes", "licence économie gestion maroc", "cours s1 fsjes", "exercices corrigés fsjes",
-    "cours droit fsjes", "cours droit s1", "droit constitutionnel s1", "دروس القانون s1",
+    "cours droit fsjes", "licence droit maroc", "cours droit s1", "droit constitutionnel s1", "cours droit en arabe", "دروس القانون s1", "محاضرات القانون",
     "concours master maroc", "master économie gestion maroc", "concours accès master fsjes encg", "sujets concours master",
   ],
   alternates: { canonical: "/" },
@@ -119,6 +119,9 @@ const ORG_JSON_LD = {
   url: SITE_URL,
   description: SITE_DESCRIPTION,
   areaServed: { "@type": "Country", name: "Maroc" },
+  // Ce que couvre le site, pour que Google ne le range pas en « économie-gestion » seulement.
+  knowsAbout: ["Économie", "Gestion", "Comptabilité", "Finance", "Droit", "Droit privé", "Droit public", "Concours Master"],
+  knowsLanguage: ["fr", "ar"],
 };
 
 // Nom du site affiché par Google au-dessus des résultats. Plus de

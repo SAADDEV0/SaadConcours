@@ -2,6 +2,7 @@ import { getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator, licenceParcoursLabel, licenceFiliereLabel } from "../../lib/coursTaxonomy";
 import { fsjesModule } from "../../lib/fsjesChapitres";
+import { droitOuvert } from "../../lib/droit";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
@@ -221,6 +222,13 @@ export default async function CoursPage() {
               <a href="/concours/licence-excellence">sujets des concours de licence d&apos;excellence</a> montrent ce qui est
               demandé pour l&apos;accès en S5.
             </p>
+            {droitOuvert() && (
+              <p>
+                La FSJES prépare aussi à la licence de Droit : ses <a href="/droit">cours de Droit</a>, en français et en
+                arabe, suivent le tronc commun puis les filières droit privé et droit public, avec la même organisation par
+                chapitre.
+              </p>
+            )}
           </section>
         </div>
       </div>

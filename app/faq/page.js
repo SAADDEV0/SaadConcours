@@ -19,6 +19,10 @@ const SITE_URL = "https://www.saadconcours.space";
 
 const FAQ = [
   {
+    q: "Quels cours trouve-t-on sur SaadConcours ?",
+    a: "Les cours du 2ᵉ Bac Sciences Économiques et Gestion, puis ceux de la Licence FSJES : économie et gestion du S1 au S6, et droit (tronc commun, puis filières droit privé et droit public), en français et en arabe. Chaque chapitre a son cours, des exercices corrigés, un résumé et un QCM. S'y ajoutent les sujets réels des concours de licence d'excellence et de master.",
+  },
+  {
     q: "Comment se déroule le concours d'accès à un master au Maroc ?",
     a: "Après une présélection sur dossier (moyenne de licence, filière), les facultés organisent un concours écrit dans les matières de la spécialité visée (comptabilité, analyse financière, fiscalité, contrôle de gestion...), parfois suivi d'un entretien oral selon les établissements. Le format exact (QCM, cas pratiques, durée) varie d'une faculté à l'autre.",
   },
@@ -50,9 +54,9 @@ const FAQ = [
 
 export const metadata = {
   // + « | SaadConcours » (modèle de app/layout.js) : 60 caractères.
-  title: "FAQ : concours d'accès aux Masters au Maroc",
+  title: "FAQ : cours FSJES et concours Master au Maroc",
   description:
-    "Réponses aux questions les plus courantes sur le concours d'accès aux masters économie-gestion au Maroc : déroulement, conditions, corrigés, calendrier.",
+    "Questions fréquentes : cours d'économie, de gestion et de droit de la FSJES, concours d'accès aux masters au Maroc, conditions, corrigés, calendrier.",
   alternates: { canonical: "/faq" },
   // Un openGraph posé ici remplace celui de la racine, image comprise.
   openGraph: { title: "Questions fréquentes — SaadConcours", url: "/faq", images: ["/opengraph-image"] },
