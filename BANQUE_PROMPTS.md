@@ -842,6 +842,17 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   chiffres occidentaux ; « الأسدس » pour le semestre, « الفصل » pour le chapitre. Seuil de longueur :
   **1 000 mots arabes** par chapitre (l'arabe compte environ 20 % de mots de moins que le français pour
   le même contenu) ; viser 1 100 dès le premier jet, sinon il faut rallonger chaque chapitre.
+- **Programme arabe complet** (2026-10-18, « continue les cours de droit ») : S3 (القانون الدولي العام)
+  et tout le S4 arabe rédigés — التنظيم القضائي، المنازعات الإدارية، حقوق الإنسان والحريات العامة (tronc
+  commun), قانون الشركات et القانون العقاري (`prive-ar`), تاريخ الفكر السياسي et قانون المساطر
+  (`public-ar`). Toutes les fiches de `droit.json` (S1 → S4, FR et AR) sont `available`. « قانون
+  المساطر » est traité comme les **deux** procédures (civile puis pénale, chapitres 1-4 et 5-7).
+  Méthode qui marche : un dossier scratchpad par cours (`head.md`, `c01.md`…`c07.md`, `annexe.md`),
+  le fichier `lib/droitContenu/<id>.js` écrit à la main, puis un script d'assemblage qui remplit la
+  fiche, ajoute l'import et la ligne `SUPPLEMENTS`, et contrôle mots/exercices/QCM/descriptions.
+  `next dev` ne voit une nouvelle page `/droit/<id>/<chapitre>` qu'après **redémarrage** du serveur
+  (`dynamicParams = false`). Étape suivante possible : S5-S6 (programme à saisir d'abord).
+  Quand un semestre s'ajoute, mettre à jour la ligne Droit de `public/llms.txt` (faite le 2026-10-18 pour S1 → S4).
 - **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
   se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,
   `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
