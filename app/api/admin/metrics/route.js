@@ -46,6 +46,15 @@ export async function GET(req) {
     return NextResponse.json({ ads }, { headers: { "Cache-Control": "private, max-age=30" } });
   }
 
+  // ?scope=journal&n=100 → seulement les derniers évènements (onglet
+  // Journal), quand l'admin veut voir plus loin que les 40 du tableau de bord.
+  // Les journaux sont plafonnés à 200 entrées (MAX_LOG, lib/analytics.js).
+  if (sp.get("scope") === "journal") {
+    const n = Math.min(200, Math.max(1, Number(sp.get("n")) || 40));
+    const [recentVisits, recentPdf] = await Promise.all([safe(getRecentVisits(n), []), safe(getRecentPdfDownloads(n), [])]);
+    return NextResponse.json({ recentVisits, recentPdf }, { headers: { "Cache-Control": "private, max-age=30" } });
+  }
+
   // ?scope=page&path=/concours/xyz → fiche d'une page (onglet Pages).
   if (sp.get("scope") === "page") {
     const path = sp.get("path") || "";

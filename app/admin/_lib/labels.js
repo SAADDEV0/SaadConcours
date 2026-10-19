@@ -51,13 +51,33 @@ export function adminHrefForPath(path) {
 }
 
 // Fiche détaillée d'une ligne du journal : titre (le master pour un concours),
-// pastilles (établissement, ville, année…) et liens. `kind` donne l'icône.
+// pastilles (établissement, ville, année…) et liens. `kind` donne l'icône,
+// `section` l'espace du site (filtre « Contenu » du journal).
 function describeConcours(c, id) {
-  if (!c) return { kind: "concours", title: id, tags: [] };
+  if (!c) return { kind: "concours", section: "concours", title: id, tags: [] };
   return {
     kind: "concours",
+    section: "concours",
     title: c.filiere || c.master_reel || c.etablissement,
     tags: [c.etablissement, c.ville, /^\d{4}$/.test(c.annee) ? c.annee : "année non précisée"].filter(Boolean),
+  };
+}
+
+// Les trois espaces de cours partagent la même fiche (module, semestre).
+const ESPACES_COURS = [
+  { key: "cours", admin: "/admin/cours", tag: "Cours" },
+  { key: "droit", admin: "/admin/droit", tag: "Droit" },
+  { key: "encg", admin: "/admin/encg", tag: "ENCG" },
+];
+
+function describeCours(espace, id, content, sub) {
+  const c = find(content[espace.key], id);
+  return {
+    kind: "cours",
+    section: espace.key,
+    title: c?.module || id,
+    tags: [espace.tag, c?.semestre, sub && decodeURIComponent(sub).replace(/-/g, " ")].filter(Boolean),
+    edit: `${espace.admin}/editer?id=${encodeURIComponent(id)}`,
   };
 }
 
@@ -65,32 +85,32 @@ export function describePath(path, content = {}) {
   const [, section, id, sub] = String(path || "").split("/");
   const decoded = id ? decodeURIComponent(id) : "";
   const base = { href: path, edit: adminHrefForPath(path) };
+  const espace = ESPACES_COURS.find((e) => e.key === section);
   if (section === "concours" && decoded) return { ...base, ...describeConcours(find(content.concours, decoded), decoded) };
-  if (section === "cours" && decoded) {
-    const c = find(content.cours, decoded);
-    return { ...base, kind: "cours", title: c?.module || decoded, tags: ["Cours", c?.semestre, sub && decodeURIComponent(sub).replace(/-/g, " ")].filter(Boolean) };
-  }
-  if (section === "evaluation" && decoded) return { ...base, kind: "quiz", title: find(content.quiz, decoded)?.title || decoded, tags: ["Évaluation"] };
-  if (section === "blog" && decoded) return { ...base, kind: "blog", title: find(content.blog, decoded)?.title || decoded, tags: ["Article"] };
-  if (section === "bac") return { ...base, kind: "bac", title: labelForPath(path, content), tags: ["Bac"] };
-  return { ...base, kind: "page", title: labelForPath(path, content), tags: [] };
+  if (espace && decoded) return { ...base, ...describeCours(espace, decoded, content, sub) };
+  if (section === "evaluation" && decoded) return { ...base, kind: "quiz", section: "quiz", title: find(content.quiz, decoded)?.title || decoded, tags: ["Évaluation"] };
+  if (section === "blog" && decoded) return { ...base, kind: "blog", section: "blog", title: find(content.blog, decoded)?.title || decoded, tags: ["Article"] };
+  if (section === "bac") return { ...base, kind: "bac", section: "bac", title: labelForPath(path, content), tags: ["Bac"] };
+  return { ...base, kind: "page", section: "page", title: labelForPath(path, content), tags: [] };
 }
 
 export function describePdf(kind, id, content = {}) {
   if (kind === "concours") return { href: `/concours/${id}`, edit: adminHrefForPath(`/concours/${id}`), ...describeConcours(find(content.concours, id), id) };
   if (kind === "cours") {
-    const c = find(content.cours, id);
-    return { href: `/cours/${id}`, edit: adminHrefForPath(`/cours/${id}`), kind: "cours", title: c?.module || id, tags: ["Cours", c?.semestre].filter(Boolean) };
+    // Les pages Droit et ENCG réutilisent le bouton PDF des cours Licence :
+    // leurs téléchargements arrivent aussi en « cours », avec l'id du module.
+    const espace = ESPACES_COURS.find((e) => find(content[e.key], id)) || ESPACES_COURS[0];
+    return { href: `/${espace.key}/${encodeURIComponent(id)}`, ...describeCours(espace, id, content) };
   }
-  if (kind === "evaluation") return { href: `/evaluation/${id}`, edit: adminHrefForPath(`/evaluation/${id}`), kind: "quiz", title: find(content.quiz, id)?.title || id, tags: ["Évaluation"] };
-  return { kind: "page", title: `${kind}:${id}`, tags: [] };
+  if (kind === "evaluation") return { href: `/evaluation/${id}`, edit: adminHrefForPath(`/evaluation/${id}`), kind: "quiz", section: "quiz", title: find(content.quiz, id)?.title || id, tags: ["Évaluation"] };
+  return { kind: "page", section: "page", title: `${kind}:${id}`, tags: [] };
 }
 
 export function labelForPdfItem(member, content = {}) {
   const [kind, ...rest] = String(member).split(":");
   const id = rest.join(":");
   if (kind === "concours") return concoursLabel(find(content.concours, id)) || id;
-  if (kind === "cours") return find(content.cours, id)?.module || id;
+  if (kind === "cours") return (find(content.cours, id) || find(content.droit, id) || find(content.encg, id))?.module || id;
   if (kind === "evaluation") return find(content.quiz, id)?.title || id;
   return member;
 }
