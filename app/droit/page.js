@@ -1,4 +1,6 @@
-import { getAllDroit, getAllCours } from "@/lib/store";
+import { getAllDroit, getAllCours, getPublicConcours, getCorrigeIdsLocal } from "@/lib/store";
+import { isMasterDroit } from "@/lib/concoursNiveaux";
+import { compareConcoursRecents, concoursCardHtml } from "../_shared/concoursCard";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
@@ -100,8 +102,20 @@ function moduleHref(c) {
   return c.cible ? `/cours/${encodeURIComponent(c.cible.id)}` : droitModuleHref(c);
 }
 
+// Après la licence : les derniers sujets de Masters de droit
+// (/concours/droit), pour l'étudiant qui prépare la sélection.
+async function sujetsMasterDroit(n = 4) {
+  const concours = (await getPublicConcours().catch(() => [])).filter(isMasterDroit);
+  const corrigeIds = getCorrigeIdsLocal();
+  return {
+    total: concours.length,
+    recents: [...concours].sort(compareConcoursRecents).slice(0, n).map((c) => ({ ...c, hasCorrige: Boolean(c.corrige_md) || corrigeIds.has(c.id) })),
+  };
+}
+
 export default async function DroitPage() {
   const { modules } = await donnees();
+  const sujets = modules.length ? await sujetsMasterDroit() : { total: 0, recents: [] };
   const totalChapitres = modules.reduce((n, c) => n + (c.cible ? fsjesModule(c.cible) : droitModule(c)).chapitres.length, 0);
   const communs = modules.filter((c) => c.cible);
   const semestres = DROIT_SEMESTRES.filter((s) => modules.some((c) => c.semestre === s.code));
@@ -227,6 +241,16 @@ export default async function DroitPage() {
           <div className="sp-empty" id="coursEmpty" hidden>
             Aucun module ne correspond à ces filtres.
           </div>
+
+          {sujets.recents.length > 0 && (
+            <section className="bac-group" id="concours-master-droit">
+              <div className="home-subhead">
+                <h2 className="bac-section-title">Après la licence : les concours de Master en droit</h2>
+                <a href="/concours/droit">Les {sujets.total} sujets</a>
+              </div>
+              <div className="sp-rows" dangerouslySetInnerHTML={{ __html: sujets.recents.map((c) => concoursCardHtml(c, { dl: false })).join("") }} />
+            </section>
+          )}
 
           <section className="sp-about">
             <h2>Suivre la licence de Droit semestre par semestre</h2>

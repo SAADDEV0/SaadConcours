@@ -14,6 +14,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute 10 concours` · `ajoute 5 concours Marrakech` · `ajoute des concours MRH 2024` | [C1](#c1--ajouter-n-concours-depuis-internet) |
 | `ajoute ce concours` + photo / PDF / lien | [C2](#c2--ajouter-un-concours-fourni-photo-pdf-lien) |
 | `ajoute 10 concours licence d'excellence` · `ajoute des LE CCA` | [C9](#c9--concours-de-licence-dexcellence) |
+| `ajoute 10 concours de droit` · `ajoute des concours master droit` · `ajoute ce sujet de droit` | [C11](#c11--concours-de-master-en-droit) |
 | `corrige le concours X` · `ajoute les corrigés manquants` · `ajoute 10 corrigés` | [C3](#c3--rédiger-ou-refaire-un-corrigé) |
 | `corrige l'énoncé de X` · `vérifie l'extrait de X` · `retranscris X` | [C4](#c4--corriger-un-énoncé--un-extrait) |
 | `modifie le concours X : …` | [C5](#c5--modifier-un-concours) |
@@ -596,6 +597,44 @@ Logistique Tétouan 2019, Finance ENCG Settat, dont le QCM final n'a que 2 quest
 Si une règle du formateur change, la mesurer avant/après sur toute la base (nombre de cases par
 fiche) : aucune étude de cas ne doit passer en QCM.
 
+### C11 — Concours de Master en droit
+Section créée le 2026-10-22 (« add section pour droit concours et ajoute 10 concours de fsjes ») :
+même fichier `concours.json`, même schéma et même déroulé que C1/C2, avec `"niveau": "master_droit"`
+(`lib/concoursNiveaux.js`). Ces fiches ne sont pas sur `/concours` (Master économie-gestion) mais sur
+`/concours/droit`, onglet « Masters de droit » de l'espace Master (`lib/espaces.js`, ouvert par le
+contenu `concours-droit` de `lib/contenusPublies.mjs`). Les derniers sujets s'affichent aussi en bas de
+`/droit` (« Après la licence ») et dans la section Master de l'accueil. Textes de la page calculés sur les
+sujets en base (formats, langues, matières, facultés) : rien à retoucher quand un sujet s'ajoute.
+1. **Champs propres** : `categorie: "DRT"` et `filiere` = une sous-filière DRT de `lib/taxonomy.js`
+   (affaires et entreprise ; contentieux, justice et modes alternatifs ; civil, famille et immobilier ;
+   droit public et science politique). `id` : `<annee>_<Ville>_<Etab>_<Master abrégé>` comme en C1.
+   `etablissement` : le nom de la faculté qui a organisé l'épreuve (« FSJP Ait Melloul (Ibn Zohr) » pour
+   une faculté de droit issue de la FSJES : pas de renommage). `master_reel` en **français** (titre de la
+   page, image de partage) ; l'intitulé arabe va dans `notions_cles`. `modules` en **français** : ils
+   relient la fiche aux cours de Droit (`MOTIFS_DROIT`, `lib/concoursParModule.js`) et aux cours FSJES.
+2. **Sujet en arabe** : `"langue": "ar"`. La fiche passe l'énoncé et le corrigé en `dir="rtl"`, les blocs
+   sans lettre arabe repassent en écriture latine (`marquerBlocsLatins`, `concoursFormat.js`) ; le PDF
+   charge la police arabe (`concoursPdf.js`). Énoncé transcrit en arabe, options `A)` `B)`… une par ligne,
+   questions en `**1)**`, `**1-**` ou `**Question 1 -**` comme sur le sujet. **Corrigé rédigé en arabe**
+   (langue de la copie attendue), précédé du bandeau en français puis d'une ligne en arabe, séparés par
+   une ligne `>` vide (sinon le bandeau prend la direction de l'arabe). Pas d'arabe dans la phrase du
+   bandeau français. Sujet en français : pas de champ `langue`.
+3. **Sources** (précédent du 2026-10-22) : `wadifa-info.com/fr/modeles-concours/acces-master-doctorat`
+   (tableau par année, scans `content/modeles/<n>/page_NN.jpg`), puis fsjesmaster (articles « نموذج امتحان
+   القبول في ماستر… » et « Exemple Concours Master Droit… »). Bandeau vert « wadifa-info.com » en bas de
+   chaque scan : le couper (première ligne verte détectée), puis effacer « Scanné avec CamScanner »,
+   « Scanned with » et les marques de profs (« Cours de français Ali Lmghari ») avant `filigrane-scans.mjs`.
+   Logo CamScanner posé sur le texte : blanchir seulement le gris clair du logo (180-220) loin de l'encre,
+   jamais par seuil global (les lettres floues partent). fsjesmaster récent : la ligne noire
+   « www.fsjesmaster.com » n'est pas reconnue par `nettoyer-scans.mjs` → `effacer` + `seuil: 200` dans
+   les exceptions. Écarté : scans trop flous pour être transcrits sans deviner (FSJP Aït Melloul, gestion
+   publique territoriale et professions juridiques 2026), facultés hors FSJES quand on demande « FSJES »
+   (FP Taza, faculté de Charia de Fès).
+4. Depuis la décision ministérielle de juillet 2025, beaucoup de masters sélectionnent sur dossier : peu
+   de sujets 2025 existent. Les plus récents en base sont ceux de la session 2026-2027 (Aïn Chock, Aït Melloul).
+5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, rendu, `npm run check`).
+   Commit : « Ajoute N concours de Masters de droit … ».
+
 ---
 
 ## K. COURS (Licence FSJES)
@@ -886,7 +925,8 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   quatre premiers modules), chapitres et QCM de Droit dans les chiffres de l'accueil, `/a-propos`,
   `/faq`, titre et description du site, manifeste, image de partage, `llms.txt`.
   Quand un semestre s'ajoute : mettre à jour la liste des modules dans `public/llms.txt` (règle 1.8).
-  `MOTIFS` (`lib/concoursParModule.js`) si des concours de droit entrent un jour dans la base.
+  Concours de droit : entrés dans la base le 2026-10-22 (recette C11) ; une fiche `master_droit` mène aux
+  cours de Droit de ses matières (`MOTIFS_DROIT`, `lib/concoursParModule.js`), dans la langue du sujet.
 
 ## B. BAC (Sciences Économiques & Gestion)
 

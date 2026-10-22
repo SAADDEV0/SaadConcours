@@ -50,6 +50,13 @@ function lieux(c) {
   return [...new Set([long, etab.includes(" ") ? etab : long])];
 }
 
+// « Master Droit » devant « Droit des affaires » : le mot n'est pas répété
+// (« Concours Master Droit des affaires », pas « Master Droit Droit des affaires »).
+function sansRedite(niveau, nom) {
+  const dernier = niveau.split(" ").pop();
+  return nom && niveau.includes(" ") && cle(nom.split(" ")[0]) === cle(dernier) ? niveau.slice(0, -dernier.length).trim() : niveau;
+}
+
 // « de la FSJES », « de l'ENCG », « de l'EST ».
 const deLa = (lieu) => (/^[AEIOUYÉ]/i.test(lieu) ? `de l'${lieu}` : `de la ${lieu}`);
 
@@ -97,7 +104,7 @@ function formes(c, hasCorrige, precision = "") {
   const noms = [l.sigle && l.complet && `${l.complet} (${l.sigle})`, l.complet, l.sigle].filter(Boolean);
   const titres = [];
   for (const suite of [hasCorrige ? " : sujet et corrigé" : " : sujet", ""]) {
-    for (const nom of noms) for (const lieu of [lieuLong, lieuCourt]) titres.push(`Concours ${niveau} ${nom} ${lieu}${annee}${p}${suite}`);
+    for (const nom of noms) for (const lieu of [lieuLong, lieuCourt]) titres.push(`Concours ${sansRedite(niveau, nom)} ${nom} ${lieu}${annee}${p}${suite}`);
   }
   if (!titres.length) titres.push(`Concours ${niveau} ${lieuLong}${annee}${p}`);
   // Nom trop long pour tenir : l'essentiel d'abord, le nom complet ensuite.
@@ -107,7 +114,7 @@ function formes(c, hasCorrige, precision = "") {
   return {
     titres,
     titreNomLong,
-    sujet: `${niveau}${nomCourt ? ` ${nomCourt}` : ""} ${deLa(lieuLong)}${annee}`,
+    sujet: `${sansRedite(niveau, nomCourt)}${nomCourt ? ` ${nomCourt}` : ""} ${deLa(lieuLong)}${annee}`,
     sujetCourt: `${niveau}${l.sigle ? ` ${l.sigle}` : ""} ${deLa(lieuCourt)}${annee}`,
     variante: l.variante,
   };

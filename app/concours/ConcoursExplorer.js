@@ -33,6 +33,12 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
 
     const $ = (sel) => document.querySelector(sel);
 
+    // Catégories de la taxonomie qui ont au moins un sujet dans cette liste :
+    // les Masters de droit (DRT) ne s'affichent que sur /concours/droit, et
+    // inversement les catégories d'économie-gestion n'y apparaissent pas.
+    const presentes = new Set(ALL.map((c) => c.categorie).filter(Boolean));
+    const CATEGORIES = FILIERE_CATEGORIES.filter((cat) => presentes.has(cat.code));
+
     // initialData ne porte que les données des cartes (concoursListItem) :
     // le texte des sujets (énoncé, notions clés) n'est chargé qu'au
     // premier PDF, depuis le fichier statique que
@@ -98,7 +104,7 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
         });
         return;
       }
-      FILIERE_CATEGORIES.forEach((cat) => {
+      CATEGORIES.forEach((cat) => {
         const group = document.createElement("optgroup");
         group.label = cat.label;
         cat.sousFilieres.forEach((s) => {
@@ -170,7 +176,7 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
         byCategorie[home].push(display);
       });
 
-      FILIERE_CATEGORIES.forEach((cat) => {
+      CATEGORIES.forEach((cat) => {
         const mods = byCategorie[cat.code];
         if (!mods || !mods.length) return;
         const group = document.createElement("optgroup");
@@ -328,12 +334,14 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
 
       fillSelect("#filterVille", villes);
       const catEl = $("#filterCategorie");
-      categoryOptions().forEach((o) => {
-        const opt = document.createElement("option");
-        opt.value = o.value;
-        opt.textContent = o.label;
-        catEl.appendChild(opt);
-      });
+      categoryOptions()
+        .filter((o) => presentes.has(o.value))
+        .forEach((o) => {
+          const opt = document.createElement("option");
+          opt.value = o.value;
+          opt.textContent = o.label;
+          catEl.appendChild(opt);
+        });
       fillFiliereSelect("");
       fillSelect("#filterEtab", etabs);
       fillSelect("#filterAnnee", annees);

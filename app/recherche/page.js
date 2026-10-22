@@ -1,6 +1,6 @@
 import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
-import { isLicenceExcellence, isPostBac } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMasterDroit, isPostBac } from "@/lib/concoursNiveaux";
 import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, encgRenvois, isEncgPublie } from "../../lib/encg";
 import { encgSemestreLabel } from "../../lib/encgTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
@@ -54,9 +54,9 @@ export default async function RecherchePage() {
       entree(
         "concours",
         c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`,
-        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isPostBac(c) ? " · Concours post-bac" : ""}`,
+        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isPostBac(c) ? " · Concours post-bac" : isMasterDroit(c) ? " · Master de droit" : ""}`,
         `/concours/${encodeURIComponent(c.id)}`,
-        [c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isPostBac(c) ? "post bac encg tafem" : "master"].filter(Boolean).join(" ")
+        [c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isPostBac(c) ? "post bac encg tafem" : isMasterDroit(c) ? "master droit juridique" : "master"].filter(Boolean).join(" ")
       )
     );
   }
@@ -166,6 +166,12 @@ export default async function RecherchePage() {
                   <strong>Concours Master</strong>
                   <span>Tous les sujets, par ville et filière</span>
                 </a>
+                {contenuOuvert("concours-droit") && (
+                  <a className="home-link" href="/concours/droit">
+                    <strong>Concours Master Droit</strong>
+                    <span>Masters de droit des FSJES, en français et en arabe</span>
+                  </a>
+                )}
                 <a className="home-link" href="/concours/licence-excellence">
                   <strong>Licence d&apos;excellence</strong>
                   <span>Concours d&apos;accès en S5</span>

@@ -12,6 +12,7 @@ import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
 import { convertMathSpansToPlainText } from "./latexPlainText";
 import { ensureConcoursPdfScripts } from "./pdfScripts";
+import { ARABIC_FONT, hasArabic, loadArabicPdfFont } from "./pdfArabic";
 
 // Every line drawn by this file goes through here, so sanitizePdfText is
 // applied at the same time as the markdown stripping: the énoncés and
@@ -24,8 +25,9 @@ import { ensureConcoursPdfScripts } from "./pdfScripts";
 // coursPdf.js has, even though the enonces/corriges are full of the same
 // \frac/\sqrt/\sum formulas. convertMathSpansToPlainText runs each span
 // through the same latexToPlainText() coursPdf.js falls back to.
-function stripInlineMd(s) {
-  return sanitizePdfText(convertMathSpansToPlainText(String(s ?? "")).replace(/\*\*/g, "")).trim();
+// `arabic` keeps the Arabic letters (sujet de droit en arabe, see below).
+function stripInlineMd(s, arabic = false) {
+  return sanitizePdfText(convertMathSpansToPlainText(String(s ?? "")).replace(/\*\*/g, ""), { arabic }).trim();
 }
 
 async function loadImageAsDataURL(src) {
@@ -53,11 +55,22 @@ function getImageDimensions(dataUrl) {
 // unsaved settings (`brandingOverride`) and without the scans (`images`).
 export async function buildConcoursPdf(c, brandingOverride, { images = true } = {}) {
   const [settings] = await Promise.all([brandingOverride ? null : loadPdfSettings(), ensureConcoursPdfScripts()]);
-  const branding = brandingOverride || (await resolvePdfBranding(settings));
+  let branding = brandingOverride || (await resolvePdfBranding(settings));
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const bodyFont = branding.fontFamily || "helvetica";
+  // Sujet en arabe (Masters de droit, `langue: "ar"`) : police arabe
+  // embarquée, et chaque ligne qui contient de l'arabe calée à droite — le
+  // bandeau du corrigé et les lignes en français restent à gauche. Même
+  // mécanique que les cours de droit en arabe (coursPdf.js, pdfArabic.js).
+  const rtl = c.langue === "ar";
+  if (rtl) {
+    await loadArabicPdfFont(doc);
+    branding = { ...branding, arabicFont: ARABIC_FONT };
+  }
+  const clean = (s) => stripInlineMd(s, rtl);
+  const isRtlLine = (s) => rtl && hasArabic(s);
+  const bodyFont = rtl ? ARABIC_FONT : branding.fontFamily || "helvetica";
   doc.setFont(bodyFont, "normal"); // ambient default — every doc.setFont(undefined, style) call below keeps this family
   const baseFontSize = branding.fontSize || 10.5;
   const fontScale = baseFontSize / 10.5;
@@ -92,22 +105,25 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
 
   function addWrappedLine(text, opts = {}) {
     const { bold = false, size = baseFontSize, indent = 0, gapAfter = 1.6, color = branding.textColor, font, quote = false } = opts;
-    const clean = stripInlineMd(text);
-    if (!clean) {
+    const texte = clean(text);
+    if (!texte) {
       y += 2 * lineSpacing;
       return;
     }
-    doc.setFont(font || undefined, bold ? "bold" : "normal");
+    const droite = isRtlLine(texte);
+    // Police d'un titre réglée dans la console : latine, donc pas pour un sujet en arabe.
+    doc.setFont((!rtl && font) || undefined, bold ? "bold" : "normal");
     doc.setFontSize(size);
     const lineStep = size * 0.42 * lineSpacing;
-    const wrapped = doc.splitTextToSize(clean, maxWidth - indent);
+    const wrapped = doc.splitTextToSize(texte, maxWidth - indent);
     for (const wl of wrapped) {
       ensureSpace(lineStep);
       // A "> note" line gets the same bar / tinted band as the cours'
       // blockquotes, drawn under the text (see drawQuoteLine).
-      if (quote) drawQuoteLine(doc, branding, { x: marginX, top: y - size * 0.3528 * 0.78, height: lineStep, width: maxWidth });
+      if (quote) drawQuoteLine(doc, branding, { x: marginX, top: y - size * 0.3528 * 0.78, height: lineStep, width: maxWidth, barRight: droite });
       doc.setTextColor(...color);
-      doc.text(wl, marginX + indent, y);
+      if (droite) doc.text(wl, marginX + maxWidth - indent, y, { align: "right" });
+      else doc.text(wl, marginX + indent, y);
       y += lineStep;
     }
     y += gapAfter * lineSpacing;
@@ -115,13 +131,19 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
 
   function addPrefixedLine(prefix, rest, opts = {}) {
     const { indent = 0, bullet = false, size = baseFontSize, gapAfter = 1.8 } = opts;
+    // Ligne en arabe : préfixe (numéro de question, lettre du choix) et texte
+    // d'un seul tenant, calés à droite, le préfixe en tête de lecture.
+    if (isRtlLine(`${prefix} ${rest}`)) {
+      addWrappedLine(`${bullet ? "• " : ""}${prefix} ${rest}`, { bold: !clean(rest), size, indent, gapAfter });
+      return;
+    }
     const lineStep = size * 0.42 * lineSpacing;
     doc.setFontSize(size);
     doc.setTextColor(...branding.textColor);
     const bx = marginX + indent + (bullet ? 4 : 0);
     const availW = maxWidth - indent - (bullet ? 4 : 0);
-    const prefixClean = stripInlineMd(prefix);
-    const restClean = stripInlineMd(rest);
+    const prefixClean = clean(prefix);
+    const restClean = clean(rest);
 
     doc.setFont(undefined, "bold");
     // A QCM stem is often written entirely inside "**...**" with no trailing
@@ -168,7 +190,9 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   }
 
   function addTable(rows) {
-    const cleanRows = rows.map((r) => r.map((cell) => stripInlineMd(cell)));
+    // Tableau d'un sujet en arabe : colonnes de droite à gauche.
+    const droite = rows.some((r) => r.some(isRtlLine));
+    const cleanRows = rows.map((r) => (droite ? [...r].reverse() : r).map((cell) => clean(cell)));
     ensureSpace(20);
     doc.autoTable({
       startY: y,
@@ -177,7 +201,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
       margin: { left: marginX, right: marginX, top: topY, bottom: pageH - bottomLimit },
       head: [cleanRows[0]],
       body: cleanRows.slice(1),
-      styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor },
+      styles: { font: bodyFont, fontSize: 8.5 * fontScale, cellPadding: 2, overflow: "linebreak", textColor: branding.textColor, halign: droite ? "right" : "left" },
       headStyles: { fillColor: branding.accentColor, textColor: 255 },
       theme: "grid",
     });

@@ -269,3 +269,21 @@ export function markQcmOptions(html) {
     (_, p, marker) => `<li class="qcm-opt">${p || ""}<strong class="qcm-letter">${marker}</strong>`
   );
 }
+
+// Sujet de droit rédigé en arabe (champ `langue: "ar"`) : la fiche pose
+// dir="rtl" lang="ar" sur l'énoncé et le corrigé. Un bloc qui n'a aucune
+// lettre arabe — le bandeau « Corrigé indicatif… », une citation en
+// français — repasse en écriture latine, sinon son point final saute en tête
+// de ligne. Seul le texte propre au bloc compte (jusqu'à sa fin ou à une
+// liste imbriquée), la lettre d'un choix de QCM (« A) ») exclue.
+const ARABE_RE = /[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/;
+const LATIN_RE = /[A-Za-zÀ-ÿ]/;
+
+export function marquerBlocsLatins(html) {
+  if (!html) return html;
+  return html.replace(/<(p|li|h[1-6]|td|th)((?:\s[^>]*)?)>([\s\S]*?)(?=<\/\1>|<ul|<ol)/g, (m, tag, attrs, contenu) => {
+    const texte = contenu.replace(/<strong class="qcm-letter">[^<]*<\/strong>/, "").replace(/<[^>]+>/g, "");
+    if (ARABE_RE.test(texte) || !LATIN_RE.test(texte)) return m;
+    return `<${tag}${attrs} dir="ltr" lang="fr">${contenu}`;
+  });
+}

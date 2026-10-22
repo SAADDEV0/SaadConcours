@@ -1,8 +1,8 @@
 import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
-import { concoursCardHtml } from "./_shared/concoursCard";
+import { compareConcoursRecents, concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
-import { isLicenceExcellence, isMaster, isPostBac } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMaster, isMasterDroit, isPostBac } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
 import { encgModule, encgOuvert, encgRenvois, isEncgPublie } from "../lib/encg";
 import { droitModule, droitOuvert, droitRenvois, isDroitPublie } from "../lib/droit";
@@ -79,6 +79,9 @@ export default async function HomePage() {
   const plusRecent = recents[0]?.date_ajout || "";
   const recentsExcellence = [...licenceExc].sort((a, b) => String(b.annee).localeCompare(String(a.annee)) || String(b.date_ajout || "").localeCompare(String(a.date_ajout || ""))).slice(0, 5);
   const etabsExcellence = new Set(licenceExc.map((c) => c.etablissement).filter(Boolean)).size;
+  // Masters de droit (niveau master_droit) : leur liste à part, /concours/droit.
+  const masterDroit = allConcours.filter(isMasterDroit);
+  const recentsDroit = [...masterDroit].sort(compareConcoursRecents).slice(0, 3);
   const recentPosts = blog
     .filter((p) => p.available)
     .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
@@ -134,7 +137,12 @@ export default async function HomePage() {
       chiffres: [[licenceExc.length, "sujets réels"], [licenceExc.filter(aCorrige).length, "corrigés"], [etabsExcellence, "établissements"]],
     },
     master: {
-      ligne: `${nombre(master.length)} sujets réels · ${nombre(master.filter(aCorrige).length)} corrigés`,
+      ligne: [
+        `${nombre(master.length)} sujets réels · ${nombre(master.filter(aCorrige).length)} corrigés`,
+        masterDroit.length > 0 && `${masterDroit.length} en droit`,
+      ]
+        .filter(Boolean)
+        .join(" · "),
       chiffres: [[master.length, "sujets réels"], [master.filter(aCorrige).length, "corrigés"], [etablissements, "établissements"]],
     },
   };
@@ -247,6 +255,15 @@ export default async function HomePage() {
           <a href="/concours">Tous les sujets</a>
         </div>
         <div className="sp-rows" dangerouslySetInnerHTML={{ __html: recents.map(ligneSujet).join("") }} />
+        {recentsDroit.length > 0 && (
+          <>
+            <div className="home-subhead">
+              <h3>Masters de droit</h3>
+              <a href="/concours/droit">Tous les sujets</a>
+            </div>
+            <div className="sp-rows" dangerouslySetInnerHTML={{ __html: recentsDroit.map(ligneSujet).join("") }} />
+          </>
+        )}
         <div className="home-suggest home-suggest-inline">
           <span>Chercher par :</span>
           {SUGGESTIONS.map((q) => (

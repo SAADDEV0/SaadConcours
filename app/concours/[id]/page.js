@@ -4,16 +4,16 @@ import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } fr
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
 import { concoursCardHtml } from "../../_shared/concoursCard";
 import { difficulteHtml } from "../../_shared/format";
-import { formatQCM, markQcmOptions } from "../../_shared/concoursFormat";
+import { formatQCM, markQcmOptions, marquerBlocsLatins } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { concoursSeo } from "../../_shared/concoursSeo";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
 import MathScripts from "../../_shared/MathScripts";
-import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, POST_BAC } from "@/lib/concoursNiveaux";
+import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, MASTER_DROIT, POST_BAC } from "@/lib/concoursNiveaux";
 
 // Onglet du header et de la barre d'espace (lib/espaces.js) selon le niveau.
-const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [POST_BAC]: "concours-pb" };
+const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [POST_BAC]: "concours-pb", [MASTER_DROIT]: "concours-droit" };
 import { Icon } from "../../_shared/icons";
 import { modulesDuConcours } from "@/lib/concoursParModule";
 
@@ -101,8 +101,13 @@ async function seoDe(c, list) {
 // en plus du titre de la page (jusqu'à 5 sur une fiche). Il est rangé sous le
 // <h2> de sa carte (« Énoncé », « Corrigé ») : ses titres descendent de deux
 // niveaux, h1 → h3, h2 → h4… Les documents sans « # » ne changent pas.
-function renderEnonce(md) {
-  const html = markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
+//
+// Sujet en arabe (`langue: "ar"`, Masters de droit) : les blocs sans lettre
+// arabe sont rendus à l'écriture latine (marquerBlocsLatins), le conteneur
+// porte dir="rtl" lang="ar".
+function renderEnonce(md, { arabe = false } = {}) {
+  let html = markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
+  if (arabe) html = marquerBlocsLatins(html);
   if (!/<h1[\s>]/.test(html)) return html;
   return html.replace(/<(\/?)h([1-6])(?=[\s>])/g, (m, fin, n) => `<${fin}h${Math.min(6, Number(n) + 2)}`);
 }
@@ -159,9 +164,11 @@ export default async function ConcoursDetailPage(props) {
 
   const settings = await getSettings().catch(() => null);
 
-  const enonceHtml = renderEnonce(c.enonce_md || "*Énoncé non disponible.*");
+  const arabe = c.langue === "ar";
+  const sens = arabe ? { dir: "rtl", lang: "ar" } : {};
+  const enonceHtml = renderEnonce(c.enonce_md || "*Énoncé non disponible.*", { arabe });
   const corrigeMd = await resolveCorrigeMd(c);
-  const corrigeHtml = corrigeMd ? renderEnonce(corrigeMd) : null;
+  const corrigeHtml = corrigeMd ? renderEnonce(corrigeMd, { arabe }) : null;
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
@@ -193,7 +200,7 @@ export default async function ConcoursDetailPage(props) {
     name: title,
     description,
     url,
-    inLanguage: "fr",
+    inLanguage: arabe ? "ar" : "fr",
     isAccessibleForFree: true,
     learningResourceType: corrigeHtml ? ["Sujet d'examen", "Corrigé indicatif"] : ["Sujet d'examen"],
     educationalLevel: niveau.educationalLevel,
@@ -306,7 +313,7 @@ export default async function ConcoursDetailPage(props) {
 
         <div className="cd-card" id="section-enonce">
           <h2>Énoncé</h2>
-          <div className="enonce-content" dangerouslySetInnerHTML={{ __html: enonceHtml }} />
+          <div className="enonce-content" {...sens} dangerouslySetInnerHTML={{ __html: enonceHtml }} />
         </div>
 
         {/* Le sujet original juste après sa transcription, et non plus après
@@ -349,7 +356,7 @@ export default async function ConcoursDetailPage(props) {
                 <Icon name="alert" size={18} />
                 <span>Corrigé proposé par SaadConcours, pas une correction officielle {niveauOf(c) === POST_BAC ? "de l'école" : "de la faculté"} — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
               </div>
-              <div className="enonce-content" dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
+              <div className="enonce-content" {...sens} dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
             </details>
           </div>
         )}
@@ -369,11 +376,11 @@ export default async function ConcoursDetailPage(props) {
             <h2 className="bac-section-title">Réviser les matières de ce sujet</h2>
             <div className="sp-related">
               {modulesLies.map((m) => (
-                <a key={m.id} className="bac-mat-card" href={`/cours/${m.id}`}>
+                <a key={m.id} className="bac-mat-card" href={m.href} dir={m.langue === "ar" ? "rtl" : undefined} lang={m.langue === "ar" ? "ar" : undefined}>
                   <span className="bac-mat-body">
                     <span className="bac-mat-name">{m.module}</span>
                     <span className="bac-mat-meta">
-                      <span>Cours Licence FSJES</span>
+                      <span>{m.espace}</span>
                       {m.semestre && <span>{m.semestre}</span>}
                     </span>
                   </span>

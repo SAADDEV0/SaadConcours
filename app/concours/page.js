@@ -3,7 +3,7 @@ import AdSlot from "../_shared/AdSlot";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
-import { isMaster } from "@/lib/concoursNiveaux";
+import { isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
 import ConcoursListing from "./ConcoursListing";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
@@ -33,13 +33,15 @@ export default async function ConcoursPage() {
   // haut de page oubliait ces sujets.
   const corrigeIds = getCorrigeIdsLocal();
   // Les concours de licence d'excellence ont leur propre page
-  // (/concours/licence-excellence) : celle-ci ne liste que le Master.
+  // (/concours/licence-excellence), les Masters de droit aussi
+  // (/concours/droit) : celle-ci ne liste que le Master économie-gestion.
   const concours = tous
     .filter(isMaster)
     .map((c) => (!c.corrige_md && corrigeIds.has(c.id) ? { ...c, corrige_from_github: true } : c));
   const nbEtabs = new Set(concours.map((c) => c.etablissement).filter(Boolean)).size;
   const nbVilles = new Set(concours.map((c) => c.ville).filter(Boolean)).size;
   const nbCorriges = concours.filter((c) => c.corrige_md || c.corrige_from_github).length;
+  const aDesMastersDroit = tous.some(isMasterDroit);
 
   return (
     <>
@@ -84,6 +86,7 @@ export default async function ConcoursPage() {
           <ConcoursListing
             concours={concours}
             sideLinks={[
+              ...(aDesMastersDroit ? [{ href: "/concours/droit", label: "Concours Master Droit" }] : []),
               { href: "/concours/licence-excellence", label: "Concours Licence d'excellence" },
               { href: "/evaluation", label: "QCM d'entraînement" },
               { href: "/cours", label: "Cours Licence FSJES" },

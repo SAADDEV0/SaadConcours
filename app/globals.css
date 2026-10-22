@@ -541,17 +541,23 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
    (voir renderEnonce, app/concours/[id]/page.js), sans tomber à la taille
    minuscule par défaut des h5/h6. */
 .enonce-content h5,.enonce-content h6{margin:18px 0 8px; font-size:.95em;}
-.enonce-content ul,.enonce-content ol{margin:10px 0; padding-left:1.35em;}
+.enonce-content ul,.enonce-content ol{margin:10px 0; padding-inline-start:1.35em;}
 .enonce-content li{margin:5px 0; line-height:1.6;}
 /* Choix de QCM (balisés par markQcmOptions, app/_shared/concoursFormat.js) :
    une ligne encadrée par choix. :has() pour ne pas toucher aux autres listes ;
-   sans lui, le display:block du li masque déjà la puce. */
-.enonce-content ul:has(> li.qcm-opt){list-style:none; padding-left:0; margin:10px 0 16px;}
-.enonce-content li.qcm-opt{position:relative; display:block; margin:6px 0; padding:9px 12px 9px 38px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg-card);}
+   sans lui, le display:block du li masque déjà la puce. Propriétés logiques
+   (inline-start) : dans un sujet en arabe (dir="rtl"), la lettre passe à droite. */
+.enonce-content ul:has(> li.qcm-opt){list-style:none; padding-inline-start:0; margin:10px 0 16px;}
+.enonce-content li.qcm-opt{position:relative; display:block; margin:6px 0; padding:9px 12px; padding-inline-start:38px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg-card);}
 .enonce-content li.qcm-opt > p{margin:0;}
 /* Hors du flux, pour qu'un choix sur deux lignes reparte sous son propre
-   texte et non sous la lettre. */
-.enonce-content .qcm-letter{position:absolute; left:13px; top:9px; color:var(--text-faint); font-weight:700;}
+   texte et non sous la lettre. Sens déduit de son propre texte (plaintext) :
+   « A) » ne devient pas « (A » dans une ligne en arabe, et la lettre reste
+   ancrée du côté du début de ligne (un direction:ltr la renverrait à gauche). */
+.enonce-content .qcm-letter{position:absolute; inset-inline-start:13px; top:9px; color:var(--text-faint); font-weight:700; unicode-bidi:plaintext;}
+/* Sujet en arabe : les blocs sans lettre arabe (bandeau du corrigé, phrase en
+   français) gardent l'écriture latine (marquerBlocsLatins, concoursFormat.js). */
+.enonce-content[lang="ar"] [lang="fr"]{font-family:var(--font-reading); font-size:.9em; line-height:1.7; word-spacing:normal;}
 
 /* Formules et tableaux plus larges que l'écran : ils défilent dans leur
    boîte, et .is-scrollable (markScrollables, chrome.js) estompe le bord droit

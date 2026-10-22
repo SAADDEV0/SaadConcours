@@ -59,6 +59,7 @@ export const PARTNER_PLACEMENT_KEYS = PARTNER_PLACEMENTS.map((p) => p.key);
 export const PARTNER_SECTIONS = [
   { key: "home", label: "Accueil" },
   { key: "concours", label: "Concours Master" },
+  { key: "concours-droit", label: "Concours Master Droit" },
   { key: "concours-le", label: "Licence d'excellence" },
   { key: "concours-pb", label: "Concours ENCG (TAFEM)" },
   { key: "cours", label: "Cours Licence FSJES" },

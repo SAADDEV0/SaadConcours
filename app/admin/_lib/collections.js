@@ -16,7 +16,7 @@ import {
   licenceParcoursLabel,
   licenceSemestreLabel,
 } from "@/lib/coursTaxonomy";
-import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, MASTER, POST_BAC, niveauOf } from "@/lib/concoursNiveaux";
+import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, MASTER, MASTER_DROIT, POST_BAC, niveauOf } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgSemestreLabel } from "@/lib/encgTaxonomy";
 import { DROIT_FILIERES, DROIT_LANGUES, DROIT_SEMESTRES, droitFilieresFor, droitLangueInfo, droitParcoursFor, droitRangLabelFr } from "@/lib/droitTaxonomy";
 import { BOUTIQUE_NIVEAUX, BOUTIQUE_BADGES, BOUTIQUE_DEVISES, boutiqueNiveau, formatPrix } from "@/lib/boutique";
@@ -95,7 +95,7 @@ const concours = {
   href: "/admin/concours",
   publicUrl: (c) => `${SITE}/concours/${encodeURIComponent(c.id)}`,
   hydrate: (c) => ({ ...c, niveau: niveauOf(c) }),
-  title: (c) => [niveauOf(c) === LICENCE_EXCELLENCE ? "⭐" : niveauOf(c) === POST_BAC ? "🎓" : "", c.etablissement, c.annee].filter(Boolean).join(" · ") || c.id,
+  title: (c) => [niveauOf(c) === LICENCE_EXCELLENCE ? "⭐" : niveauOf(c) === POST_BAC ? "🎓" : niveauOf(c) === MASTER_DROIT ? "⚖️" : "", c.etablissement, c.annee].filter(Boolean).join(" · ") || c.id,
   subtitle: (c) => [c.master_reel || c.filiere, c.ville].filter(Boolean).join(" — "),
   isPublished: (c) => c.statut !== "brouillon",
   setPublished: (c, on) => {

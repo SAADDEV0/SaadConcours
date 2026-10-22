@@ -187,5 +187,27 @@
   },
   "2023_Kenitra_FEG_Kenitra_MFMT_p1.webp": {
     "seuil": 200
+  },
+  "2024_Meknes_FSJES_Meknes_FD_p1.webp": {
+    "seuil": 200,
+    "effacer": [
+      [
+        0.02,
+        0.398,
+        0.59,
+        0.437
+      ]
+    ]
+  },
+  "2024_Meknes_FSJES_Meknes_FD_p2.webp": {
+    "seuil": 200,
+    "effacer": [
+      [
+        0.17,
+        0.83,
+        0.79,
+        0.87
+      ]
+    ]
   }
 }
