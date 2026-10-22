@@ -6,7 +6,7 @@ export const metadata = {
   description:
     "Cours de l'ENCG (École nationale de commerce et de gestion) du S1 au S10, module par module : chapitres, exercices corrigés et cours complet en PDF.",
   alternates: { canonical: "/encg" },
-  openGraph: { title: "Cours ENCG du S1 au S10 — SaadConcours", url: "/encg" },
+  openGraph: { title: "Cours ENCG du S1 au S10 — SaadConcours", url: "/encg", images: ["/opengraph-image"] },
 };
 
 export default function EncgLayout({ children }) {

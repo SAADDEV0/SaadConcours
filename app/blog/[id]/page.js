@@ -9,6 +9,7 @@ import { categoryInfo } from "../../../lib/blogTaxonomy";
 import { findDuplicateBlogIds } from "../../../lib/blogDuplicates";
 import { readingTimeMinutes } from "../../_shared/blogCard";
 import { formatDateFr } from "../../_shared/format";
+import { ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 import MathScripts from "../../_shared/MathScripts";
 
@@ -43,6 +44,15 @@ export async function generateMetadata(props) {
   // L'extrait (≈ 250 caractères, pensé pour la carte) est borné à 155.
   const title = p.seoTitle || p.title;
   const description = clampDescription(p.excerpt);
+  // Image de ./opengraph-image.js, déclarée ici pour porter un `alt` propre à
+  // l'article : Next n'ajoute pas l'image du fichier quand openGraph.images
+  // (ou twitter.images) est défini.
+  const image = {
+    url: `${url}/opengraph-image`,
+    ...ogImageSize,
+    type: ogImageContentType,
+    alt: `${p.title} — SaadConcours`,
+  };
 
   return {
     title,
@@ -56,8 +66,9 @@ export async function generateMetadata(props) {
       url,
       publishedTime: p.publishedAt,
       ...(p.updatedAt ? { modifiedTime: p.updatedAt } : {}),
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 

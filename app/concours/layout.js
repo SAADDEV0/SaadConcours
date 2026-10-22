@@ -8,7 +8,7 @@ export const metadata = {
   description:
     "Sujets de concours d'accès aux Masters marocains réellement tombés (FSJES, ENCG) : énoncés complets, scans, corrigés indicatifs et PDF gratuit.",
   alternates: { canonical: "/concours" },
-  openGraph: { title: "Concours Masters Maroc — Sujets réels avec corrigés", url: "/concours" },
+  openGraph: { title: "Concours Masters Maroc — Sujets réels avec corrigés", url: "/concours", images: ["/opengraph-image"] },
 };
 
 export default function ConcoursLayout({ children }) {

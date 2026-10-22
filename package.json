@@ -6,8 +6,8 @@
     "prebuild": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-app-data.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "check": "next lint && next build && node scripts/audit-contenu.mjs",
+    "lint": "eslint app lib",
+    "check": "npm run lint && next build && node scripts/audit-contenu.mjs",
     "audit:contenu": "node scripts/audit-contenu.mjs",
     "cf:assets": "node scripts/prerender-to-assets.mjs",
     "app:data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-app-data.mjs"
@@ -15,14 +15,14 @@
   "dependencies": {
     "@upstash/redis": "^1.39.0",
     "marked": "^18.0.10",
-    "next": "^15.5.25",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.20.6",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.5.25",
-    "wrangler": "^4.135.0"
+    "@opennextjs/cloudflare": "^1.20.13",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.2",
+    "wrangler": "^4.151.3"
   }
 }

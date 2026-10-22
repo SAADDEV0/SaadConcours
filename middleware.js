@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { verifySessionToken, isSessionRevoked, SESSION_COOKIE } from "./lib/session";
 
+// Reste `middleware.js` en Next 16, malgré le renommage en `proxy.js` : un
+// proxy tourne forcément dans le runtime Node.js, que @opennextjs/cloudflare
+// ne fait tourner sur workerd qu'à titre expérimental (« not supported by the
+// OpenNext maintainers », dist/cli/build/open-next/bundle-node-middleware.js).
+// Le fichier middleware garde le runtime Edge, celui qu'OpenNext supporte ;
+// Next 16 l'accepte toujours, avec un avertissement de dépréciation au build.
+
 // Ressources publiques en lecture, réservées à l'admin en écriture.
 const PROTECTED_WRITE_PREFIXES = [
   "/api/concours",

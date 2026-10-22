@@ -164,6 +164,12 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   ailleurs se redirige vers cette page, plutôt que de laisser le Worker servir des 404.
 - Toute route d'image (`opengraph-image`, icône) porte `dynamic = "force-static"` (+ `generateStaticParams`
   sous un `[id]`), comme les pages : rendue à la demande, elle dépasse les 10 ms de CPU du Worker (5XX).
+  Pas de `generateImageMetadata` sous un `[id]` : depuis Next 16, Next ignore alors le
+  `generateStaticParams` du fichier et plus aucune image n'est prérendue. Un `alt` propre à la page se
+  déclare dans `generateMetadata` (`openGraph.images` et `twitter.images`, voir `app/blog/[id]/page.js`).
+- Image de partage : un layout ou une page qui définit `openGraph` sans `images` remplace l'`openGraph`
+  du parent et perd l'image du site (`app/opengraph-image.js`) — 5 pages de liste l'ont perdue au
+  passage à Next 16. Toujours écrire `images: ["/opengraph-image"]` (ou l'image propre à la page).
 - Pages de confiance : `/a-propos` (éditeur : Saad), `/contact`, `/confidentialite`,
   `/mentions-legales`, toutes liées depuis le pied de page. Les tenir exactes quand le site change.
 

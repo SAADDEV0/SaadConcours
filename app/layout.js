@@ -160,7 +160,10 @@ export default async function RootLayout({ children }) {
   return (
     // suppressHydrationWarning: data-theme is stamped on by the pre-paint
     // script below, so it is always an "extra" attribute at hydration time.
-    <html lang="fr" className={`${jakarta.variable} ${literata.variable} ${plexArabic.variable} ${naskhArabic.variable}`} suppressHydrationWarning>
+    // data-scroll-behavior: globals.css sets scroll-behavior:smooth on <html>;
+    // since Next 16 the router only switches it off during a navigation when
+    // this attribute asks it to, as Next 15 always did (instant jump to top).
+    <html lang="fr" data-scroll-behavior="smooth" className={`${jakarta.variable} ${literata.variable} ${plexArabic.variable} ${naskhArabic.variable}`} suppressHydrationWarning>
       <head>
         {/* Applies the saved light/dark choice before the first paint.
            chromeScript() also sets data-theme, but only from a useEffect

@@ -6,7 +6,7 @@ export const metadata = {
   description:
     "Cours FSJES Économie et Gestion du S1 au S6, module par module : chaque chapitre avec le cours, des exercices corrigés, un résumé et un QCM. Gratuit.",
   alternates: { canonical: "/cours" },
-  openGraph: { title: "Cours FSJES S1 à S6 — SaadConcours", url: "/cours" },
+  openGraph: { title: "Cours FSJES S1 à S6 — SaadConcours", url: "/cours", images: ["/opengraph-image"] },
 };
 
 export default function CoursLayout({ children }) {
