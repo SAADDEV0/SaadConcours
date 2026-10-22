@@ -55,10 +55,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # --dangerouslyUseUnsupportedNextVersion : depuis le 2026-10-22, OpenNext
+      # refuse de construire Next.js 15 (supporté deux ans après sa sortie du
+      # 2024-10-21). Drapeau temporaire, à RETIRER avec la migration vers
+      # Next.js 16 : Next 15 ne reçoit plus de correctifs de sécurité.
       - name: Build for Cloudflare
         env:
           GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
-        run: npx opennextjs-cloudflare build
+        run: npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion
 
       # Sort les pages publiques du chemin du Worker. Sans cette étape,
       # OpenNext les sert depuis le cache incrémental, donc via le Worker,
