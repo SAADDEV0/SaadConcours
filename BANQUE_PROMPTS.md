@@ -456,6 +456,9 @@ le miroir correspondant ; si `id` ou `ville` change, déplacer le dossier d'imag
 3. Chercher les liens vers `/concours/<id>` dans `blog.json` et les signaler/corriger.
 4. L'URL était indexée : ajouter `/concours/<id> /concours/<id gardé ou page liste> 301` dans
    `public/_redirects` (redirection servie par Cloudflare avant le Worker, jamais un `redirect()` Next).
+   **Ses scans aussi** : une règle par image, `/images/<Ville>/<id>/<id>_pN.webp` vers la même page
+   de la fiche gardée (ou vers la fiche si elle a moins de pages), chemin encodé (`Mekn%C3%A8s`) —
+   Googlebot-Image redemandait encore les scans des 12 doublons un mois après (404, 2026-10-22).
 5. Commit : « Supprime le concours <id> » + raison.
 
 **Doublons** (`supprime les doublons`) : ne jamais se fier au seul titre. Un doublon = même
@@ -1025,6 +1028,10 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
   secondaire (« pose ta question sous la publication »). Indiquer le nombre de pages et le poids.
   Précédent : cahier Master GFC FSJES Aïn Sebaâ, 2026-10-02.
 - Supprimer : retirer l'entrée ; chercher les liens `/blog/<id>` dans les autres articles et les corriger.
+- Supprimer **ou dépublier** (`available: false`) : ajouter `/blog/<id> <page qui reprend le sujet> 301`
+  dans `public/_redirects` — un article dépublié répond 404 et Googlebot le redemande pendant des
+  semaines (guide « FSJES Fès », 404 quotidiennes un mois après, 2026-10-22). Un guide de ville peut
+  renvoyer vers `/concours?q=<Ville>`, la liste filtrée des sujets de la ville.
 - **Avant de dépublier ou supprimer un article, vérifier ses clics dans Search Console**
   (Performances › Pages, propriété `https://www.saadconcours.space/`). Un article qui amène du trafic
   se **réécrit sous le même `id`**, il ne se supprime pas — précédent : les guides « FSJES Mohammedia »
