@@ -639,8 +639,17 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
 4. Depuis la décision ministérielle de juillet 2025, beaucoup de masters sélectionnent sur dossier : peu
    de sujets 2025 existent. Les plus récents en base sont ceux de la session 2026-2027 (Aïn Chock, Aït Melloul).
    Au 2026-10-23, wadifa-info n'a plus de sujet de droit en arabe daté de 2025 ou 2026 hors de la base, à part
-   ceux écartés ci-dessus et « Droit civil, immobilier et transformations numériques » (FSJP Aït Melloul,
-   non daté, très annoté au stylo).
+   ceux écartés ci-dessus. **Sources épuisées au 2026-10-23** (après trois passes, 67 sujets de droit en
+   base) : wadifa-info (`acces-master-doctorat`, 196 modèles) et fsjesmaster n'ont plus de sujet de master
+   de droit hors base, en arabe comme en français ; restent seulement des concours de recrutement (ANCFCC),
+   des doctorats, la Faculté de Charia de Fès et un master de la FP de l'Université Moulay Ismaïl (ville
+   non indiquée). Pour aller plus loin, chercher d'autres sites ou demander des sujets.
+   Anciens scans wadifa (2017-2023, ≈ 350 px de large) : filigrane « wadifa-info.com » gris en diagonale.
+   `nettoyer-scans.mjs` les blanchit (Meknès 2023, Famille et droit, illisible) : égaliser le fond à la place
+   (niveaux de gris, fond = médiane 25 px puis flou, rapport pixel/fond ramené entre 0,50 et 0,86, agrandi
+   ×2), puis `filigrane-scans.mjs`. Avec le canal max au lieu du gris, la même méthode efface aussi le
+   surligneur jaune et le filigrane rose de fsjesmaster ; la ligne noire « www.fsjesmaster.com » se
+   blanchit par un rectangle. Une photo de moins de 500 px trop dégradée : texte seul, `images: []`.
 5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, rendu, `npm run check`).
    Commit : « Ajoute N concours de Masters de droit … ».
 
