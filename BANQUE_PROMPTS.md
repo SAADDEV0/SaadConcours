@@ -643,7 +643,15 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
    base) : wadifa-info (`acces-master-doctorat`, 196 modèles) et fsjesmaster n'ont plus de sujet de master
    de droit hors base, en arabe comme en français ; restent seulement des concours de recrutement (ANCFCC),
    des doctorats, la Faculté de Charia de Fès et un master de la FP de l'Université Moulay Ismaïl (ville
-   non indiquée). Pour aller plus loin, chercher d'autres sites ou demander des sujets.
+   non indiquée). Recherche élargie du 2026-10-23 (3 sujets en français trouvés) : **Studocu** n'a aucun
+   sujet de master de droit marocain (le recueil « FSJES-Meknès 2008-2017 » est verrouillé après 6 pages
+   et porte sur l'économie) ; **mesconcours.ma** (47 sessions de droit) n'a que des sujets en arabe
+   ressaisis sans scan, et son contenu est protégé : ne rien en reprendre ; almaster.ma, economie-gestion.com,
+   9rayti, orientation-chabab : annonces seulement ; concoursmaster.blogspot.com : listes de questions sans
+   faculté ni année. Ce qui a servi : archive.org de **fsjesmaroc.info** (CDX
+   `web.archive.org/cdx/search/cdx?url=fsjesmaroc.info*`, images encore servies par blogspot), un ancien
+   modèle wadifa hors filtre « droit » (Gouvernance publique 2014) et un article fsjesmaster classé en
+   science politique (Communication politique 2022). Pour aller plus loin : demander des sujets.
    Anciens scans wadifa (2017-2023, ≈ 350 px de large) : filigrane « wadifa-info.com » gris en diagonale.
    `nettoyer-scans.mjs` les blanchit (Meknès 2023, Famille et droit, illisible) : égaliser le fond à la place
    (niveaux de gris, fond = médiane 25 px puis flou, rapport pixel/fond ramené entre 0,50 et 0,86, agrandi
