@@ -630,8 +630,17 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
    les exceptions. Écarté : scans trop flous pour être transcrits sans deviner (FSJP Aït Melloul, gestion
    publique territoriale et professions juridiques 2026), facultés hors FSJES quand on demande « FSJES »
    (FP Taza, faculté de Charia de Fès).
+   **Se fier à l'en-tête du sujet, pas au titre wadifa** (précédent du 2026-10-23) : la page « Gouvernance »
+   de Kelâa des Sraghna porte le sujet du master Contentieux civil et immobilier, et celle « FSJES Salé » du
+   master Droit civil économique est un sujet de Souissi. Annotations d'un candidat (coche, cercle, cadre,
+   chiffres) **de la même couleur que l'encre** (`encre: true` ne les voit pas) : effacer par zones les seuls
+   pixels plus sombres que le fond local (médiane 21 px), en protégeant les lignes du sujet, puis comparer
+   à la photo ; un aplat blanc laisse un rectangle visible sur une photo grise.
 4. Depuis la décision ministérielle de juillet 2025, beaucoup de masters sélectionnent sur dossier : peu
    de sujets 2025 existent. Les plus récents en base sont ceux de la session 2026-2027 (Aïn Chock, Aït Melloul).
+   Au 2026-10-23, wadifa-info n'a plus de sujet de droit en arabe daté de 2025 ou 2026 hors de la base, à part
+   ceux écartés ci-dessus et « Droit civil, immobilier et transformations numériques » (FSJP Aït Melloul,
+   non daté, très annoté au stylo).
 5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, rendu, `npm run check`).
    Commit : « Ajoute N concours de Masters de droit … ».
 
