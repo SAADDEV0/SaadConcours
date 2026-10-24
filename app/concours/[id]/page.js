@@ -207,6 +207,7 @@ export default async function ConcoursDetailPage(props) {
     ...(c.modules?.length ? { assesses: c.modules } : {}),
     keywords: [...new Set([masterLabel, c.master_fr, c.filiere, c.etablissement, c.ville, String(c.annee)].filter(Boolean))].join(", "),
     ...(c.date_ajout ? { datePublished: c.date_ajout } : {}),
+    ...(c.date_maj ? { dateModified: c.date_maj } : {}),
     isPartOf: { "@type": "CollectionPage", name: `Concours ${niveau.label}`, url: `${SITE_URL}${niveau.href}` },
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
   };

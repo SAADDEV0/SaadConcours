@@ -45,10 +45,13 @@ export default async function sitemap() {
     getAllBoutique().catch(() => []),
   ]);
 
-  const concoursUpdated = latestDate(concours.filter(isMaster), "date_ajout");
-  const licenceUpdated = latestDate(concours.filter(isLicenceExcellence), "date_ajout");
+  // Une liste change quand un sujet s'ajoute (date_ajout) ou qu'une de ses
+  // cartes change (date_maj, ex. titres arabes du 2026-10-24).
+  const concoursDate = (items) => [latestDate(items, "date_ajout"), latestDate(items, "date_maj")].filter(Boolean).sort().pop() || null;
+  const concoursUpdated = concoursDate(concours.filter(isMaster));
+  const licenceUpdated = concoursDate(concours.filter(isLicenceExcellence));
   const masterDroit = concours.filter(isMasterDroit);
-  const droitConcoursUpdated = latestDate(masterDroit, "date_ajout");
+  const droitConcoursUpdated = concoursDate(masterDroit);
   // Espace ENCG : rien tant qu'il est caché (ENCG_LANCE, lib/contenusPublies.mjs).
   const postBac = contenuOuvert("concours-post-bac") ? concours.filter(isPostBac) : [];
   const encgPublies = encgOuvert() ? encg.filter(isEncgPublie) : [];
@@ -100,7 +103,9 @@ export default async function sitemap() {
     // on the earliest imports) — omitting it for the rest rather than
     // guessing keeps every lastModified we do emit actually true, which
     // matters more to Google than covering every URL.
-    ...(c.date_ajout ? { lastModified: c.date_ajout } : {}),
+    // date_maj : dernière modification visible de la fiche (titre, énoncé,
+    // corrigé), posée par les recettes C3, C4, C5 de BANQUE_PROMPTS.md.
+    ...(c.date_maj || c.date_ajout ? { lastModified: [c.date_ajout, c.date_maj].filter(Boolean).sort().pop() } : {}),
   }));
 
   // Un module = sa page sommaire + une page par chapitre (lib/fsjesChapitres.js).

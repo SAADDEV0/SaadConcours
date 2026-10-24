@@ -225,6 +225,10 @@ Règles des champs :
   JSON-LD. Même règle dans le texte : ne pas nommer le site d'origine dans `enonce_md` / `corrige_md`
   (écrire « une version publiée en ligne », « un corrigé publié en ligne »).
 - `date_ajout` : date du jour.
+- `date_maj` : date du jour quand une fiche existante change de façon visible (titre, énoncé, corrigé,
+  scans ; recettes C3, C4, C5). Sert de `lastmod` au sitemap et de `dateModified` au JSON-LD : sans elle,
+  Google ne sait pas qu'une page a changé. La console la pose seule (`updateConcours`, `lib/store.js`) ;
+  un script qui modifie `concours.json` doit la poser lui-même.
 - `niveau` : **absent pour un concours de Master** ; `"licence_excellence"` pour un concours d'accès à une
   licence d'excellence (voir [C9](#c9--concours-de-licence-dexcellence)). Source de vérité : `lib/concoursNiveaux.js`.
 
