@@ -18,7 +18,7 @@
 // Deux fiches ne partagent jamais un titre ni une description : les
 // collisions sont résolues sur la liste entière (« Formation initiale »,
 // « sujet 2 »). « Formation continue » figure toujours dans le titre.
-import { niveauLabel } from "../../lib/concoursNiveaux";
+import { niveauLabel, niveauOf, TAALIM } from "../../lib/concoursNiveaux";
 import { DESCRIPTION_MAX, fitTitle, clampDescription } from "./seoText";
 
 const propre = (s) => String(s || "").replace(/\s+/g, " ").trim();
@@ -103,6 +103,31 @@ function formes(c, hasCorrige, precision = "") {
         `Concours ${niveau} ${lieuCourt}${annee}${p} : ${commune}`,
       ],
       sujet: `${niveau} ${deLa(lieuLong)}${annee} (${commune})`,
+      variante: "",
+    };
+  }
+
+  // Concours de l'enseignement (Taalim) : épreuve nationale, sans faculté ni
+  // ville. Le titre suit la recherche (« concours taalim 2021 français »,
+  // « مباراة التعليم 2021 ») ; un sujet en arabe est titré en arabe et décrit
+  // en français par `master_fr`, comme les Masters de droit.
+  if (niveauOf(c) === TAALIM) {
+    const nom = propre(c.master_reel || c.filiere);
+    const nomFr = propre(c.master_fr || nom);
+    const ar = c.langue === "ar" && ARABE.test(nom);
+    // « Épreuve — cycle » trop long : l'épreuve seule (première partie).
+    const noms = [nom, nom.includes(" — ") ? nom.split(" — ")[0] : ""].filter(Boolean);
+    const titres = noms.flatMap((n) =>
+      ar
+        ? [`مباراة التعليم${annee}${p} — ${n} : ${hasCorrige ? "الموضوع والتصحيح" : "الموضوع"}`, `مباراة التعليم${annee}${p} — ${n}`]
+        : [`Concours Taalim${annee}${p} — ${n} : ${hasCorrige ? "sujet et corrigé" : "sujet"}`, `Concours Taalim${annee}${p} — ${n}`]
+    );
+    return {
+      titres,
+      titreMax: ar ? TITLE_MAX_AR : undefined,
+      sujet: `de l'enseignement (Taalim)${annee} — ${nomFr}`,
+      sujetMoyen: `Taalim${annee} — ${nomFr}`,
+      sujetCourt: `Taalim${annee}`,
       variante: "",
     };
   }

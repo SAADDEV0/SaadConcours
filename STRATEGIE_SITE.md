@@ -578,6 +578,45 @@ The space goes public only when **all** of these hold:
 - `npm run check` passes, including the Arabic placeholder words (§11);
 - the AdSense decision (§11).
 
+### 8.7 Status on 2026-10-24: the « Taalim » space is built
+
+Saad asked for the section under the name **Taalim** (what candidates type). What exists now, and
+what changed from the plan above:
+- **Built:** concours level `taalim`, list `/concours/taalim`, space « Taalim » in the header,
+  colour **violet** (per-space colours were adopted on 2026-10-10, so decision #7 no longer holds),
+  home section, sitemap, search, `llms.txt`, admin (level « Concours de l'enseignement (Taalim) »,
+  category ENS). Recipe **C12** in `BANQUE_PROMPTS.md`.
+- **Content at launch:** 4 real papers from the December 2021 session (CNEE), all with scans and
+  corrections: primary French (40 q.), primary French didactics (30 q.), attachés d'économie et
+  d'administration: financial management QCM (75 q.) and missions essay. Gate item « 3 real
+  corrected past papers »: met. Fiches, mock exam and pillar guide: **not yet**.
+- **No AI label:** the 2026-10-10 rule (never say content is AI-made) replaces the « AI-assisted
+  label » line of §8.4. Corrections say « proposé par SaadConcours », and where official answer
+  elements exist, the correction says it was checked against them.
+- **The page is in French** (with Arabic papers in RTL), not an Arabic space: the papers decide
+  the language, as for the Masters de droit.
+
+**Calendar (if 2026 repeats 2025):** announcement ≈ 29 Oct, registration to ≈ 13 Nov, written exam
+≈ Sat 21 Nov, oral early December. The list page must be online and crawled **before** the
+announcement: push now, then ask Search Console to index `/concours/taalim` (quota 10/day).
+
+**Next 4 weeks, in order:**
+1. **Push the space** and request indexing of the hub and the 4 papers (this week).
+2. **Common test first:** the 2019 « مستجدات التربية والتكوين » paper (official answers already
+   located), then the 2021 secondary papers by subject: sciences de l'éducation, then
+   « علوم الاقتصاد والتدبير » qualifiant (closest to the site's audience). Target: 12 papers by
+   ≈ 10 Nov.
+3. **Pillar guide** (blog, evergreen URL): « Concours Taalim 2026 : conditions, épreuves,
+   calendrier, sujets corrigés », updated from the official announcement the day it appears.
+4. **One timed mock exam** in `/evaluation` (common test, 50 questions), validated by Saad.
+5. **Oral prep page** live before the written results (≈ 26 Nov).
+6. After the session: add the 2026 papers as soon as they circulate (biggest search spike of the
+   year for « مواضيع مباراة التعليم 2026 »).
+
+**Measure:** Search Console queries containing « taalim », « مباراة التعليم », « CRMEF »;
+clicks to `/concours/taalim`; PDF downloads per Taalim paper. Decide on more specialties only from
+those numbers.
+
 ---
 
 ## 9. Content strategy per space

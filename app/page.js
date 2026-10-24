@@ -2,7 +2,7 @@ import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllDroit, g
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { compareConcoursRecents, concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
-import { isLicenceExcellence, isMaster, isMasterDroit, isPostBac } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMaster, isMasterDroit, isPostBac, isTaalim } from "@/lib/concoursNiveaux";
 import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
 import { encgModule, encgOuvert, encgRenvois, isEncgPublie } from "../lib/encg";
 import { droitModule, droitOuvert, droitRenvois, isDroitPublie } from "../lib/droit";
@@ -82,6 +82,10 @@ export default async function HomePage() {
   // Masters de droit (niveau master_droit) : leur liste à part, /concours/droit.
   const masterDroit = allConcours.filter(isMasterDroit);
   const recentsDroit = [...masterDroit].sort(compareConcoursRecents).slice(0, 3);
+  // Concours de l'enseignement (niveau taalim) : /concours/taalim.
+  const taalim = allConcours.filter(isTaalim);
+  const recentsTaalim = [...taalim].sort(compareConcoursRecents).slice(0, 4);
+  const sessionsTaalim = new Set(taalim.map((c) => c.annee)).size;
   const recentPosts = blog
     .filter((p) => p.available)
     .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
@@ -147,9 +151,23 @@ export default async function HomePage() {
     },
   };
 
+  RESUME.taalim = {
+    ligne: `${taalim.length} sujets officiels · épreuves nationales du ministère`,
+    chiffres: [[taalim.length, "sujets officiels"], [taalim.filter(aCorrige).length, "corrigés"], [sessionsTaalim, sessionsTaalim > 1 ? "sessions" : "session"]],
+  };
+
   // Contenu propre à chaque espace ; un espace absent d'ici affiche ses
   // onglets (section générique).
   const SECTIONS = {
+    taalim: (
+      <>
+        <div className="home-subhead">
+          <h3>Derniers sujets officiels</h3>
+          <a href="/concours/taalim">Tous les sujets</a>
+        </div>
+        <div className="sp-rows" dangerouslySetInnerHTML={{ __html: recentsTaalim.map(ligneSujet).join("") }} />
+      </>
+    ),
     bac: (
       <div className="home-links">
         {matieresBac.map((m) => (

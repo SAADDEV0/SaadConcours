@@ -15,6 +15,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute ce concours` + photo / PDF / lien | [C2](#c2--ajouter-un-concours-fourni-photo-pdf-lien) |
 | `ajoute 10 concours licence d'excellence` · `ajoute des LE CCA` | [C9](#c9--concours-de-licence-dexcellence) |
 | `ajoute 10 concours de droit` · `ajoute des concours master droit` · `ajoute ce sujet de droit` | [C11](#c11--concours-de-master-en-droit) |
+| `ajoute 10 concours taalim` · `ajoute des sujets taalim primaire` · `ajoute ce sujet taalim` | [C12](#c12--concours-de-lenseignement-taalim) |
 | `corrige le concours X` · `ajoute les corrigés manquants` · `ajoute 10 corrigés` | [C3](#c3--rédiger-ou-refaire-un-corrigé) |
 | `corrige l'énoncé de X` · `vérifie l'extrait de X` · `retranscris X` | [C4](#c4--corriger-un-énoncé--un-extrait) |
 | `modifie le concours X : …` | [C5](#c5--modifier-un-concours) |
@@ -674,6 +675,45 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
    blanchit par un rectangle. Une photo de moins de 500 px trop dégradée : texte seul, `images: []`.
 5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, rendu, `npm run check`).
    Commit : « Ajoute N concours de Masters de droit … ».
+
+### C12 — Concours de l'enseignement (Taalim)
+Section créée le 2026-10-24 (« ajoute une nouvelle section pour concours Taalim ») : espace « Taalim » (couleur
+violet, `lib/espaces.js`), liste `/concours/taalim`, même fichier `concours.json` et même déroulé que C1/C2 avec
+`"niveau": "taalim"` (`lib/concoursNiveaux.js`). L'espace s'ouvre seul au premier sujet publié (contenu
+`concours-taalim`, `lib/contenusPublies.mjs`). Textes de la page calculés sur les sujets en base (cycles,
+sessions, langues, épreuves) ; seules les conditions de candidature de la FAQ sont écrites à la main (avis de la
+session de novembre 2025 : 35 ans au plus, licence, présélection sur dossier, un seul cycle) : les mettre à jour
+quand un nouvel avis paraît sur men.gov.ma.
+1. **Champs propres** : `categorie: "ENS"`, `filiere` = une sous-filière ENS de `lib/taxonomy.js` (Enseignement
+   primaire, secondaire collégial, secondaire qualifiant, cadres de soutien). `ville: ""` (épreuve nationale),
+   `etablissement: "Concours national (AREF)"`, `session` = mois et année du sujet (« décembre 2021 », repris dans
+   la ligne « Sujet officiel »). `id` : `<annee>_Taalim_AREF_<Cycle>_<Épreuve>` ; scans dans
+   `public/images/Taalim/<id>/`. `master_reel` = « <Épreuve> — <cycle ou cadre> » (« Langue française — enseignement
+   primaire »), dans cet ordre aussi en arabe ; la partie avant « — » sert de titre court. **Sujet en arabe** : `langue: "ar"`, `master_reel` en arabe
+   (« الاختصاصات والمهام — ملحق الاقتصاد والإدارة »), `master_fr` en français (description, image de partage),
+   corrigé rédigé en arabe après le bandeau français (comme C11). La fiche et le titre ne disent jamais « ماستر »
+   pour ce niveau (`concoursSeo.js`, `app/concours/[id]/page.js`).
+2. **Sources** (2026-10-24) : le fil tawjihnet « نماذج اختبارات ومواضيع سابقة لمباريات التعليم »
+   (`https://www.tawjihnet.net/vb/threads/37579/`) liste des PDF Google Drive par session et par matière
+   (primaire 2021 : arabe, français, maths-sciences + didactique + corrigés ; secondaire 2021 par discipline ;
+   cadres de soutien 2021 ; « مستجدات التربية والتكوين » 2019 avec corrigé officiel). Téléchargement direct :
+   `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"`. Les PDF sont des
+   scans sans texte : extraire les images en Node (flux `/Subtype /Image` ; `DCTDecode` = JPEG tel quel ;
+   `[/FlateDecode /DCTDecode]` = `zlib.inflateSync` puis JPEG ; `/Length` peut être une référence « 12 0 R » :
+   couper alors à `endstream`). Les « عناصر الإجابة » officiels (éléments de réponse) existent pour une partie
+   des épreuves : les recouper avec son propre corrigé et le dire dans le bandeau ; un lien Drive peut être mal
+   étiqueté (le « تصحيح الاختصاصات » de 2021 est la grille du QCM de gestion financière, 75 questions).
+3. **Scans** : les pages « لا يكتب أي شيء في هذا الإطار » font partie du sujet (garder celles qui portent des
+   questions, retirer les pages de réponse vierges : l'essai de 2021 n'a qu'une page de sujet). Logo
+   « CamScanner » en bas à droite : recadrer les ~3,5 % du bas avant `filigrane-scans.mjs`.
+4. **Pièges vus** : options arabes أ ب ج د écrites A B C D (dire la correspondance dans l'énoncé et le corrigé) ;
+   sujet avec deux propositions identiques (2021, gestion financière Q66) ou sans bonne proposition (Q10) : le
+   signaler, donner le calcul juste et la réponse de la grille. Un texte littéraire qui contient « Bientôt, … »
+   n'est plus pris pour un badge par `audit-contenu.mjs` (2026-10-24).
+5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, `npm run check`). Commit : « Ajoute N
+   sujets du concours Taalim … ». Priorités par défaut : épreuves les plus demandées d'abord (primaire,
+   sciences de l'éducation / مستجدات التربية والتكوين, puis spécialité « علوم الاقتصاد والتدبير » du secondaire),
+   sessions récentes (CRMEF 2023-2025) quand un sujet avec scan est trouvé.
 
 ---
 

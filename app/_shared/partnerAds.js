@@ -60,6 +60,7 @@ export const PARTNER_SECTIONS = [
   { key: "home", label: "Accueil" },
   { key: "concours", label: "Concours Master" },
   { key: "concours-droit", label: "Concours Master Droit" },
+  { key: "concours-taalim", label: "Concours Taalim (enseignement)" },
   { key: "concours-le", label: "Licence d'excellence" },
   { key: "concours-pb", label: "Concours ENCG (TAFEM)" },
   { key: "cours", label: "Cours Licence FSJES" },

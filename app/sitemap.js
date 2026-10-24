@@ -4,7 +4,7 @@ import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
-import { isLicenceExcellence, isMaster, isMasterDroit, isPostBac } from "@/lib/concoursNiveaux";
+import { isLicenceExcellence, isMaster, isMasterDroit, isPostBac, isTaalim } from "@/lib/concoursNiveaux";
 import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, encgRenvois, isEncgPublie } from "@/lib/encg";
 import { contenuOuvert } from "@/lib/espaces";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "@/lib/droit";
@@ -52,6 +52,8 @@ export default async function sitemap() {
   const licenceUpdated = concoursDate(concours.filter(isLicenceExcellence));
   const masterDroit = concours.filter(isMasterDroit);
   const droitConcoursUpdated = concoursDate(masterDroit);
+  const taalim = concours.filter(isTaalim);
+  const taalimUpdated = concoursDate(taalim);
   // Espace ENCG : rien tant qu'il est caché (ENCG_LANCE, lib/contenusPublies.mjs).
   const postBac = contenuOuvert("concours-post-bac") ? concours.filter(isPostBac) : [];
   const encgPublies = encgOuvert() ? encg.filter(isEncgPublie) : [];
@@ -60,7 +62,7 @@ export default async function sitemap() {
   const blogUpdated = latestDate(blog, "publishedAt");
   // The homepage surfaces the latest concours and the latest blog posts, so it
   // is as fresh as the freshest of them.
-  const homeUpdated = [concoursUpdated, licenceUpdated, droitConcoursUpdated, blogUpdated].filter(Boolean).sort().pop() || null;
+  const homeUpdated = [concoursUpdated, licenceUpdated, droitConcoursUpdated, taalimUpdated, blogUpdated].filter(Boolean).sort().pop() || null;
   const produits = boutique.filter(isProduitVisible);
 
   // /cours, /evaluation, /faq, /a-propos, /contact and /confidentialite carry no lastModified on
@@ -72,6 +74,8 @@ export default async function sitemap() {
     { path: "/concours/licence-excellence", changeFrequency: "weekly", priority: 0.8, lastModified: licenceUpdated },
     // Masters de droit : la liste seulement avec au moins un sujet publié.
     ...(masterDroit.length ? [{ path: "/concours/droit", changeFrequency: "weekly", priority: 0.8, lastModified: droitConcoursUpdated }] : []),
+    // Concours de l'enseignement (Taalim) : même règle.
+    ...(taalim.length ? [{ path: "/concours/taalim", changeFrequency: "weekly", priority: 0.8, lastModified: taalimUpdated }] : []),
     // Espace ENCG : chaque page seulement avec son contenu (lib/espaces.js).
     ...(postBac.length ? [{ path: "/concours/post-bac", changeFrequency: "weekly", priority: 0.8, lastModified: latestDate(postBac, "date_ajout") }] : []),
     // Les modules en renvoi n'ont pas de page : seul /encg les liste.
