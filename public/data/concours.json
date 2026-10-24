@@ -8035,7 +8035,8 @@
     "ville": "Casablanca",
     "etablissement": "FSJES Ain Chock",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Immobilier et Urbanisme",
+    "master_reel": "العقار والتعمير",
+    "master_fr": "Immobilier et Urbanisme",
     "modules": [
       "Droit foncier",
       "Immatriculation foncière",
@@ -8064,7 +8065,8 @@
     "ville": "Agadir",
     "etablissement": "FSJP Ait Melloul (Ibn Zohr)",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Droit des affaires et modes de règlement des différends",
+    "master_reel": "قانون الأعمال وآليات تسوية المنازعات",
+    "master_fr": "Droit des affaires et modes de règlement des différends",
     "modules": [
       "Introduction à l'étude du droit",
       "Droit commercial",
@@ -8093,7 +8095,8 @@
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Droit de l'économie numérique et des affaires",
+    "master_reel": "قانون الاقتصاد الرقمي والأعمال",
+    "master_fr": "Droit de l'économie numérique et des affaires",
     "modules": [
       "Droit des affaires",
       "Droit du numérique",
@@ -8119,7 +8122,8 @@
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Droit de l'entreprise",
+    "master_reel": "قانون المقاولة",
+    "master_fr": "Droit de l'entreprise",
     "modules": [
       "Droit des sociétés",
       "Entreprises en difficulté"
@@ -8143,7 +8147,8 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Contentieux juridiques et judiciaires",
+    "master_reel": "المنازعات القانونية والقضائية",
+    "master_fr": "Contentieux juridiques et judiciaires",
     "modules": [
       "Droit de la famille",
       "Culture juridique",
@@ -8218,7 +8223,8 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Famille et droit",
+    "master_reel": "الأسرة والقانون",
+    "master_fr": "Famille et droit",
     "modules": [
       "Droit de la famille",
       "Successions",
@@ -8247,7 +8253,8 @@
     "ville": "Tanger",
     "etablissement": "FSJES Tanger",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit civil, des affaires et des opérations de crédit",
+    "master_reel": "القانون المدني والأعمال والمعاملات الائتمانية",
+    "master_fr": "Droit civil, des affaires et des opérations de crédit",
     "modules": [
       "Obligations et contrats",
       "Fonds de commerce",
@@ -8272,7 +8279,8 @@
     "ville": "Mohammedia",
     "etablissement": "FSJES Mohammedia",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Techniques alternatives de règlement des litiges",
+    "master_reel": "التقنيات البديلة لحل المنازعات",
+    "master_fr": "Techniques alternatives de règlement des litiges",
     "modules": [
       "Culture juridique",
       "Modes alternatifs de règlement des litiges"
@@ -8296,7 +8304,8 @@
     "ville": "Tétouan",
     "etablissement": "FSJES Tétouan",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Professions juridiques et judiciaires",
+    "master_reel": "المهن القانونية والقضائية",
+    "master_fr": "Professions juridiques et judiciaires",
     "modules": [
       "Procédure civile",
       "Procédure pénale",
@@ -8321,7 +8330,8 @@
     "ville": "El Kelâa des Sraghna",
     "etablissement": "FSJES El Kelâa des Sraghna (Cadi Ayyad)",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Contentieux civil et immobilier",
+    "master_reel": "المنازعات المدنية والعقارية",
+    "master_fr": "Contentieux civil et immobilier",
     "modules": [
       "Immatriculation foncière",
       "Droit foncier",
@@ -8346,7 +8356,8 @@
     "ville": "Rabat",
     "etablissement": "FSJES Souissi",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit civil économique",
+    "master_reel": "القانون المدني الاقتصادي",
+    "master_fr": "Droit civil économique",
     "modules": [
       "Obligations et contrats",
       "Droit civil",
@@ -8371,7 +8382,8 @@
     "ville": "Agadir",
     "etablissement": "FSJES Agadir",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Droit des affaires et procédures judiciaires",
+    "master_reel": "قانون الأعمال والمساطر القضائية",
+    "master_fr": "Droit des affaires et procédures judiciaires",
     "modules": [
       "Droit commercial",
       "Procédures judiciaires",
@@ -8397,7 +8409,8 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Gestion des affaires juridiques de l'entreprise",
+    "master_reel": "إدارة الشؤون القانونية للمقاولة",
+    "master_fr": "Gestion des affaires juridiques de l'entreprise",
     "modules": [
       "Droit commercial",
       "Droit des affaires",
@@ -8422,7 +8435,8 @@
     "ville": "Settat",
     "etablissement": "FSJP Settat (Hassan 1er)",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Droit et contentieux",
+    "master_reel": "القانون والمنازعات",
+    "master_fr": "Droit et contentieux",
     "modules": [
       "Modes alternatifs de règlement des litiges",
       "Arbitrage",
@@ -8448,7 +8462,8 @@
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Droit des affaires et modes de règlement des différends",
+    "master_reel": "قانون الأعمال وآليات تسوية المنازعات",
+    "master_fr": "Droit des affaires et modes de règlement des différends",
     "modules": [
       "Droit des affaires",
       "Droit de l'investissement",
@@ -8474,7 +8489,8 @@
     "ville": "El Kelâa des Sraghna",
     "etablissement": "FSJES El Kelâa des Sraghna (Cadi Ayyad)",
     "filiere": "Droit Public & Science Politique",
-    "master_reel": "Gouvernance juridique numérique et protection des données",
+    "master_reel": "الحكامة القانونية الرقمية وحماية المعطيات",
+    "master_fr": "Gouvernance juridique numérique et protection des données",
     "modules": [
       "Droit du numérique",
       "Protection des données personnelles",
@@ -8500,7 +8516,8 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Justice administrative, arbitrage et médiation",
+    "master_reel": "القضاء الإداري والتحكيم والوساطة",
+    "master_fr": "Justice administrative, arbitrage et médiation",
     "modules": [
       "Contentieux administratif",
       "Justice administrative",
@@ -8525,7 +8542,8 @@
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
     "filiere": "Droit Public & Science Politique",
-    "master_reel": "Diplomatie spirituelle et transformations politiques en Afrique",
+    "master_reel": "الدبلوماسية الروحية والتحولات السياسية في إفريقيا",
+    "master_fr": "Diplomatie spirituelle et transformations politiques en Afrique",
     "modules": [
       "Relations internationales",
       "Science politique",
@@ -8550,7 +8568,8 @@
     "ville": "Taza",
     "etablissement": "FP Taza",
     "filiere": "Droit Public & Science Politique",
-    "master_reel": "Excellence en science politique et relations internationales",
+    "master_reel": "التميز في علم السياسة والعلاقات الدولية",
+    "master_fr": "Excellence en science politique et relations internationales",
     "modules": [
       "Relations internationales",
       "Science politique",
@@ -8575,7 +8594,8 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Contentieux juridiques et judiciaires",
+    "master_reel": "المنازعات القانونية والقضائية",
+    "master_fr": "Contentieux juridiques et judiciaires",
     "modules": [
       "Culture juridique",
       "Introduction à l'étude du droit",
@@ -8600,7 +8620,8 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Gestion des affaires juridiques de l'entreprise",
+    "master_reel": "إدارة الشؤون القانونية للمقاولة",
+    "master_fr": "Gestion des affaires juridiques de l'entreprise",
     "modules": [
       "Droit des affaires",
       "Droit de l'investissement",
@@ -8625,7 +8646,8 @@
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Justice et arbitrage numérique",
+    "master_reel": "القضاء والتحكيم الرقمي",
+    "master_fr": "Justice et arbitrage numérique",
     "modules": [
       "Arbitrage",
       "Modes alternatifs de règlement des litiges",
@@ -8650,7 +8672,8 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit civil économique",
+    "master_reel": "القانون المدني الاقتصادي",
+    "master_fr": "Droit civil économique",
     "modules": [
       "Obligations et contrats",
       "Droit civil",
@@ -8676,7 +8699,8 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Droit Public & Science Politique",
-    "master_reel": "Politiques publiques",
+    "master_reel": "السياسات العمومية",
+    "master_fr": "Politiques publiques",
     "modules": [
       "Collectivités territoriales",
       "Science politique",
@@ -8702,7 +8726,8 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Droit pénal et coopération pénale internationale",
+    "master_reel": "القانون الجنائي والتعاون الجنائي الدولي",
+    "master_fr": "Droit pénal et coopération pénale internationale",
     "modules": [
       "Droit pénal",
       "Sciences criminelles",
@@ -8728,7 +8753,8 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Famille et droit",
+    "master_reel": "الأسرة والقانون",
+    "master_fr": "Famille et droit",
     "modules": [
       "Droit de la famille",
       "Introduction à l'étude du droit"
@@ -8753,7 +8779,8 @@
     "ville": "Meknès",
     "etablissement": "FSJES Meknès",
     "filiere": "Droit des Affaires & de l'Entreprise",
-    "master_reel": "Droit et entreprise",
+    "master_reel": "القانون والمقاولة",
+    "master_fr": "Droit et entreprise",
     "modules": [
       "Droit des sociétés",
       "Droit des affaires"
@@ -8828,7 +8855,8 @@
     "ville": "Settat",
     "etablissement": "FSJP Settat (Hassan 1er)",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Sciences criminelles et coopération pénale internationale",
+    "master_reel": "العلوم الجنائية والتعاون الجنائي الدولي",
+    "master_fr": "Sciences criminelles et coopération pénale internationale",
     "modules": [
       "Droit pénal",
       "Sciences criminelles",
@@ -8857,7 +8885,8 @@
     "ville": "Salé",
     "etablissement": "FSJES Salé",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Contentieux juridiques et judiciaires",
+    "master_reel": "المنازعات القانونية والقضائية",
+    "master_fr": "Contentieux juridiques et judiciaires",
     "modules": [
       "Culture juridique",
       "Introduction à l'étude du droit",
@@ -8883,7 +8912,8 @@
     "ville": "Agadir",
     "etablissement": "FSJES Agadir",
     "filiere": "Droit Public & Science Politique",
-    "master_reel": "Droit constitutionnel et science politique",
+    "master_reel": "القانون الدستوري وعلم السياسة",
+    "master_fr": "Droit constitutionnel et science politique",
     "modules": [
       "Droit constitutionnel",
       "Science politique",
@@ -8908,7 +8938,8 @@
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit des contrats et de l'immobilier",
+    "master_reel": "قانون العقود والعقار",
+    "master_fr": "Droit des contrats et de l'immobilier",
     "modules": [
       "Obligations et contrats",
       "Droit civil",
@@ -8933,7 +8964,8 @@
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit des contrats et de l'immobilier",
+    "master_reel": "قانون العقود والعقار",
+    "master_fr": "Droit des contrats et de l'immobilier",
     "modules": [
       "Droit foncier",
       "Immatriculation foncière",
@@ -8958,7 +8990,8 @@
     "ville": "Oujda",
     "etablissement": "FSJES Oujda",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit des contrats et de l'immobilier",
+    "master_reel": "قانون العقود والعقار",
+    "master_fr": "Droit des contrats et de l'immobilier",
     "modules": [
       "Droit foncier",
       "Droits réels",
@@ -8983,7 +9016,8 @@
     "ville": "Agadir",
     "etablissement": "FSJES Ait Melloul (Ibn Zohr)",
     "filiere": "Contentieux, Justice & Modes Alternatifs",
-    "master_reel": "Droit pénal et sécurité numérique",
+    "master_reel": "القانون الجنائي والأمن الرقمي",
+    "master_fr": "Droit pénal et sécurité numérique",
     "modules": [
       "Droit pénal",
       "Sciences criminelles"
@@ -9007,7 +9041,8 @@
     "ville": "Settat",
     "etablissement": "FSJP Settat (Hassan 1er)",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit civil, techniques notariales et digitalisation",
+    "master_reel": "القانون المدني وتقنيات التوثيق والرقمنة",
+    "master_fr": "Droit civil, techniques notariales et digitalisation",
     "modules": [
       "Obligations et contrats",
       "Droit civil"
@@ -9031,7 +9066,8 @@
     "ville": "Agadir",
     "etablissement": "FSJP Ait Melloul (Ibn Zohr)",
     "filiere": "Droit Civil, Famille & Immobilier",
-    "master_reel": "Droit civil, immobilier et transformations numériques",
+    "master_reel": "القانون المدني والعقاري والتحولات الرقمية",
+    "master_fr": "Droit civil, immobilier et transformations numériques",
     "modules": [
       "Immatriculation foncière",
       "Droit foncier",

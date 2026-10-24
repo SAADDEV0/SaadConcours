@@ -196,7 +196,8 @@ const concours = {
           },
           onChange: (form) => ({ ...form, categorie: categoryOf(form.filiere) || form.categorie }),
         },
-        { key: "master_reel", label: "Intitulé officiel du master", type: "text", placeholder: "Tel qu'écrit sur le sujet", full: true },
+        { key: "master_reel", label: "Intitulé officiel du master", type: "text", placeholder: "Tel qu'écrit sur le sujet (en arabe pour un sujet en arabe)", full: true },
+        { key: "master_fr", label: "Nom français du master (sujet en arabe)", type: "text", placeholder: "Image de partage et recherche", full: true },
       ],
     },
     {

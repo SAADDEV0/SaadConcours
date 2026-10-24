@@ -29,6 +29,10 @@ export function compareConcoursRecents(a, b) {
   );
 }
 
+// Lettre arabe : sujets de droit en arabe, dont l'intitulé du master
+// (`master_reel`) est écrit en arabe, le nom français étant dans `master_fr`.
+export const ARABE_RE = /[؀-ۿ]/;
+
 export function escapeHtml(s) {
   return String(s ?? "").replace(
     /[&<>"']/g,
@@ -49,6 +53,7 @@ export function concoursListItem(c) {
     etablissement: c.etablissement,
     filiere: c.filiere,
     master_reel: c.master_reel,
+    ...(c.master_fr ? { master_fr: c.master_fr } : {}),
     categorie: c.categorie,
     modules: c.modules,
     difficulte: c.difficulte,
@@ -73,13 +78,16 @@ export function concoursCardHtml(c, { hidden = false, dl = true, badgeNiveau = f
   const hasImg = c.hasImg ?? (c.images || []).length > 0;
   const hasCorrige = c.hasCorrige ?? Boolean(c.corrige_md || c.corrige_from_github);
   const masterLabel = c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`;
+  // Sujet en arabe : l'intitulé arabe du master, isolé (<bdi>) pour que
+  // l'écriture de droite à gauche ne déplace pas le reste de la ligne.
+  const titre = ARABE_RE.test(masterLabel) ? `<bdi lang="ar">${escapeHtml(masterLabel)}</bdi>` : escapeHtml(masterLabel);
   // « FSJES Mohammedia, Mohammedia » : la ville n'est répétée que si le nom
   // de l'établissement ne la contient pas déjà.
   const lieu = [c.etablissement, c.ville && !String(c.etablissement || "").includes(c.ville) ? c.ville : ""].filter(Boolean).join(", ");
   return `
   <a class="sp-row" href="/concours/${encodeURIComponent(c.id)}" data-id="${escapeHtml(c.id)}"${hidden ? " hidden" : ""}>
     <span class="sp-row-main">
-      <span class="sp-row-title">${escapeHtml(masterLabel)}${nouveau ? '<span class="home-new">Nouveau</span>' : ""}</span>
+      <span class="sp-row-title">${titre}${nouveau ? '<span class="home-new">Nouveau</span>' : ""}</span>
       <span class="sp-row-meta"><span>${escapeHtml(lieu)}</span>${difficulteHtml(c.difficulte)}${
         badgeNiveau && isLicenceExcellence(c) ? `<span class="sp-le-badge">${iconHtml("star", { size: 12 })}Licence d'excellence</span>` : ""
       }${hasCorrige ? "" : '<span class="sp-flag">Sans corrigé</span>'}${hasImg || c.scansMasques ? "" : '<span class="sp-flag">Sans scan</span>'}</span>

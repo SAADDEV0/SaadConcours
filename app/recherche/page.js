@@ -56,7 +56,7 @@ export default async function RecherchePage() {
         c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`,
         `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isPostBac(c) ? " · Concours post-bac" : isMasterDroit(c) ? " · Master de droit" : ""}`,
         `/concours/${encodeURIComponent(c.id)}`,
-        [c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isPostBac(c) ? "post bac encg tafem" : isMasterDroit(c) ? "master droit juridique" : "master"].filter(Boolean).join(" ")
+        [c.master_fr, c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isPostBac(c) ? "post bac encg tafem" : isMasterDroit(c) ? "master droit juridique" : "master"].filter(Boolean).join(" ")
       )
     );
   }

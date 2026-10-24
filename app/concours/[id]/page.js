@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
-import { concoursCardHtml } from "../../_shared/concoursCard";
+import { ARABE_RE, concoursCardHtml } from "../../_shared/concoursCard";
 import { difficulteHtml } from "../../_shared/format";
 import { formatQCM, markQcmOptions, marquerBlocsLatins } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
@@ -205,7 +205,7 @@ export default async function ConcoursDetailPage(props) {
     learningResourceType: corrigeHtml ? ["Sujet d'examen", "Corrigé indicatif"] : ["Sujet d'examen"],
     educationalLevel: niveau.educationalLevel,
     ...(c.modules?.length ? { assesses: c.modules } : {}),
-    keywords: [...new Set([masterLabel, c.filiere, c.etablissement, c.ville, String(c.annee)].filter(Boolean))].join(", "),
+    keywords: [...new Set([masterLabel, c.master_fr, c.filiere, c.etablissement, c.ville, String(c.annee)].filter(Boolean))].join(", "),
     ...(c.date_ajout ? { datePublished: c.date_ajout } : {}),
     isPartOf: { "@type": "CollectionPage", name: `Concours ${niveau.label}`, url: `${SITE_URL}${niveau.href}` },
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
@@ -251,7 +251,16 @@ export default async function ConcoursDetailPage(props) {
         <div className="sp-layout-main sp-detail">
         <div className="bac-chap-hero sp-detail-hero">
           <div className="bac-eyebrow">{niveau.long}</div>
-          <h1>{masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`}</h1>
+          {/* Sujet en arabe : intitulé arabe du master (isolé par <bdi>),
+             son nom français juste dessous. */}
+          <h1>
+            {arabe && ARABE_RE.test(masterLabel || "") ? (
+              <bdi lang="ar">ماستر {masterLabel}</bdi>
+            ) : (
+              masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`
+            )}
+          </h1>
+          {arabe && c.master_fr && <p className="sp-detail-modules">Master {c.master_fr}</p>}
           <div className="sp-detail-meta">
             <span>{c.etablissement}</span>
             {c.ville && !String(c.etablissement || "").includes(c.ville) && <span>{c.ville}</span>}

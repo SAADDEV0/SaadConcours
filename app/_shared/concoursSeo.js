@@ -29,6 +29,7 @@ const cle = (s) =>
     .replace(/[^a-z0-9]/gi, "")
     .toLowerCase();
 const SIGLE = /^[A-Z][A-Z0-9.\- ]{1,11}$/;
+const ARABE = /[؀-ۿ]/;
 const TITLE_TOLERE = 72;
 
 // Villes saisies sans accent ni espace dans les anciennes fiches.
@@ -98,6 +99,24 @@ function formes(c, hasCorrige, precision = "") {
       ],
       sujet: `${niveau} ${deLa(lieuLong)}${annee} (${commune})`,
       variante: "",
+    };
+  }
+
+  // Sujet en arabe (Masters de droit) : titre en arabe, sur l'intitulé arabe
+  // du master ; la description reste en français, sur son nom français
+  // (`master_fr`).
+  if (c.langue === "ar" && ARABE.test(l.complet)) {
+    const fr = c.master_fr ? formes({ ...c, langue: undefined, master_reel: c.master_fr }, hasCorrige, precision) : {};
+    const titres = [];
+    for (const suite of [hasCorrige ? " : الموضوع والتصحيح" : " : الموضوع", ""]) {
+      for (const lieu of [lieuLong, lieuCourt]) titres.push(`ماستر ${l.complet} — ${lieu}${annee}${p}${suite}`);
+    }
+    return {
+      titres,
+      titreNomLong: `ماستر ${l.complet} — ${lieuCourt}${annee}${p}`,
+      sujet: fr.sujet || `${niveau} ${deLa(lieuLong)}${annee}`,
+      sujetCourt: fr.sujetCourt,
+      variante: l.variante,
     };
   }
 

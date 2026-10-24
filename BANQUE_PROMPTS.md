@@ -609,8 +609,12 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
    (affaires et entreprise ; contentieux, justice et modes alternatifs ; civil, famille et immobilier ;
    droit public et science politique). `id` : `<annee>_<Ville>_<Etab>_<Master abrégé>` comme en C1.
    `etablissement` : le nom de la faculté qui a organisé l'épreuve (« FSJP Ait Melloul (Ibn Zohr) » pour
-   une faculté de droit issue de la FSJES : pas de renommage). `master_reel` en **français** (titre de la
-   page, image de partage) ; l'intitulé arabe va dans `notions_cles`. `modules` en **français** : ils
+   une faculté de droit issue de la FSJES : pas de renommage). **Sujet en arabe : `master_reel` en arabe**
+   (à ma demande, 2026-10-24), sans « ماستر » devant (la fiche l'ajoute), et le nom français dans
+   `master_fr`, placé juste après. La fiche titre en arabe (H1 et `<title>` « ماستر … — FSJES … 2024 :
+   الموضوع والتصحيح », `concoursSeo.js`), la carte isole l'arabe dans un `<bdi>`, `master_fr` sert à la
+   description, à la recherche et à l'image de partage (satori ne sait pas dessiner l'arabe : le build
+   plante). Sujet en français : `master_reel` en français, pas de `master_fr`. `modules` en **français** : ils
    relient la fiche aux cours de Droit (`MOTIFS_DROIT`, `lib/concoursParModule.js`) et aux cours FSJES.
 2. **Sujet en arabe** : `"langue": "ar"`. La fiche passe l'énoncé et le corrigé en `dir="rtl"`, les blocs
    sans lettre arabe repassent en écriture latine (`marquerBlocsLatins`, `concoursFormat.js`) ; le PDF

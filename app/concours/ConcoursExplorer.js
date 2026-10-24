@@ -313,7 +313,7 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
         // la carte), la faculté et la ville : pas sur l'énoncé, les notions
         // ni les modules.
         if (q) {
-          const hay = searchNormalize([c.master_reel || c.filiere, c.etablissement, c.ville].join(" "));
+          const hay = searchNormalize([c.master_reel || c.filiere, c.master_fr, c.etablissement, c.ville].join(" "));
           const tokens = searchTokens(q);
           if (!tokens.every((t) => hay.includes(t))) return false;
         }
