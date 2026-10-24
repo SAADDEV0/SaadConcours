@@ -63,7 +63,9 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   // embarquée, et chaque ligne qui contient de l'arabe calée à droite — le
   // bandeau du corrigé et les lignes en français restent à gauche. Même
   // mécanique que les cours de droit en arabe (coursPdf.js, pdfArabic.js).
-  const rtl = c.langue === "ar";
+  // Aussi pour un sujet en français qui cite de l'arabe (épreuve bilingue) :
+  // la police latine effaçait ces passages (Amiri a aussi les lettres latines).
+  const rtl = c.langue === "ar" || hasArabic(`${c.enonce_md || ""}${c.corrige_md || ""}`);
   if (rtl) {
     await loadArabicPdfFont(doc);
     branding = { ...branding, arabicFont: ARABIC_FONT };

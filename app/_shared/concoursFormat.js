@@ -287,3 +287,17 @@ export function marquerBlocsLatins(html) {
     return `<${tag}${attrs} dir="ltr" lang="fr">${contenu}`;
   });
 }
+
+// L'inverse pour un sujet en français qui contient des passages en arabe
+// (épreuve bilingue de Meknès, traduction demandée à Aïn Chock) : un bloc qui
+// commence par une lettre arabe passe de droite à gauche, sinon son « ؟ »
+// final saute en tête de ligne.
+export function marquerBlocsArabes(html) {
+  if (!html || !ARABE_RE.test(html)) return html;
+  return html.replace(/<(p|li|h[1-6]|td|th)((?:\s[^>]*)?)>([\s\S]*?)(?=<\/\1>|<ul|<ol)/g, (m, tag, attrs, contenu) => {
+    const texte = contenu.replace(/<strong class="qcm-letter">[^<]*<\/strong>/, "").replace(/<[^>]+>/g, "");
+    const premiere = texte.match(/[A-Za-zÀ-ÿ؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/);
+    if (!premiere || !ARABE_RE.test(premiere[0])) return m;
+    return `<${tag}${attrs} dir="rtl" lang="ar">${contenu}`;
+  });
+}

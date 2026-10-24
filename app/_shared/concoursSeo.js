@@ -31,6 +31,11 @@ const cle = (s) =>
 const SIGLE = /^[A-Z][A-Z0-9.\- ]{1,11}$/;
 const ARABE = /[؀-ۿ]/;
 const TITLE_TOLERE = 72;
+// Titre en arabe : Google coupe au pixel, et une lettre arabe est plus étroite
+// qu'une lettre latine (mesuré le 2026-10-24 en Arial 20 px : 7,5 à 8,3 px par
+// caractère sur les titres des sujets en arabe, contre 9,5 en français). 72
+// caractères tiennent dans les ~600 px, « الموضوع والتصحيح » compris.
+const TITLE_MAX_AR = 72;
 
 // Villes saisies sans accent ni espace dans les anciennes fiches.
 const VILLES = { ElJadida: "El Jadida", BeniMellal: "Béni Mellal", Meknes: "Meknès", Kenitra: "Kénitra", Tetouan: "Tétouan", Fes: "Fès", Sale: "Salé" };
@@ -113,9 +118,11 @@ function formes(c, hasCorrige, precision = "") {
     }
     return {
       titres,
-      titreNomLong: `ماستر ${l.complet} — ${lieuCourt}${annee}${p}`,
+      titreMax: TITLE_MAX_AR,
       sujet: fr.sujet || `${niveau} ${deLa(lieuLong)}${annee}`,
+      sujetMoyen: fr.sujetMoyen,
       sujetCourt: fr.sujetCourt,
+      sigle: fr.sigle,
       variante: l.variante,
     };
   }
@@ -134,15 +141,30 @@ function formes(c, hasCorrige, precision = "") {
     titres,
     titreNomLong,
     sujet: `${sansRedite(niveau, nomCourt)}${nomCourt ? ` ${nomCourt}` : ""} ${deLa(lieuLong)}${annee}`,
+    sujetMoyen: `${sansRedite(niveau, nomCourt)}${nomCourt ? ` ${nomCourt}` : ""} ${deLa(lieuCourt)}${annee}`,
     sujetCourt: `${niveau}${l.sigle ? ` ${l.sigle}` : ""} ${deLa(lieuCourt)}${annee}`,
+    sigle: Boolean(l.sigle),
     variante: l.variante,
   };
 }
 
 function description(c, hasCorrige, f, precision = "") {
-  const offre = hasCorrige ? "énoncé complet, corrigé indicatif et PDF gratuit" : "énoncé complet et PDF gratuit";
+  const [offre, offreCourte] = hasCorrige
+    ? ["énoncé complet, corrigé indicatif et PDF gratuit", "énoncé, corrigé et PDF gratuits"]
+    : ["énoncé complet et PDF gratuit", "énoncé et PDF gratuits"];
   const p = precision ? ` (${precision})` : "";
-  const bases = [f.sujet, f.sujetCourt].filter(Boolean).map((s) => `Sujet réel du concours ${s}${p} : ${offre}.`);
+  // Le nom du master d'abord (ou son sigle) : on raccourcit la phrase avant de
+  // le perdre. Sans sigle, la forme courte (`sujetCourt`) ne dit plus que
+  // « Master Droit de la FSJES Tanger 2024 » : 15 des 36 sujets de droit en
+  // arabe en étaient là (octobre 2026), dont deux descriptions identiques.
+  const bases = [
+    `Sujet réel du concours ${f.sujet}${p} : ${offre}.`,
+    f.sigle && `Sujet réel du concours ${f.sujetCourt}${p} : ${offre}.`,
+    `Sujet réel du concours ${f.sujet}${p} : ${offreCourte}.`,
+    `Concours ${f.sujet}${p} : ${offreCourte}.`,
+    f.sujetMoyen && `Concours ${f.sujetMoyen}${p} : ${offreCourte}.`,
+    f.sujetCourt && `Sujet réel du concours ${f.sujetCourt}${p} : ${offre}.`,
+  ].filter(Boolean);
   const base = bases.find((b) => b.length <= DESCRIPTION_MAX) || bases.at(-1);
   // Les matières rendent chaque description unique et portent des mots-clés ;
   // autant que la limite le permet, sans couper une matière.
@@ -169,7 +191,7 @@ function seoPourListe(list, corrigeIds) {
       precision = "formation continue";
       f = formes(c, hasCorrige, precision);
     }
-    const complet = fitTitle(f.titres);
+    const complet = fitTitle(f.titres, f.titreMax);
     // Sinon : la forme complète la plus courte si elle reste dans la
     // tolérance, puis l'essentiel devant le nom.
     const title = complet.length <= TITLE_TOLERE || !f.titreNomLong ? complet : f.titreNomLong;
@@ -185,10 +207,12 @@ function seoPourListe(list, corrigeIds) {
     for (const doublons of groupes.values()) {
       if (doublons.length < 2) continue;
       const variantes = doublons.map((d) => seo.get(d.id).variante);
+      // Seul le champ en double change : deux descriptions identiques ne
+      // valent pas un « (sujet 2) » dans un titre déjà unique.
       doublons.forEach((c, i) => {
         const v = variantes[i];
         const distincte = v && variantes.filter((x) => x === v).length === 1;
-        seo.set(c.id, calcule(c, distincte ? v : `sujet ${i + 1}`));
+        seo.set(c.id, { ...seo.get(c.id), [champ]: calcule(c, distincte ? v : `sujet ${i + 1}`)[champ] });
       });
     }
   }

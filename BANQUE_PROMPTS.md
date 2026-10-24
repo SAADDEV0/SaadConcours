@@ -145,7 +145,11 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
 - Titre ≤ 65 caractères, meta description ≤ 155 : passer par `fitTitle` / `clampDescription`
   (`app/_shared/seoText.js`) plutôt qu'une chaîne libre. Fiches concours : `app/_shared/concoursSeo.js`
   (titres et descriptions uniques, calculés sur toute la liste). Blog : champ `seoTitle` quand le
-  titre de l'article dépasse 65 caractères (le H1 garde `title`).
+  titre de l'article dépasse 65 caractères (le H1 garde `title`). Une description de fiche concours
+  garde toujours le nom du master (ou son sigle) : la phrase se raccourcit d'abord (« énoncé, corrigé
+  et PDF gratuits », « Concours … » sans « Sujet réel du ») ; un doublon ne retouche que le champ en
+  double, jamais le titre (2026-10-24). Titre en arabe : 72 caractères (≈ 600 px mesurés, une lettre
+  arabe est plus étroite qu'une latine).
 - Page d'entrée d'un espace : la requête que tapent les élèves, telle quelle, ouvre le titre **et**
   le H1 (`/cours` → « Cours FSJES … », 2026-10-14), et un bloc `sp-about` en bas de page explique
   l'organisation (semestres, parcours, filières) à partir des données, pas d'un texte figé.
@@ -620,6 +624,8 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
    description, à la recherche et à l'image de partage (satori ne sait pas dessiner l'arabe : le build
    plante). Sujet en français : `master_reel` en français, pas de `master_fr`. `modules` en **français** : ils
    relient la fiche aux cours de Droit (`MOTIFS_DROIT`, `lib/concoursParModule.js`) et aux cours FSJES.
+   Sujet en français qui cite de l'arabe (épreuve bilingue, traduction) : pas de `langue`, la fiche passe
+   ses blocs commençant par l'arabe en `dir="rtl"` (`marquerBlocsArabes`) et le PDF prend la police arabe.
 2. **Sujet en arabe** : `"langue": "ar"`. La fiche passe l'énoncé et le corrigé en `dir="rtl"`, les blocs
    sans lettre arabe repassent en écriture latine (`marquerBlocsLatins`, `concoursFormat.js`) ; le PDF
    charge la police arabe (`concoursPdf.js`). Énoncé transcrit en arabe, options `A)` `B)`… une par ligne,

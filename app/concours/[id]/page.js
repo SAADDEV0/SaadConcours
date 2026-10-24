@@ -4,11 +4,12 @@ import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } fr
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
 import { ARABE_RE, concoursCardHtml } from "../../_shared/concoursCard";
 import { difficulteHtml } from "../../_shared/format";
-import { formatQCM, markQcmOptions, marquerBlocsLatins } from "../../_shared/concoursFormat";
+import { formatQCM, markQcmOptions, marquerBlocsArabes, marquerBlocsLatins } from "../../_shared/concoursFormat";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { concoursSeo } from "../../_shared/concoursSeo";
 import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./ConcoursDetailClient";
 import AdSlot from "../../_shared/AdSlot";
+import { ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 import MathScripts from "../../_shared/MathScripts";
 import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, MASTER_DROIT, POST_BAC } from "@/lib/concoursNiveaux";
 
@@ -80,6 +81,12 @@ function officielDe(c) {
   return `du concours de ${article}${lieu}${session}.`;
 }
 
+// « FSJES Tanger 2024 » dans le fil d'Ariane, sans « non précisée » quand
+// l'année du sujet est inconnue.
+function filAriane(c) {
+  return /^\d{4}/.test(String(c.annee)) ? `${c.etablissement} ${c.annee}` : c.etablissement;
+}
+
 // Titre et description : voir app/_shared/concoursSeo.js (tenir en 65 / 155
 // caractères, jamais deux fiches identiques). Le H1 de la page garde le nom
 // complet du master, sans établissement ni année : les pastilles juste en
@@ -104,10 +111,11 @@ async function seoDe(c, list) {
 //
 // Sujet en arabe (`langue: "ar"`, Masters de droit) : les blocs sans lettre
 // arabe sont rendus à l'écriture latine (marquerBlocsLatins), le conteneur
-// porte dir="rtl" lang="ar".
+// porte dir="rtl" lang="ar". Sujet en français : ses blocs en arabe passent
+// de droite à gauche (marquerBlocsArabes).
 function renderEnonce(md, { arabe = false } = {}) {
   let html = markQcmOptions(renderMarkdownWithMath(marked, formatQCM(md, { tagChoices: true }), { breaks: true }));
-  if (arabe) html = marquerBlocsLatins(html);
+  html = arabe ? marquerBlocsLatins(html) : marquerBlocsArabes(html);
   if (!/<h1[\s>]/.test(html)) return html;
   return html.replace(/<(\/?)h([1-6])(?=[\s>])/g, (m, fin, n) => `<${fin}h${Math.min(6, Number(n) + 2)}`);
 }
@@ -119,13 +127,29 @@ export async function generateMetadata(props) {
 
   const { title, description } = await seoDe(c, list);
   const url = `${SITE_URL}/concours/${c.id}`;
+  // Image de ./opengraph-image.js, déclarée ici pour porter un `alt` propre au
+  // sujet (comme app/blog/[id]/page.js) : ce que l'image affiche, en français.
+  const image = {
+    url: `${url}/opengraph-image`,
+    ...ogImageSize,
+    type: ogImageContentType,
+    alt: `Sujet du concours ${(c.langue === "ar" && c.master_fr) || c.master_reel || c.filiere || "Master"} — ${filAriane(c)}`,
+  };
 
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { type: "article", title, description, url },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url,
+      ...(c.date_ajout ? { publishedTime: c.date_ajout } : {}),
+      ...(c.date_maj ? { modifiedTime: c.date_maj } : {}),
+      images: [image],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -218,7 +242,7 @@ export default async function ConcoursDetailPage(props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
       { "@type": "ListItem", position: 2, name: niveau.label === "Master" ? "Concours" : `Concours ${niveau.label}`, item: `${SITE_URL}${niveau.href}` },
-      { "@type": "ListItem", position: 3, name: `${c.etablissement} ${c.annee}`, item: url },
+      { "@type": "ListItem", position: 3, name: filAriane(c), item: url },
     ],
   };
 
@@ -241,7 +265,7 @@ export default async function ConcoursDetailPage(props) {
       <div className="bac-wrap">
         <nav className="cd-breadcrumb" aria-label="Fil d'Ariane">
           <a href="/">Accueil</a> <span>/</span> <a href={niveau.href}>{niveau.label === "Master" ? "Concours Master" : `Concours ${niveau.label}`}</a>{" "}
-          <span>/</span> <span>{c.etablissement} {c.annee}</span>
+          <span>/</span> <span>{filAriane(c)}</span>
         </nav>
 
         {/* Deux colonnes sur grand écran : la fiche, et à droite le résumé
