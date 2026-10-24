@@ -82,8 +82,16 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
       return [...new Set(arr)].filter(Boolean).sort();
     }
 
+    // Un filtre qui n'offre qu'une valeur (sujets nationaux sans ville, une
+    // seule session, un seul établissement) ne trie rien : il est caché.
+    function hideIfSingle(el, n) {
+      const field = el.closest(".sp-field");
+      if (field) field.style.display = n < 2 ? "none" : "";
+    }
+
     function fillSelect(sel, values) {
       const el = $(sel);
+      hideIfSingle(el, values.filter(Boolean).length);
       values.forEach((v) => {
         const opt = document.createElement("option");
         opt.value = v;
@@ -334,6 +342,7 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
 
       fillSelect("#filterVille", villes);
       const catEl = $("#filterCategorie");
+      hideIfSingle(catEl, categoryOptions().filter((o) => presentes.has(o.value)).length);
       categoryOptions()
         .filter((o) => presentes.has(o.value))
         .forEach((o) => {

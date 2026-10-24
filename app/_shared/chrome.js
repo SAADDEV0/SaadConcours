@@ -759,6 +759,12 @@ export const chromeScript = function initChrome() {
     function update() {
       ticking = false;
       const y = window.scrollY;
+      // Bouton WhatsApp (téléphone) : caché sur le premier écran, où il
+      // couvrait l'action principale de la page (bouton PDF d'une fiche
+      // concours, flèches de « Je prépare… ») ; il apparaît dès qu'on lit.
+      // Sur une page courte, rien à masquer : il reste visible.
+      const court = root.scrollHeight < window.innerHeight * 1.6;
+      root.classList.toggle("fab-ready", court || y > window.innerHeight * 0.5);
       const menuOpen = root.classList.contains("sheet-open");
       if (!mq.matches || menuOpen || y < 120) root.classList.remove("header-hidden");
       else if (y > lastY + 6) root.classList.add("header-hidden");
@@ -775,6 +781,8 @@ export const chromeScript = function initChrome() {
       },
       { passive: true }
     );
+    // État de départ (page courte, ou rechargée au milieu de la lecture).
+    requestAnimationFrame(update);
     // Un champ qui prend le focus au clavier ne doit pas rester sous un header caché.
     document.addEventListener("focusin", (e) => {
       if (e.target.matches?.(":focus-visible")) root.classList.remove("header-hidden");

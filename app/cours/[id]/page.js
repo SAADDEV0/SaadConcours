@@ -157,7 +157,7 @@ export default async function CoursModulePage(props) {
               <div className="sp-hero-actions">
                 {chapitres[0] && (
                   <a className="sp-btn primary" href={fsjesChapitreHref(c, chapitres[0])} data-resume-link={`/cours/${c.id}`}>
-                    Commencer le chapitre 1 →
+                    Commencer le chapitre 1 <Icon name="arrow-right" size={18} />
                   </a>
                 )}
                 <button type="button" className="sp-btn" id="coursPdfBtn">

@@ -123,7 +123,7 @@ export default async function BacMatierePage(props) {
                   {/* Devient « Reprendre : … » si l'élève a déjà lu un chapitre
                      de cette matière (chromeScript, progression locale). */}
                   <a className="sp-btn primary" href={bacChapitreHref(m, premierRedige)} data-resume-link={bacMatiereHref(m)}>
-                    Commencer le chapitre {premierRedige.numero} →
+                    Commencer le chapitre {premierRedige.numero} <Icon name="arrow-right" size={18} />
                   </a>
                 </div>
               )}
