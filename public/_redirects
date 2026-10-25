@@ -149,6 +149,16 @@
 # relancement de l'espace (BANQUE_PROMPTS, recette K4).
 /encg /cours 302
 
+# Espace Taalim caché le 2026-10-25 (TAALIM_LANCE = false, lib/contenusPublies.mjs) :
+# /concours/taalim et ses quatre sujets étaient en ligne depuis le 2026-10-24.
+# 302 : temporaire, à retirer au relancement de l'espace (BANQUE_PROMPTS, C12).
+/taalim /concours 302
+/concours/taalim /concours 302
+/concours/2021_Taalim_AREF_EcoAdmin_GestionFinanciere /concours 302
+/concours/2021_Taalim_AREF_EcoAdmin_Missions /concours 302
+/concours/2021_Taalim_AREF_Primaire_Francais /concours 302
+/concours/2021_Taalim_AREF_Primaire_DidactiqueFrancais /concours 302
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et

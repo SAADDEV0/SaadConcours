@@ -34,7 +34,7 @@ import { BAC_GROUPES, BAC_MATIERES_PUBLIEES, BAC_NIVEAUX } from "../lib/bacProgr
 import { bacMatiereContenu } from "../lib/bacContenu/index.js";
 import { fsjesModule, fsjesModuleIcon } from "../lib/fsjesChapitres.js";
 import { encgModule } from "../lib/encg.js";
-import { ENCG_LANCE } from "../lib/contenusPublies.mjs";
+import { ENCG_LANCE, TAALIM_LANCE } from "../lib/contenusPublies.mjs";
 import { FILIERE_CATEGORIES } from "../lib/taxonomy.js";
 import { CONCOURS_NIVEAUX } from "../lib/concoursNiveaux.js";
 import { COURS_CATEGORIES, LICENCE_FILIERES, LICENCE_PARCOURS, LICENCE_SEMESTRES, coursSortComparator } from "../lib/coursTaxonomy.js";
@@ -130,8 +130,9 @@ function corrigeOf(c) {
   return existsSync(p) ? readFileSync(p, "utf8") : "";
 }
 
+// Espace Taalim caché (TAALIM_LANCE) : ses sujets restent hors de l'appli.
 const concours = readJson("concours.json", [])
-  .filter((c) => c.statut !== "brouillon")
+  .filter((c) => c.statut !== "brouillon" && (TAALIM_LANCE || c.niveau !== "taalim"))
   .map((c) => {
     const corrige = corrigeOf(c);
     const images = scansMasques ? [] : c.images || [];

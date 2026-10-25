@@ -75,7 +75,13 @@ export default async function sitemap() {
     // Masters de droit : la liste seulement avec au moins un sujet publié.
     ...(masterDroit.length ? [{ path: "/concours/droit", changeFrequency: "weekly", priority: 0.8, lastModified: droitConcoursUpdated }] : []),
     // Concours de l'enseignement (Taalim) : même règle.
-    ...(taalim.length ? [{ path: "/concours/taalim", changeFrequency: "weekly", priority: 0.8, lastModified: taalimUpdated }] : []),
+    // Hub /taalim (filières, cours) et liste des sujets, ouverts ensemble.
+    ...(taalim.length
+      ? [
+          { path: "/taalim", changeFrequency: "monthly", priority: 0.8, lastModified: taalimUpdated },
+          { path: "/concours/taalim", changeFrequency: "weekly", priority: 0.8, lastModified: taalimUpdated },
+        ]
+      : []),
     // Espace ENCG : chaque page seulement avec son contenu (lib/espaces.js).
     ...(postBac.length ? [{ path: "/concours/post-bac", changeFrequency: "weekly", priority: 0.8, lastModified: latestDate(postBac, "date_ajout") }] : []),
     // Les modules en renvoi n'ont pas de page : seul /encg les liste.

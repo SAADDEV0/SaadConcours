@@ -684,6 +684,14 @@ violet, `lib/espaces.js`), liste `/concours/taalim`, même fichier `concours.jso
 sessions, langues, épreuves) ; seules les conditions de candidature de la FAQ sont écrites à la main (avis de la
 session de novembre 2025 : 35 ans au plus, licence, présélection sur dossier, un seul cycle) : les mettre à jour
 quand un nouvel avis paraît sur men.gov.ma.
+**Hub `/taalim`** (2026-10-25, « quand je clique sur Taalim : les filières, le professeur que tu deviens, les cours
+de chaque filière et leur type, puis les concours ») : `app/taalim/page.js`, contenu dans `lib/taalimFilieres.js`
+(filières, spécialités, cours typés Tronc commun / Spécialité / Didactique / Pratique, liens vers les cours FSJES
+existants — jamais de 2ᵉ cours d'une matière, règle 1.6). Ne lister que les spécialités ouvertes par un avis récent.
+**Caché depuis le 2026-10-25** (« hide section taalim ») : `TAALIM_LANCE = false` (`lib/contenusPublies.mjs`) ferme
+l'espace en production (hub, liste, fiches des sujets via `isConcoursPublic`, appli) ; 302 de `/taalim`,
+`/concours/taalim` et des 4 sujets vers `/concours` (`public/_redirects`), retiré de `public/llms.txt`. `npm run dev`
+le montre. **Relancer** : drapeau à `true`, retirer ces 302, remettre la ligne Taalim dans `llms.txt`, `npm run check`, P1.
 1. **Champs propres** : `categorie: "ENS"`, `filiere` = une sous-filière ENS de `lib/taxonomy.js` (Enseignement
    primaire, secondaire collégial, secondaire qualifiant, cadres de soutien). `ville: ""` (épreuve nationale),
    `etablissement: "Concours national (AREF)"`, `session` = mois et année du sujet (« décembre 2021 », repris dans

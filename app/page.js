@@ -161,7 +161,17 @@ export default async function HomePage() {
   const SECTIONS = {
     taalim: (
       <>
-        <div className="home-subhead">
+        <div className="home-links">
+          <a className="home-link" href="/taalim#filieres">
+            <strong>Les filières du concours</strong>
+            <span>Primaire, collège, lycée, cadres de soutien : le professeur que vous devenez</span>
+          </a>
+          <a className="home-link" href="/taalim#cours">
+            <strong>Les cours à réviser</strong>
+            <span>Tronc commun, spécialité et didactique, filière par filière</span>
+          </a>
+        </div>
+        <div className="home-subhead" style={{ marginTop: 18 }}>
           <h3>Derniers sujets officiels</h3>
           <a href="/concours/taalim">Tous les sujets</a>
         </div>
