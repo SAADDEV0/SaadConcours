@@ -906,7 +906,7 @@ footer.site-footer{
 
 /* ---------- Bouton WhatsApp flottant (chrome.js → whatsappFabHtml) ---------- */
 /* Vert WhatsApp (couleur de la marque tierce, reconnue d'un coup d'oeil) en
- * bas à droite ; libellé « Cours de soutien » sur ordinateur, rond seul sur
+ * bas à droite ; libellé « Cahiers de préparation » sur ordinateur, rond seul sur
  * téléphone. Caché quand une barre collante occupe déjà le bas (QCM) et
  * remonté au-dessus du bouton d'édition admin. */
 .wa-fab{

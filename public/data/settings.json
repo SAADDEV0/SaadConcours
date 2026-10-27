@@ -53,18 +53,18 @@
   "partnerAdsEnabled": true,
   "partnerAds": [
     {
-      "id": "pa_prep_s1s3s5",
-      "name": "Préparation S1 S3 S5 Économie et Gestion",
+      "id": "pa_cahiers_prepa",
+      "name": "Cahiers de préparation (tous les modules)",
       "contact": "+212713875327",
-      "image": "images/partenaires/preparation-s1-s3-s5-desk.webp",
+      "image": "images/partenaires/cahiers-preparation-desk.webp",
       "w": 1940,
       "h": 240,
-      "imageMobile": "images/partenaires/preparation-s1-s3-s5-mob.webp",
+      "imageMobile": "images/partenaires/cahiers-preparation-mob.webp",
       "mw": 1280,
       "mh": 400,
       "logo": "",
-      "link": "https://wa.me/212713875327?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20pr%C3%A9paration%20S1%20%2F%20S3%20%2F%20S5%20%C3%89conomie%20et%20Gestion.",
-      "alt": "Préparation S1, S3 et S5 Économie et Gestion (FSJES) : inscriptions sur WhatsApp au +212 7 13 87 53 27",
+      "link": "https://wa.me/212713875327?text=Bonjour%2C%20je%20souhaite%20acheter%20le%20cahier%20de%20pr%C3%A9paration%20du%20module%20%3A%20",
+      "alt": "Cahiers de préparation de tous les modules (Bac, Licence FSJES, Master) : commande sur WhatsApp au +212 7 13 87 53 27",
       "title": "",
       "description": "",
       "cta": "",
@@ -85,7 +85,7 @@
       "active": true,
       "startDate": "",
       "endDate": "",
-      "note": "Bannière maison (ads/preparation-s1-s3-s5)"
+      "note": "Bannière maison (ads/cahiers-preparation) ; remplace la préparation S1 S3 S5 (fin des cours de soutien)"
     }
   ],
   "pdfMarginMm": 18,

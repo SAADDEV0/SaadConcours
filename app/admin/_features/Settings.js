@@ -92,7 +92,7 @@ function General() {
   );
 }
 
-// Bouton WhatsApp flottant « Cours de soutien » (chrome.js → whatsappFabHtml).
+// Bouton WhatsApp flottant « Cahiers de préparation » (chrome.js → whatsappFabHtml).
 // Affiché tant que le réglage n'est pas explicitement à false ; lu au build
 // par app/layout.js, qui le masque sur tout le site.
 const WA_KEYS = ["whatsappFabEnabled"];
@@ -103,7 +103,7 @@ function WhatsappFab() {
   return (
     <section className="ax-card">
       <SectionTitle>Bouton WhatsApp flottant</SectionTitle>
-      <p className="ax-sub">Le bouton vert « Cours de soutien » en bas à droite de toutes les pages publiques.</p>
+      <p className="ax-sub">Le bouton vert « Cahiers de préparation » (achat sur WhatsApp) en bas à droite de toutes les pages publiques.</p>
       <Switch checked={s.form.whatsappFabEnabled !== false} onChange={(v) => s.set("whatsappFabEnabled", v)} label="Afficher le bouton sur le site" />
       <SaveBar s={s} label="bouton WhatsApp" />
     </section>
