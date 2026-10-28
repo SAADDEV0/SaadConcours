@@ -866,6 +866,17 @@ Tous les cours sont réécrits sur ce modèle ; tout nouveau cours doit le suivr
   (blocs de l'ancien fichier renumérotés), compléter chaque nouveau module jusqu'à un programme
   complet (norme « cours détaillé »), séparer `MOTIFS` et relier les deux modules entre eux
   (liens dans les chapitres et l'annexe).
+  Deuxième précédent : `ajoute macroéconomie 1 dans S1 gestion` (2026-10-28). L'ancien
+  « Macroéconomie » (S2) contenait le programme des deux modules : ses chapitres 1 à 4
+  (comptabilité nationale, agrégats, ERE, consommation et investissement) sont passés dans
+  `macro1_cours` (S1, parcours gestion) + un chapitre « Classiques et keynésiens » ;
+  `macro_cours` est devenu « Macroéconomie 2 » (S2, commun) avec deux chapitres ajoutés
+  (marché du travail et offre globale, modèle OG-DG). Le programme officiel est celui du
+  **tronc commun national** du réseau des doyens (maquettes publiées par l'UMI, mars 2026 :
+  `umi.ac.ma/wp-content/uploads/2026/03/tcn_gestion.pdf` et `tcn_economie.pdf`, texte extrait
+  avec `pdftotext`). Gestion : Macro 1 en S1, Macro 2 en S2 ; Économie : Macro 1 en S2,
+  Macro 2 en S3. Le S1 Gestion y compte 7 modules (Macroéconomie 1 incluse) : le guide
+  `comment_valider_le_s1_gestion_fsjes_maroc` a été mis à jour en conséquence.
 
 ---
 

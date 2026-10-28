@@ -99,6 +99,14 @@
 /cours/stats_cours/variables-aleatoires-et-lois-usuelles /cours/probas_cours/variables-aleatoires-et-lois-usuelles 301
 /cours/stats_cours/echantillonnage-et-estimation /cours/probas_cours/echantillonnage-et-estimation 301
 
+# Le module « Macroéconomie » (S2) a été séparé le 2026-10-28 en Macroéconomie 1
+# (S1 Gestion, macro1_cours) et Macroéconomie 2 (S2, macro_cours), comme dans le
+# tronc commun national : ses quatre premiers chapitres ont changé de module.
+/cours/macro_cours/introduction-a-la-macroeconomie-et-comptabilite-nationale /cours/macro1_cours/introduction-a-la-macroeconomie-et-comptabilite-nationale 301
+/cours/macro_cours/les-agregats-de-production-et-de-revenu /cours/macro1_cours/les-agregats-de-production-et-de-revenu 301
+/cours/macro_cours/l-equilibre-emplois-ressources /cours/macro1_cours/l-equilibre-emplois-ressources 301
+/cours/macro_cours/la-consommation-l-epargne-et-l-investissement /cours/macro1_cours/la-consommation-l-epargne-et-l-investissement 301
+
 # Comparatifs « X vs Y » fusionnés par domaine le 2026-10-11 : chaque ancien
 # article renvoie vers le comparatif qui reprend son contenu.
 /blog/master_actuariat_vs_master_finance_lequel_choisir /blog/master_cca_vs_master_finance_lequel_choisir 301
