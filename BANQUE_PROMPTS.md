@@ -657,10 +657,18 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
    chiffres) **de la même couleur que l'encre** (`encre: true` ne les voit pas) : effacer par zones les seuls
    pixels plus sombres que le fond local (médiane 21 px), en protégeant les lignes du sujet, puis comparer
    à la photo ; un aplat blanc laisse un rectangle visible sur une photo grise.
+   Coches et lettres entourées restées sur un scan publié (audit du 2026-10-28) : scan fsjesmaster
+   repris par `nettoyer-scans.mjs` → re-télécharger la photo et ajouter chaque coche aux zones `effacer`
+   des exceptions (Meknès, Famille et droit 2024). Scan sans procédé reproductible (wadifa, Settat DRA
+   2023) → sur le webp publié : pixels plus sombres que le papier de la zone remis à la couleur du papier,
+   puis la lettre (« b- », « a. ») redessinée avec une lettre intacte de la même page, placée par
+   corrélation sur la lettre d'origine. Relever les zones sur une grille fine (×3, repère tous les 20 px) :
+   lues sur une bande réduite, elles tombent sur la mauvaise ligne. Planche avant/après de chaque zone
+   avant d'écrire, et mettre à jour le bandeau du corrigé (« effacées du scan », plus « visibles »).
 4. Depuis la décision ministérielle de juillet 2025, beaucoup de masters sélectionnent sur dossier : peu
    de sujets 2025 existent. Les plus récents en base sont ceux de la session 2026-2027 (Aïn Chock, Aït Melloul).
    Au 2026-10-23, wadifa-info n'a plus de sujet de droit en arabe daté de 2025 ou 2026 hors de la base, à part
-   ceux écartés ci-dessus. **Sources épuisées au 2026-10-23** (après trois passes, 67 sujets de droit en
+   ceux écartés ci-dessus. **Sources épuisées au 2026-10-23** (après trois passes, 60 sujets de droit en
    base) : wadifa-info (`acces-master-doctorat`, 196 modèles) et fsjesmaster n'ont plus de sujet de master
    de droit hors base, en arabe comme en français ; restent seulement des concours de recrutement (ANCFCC),
    des doctorats, la Faculté de Charia de Fès et un master de la FP de l'Université Moulay Ismaïl (ville

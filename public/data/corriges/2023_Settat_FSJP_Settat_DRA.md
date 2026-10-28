@@ -1,4 +1,4 @@
-> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJP de Settat. Plusieurs réponses peuvent être justes pour une même question, comme le sujet l'indique ; les références sont celles du DOC, du Code de commerce et du Code du travail marocains.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJP de Settat. Plusieurs réponses peuvent être justes pour une même question, comme le sujet l'indique ; les références sont celles du DOC, du Code de commerce et du Code du travail marocains. Les propositions entourées par un candidat ont été effacées du scan.
 
 **1-** **b** — Obligation alternative : plusieurs prestations, l'exécution de l'une libère le débiteur (art. 143 du DOC).
 

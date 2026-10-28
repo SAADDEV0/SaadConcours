@@ -1,6 +1,6 @@
-> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Les coches visibles sur le scan sont celles d'un candidat, souvent fausses (questions 6, 14 et 18 notamment) : ne pas s'y fier. À vérifier, notamment les questions 8, 10, 15 et 19, où la réponse dépend de la lecture retenue par le jury.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Les coches d'un candidat, souvent fausses, ont été effacées du scan. À vérifier, notamment les questions 8, 10, 15 et 19, où la réponse dépend de la lecture retenue par le jury.
 >
-> تصحيح مقترح من SaadConcours وليس تصحيحا رسميا للكلية. العلامات الظاهرة على النسخة الممسوحة من وضع مترشح، وكثير منها خاطئ. النص الأساسي : القانون رقم 70.03 بمثابة مدونة الأسرة.
+> تصحيح مقترح من SaadConcours وليس تصحيحا رسميا للكلية. حذفت من النسخة الممسوحة علامات وضعها مترشح، وكان كثير منها خاطئا. النص الأساسي : القانون رقم 70.03 بمثابة مدونة الأسرة.
 
 ## الزواج وآثاره (الأسئلة 1 إلى 7)
 
