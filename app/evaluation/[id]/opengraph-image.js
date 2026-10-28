@@ -1,4 +1,4 @@
-import { getAllQuiz } from "@/lib/store";
+import { getPublicQuiz } from "@/lib/store";
 import { buildOgImage, ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 
 export const size = ogImageSize;
@@ -11,7 +11,7 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   try {
-    const list = await getAllQuiz();
+    const list = await getPublicQuiz();
     return list.filter((q) => q.available).map((q) => ({ id: q.id }));
   } catch {
     return [];
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 
 export default async function Image(props) {
   const params = await props.params;
-  const list = await getAllQuiz();
+  const list = await getPublicQuiz();
   const q = list.find((x) => x.id === params.id && x.available);
   if (!q) {
     return buildOgImage({ eyebrow: "SaadConcours", title: "QCM introuvable" });

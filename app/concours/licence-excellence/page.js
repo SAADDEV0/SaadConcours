@@ -5,6 +5,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema"
 import JsonLd from "../../_shared/JsonLd";
 import { isLicenceExcellence } from "@/lib/concoursNiveaux";
 import ConcoursListing from "../ConcoursListing";
+import { contenuOuvert } from "@/lib/espaces";
 
 // Même contrainte que /concours : page prérendue, servie depuis les assets
 // Cloudflare sans invoquer le Worker (voir README).
@@ -140,7 +141,7 @@ export default async function LicenceExcellencePage() {
             sideLinks={[
               { href: "/concours", label: "Concours Master" },
               { href: "/cours", label: "Cours Licence FSJES (S1-S4)" },
-              { href: "/evaluation", label: "QCM d'entraînement" },
+              ...(contenuOuvert("qcm") ? [{ href: "/evaluation", label: "QCM d'entraînement" }] : []),
             ]}
           />
 

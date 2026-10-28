@@ -70,9 +70,17 @@ export const metadata = {
     "concours master maroc", "master économie gestion maroc", "concours accès master fsjes encg", "sujets concours master",
   ],
   alternates: { canonical: "/" },
-  // Real favicon/apple-icon files (app/icon.js, app/apple-icon.js) replace
-  // the old inline data:image/svg+xml URI here — Next picks them up
-  // automatically via its file convention, no manual `icons` needed.
+  // Real favicon files (Google's favicon crawler wants a stable image URL of
+  // at least 48x48, not a data: URI). Static files in public/ since
+  // 2026-10-28: as Next routes (app/icon.js, app/apple-icon.js, app/icon-*,
+  // app/manifest.js) they were served by the Worker on every request. They
+  // were drawn by buildAppIcon (app/_shared/appIcon.js) : redraw them from
+  // there if the logo changes.
+  icons: {
+    icon: [{ url: "/icon.png", sizes: "64x64", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     locale: "fr_MA",
@@ -90,8 +98,8 @@ export const metadata = {
   verification: { google: "psUjgmpZoBIvwFbyh0gIAS6cYM0MzeOU9Apw_swXJ7g" },
   other: { "google-adsense-account": "ca-pub-5993944156610700" },
   // iOS Safari ignores the web manifest for "Add to Home Screen" and reads
-  // these specific meta tags instead — apple-touch-icon itself already
-  // comes from app/apple-icon.js.
+  // these specific meta tags instead — apple-touch-icon itself comes from
+  // `icons.apple` above.
   appleWebApp: {
     capable: true,
     title: SITE_NAME,
@@ -135,6 +143,9 @@ const WEBSITE_JSON_LD = {
   url: SITE_URL,
 };
 
+// Réglages des liens du pied de page (SOCIAL_NETWORKS, app/_shared/chrome.js).
+const SOCIAL_KEYS = ["facebook", "instagram", "whatsapp", "tiktok", "youtube", "telegram", "email"];
+
 export default async function RootLayout({ children }) {
   const settings = await getSettings().catch(() => null);
   const adsEnabled = Boolean(settings?.adsEnabled && settings?.adsPublisherId);
@@ -149,12 +160,18 @@ export default async function RootLayout({ children }) {
   // Configuration publique des bannières, inscrite dans la page : le site les
   // affiche dès l'hydratation sans appeler le Worker (voir chrome.js). Pas de
   // balise du tout quand les réglages n'ont pas pu être lus au build — le
-  // navigateur se rabat alors sur /api/settings. « < » échappé : le JSON ne
-  // doit jamais pouvoir fermer la balise <script>.
+  // navigateur se rabat alors sur /data/settings.json. « < » échappé : le JSON
+  // ne doit jamais pouvoir fermer la balise <script>.
   // Bouton WhatsApp flottant (posé par footerHtml) masqué depuis les réglages.
   const hideWhatsappFab = settings?.whatsappFabEnabled === false;
   const partnerAdsJson = settings
     ? JSON.stringify(publicPartnerAdsConfig(settings) || { partnerAdsEnabled: false }).replace(/</g, "\\u003c")
+    : null;
+  // Liens du pied de page (réseaux sociaux), inscrits dans la page comme les
+  // bannières : avant le 2026-10-28, chaque page vue les demandait à
+  // /api/settings, donc au Worker (quota du plan gratuit).
+  const socialJson = settings
+    ? JSON.stringify(Object.fromEntries(SOCIAL_KEYS.filter((k) => settings[k]).map((k) => [k, settings[k]]))).replace(/</g, "\\u003c")
     : null;
 
   return (
@@ -226,6 +243,14 @@ export default async function RootLayout({ children }) {
             type="application/json"
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: partnerAdsJson }}
+          />
+        )}
+        {socialJson && (
+          <script
+            id="sc-social"
+            type="application/json"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: socialJson }}
           />
         )}
         {children}

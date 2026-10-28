@@ -15,7 +15,7 @@ import boutiqueData from "../../public/data/boutique.json";
 import { isProduitVisible } from "../../lib/boutique";
 import { readChapters, lastChapter } from "./progress";
 import { iconHtml } from "./icons";
-import { ESPACES_ACTIFS, OUTILS, espaceOfActive, espaceByKey, espaceOfPath, espaceClass, couleurOfActive } from "../../lib/espaces";
+import { ESPACES_ACTIFS, OUTILS_ACTIFS, espaceOfActive, espaceByKey, espaceOfPath, espaceClass, couleurOfActive } from "../../lib/espaces";
 
 const ICON_MOON = iconHtml("moon", { size: 18, strokeWidth: 2 });
 const ICON_SUN = iconHtml("sun", { size: 18, strokeWidth: 2 });
@@ -92,7 +92,7 @@ export const BOUTIQUE_OUVERTE = Array.isArray(boutiqueData) && boutiqueData.some
  *   2026-10-10 à la demande de Saad).
  * ------------------------------------------------------------------------ */
 const OUTILS_VISIBLES = [
-  ...OUTILS,
+  ...OUTILS_ACTIFS,
   ...(BOUTIQUE_OUVERTE ? [{ key: "boutique", label: "Boutique", long: "Boutique", desc: "Cahiers de préparation", href: "/boutique" }] : []),
 ];
 
@@ -357,22 +357,27 @@ export const chromeScript = function initChrome() {
     window.addEventListener("pageshow", () => bar.classList.remove("loading"));
   })();
 
-  // Partner banners come from the configuration baked into the page at build
-  // time (app/layout.js, <script id="sc-partner-ads">): they render on
-  // hydration, with no network round-trip that could be slow, fail, or land
-  // on a cold Worker. /api/settings now only feeds the footer's social row —
-  // and stands in for the baked config on a page built without settings.
+  // Partner banners and the footer's social links come from the
+  // configuration baked into the page at build time (app/layout.js,
+  // <script id="sc-partner-ads"> and <script id="sc-social">): they render on
+  // hydration, with no network round-trip. Never /api/settings here: that
+  // route runs on the Worker, and calling it on every page view spent the
+  // free plan's daily request quota (2026-10-28). A page built without
+  // settings falls back to the static copy deployed with the site.
   (function initSettingsChrome() {
     if (document.__scSettingsChromeWired) return;
     document.__scSettingsChromeWired = true;
 
-    const baked = readBakedPartnerAds();
+    const baked = readBaked("sc-partner-ads");
+    const social = readBaked("sc-social");
     if (baked !== undefined) renderPartnerAds(baked);
+    if (social !== undefined) renderSocialLinks(social);
+    if (baked !== undefined && social !== undefined) return;
 
-    fetch("/api/settings")
+    fetch("/data/settings.json")
       .then((r) => r.json())
       .then((settings) => {
-        renderSocialLinks(settings);
+        if (social === undefined) renderSocialLinks(settings);
         if (baked === undefined) renderPartnerAds(settings);
       })
       .catch(() => {});
@@ -380,8 +385,8 @@ export const chromeScript = function initChrome() {
 
   // undefined = no baked config on this page (fall back to the fetch);
   // {partnerAdsEnabled:false} = baked, and there is nothing to show.
-  function readBakedPartnerAds() {
-    const el = document.getElementById("sc-partner-ads");
+  function readBaked(id) {
+    const el = document.getElementById(id);
     if (!el) return undefined;
     try {
       return JSON.parse(el.textContent);

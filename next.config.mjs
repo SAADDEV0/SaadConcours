@@ -18,6 +18,8 @@ const nextConfig = {
     ],
   },
 
+  // Ne vaut que pour `next start` : en production, les fichiers de public/
+  // sont servis par les assets Cloudflare, qui lisent public/_headers.
   async headers() {
     return [
       {

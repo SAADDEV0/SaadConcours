@@ -22,6 +22,9 @@ export default defineConfig([
       // real <a href> links in the first response (see app/concours/page.js).
       // Swapping them for <Link> would mean rebuilding that as client
       // components and losing the SEO property the whole design exists for.
+      // And on Cloudflare a <Link> prefetches the page's RSC payload, which
+      // is not published as a static asset: every prefetch would invoke the
+      // Worker and spend the free plan's daily quota (2026-10-28).
       "@next/next/no-html-link-for-pages": "warn",
       "@next/next/no-page-custom-font": "warn",
 

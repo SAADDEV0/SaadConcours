@@ -54,15 +54,27 @@ export async function generateStaticParams() {
 // existe aussi dans un autre module (« Les emprunts obligataires » en
 // Comptabilité des sociétés et en Mathématiques financières) garde toujours
 // le nom du module : deux pages ne doivent pas partager un titre.
+// Comme pour le Droit (2026-10-28) : un titre de chapitre trop long (« Les
+// opérations sur le fonds de commerce : vente, nantissement et
+// location-gérance ») garde sa tête, avant les deux-points, plutôt que de
+// dépasser 65 caractères.
 function titreSeo(c, ch, list = []) {
   const sem = c.semestre ? ` ${c.semestre}` : "";
   const partage = list.some((x) => x.available && x.id !== c.id && fsjesModule(x).chapitres.some((k) => k.titre === ch.titre));
+  const teteDe = (t) => t.split(/\s?:\s/)[0].trim();
+  const tete = teteDe(ch.titre);
+  // Pas de tête partagée avec un autre chapitre du module (titres uniques).
+  const unique = !fsjesModule(c).chapitres.some((k) => k.slug !== ch.slug && teteDe(k.titre) === tete);
+  const court = tete.length >= 10 && tete !== ch.titre && unique ? tete : null;
   return fitTitle([
     `${ch.titre} : cours et exercices corrigés — ${c.module}${sem}`,
     !partage && `${ch.titre} : cours et exercices corrigés`,
     `${ch.titre} — ${c.module}${sem}`,
     !partage && `${ch.titre} : cours et exercices`,
-    partage ? `${ch.titre} — ${c.module}` : ch.titre,
+    partage && `${ch.titre} — ${c.module}`,
+    court && `${court} — ${c.module}${sem}`,
+    court && `${court} : cours et exercices corrigés`,
+    court || (partage ? `${ch.titre} — ${c.module}` : ch.titre),
   ]);
 }
 

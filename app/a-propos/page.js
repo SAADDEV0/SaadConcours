@@ -1,4 +1,4 @@
-import { getPublicConcours, getAllCours, getAllDroit, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllDroit, getPublicQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { droitModule, droitOuvert, isDroitPublie } from "../../lib/droit";
 import { BAC_MATIERES } from "../../lib/bacProgramme";
 import { fsjesModule } from "../../lib/fsjesChapitres";
@@ -31,7 +31,7 @@ async function getFigures() {
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     droitOuvert() ? getAllDroit().catch(() => []) : [],
-    getAllQuiz().catch(() => []),
+    getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
   // Pas getCorrigeIds() : voir getCorrigeIdsLocal dans lib/store.js.
@@ -139,10 +139,12 @@ export default async function AProposPage() {
               découpés en {f.chapitresDroit} chapitres, avec exercices corrigés, résumé et QCM ;
             </li>
           )}
-          <li>
-            <a href="/evaluation">{f.quiz} QCM d&apos;auto-évaluation</a> totalisant {f.questions} questions
-            corrigées ;
-          </li>
+          {f.quiz > 0 && (
+            <li>
+              <a href="/evaluation">{f.quiz} QCM d&apos;auto-évaluation</a> totalisant {f.questions} questions
+              corrigées ;
+            </li>
+          )}
           <li>
             <a href="/blog">{f.articles} articles</a> de méthode : déroulement du concours, choix du master,
             dossier de candidature, oral.

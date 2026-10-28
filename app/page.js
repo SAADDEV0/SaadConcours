@@ -1,4 +1,4 @@
-import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllDroit, getPublicQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { compareConcoursRecents, concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
@@ -53,7 +53,9 @@ export default async function HomePage() {
     getAllCours().catch(() => []),
     encgOuvert() ? getAllEncg().catch(() => []) : [],
     droitOuvert() ? getAllDroit().catch(() => []) : [],
-    getAllQuiz().catch(() => []),
+    // Vide tant que la section QCM est cachée (QCM_LANCE) : ses liens, ses
+    // chiffres et son bloc disparaissent de l'accueil.
+    getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
   const corrigeIds = getCorrigeIdsLocal();
@@ -126,7 +128,11 @@ export default async function HomePage() {
       ]
         .filter(Boolean)
         .join(" · "),
-      chiffres: [[coursPublies.length + droitModules.length, "modules"], [chapitresFsjes + chapitresDroit, "chapitres"], [quizPublies.length, "concours blancs"]],
+      chiffres: [
+        [coursPublies.length + droitModules.length, "modules"],
+        [chapitresFsjes + chapitresDroit, "chapitres"],
+        ...(quizPublies.length ? [[quizPublies.length, "concours blancs"]] : []),
+      ],
     },
     encg: {
       ligne: [tafem.length && `${tafem.length} sujets TAFEM`, encgPublies.length && `${encgPublies.length} modules du S1 au S10`].filter(Boolean).join(" · "),
@@ -231,10 +237,12 @@ export default async function HomePage() {
           </>
         )}
         <div className="home-links home-links-wide">
-          <a className="home-link" href="/evaluation">
-            <strong>QCM d&apos;entraînement par module</strong>
-            <span>{quizPublies.length} concours blancs corrigés question par question</span>
-          </a>
+          {quizPublies.length > 0 && (
+            <a className="home-link" href="/evaluation">
+              <strong>QCM d&apos;entraînement par module</strong>
+              <span>{quizPublies.length} concours blancs corrigés question par question</span>
+            </a>
+          )}
           <a className="home-link" href="#excellence">
             <strong>Après le DEUG : la licence d&apos;excellence</strong>
             <span>Les concours d&apos;accès en S5 ont leur propre espace, juste en dessous</span>
@@ -432,32 +440,34 @@ export default async function HomePage() {
           </div>
         ))}
 
-        <section className="home-espace home-outils" aria-labelledby="home-outils-title">
+        <section className="home-espace home-outils" aria-labelledby={quizPublies.length ? "home-outils-title" : "home-blog-title"}>
           <div className="home-wrap">
-            <div className="home-outils-grid">
-              <div>
-                <p className="home-kicker">S&apos;entraîner</p>
-                <h2 id="home-outils-title">QCM et concours blancs</h2>
-                <p className="home-espace-desc">
-                  {quizPublies.length} concours blancs de 100 questions, corrigés question par question, pour réviser un module en
-                  conditions d&apos;examen. Ton meilleur score reste enregistré dans ce navigateur.
-                </p>
-                <div className="home-links home-links-wide">
-                  {quizPublies.slice(0, 4).map((q) => (
-                    <a key={q.id} className="home-link" href={`/evaluation/${encodeURIComponent(q.id)}`}>
-                      <strong>{q.module || q.title}</strong>
-                      <span>Concours blanc · {(q.questions || []).length} questions</span>
-                    </a>
-                  ))}
+            <div className={`home-outils-grid${quizPublies.length ? "" : " home-outils-seul"}`}>
+              {quizPublies.length > 0 && (
+                <div>
+                  <p className="home-kicker">S&apos;entraîner</p>
+                  <h2 id="home-outils-title">QCM et concours blancs</h2>
+                  <p className="home-espace-desc">
+                    {quizPublies.length} concours blancs de 100 questions, corrigés question par question, pour réviser un module en
+                    conditions d&apos;examen. Ton meilleur score reste enregistré dans ce navigateur.
+                  </p>
+                  <div className="home-links home-links-wide">
+                    {quizPublies.slice(0, 4).map((q) => (
+                      <a key={q.id} className="home-link" href={`/evaluation/${encodeURIComponent(q.id)}`}>
+                        <strong>{q.module || q.title}</strong>
+                        <span>Concours blanc · {(q.questions || []).length} questions</span>
+                      </a>
+                    ))}
+                  </div>
+                  <a className="home-more" href="/evaluation">
+                    Tous les QCM <Icon name="arrow-right" size={16} />
+                  </a>
                 </div>
-                <a className="home-more" href="/evaluation">
-                  Tous les QCM <Icon name="arrow-right" size={16} />
-                </a>
-              </div>
+              )}
               {recentPosts.length > 0 && (
                 <div>
                   <p className="home-kicker">Méthode et orientation</p>
-                  <h2>Derniers articles</h2>
+                  <h2 id="home-blog-title">Derniers articles</h2>
                   <div className="sp-rows">
                     {recentPosts.map((p) => {
                       const cat = categoryInfo(p.category);
@@ -495,7 +505,8 @@ export default async function HomePage() {
                 languesDroit.length > 1 ? "en français et en arabe" : "en français"
               }.`}{" "}
             Après le DEUG, les sujets des concours de <strong>licence d&apos;excellence</strong>{" "}
-            préparent l&apos;accès direct en S5 ; pour le <strong>Master</strong>, la base de sujets réels et les QCM permettent de
+            préparent l&apos;accès direct en S5 ; pour le <strong>Master</strong>,{" "}
+            {quizPublies.length ? "la base de sujets réels et les QCM permettent" : "la base de sujets réels permet"} de
             préparer les concours d&apos;accès des FSJES et des ENCG en conditions réelles.
           </p>
         </section>

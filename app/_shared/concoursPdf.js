@@ -320,12 +320,14 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
 
   // c.corrige_md is empty when the corrigé exists only as a raw file in the
   // repo's data/corriges/ folder (see lib/store.js getCorrigeFile) — fetch
-  // it on demand rather than silently leaving it out of the PDF.
+  // it on demand rather than silently leaving it out of the PDF. Read from
+  // the static copy deployed with the site, never /api/concours/[id]/corrige:
+  // that route runs on the Worker (free plan quota, 2026-10-28).
   let corrigeMd = c.corrige_md;
   if (!corrigeMd && c.id) {
     try {
-      const res = await fetch(`/api/concours/${encodeURIComponent(c.id)}/corrige`);
-      if (res.ok) corrigeMd = (await res.json()).corrige_md;
+      const res = await fetch(`/data/corriges/${encodeURIComponent(c.id)}.md`);
+      if (res.ok) corrigeMd = (await res.text()).trim() || null;
     } catch {
       // best-effort: PDF is still useful without the corrigé
     }

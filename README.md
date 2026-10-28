@@ -10,7 +10,7 @@ Application Next.js multi-pages :
 - `/droit` — Cours de la licence de Droit (FSJES) par semestre, tronc commun puis filières, en français et en arabe (`public/data/droit.json`), lancé le 2026-10-17
 - `/encg` — Cours de l'ENCG du S1 au S10 par module et chapitre (`public/data/encg.json`) ; `/concours/post-bac` — sujets du concours d'accès aux ENCG (TAFEM). Les deux forment l'espace ENCG et ne s'affichent qu'avec du contenu publié ; **caché depuis le 2026-10-17** (`ENCG_LANCE = false`, `lib/contenusPublies.mjs`, recette K4)
 - `/concours` — Concours (filtres, recherche, rendu Markdown/LaTeX, galerie d'images, export PDF, corrigé quand disponible)
-- `/evaluation` — QCM d'auto-évaluation par module
+- `/evaluation` — QCM d'auto-évaluation par module ; **caché depuis le 2026-10-28** (`QCM_LANCE = false`, `lib/contenusPublies.mjs`, recette E), `/evaluation` redirige en 302 vers `/concours`
 - `/blog` — Articles de méthode et d'orientation
 - `/boutique` — Cahiers de préparation vendus sur Gumroad (le site présente, Gumroad encaisse et livre le PDF) ; absente du menu tant qu'aucun cahier n'est publié
 - `/admin` — Console d'administration v7 (voir « La console d'administration » plus bas), protégée par mot de passe
@@ -87,7 +87,17 @@ construction de rendre une 1102. Le sitemap y est publié aussi (le script refus
 un sitemap tronqué), et les redirections vivent dans `public/_redirects`, lu par
 Cloudflare avant le Worker — jamais un `redirect()` Next sur une URL publique.
 Le Worker ne garde que `/admin`, `/api/*`, les images de partage
-(`opengraph-image`) et les 404.
+(`opengraph-image`) et les 404. Les icônes et le manifeste sont des fichiers de
+`public/` (plus des routes Next) et les en-têtes de cache des assets vivent dans
+`public/_headers`. Le même script réduit la copie déployée de `public/data/` à ce
+que le site lit : sans le champ `source`, sans brouillons ni sujets d'espaces
+cachés, sans `extraits/` ni `news.json` (le dépôt, lui, reste complet).
+
+- **Une page publique n'appelle pas `/api/*` non plus depuis le navigateur.**
+  Chaque appel est une invocation du Worker, décomptée du quota gratuit
+  (100 000 requêtes par jour) : réglages, corrigés et données se lisent dans la
+  page (inscrits au build) ou dans `/data/*`. Seul `/api/track/batch`
+  (statistiques) reste appelé par les visiteurs.
 
 En pratique, quand tu touches à une page publique :
 

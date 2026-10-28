@@ -5,6 +5,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import { isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
 import ConcoursListing from "./ConcoursListing";
+import { contenuOuvert } from "@/lib/espaces";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
 // request. lib/github.js reads the data JSON with `cache: "no-store"` (
@@ -88,7 +89,7 @@ export default async function ConcoursPage() {
             sideLinks={[
               ...(aDesMastersDroit ? [{ href: "/concours/droit", label: "Concours Master Droit" }] : []),
               { href: "/concours/licence-excellence", label: "Concours Licence d'excellence" },
-              { href: "/evaluation", label: "QCM d'entraînement" },
+              ...(contenuOuvert("qcm") ? [{ href: "/evaluation", label: "QCM d'entraînement" }] : []),
               { href: "/cours", label: "Cours Licence FSJES" },
             ]}
           />

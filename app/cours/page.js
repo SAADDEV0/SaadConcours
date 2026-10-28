@@ -3,6 +3,7 @@ import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator, licenceParcoursLabel, licenceFiliereLabel } from "../../lib/coursTaxonomy";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { droitOuvert } from "../../lib/droit";
+import { contenuOuvert } from "../../lib/espaces";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import CoursExplorer from "./CoursExplorer";
@@ -219,8 +220,13 @@ export default async function CoursPage() {
               et sans inscription.
             </p>
             <p>
-              Pour s&apos;entraîner sur tout un module, les <a href="/evaluation">QCM d&apos;évaluation</a> reprennent le programme
-              en conditions d&apos;examen. Après le S4, les{" "}
+              {contenuOuvert("qcm") && (
+                <>
+                  Pour s&apos;entraîner sur tout un module, les <a href="/evaluation">QCM d&apos;évaluation</a> reprennent le
+                  programme en conditions d&apos;examen.{" "}
+                </>
+              )}
+              Après le S4, les{" "}
               <a href="/concours/licence-excellence">sujets des concours de licence d&apos;excellence</a> montrent ce qui est
               demandé pour l&apos;accès en S5.
             </p>

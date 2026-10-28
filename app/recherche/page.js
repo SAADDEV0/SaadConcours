@@ -1,4 +1,4 @@
-import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getPublicQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { isLicenceExcellence, isMasterDroit, isPostBac, isTaalim } from "@/lib/concoursNiveaux";
 import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, encgRenvois, isEncgPublie } from "../../lib/encg";
@@ -43,7 +43,7 @@ export default async function RecherchePage() {
     getAllCours().catch(() => []),
     encgOuvert() ? getAllEncg().catch(() => []) : [],
     droitOuvert() ? getAllDroit().catch(() => []) : [],
-    getAllQuiz().catch(() => []),
+    getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
 
@@ -208,10 +208,12 @@ export default async function RecherchePage() {
                   <strong>Cours 2ᵉ Bac SEG</strong>
                   <span>Toutes les matières</span>
                 </a>
-                <a className="home-link" href="/evaluation">
-                  <strong>QCM d&apos;entraînement</strong>
-                  <span>Concours blancs corrigés</span>
-                </a>
+                {contenuOuvert("qcm") && (
+                  <a className="home-link" href="/evaluation">
+                    <strong>QCM d&apos;entraînement</strong>
+                    <span>Concours blancs corrigés</span>
+                  </a>
+                )}
                 <a className="home-link" href="/blog">
                   <strong>Blog</strong>
                   <span>Méthode et orientation</span>

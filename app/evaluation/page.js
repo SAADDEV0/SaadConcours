@@ -1,4 +1,4 @@
-import { getAllQuiz, getSettings } from "@/lib/store";
+import { getPublicQuiz, getSettings } from "@/lib/store";
 import AdSlot from "../_shared/AdSlot";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { evalCardHtml } from "../_shared/evalCard";
@@ -26,8 +26,16 @@ export const revalidate = false;
 // click is a plain navigation to that dedicated page, which now hosts the
 // actual interactive quiz (see app/evaluation/[id]/EvaluationDetailClient.js)
 // — exactly like a concours/cours card navigates to its own page.
+// Section cachée (QCM_LANCE, lib/contenusPublies.mjs) : la page ne liste
+// rien, n'est liée nulle part et /evaluation redirige vers /concours
+// (public/_redirects). Hors de l'index, comme /encg.
+export async function generateMetadata() {
+  const quiz = await getPublicQuiz().catch(() => []);
+  return quiz.length ? {} : { robots: { index: false, follow: true } };
+}
+
 export default async function EvaluationPage() {
-  const quiz = await getAllQuiz().catch(() => []);
+  const quiz = await getPublicQuiz().catch(() => []);
   const settings = await getSettings().catch(() => null);
   const disponibles = quiz.filter((q) => q.available);
   const nbQuestions = disponibles.reduce((n, q) => n + (q.questions || []).length, 0);

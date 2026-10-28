@@ -138,7 +138,7 @@ export default async function PostBacPage() {
             sideLinks={[
               ...(contenuOuvert("encg-cours") ? [{ href: "/encg", label: "Cours ENCG du S1 au S10" }] : []),
               { href: "/bac/2bac", label: "Réviser le 2ᵉ Bac Éco & Gestion" },
-              { href: "/evaluation", label: "QCM d'entraînement" },
+              ...(contenuOuvert("qcm") ? [{ href: "/evaluation", label: "QCM d'entraînement" }] : []),
             ]}
           />
 

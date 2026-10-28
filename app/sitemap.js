@@ -1,4 +1,4 @@
-import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getAllQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getPublicQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
 import { isProduitVisible } from "@/lib/boutique";
 import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
@@ -40,7 +40,7 @@ export default async function sitemap() {
     getAllCours().catch(() => []),
     getAllEncg().catch(() => []),
     getAllDroit().catch(() => []),
-    getAllQuiz().catch(() => []),
+    getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
     getAllBoutique().catch(() => []),
   ]);
@@ -90,7 +90,8 @@ export default async function sitemap() {
     ...(droitPublies.length || (droitOuvert() && droitRenvois(droit, cours).length) ? [{ path: "/droit", changeFrequency: "weekly", priority: 0.8 }] : []),
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
     { path: "/cours", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/evaluation", changeFrequency: "weekly", priority: 0.8 },
+    // Section QCM cachée (QCM_LANCE) : ni /evaluation ni ses fiches.
+    ...(contenuOuvert("qcm") ? [{ path: "/evaluation", changeFrequency: "weekly", priority: 0.8 }] : []),
     // Boutique vide = page « bientôt » : hors sitemap tant qu'aucun cahier n'est publié.
     ...(produits.length ? [{ path: "/boutique", changeFrequency: "weekly", priority: 0.7 }] : []),
     { path: "/faq", changeFrequency: "monthly", priority: 0.5 },

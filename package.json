@@ -9,7 +9,7 @@
     "lint": "eslint app lib",
     "check": "npm run lint && next build && node scripts/audit-contenu.mjs",
     "audit:contenu": "node scripts/audit-contenu.mjs",
-    "cf:assets": "node scripts/prerender-to-assets.mjs",
+    "cf:assets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/prerender-to-assets.mjs",
     "app:data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-app-data.mjs"
   },
   "dependencies": {

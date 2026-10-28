@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getAllQuiz } from "@/lib/store";
+import { getPublicQuiz } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import EvaluationDetailClient from "./EvaluationDetailClient";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
@@ -7,7 +7,7 @@ import { fitTitle, clampDescription } from "../../_shared/seoText";
 const SITE_URL = "https://www.saadconcours.space";
 
 async function findQuiz(id) {
-  const list = await getAllQuiz();
+  const list = await getPublicQuiz();
   return { q: list.find((x) => x.id === id) || null, list };
 }
 
@@ -54,7 +54,7 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   try {
-    const list = await getAllQuiz();
+    const list = await getPublicQuiz();
     return list.filter((q) => q.available).map((q) => ({ id: q.id }));
   } catch {
     return [];

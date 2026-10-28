@@ -1,0 +1,32 @@
+# En-têtes des fichiers statiques (Workers Static Assets), ajoutés le 2026-10-28.
+#
+# Comme _redirects, OpenNext copie ce fichier à la racine des assets et
+# Cloudflare le lit comme configuration (il n'est pas servi). Il ne touche
+# qu'aux réponses des assets : aucune invocation du Worker, aucun quota du
+# plan gratuit. Les réponses du Worker (/admin, /api, images de partage)
+# n'en reçoivent rien.
+#
+# Avant ce fichier, tout partait en « max-age=0, must-revalidate » : chaque
+# visite revalidait chaque script, police et image. Le bloc headers() de
+# next.config.mjs ne s'applique pas ici (il ne vaut que pour `next start`).
+#
+# Une seule règle Cache-Control par chemin : deux règles qui se recouvrent
+# additionneraient leurs valeurs.
+
+# Fichiers nommés par leur empreinte : leur contenu ne change jamais.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Scans et bannières : une semaine, pas « immutable » — une bannière
+# partenaire peut être remplacée sous le même nom depuis la console.
+/images/*
+  Cache-Control: public, max-age=604800
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000

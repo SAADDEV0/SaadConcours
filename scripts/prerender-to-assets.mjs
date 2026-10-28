@@ -60,7 +60,7 @@
 //   perdraient leur Content-Type image/png et les crawlers sociaux les
 //   rejetteraient.
 
-import { readFile, mkdir, copyFile, access } from "node:fs/promises";
+import { readFile, writeFile, readdir, rm, mkdir, copyFile, access } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
 const APP_DIR = ".next/server/app";
@@ -154,3 +154,53 @@ if (nbUrls < copied * 0.9) {
 }
 await copyFile(sitemapSrc, join(ASSETS_DIR, "sitemap.xml"));
 console.log(`  sitemap.xml publié en asset statique (${nbUrls} URL)`);
+
+// DONNÉES PUBLIQUES : CE QUE LE SITE LIT, RIEN DE PLUS (2026-10-28)
+//   OpenNext copie public/ tel quel dans les assets, donc public/data/ y
+//   arrivait entier : le champ interne `source` des sujets (le site d'origine,
+//   « jamais publié » depuis le 2026-09-26), les brouillons, les sujets des
+//   espaces cachés, les fiches privées des annonceurs (contact, note), les
+//   news copiées d'almaster-maroc.com et les copies .md des énoncés, que rien
+//   ne lit sur le site. Les fichiers du dépôt ne changent pas (la console et
+//   le build lisent le dépôt) : seule la copie déployée est réduite, ce qui
+//   ne fait que retirer des fichiers et des octets des assets.
+//   Ce que le navigateur lit encore : concours.json (texte des PDF de la
+//   liste), corriges/<id>.md (corrigés hors concours.json), settings.json
+//   (repli des PDF et du pied de page), cours/droit/encg/blog.json.
+const DATA_DIR = join(ASSETS_DIR, "data");
+const { ENCG_LANCE, TAALIM_LANCE, QCM_LANCE } = await import("../lib/contenusPublies.mjs");
+const { publicAd } = await import("../app/_shared/partnerAds.js");
+
+// Même règle que isConcoursPublic (lib/store.js), sans le registre des espaces.
+const concoursPublic = (c) =>
+  c?.statut !== "brouillon" && (c?.niveau !== "post_bac" || ENCG_LANCE) && (c?.niveau !== "taalim" || TAALIM_LANCE);
+
+const concoursPath = join(DATA_DIR, "concours.json");
+const tousConcours = JSON.parse(await readFile(concoursPath, "utf8"));
+const publics = tousConcours.filter(concoursPublic).map(({ source: _source, ...c }) => c);
+await writeFile(concoursPath, JSON.stringify(publics));
+const idsPublics = new Set(publics.map((c) => c.id));
+
+// Corrigés : seulement ceux d'un sujet publié.
+let corrigesRetires = 0;
+for (const f of await readdir(join(DATA_DIR, "corriges")).catch(() => [])) {
+  if (!idsPublics.has(f.replace(/\.md$/, ""))) {
+    await rm(join(DATA_DIR, "corriges", f));
+    corrigesRetires += 1;
+  }
+}
+
+const settingsPath = join(DATA_DIR, "settings.json");
+const settings = JSON.parse(await readFile(settingsPath, "utf8"));
+if (Array.isArray(settings.partnerAds)) settings.partnerAds = settings.partnerAds.map(publicAd);
+await writeFile(settingsPath, JSON.stringify(settings));
+
+await rm(join(DATA_DIR, "extraits"), { recursive: true, force: true });
+await rm(join(DATA_DIR, "news.json"), { force: true });
+if (!QCM_LANCE) await rm(join(DATA_DIR, "quiz.json"), { force: true });
+
+console.log(
+  `  data/ : ${publics.length}/${tousConcours.length} sujets publiés sans « source », ` +
+    `${corrigesRetires} corrigés hors site retirés, extraits/ et news.json retirés` +
+    (QCM_LANCE ? "" : ", quiz.json retiré (section QCM cachée)"),
+);

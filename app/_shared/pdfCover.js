@@ -15,7 +15,6 @@
 
 import { drawLogoMark, PDF_COVER_DEFAULT_POSITIONS, sanitizePdfText } from "./pdfTheme";
 
-const PT_TO_MM = 0.3528;
 // Distance from the top of a line box down to its baseline, and from one
 // line's top to the next — both as a multiple of the point size, in mm.
 // Matches the 22pt/9mm step the hand-written covers used before.

@@ -159,6 +159,27 @@
 /concours/2021_Taalim_AREF_Primaire_Francais /concours 302
 /concours/2021_Taalim_AREF_Primaire_DidactiqueFrancais /concours 302
 
+# Section QCM cachée le 2026-10-28 (QCM_LANCE = false, lib/contenusPublies.mjs) :
+# /evaluation et ses cinq concours blancs étaient dans le sitemap. Leurs
+# visiteurs arrivent sur les sujets réels. 302 : temporaire, à retirer au
+# relancement de la section (BANQUE_PROMPTS, recette E1).
+/evaluation /concours 302
+/evaluation/analysefin_100 /concours 302
+/evaluation/audit_100 /concours 302
+/evaluation/comptaana_100 /concours 302
+/evaluation/macro_100 /concours 302
+/evaluation/mathfin_100 /concours 302
+
+# Icônes du site publiées en fichiers statiques le 2026-10-28 : en routes Next
+# (/icon, /apple-icon…), chaque demande démarrait le Worker. Les anciennes
+# adresses, encore en cache chez Google et dans les applis installées, mènent
+# aux fichiers.
+/icon /icon.png 301
+/apple-icon /apple-icon.png 301
+/icon-192 /icon-192.png 301
+/icon-512 /icon-512.png 301
+/icon-512-maskable /icon-512-maskable.png 301
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et

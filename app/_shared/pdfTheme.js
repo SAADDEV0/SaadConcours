@@ -200,7 +200,7 @@ export const PDF_COVER_DEFAULT_POSITIONS = {
 // "->"), the rest are dropped rather than left to corrupt their line.
 const PDF_TEXT_REPLACEMENTS = {
   // Arrows and relations — by far the most common offenders in the corrigés.
-  "−": "-", "‐": "-", "‑": "-", "−": "-", "﹘": "-",
+  "−": "-", "‐": "-", "‑": "-", "﹘": "-",
   "→": "->", "➜": "->", "➔": "->", "⇒": "=>", "⟹": "=>", "⟶": "->",
   "←": "<-", "⟵": "<-", "↔": "<->", "⇔": "<=>", "↑": "^", "↓": "v",
   "≈": "~=", "≃": "~=", "≅": "~=", "≤": "<=", "⩽": "<=", "≥": ">=", "⩾": ">=",
@@ -394,15 +394,16 @@ export function getImageDimensions(dataUrl) {
 
 // ---- settings -> branding --------------------------------------------
 
-// The saved settings every public PDF is styled with. /api/settings runs on
-// the Worker, and on a cold isolate it can answer with an Error 1102 page
-// instead of JSON (README, « une page publique n'invoque pas le Worker ») —
-// the PDF then silently came out in the default look, without the cover or
-// the colors the admin chose. The static copy deployed with the site
-// (/data/settings.json, served from the edge) is the fallback: at worst it's
-// the version of the last deploy, never the factory defaults.
+// The saved settings every public PDF is styled with, read from the static
+// copy deployed with the site (/data/settings.json, served from the edge):
+// /api/settings runs on the Worker, so a PDF downloaded from a public page
+// spent the free plan's request quota and could hit an Error 1102 (README,
+// « une page publique n'invoque pas le Worker »). Every settings change is a
+// commit, hence a deploy, so the static copy is current. Only the console
+// reads /api/settings first, for a change saved before the deploy is live.
 export async function loadPdfSettings() {
-  for (const url of ["/api/settings", "/data/settings.json"]) {
+  const admin = typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
+  for (const url of admin ? ["/api/settings", "/data/settings.json"] : ["/data/settings.json"]) {
     try {
       const res = await fetch(url);
       if (!res.ok) continue;

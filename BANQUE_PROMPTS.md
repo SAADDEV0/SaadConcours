@@ -102,6 +102,12 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 ### 1.4 Ne pas casser le site
 - Pas de page publique dynamique (`cookies()`, `headers()`, `searchParams`, `force-dynamic`,
   `revalidate` non nul) — voir README, section « une page publique n'invoque pas le Worker ».
+- **Jamais une modification qui augmente l'usage Cloudflare** (consigne de Saad, 2026-10-28) : le
+  site reste sur le plan gratuit. Avant tout changement, se demander s'il ajoute des invocations du
+  Worker (un `fetch("/api/…")` depuis une page publique, une route Next servie à chaque visite, un
+  `<Link>` qui précharge le RSC), des fichiers d'assets (limite de 20 000 par déploiement, 7 167
+  le 2026-10-27), du poids au Worker (5,3 Mo compressés) ou des écritures KV. Si oui : ne pas le
+  faire et le dire. Une page publique lit ce dont elle a besoin au build ou dans `/data/*` (statique).
 - Ne pas toucher aux fichiers d'une autre tâche en cours (vérifier `git status` avant de commencer
   et ne committer **que** les fichiers de la recette).
 
@@ -1073,6 +1079,14 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
 ---
 
 ## E. ÉVALUATIONS (QCM — `/evaluation`)
+
+> **Section cachée depuis le 2026-10-28** (`QCM_LANCE = false`, `lib/contenusPublies.mjs`) : ni
+> pages, ni liens, ni sitemap ; `/evaluation` et ses fiches redirigent en 302 vers `/concours`
+> (`public/_redirects`) et `quiz.json` n'est pas déployé. Les QCM des chapitres de cours ne sont
+> pas concernés. **Relancer** : `QCM_LANCE = true`, retirer le bloc « Section QCM cachée » de
+> `public/_redirects`, puis rétablir les liens du blog vers `/evaluation` (retirés dans le même
+> commit : `git show <commit> -- public/data/blog.json`). Ajouter une évaluation reste possible
+> en attendant : elle n'apparaîtra qu'au relancement.
 
 ### Schéma d'une entrée `quiz.json`
 ```json
