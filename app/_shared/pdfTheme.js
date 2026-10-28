@@ -247,6 +247,24 @@ export function sanitizePdfText(input, { arabic = false } = {}) {
     .replace(/[ \t]{2,}/g, " ");
 }
 
+// Nom du fichier téléchargé, tiré du nom lisible du document :
+// « Contrôle de Gestion » → controle_de_gestion.pdf. Accents retirés, tout
+// en minuscules, les lettres arabes gardées. Chaque partie est coupée vers
+// 60 caractères à une limite de mot, pour qu'un intitulé de master très long
+// ne chasse pas l'établissement et l'année. Les parties vides sont ignorées ;
+// `fallback` (l'id) sert si rien de lisible ne reste.
+export function pdfFileName(parts, fallback = "document") {
+  const name = (Array.isArray(parts) ? parts : [parts])
+    .map((p) => {
+      const s = String(p ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "");
+      return s.length > 60 ? s.slice(0, 60).replace(/_[^_]*$/, "") : s;
+    })
+    .filter(Boolean)
+    .join("_");
+  return `${name || String(fallback).replace(/[^\w-]+/g, "_")}.pdf`;
+}
+
 // ---- small helpers ----------------------------------------------------
 
 export function hexToRgb(hex, fallback = null) {

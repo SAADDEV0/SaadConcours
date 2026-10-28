@@ -7,7 +7,7 @@
 
 import { pub, trackPdfDownload } from "./chrome";
 import { formatQCM } from "./concoursFormat";
-import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
+import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, pdfFileName, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
 import { convertMathSpansToPlainText } from "./latexPlainText";
@@ -386,6 +386,10 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
 
 export async function downloadConcoursPdf(c) {
   const doc = await buildConcoursPdf(c);
-  doc.save(`${c.id}.pdf`);
+  // Année inconnue (« non précisée », « SD ») laissée hors du nom ; un 2e
+  // sujet du même master la même année (id en « …AIF2 ») devient « sujet_2 ».
+  const annee = /\d/.test(c.annee || "") ? c.annee : "";
+  const variante = /\D(\d)$/.exec(c.id || "")?.[1];
+  doc.save(pdfFileName([c.master_fr || c.master_reel || c.filiere, c.etablissement, annee, variante && `sujet ${variante}`], c.id));
   trackPdfDownload("concours", c.id);
 }

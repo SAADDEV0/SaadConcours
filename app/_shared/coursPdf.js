@@ -22,7 +22,7 @@
 // plain text only (autotable doesn't have a clean spot to draw an inline
 // SVG per cell).
 import { trackPdfDownload } from "./chrome";
-import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
+import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, pdfFileName, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
 import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
@@ -612,6 +612,6 @@ export async function buildCoursPdf(cours, brandingOverride) {
 
 export async function downloadCoursPdf(cours) {
   const doc = await buildCoursPdf(cours);
-  doc.save(`${cours.id}.pdf`);
+  doc.save(pdfFileName(cours.module || cours.title, cours.id));
   trackPdfDownload("cours", cours.id);
 }

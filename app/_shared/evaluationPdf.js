@@ -6,7 +6,7 @@
 // same reasoning as coursPdf.js / concoursPdf.js.
 
 import { trackPdfDownload } from "./chrome";
-import { addPageFurniture, contentBounds, loadPdfSettings, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
+import { addPageFurniture, contentBounds, loadPdfSettings, pdfFileName, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
 import { convertMathSpansToPlainText } from "./latexPlainText";
@@ -120,6 +120,6 @@ export async function buildEvaluationPdf({ quiz, questions, chapter = ALL_CHAPTE
 
 export async function downloadEvaluationPdf({ quiz, questions, chapter = ALL_CHAPTERS }) {
   const doc = await buildEvaluationPdf({ quiz, questions, chapter });
-  doc.save(`${quiz.id}_${chapter.replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 30)}.pdf`);
+  doc.save(pdfFileName([quiz.title, chapter === ALL_CHAPTERS ? "" : chapter], quiz.id));
   trackPdfDownload("evaluation", quiz.id);
 }
