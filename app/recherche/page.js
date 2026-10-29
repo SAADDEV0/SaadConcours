@@ -1,8 +1,6 @@
-import { getPublicConcours, getAllCours, getAllEncg, getAllDroit, getPublicQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllDroit, getPublicQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
-import { isLicenceExcellence, isMasterDroit, isPostBac, isTaalim } from "@/lib/concoursNiveaux";
-import { encgModule, encgModuleHref, encgChapitreHref, encgOuvert, encgRenvois, isEncgPublie } from "../../lib/encg";
-import { encgSemestreLabel } from "../../lib/encgTaxonomy";
+import { isLicenceExcellence, isMasterDroit } from "@/lib/concoursNiveaux";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { droitRangLabelFr } from "../../lib/droitTaxonomy";
 import { contenuOuvert } from "../../lib/espaces";
@@ -38,10 +36,9 @@ function entree(k, t, s, u, x = "") {
 }
 
 export default async function RecherchePage() {
-  const [concours, cours, encg, droit, quiz, blog] = await Promise.all([
+  const [concours, cours, droit, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
-    encgOuvert() ? getAllEncg().catch(() => []) : [],
     droitOuvert() ? getAllDroit().catch(() => []) : [],
     getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
@@ -54,9 +51,9 @@ export default async function RecherchePage() {
       entree(
         "concours",
         c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`,
-        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isPostBac(c) ? " · Concours post-bac" : isMasterDroit(c) ? " · Master de droit" : isTaalim(c) ? " · Concours Taalim" : ""}`,
+        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isMasterDroit(c) ? " · Master de droit" : ""}`,
         `/concours/${encodeURIComponent(c.id)}`,
-        [c.master_fr, c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isPostBac(c) ? "post bac encg tafem" : isMasterDroit(c) ? "master droit juridique" : isTaalim(c) ? "taalim enseignement enseignant professeur aref crmef مباراة التعليم" : "master"].filter(Boolean).join(" ")
+        [c.master_fr, c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isMasterDroit(c) ? "master droit juridique" : "master"].filter(Boolean).join(" ")
       )
     );
   }
@@ -67,17 +64,6 @@ export default async function RecherchePage() {
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · Chapitre ${ch.numero}`, fsjesChapitreHref(c, ch)));
     }
-  }
-  for (const c of encg.filter(isEncgPublie)) {
-    const { chapitres } = encgModule(c);
-    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), `${chapitres.length} chapitres`].filter(Boolean).join(" · "), encgModuleHref(c), [c.description, c.option, "encg"].filter(Boolean).join(" ")));
-    for (const ch of chapitres) {
-      index.push(entree("chapitre", ch.titre, `${c.module} · ENCG · Chapitre ${ch.numero}`, encgChapitreHref(c, ch)));
-    }
-  }
-  // Module ENCG commun avec la Licence : une entrée qui mène au cours FSJES.
-  for (const c of encgRenvois(encg, cours)) {
-    index.push(entree("cours", c.module, ["ENCG", encgSemestreLabel(c.semestre), "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "encg"].filter(Boolean).join(" ")));
   }
   for (const c of droit.filter(isDroitPublie)) {
     const { chapitres } = droitModule(c);
@@ -172,28 +158,10 @@ export default async function RecherchePage() {
                     <span>Masters de droit des FSJES, en français et en arabe</span>
                   </a>
                 )}
-                {contenuOuvert("concours-taalim") && (
-                  <a className="home-link" href="/concours/taalim">
-                    <strong>Concours Taalim</strong>
-                    <span>Sujets officiels du concours de l&apos;enseignement</span>
-                  </a>
-                )}
                 <a className="home-link" href="/concours/licence-excellence">
                   <strong>Licence d&apos;excellence</strong>
                   <span>Concours d&apos;accès en S5</span>
                 </a>
-                {contenuOuvert("concours-post-bac") && (
-                  <a className="home-link" href="/concours/post-bac">
-                    <strong>Concours ENCG (TAFEM)</strong>
-                    <span>Sujets d&apos;accès après le Bac</span>
-                  </a>
-                )}
-                {contenuOuvert("encg-cours") && (
-                  <a className="home-link" href="/encg">
-                    <strong>Cours ENCG</strong>
-                    <span>Modules du S1 au S10</span>
-                  </a>
-                )}
                 <a className="home-link" href="/cours">
                   <strong>Cours Licence FSJES</strong>
                   <span>Modules du S1 au S6</span>

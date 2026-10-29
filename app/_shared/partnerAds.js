@@ -8,7 +8,7 @@
 // général `partnerAdsEnabled` et les réglages communs `partnerAdsRotationSec`,
 // `partnerAdsLabel`, `partnerAdsLabelPosition`), édité depuis
 // /admin/monetisation. Chaque entrée :
-//   { id, name, image, w, h, imageMobile, mw, mh, logo, link, alt, title,
+//   { id, name, image, w, h, imageMobile, mw, mh, logo, link, alt, label, title,
 //     description, cta, colors: { bg, fg, accent }, placements: [],
 //     sections: [], device, weight, utm, utmCampaign, active, startDate,
 //     endDate, contact, note }
@@ -60,11 +60,8 @@ export const PARTNER_SECTIONS = [
   { key: "home", label: "Accueil" },
   { key: "concours", label: "Concours Master" },
   { key: "concours-droit", label: "Concours Master Droit" },
-  { key: "concours-taalim", label: "Concours Taalim (enseignement)" },
   { key: "concours-le", label: "Licence d'excellence" },
-  { key: "concours-pb", label: "Concours ENCG (TAFEM)" },
   { key: "cours", label: "Cours Licence FSJES" },
-  { key: "encg", label: "Cours ENCG" },
   { key: "droit", label: "Cours de Droit" },
   { key: "bac", label: "Cours Bac" },
   { key: "eval", label: "Évaluation (QCM)" },
@@ -177,7 +174,7 @@ export function adsForPlacement(settings, placement, { today = todayIso(), secti
 // `contact`/`note` : un champ privé ajouté plus tard au panel ne doit pas
 // partir sur le site par défaut.
 const PUBLIC_FIELDS = [
-  "id", "name", "image", "w", "h", "imageMobile", "mw", "mh", "logo", "link", "alt", "title", "description",
+  "id", "name", "image", "w", "h", "imageMobile", "mw", "mh", "logo", "link", "alt", "label", "title", "description",
   "cta", "colors", "placements", "sections", "device", "weight", "utm", "utmCampaign", "active", "startDate", "endDate",
 ];
 
@@ -401,7 +398,10 @@ function colorVars(colors) {
 // l'aperçu du panel admin, qui passe ses propres URL d'images.
 //
 // Structure : .pa-unit (mention + bannière) > .pa-banner (le lien).
-export function partnerAdHtml(ad, placement, { label = DEFAULT_LABEL, labelPosition = "above" } = {}) {
+export function partnerAdHtml(ad, placement, { label: labelCommun = DEFAULT_LABEL, labelPosition = "above" } = {}) {
+  // Mention propre à la bannière (« Nos cahiers » pour une annonce maison) :
+  // « Sponsorisé » sur ses propres produits serait faux.
+  const label = String(ad.label || "").trim().slice(0, 24) || labelCommun;
   const href = adHref(ad, placement);
   const tag = href ? "a" : "div";
   const attrs = href ? ` href="${esc(href)}" target="_blank" rel="noopener sponsored"` : "";

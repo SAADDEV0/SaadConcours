@@ -341,8 +341,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     doc.setTextColor(...branding.textColor);
     doc.text("Corrigé", marginX, y);
     y += 6;
-    const officielle = c.niveau === "taalim" ? "du ministère" : c.niveau === "post_bac" ? "de l'école" : "de la faculté";
-    addWrappedLine(`Corrigé proposé par SaadConcours, pas une correction officielle ${officielle} — vérifie les calculs avant de t'y fier.`, {
+    addWrappedLine(`Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t'y fier.`, {
       size: 8.5 * fontScale,
       color: [180, 120, 20],
       gapAfter: 3,

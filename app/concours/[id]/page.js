@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getPublicConcours, getCorrigeFile, getCorrigeIdsLocal, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml, partnerZoneHtml, pub } from "../../_shared/chrome";
+import CommunauteCta from "../../_shared/CommunauteCta";
 import { ARABE_RE, concoursCardHtml } from "../../_shared/concoursCard";
 import { difficulteHtml } from "../../_shared/format";
 import { formatQCM, markQcmOptions, marquerBlocsArabes, marquerBlocsLatins } from "../../_shared/concoursFormat";
@@ -11,10 +12,10 @@ import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./Concours
 import AdSlot from "../../_shared/AdSlot";
 import { ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 import MathScripts from "../../_shared/MathScripts";
-import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, MASTER_DROIT, POST_BAC, TAALIM } from "@/lib/concoursNiveaux";
+import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, MASTER_DROIT } from "@/lib/concoursNiveaux";
 
 // Onglet du header et de la barre d'espace (lib/espaces.js) selon le niveau.
-const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [POST_BAC]: "concours-pb", [MASTER_DROIT]: "concours-droit", [TAALIM]: "concours-taalim" };
+const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [MASTER_DROIT]: "concours-droit" };
 import { Icon } from "../../_shared/icons";
 import { modulesDuConcours } from "@/lib/concoursParModule";
 
@@ -75,9 +76,6 @@ function officielDe(c) {
   const etab = String(c.etablissement || "").trim();
   const article = /^[aeiouéèêh]/i.test(etab) ? "l'" : "la ";
   const session = /^\d{4}/.test(String(c.annee)) ? `, session ${c.annee}` : "";
-  // Concours de l'enseignement : une épreuve nationale du ministère, pas d'une
-  // faculté ; `session` précise le mois quand le sujet le donne (« décembre 2021 »).
-  if (niveauOf(c) === TAALIM) return `du concours national de l'enseignement (ministère de l'Éducation nationale, épreuve du CNEE), session ${c.session || c.annee}.`;
   if (!c.ville || etab.includes(c.ville)) return `du concours de ${article}${etab}${session}.`;
   // « FSJES Ait Melloul (Ibn Zohr) » → « (Ibn Zohr, Agadir) », pas deux parenthèses.
   const lieu = etab.endsWith(")") ? `${etab.slice(0, -1)}, ${c.ville})` : `${etab} (${c.ville})`;
@@ -192,7 +190,6 @@ export default async function ConcoursDetailPage(props) {
   const settings = await getSettings().catch(() => null);
 
   const arabe = c.langue === "ar";
-  const taalim = niveauOf(c) === TAALIM;
   const sens = arabe ? { dir: "rtl", lang: "ar" } : {};
   const enonceHtml = renderEnonce(c.enonce_md || "*Énoncé non disponible.*", { arabe });
   const corrigeMd = await resolveCorrigeMd(c);
@@ -200,9 +197,7 @@ export default async function ConcoursDetailPage(props) {
   const url = `${SITE_URL}/concours/${c.id}`;
   const masterLabel = c.master_reel || c.filiere;
   const related = getRelatedConcours(list, c);
-  // Les modules liés sont des cours de Licence FSJES : sans objet pour un
-  // candidat à l'ENCG qui sort du Bac.
-  const modulesLies = niveauOf(c) === POST_BAC ? [] : modulesDuConcours(c);
+  const modulesLies = modulesDuConcours(c);
   const corrigeIds = getCorrigeIdsLocal();
   const hasImages = Boolean(c.images && c.images.length > 0);
   // La source d'un sujet (c.source) reste dans concours.json pour la console,
@@ -235,7 +230,7 @@ export default async function ConcoursDetailPage(props) {
     ...(c.modules?.length ? { assesses: c.modules } : {}),
     keywords: [...new Set([masterLabel, c.master_fr, c.filiere, c.etablissement, c.ville, String(c.annee)].filter(Boolean))].join(", "),
     ...(c.date_ajout ? { datePublished: c.date_ajout } : {}),
-    ...(c.date_maj ? { dateModified: c.date_maj } : {}),
+    ...(c.date_maj || c.date_ajout ? { dateModified: c.date_maj || c.date_ajout } : {}),
     isPartOf: { "@type": "CollectionPage", name: `Concours ${niveau.label}`, url: `${SITE_URL}${niveau.href}` },
     provider: { "@type": "Organization", name: "SaadConcours", url: SITE_URL },
   };
@@ -284,12 +279,12 @@ export default async function ConcoursDetailPage(props) {
              son nom français juste dessous. */}
           <h1>
             {arabe && ARABE_RE.test(masterLabel || "") ? (
-              <bdi lang="ar">{taalim ? masterLabel : `ماستر ${masterLabel}`}</bdi>
+              <bdi lang="ar">{`ماستر ${masterLabel}`}</bdi>
             ) : (
               masterLabel || `${c.etablissement} — ${c.ville} — ${c.annee}`
             )}
           </h1>
-          {arabe && c.master_fr && <p className="sp-detail-modules">{taalim ? c.master_fr : `Master ${c.master_fr}`}</p>}
+          {arabe && c.master_fr && <p className="sp-detail-modules">{`Master ${c.master_fr}`}</p>}
           <div className="sp-detail-meta">
             <span>{c.etablissement}</span>
             {c.ville && !String(c.etablissement || "").includes(c.ville) && <span>{c.ville}</span>}
@@ -392,12 +387,21 @@ export default async function ConcoursDetailPage(props) {
               </summary>
               <div className="corrige-disclaimer">
                 <Icon name="alert" size={18} />
-                <span>Corrigé proposé par SaadConcours, pas une correction officielle {niveauOf(c) === POST_BAC ? "de l'école" : taalim ? "du ministère" : "de la faculté"} — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
+                <span>Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t&apos;y fier pour réviser.</span>
               </div>
               <div className="enonce-content" {...sens} dangerouslySetInnerHTML={{ __html: corrigeHtml }} />
+              {/* Un lien mailto : aucun appel au Worker. Chaque signalement
+                 corrigé pose date_maj, qui apparaît sur /a-propos. */}
+              <p className="corrige-report">
+                Une erreur dans ce corrigé ?{" "}
+                <a href={`mailto:saadconcours.space@gmail.com?subject=${encodeURIComponent(`Erreur dans le corrigé ${c.id}`)}`}>Signale-la</a>{" "}
+                : la fiche est corrigée et la date de mise à jour s&apos;affiche.
+              </p>
             </details>
           </div>
         )}
+
+        <CommunauteCta settings={settings} />
 
         <AdSlot settings={settings} placement="concours_bottom" />
 

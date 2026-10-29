@@ -16,8 +16,7 @@ import {
   licenceParcoursLabel,
   licenceSemestreLabel,
 } from "@/lib/coursTaxonomy";
-import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, MASTER, MASTER_DROIT, POST_BAC, TAALIM, niveauOf } from "@/lib/concoursNiveaux";
-import { ENCG_SEMESTRES, encgSemestreLabel } from "@/lib/encgTaxonomy";
+import { CONCOURS_NIVEAUX, LICENCE_EXCELLENCE, MASTER, MASTER_DROIT, niveauOf } from "@/lib/concoursNiveaux";
 import { DROIT_FILIERES, DROIT_LANGUES, DROIT_SEMESTRES, droitFilieresFor, droitLangueInfo, droitParcoursFor, droitRangLabelFr } from "@/lib/droitTaxonomy";
 import { BOUTIQUE_NIVEAUX, BOUTIQUE_BADGES, BOUTIQUE_DEVISES, boutiqueNiveau, formatPrix } from "@/lib/boutique";
 import { BLOG_CATEGORIES, categoryLabel as blogCategoryLabel } from "@/lib/blogTaxonomy";
@@ -95,7 +94,7 @@ const concours = {
   href: "/admin/concours",
   publicUrl: (c) => `${SITE}/concours/${encodeURIComponent(c.id)}`,
   hydrate: (c) => ({ ...c, niveau: niveauOf(c) }),
-  title: (c) => [niveauOf(c) === LICENCE_EXCELLENCE ? "⭐" : niveauOf(c) === POST_BAC ? "🎓" : niveauOf(c) === MASTER_DROIT ? "⚖️" : niveauOf(c) === TAALIM ? "🍎" : "", c.etablissement, c.annee].filter(Boolean).join(" · ") || c.id,
+  title: (c) => [niveauOf(c) === LICENCE_EXCELLENCE ? "⭐" : niveauOf(c) === MASTER_DROIT ? "⚖️" : "", c.etablissement, c.annee].filter(Boolean).join(" · ") || c.id,
   subtitle: (c) => [c.master_reel || c.filiere, c.ville].filter(Boolean).join(" — "),
   isPublished: (c) => c.statut !== "brouillon",
   setPublished: (c, on) => {
@@ -351,76 +350,13 @@ const cours = {
   auditLabel: (c) => c.title || c.module,
 };
 
-/* ------------------------------ Cours ENCG ------------------------------ */
-
-// Même forme que cours.json (lib/encg.js) ; pages /encg/<id>/<chapitre>.
-const encg = {
-  ...cours,
-  key: "encg",
-  path: "data/encg.json",
-  label: "Cours ENCG",
-  emoji: "🏫",
-  href: "/admin/encg",
-  publicUrl: (c) => (c.renvoi ? `${SITE}/cours/${encodeURIComponent(c.renvoi)}` : `${SITE}/encg/${encodeURIComponent(c.id)}`),
-  subtitle: (c) => [encgSemestreLabel(c.semestre), c.option, c.renvoi && `renvoi → ${c.renvoi}`, coursCategoryLabel(c.category)].filter(Boolean).join(" · "),
-  searchText: (c) => [c.id, c.module, c.title, c.description, c.semestre, c.option].join(" "),
-  filters: [
-    { key: "semestre", label: "Semestre", options: opt(ENCG_SEMESTRES), get: (c) => c.semestre },
-    { key: "category", label: "Catégorie", options: COURS_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })), get: (c) => c.category },
-  ],
-  empty: () => ({ module: "", title: "", description: "", category: "", semestre: "", option: "", renvoi: "", content: "", available: false }),
-  groups: [
-    {
-      title: "Présentation",
-      fields: [
-        { key: "module", label: "Module", type: "text", required: true, placeholder: "Comptabilité générale" },
-        { key: "title", label: "Titre de la fiche", type: "text", required: true, placeholder: "Cours — Comptabilité générale (ENCG S1)" },
-        { key: "description", label: "Description (SEO et cartes)", type: "textarea", rows: 2, full: true, counter: [120, 160] },
-        { key: "category", label: "Catégorie", type: "select", options: COURS_CATEGORIES.map((c) => ({ value: c.code, label: `${c.emoji} ${c.label}` })) },
-        { key: "semestre", label: "Semestre", type: "select", options: opt(ENCG_SEMESTRES) },
-        { key: "option", label: "Option / spécialisation (dernières années)", type: "text", placeholder: "Audit et contrôle de gestion", suggest: "option" },
-      ],
-    },
-    {
-      title: "Module commun avec la Licence",
-      hint: "Si ce module existe déjà dans les cours FSJES (comptabilité générale, microéconomie, mathématiques…), ne pas le réécrire : mettre ici l'id du cours FSJES (ex. comptagen1_cours) et laisser le contenu vide. La carte du module mène alors au cours de la Licence : un seul cours par matière sur le site (règle AdSense).",
-      fields: [{ key: "renvoi", label: "Id du cours FSJES (renvoi)", type: "text", placeholder: "comptagen1_cours" }],
-    },
-    {
-      title: "Contenu",
-      hint: "Chaque « # CHAPITRE N — TITRE » devient une page chapitre (/encg/<module>/<chapitre>). Dans un chapitre : « ## ⚡ RÉSUMÉ » (onglet Résumé), « ## ✏️ EXERCICE N » puis « ## ✅ CORRECTION N ». Un module sans chapitre n'est pas publié. Vide pour un module en renvoi.",
-      fields: [{ key: "content", label: "Cours complet (Markdown + LaTeX)", type: "markdown", full: true, rows: 28 }],
-    },
-  ],
-  prepare(item, { isNew, list }) {
-    const out = { ...item };
-    if (isNew && !out.id) out.id = uniqueId([slugify(out.module, "-"), String(out.semestre || "").toLowerCase()].filter(Boolean).join("-"), new Set(list.map((x) => x.id)));
-    return out;
-  },
-  quality(c) {
-    const chapitres = (String(c.content || "").match(/^# CHAPITRE \d+\s*[—–-]/gm) || []).length;
-    return checks([
-      [c.module && c.title, "Module et titre", "red"],
-      ...(c.renvoi
-        ? [[!chapitres, "Renvoi vers la Licence : pas de cours ENCG en plus (doublon)", "red"]]
-        : [
-            [chapitres >= 1, `Découpage en chapitres (${chapitres} « # CHAPITRE N — … »)`, "red"],
-            [wordCount(c.content) > 400, "Contenu rédigé", "red"],
-          ]),
-      [c.description && c.description.length >= 80, "Description d'au moins 80 caractères"],
-      [c.category, "Catégorie"],
-      [c.semestre, "Semestre"],
-    ]);
-  },
-};
-
 /* ------------------------------ Cours Droit ------------------------------ */
 
-// Même forme que encg.json, plus langue / filière / parcours
+// Même forme que cours.json, plus langue / filière / parcours
 // (lib/droitTaxonomy.js) ; pages /droit/<id>/<chapitre>. L'espace reste
 // fermé sur le site tant que DROIT_LANCE est à false (lib/contenusPublies.mjs).
 const droit = {
-  ...encg,
+  ...cours,
   key: "droit",
   path: "data/droit.json",
   label: "Cours Droit",
@@ -481,6 +417,11 @@ const droit = {
       fields: [{ key: "content", label: "Cours complet (Markdown)", type: "markdown", full: true, rows: 28 }],
     },
   ],
+  prepare(item, { isNew, list }) {
+    const out = { ...item };
+    if (isNew && !out.id) out.id = uniqueId([slugify(out.module, "-"), String(out.semestre || "").toLowerCase()].filter(Boolean).join("-"), new Set(list.map((x) => x.id)));
+    return out;
+  },
   quality(c) {
     const chapitres = (String(c.content || "").match(/^# CHAPITRE \d+\s*[—–-]/gm) || []).length;
     return checks([
@@ -850,8 +791,8 @@ const boutique = {
   auditLabel: (p) => p.titre,
 };
 
-export const COLLECTIONS = { concours, cours, encg, droit, quiz, blog, news, boutique };
-export const COLLECTION_LIST = [concours, cours, encg, droit, quiz, blog, news, boutique];
+export const COLLECTIONS = { concours, cours, droit, quiz, blog, news, boutique };
+export const COLLECTION_LIST = [concours, cours, droit, quiz, blog, news, boutique];
 
 export function collectionByKey(key) {
   return COLLECTIONS[key] || null;

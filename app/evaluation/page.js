@@ -28,7 +28,7 @@ export const revalidate = false;
 // — exactly like a concours/cours card navigates to its own page.
 // Section cachée (QCM_LANCE, lib/contenusPublies.mjs) : la page ne liste
 // rien, n'est liée nulle part et /evaluation redirige vers /concours
-// (public/_redirects). Hors de l'index, comme /encg.
+// (public/_redirects). Hors de l'index.
 export async function generateMetadata() {
   const quiz = await getPublicQuiz().catch(() => []);
   return quiz.length ? {} : { robots: { index: false, follow: true } };

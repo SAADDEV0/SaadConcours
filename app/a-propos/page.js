@@ -3,6 +3,7 @@ import { droitModule, droitOuvert, isDroitPublie } from "../../lib/droit";
 import { BAC_MATIERES } from "../../lib/bacProgramme";
 import { fsjesModule } from "../../lib/fsjesChapitres";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
+import { formatDateFr } from "../_shared/format";
 import ChromeInit from "../_shared/ChromeInit";
 
 // Prerendered, like /faq: every admin edit commits to GitHub and redeploys,
@@ -55,6 +56,13 @@ async function getFigures() {
     quiz: quiz.filter((q) => q.available).length,
     questions: quiz.filter((q) => q.available).reduce((n, q) => n + (q.questions?.length || 0), 0),
     articles: blog.filter((b) => b.available).length,
+    // Fiches corrigées ou complétées après leur mise en ligne (date_maj, posée
+    // par la console et par les recettes C3, C4, C5) : la preuve que le site
+    // est relu, plutôt qu'une promesse.
+    misesAJour: concours
+      .filter((c) => c.date_maj && c.date_maj > (c.date_ajout || ""))
+      .sort((a, b) => String(b.date_maj).localeCompare(String(a.date_maj)))
+      .slice(0, 8),
   };
 }
 
@@ -66,12 +74,12 @@ export default async function AProposPage() {
     "@type": "AboutPage",
     url: `${SITE_URL}/a-propos`,
     name: "À propos de SaadConcours",
+    // L'organisation est décrite une fois, dans app/layout.js (même @id).
     mainEntity: {
-      "@type": "Organization",
+      "@type": "EducationalOrganization",
+      "@id": `${SITE_URL}/#organization`,
       name: "SaadConcours",
       url: SITE_URL,
-      email: "saadconcours.space@gmail.com",
-      founder: { "@type": "Person", name: "Saad" },
       parentOrganization: { "@type": "Organization", name: "SaadGroup" },
     },
   };
@@ -177,6 +185,22 @@ export default async function AProposPage() {
           quand une erreur est signalée. Pour les dates de candidature et les conditions d&apos;admission, c&apos;est
           toujours l&apos;annonce officielle de l&apos;établissement qui fait foi.
         </p>
+        {f.misesAJour.length > 0 && (
+          <>
+            <p style={P}>Les dernières fiches corrigées ou complétées après leur mise en ligne :</p>
+            <ul style={{ ...P, paddingLeft: 20 }}>
+              {f.misesAJour.map((c) => (
+                <li key={c.id}>
+                  <a href={`/concours/${encodeURIComponent(c.id)}`}>
+                    {c.master_fr || c.master_reel || c.filiere} — {c.etablissement}
+                    {/^\d{4}$/.test(String(c.annee)) ? ` ${c.annee}` : ""}
+                  </a>{" "}
+                  <span style={{ color: "var(--text-faint)" }}>(mise à jour le {formatDateFr(c.date_maj)})</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
         <h2 style={H2}>Ce que SaadConcours n&apos;est pas</h2>
         <p style={P}>

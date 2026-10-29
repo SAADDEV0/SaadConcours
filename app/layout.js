@@ -120,17 +120,32 @@ export const viewport = {
   viewportFit: "cover",
 };
 
-const ORG_JSON_LD = {
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  name: SITE_NAME,
-  url: SITE_URL,
-  description: SITE_DESCRIPTION,
-  areaServed: { "@type": "Country", name: "Maroc" },
-  // Ce que couvre le site, pour que Google ne le range pas en « économie-gestion » seulement.
-  knowsAbout: ["Économie", "Gestion", "Comptabilité", "Finance", "Droit", "Droit privé", "Droit public", "Concours Master"],
-  knowsLanguage: ["fr", "ar"],
-};
+// Entité du site pour Google et les moteurs de réponse IA : logo, éditeur et
+// comptes sociaux (sameAs, lus dans les réglages) relient SaadConcours à sa
+// présence ailleurs sur le web — sans eux, une marque jeune n'est qu'un nom.
+// `@id` stable : les autres balisages (À propos) y renvoient au lieu de
+// redécrire l'organisation.
+function orgJsonLd(settings) {
+  const sameAs = ["facebook", "instagram", "tiktok", "youtube", "telegram"]
+    .map((k) => String(settings?.[k] || "").trim())
+    .filter((u) => /^https:\/\//.test(u));
+  return {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "@id": `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: { "@type": "ImageObject", url: `${SITE_URL}/icon-512.png`, width: 512, height: 512 },
+    description: SITE_DESCRIPTION,
+    email: "saadconcours.space@gmail.com",
+    founder: { "@type": "Person", name: "Saad", url: `${SITE_URL}/a-propos` },
+    areaServed: { "@type": "Country", name: "Maroc" },
+    // Ce que couvre le site, pour que Google ne le range pas en « économie-gestion » seulement.
+    knowsAbout: ["Économie", "Gestion", "Comptabilité", "Finance", "Droit", "Droit privé", "Droit public", "Concours Master"],
+    knowsLanguage: ["fr", "ar"],
+    ...(sameAs.length ? { sameAs } : {}),
+  };
+}
 
 // Nom du site affiché par Google au-dessus des résultats. Plus de
 // potentialAction/SearchAction : Google a retiré la « sitelinks search box »
@@ -195,7 +210,7 @@ export default async function RootLayout({ children }) {
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd(settings)) }}
         />
         <script
           type="application/ld+json"

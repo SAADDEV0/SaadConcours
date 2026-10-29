@@ -29,7 +29,7 @@ const MIN_MOTS = 120;
 // « Bientôt » avec majuscule = le badge ; en minuscule, le mot vient dans des
 // phrases normales. Pas de « en construction » pour la même raison : il revient
 // dans les corrigés (« un cadre réglementaire encore en construction »).
-// « Bientôt, elle se mit à rire » (texte littéraire d'un sujet, Taalim 2021)
+// « Bientôt, elle se mit à rire » (texte littéraire d'un ancien sujet)
 // n'est pas un badge : un « Bientôt » suivi d'une virgule et d'une minuscule
 // ouvre une phrase. Le badge seul (« Bientôt », « Bientôt disponible ») reste repéré.
 const MARQUEURS = /\bBientôt\b(?!\s*,\s*[a-zà-ÿ])|\ben préparation\b|arrivent bientôt|coming soon|under construction/;

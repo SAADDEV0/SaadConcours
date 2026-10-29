@@ -44,7 +44,7 @@ function getRelated(list, current, limit = 4) {
 
 export async function generateMetadata(props) {
   const params = await props.params;
-  const { c } = await findModule(params.id);
+  const { c, list } = await findModule(params.id);
   if (!c) return {};
   const sem = c.semestre ? `${c.semestre} ` : "";
   // Module en arabe : titre et description en arabe, la langue de la
@@ -70,10 +70,20 @@ export async function generateMetadata(props) {
         ) || `${c.module} (licence de Droit${c.semestre ? `, ${c.semestre}` : ""}, ${droitRangLabel(c)}) : cours et exercices corrigés, chapitre par chapitre. ${c.description || ""}`
   );
   const url = `${SITE_URL}${droitModuleHref(c)}`;
+  // Même module dans l'autre langue (droitEquivalent) : hreflang dans les deux
+  // sens, pour que Google serve la version française ou arabe selon la
+  // recherche au lieu de les traiter comme deux pages concurrentes.
+  const equivalent = droitEquivalent(c, list);
+  const langues = equivalent
+    ? {
+        [c.langue === "ar" ? "ar-MA" : "fr-MA"]: url,
+        [c.langue === "ar" ? "fr-MA" : "ar-MA"]: `${SITE_URL}${droitModuleHref(equivalent)}`,
+      }
+    : null;
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: url, ...(langues ? { languages: langues } : {}) },
     openGraph: { type: "article", title, description, url },
     twitter: { card: "summary_large_image", title, description },
   };

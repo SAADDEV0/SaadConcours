@@ -142,6 +142,7 @@ function newAd() {
     logo: "",
     link: "",
     alt: "",
+    label: "",
     title: "",
     description: "",
     cta: "",
@@ -543,6 +544,9 @@ function AdEditor({ ad, options, onClose, onSaved }) {
       )}
       <Field label="Texte alternatif" hint="Décrit le visuel pour les lecteurs d'écran.">
         <input className="ax-input" value={form.alt} onChange={(e) => set("alt", e.target.value)} placeholder={form.name || "Nom de l'annonceur"} />
+      </Field>
+      <Field label="Mention de cette bannière" hint="Remplace la mention commune pour cette bannière seulement. Annonce maison (nos cahiers) : « Nos cahiers », jamais « Sponsorisé ».">
+        <input className="ax-input" maxLength={24} value={form.label || ""} onChange={(e) => set("label", e.target.value)} placeholder={DEFAULT_LABEL} />
       </Field>
 
       <hr className="ax-sep" />

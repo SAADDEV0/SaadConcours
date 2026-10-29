@@ -126,7 +126,13 @@ export default function ConcoursListing({ concours: liste, gridTitle = "Tous les
             className="sp-rows"
             id="grid"
             dangerouslySetInnerHTML={{
-              __html: concours.map((c, i) => concoursCardHtml(c, { hidden: i >= CONCOURS_PAGE_SIZE })).join(""),
+              // Les premières lignes seulement : la suite vient de initialData
+              // (« Voir plus », filtres). Chaque fiche reste liée en HTML depuis
+              // son hub de ville et de master (lib/concoursHubs.js).
+              __html: concours
+                .slice(0, CONCOURS_PAGE_SIZE)
+                .map((c) => concoursCardHtml(c))
+                .join(""),
             }}
           />
           <div className="sp-more" id="moreWrap" hidden={restants === 0}>

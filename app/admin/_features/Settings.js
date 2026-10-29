@@ -20,7 +20,7 @@ const TABS = [
 const SOCIAL = [
   { key: "facebook", label: "Facebook", ph: "https://facebook.com/tapage" },
   { key: "instagram", label: "Instagram", ph: "https://instagram.com/toncompte" },
-  { key: "whatsapp", label: "WhatsApp", ph: "https://wa.me/2126…" },
+  { key: "whatsapp", label: "WhatsApp (lien de la chaîne : affiche « Rejoindre la chaîne » sous les sujets)", ph: "https://whatsapp.com/channel/…" },
   { key: "tiktok", label: "TikTok", ph: "https://tiktok.com/@toncompte" },
   { key: "youtube", label: "YouTube", ph: "https://youtube.com/@tachaine" },
   { key: "telegram", label: "Telegram", ph: "https://t.me/toncanal" },

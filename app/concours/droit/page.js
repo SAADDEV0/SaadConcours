@@ -5,6 +5,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema"
 import JsonLd from "../../_shared/JsonLd";
 import { isMasterDroit } from "@/lib/concoursNiveaux";
 import ConcoursListing from "../ConcoursListing";
+import HubNav from "../_hub/HubNav";
 
 // Masters de droit des FSJES (niveau master_droit, lib/concoursNiveaux.js) :
 // même contrainte que /concours, page prérendue servie depuis les assets
@@ -168,6 +169,8 @@ export default async function ConcoursDroitPage() {
               { href: "/concours/licence-excellence", label: "Concours Licence d'excellence" },
             ]}
           />
+
+          <HubNav concours={await getPublicConcours().catch(() => [])} droit parVille={false} />
 
           <section className="sp-le-steps" aria-label="Déroulement du concours" style={{ marginTop: 32 }}>
             <div className="sp-le-step">

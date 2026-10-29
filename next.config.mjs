@@ -42,8 +42,8 @@ const nextConfig = {
   },
 };
 
-// Onglets d'espace ouverts par leur contenu (cours ENCG, sujets TAFEM, cours
-// de Droit) : voir lib/contenusPublies.mjs et lib/espaces.js. `next dev`
+// Onglets d'espace ouverts par leur contenu (cours de Droit, masters de droit,
+// QCM) : voir lib/contenusPublies.mjs et lib/espaces.js. `next dev`
 // ouvre aussi les espaces construits en silence (aperçu avant lancement).
 export default function config(phase) {
   return { ...nextConfig, env: { SC_CONTENUS: contenusPublies({ apercu: phase === PHASE_DEVELOPMENT_SERVER }) } };

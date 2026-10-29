@@ -1,10 +1,8 @@
-import { getPublicConcours, getSettings, getAllCours, getAllEncg, getAllDroit, getPublicQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
+import { getPublicConcours, getSettings, getAllCours, getAllDroit, getPublicQuiz, getAllBlog, getCorrigeIdsLocal } from "@/lib/store";
 import { chromeHtml, footerHtml } from "./_shared/chrome";
 import { compareConcoursRecents, concoursCardHtml } from "./_shared/concoursCard";
 import { formatDateFr } from "./_shared/format";
-import { isLicenceExcellence, isMaster, isMasterDroit, isPostBac, isTaalim } from "@/lib/concoursNiveaux";
-import { ENCG_SEMESTRES, encgAnneeLabel } from "../lib/encgTaxonomy";
-import { encgModule, encgOuvert, encgRenvois, isEncgPublie } from "../lib/encg";
+import { isLicenceExcellence, isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
 import { droitModule, droitOuvert, droitRenvois, isDroitPublie } from "../lib/droit";
 import { DROIT_LANGUES, DROIT_SEMESTRES, droitSortComparator } from "../lib/droitTaxonomy";
 import { categoryInfo } from "../lib/blogTaxonomy";
@@ -47,11 +45,10 @@ function nombre(n) {
 }
 
 export default async function HomePage() {
-  const [allConcours, settings, cours, encg, droit, quiz, blog] = await Promise.all([
+  const [allConcours, settings, cours, droit, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getSettings().catch(() => null),
     getAllCours().catch(() => []),
-    encgOuvert() ? getAllEncg().catch(() => []) : [],
     droitOuvert() ? getAllDroit().catch(() => []) : [],
     // Vide tant que la section QCM est cachée (QCM_LANCE) : ses liens, ses
     // chiffres et son bloc disparaissent de l'accueil.
@@ -84,22 +81,10 @@ export default async function HomePage() {
   // Masters de droit (niveau master_droit) : leur liste à part, /concours/droit.
   const masterDroit = allConcours.filter(isMasterDroit);
   const recentsDroit = [...masterDroit].sort(compareConcoursRecents).slice(0, 3);
-  // Concours de l'enseignement (niveau taalim) : /concours/taalim.
-  const taalim = allConcours.filter(isTaalim);
-  const recentsTaalim = [...taalim].sort(compareConcoursRecents).slice(0, 4);
-  const sessionsTaalim = new Set(taalim.map((c) => c.annee)).size;
   const recentPosts = blog
     .filter((p) => p.available)
     .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""))
     .slice(0, 4);
-  // Espace ENCG : sujets TAFEM (niveau post_bac) et cours S1 → S10.
-  const tafem = allConcours.filter(isPostBac);
-  const recentsTafem = [...tafem].sort((a, b) => String(b.annee).localeCompare(String(a.annee)) || String(b.date_ajout || "").localeCompare(String(a.date_ajout || ""))).slice(0, 4);
-  // Modules rédigés pour l'ENCG + modules communs qui renvoient au cours FSJES
-  // (lib/encg.js) ; seuls les premiers ont des chapitres à eux.
-  const encgPublies = [...encg.filter(isEncgPublie), ...encgRenvois(encg, cours)];
-  const chapitresEncg = encgPublies.reduce((n, c) => n + (c.cible ? 0 : encgModule(c).chapitres.length), 0);
-  const semestresEncg = ENCG_SEMESTRES.map((s) => ({ ...s, n: encgPublies.filter((c) => c.semestre === s.code).length })).filter((s) => s.n > 0);
   // Espace Droit : modules rédigés (français et arabe) + modules qui renvoient
   // au cours de la Licence FSJES (lib/droit.js).
   const droitRediges = droit.filter(isDroitPublie);
@@ -134,14 +119,6 @@ export default async function HomePage() {
         ...(quizPublies.length ? [[quizPublies.length, "concours blancs"]] : []),
       ],
     },
-    encg: {
-      ligne: [tafem.length && `${tafem.length} sujets TAFEM`, encgPublies.length && `${encgPublies.length} modules du S1 au S10`].filter(Boolean).join(" · "),
-      chiffres: [
-        ...(tafem.length ? [[tafem.length, "sujets TAFEM"]] : []),
-        ...(encgPublies.length ? [[encgPublies.length, "modules"]] : []),
-        ...(chapitresEncg ? [[chapitresEncg, "chapitres"]] : []),
-      ],
-    },
     excellence: {
       ligne: `${licenceExc.length} sujets réels · accès en S5 après le DEUG`,
       chiffres: [[licenceExc.length, "sujets réels"], [licenceExc.filter(aCorrige).length, "corrigés"], [etabsExcellence, "établissements"]],
@@ -157,33 +134,9 @@ export default async function HomePage() {
     },
   };
 
-  RESUME.taalim = {
-    ligne: `${taalim.length} sujets officiels · épreuves nationales du ministère`,
-    chiffres: [[taalim.length, "sujets officiels"], [taalim.filter(aCorrige).length, "corrigés"], [sessionsTaalim, sessionsTaalim > 1 ? "sessions" : "session"]],
-  };
-
   // Contenu propre à chaque espace ; un espace absent d'ici affiche ses
   // onglets (section générique).
   const SECTIONS = {
-    taalim: (
-      <>
-        <div className="home-links">
-          <a className="home-link" href="/taalim#filieres">
-            <strong>Les filières du concours</strong>
-            <span>Primaire, collège, lycée, cadres de soutien : le professeur que vous devenez</span>
-          </a>
-          <a className="home-link" href="/taalim#cours">
-            <strong>Les cours à réviser</strong>
-            <span>Tronc commun, spécialité et didactique, filière par filière</span>
-          </a>
-        </div>
-        <div className="home-subhead" style={{ marginTop: 18 }}>
-          <h3>Derniers sujets officiels</h3>
-          <a href="/concours/taalim">Tous les sujets</a>
-        </div>
-        <div className="sp-rows" dangerouslySetInnerHTML={{ __html: recentsTaalim.map(ligneSujet).join("") }} />
-      </>
-    ),
     bac: (
       <div className="home-links">
         {matieresBac.map((m) => (
@@ -248,31 +201,6 @@ export default async function HomePage() {
             <span>Les concours d&apos;accès en S5 ont leur propre espace, juste en dessous</span>
           </a>
         </div>
-      </>
-    ),
-    encg: (
-      <>
-        {recentsTafem.length > 0 && (
-          <>
-            <div className="home-subhead">
-              <h3>Sujets du concours TAFEM</h3>
-              <a href="/concours/post-bac">Tous les sujets</a>
-            </div>
-            <div className="sp-rows" dangerouslySetInnerHTML={{ __html: recentsTafem.map(ligneSujet).join("") }} />
-          </>
-        )}
-        {semestresEncg.length > 0 && (
-          <div className="home-links home-links-semestres">
-            {semestresEncg.map((s) => (
-              <a key={s.code} className="home-link" href={`/encg?semestre=${s.code}`}>
-                <strong>{s.label}</strong>
-                <span>
-                  {s.n} module{s.n > 1 ? "s" : ""} · {encgAnneeLabel(s.code)}
-                </span>
-              </a>
-            ))}
-          </div>
-        )}
       </>
     ),
     excellence: (

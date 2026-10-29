@@ -8,7 +8,6 @@ Application Next.js multi-pages :
 - `/bac/2bac` — Cours du 2ème Bac SEG par matière et chapitre ; examens nationaux listés sur la page de chaque matière (la 1ère Bac est masquée tant qu'elle n'est pas rédigée)
 - `/cours` — Cours de la Licence FSJES par module et chapitre
 - `/droit` — Cours de la licence de Droit (FSJES) par semestre, tronc commun puis filières, en français et en arabe (`public/data/droit.json`), lancé le 2026-10-17
-- `/encg` — Cours de l'ENCG du S1 au S10 par module et chapitre (`public/data/encg.json`) ; `/concours/post-bac` — sujets du concours d'accès aux ENCG (TAFEM). Les deux forment l'espace ENCG et ne s'affichent qu'avec du contenu publié ; **caché depuis le 2026-10-17** (`ENCG_LANCE = false`, `lib/contenusPublies.mjs`, recette K4)
 - `/concours` — Concours (filtres, recherche, rendu Markdown/LaTeX, galerie d'images, export PDF, corrigé quand disponible)
 - `/evaluation` — QCM d'auto-évaluation par module ; **caché depuis le 2026-10-28** (`QCM_LANCE = false`, `lib/contenusPublies.mjs`, recette E), `/evaluation` redirige en 302 vers `/concours`
 - `/blog` — Articles de méthode et d'orientation
@@ -20,10 +19,10 @@ site public le 24/09/2026 pour la demande AdSense ; `public/data/news.json` et l
 
 ## Design et sections : où toucher quoi
 
-- **Espaces** (`lib/espaces.js`) : un public = un espace (Bac, ENCG, Licence FSJES, Licence
-  d'excellence, Master). Un onglet peut dépendre d'un contenu (`contenu`) : il n'apparaît qu'une
-  fois ce contenu publié, calculé au build (`lib/contenusPublies.mjs` → `SC_CONTENUS`). L'espace
-  ENCG (concours TAFEM, cours S1 → S10) s'ouvre ainsi tout seul au premier sujet ou module publié. Le header,
+- **Espaces** (`lib/espaces.js`) : un public = un espace (Bac, Licence FSJES — économie-gestion et
+  droit —, Licence d'excellence, Master). Un onglet peut dépendre d'un contenu (`contenu`) : il n'apparaît qu'une
+  fois ce contenu publié, calculé au build (`lib/contenusPublies.mjs` → `SC_CONTENUS`). Les espaces ENCG
+  et Taalim ont été supprimés le 2026-10-29 (anciennes adresses en 301). Le header,
   la barre d'espace, le menu, la barre du bas, le pied de page et l'accueil se construisent depuis
   ce registre. Ajouter une section : recette X1 de `BANQUE_PROMPTS.md`.
 - **Couleurs et mise en page** : jetons en tête de `app/globals.css` (indigo de marque, rouge des
@@ -32,7 +31,7 @@ site public le 24/09/2026 pour la demande AdSense ; `public/data/news.json` et l
   jetons ; la console (`app/admin/admin.css`) aussi.
 - **Publicité** : emplacements AdSense dans `app/_shared/adPlacements.js` (rendus par `AdSlot`,
   hauteur réservée, repli si vide), formulaire de la console généré depuis la même liste. Recette X3.
-- **Niveaux de concours** (`lib/concoursNiveaux.js`) : Master, Licence d'excellence, Post-bac.
+- **Niveaux de concours** (`lib/concoursNiveaux.js`) : Master, Licence d'excellence, Master Droit.
 
 ## Garde-fou AdSense (« low value content »)
 

@@ -120,9 +120,9 @@
 # (available: false dans blog.json) : Googlebot redemandait encore celui de Fès
 # chaque jour en octobre 2026 (404). Ils renvoient vers les sujets de la ville,
 # filtrés par la recherche de /concours (?q=).
-/blog/fsjes_fes_concours_master_filieres_et_conseils /concours?q=Fes 301
-/blog/fsjes_marrakech_concours_master_filieres_et_conseils /concours?q=Marrakech 301
-/blog/fsjes_beni_mellal_concours_master_filieres_et_conseils /concours?q=Beni%20Mellal 301
+/blog/fsjes_fes_concours_master_filieres_et_conseils /concours/ville/fes 301
+/blog/fsjes_marrakech_concours_master_filieres_et_conseils /concours/ville/marrakech 301
+/blog/fsjes_beni_mellal_concours_master_filieres_et_conseils /concours/ville/beni-mellal 301
 
 # Cours ENCG retirés le 2026-10-15 : la comptabilité générale et la
 # microéconomie du S1 doublaient les cours de la Licence FSJES (même programme,
@@ -151,21 +151,19 @@
 /encg/microeconomie-s1/les-couts-de-production /cours/micro_cours/les-couts-de-production 301
 /encg/microeconomie-s1/l-entreprise-en-concurrence-pure-et-parfaite /cours/micro_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
 
-# Espace ENCG caché le 2026-10-17 (ENCG_LANCE = false, lib/contenusPublies.mjs) :
-# /encg était dans le sitemap, ses visiteurs arrivent sur les cours de la
-# Licence, où renvoyaient déjà tous ses modules. 302 : temporaire, à retirer au
-# relancement de l'espace (BANQUE_PROMPTS, recette K4).
-/encg /cours 302
-
-# Espace Taalim caché le 2026-10-25 (TAALIM_LANCE = false, lib/contenusPublies.mjs) :
-# /concours/taalim et ses quatre sujets étaient en ligne depuis le 2026-10-24.
-# 302 : temporaire, à retirer au relancement de l'espace (BANQUE_PROMPTS, C12).
-/taalim /concours 302
-/concours/taalim /concours 302
-/concours/2021_Taalim_AREF_EcoAdmin_GestionFinanciere /concours 302
-/concours/2021_Taalim_AREF_EcoAdmin_Missions /concours 302
-/concours/2021_Taalim_AREF_Primaire_Francais /concours 302
-/concours/2021_Taalim_AREF_Primaire_DidactiqueFrancais /concours 302
+# Espaces ENCG (cours S1 → S10, concours TAFEM) et Taalim (concours de
+# l'enseignement) supprimés le 2026-10-29, après avoir été cachés (302) depuis
+# le 2026-10-17 et le 2026-10-25. /encg était dans le sitemap et ses modules
+# renvoyaient tous aux cours de la Licence ; /concours/taalim et ses quatre
+# sujets ont été en ligne le 2026-10-24. 301 : définitif.
+/encg /cours 301
+/concours/post-bac /concours 301
+/taalim /concours 301
+/concours/taalim /concours 301
+/concours/2021_Taalim_AREF_EcoAdmin_GestionFinanciere /concours 301
+/concours/2021_Taalim_AREF_EcoAdmin_Missions /concours 301
+/concours/2021_Taalim_AREF_Primaire_Francais /concours 301
+/concours/2021_Taalim_AREF_Primaire_DidactiqueFrancais /concours 301
 
 # Section QCM cachée le 2026-10-28 (QCM_LANCE = false, lib/contenusPublies.mjs) :
 # /evaluation et ses cinq concours blancs étaient dans le sitemap. Leurs
@@ -188,6 +186,34 @@
 /icon-512 /icon-512.png 301
 /icon-512-maskable /icon-512-maskable.png 301
 
+# Articles fusionnés le 2026-10-29 dans les hubs de concours (lib/concoursHubs.js) :
+# « FSJES <ville> : concours Master… » → /concours/ville/<ville>, « Les matières
+# à préparer pour le master X » → /concours/master/<x>. Le hub reprend le texte
+# de l'article, daté, sous la liste à jour des sujets.
+/blog/les_matieres_a_preparer_pour_le_master_cca /concours/master/cca 301
+/blog/les_matieres_a_preparer_pour_le_master_finance /concours/master/finance 301
+/blog/les_matieres_a_preparer_pour_le_master_banque_assurance_marches_financiers /concours/master/banque-assurance 301
+/blog/les_matieres_a_preparer_pour_le_master_fiscalite_gestion_financiere /concours/master/fiscalite 301
+/blog/les_matieres_a_preparer_pour_le_master_actuariat /concours/master/actuariat 301
+/blog/les_matieres_a_preparer_pour_le_master_grh /concours/master/grh 301
+/blog/les_matieres_a_preparer_pour_le_master_entrepreneuriat /concours/master/entrepreneuriat 301
+/blog/les_matieres_a_preparer_pour_le_master_marketing_strategie_commerciale /concours/master/marketing 301
+/blog/les_matieres_a_preparer_pour_le_master_commerce_international /concours/master/commerce-international 301
+/blog/les_matieres_a_preparer_pour_le_master_logistique_supply_chain /concours/master/logistique 301
+/blog/les_matieres_a_preparer_pour_le_master_economie_internationale_developpement /concours/master/economie-internationale 301
+/blog/les_matieres_a_preparer_pour_le_master_econometrie /concours/master/econometrie 301
+/blog/les_matieres_a_preparer_pour_le_master_droit_des_affaires /concours/master/droit-des-affaires 301
+/blog/fsjes_casablanca_concours_master_filieres_et_conseils /concours/ville/casablanca 301
+/blog/fsjes_rabat_concours_master_filieres_et_conseils /concours/ville/rabat 301
+/blog/fsjes_agadir_concours_master_filieres_et_conseils /concours/ville/agadir 301
+/blog/fsjes_meknes_concours_master_filieres_et_conseils /concours/ville/meknes 301
+/blog/fsjes_mohammedia_concours_master_filieres_et_conseils /concours/ville/mohammedia 301
+/blog/fsjes_settat_concours_master_filieres_et_conseils /concours/ville/settat 301
+/blog/fsjes_kenitra_concours_master_filieres_et_conseils /concours/ville/kenitra 301
+/blog/fsjes_sale_concours_master_filieres_et_conseils /concours/ville/sale 301
+/blog/fsjes_tetouan_concours_master_filieres_et_conseils /concours/ville/tetouan 301
+/blog/fsjes_el_jadida_concours_master_filieres_et_conseils /concours/ville/el-jadida 301
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et
@@ -207,3 +233,10 @@
 # passerait avant elles.
 /bac/2bac/:matiere/examens/* /bac/2bac/:matiere 301
 /bac/2bac/:matiere/examens /bac/2bac/:matiere 301
+
+# Espaces ENCG et Taalim supprimés le 2026-10-29 (voir plus haut) : toute autre
+# adresse sous leurs chemins (modules, chapitres, scans des sujets Taalim) mène
+# à la page qui les remplace, sans 404 servie par le Worker.
+/encg/* /cours 301
+/taalim/* /concours 301
+/images/Taalim/* /concours 301

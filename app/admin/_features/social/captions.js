@@ -98,7 +98,7 @@ export function factsFor(kind, item, ctx = {}) {
       const hasCorrige = Boolean(item.corrige_md) || ctx.corrigeFiles?.has(item.id);
       return {
         emoji: "📝",
-        kicker: `Concours ${item.niveau === "licence_excellence" ? "Licence d'excellence" : item.niveau === "master_droit" ? "Master Droit" : item.niveau === "taalim" ? "Taalim" : "Master"} · ${item.annee}`,
+        kicker: `Concours ${item.niveau === "licence_excellence" ? "Licence d'excellence" : item.niveau === "master_droit" ? "Master Droit" : "Master"} · ${item.annee}`,
         title: `${item.master_reel || item.filiere || "Concours"}`,
         subtitle: `${item.etablissement}${item.ville && !String(item.etablissement).includes(item.ville) ? ` — ${item.ville}` : ""}`,
         bullets: ["Énoncé complet transcrit", hasCorrige ? "Corrigé détaillé" : null, (item.images || []).length ? "Scans du sujet original" : null, "PDF téléchargeable gratuitement"].filter(Boolean),

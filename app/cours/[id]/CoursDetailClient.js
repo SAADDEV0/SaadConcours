@@ -11,8 +11,8 @@ import { Icon } from "../../_shared/icons";
 // lives in the hero so it's visible without scrolling — wired imperatively
 // by id rather than rendered here. Shows the admin edit shortcut the same
 // way BacChapitreClient does (only on the admin's own browser).
-// `source` : fichier qui porte le Markdown du module (les cours ENCG vivent
-// dans encg.json) ; `editHref` : écran de la console qui le modifie.
+// `source` : fichier qui porte le Markdown du module (les cours de Droit
+// vivent dans droit.json) ; `editHref` : écran de la console qui le modifie.
 export default function CoursDetailClient({ cours, source = "/data/cours.json", editHref = "/admin/cours" }) {
   const [admin, setAdmin] = useState(false);
 

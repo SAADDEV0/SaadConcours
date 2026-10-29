@@ -222,7 +222,7 @@ export function spinnerHtml(label) {
 // Bouton WhatsApp flottant (achat des cahiers de préparation, tous modules) :
 // ouvre directement la conversation avec un message déjà rédigé. Posé avec le
 // pied de page, donc sur toutes les pages publiques et jamais dans la console admin.
-const WHATSAPP_NUMERO = "212713875327";
+export const WHATSAPP_NUMERO = "212713875327";
 const WHATSAPP_MESSAGE = "Bonjour, je souhaite acheter le cahier de préparation du module : ";
 
 function whatsappFabHtml() {
@@ -241,7 +241,7 @@ export function footerHtml() {
   const annee = new Date().getFullYear();
   const colonnes = ESPACES_ACTIFS.map(
     (e) => `<nav class="footer-col ${espaceClass(e)}" aria-label="${escapeAttr(e.long)}">
-      <h2><a href="${e.hub}"><span class="esp-dot" aria-hidden="true"></span>${escapeAttr(e.long)}</a></h2>
+      <p class="footer-col-title"><a href="${e.hub}"><span class="esp-dot" aria-hidden="true"></span>${escapeAttr(e.long)}</a></p>
       <ul>${e.tabs.map((t) => `<li><a href="${t.href}">${escapeAttr(t.label)}</a></li>`).join("")}</ul>
     </nav>`
   ).join("");
@@ -256,7 +256,7 @@ export function footerHtml() {
     </div>
     ${colonnes}
     <nav class="footer-col" aria-label="SaadConcours">
-      <h2>SaadConcours</h2>
+      <p class="footer-col-title">SaadConcours</p>
       <ul>
         ${OUTILS_VISIBLES.map((o) => `<li><a href="${o.href}">${escapeAttr(o.long)}</a></li>`).join("")}
         <li><a href="/a-propos">À propos</a></li>

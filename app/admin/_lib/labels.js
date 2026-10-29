@@ -67,7 +67,6 @@ function describeConcours(c, id) {
 const ESPACES_COURS = [
   { key: "cours", admin: "/admin/cours", tag: "Cours" },
   { key: "droit", admin: "/admin/droit", tag: "Droit" },
-  { key: "encg", admin: "/admin/encg", tag: "ENCG" },
 ];
 
 function describeCours(espace, id, content, sub) {
@@ -97,7 +96,7 @@ export function describePath(path, content = {}) {
 export function describePdf(kind, id, content = {}) {
   if (kind === "concours") return { href: `/concours/${id}`, edit: adminHrefForPath(`/concours/${id}`), ...describeConcours(find(content.concours, id), id) };
   if (kind === "cours") {
-    // Les pages Droit et ENCG réutilisent le bouton PDF des cours Licence :
+    // Les pages Droit réutilisent le bouton PDF des cours Licence :
     // leurs téléchargements arrivent aussi en « cours », avec l'id du module.
     const espace = ESPACES_COURS.find((e) => find(content[e.key], id)) || ESPACES_COURS[0];
     return { href: `/${espace.key}/${encodeURIComponent(id)}`, ...describeCours(espace, id, content) };
@@ -110,7 +109,7 @@ export function labelForPdfItem(member, content = {}) {
   const [kind, ...rest] = String(member).split(":");
   const id = rest.join(":");
   if (kind === "concours") return concoursLabel(find(content.concours, id)) || id;
-  if (kind === "cours") return (find(content.cours, id) || find(content.droit, id) || find(content.encg, id))?.module || id;
+  if (kind === "cours") return (find(content.cours, id) || find(content.droit, id))?.module || id;
   if (kind === "evaluation") return find(content.quiz, id)?.title || id;
   return member;
 }

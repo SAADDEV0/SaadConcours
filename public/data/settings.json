@@ -65,6 +65,7 @@
       "logo": "",
       "link": "https://wa.me/212713875327?text=Bonjour%2C%20je%20souhaite%20acheter%20le%20cahier%20de%20pr%C3%A9paration%20du%20module%20%3A%20",
       "alt": "Cahiers de préparation de tous les modules (Bac, Licence FSJES, Master) : commande sur WhatsApp au +212 7 13 87 53 27",
+      "label": "Nos cahiers",
       "title": "",
       "description": "",
       "cta": "",
@@ -74,7 +75,7 @@
         "accent": ""
       },
       "placements": [
-        "header",
+        "inline",
         "footer"
       ],
       "sections": [],

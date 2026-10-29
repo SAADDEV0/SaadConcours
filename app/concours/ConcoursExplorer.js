@@ -274,20 +274,26 @@ export default function ConcoursExplorer({ initialData, pageSize = 24 }) {
         syncMore();
         return;
       }
-      grid.innerHTML = filtered.map((c, i) => concoursCardHtml(c, { hidden: i >= shown })).join("");
+      grid.innerHTML = filtered
+        .slice(0, shown)
+        .map((c) => concoursCardHtml(c))
+        .join("");
       wireDownloadButtons();
       syncMore();
     }
 
-    // Les cartes suivantes sont déjà dans la grille, en `hidden` : on les
-    // révèle par paquets sans rien re-rendre, et le focus passe sur la
-    // première carte révélée pour que le clavier enchaîne naturellement.
+    // Les cartes suivantes ne sont pas dans le HTML (la page n'en envoie
+    // qu'une page) : on les ajoute par paquets depuis initialData, et le focus
+    // passe sur la première ajoutée pour que le clavier enchaîne naturellement.
     $("#moreBtn").onclick = () => {
-      const caches = [...document.querySelectorAll("#grid > a[hidden]")].slice(0, pageSize);
-      caches.forEach((el) => el.removeAttribute("hidden"));
-      shown += caches.length;
+      const grid = $("#grid");
+      const suivants = filtered.slice(shown, shown + pageSize);
+      grid.insertAdjacentHTML("beforeend", suivants.map((c) => concoursCardHtml(c)).join(""));
+      const premier = grid.children[shown];
+      shown += suivants.length;
+      wireDownloadButtons();
       syncMore();
-      caches[0]?.focus({ preventScroll: true });
+      premier?.focus({ preventScroll: true });
     };
 
     function sortFiltered() {

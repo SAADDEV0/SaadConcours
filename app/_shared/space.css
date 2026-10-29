@@ -266,6 +266,23 @@
 
 /* ---------- À propos (texte de référencement, en bas des pages) ---------- */
 .sp-about{margin-top:36px; padding:22px 0 0; border-top:1px solid var(--border);}
+/* Hubs de concours (app/concours/ville, app/concours/master). */
+.hub-lead{margin:-4px 0 14px; color:var(--text-dim); font-size:.92rem; line-height:1.6; max-width:76ch;}
+.hub-article{margin-top:32px;}
+.hub-article > h2{font-size:1.1rem; margin:0 0 6px;}
+.hub-article-date{margin:0 0 16px; font-size:.84rem; color:var(--text-faint);}
+.hub-chips{gap:8px;}
+.hub-chips a{text-decoration:none; font-size:.82rem; padding:4px 10px;}
+.hub-chips a:hover{border-color:var(--accent-fill); color:var(--accent);}
+.hub-nav{margin:28px 0 8px;}
+.hub-nav h2{font-size:1.05rem; margin:0 0 10px;}
+.hub-nav .hub-chips{margin-bottom:18px;}
+/* Envoyer un sujet, rejoindre la chaîne (app/_shared/CommunauteCta.js). */
+.cta-communaute{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap:12px; margin:28px 0;}
+.cta-communaute > div{display:flex; flex-direction:column; align-items:flex-start; gap:6px; padding:16px 18px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg-card);}
+.cta-communaute strong{font-size:.98rem;}
+.cta-communaute span{color:var(--text-dim); font-size:.88rem; line-height:1.55;}
+.cta-communaute .sp-btn{margin-top:6px;}
 .sp-about h2{font-size:1.05rem; margin:0 0 8px;}
 .sp-about p{margin:0 0 10px; color:var(--text-dim); line-height:1.65; font-size:.9rem; max-width:80ch;}
 .sp-about strong{color:var(--text); font-weight:600;}
@@ -358,9 +375,6 @@
 .home-subhead h3{margin:0; font-size:1rem; font-weight:700;}
 .home-subhead a, .home-more{font-size:.88rem; font-weight:600; color:var(--accent); text-decoration:none; white-space:nowrap;}
 .home-subhead a:hover, .home-more:hover{text-decoration:underline;}
-/* Hub ENCG (app/encg/page.js) : derniers sujets TAFEM sous la liste des modules. */
-.sp-encg-tafem{margin-top:32px;}
-.sp-encg-tafem .home-subhead .bac-section-title{margin:0;}
 .home-more{display:inline-flex; align-items:center; gap:6px; margin-top:16px;}
 
 .home-links{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap:10px;}
@@ -601,47 +615,3 @@
 }
 .sr-help{margin:0; font-size:.92rem; line-height:1.65; color:var(--text-dim); max-width:72ch;}
 
-/* Hub Taalim (/taalim) : filières, cours par filière, sujets. */
-.tl-sommaire{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 26px;}
-.tl-sommaire a{padding:6px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); font-size:.88rem; font-weight:600;}
-.tl-sommaire a:hover{border-color:color-mix(in srgb, var(--accent-fill) 55%, var(--border)); color:var(--accent);}
-.tl-intro{margin:-4px 0 16px; color:var(--text-dim); font-size:.92rem; line-height:1.6; max-width:76ch;}
-.tl-ar{display:block; font-size:.92rem; color:var(--text-dim); line-height:1.7;}
-.tl-filieres{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap:12px;}
-.tl-filiere{display:flex; flex-direction:column; padding:18px 20px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); border-top:3px solid var(--accent-fill);}
-.tl-filiere-cycle{align-self:flex-start; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink); background:var(--accent-dim); padding:2px 9px; border-radius:999px; margin-bottom:8px;}
-.tl-filiere h3{margin:0; font-size:1.02rem; line-height:1.35;}
-.tl-filiere dl{margin:12px 0 0; display:grid; gap:2px;}
-.tl-filiere dt{font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-faint); margin-top:8px;}
-.tl-filiere dd{margin:0; font-size:.88rem; line-height:1.55; color:var(--text-dim);}
-.tl-filiere-liens{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:auto; padding-top:14px; font-size:.86rem; font-weight:600;}
-.tl-filiere-liens a{color:var(--accent);}
-.tl-legende{list-style:none; margin:0 0 20px; padding:0; display:grid; gap:6px; font-size:.86rem; color:var(--text-dim);}
-.tl-type{display:inline-block; font-size:.7rem; font-weight:700; padding:1px 8px; border-radius:999px; border:1px solid var(--border); white-space:nowrap; vertical-align:1px;}
-.tl-type-commun{background:var(--bg-inset); color:var(--text-dim);}
-.tl-type-specialite{background:var(--accent-dim); color:var(--accent-ink); border-color:transparent;}
-.tl-type-didactique{background:transparent; color:var(--accent); border-color:color-mix(in srgb, var(--accent-fill) 60%, var(--border));}
-.tl-type-pratique{background:transparent; color:var(--text-dim); border-style:dashed;}
-.tl-bloc{margin:0 0 26px;}
-.tl-bloc > h3{font-size:1rem; margin:0 0 10px; padding-bottom:6px; border-bottom:1px solid var(--border);}
-.tl-specialite{margin:0 0 16px;}
-.tl-specialite h4{margin:0; font-size:.95rem;}
-.tl-specialite h4 .tl-ar{display:inline; margin-left:6px;}
-.tl-spec-desc{margin:2px 0 10px; font-size:.86rem; color:var(--text-dim); line-height:1.6;}
-.tl-cours-liste{list-style:none; margin:0; padding:0; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg-card);}
-.tl-cours{padding:12px 16px;}
-.tl-cours + .tl-cours{border-top:1px solid var(--border);}
-.tl-cours-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px;}
-.tl-cours-head strong{font-size:.92rem;}
-.tl-cours-head .tl-ar{display:inline; font-size:.86rem;}
-.tl-cours-head .tl-type{margin-left:auto;}
-.tl-cours p{margin:4px 0 0; font-size:.85rem; color:var(--text-dim); line-height:1.55;}
-.tl-liens{font-size:.82rem !important;}
-.tl-liens a{color:var(--accent); font-weight:600;}
-.tl-specs{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap:10px;}
-.tl-spec{padding:14px 16px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border);}
-.tl-spec strong{font-size:.92rem;}
-.tl-spec ul{margin:8px 0 0; padding-left:18px; font-size:.85rem; color:var(--text-dim); line-height:1.6;}
-.tl-spec .tl-liens{margin:8px 0 0;}
-.tl-bloc .sp-rows{margin:0;}
-.tl-h3-sub{font-weight:500; color:var(--text-dim);}

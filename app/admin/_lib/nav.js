@@ -11,7 +11,6 @@ export const NAV = [
     items: [
       { href: "/admin/concours", icon: "book", label: "Concours Master", badge: "concours" },
       { href: "/admin/cours", icon: "notebook", label: "Cours Licence" },
-      { href: "/admin/encg", icon: "notebook", label: "Cours ENCG" },
       { href: "/admin/droit", icon: "notebook", label: "Cours Droit" },
       { href: "/admin/bac", icon: "graduation", label: "Cours Bac" },
       { href: "/admin/evaluations", icon: "quiz", label: "Évaluations" },
@@ -44,7 +43,6 @@ export const SUBPAGES = {
   "/admin/concours/couverture": "Couverture & qualité",
   "/admin/concours/import": "Import groupé",
   "/admin/cours/editer": "Éditeur",
-  "/admin/encg/editer": "Éditeur",
   "/admin/droit/editer": "Éditeur",
   "/admin/evaluations/editer": "Éditeur",
   "/admin/blog/editer": "Éditeur",

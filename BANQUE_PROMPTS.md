@@ -15,7 +15,6 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute ce concours` + photo / PDF / lien | [C2](#c2--ajouter-un-concours-fourni-photo-pdf-lien) |
 | `ajoute 10 concours licence d'excellence` · `ajoute des LE CCA` | [C9](#c9--concours-de-licence-dexcellence) |
 | `ajoute 10 concours de droit` · `ajoute des concours master droit` · `ajoute ce sujet de droit` | [C11](#c11--concours-de-master-en-droit) |
-| `ajoute 10 concours taalim` · `ajoute des sujets taalim primaire` · `ajoute ce sujet taalim` | [C12](#c12--concours-de-lenseignement-taalim) |
 | `corrige le concours X` · `ajoute les corrigés manquants` · `ajoute 10 corrigés` | [C3](#c3--rédiger-ou-refaire-un-corrigé) |
 | `corrige l'énoncé de X` · `vérifie l'extrait de X` · `retranscris X` | [C4](#c4--corriger-un-énoncé--un-extrait) |
 | `modifie le concours X : …` | [C5](#c5--modifier-un-concours) |
@@ -26,7 +25,6 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute le cours <module>` · `ajoute les cours du S3` | [K1](#k1--ajouter-un-cours-licence-fsjes) |
 | `complète le cours X par chapitres` · `ajoute QCM / résumés au cours X` | [K2](#k2--compléter-un-cours-par-chapitres) |
 | `modifie / réécris le cours X` · `supprime le cours X` | [K3](#k3--modifier-ou-supprimer-un-cours) |
-| `ajoute le cours ENCG <module> S3` · `ajoute les cours ENCG du S1` · `relance la section ENCG` | [K4](#k4--cours-encg-s1-à-s10) |
 | `ajoute le cours de droit <module>` · `ajoute les cours du tronc commun droit` · `ajoute les cours S2 de droit` | [K5](#k5--cours-de-droit-fsjp-ex-fsjes) |
 | `rédige les chapitres Bac de <matière> <niveau>` | [B1](#b1--rédiger-des-chapitres-bac) |
 | `ajoute les nationaux (bac)` · `ajoute les nationaux 2026` | [B2](#b2--examens-nationaux-2ème-bac) |
@@ -40,7 +38,6 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `poste les concours` · `prépare les posts Instagram / Facebook` · `carrousels de la semaine` | [R1](#r1--carrousels-instagram--facebook-des-concours) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
-| `ajoute 10 concours TAFEM` · `ajoute ce sujet TAFEM` · `ajoute des concours post-bac ENCG` | [X2](#x2--concours-post-bac-tafem-encg) |
 | `ajoute un emplacement de pub` · `déplace la pub de X` | [X3](#x3--emplacements-publicitaires-adsense) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
 | `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
@@ -62,7 +59,6 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 |---|---|---|
 | Concours | `public/data/concours.json` + miroirs `public/data/extraits/<id>.md`, `public/data/corriges/<id>.md` + scans `public/images/<Ville>/<id>/` | `lib/taxonomy.js` |
 | Cours de Droit (S1 → S6, FR/AR) | `public/data/droit.json` + compléments `lib/droitContenu/<id>.js` (déclarés dans `lib/droitContenu/index.js`) | `lib/droitTaxonomy.js`, découpage : `lib/droit.js` (même convention que FSJES) |
-| Cours ENCG (S1 → S10) | `public/data/encg.json` + compléments `lib/encgContenu/<id>.js` (déclarés dans `lib/encgContenu/index.js`) | `lib/encgTaxonomy.js`, découpage : `lib/encg.js` (même convention que FSJES) |
 | Cours Licence FSJES | `public/data/cours.json` + compléments `lib/fsjesContenu/<module>.js` (déclarés dans `lib/fsjesContenu/index.js`) | `lib/coursTaxonomy.js`, découpage : `lib/fsjesChapitres.js` |
 | Cours Bac | `lib/bacContenu/<niveau>/<fichier>.js` (déclarés dans `lib/bacContenu/index.js`) ; surcharges admin dans `public/data/bac.json` | `lib/bacProgramme.js` |
 | Examens nationaux Bac | `lib/bacNationaux.json` (catalogue) + PDF `public/bac/nationaux/<se|sgc|commun>/<matière>/<année>-<session>-<sujet|corrige>.pdf` | `lib/bacNationaux.js` |
@@ -137,10 +133,10 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
 - Pas de contenu copié ou récupéré automatiquement d'un autre site (scraping), sous aucune forme.
 - Pas de gabarit recyclé d'une page à l'autre (voir A1 pour le blog).
 - **Un seul cours par matière sur tout le site** (décision du 2026-10-15) : une matière déjà
-  traitée dans un espace (Licence FSJES, ENCG, Droit, Bac) n'est jamais réécrite dans un autre,
+  traitée dans un espace (Licence FSJES, Droit, Bac) n'est jamais réécrite dans un autre,
   même avec d'autres exemples. Deux cours proches sur le même programme = contenu en double aux
-  yeux d'AdSense. L'espace qui arrive en second **renvoie** au cours existant (ENCG : champ
-  `renvoi`, recette K4) ; seul un module propre à l'espace se rédige. Mesuré le 2026-10-15 sur
+  yeux d'AdSense. L'espace qui arrive en second **renvoie** au cours existant (Droit : champ
+  `renvoi`, recette K5) ; seul un module propre à l'espace se rédige. Mesuré le 2026-10-15 sur
   les deux cours ENCG du S1 récrits « à part » : même plan chapitre par chapitre que le cours
   FSJES et 3 à 7 % de passages identiques (tableaux du CPC, classes du PCGE, formules) — retirés.
 - Contrôle : `npm run check` = lint + build + `scripts/audit-contenu.mjs` (aussi lancé en CI). Il
@@ -228,7 +224,9 @@ Règles des champs :
 - `etablissement` : réutiliser **l'orthographe déjà présente** en base pour cette faculté
   (`node` : lister les valeurs distinctes avant d'écrire). Ex. `FSJES Ain Chock`, `FSJES Ain Sebaâ`, `FSJES Agdal`.
 - `filiere` : **exactement** une sous-filière de `lib/taxonomy.js` ; `categorie` = son code
-  (FCA, MRH, MCL, EAPP, EDMQ).
+  (FCA, MRH, MCL, EAPP, EDMQ, DRT). Elle range le sujet dans son hub de master
+  (`/concours/master/<slug>`, `lib/concoursHubs.js`) : jamais l'intitulé du master ici, il va dans
+  `master_reel` (45 sujets corrigés le 2026-10-29).
 - `master_reel` : intitulé officiel du master tel qu'écrit sur le sujet.
 - `difficulte` : `"1/5"` à `"5/5"` (jugée sur la longueur, la technicité, le barème négatif).
 - `source` : format `- <site> — <titre de la page> : <url>` ; sujet fourni par moi → `- Lien / origine du sujet : https://saadconcours.space`.
@@ -690,56 +688,13 @@ sujets en base (formats, langues, matières, facultés) : rien à retoucher quan
 5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, rendu, `npm run check`).
    Commit : « Ajoute N concours de Masters de droit … ».
 
-### C12 — Concours de l'enseignement (Taalim)
-Section créée le 2026-10-24 (« ajoute une nouvelle section pour concours Taalim ») : espace « Taalim » (couleur
-violet, `lib/espaces.js`), liste `/concours/taalim`, même fichier `concours.json` et même déroulé que C1/C2 avec
-`"niveau": "taalim"` (`lib/concoursNiveaux.js`). L'espace s'ouvre seul au premier sujet publié (contenu
-`concours-taalim`, `lib/contenusPublies.mjs`). Textes de la page calculés sur les sujets en base (cycles,
-sessions, langues, épreuves) ; seules les conditions de candidature de la FAQ sont écrites à la main (avis de la
-session de novembre 2025 : 35 ans au plus, licence, présélection sur dossier, un seul cycle) : les mettre à jour
-quand un nouvel avis paraît sur men.gov.ma.
-**Hub `/taalim`** (2026-10-25, « quand je clique sur Taalim : les filières, le professeur que tu deviens, les cours
-de chaque filière et leur type, puis les concours ») : `app/taalim/page.js`, contenu dans `lib/taalimFilieres.js`
-(filières, spécialités, cours typés Tronc commun / Spécialité / Didactique / Pratique, liens vers les cours FSJES
-existants — jamais de 2ᵉ cours d'une matière, règle 1.6). Ne lister que les spécialités ouvertes par un avis récent.
-**Caché depuis le 2026-10-25** (« hide section taalim ») : `TAALIM_LANCE = false` (`lib/contenusPublies.mjs`) ferme
-l'espace en production (hub, liste, fiches des sujets via `isConcoursPublic`, appli) ; 302 de `/taalim`,
-`/concours/taalim` et des 4 sujets vers `/concours` (`public/_redirects`), retiré de `public/llms.txt`. `npm run dev`
-le montre. **Relancer** : drapeau à `true`, retirer ces 302, remettre la ligne Taalim dans `llms.txt`, `npm run check`, P1.
-1. **Champs propres** : `categorie: "ENS"`, `filiere` = une sous-filière ENS de `lib/taxonomy.js` (Enseignement
-   primaire, secondaire collégial, secondaire qualifiant, cadres de soutien). `ville: ""` (épreuve nationale),
-   `etablissement: "Concours national (AREF)"`, `session` = mois et année du sujet (« décembre 2021 », repris dans
-   la ligne « Sujet officiel »). `id` : `<annee>_Taalim_AREF_<Cycle>_<Épreuve>` ; scans dans
-   `public/images/Taalim/<id>/`. `master_reel` = « <Épreuve> — <cycle ou cadre> » (« Langue française — enseignement
-   primaire »), dans cet ordre aussi en arabe ; la partie avant « — » sert de titre court. **Sujet en arabe** : `langue: "ar"`, `master_reel` en arabe
-   (« الاختصاصات والمهام — ملحق الاقتصاد والإدارة »), `master_fr` en français (description, image de partage),
-   corrigé rédigé en arabe après le bandeau français (comme C11). La fiche et le titre ne disent jamais « ماستر »
-   pour ce niveau (`concoursSeo.js`, `app/concours/[id]/page.js`).
-2. **Sources** (2026-10-24) : le fil tawjihnet « نماذج اختبارات ومواضيع سابقة لمباريات التعليم »
-   (`https://www.tawjihnet.net/vb/threads/37579/`) liste des PDF Google Drive par session et par matière
-   (primaire 2021 : arabe, français, maths-sciences + didactique + corrigés ; secondaire 2021 par discipline ;
-   cadres de soutien 2021 ; « مستجدات التربية والتكوين » 2019 avec corrigé officiel). Téléchargement direct :
-   `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"`. Les PDF sont des
-   scans sans texte : extraire les images en Node (flux `/Subtype /Image` ; `DCTDecode` = JPEG tel quel ;
-   `[/FlateDecode /DCTDecode]` = `zlib.inflateSync` puis JPEG ; `/Length` peut être une référence « 12 0 R » :
-   couper alors à `endstream`). Les « عناصر الإجابة » officiels (éléments de réponse) existent pour une partie
-   des épreuves : les recouper avec son propre corrigé et le dire dans le bandeau ; un lien Drive peut être mal
-   étiqueté (le « تصحيح الاختصاصات » de 2021 est la grille du QCM de gestion financière, 75 questions).
-3. **Scans** : les pages « لا يكتب أي شيء في هذا الإطار » font partie du sujet (garder celles qui portent des
-   questions, retirer les pages de réponse vierges : l'essai de 2021 n'a qu'une page de sujet). Logo
-   « CamScanner » en bas à droite : recadrer les ~3,5 % du bas avant `filigrane-scans.mjs`.
-4. **Pièges vus** : options arabes أ ب ج د écrites A B C D (dire la correspondance dans l'énoncé et le corrigé) ;
-   sujet avec deux propositions identiques (2021, gestion financière Q66) ou sans bonne proposition (Q10) : le
-   signaler, donner le calcul juste et la réponse de la grille. Un texte littéraire qui contient « Bientôt, … »
-   n'est plus pris pour un badge par `audit-contenu.mjs` (2026-10-24).
-5. Contrôles et fin de recette comme C1 (`audit-qcm.mjs`, miroirs, `npm run check`). Commit : « Ajoute N
-   sujets du concours Taalim … ». Priorités par défaut : épreuves les plus demandées d'abord (primaire,
-   sciences de l'éducation / مستجدات التربية والتكوين, puis spécialité « علوم الاقتصاد والتدبير » du secondaire),
-   sessions récentes (CRMEF 2023-2025) quand un sujet avec scan est trouvé.
-
----
-
-## K. COURS (Licence FSJES)
+### C12 — Concours de l'enseignement (Taalim) — supprimé
+**Espaces ENCG et Taalim supprimés le 2026-10-29** (« delete ENCG and Taalim section, they are unused,
+keep Droit — la FSJES, c'est l'économie-gestion et le droit »). Pages, console, données (`encg.json`, les
+4 sujets Taalim et leurs scans), niveaux `post_bac` / `taalim` et catégorie ENS retirés ; anciennes adresses en
+301 (`public/_redirects`). Les sujets de **Master** passés dans une ENCG restent des concours de Master (C1).
+Une demande « ajoute un cours ENCG », « ajoute un concours TAFEM » ou « ajoute un sujet Taalim » : **ne pas
+recréer l'espace**, le signaler et demander. Un sujet de Master d'une ENCG suit C1/C2.
 
 ### Schéma d'une entrée `cours.json`
 ```json
@@ -785,7 +740,7 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    dans une autre filière : ne jamais le dupliquer. Mettre `filiere` à `""` (commun au parcours)
    et ajouter une ligne d'en-tête qui donne les deux intitulés. Précédent : « Introduction à
    l'économétrie » (S5 EIL) = `econometrie_cours`, octobre 2026.
-   Vérifier aussi `encg.json` et `droit.json` : si la matière y a déjà un cours rédigé, ne pas
+   Vérifier aussi `droit.json` : si la matière y a déjà un cours rédigé, ne pas
    en écrire un second (règle 1.6) — me le signaler et proposer de faire de l'un un renvoi.
    Un intitulé peut être couvert par deux modules existants : « Économie internationale » (S5
    Économétrie appliquée) = `introecoint_cours` + `theoriescomint_cours`, passés à `filiere: ""`,
@@ -880,51 +835,14 @@ Tous les cours sont réécrits sur ce modèle ; tout nouveau cours doit le suivr
 
 ---
 
-### K4 — Cours ENCG (S1 à S10)
-Espace ENCG (`lib/espaces.js`, clé `encg`, couleur sky), onglet « Cours S1 → S10 » : pages `/encg`,
-`/encg/<id>`, `/encg/<id>/<chapitre>`. L'onglet **s'ouvre tout seul** au premier module publié :
-`next.config.mjs` calcule `SC_CONTENUS` au build (`lib/contenusPublies.mjs`). Rien à retoucher dans le
-code ; ne jamais créer de lien vers `/encg` à la main tant qu'aucun module n'est publié.
-**Caché depuis le 2026-10-17** (« cache la section de l'ENCG pour l'instant ») : `ENCG_LANCE = false`
-(`lib/contenusPublies.mjs`) ferme les deux onglets (cours et concours TAFEM) en production, même avec du
-contenu publié — ni page de module, ni lien, ni sitemap, ni recherche, ni sujet TAFEM (`isConcoursPublic`,
-`lib/store.js`), ni module dans l'appli ; `/encg` a une 302 vers `/cours` (`public/_redirects`). `npm run dev`
-montre toujours l'espace. On peut continuer à rédiger. **Relancer** (« relance / affiche la section ENCG ») :
-`ENCG_LANCE = true`, retirer la 302 de `/encg`, remettre l'ENCG dans `public/llms.txt`, `npm run check`, P1.
-- **Schéma** (`encg.json`, même forme que `cours.json`) : `id` (`<module-en-tirets>-s<N>`, ex.
-  `comptabilite-generale-s1`, fixe l'URL), `module`, `title` (« Cours — Comptabilité générale (ENCG S1) »),
-  `description` (120-160 caractères), `category` (codes de `COURS_CATEGORIES`), `semestre` (`S1`…`S10`),
-  `option` (texte libre, dernières années : « Audit et contrôle de gestion »), `content`, `available`.
-- **Markdown** : convention FSJES (`# CHAPITRE N — TITRE`, `## ✏️ EXERCICE N` / `## ✅ CORRECTION N`,
-  annexe `# 🧾` / `# 📝`), norme « cours détaillé » de la section K. En plus : `## ⚡ RÉSUMÉ` dans un
-  chapitre remplit l'onglet Résumé. Un QCM de chapitre ne s'écrit que dans `lib/encgContenu/<id>.js`
-  (format K2), déclaré dans `SUPPLEMENTS` de `lib/encgContenu/index.js`.
-- **Publié** = `available: true` **et** au moins un `# CHAPITRE N — …` (`isEncgPublie`, `lib/encg.js`).
-  Un chapitre n'affiche que les onglets qui ont du contenu (jamais d'onglet « en préparation »).
-- Console : Contenu › Cours ENCG (l'aide du champ Contenu rappelle la convention).
-- Contexte : programme réel du module à l'ENCG ; les intitulés d'option changent d'une école à
-  l'autre (n'en présenter aucun comme national).
-- **Pas de doublon avec la Licence : renvoi, jamais réécriture** (règle 1.6, 2026-10-15). Avant
-  de rédiger un module ENCG, chercher dans `cours.json` (et `droit.json`) un cours qui couvre le
-  même programme, sous n'importe quel intitulé. S'il existe : fiche de **renvoi** dans
-  `encg.json` — `renvoi: "<id FSJES>"`, `content: ""`, `available: true`, `module`, `semestre`,
-  `category` et une `description` propre (120-160 caractères) qui dit que le programme est
-  commun. Le module n'a alors aucune page `/encg/<id>` : sa carte sur `/encg`, la recherche et
-  l'accueil mènent à `/cours/<id FSJES>` (`encgRenvois`, `lib/encg.js`). Un renvoi vers un cours
-  FSJES non publié est ignoré. Si un chapitre propre à l'ENCG manque au cours FSJES, l'ajouter au
-  cours FSJES (K3) plutôt que d'ouvrir un cours ENCG. On ne rédige un cours ENCG que pour un module
-  **absent** du site (ex. techniques de vente, négociation, commerce international propre à
-  l'ENCG…), et on le dit dans le compte rendu.
-- Renvois en place (S1, tronc commun constaté à Tanger, Agadir, Kénitra) :
-  `comptabilite-generale-s1` → `comptagen1_cours`, `microeconomie-s1` → `micro_cours`,
-  `management-s1` → `introgestion_cours`, `mathematiques-s1` → `maths_cours`, `droit-s1` →
-  `introdroit_cours`, `langues-s1` → `languessoft_cours`. Les deux cours ENCG rédigés en
-  octobre 2026 (compta, micro) ont été retirés le 2026-10-15 ; leurs anciennes adresses ont une
-  301 vers le chapitre FSJES équivalent (`public/_redirects`, règles exactes au-dessus des règles
-  à motif). Retirer un module rédigé = même chose : 301 du module et de chaque chapitre.
-- Le découpage S1/S2 varie selon l'école : le dire dans l'en-tête d'un module rédigé. Contrôle et
-  fin de recette comme K1 ; mettre à jour `public/llms.txt` quand la liste des modules change
-  (règle 1.8).
+### K4 — Cours ENCG — supprimé
+**Espaces ENCG et Taalim supprimés le 2026-10-29** (« delete ENCG and Taalim section, they are unused,
+keep Droit — la FSJES, c'est l'économie-gestion et le droit »). Pages, console, données (`encg.json`, les
+4 sujets Taalim et leurs scans), niveaux `post_bac` / `taalim` et catégorie ENS retirés ; anciennes adresses en
+301 (`public/_redirects`). Les sujets de **Master** passés dans une ENCG restent des concours de Master (C1).
+Une demande « ajoute un cours ENCG », « ajoute un concours TAFEM » ou « ajoute un sujet Taalim » : **ne pas
+recréer l'espace**, le signaler et demander. Un sujet de Master d'une ENCG suit C1/C2.
+
 ### K5 — Cours de Droit (FSJES)
 Espace Droit (`lib/espaces.js`, clé `droit`, couleur violet), créé le 2026-10-15 : pages `/droit`,
 `/droit/<id>`, `/droit/<id>/<chapitre>`, console Contenu › Cours Droit. **Lancé le 2026-10-17**
@@ -1026,7 +944,7 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
 - **Un seul cours par matière** (règle 1.6) : une matière qui a déjà un cours dans `cours.json` ne
   se rédige pas une 2ᵉ fois. La fiche porte `renvoi` (id du cours FSJES), `content` vide,
   `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
-  cours FSJES, sans page `/droit/<id>` (`droitRenvois`, `lib/droit.js`, comme l'ENCG). En place
+  cours FSJES, sans page `/droit/<id>` (`droitRenvois`, `lib/droit.js`). En place
   depuis le 2026-10-16 : Introduction à l'étude du droit → `introdroit_cours`, Droit commercial
   fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`, Introduction à
   l'économie et à la gestion → `introeco_cours` (la partie gestion est dans `introgestion_cours`). Organisation
@@ -1174,6 +1092,14 @@ Cloudflare (aucun coût Worker). Les anciennes pages `/examens/<id>` ont été s
    Master Spécialisé, public ou privé) → `master_public_vs_master_prive_au_maroc_que_choisir`. Un
    nouveau master s'ajoute à l'article de son domaine. Les guides par faculté (« préparer le master X
    de la faculté Y », avec ou sans cahier PDF) sont voulus : on les enrichit, on ne les supprime pas.
+   **Hubs (2026-10-29)** : « les matières à préparer pour le master X » et « FSJES <ville> : concours
+   Master » ne s'écrivent plus en article. Ces questions ont leur page calculée sur la base,
+   `/concours/master/<slug>` et `/concours/ville/<slug>` (`lib/concoursHubs.js`, à partir de 5 sujets
+   publiés) : liste à jour des sujets, établissements, cours à réviser. Les 23 articles de ces deux
+   familles y ont été fusionnés (`available: false`, champ `fusion` = adresse du hub, texte repris en
+   fin de hub sous « Guide », 301 dans `public/_redirects`). Un nouveau type de master : une entrée
+   dans `MASTER_HUBS` (sous-filière de `lib/taxonomy.js`), jamais un article de plus. Un lien vers ces
+   sujets dans un article : vers le hub, pas vers `/concours?q=`.
 2. **Fondé sur les données du site** : analyser les concours en base (modules qui reviennent,
    format d'épreuve, difficulté, questions recyclées d'une année à l'autre) et donner des chiffres
    (« Comptabilité analytique : 8 sessions sur 8 »). C'est ce qui distingue l'article (AdSense).
@@ -1342,8 +1268,8 @@ Une suppression en masse (« supprime tous les … ») → **montrer la liste et
 
 ## X. SECTIONS DU SITE (espaces, publicité)
 
-Le site est rangé par **espaces** (un public = un espace : Bac, ENCG, Licence FSJES, Licence
-d'excellence, Master), décrits dans un seul fichier, `lib/espaces.js`. Le header, le menu du
+Le site est rangé par **espaces** (un public = un espace : Bac, Licence FSJES — économie-gestion et
+droit —, Licence d'excellence, Master), décrits dans un seul fichier, `lib/espaces.js`. Le header, le menu du
 téléphone, la barre d'espace sous le header, le pied de page et « Je prépare… » + les sections
 de l'accueil se construisent depuis ce registre. Aucun composant
 ne nomme un espace : en ajouter un ne demande **aucune retouche du chrome**.
@@ -1375,21 +1301,13 @@ ne nomme un espace : en ajouter un ne demande **aucune retouche du chrome**.
    des bannières partenaires (`PARTNER_SECTIONS`, `app/_shared/partnerAds.js`).
 7. `npm run check` (l'audit de contenu suit les liens du nouvel espace), puis P1.
 
-### X2 — Concours post-bac (TAFEM, ENCG)
-Concours d'accès en 1ʳᵉ année des ENCG (TAFEM), onglet « Concours TAFEM » de l'espace ENCG. Même
-fichier `concours.json`, même schéma et même déroulé que C1/C2, avec `"niveau": "post_bac"`
-(`lib/concoursNiveaux.js`) : ces fiches n'apparaissent ni sur `/concours` (Master) ni sur
-`/concours/licence-excellence`, mais sur `/concours/post-bac` (déjà construite).
-1. `id` : `<annee>_<Ville>_ENCG_PB_TAFEM` (ex. `2025_Settat_ENCG_PB_TAFEM`) ; `etablissement` :
-   « ENCG <Ville> » ; `master_reel` : « TAFEM » ou l'intitulé exact de l'épreuve ; `modules` : les
-   matières du sujet (elles alimentent « Ce que testent les épreuves ») ; `filiere` / `categorie` vides
-   (taxonomie Master, sans objet ici).
-2. Console : choisir « Concours d'accès à l'ENCG (TAFEM) » dans « Niveau du concours » (l'enregistrement
-   garde `post_bac` depuis le 2026-10-10 ; avant, la console le remplaçait par Master).
-3. Le premier sujet publié ouvre l'onglet et l'espace (`SC_CONTENUS`), ajoute `/concours/post-bac` au
-   sitemap et retire son `noindex` : rien d'autre à faire. La fiche dit « pas une correction officielle
-   de l'école » et ne propose pas de cours FSJES à réviser.
-4. Ne jamais inventer le format du TAFEM : les textes de la page sont calculés sur les sujets en base.
+### X2 — Concours post-bac (TAFEM, ENCG) — supprimé
+**Espaces ENCG et Taalim supprimés le 2026-10-29** (« delete ENCG and Taalim section, they are unused,
+keep Droit — la FSJES, c'est l'économie-gestion et le droit »). Pages, console, données (`encg.json`, les
+4 sujets Taalim et leurs scans), niveaux `post_bac` / `taalim` et catégorie ENS retirés ; anciennes adresses en
+301 (`public/_redirects`). Les sujets de **Master** passés dans une ENCG restent des concours de Master (C1).
+Une demande « ajoute un cours ENCG », « ajoute un concours TAFEM » ou « ajoute un sujet Taalim » : **ne pas
+recréer l'espace**, le signaler et demander. Un sujet de Master d'une ENCG suit C1/C2.
 
 ### X3 — Emplacements publicitaires (AdSense)
 Les emplacements sont listés dans `app/_shared/adPlacements.js` (clé, page, format, hauteur

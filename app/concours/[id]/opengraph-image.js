@@ -33,8 +33,7 @@ export default async function Image(props) {
   return buildOgImage({
     // « Fès · Non précisée » sur la carte quand l'année est inconnue : on
     // n'affiche l'année que si c'en est une.
-    // Concours Taalim : épreuve nationale, sans ville.
-    eyebrow: [c.niveau === "taalim" ? "Concours Taalim" : c.ville, /\d{4}/.test(String(c.annee || "")) ? c.annee : null].filter(Boolean).join(" · "),
+    eyebrow: [c.ville, /\d{4}/.test(String(c.annee || "")) ? c.annee : null].filter(Boolean).join(" · "),
     // Sujet en arabe : nom français du master (`master_fr`). Les polices de
     // l'image n'ont pas de glyphes arabes et satori ne lie pas les lettres
     // (voir app/droit/[id]/opengraph-image.js).

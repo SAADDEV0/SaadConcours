@@ -4,7 +4,7 @@
 // des JSON statiques publiés avec les assets, sous /app-data/v1/. Ce script
 // les génère depuis les mêmes sources que le site, au moment du build
 // (« prebuild » de package.json) :
-//   public/data/*.json      concours, cours FSJES/ENCG, QCM, blog, réglages
+//   public/data/*.json      concours, cours FSJES, QCM, blog, réglages
 //   lib/bacProgramme.js     programme du Bac + lib/bacContenu (contenu rédigé)
 //   lib/fsjesChapitres.js   découpage des cours en chapitres, comme le site
 //
@@ -33,8 +33,6 @@ import { fileURLToPath } from "node:url";
 import { BAC_GROUPES, BAC_MATIERES_PUBLIEES, BAC_NIVEAUX } from "../lib/bacProgramme.js";
 import { bacMatiereContenu } from "../lib/bacContenu/index.js";
 import { fsjesModule, fsjesModuleIcon } from "../lib/fsjesChapitres.js";
-import { encgModule } from "../lib/encg.js";
-import { ENCG_LANCE, TAALIM_LANCE } from "../lib/contenusPublies.mjs";
 import { FILIERE_CATEGORIES } from "../lib/taxonomy.js";
 import { CONCOURS_NIVEAUX } from "../lib/concoursNiveaux.js";
 import { COURS_CATEGORIES, LICENCE_FILIERES, LICENCE_PARCOURS, LICENCE_SEMESTRES, coursSortComparator } from "../lib/coursTaxonomy.js";
@@ -130,9 +128,8 @@ function corrigeOf(c) {
   return existsSync(p) ? readFileSync(p, "utf8") : "";
 }
 
-// Espace Taalim caché (TAALIM_LANCE) : ses sujets restent hors de l'appli.
 const concours = readJson("concours.json", [])
-  .filter((c) => c.statut !== "brouillon" && (TAALIM_LANCE || c.niveau !== "taalim"))
+  .filter((c) => c.statut !== "brouillon")
   .map((c) => {
     const corrige = corrigeOf(c);
     const images = scansMasques ? [] : c.images || [];
@@ -208,11 +205,6 @@ const coursIndex = [];
 for (const c of readJson("cours.json", []).filter((x) => x.available).sort(coursSortComparator)) {
   const decoupe = fsjesModule(c);
   if (decoupe.chapitres.length) coursIndex.push(moduleIndex(c, decoupe, "licence"));
-}
-// Espace ENCG caché (ENCG_LANCE) : ses modules restent hors de l'appli aussi.
-for (const c of ENCG_LANCE ? readJson("encg.json", []).filter((x) => x.available) : []) {
-  const decoupe = encgModule(c);
-  if (decoupe.chapitres.length) coursIndex.push(moduleIndex(c, decoupe, "encg"));
 }
 writeIndex("cours.json", coursIndex);
 

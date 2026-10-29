@@ -166,14 +166,13 @@ console.log(`  sitemap.xml publié en asset statique (${nbUrls} URL)`);
 //   ne fait que retirer des fichiers et des octets des assets.
 //   Ce que le navigateur lit encore : concours.json (texte des PDF de la
 //   liste), corriges/<id>.md (corrigés hors concours.json), settings.json
-//   (repli des PDF et du pied de page), cours/droit/encg/blog.json.
+//   (repli des PDF et du pied de page), cours/droit/blog.json.
 const DATA_DIR = join(ASSETS_DIR, "data");
-const { ENCG_LANCE, TAALIM_LANCE, QCM_LANCE } = await import("../lib/contenusPublies.mjs");
+const { QCM_LANCE } = await import("../lib/contenusPublies.mjs");
 const { publicAd } = await import("../app/_shared/partnerAds.js");
 
 // Même règle que isConcoursPublic (lib/store.js), sans le registre des espaces.
-const concoursPublic = (c) =>
-  c?.statut !== "brouillon" && (c?.niveau !== "post_bac" || ENCG_LANCE) && (c?.niveau !== "taalim" || TAALIM_LANCE);
+const concoursPublic = (c) => c?.statut !== "brouillon";
 
 const concoursPath = join(DATA_DIR, "concours.json");
 const tousConcours = JSON.parse(await readFile(concoursPath, "utf8"));

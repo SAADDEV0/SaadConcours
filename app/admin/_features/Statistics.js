@@ -44,8 +44,7 @@ export default function Statistics() {
   const quiz = useJson(COLLECTIONS.quiz.path);
   const blog = useJson(COLLECTIONS.blog.path);
   const droit = useJson(COLLECTIONS.droit.path);
-  const encg = useJson(COLLECTIONS.encg.path);
-  const content = { concours: concours.data, cours: cours.data, quiz: quiz.data, blog: blog.data, droit: droit.data, encg: encg.data };
+  const content = { concours: concours.data, cours: cours.data, quiz: quiz.data, blog: blog.data, droit: droit.data };
 
   function load() {
     setError("");
@@ -200,7 +199,6 @@ const JR_SECTIONS = [
   { value: "concours", label: "Concours" },
   { value: "cours", label: "Cours Licence" },
   { value: "droit", label: "Cours Droit" },
-  { value: "encg", label: "Cours ENCG" },
   { value: "quiz", label: "Évaluations" },
   { value: "blog", label: "Blog" },
   { value: "bac", label: "Bac" },

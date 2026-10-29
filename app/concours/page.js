@@ -5,6 +5,7 @@ import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
 import JsonLd from "../_shared/JsonLd";
 import { isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
 import ConcoursListing from "./ConcoursListing";
+import HubNav from "./_hub/HubNav";
 import { contenuOuvert } from "@/lib/espaces";
 
 // Served as prerendered HTML revalidated hourly instead of rendered per
@@ -93,6 +94,8 @@ export default async function ConcoursPage() {
               { href: "/cours", label: "Cours Licence FSJES" },
             ]}
           />
+
+          <HubNav concours={tous} />
 
           {/* Texte de la page (requête principale du site, « concours master
              maroc ») : sous la liste, qu'un élève voit en premier, mais
