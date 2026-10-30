@@ -986,7 +986,10 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
 
 ### B1 — Rédiger des chapitres Bac
 1. La structure (niveaux, matières, unités, **slugs de chapitres**) est fixée par
-   `lib/bacProgramme.js` : ne jamais inventer un slug, le reprendre de là.
+   `lib/bacProgramme.js` : ne jamais inventer un slug, le reprendre de là. Un chapitre absent du
+   programme se déduit des dossiers des sujets nationaux et de leurs corrigés (`pdftotext -enc UTF-8`
+   sur `public/bac/nationaux/`), filière par filière : SE et SGC n'ont pas les mêmes dossiers. L'ajouter
+   en fin de matière pour ne pas décaler la numérotation (précédent : statistiques EGS, 2026-10-30).
 2. Écrire dans `lib/bacContenu/<niveau>/<matiere-court>[-N].js` (découper en plusieurs fichiers
    par unité si la matière est longue, comme `egs-1.js`, `egs-2.js`…) :
    ```js
