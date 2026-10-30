@@ -12,7 +12,7 @@ import {
   MOBILE_QUERY,
 } from "./partnerAds";
 import boutiqueData from "../../public/data/boutique.json";
-import { isProduitVisible } from "../../lib/boutique";
+import { isProduitVisible, WHATSAPP_NUMERO } from "../../lib/boutique";
 import { readChapters, lastChapter } from "./progress";
 import { iconHtml } from "./icons";
 import { ESPACES_ACTIFS, OUTILS_ACTIFS, espaceOfActive, espaceByKey, espaceOfPath, espaceClass, couleurOfActive } from "../../lib/espaces";
@@ -222,7 +222,7 @@ export function spinnerHtml(label) {
 // Bouton WhatsApp flottant (achat des cahiers de préparation, tous modules) :
 // ouvre directement la conversation avec un message déjà rédigé. Posé avec le
 // pied de page, donc sur toutes les pages publiques et jamais dans la console admin.
-export const WHATSAPP_NUMERO = "212713875327";
+export { WHATSAPP_NUMERO };
 const WHATSAPP_MESSAGE = "Bonjour, je souhaite acheter le cahier de préparation du module : ";
 
 function whatsappFabHtml() {

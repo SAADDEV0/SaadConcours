@@ -16,7 +16,7 @@ const ACTIONS = [
   { id: "new-quiz", label: "Nouvelle évaluation (QCM)", icon: "plus", href: "/admin/evaluations/editer?nouveau=1", keywords: "ajouter qcm" },
   { id: "new-blog", label: "Nouvel article de blog", icon: "plus", href: "/admin/blog/editer?nouveau=1", keywords: "ajouter écrire" },
   { id: "new-news", label: "Nouvelle annonce de concours ouvert", icon: "plus", href: "/admin/annonces/editer?nouveau=1", keywords: "news ajouter" },
-  { id: "new-cahier", label: "Nouveau cahier à vendre (boutique Gumroad)", icon: "bag", href: "/admin/boutique/editer?nouveau=1", keywords: "vendre produit gumroad" },
+  { id: "new-cahier", label: "Nouveau cahier à vendre (boutique WhatsApp)", icon: "bag", href: "/admin/boutique/editer?nouveau=1", keywords: "vendre produit whatsapp" },
   { id: "social", label: "Préparer une publication réseaux sociaux", icon: "share", href: "/admin/social", keywords: "facebook instagram partager" },
   { id: "export", label: "Exporter les abonnés (CSV)", icon: "download", href: "/api/admin/subscribers?format=csv", external: true, keywords: "emails" },
   { id: "trash", label: "Ouvrir la corbeille", icon: "trash", href: "/admin/activite?onglet=corbeille", keywords: "restaurer supprimé" },

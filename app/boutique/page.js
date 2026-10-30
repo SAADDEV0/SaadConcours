@@ -30,8 +30,8 @@ export async function generateMetadata() {
 
 const ETAPES = [
   ["search", "Trouve ton cahier", "Filtre par niveau ou cherche ta matière, ton concours."],
-  ["credit-card", "Paie en toute sécurité", "Le paiement se fait sur Gumroad, par carte bancaire."],
-  ["download", "Télécharge tout de suite", "Le PDF arrive par email et reste disponible dans ton compte Gumroad."],
+  ["message", "Commande sur WhatsApp", "Clique sur « Commander » : le message avec le nom du cahier est déjà écrit."],
+  ["send", "Reçois ton PDF", "Après le paiement, le PDF t'est envoyé directement sur WhatsApp."],
 ];
 
 export default async function BoutiquePage() {
@@ -69,12 +69,12 @@ export default async function BoutiquePage() {
                 <strong>{produits.length}</strong> cahier{produits.length > 1 ? "s" : ""}
               </span>
               <span className="bac-stat">
-                <Icon name="lock" size={15} />
-                Paiement sécurisé Gumroad
+                <Icon name="message" size={15} />
+                Commande sur WhatsApp
               </span>
               <span className="bac-stat">
-                <Icon name="download" size={15} />
-                Téléchargement immédiat
+                <Icon name="send" size={15} />
+                PDF envoyé sur WhatsApp
               </span>
             </div>
           </section>
@@ -127,11 +127,11 @@ export default async function BoutiquePage() {
             <h2>Questions fréquentes</h2>
             <details>
               <summary>Comment je reçois mon cahier ?</summary>
-              <p>Juste après le paiement, Gumroad t&apos;envoie le PDF par email. Il reste aussi téléchargeable à tout moment depuis ton compte Gumroad.</p>
+              <p>Commande le cahier sur WhatsApp avec le bouton « Commander ». Après le paiement, nous t&apos;envoyons le PDF directement dans la conversation WhatsApp.</p>
             </details>
             <details>
               <summary>Quels moyens de paiement sont acceptés ?</summary>
-              <p>Carte bancaire activée pour le paiement en ligne (Visa, Mastercard) et, quand il est proposé, PayPal — sur la page de paiement sécurisée de Gumroad.</p>
+              <p>Quand tu commandes sur WhatsApp, nous t&apos;indiquons les moyens de paiement disponibles. Le PDF part dès que le paiement est reçu.</p>
             </details>
             <details>
               <summary>Le contenu du site reste-t-il gratuit ?</summary>
@@ -140,7 +140,7 @@ export default async function BoutiquePage() {
             <details>
               <summary>J&apos;ai un problème avec ma commande.</summary>
               <p>
-                Écris-nous depuis la page <a href="/contact">Contact</a> en indiquant l&apos;email utilisé pour l&apos;achat.
+                Écris-nous sur WhatsApp au +212 7 13 87 53 27, dans la conversation de ta commande, ou depuis la page <a href="/contact">Contact</a>.
               </p>
             </details>
           </section>

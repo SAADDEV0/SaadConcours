@@ -5,8 +5,8 @@ import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import MathScripts from "../../_shared/MathScripts";
 import { boutiqueCardHtml } from "../../_shared/boutiqueCard";
-import { boutiqueNiveau, formatPrix, gumroadHref, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
-import ProduitClient from "./ProduitClient";
+import { boutiqueNiveau, commandeHref, formatPrix, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
+import ProduitClient, { ShareButton } from "./ProduitClient";
 import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -51,7 +51,7 @@ export default async function ProduitPage(props) {
   const niv = boutiqueNiveau(p.niveau);
   const url = `${SITE_URL}/boutique/${p.id}`;
   const achetable = isProduitAchetable(p);
-  const href = gumroadHref(p);
+  const href = commandeHref(p);
   const remise = remisePct(p);
   const cover = produitImage(p.couverture);
   const descriptionHtml = renderMarkdownWithMath(marked, p.description || "");
@@ -75,7 +75,7 @@ export default async function ProduitPage(props) {
             price: Number(p.prix),
             priceCurrency: p.devise || "MAD",
             availability: "https://schema.org/InStock",
-            url: p.gumroadUrl,
+            url,
           },
         }
       : {}),
@@ -157,10 +157,11 @@ export default async function ProduitPage(props) {
                 </div>
                 {achetable && (
                   <a className="sp-btn primary shop-buy" href={href} target="_blank" rel="noopener" data-shop-buy={p.id}>
-                    <Icon name="cart" size={18} />
-                    Acheter sur Gumroad
+                    <Icon name="message" size={18} />
+                    Commander sur WhatsApp
                   </a>
                 )}
+                <ShareButton titre={p.titre} prix={achetable ? formatPrix(p.prix, p.devise) : ""} />
                 {p.apercu && (
                   <a className="sp-btn" href={p.apercu} target="_blank" rel="noopener">
                     <Icon name="eye" size={18} />
@@ -169,10 +170,10 @@ export default async function ProduitPage(props) {
                 )}
                 <ul className="shop-reassure">
                   <li>
-                    <Icon name="lock" size={15} /> Paiement sécurisé sur Gumroad
+                    <Icon name="message" size={15} /> Le message avec le nom du cahier est déjà écrit
                   </li>
                   <li>
-                    <Icon name="download" size={15} /> PDF envoyé par email, tout de suite
+                    <Icon name="send" size={15} /> PDF envoyé sur WhatsApp après le paiement
                   </li>
                   <li>
                     <Icon name="phone" size={15} /> Lisible sur téléphone, tablette et ordinateur
@@ -239,11 +240,11 @@ export default async function ProduitPage(props) {
             <div className="shop-cta-bottom">
               <div>
                 <strong>{p.titre}</strong>
-                <span>{formatPrix(p.prix, p.devise)} · téléchargement immédiat</span>
+                <span>{formatPrix(p.prix, p.devise)} · PDF envoyé sur WhatsApp</span>
               </div>
               <a className="sp-btn primary shop-buy" href={href} target="_blank" rel="noopener" data-shop-buy={p.id}>
-                <Icon name="cart" size={18} />
-                Acheter sur Gumroad
+                <Icon name="message" size={18} />
+                Commander sur WhatsApp
               </a>
             </div>
           )}

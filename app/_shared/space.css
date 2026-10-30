@@ -553,7 +553,7 @@
   .sp-le-steps{grid-template-columns:1fr;}
 }
 
-/* ---------- Boutique (cahiers vendus sur Gumroad) ---------- */
+/* ---------- Boutique (cahiers commandés sur WhatsApp) ---------- */
 .shop-steps{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px;}
 .shop-step{position:relative; display:flex; flex-direction:column; gap:4px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); font-size:.86rem; color:var(--text-dim);}
 .shop-step strong{color:var(--text); font-size:.95rem;}

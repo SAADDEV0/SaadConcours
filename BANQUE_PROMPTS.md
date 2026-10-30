@@ -34,7 +34,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `mets à jour l'article X` · `supprime l'article X` | [A2](#a2--modifier-ou-supprimer-un-article) |
 | `fais le même cahier PDF pour <master> <fac>` · `cahier de préparation + article` | [A3](#a3--cahier-de-préparation-pdf--article--fais-le-même-cahier-pour-master-fac-) |
 | `ajoute une news …` · `supprime la news X` · `lance le scraper news` | [N1](#n1--news-concours-ouverts) |
-| `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-gumroad) |
+| `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-commandés-sur-whatsapp) |
 | `poste les concours` · `prépare les posts Instagram / Facebook` · `carrousels de la semaine` | [R1](#r1--carrousels-instagram--facebook-des-concours) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
@@ -1196,17 +1196,19 @@ demander avant toute remise en ligne (elle exigerait un contenu rédigé, pas un
 
 ---
 
-## V. BOUTIQUE (cahiers vendus sur Gumroad)
+## V. BOUTIQUE (cahiers commandés sur WhatsApp)
 
-### V1 — Boutique : cahiers Gumroad
-- Pages publiques : `/boutique` (liste, recherche, filtre par niveau) et `/boutique/<id>` (fiche + bouton « Acheter sur Gumroad »). Le site n’encaisse rien : le paiement et la livraison du PDF se font sur Gumroad.
-- Schéma : `{ id (slug du titre), titre, sousTitre, niveau (bac|licence|licence_excellence|master), matiere, description (Markdown), sommaire: [], pointsForts: [], prix, prixBarre (promo, facultatif), devise (MAD|EUR|USD), pages, format, couverture (images/boutique/<id>/…), apercu (lien d’extrait gratuit), gumroadUrl, paiementDirect (true = ouvre directement le paiement, ?wanted=true), badge (Nouveau|Best-seller|Promo|Édition 2026|Bientôt), vedette, available, dateAjout }`.
-- **Ne jamais inventer** un prix ni un lien Gumroad : les demander s’ils ne sont pas fournis. Une fiche sans `gumroadUrl` valide s’affiche en « Bientôt disponible », sans bouton d’achat : ne pas la publier (`available: true`) dans cet état, le garde-fou de la règle 1.6 bloquerait.
-- Tant qu’aucun cahier n’est publié, la boutique est absente du menu, du sitemap et de l’index (`BOUTIQUE_OUVERTE` dans `app/_shared/chrome.js`) : le premier cahier `available` la fait apparaître au déploiement suivant, sans toucher au code.
+### V1 — Boutique : cahiers commandés sur WhatsApp
+- **Plus de Gumroad** (décision du 2026-10-30) : le bouton « Commander sur WhatsApp » de `/boutique/<id>` ouvre `wa.me/212713875327` avec un message qui nomme le cahier et son prix (`commandeHref`, `lib/boutique.js` ; le préfixe « Cahier de préparation — » du titre est retiré du message). Saad répond, encaisse et **envoie le PDF à la main sur WhatsApp**. Le site n’encaisse rien et **ne contient jamais le PDF d’un cahier vendu** (ni `public/`, ni lien, ni extrait complet) : il est fabriqué hors site (ex. `docs/cahier-intro-droit-s1/`, ignoré par git).
+- Pages publiques : `/boutique` (liste, recherche, filtre par niveau) et `/boutique/<id>` (fiche, bouton de commande, bouton « Partager » : WhatsApp, Facebook, Telegram, copier le lien).
+- Schéma : `{ id (slug du titre), titre, sousTitre, niveau (bac|licence|licence_excellence|master), matiere, description (Markdown), sommaire: [], pointsForts: [], prix, prixBarre (promo, facultatif), devise (MAD|EUR|USD), pages, format, couverture (images/boutique/<id>/…), apercu (lien d’extrait gratuit, facultatif), badge (Nouveau|Best-seller|Promo|Édition 2026|Bientôt), vedette, available, dateAjout }`.
+- **Ne jamais inventer** un prix : le demander s’il n’est pas fourni. Une fiche sans prix s’affiche en « Bientôt disponible », sans bouton de commande : ne pas la publier (`available: true`) dans cet état, le garde-fou de la règle 1.6 bloquerait.
+- La boutique n’entre dans le menu, le sitemap et l’index qu’avec un cahier `available` (`BOUTIQUE_OUVERTE`, `app/_shared/chrome.js`). Ouverte le 2026-10-30 avec le cahier « Introduction à l’étude du droit (S1) », 50 DH.
 - Le plus simple pour Saad : Console › Contenu › Boutique › « Nouveau cahier ». Par script : mêmes règles que 1.2 (lecture, modification, `JSON.stringify(list, null, 2) + "
 "`).
-- Couverture : image portrait (3:4) en WebP, sous un **nouveau nom** à chaque remplacement (les images sont en cache immuable).
-- Suivi : vues des fiches et clics sur « Acheter » dans la liste Boutique de la console (Gumroad compte les ventes).
+- Couverture : image portrait (3:4) en WebP, sous un **nouveau nom** à chaque remplacement (les images sont en cache immuable). Le même fichier `poster.html` produit les posters carré et story pour les réseaux.
+- **Couverture = le poster du cahier** (demande du 2026-10-30) : même design que le poster story (indigo, pages du cahier en éventail, pastille de prix, bandeau « Commande sur WhatsApp » + numéro + QR), recadré en 3:4 (1080 × 1440) : bloc `#couv` de `docs/cahier-intro-droit-s1/marketing/poster.html`, export `node render.mjs public/images/boutique/<id>/couverture-vN.webp`. Pas de section « affiche » séparée sur la fiche (retirée à la demande de Saad) ; pas de nouveau design sans demande.
+- Suivi : vues des fiches et clics sur « Commander » dans la liste Boutique de la console ; les ventes se comptent dans WhatsApp.
 
 ---
 ## R. RÉSEAUX SOCIAUX

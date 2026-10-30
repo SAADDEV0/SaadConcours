@@ -11,7 +11,7 @@ Application Next.js multi-pages :
 - `/concours` — Concours (filtres, recherche, rendu Markdown/LaTeX, galerie d'images, export PDF, corrigé quand disponible)
 - `/evaluation` — QCM d'auto-évaluation par module ; **caché depuis le 2026-10-28** (`QCM_LANCE = false`, `lib/contenusPublies.mjs`, recette E), `/evaluation` redirige en 302 vers `/concours`
 - `/blog` — Articles de méthode et d'orientation
-- `/boutique` — Cahiers de préparation vendus sur Gumroad (le site présente, Gumroad encaisse et livre le PDF) ; absente du menu tant qu'aucun cahier n'est publié
+- `/boutique` — Cahiers de préparation commandés sur WhatsApp (le site présente ; paiement et envoi du PDF à la main sur WhatsApp, jamais de PDF sur le site) ; absente du menu tant qu'aucun cahier n'est publié
 - `/admin` — Console d'administration v7 (voir « La console d'administration » plus bas), protégée par mot de passe
 
 La section « Concours ouverts » (`/news`, copie automatique d'almaster-maroc.com) a été retirée du

@@ -650,9 +650,7 @@ const news = {
   auditLabel: (n) => n.titre,
 };
 
-/* ------------------------------ Boutique (Gumroad) ------------------------------ */
-
-const GUMROAD_RE = /^https:\/\/([\w-]+\.)?gumroad\.com\//i;
+/* ------------------------------ Boutique (commande WhatsApp) ------------------------------ */
 
 const boutique = {
   key: "boutique",
@@ -699,7 +697,7 @@ const boutique = {
         const v = ctx?.shop?.views?.[p.id] || 0;
         const c = ctx?.shop?.clicks?.[p.id] || 0;
         return (
-          <span className="ax-muted ax-nowrap" title="Vues de la fiche → clics sur « Acheter » (départs vers Gumroad)">
+          <span className="ax-muted ax-nowrap" title="Vues de la fiche → clics sur « Commander » (départs vers WhatsApp)">
             {v} → {c}
             {v ? ` (${Math.round((c / v) * 100)} %)` : ""}
           </span>
@@ -722,8 +720,6 @@ const boutique = {
     format: "PDF",
     couverture: "",
     apercu: "",
-    gumroadUrl: "",
-    paiementDirect: true,
     badge: "",
     vedette: false,
     available: false,
@@ -745,14 +741,12 @@ const boutique = {
       ],
     },
     {
-      title: "Prix et paiement Gumroad",
-      hint: "Le paiement et la livraison du PDF se font sur Gumroad : indique ici le même prix que sur Gumroad.",
+      title: "Prix et commande WhatsApp",
+      hint: "Le bouton « Commander » ouvre WhatsApp avec un message qui nomme le cahier et son prix. Le paiement et l'envoi du PDF se font à la main sur WhatsApp : le PDF n'est jamais mis sur le site.",
       fields: [
-        { key: "prix", label: "Prix", type: "number", required: true, placeholder: "149" },
-        { key: "prixBarre", label: "Prix barré (avant promo)", type: "number", placeholder: "199" },
+        { key: "prix", label: "Prix", type: "number", required: true, placeholder: "50" },
+        { key: "prixBarre", label: "Prix barré (avant promo)", type: "number", placeholder: "80" },
         { key: "devise", label: "Devise", type: "select", options: BOUTIQUE_DEVISES.map((d) => ({ value: d.code, label: d.label })) },
-        { key: "gumroadUrl", label: "Lien du produit Gumroad", type: "url", required: true, full: true, hint: "Ex. https://saadconcours.gumroad.com/l/cahier-cca" },
-        { key: "paiementDirect", label: "Ouvrir directement le paiement (sinon la page produit Gumroad)", type: "switch", full: true },
       ],
     },
     { title: "Couverture", fields: [{ key: "couverture", label: "Couverture", type: "cover", full: true }] },
@@ -780,7 +774,6 @@ const boutique = {
     return checks([
       [p.titre, "Titre", "red"],
       [Number(p.prix) > 0, "Prix", "red"],
-      [GUMROAD_RE.test(p.gumroadUrl || ""), "Lien Gumroad valide (https://…gumroad.com/…)", "red"],
       [p.couverture, "Couverture"],
       [(p.description || "").length > 200, "Description détaillée (200 caractères et plus)"],
       [(p.sommaire || []).length >= 3, "Sommaire (au moins 3 lignes)"],
