@@ -35,6 +35,8 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `fais le même cahier PDF pour <master> <fac>` · `cahier de préparation + article` | [A3](#a3--cahier-de-préparation-pdf--article--fais-le-même-cahier-pour-master-fac-) |
 | `ajoute une news …` · `supprime la news X` · `lance le scraper news` | [N1](#n1--news-concours-ouverts) |
 | `ajoute un cahier à la boutique` · `mets en promo le cahier X` · `retire le cahier X` | [V1](#v1--boutique-cahiers-commandés-sur-whatsapp) |
+| `fais un cahier de préparation de <module>` · `cahier à vendre` · `exemplaire au nom de X` | [V2](#v2--cahier-payant-en-pdf) |
+| `fais le poster du cahier X` · `change le poster` | [V3](#v3--posters-dun-cahier) |
 | `poste les concours` · `prépare les posts Instagram / Facebook` · `carrousels de la semaine` | [R1](#r1--carrousels-instagram--facebook-des-concours) |
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
@@ -1204,11 +1206,32 @@ demander avant toute remise en ligne (elle exigerait un contenu rédigé, pas un
 - Schéma : `{ id (slug du titre), titre, sousTitre, niveau (bac|licence|licence_excellence|master), matiere, description (Markdown), sommaire: [], pointsForts: [], prix, prixBarre (promo, facultatif), devise (MAD|EUR|USD), pages, format, couverture (images/boutique/<id>/…), apercu (lien d’extrait gratuit, facultatif), badge (Nouveau|Best-seller|Promo|Édition 2026|Bientôt), vedette, available, dateAjout }`.
 - **Ne jamais inventer** un prix : le demander s’il n’est pas fourni. Une fiche sans prix s’affiche en « Bientôt disponible », sans bouton de commande : ne pas la publier (`available: true`) dans cet état, le garde-fou de la règle 1.6 bloquerait.
 - La boutique n’entre dans le menu, le sitemap et l’index qu’avec un cahier `available` (`BOUTIQUE_OUVERTE`, `app/_shared/chrome.js`). Ouverte le 2026-10-30 avec le cahier « Introduction à l’étude du droit (S1) », 50 DH.
-- Le plus simple pour Saad : Console › Contenu › Boutique › « Nouveau cahier ». Par script : mêmes règles que 1.2 (lecture, modification, `JSON.stringify(list, null, 2) + "
-"`).
+- Le plus simple pour Saad : Console › Contenu › Boutique › « Nouveau cahier ». Par script : mêmes règles que 1.2 (lecture, modification, `JSON.stringify(list, null, 2) + "\n"`).
 - Couverture : image portrait (3:4) en WebP, sous un **nouveau nom** à chaque remplacement (les images sont en cache immuable). Le même fichier `poster.html` produit les posters carré et story pour les réseaux.
 - **Couverture = le poster du cahier** (demande du 2026-10-30) : même design que le poster story (indigo, pages du cahier en éventail, pastille de prix, bandeau « Commande sur WhatsApp » + numéro + QR), recadré en 3:4 (1080 × 1440) : bloc `#couv` de `docs/cahier-intro-droit-s1/marketing/poster.html`, export `node render.mjs public/images/boutique/<id>/couverture-vN.webp`. Pas de section « affiche » séparée sur la fiche (retirée à la demande de Saad) ; pas de nouveau design sans demande.
 - Suivi : vues des fiches et clics sur « Commander » dans la liste Boutique de la console ; les ventes se comptent dans WhatsApp.
+
+### V2 — Cahier payant en PDF
+Commande : « fais un cahier de préparation de <module> », « cahier à vendre ». Précédent : `docs/cahier-intro-droit-s1/` (Introduction à l’étude du droit S1, 97 pages, 2026-10-29 et 30), à copier comme point de départ.
+1. **Avant d’écrire** : proposer à Saad le sommaire et la méthode, et attendre son accord. Annoncer les choix par défaut : lexique français-arabe, exercices en QCM et en rédigé, PDF remis à Saad seulement.
+2. **Dossier** : `docs/cahier-<module>/` (`docs/` est dans `.gitignore` : jamais commité, jamais déployé, pas sauvegardé sur GitHub — le dire à Saad). Jamais dans `public/`, `scripts/` ni ailleurs sur le site : le PDF vendu ne doit pas devenir gratuit.
+3. **Structure fixe** : couverture ; bienvenue ; sommaire ; plan de révision en 14 et en 7 jours ; partie 0 lexique (~80 mots : mot, explication simple, terme arabe utilisé au Maroc) ; un chapitre par partie avec 9 blocs (l’essentiel, définitions à réciter, textes à citer, schéma, pièges, 15 QCM + corrigé en rouge, 5 questions de cours + réponse modèle, 1 ou 2 cas pratiques corrigés en syllogisme, bilan à cocher) ; méthodologie (question de cours, cas pratique, dissertation, commentaire d’article, QCM) ; 3 examens blancs avec barème (40 QCM nouveaux, sujet mixte, dissertation avec copie modèle) ; mémo de la veille ; page « le jour de l’examen » + mentions (usage personnel, reproduction interdite).
+4. **Fond** : suivre l’ordre et les notions du cours du site (`cours.json` / `droit.json`), mais réécrire (pas de copie). Les exercices écrits par nous ne sont jamais présentés comme des annales.
+5. **Langue B1** : phrases courtes (≈ 10 mots en moyenne, mesuré), tutoiement, chaque mot juridique expliqué à sa première apparition (encadré « Mot du droit »), exemples marocains, pas de latin sans traduction.
+6. **Écriture** : un fichier par partie dans `contenu/` (`chNN.mjs` : `objectifs, essentiel, definitions, textes, schema, pieges, qcm [{q, o[4], ok, ex}], questions [{q, pts, r}], cas [{titre, enonce, corrige}]` ; plus `lexique`, `methode`, `examens`, `memo`, `intro`). Outils de `h.mjs` : `blocks`, `mot`, `ex`, `retiens`, `attention`, `tab`, `syl`, `flow` ; dans le texte `**gras**`, `*italique*`, `==surligné==`. QCM : jamais de lettre dans l’explication ; le build mélange les propositions (graine = texte de la question), `fixe: true` garde l’ordre.
+7. **Build** : `node build.mjs cahier.pdf` (Edge headless + `pdftotext`, sommaire en deux passes) ; `--acheteur "Nom"` pour un exemplaire nominatif (nom en couverture et en pied de page). Le build pose la typographie française, met « 1er » en exposant et remplace Creator/Producer du PDF par « SaadConcours » (aucune trace du navigateur). Charte : indigo, teal, rouge = corrigé, vert = bonne réponse, pas de dégradé ; polices Literata, Plus Jakarta Sans, Noto Naskh Arabic.
+8. **Audit obligatoire avant de remettre le PDF** :
+   - chaque article cité vérifié sur le texte officiel : PDF d’adala.justice.gov.ma récupéré par WebFetch (le fichier est enregistré), puis `pdftotext`. Erreurs trouvées la première fois : capacité de jouissance = art. 207 et d’exercice = art. 208 du Code de la famille (pas 206/207) ; acte mixte = preuve libre **contre le commerçant** (Code de commerce, art. 4) ; Code pénal art. 111 = classement selon la peine. En cas de doute : citer le texte sans numéro ;
+   - script de contrôle : 4 propositions distinctes par QCM, lettre valide, pas de question en double, répartition des bonnes lettres, longueur des phrases, restes de balisage (`**`, `==`, `ZZ`, `undefined`), aucune mention de l’IA (règle 1.3), métadonnées du PDF ;
+   - relecture visuelle avec `snap.mjs` : couverture, sommaire, lexique arabe, un schéma, QCM, corrigé, cas pratique, examen blanc, mémo, fin.
+9. **Remise** : envoyer le PDF à Saad, avec le compte rendu de l’audit. Ne rien changer au site sans demande ; pour le vendre : V1 (fiche boutique) et V3 (posters).
+
+### V3 — Posters d’un cahier
+Commande : « fais le poster du cahier X », « change le poster ». Fichier : `docs/cahier-<module>/marketing/poster.html` ; aperçus des pages : `node snap.mjs cahier.pdf marketing/_pages 1,31,55` (couverture + deux pages parlantes) ; export : `node marketing/render.mjs` (+ chemin `.webp` pour la couverture boutique, bloc `#couv`).
+- Trois formats : carré 1080 × 1080 (publications Instagram, Facebook, groupes WhatsApp), story 1080 × 1920 (statuts, stories), couverture boutique 3:4 (1080 × 1440, voir V1).
+- **Design validé à réutiliser tel quel** (2026-10-29 et 30) : fond indigo plein, bande teal en haut, étiquette jaune du niveau, titre avec le dernier mot en jaune, éventail de trois pages du cahier, pastille jaune « 50 DH seulement », chiffres en cases, puces menthe, bandeau teal « Commande sur WhatsApp » avec le numéro +212 7 13 87 53 27 et un QR (`wa.me` + message court qui nomme le cahier). Saad a refusé un nouveau design (« cahier d’écolier ») : ne changer que les textes, sauf demande explicite ; si la demande est floue, poser une question à choix.
+- Textes : livraison « PDF envoyé sur WhatsApp » (jamais « par e-mail »), pas d’emoji, pas de mention de l’IA.
+- Relire chaque image (chevauchement, texte coupé, QR qui touche le bord) ; Saad doit scanner le QR avec son téléphone avant de publier (non testable ici).
 
 ---
 ## R. RÉSEAUX SOCIAUX
