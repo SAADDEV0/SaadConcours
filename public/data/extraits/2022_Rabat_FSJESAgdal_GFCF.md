@@ -390,10 +390,10 @@ Traitez en 60 mn les questions suivantes selon les consignes indiquées ci-dessu
 - **d.** Bureaucratie mécaniste
 
 **64.** Le PIB du Maroc en 2021 est situé dans la fourchette suivante :
-- **a.** 60.000.000.000 $ - 80.000.000.000 $
-- **b.** 80.000.000.001 $ - 100.000.000.000 $
-- **c.** 100.000.000.001 $ - 120.000.000.000 $
-- **d.** 120.000.000.001 $ - 140.000.000.000 $
+- **a.** 60.000.000.000 USD - 80.000.000.000 USD
+- **b.** 80.000.000.001 USD - 100.000.000.000 USD
+- **c.** 100.000.000.001 USD - 120.000.000.000 USD
+- **d.** 120.000.000.001 USD - 140.000.000.000 USD
 
 **65.** Les principales compétences à acquérir pour être un bon manager sont notamment
 - **a.** Le commandement
