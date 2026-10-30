@@ -1279,6 +1279,11 @@ Commande : « fais un cahier de préparation de <module> », « cahier à vendre
     - `G` accepte `xticks: [...]` (repères de l'axe) et `nodot: true` sur un point (étiquette sans point noir).
     - Audit : recalcul à part (convolution pour la binomiale, série de Taylor pour Φ, intégrales numériques), résultats cherchés dans le texte du PDF.
 
+13. **Série de cahiers** (« fais le maximum de modules, un par un, tu push », 2026-10-30) : le plan n'est pas soumis à Saad et le prix reste 50 DH. Ordre tiré au sort. Gabarit commun `docs/_gabarit/` (hors git) : écrire `docs/cahier-<module>/config.mjs` (modèle : `docs/cahier-controle-gestion/config.mjs`), puis, depuis ce dossier, `node ../_gabarit/nouveau.mjs` (moteur, couleur du semestre, en-tête), écrire `contenu/`, `node build.mjs cahier.pdf`, `node ../_gabarit/audit.mjs`, relire à l'image, `node ../_gabarit/finir.mjs` (posters, couverture, fiche boutique, copie dans Desktop\pdf).
+    - `intro.mjs` est commun : le plan de révision se calcule depuis les chapitres (`court` = nom court du chapitre) et le texte vient de `config.mjs`. `contenu/outils.mjs` porte les calculs propres au module : `ECD` et `ECI` recalculent les écarts et arrêtent le build si la somme est fausse.
+    - **Les textes d'interprétation ne sont pas vérifiés par le script** : ils se relisent à l'image. Erreur trouvée ainsi : « perd −3 200 DH » sur un écart favorable, et une synthèse qui nommait le mauvais poste.
+    - Un `QCM` ne prend pas les lettres A, B, C, D comme noms de produits : les propositions sont mélangées.
+
 ### V3 — Posters d’un cahier
 Commande : « fais le poster du cahier X », « change le poster ». Fichier : `docs/cahier-<module>/marketing/poster.html` ; aperçus des pages : `node snap.mjs cahier.pdf marketing/_pages 1,31,55` (couverture + deux pages parlantes) ; export : `node marketing/render.mjs` (+ chemin `.webp` pour la couverture boutique, bloc `#couv`).
 - Trois formats : carré 1080 × 1080 (publications Instagram, Facebook, groupes WhatsApp), story 1080 × 1920 (statuts, stories), couverture boutique 3:4 (1080 × 1440, voir V1).
