@@ -379,5 +379,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-10-30"
+  },
+  {
+    "id": "cahier-econometrie-s5",
+    "titre": "Cahier de préparation — Économétrie (S5)",
+    "sousTitre": "Le module expliqué en français simple, 160 QCM corrigés, 16 exercices et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Économétrie",
+    "description": "Ce cahier prépare l'examen d'**Économétrie**, un module du semestre 5 en Licence FSJES (parcours Économie). Il est écrit en **français simple** : des phrases courtes, chaque mot expliqué et des exemples tirés de la vie au Maroc.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à estimer un modèle à la main, à rédiger un test en quatre temps et à donner un sens économique aux résultats.\n\nÀ la fin : la méthodologie de l'épreuve, **trois examens blancs** avec barème et corrigé et un **mémo de la veille** avec toutes les formules. Un plan de révision en 14 jours ou en 7 jours t'aide à t'organiser.\n\nLe cours complet reste gratuit sur le site : [Économétrie (S5)](/cours/econometrie_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 68 mots de l'économétrie (français-arabe)",
+      "Chapitre 1 · Introduction à l'économétrie",
+      "Chapitre 2 · Le modèle de régression linéaire simple",
+      "Chapitre 3 · La qualité de l'ajustement",
+      "Chapitre 4 · Inférence : tests et intervalles",
+      "Chapitre 5 · Le modèle de régression multiple",
+      "Chapitre 6 · Multicolinéarité et erreurs de spécification",
+      "Chapitre 7 · Hétéroscédasticité et autocorrélation",
+      "Chapitre 8 · Introduction aux séries temporelles",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "160 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : moindres carrés, tests, prévision, régression multiple, Durbin-Watson, séries temporelles",
+      "Chaque test rédigé en quatre temps, comme le correcteur l'attend",
+      "Lexique de 68 mots en français-arabe"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 79,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-econometrie-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-10-30"
   }
 ]
