@@ -14,8 +14,8 @@
 // renders it to SVG (pure vector paths, no browser layout/CSS involved —
 // unlike KaTeX's HTML+CSS output, which is what made an html2canvas-based
 // attempt at this hang on this exact content) and svg2pdf.js draws that
-// SVG straight into the PDF as vector graphics — see renderMathToSvg /
-// prerenderMathSvgs. So the PDF shows an actual fraction bar / exponent /
+// SVG straight into the PDF as vector graphics — see pdfMath.js. So the PDF
+// shows an actual fraction bar / exponent /
 // boxed formula matching the site instead of the ASCII approximation, at
 // print quality (it's vector, not a raster snapshot). The plain text stays
 // as the fallback if a formula's render fails, and table cells still use
@@ -25,20 +25,11 @@ import { trackPdfDownload } from "./chrome";
 import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, pdfFileName, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
-import { latexToPlainText, wrapAccentedMathWords } from "./latexPlainText";
+import { latexToPlainText } from "./latexPlainText";
+import { MATH_RE, PT_TO_MM, fitMathSvg, mathLineMetrics, prerenderMathSvgs, stashMath } from "./pdfMath";
 import { ensureCoursPdfScripts } from "./pdfScripts";
 import { ARABIC_FONT, hasArabic, loadArabicPdfFont } from "./pdfArabic";
 
-const MATH_OPEN = "";
-const MATH_CLOSE = "";
-const MATH_RE = new RegExp(`${MATH_OPEN}(\\d+)${MATH_CLOSE}`, "g");
-
-// Pulls $...$ / $$...$$ spans out of the markdown source before it reaches
-// marked() (same reasoning as mathMarkdown.js's protectMath: marked would
-// otherwise mangle underscores/asterisks inside the LaTeX) and remembers
-// whether each was a display ($$) or inline ($) span so a paragraph that's
-// *only* a display equation can later be centered like the on-page reader
-// does, instead of flowing like body text.
 // Decorative emoji (📐💡🗺️✏️✅) in the markdown source are astral-plane
 // characters (surrogate pairs in UTF-16) — marked's regex-based inline
 // tokenizer isn't surrogate-pair-aware and can silently drop the character
@@ -48,24 +39,6 @@ const MATH_RE = new RegExp(`${MATH_OPEN}(\\d+)${MATH_CLOSE}`, "g");
 // entirely, rather than trying to clean up after marked's own tokens.
 function stripEmojiFromSource(md) {
   return md.replace(/[\u{1F000}-\u{1FFFF}☀-➿️‍]/gu, "");
-}
-
-function stashMath(md) {
-  const store = [];
-  // Content authors sometimes write a French word straight into a bare
-  // subscript/superscript ("V_n^{début}") instead of "V_n^{\text{début}}" —
-  // wrapAccentedMathWords fixes that up front so both the MathJax SVG below
-  // and the plain-text fallback (latexToPlainText, which just unwraps
-  // \text{} either way) see the corrected source.
-  const stash = (raw, display) => `${MATH_OPEN}${store.push({ raw: wrapAccentedMathWords(raw), display }) - 1}${MATH_CLOSE}`;
-  // Display blocks get forced onto their own blank-line-separated paragraph:
-  // the source sometimes has two $$...$$ back to back with only a single
-  // newline between them (or text right after), and without the blank
-  // lines here marked merges them into one paragraph — losing the
-  // separator entirely and gluing the two formulas' words together.
-  let text = stripEmojiFromSource(md || "").replace(/\$\$[\s\S]+?\$\$/g, (m) => `\n\n${stash(m, true)}\n\n`);
-  text = text.replace(/\$(?:\\\$|[^$])+?\$/g, (m) => (m.includes("\n\n") ? m : stash(m, false)));
-  return { text, store };
 }
 
 // Transliterates/strips everything jsPDF's built-in fonts can't encode —
@@ -80,80 +53,6 @@ const stripUnsupportedGlyphs = (text, store) => sanitizePdfText(text, { arabic: 
 const HTML_ENTITIES = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&nbsp;": " " };
 function unescapeEntities(s) {
   return s.replace(/&(amp|lt|gt|quot|#39|apos|nbsp);/g, (m) => HTML_ENTITIES[m] || m);
-}
-
-// ---- LaTeX -> real vector typesetting (MathJax SVG + svg2pdf.js) --------
-// MathJax's SVG output is pure vector paths computed straight from font
-// metrics — no browser layout/CSS pass involved — so it's both fast and
-// immune to the CSS-parsing/layout edge cases a DOM-screenshot approach
-// (e.g. html2canvas rendering KaTeX's HTML+CSS output) runs into. svg2pdf.js
-// then draws that SVG straight into the PDF as vector graphics: print
-// quality at any zoom, not a raster snapshot.
-//
-// MathJax's SVG uses a fixed 1000-unit em for every formula (like a font's
-// unitsPerEm — the viewBox extent varies per formula because it's cropped
-// to that formula's own ink, not because the unit scale changes), so one
-// mm-per-unit ratio derived from our target point size gives every formula
-// consistent, correct-looking scale relative to the surrounding jsPDF text.
-const MATHJAX_UNITS_PER_EM = 1000;
-const PT_TO_MM = 25.4 / 72;
-
-function stripMathDelimiters(raw) {
-  const s = raw.trim();
-  if (s.startsWith("$$") && s.endsWith("$$")) return s.slice(2, -2);
-  if (s.startsWith("$") && s.endsWith("$")) return s.slice(1, -1);
-  return s;
-}
-
-// fontCache must be "none" in the MathJax config (see app/layout.js) — any
-// caching mode defines repeated glyphs once in a <defs> and references them
-// via <use>, and svg2pdf.js can't resolve that for an SVG that's never
-// attached to a live document (confirmed for both "local" and "global").
-// "none" makes every glyph a fully inline path, larger but reliable.
-async function renderMathToSvg(raw, display) {
-  if (!window.MathJax?.tex2svgPromise) return null;
-  // svg2pdf.js (loaded via a separate <Script> tag) patches jsPDF.API.svg —
-  // it can still be mid-load even once MathJax itself is ready, since script
-  // tags with strategy="afterInteractive" don't guarantee any particular
-  // load order relative to each other. Without this check, prerendering
-  // would succeed here but the later doc.svg(...) draw call would throw
-  // "doc.svg is not a function" and abort the whole PDF. Bailing out to
-  // null here instead routes this formula through the existing plain-text
-  // fallback, same as any other MathJax failure.
-  if (typeof window.jspdf?.jsPDF?.API?.svg !== "function") return null;
-  try {
-    const node = await window.MathJax.tex2svgPromise(stripMathDelimiters(raw), { display });
-    const svg = node.querySelector("svg");
-    if (!svg) return null;
-    const viewBox = (svg.getAttribute("viewBox") || "").trim().split(/\s+/).map(Number);
-    if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return null;
-    const [, minY, vbWidth, vbHeight] = viewBox;
-    const fontSizePt = display ? 12 : 10.5; // matches the display-block/body text sizes used elsewhere in this file
-    const mmPerUnit = (fontSizePt * PT_TO_MM) / MATHJAX_UNITS_PER_EM;
-    return {
-      svg,
-      wMM: vbWidth * mmPerUnit,
-      hMM: vbHeight * mmPerUnit,
-      // distance from the SVG's top edge down to the text baseline, for
-      // aligning it against surrounding jsPDF text (whose y is a baseline).
-      ascentMM: -minY * mmPerUnit,
-    };
-  } catch {
-    return null; // falls back to the plain-text rendering of this formula
-  }
-}
-
-// Pre-renders every stashed formula to SVG *before* the jsPDF layout pass
-// below runs, and attaches it as `entry.svg` — left undefined on failure so
-// downstream rendering falls back to the plain-text conversion. Safe to run
-// concurrently: tex2svgPromise never touches the live DOM.
-async function prerenderMathSvgs(store) {
-  await Promise.all(
-    store.map(async (entry) => {
-      const svg = await renderMathToSvg(entry.raw, entry.display);
-      if (svg) entry.svg = svg;
-    })
-  );
 }
 
 // ---- markdown tokens -> styled text runs -----------------------------
@@ -300,7 +199,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
       // carry their own leading/trailing whitespace, so spacing around it
       // is unaffected.
       if (run.svg) {
-        words.push({ isSvg: true, svg: run.svg, space: false });
+        words.push({ isSvg: true, svg: fitMathSvg(run.svg, usableWidth), space: false });
         return;
       }
       const italic = !!(run.italic || run.math);
@@ -325,23 +224,24 @@ export async function buildCoursPdf(cours, brandingOverride) {
     async function flushLine() {
       if (!line.length) return;
       // A formula taller than a text line (a fraction, a boxed formula)
-      // needs the line to reserve extra room, or it bleeds into the next
-      // one — it still sits on the same baseline as the surrounding text,
-      // it just extends further above it.
-      const svgHeights = line.filter((w) => w.isSvg).map((w) => w.svg.hMM);
-      const effLineHeight = svgHeights.length ? Math.max(lineHeight, ...svgHeights) + 0.8 : lineHeight;
+      // needs the line to reserve extra room on both sides, or it bleeds into
+      // its neighbours — it still sits on the same baseline as the
+      // surrounding text.
+      const { extraTop, height: effLineHeight } = mathLineMetrics(line.filter((w) => w.isSvg).map((w) => w.svg), lineHeight);
       // Checked here rather than at the call sites: the *last* line of a
       // paragraph used to be flushed without any space check, so a paragraph
       // ending near the bottom of a page drew its final line into the
       // margin, over the footer. Doing it once, right before the line is
       // actually drawn, also covers the taller-than-usual formula lines.
-      ensureSpace(effLineHeight);
+      ensureSpace(extraTop + effLineHeight);
+      y += extraTop;
       // Inside a blockquote, the accent bar / tinted band of this line goes
       // down first so the text is drawn on top of it (see drawQuoteLine).
       if (quote) {
-        const top = y - size * PT_TO_MM * 0.78;
-        if (rtl) drawQuoteLine(doc, branding, { x: marginX, top, height: effLineHeight, width: quote.right - marginX, barRight: true });
-        else drawQuoteLine(doc, branding, { x: quote.x, top, height: effLineHeight, width: marginX + maxWidth - quote.x });
+        const top = y - size * PT_TO_MM * 0.78 - extraTop;
+        const height = effLineHeight + extraTop;
+        if (rtl) drawQuoteLine(doc, branding, { x: marginX, top, height, width: quote.right - marginX, barRight: true });
+        else drawQuoteLine(doc, branding, { x: quote.x, top, height, width: marginX + maxWidth - quote.x });
       }
       doc.setTextColor(...color);
       if (rtl) {
@@ -519,7 +419,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
             ensureSpace(h + 6);
             y += 1.5;
             await doc.svg(svg.svg.cloneNode(true), { x: marginX + indent + (availWidth - w) / 2, y, width: w, height: h });
-            y += h + 4;
+            y += h + 6.5; // y is the next text's baseline: its letters rise about 3mm back up
             break;
           }
           ensureSpace(14);
@@ -598,7 +498,7 @@ export async function buildCoursPdf(cours, brandingOverride) {
     }
   }
 
-  const { text: stashed, store } = stashMath(cours.content || "");
+  const { text: stashed, store } = stashMath(stripEmojiFromSource(cours.content || ""));
   store.arabic = rtl;
   await prerenderMathSvgs(store);
   const tokens = window.marked.lexer(stashed);

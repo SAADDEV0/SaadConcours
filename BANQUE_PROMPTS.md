@@ -84,6 +84,9 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 - **Contexte marocain** systématique : CGNC/PCGE, CGI et loi de finances de l'année, DOC 1913,
   Constitution 2011, lois 17-95 / 5-96 / 15-89 / 09-08, Bank Al-Maghrib, AMMC, HCP, etc.
 - Maths / formules en LaTeX `$...$` et `$$...$$` (rendu KaTeX), tableaux en Markdown.
+- PDF : les formules des cours et des concours sont composées par MathJax (`app/_shared/pdfMath.js`) ;
+  seules les cellules de tableau, les lignes en arabe et le PDF des évaluations passent en texte lisible
+  (`latexToPlainText`). Une commande LaTeX nouvelle dans ce cas : l'ajouter à `COMMANDS` dans `latexPlainText.js`.
 - **Jamais de `$` pour une monnaie** : deux `$` dans un même paragraphe deviennent une formule KaTeX
   (« 500 000 $ (1 $ = 9 dh) » devient illisible). Écrire « USD » ou « dollars » (précédent : ACGSI Aïn Chock 2014).
 - **Ne jamais inventer** un chiffre, une question ou une donnée illisible : écrire

@@ -89,6 +89,9 @@ function formatFraction(a, b) {
 function wrapIfComplex(g) {
   return isSimpleToken(g) ? g : `(${g})`;
 }
+// \{ and \} mean real braces, kept out of the way while the grouping ones go.
+const LITERAL_OPEN = "";
+const LITERAL_CLOSE = "";
 function replaceSupSub(s) {
   s = s.replace(/\^\{([^{}]*)\}/g, (m, g) => `^${wrapIfComplex(g)}`);
   s = s.replace(/\^([A-Za-z0-9])/g, (m, g) => `^${g}`);
@@ -97,18 +100,46 @@ function replaceSupSub(s) {
   return s;
 }
 
-const SYMBOLS = {
+// Named commands, matched as whole words: a substring match turned
+// "\rightarrow" into "arrow" (once "\right" was gone) and would turn
+// "\leqslant" into "<=slant".
+const COMMANDS = new Map(Object.entries({
   // × ÷ ± · are in Latin-1, safe to keep as real symbols.
-  "\\times": "×", "\\cdot": "·", "\\div": "÷", "\\pm": "±", "\\mp": "-+",
-  "\\leq": "<=", "\\geq": ">=", "\\neq": "!=", "\\approx": "~=", "\\equiv": "==", "\\infty": "l'infini",
-  "\\rightarrow": "->", "\\to": "->", "\\Rightarrow": "=>", "\\leftrightarrow": "<->",
-  "\\alpha": "alpha", "\\beta": "beta", "\\gamma": "gamma", "\\Gamma": "Gamma", "\\delta": "delta", "\\Delta": "Delta",
-  "\\epsilon": "epsilon", "\\theta": "theta", "\\lambda": "lambda", "\\mu": "mu", "\\pi": "pi", "\\sigma": "sigma",
-  "\\Sigma": "Sigma", "\\tau": "tau", "\\phi": "phi", "\\varphi": "phi", "\\omega": "omega", "\\Omega": "Omega",
+  times: "×", cdot: "·", div: "÷", pm: "±", mp: "-+",
+  leq: "<=", le: "<=", leqslant: "<=", geq: ">=", ge: ">=", geqslant: ">=", succeq: ">=", gg: ">>", ll: "<<",
+  neq: "!=", ne: "!=", approx: "~=", equiv: "==", sim: "~", infty: "l'infini",
+  rightarrow: "->", to: "->", longrightarrow: "->", mapsto: "->", leftarrow: "<-",
+  Rightarrow: "=>", Longrightarrow: "=>", implies: "=>",
+  leftrightarrow: "<->", Leftrightarrow: "<=>", Longleftrightarrow: "<=>", iff: "<=>",
+  alpha: "alpha", beta: "beta", gamma: "gamma", Gamma: "Gamma", delta: "delta", Delta: "Delta",
+  epsilon: "epsilon", varepsilon: "epsilon", zeta: "zeta", eta: "eta", theta: "theta", Theta: "Theta",
+  kappa: "kappa", lambda: "lambda", Lambda: "Lambda", mu: "mu", nu: "nu", xi: "xi", pi: "pi", Pi: "Pi",
+  rho: "rho", sigma: "sigma", Sigma: "Sigma", tau: "tau", phi: "phi", varphi: "phi", Phi: "Phi",
+  chi: "chi", psi: "psi", omega: "omega", Omega: "Omega", ell: "l",
+  sum: "somme", prod: "produit", int: "integrale", partial: "d",
+  in: " dans ", notin: " hors de ", subset: " inclus dans ", cap: " inter ", cup: " union ", setminus: " sauf ",
+  forall: "pour tout ", exists: "il existe ", emptyset: "vide", perp: " perp. ", circ: "°", checkmark: "v",
+  ldots: "...", dots: "...", cdots: "...", langle: "<", rangle: ">", mid: "|", vert: "|", lvert: "|", rvert: "|", lfloor: "[", rfloor: "]",
+  quad: "  ", qquad: "    ",
+  // Sizing/layout, nothing to read.
+  displaystyle: "", textstyle: "", limits: "", nolimits: "",
+}));
+
+const SYMBOLS = {
   "\\%": "%", "\\$": "$", "\\_": "_", "\\&": "&", "\\#": "#",
-  "\\quad": "  ", "\\qquad": "    ", "\\,": " ", "\\;": " ", "\\!": "", "\\ ": " ",
-  "\\{": "{", "\\}": "}", "\\[": "[", "\\]": "]",
+  "\\,": " ", "\\;": " ", "\\!": "", "\\ ": " ",
+  "\\{": LITERAL_OPEN, "\\}": LITERAL_CLOSE, "\\[": "[", "\\]": "]",
 };
+
+// One line per row: "[ a, b ; c, d ]" for a matrix, "a ; b" for cases/aligned.
+function flattenEnvironments(s) {
+  const rows = (body, cellSep) =>
+    body.split(/\\\\/).map((r) => r.replace(/\\hline/g, "").split("&").map((c) => c.trim()).filter(Boolean).join(cellSep)).filter(Boolean).join(" ; ");
+  return s
+    .replace(/\\begin\{[a-zA-Z]*matrix\}([\s\S]*?)\\end\{[a-zA-Z]*matrix\}/g, (m, body) => ` [ ${rows(body, ", ")} ] `)
+    .replace(/\\begin\{([a-zA-Z]+\*?)\}(?:\{[^{}]*\})?([\s\S]*?)\\end\{\1\}/g, (m, env, body) => ` ${rows(body, " ")} `)
+    .replace(/\\\\/g, " ; ");
+}
 
 export function latexToPlainText(raw, inner = false) {
   let s = raw;
@@ -117,37 +148,72 @@ export function latexToPlainText(raw, inner = false) {
     if (s.startsWith("$$") && s.endsWith("$$")) s = s.slice(2, -2);
     else if (s.startsWith("$") && s.endsWith("$")) s = s.slice(1, -1);
   }
-  s = s.replace(/\\left/g, "").replace(/\\right/g, "");
+  s = s.replace(/\\(?:left|right)\.(?![a-zA-Z])/g, "").replace(/\\(?:left|right|middle|[bB]igg?[lrm]?)(?![a-zA-Z])/g, "");
+  s = flattenEnvironments(s);
+  s = s.replace(/(\\[a-zA-Z]+)(?=\\[a-zA-Z])/g, "$1 "); // "\times\dfrac{…}": still two commands once the fraction is plain text
   s = replaceCommand(s, "dfrac", 2, ([a, b]) => formatFraction(a, b));
   s = replaceCommand(s, "tfrac", 2, ([a, b]) => formatFraction(a, b));
   s = replaceCommand(s, "frac", 2, ([a, b]) => formatFraction(a, b));
   s = s.replace(/\\sqrt\[([^\]]+)\]/g, (m, n) => `racine ${n}-ieme de `); // nth root marker, resolved right before the sqrt{...} below
   s = replaceCommand(s, "sqrt", 1, ([a]) => `sqrt(${a})`);
-  s = replaceCommand(s, "text", 1, ([a]) => a);
-  s = replaceCommand(s, "mathrm", 1, ([a]) => a);
-  s = replaceCommand(s, "mathbf", 1, ([a]) => a);
-  s = replaceCommand(s, "overline", 1, ([a]) => a);
-  s = replaceCommand(s, "boxed", 1, ([a]) => a);
+  for (const cmd of ["text", "textbf", "textit", "mathrm", "mathbf", "mathit", "mathsf", "mathbb", "mathcal", "operatorname", "boxed", "underbrace", "underline", "vec"]) {
+    s = replaceCommand(s, cmd, 1, ([a]) => a);
+  }
+  for (const cmd of ["bar", "overline"]) s = replaceCommand(s, cmd, 1, ([a]) => `${a} barre`);
+  for (const cmd of ["hat", "widehat"]) s = replaceCommand(s, cmd, 1, ([a]) => `${a} chapeau`);
+  s = replaceCommand(s, "tilde", 1, ([a]) => `${a} tilde`);
+  s = replaceCommand(s, "acute", 1, ([a]) => `${a}́`.normalize("NFC"));
+  s = replaceCommand(s, "binom", 2, ([n, k]) => `C(${n}, ${k})`);
+  s = replaceCommand(s, "xrightarrow", 1, ([a]) => ` -(${a})-> `);
   for (const [k, v] of Object.entries(SYMBOLS)) s = s.split(k).join(v);
+  s = s.replace(/\\([a-zA-Z]+)/g, (m, name) => (COMMANDS.has(name) ? COMMANDS.get(name) : m));
   s = replaceSupSub(s);
   s = s.replace(/\\([a-zA-Z]+)(?![a-zA-Z])(?=[0-9])/g, "$1 "); // unrecognized command glued to a following digit: keep a separating space
   s = s.replace(/\\([a-zA-Z]+)/g, "$1"); // unrecognized commands: drop the backslash, keep the name
   s = s.replace(/[{}]/g, "");
+  s = s.split(LITERAL_OPEN).join("{").split(LITERAL_CLOSE).join("}");
   s = s.replace(/[ \t]+/g, " ").trim();
   return s;
 }
 
+// Whether a "$...$" match really is a formula. "$B$2" and "A$1+B2" (references
+// in Excel) close on a digit, "500 $ puis 300 $" and "5$, 7$" (amounts) open
+// on a blank or punctuation; without this they would swallow the text between
+// their dollars. A formula may *end* on a blank: "$S_{xx} = $ **12**" is common
+// in the corrigés. `before` / `after` are the characters around the match.
+function isInlineMath(m, before, after) {
+  if (/\n\s*\n/.test(m)) return false; // a formula never spans a paragraph
+  if (/[\s,;.:)]/.test(m[1])) return false;
+  if (/[A-Za-z]/.test(before || "") && /\d/.test(m[1])) return false;
+  if (m.includes("\\")) return true; // "$\approx$3,01": a command settles it
+  return !m.includes("\n") && !/\d/.test(after || "");
+}
+
+// Replaces each inline $...$ formula of `text` with render(formula). A rejected
+// match resumes from its own closing "$", which can still open the next real
+// formula ("500$ soit $x=2$").
+export function replaceInlineMath(text, render) {
+  const re = /\$(?:\\\$|[^$])+?\$/g;
+  let out = "";
+  let last = 0;
+  let m;
+  while ((m = re.exec(text))) {
+    if (isInlineMath(m[0], text[m.index - 1], text[m.index + m[0].length])) {
+      out += text.slice(last, m.index) + render(m[0]);
+      last = re.lastIndex;
+    } else {
+      re.lastIndex = m.index + 1;
+    }
+  }
+  return out + text.slice(last);
+}
+
 // Replaces every $...$ / $$...$$ span in `text` with its latexToPlainText()
-// conversion — for the builders (concoursPdf.js, the évaluation PDF) that
-// draw markdown as plain doc.text() lines and never got a real math
-// typesetter. Display spans never span a blank line in this content, so a
-// match that crosses one is left alone rather than eating the rest of the
-// text looking for a closer that isn't a formula's.
+// conversion — for what is drawn as plain doc.text() lines: the évaluation
+// PDF, the carousel, and what concoursPdf.js can't typeset.
 export function convertMathSpansToPlainText(text) {
-  let out = String(text ?? "");
-  out = out.replace(/\$\$[\s\S]+?\$\$/g, (m) => ` ${latexToPlainText(m)} `);
-  out = out.replace(/\$(?:\\\$|[^$])+?\$/g, (m) => (m.includes("\n\n") ? m : ` ${latexToPlainText(m)} `));
-  return out;
+  const out = String(text ?? "").replace(/\$\$[\s\S]+?\$\$/g, (m) => ` ${latexToPlainText(m)} `);
+  return replaceInlineMath(out, (m) => ` ${latexToPlainText(m)} `);
 }
 
 // ---- accented French words in bare math mode --------------------------

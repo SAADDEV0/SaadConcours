@@ -91,10 +91,15 @@ function ensureMarked() {
   return loadScript(MARKED_URL);
 }
 
-// app/_shared/concoursPdf.js: jsPDF + AutoTable only (tables, no formulas
-// typeset as vector paths, no markdown preview needed here).
+// app/_shared/concoursPdf.js: jsPDF + AutoTable (tables, no markdown preview
+// needed here). The math toolchain comes on top with ensureMathPdfScripts(),
+// and only for a sujet that actually has formulas.
 export function ensureConcoursPdfScripts() {
   return ensureJsPDF();
+}
+
+export function ensureMathPdfScripts() {
+  return Promise.all([ensureSvg2Pdf(), ensureMathJax()]);
 }
 
 // app/_shared/evaluationPdf.js: same as concours — math is converted to
@@ -104,12 +109,12 @@ export function ensureEvaluationPdfScripts() {
   return ensureJsPDF();
 }
 
-// app/_shared/coursPdf.js: the one PDF that actually typesets LaTeX as
-// vector paths (MathJax -> SVG -> svg2pdf.js) and renders markdown tables,
-// so it needs the full set. Used by the public cours download button and by
-// the admin PDF studio's cours preview, both through buildCoursPdf().
+// app/_shared/coursPdf.js: typesets LaTeX as vector paths (MathJax -> SVG ->
+// svg2pdf.js, see pdfMath.js) and parses its markdown with marked, so it
+// needs the full set. Used by the public cours download button and by the
+// admin PDF studio's cours preview, both through buildCoursPdf().
 export function ensureCoursPdfScripts() {
-  return Promise.all([ensureSvg2Pdf(), ensureMathJax(), ensureMarked()]);
+  return Promise.all([ensureMathPdfScripts(), ensureMarked()]);
 }
 
 // app/admin/_features/pdf/PdfViewer.js: draws the studio's preview pages

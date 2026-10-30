@@ -10,8 +10,9 @@ import { formatQCM } from "./concoursFormat";
 import { addPageFurniture, contentBounds, drawQuoteLine, loadPdfSettings, pdfFileName, resolvePdfBranding, sanitizePdfText } from "./pdfTheme";
 import { coverDateString, maybeDrawCoverPage } from "./pdfCover";
 import { drawPdfVerse } from "./pdfVerse";
-import { convertMathSpansToPlainText } from "./latexPlainText";
-import { ensureConcoursPdfScripts } from "./pdfScripts";
+import { convertMathSpansToPlainText, latexToPlainText } from "./latexPlainText";
+import { MATH_RE, fitMathSvg, mathLineMetrics, prerenderMathSvgs, stashMath } from "./pdfMath";
+import { ensureConcoursPdfScripts, ensureMathPdfScripts } from "./pdfScripts";
 import { ARABIC_FONT, hasArabic, loadArabicPdfFont } from "./pdfArabic";
 
 // Every line drawn by this file goes through here, so sanitizePdfText is
@@ -19,15 +20,34 @@ import { ARABIC_FONT, hasArabic, loadArabicPdfFont } from "./pdfArabic";
 // corrigés are full of real minus signs (−) and arrows (→), and a single one
 // of them used to flip its whole line into UTF-16 — rendering as spaced-out
 // characters, roughly twice as wide as measured, running off the page.
-// $...$ / $$...$$ formulas used to just have their dollar signs deleted here,
-// leaving the raw LaTeX ("\dfrac{C \times t \times n}{100}") as literal text
-// in the PDF -- this file never got the readable-plain-text conversion
-// coursPdf.js has, even though the enonces/corriges are full of the same
-// \frac/\sqrt/\sum formulas. convertMathSpansToPlainText runs each span
-// through the same latexToPlainText() coursPdf.js falls back to.
+// Formulas are typeset for real by addMathRuns() below (same MathJax +
+// svg2pdf.js pipeline as coursPdf.js, see pdfMath.js). What reaches this
+// function is the rest: table cells, Arabic lines and any formula that failed
+// to render, which convertMathSpansToPlainText / plainMath turn into the
+// readable text of latexToPlainText() rather than raw LaTeX.
 // `arabic` keeps the Arabic letters (sujet de droit en arabe, see below).
 function stripInlineMd(s, arabic = false) {
   return sanitizePdfText(convertMathSpansToPlainText(String(s ?? "")).replace(/\*\*/g, ""), { arabic }).trim();
+}
+
+// Splits a line around its stashed formulas (see stashMath).
+function mathParts(text, store) {
+  const parts = [];
+  let last = 0;
+  for (const m of text.matchAll(MATH_RE)) {
+    if (m.index > last) parts.push({ text: text.slice(last, m.index) });
+    parts.push({ entry: store[Number(m[1])] });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last) });
+  return parts;
+}
+
+// The same line with its formulas as plain text.
+function plainMath(text, store) {
+  return mathParts(text, store)
+    .map((p) => (p.entry ? ` ${latexToPlainText(p.entry.raw)} ` : p.text))
+    .join("");
 }
 
 async function loadImageAsDataURL(src) {
@@ -57,6 +77,26 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   const [settings] = await Promise.all([brandingOverride ? null : loadPdfSettings(), ensureConcoursPdfScripts()]);
   let branding = brandingOverride || (await resolvePdfBranding(settings));
 
+  // c.corrige_md is empty when the corrigé exists only as a raw file in the
+  // repo's data/corriges/ folder (see lib/store.js getCorrigeFile) — fetch
+  // it on demand rather than silently leaving it out of the PDF. Read from
+  // the static copy deployed with the site, never /api/concours/[id]/corrige:
+  // that route runs on the Worker (free plan quota, 2026-10-28).
+  let corrigeMd = c.corrige_md;
+  if (!corrigeMd && c.id) {
+    try {
+      const res = await fetch(`/data/corriges/${encodeURIComponent(c.id)}.md`);
+      if (res.ok) corrigeMd = (await res.text()).trim() || null;
+    } catch {
+      // best-effort: PDF is still useful without the corrigé
+    }
+  }
+
+  // Before the document exists: jsPDF copies its plugins into each new doc, so
+  // one created ahead of svg2pdf.js has no doc.svg. If the CDN fails, the
+  // formulas stay readable as text (stripInlineMd).
+  if (`${c.enonce_md || ""}${corrigeMd || ""}`.includes("$")) await ensureMathPdfScripts().catch(() => {});
+
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   // Sujet en arabe (Masters de droit, `langue: "ar"`) : police arabe
@@ -65,13 +105,18 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   // mécanique que les cours de droit en arabe (coursPdf.js, pdfArabic.js).
   // Aussi pour un sujet en français qui cite de l'arabe (épreuve bilingue) :
   // la police latine effaçait ces passages (Amiri a aussi les lettres latines).
-  const rtl = c.langue === "ar" || hasArabic(`${c.enonce_md || ""}${c.corrige_md || ""}`);
+  const rtl = c.langue === "ar" || hasArabic(`${c.enonce_md || ""}${corrigeMd || ""}`);
   if (rtl) {
     await loadArabicPdfFont(doc);
     branding = { ...branding, arabicFont: ARABIC_FONT };
   }
-  const clean = (s) => stripInlineMd(s, rtl);
+  // Formules de la partie en cours (énoncé ou corrigé), remplie par renderMarkdown.
+  let mathStore = [];
+  const clean = (s) => stripInlineMd(plainMath(String(s ?? ""), mathStore), rtl);
   const isRtlLine = (s) => rtl && hasArabic(s);
+  // Une ligne en arabe garde sa formule en texte : addMathRuns ne compose que
+  // de gauche à droite, et ces lignes sont rarissimes (2 sujets sur 415).
+  const hasTypesetMath = (s) => !isRtlLine(s) && mathParts(s, mathStore).some((p) => p.entry?.svg);
   const bodyFont = rtl ? ARABIC_FONT : branding.fontFamily || "helvetica";
   doc.setFont(bodyFont, "normal"); // ambient default — every doc.setFont(undefined, style) call below keeps this family
   const baseFontSize = branding.fontSize || 10.5;
@@ -105,8 +150,127 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     }
   }
 
-  function addWrappedLine(text, opts = {}) {
+  // svg2pdf.js leaves its own font behind, and every doc.setFont(undefined, …)
+  // of this file counts on the ambient family.
+  async function drawMathSvg(svg, x, top) {
+    await doc.svg(svg.svg.cloneNode(true), { x, y: top, width: svg.wMM, height: svg.hMM });
+    doc.setFont(bodyFont, "normal");
+  }
+
+  // Centered, like the on-page reader. fitMathSvg shrinks the wide ones.
+  async function addDisplayMath(entry) {
+    const svg = fitMathSvg(entry.svg, maxWidth);
+    ensureSpace(svg.hMM + 8);
+    y += 1.5;
+    await drawMathSvg(svg, marginX + (maxWidth - svg.wMM) / 2, y);
+    y += svg.hMM + 6.5; // y is the next text's baseline: its letters rise about 3mm back up
+  }
+
+  // A line that mixes text and formulas: word wrap with each formula as one
+  // unbreakable word, sitting on the baseline of the text around it. Plain
+  // text keeps the doc.splitTextToSize path of addWrappedLine/addPrefixedLine.
+  // Same segment-by-segment drawing, and for the same reason, as coursPdf.js's
+  // writeRuns; the anti-drift padding comes from there too.
+  async function addMathRuns(runs, opts = {}) {
+    const { size = baseFontSize, indent = 0, gapAfter = 1.6, color = branding.textColor, font, quote = false, bullet = false } = opts;
+    const x0 = marginX + indent + (bullet ? 4 : 0);
+    const availW = marginX + maxWidth - x0;
+    const lineStep = size * 0.42 * lineSpacing;
+    const setStyle = (bold) => {
+      doc.setFont((!rtl && font) || undefined, bold ? "bold" : "normal");
+      doc.setFontSize(size);
+    };
+
+    const words = [];
+    for (const run of runs) {
+      for (const part of mathParts(run.text, mathStore)) {
+        if (part.entry?.svg) {
+          words.push({ svg: fitMathSvg(part.entry.svg, availW), space: false });
+          continue;
+        }
+        const raw = part.entry ? ` ${latexToPlainText(part.entry.raw)} ` : part.text;
+        for (const p of sanitizePdfText(raw.replace(/\*\*/g, ""), { arabic: rtl }).split(/(\s+)/)) {
+          if (p === "") continue;
+          if (/^\s+$/.test(p)) {
+            if (words.length) words[words.length - 1].space = true;
+          } else {
+            words.push({ text: p, bold: !!run.bold || !!opts.bold, space: false });
+          }
+        }
+      }
+    }
+    if (!words.length) return;
+
+    setStyle(false);
+    const spaceW = doc.getTextWidth(" ");
+    const gapAfterWord = (w) => spaceW + w * 0.015 + 0.15;
+
+    const lines = [[]];
+    let lineWidth = 0;
+    for (const word of words) {
+      setStyle(word.bold);
+      word.w = word.svg ? word.svg.wMM : doc.getTextWidth(word.text);
+      const line = lines[lines.length - 1];
+      const prev = line[line.length - 1];
+      const gap = prev?.space ? gapAfterWord(word.w) : 0;
+      if (prev && (prev.space || prev.svg || word.svg) && lineWidth + gap + word.w > availW) {
+        lines.push([word]);
+        lineWidth = word.w;
+      } else {
+        line.push(word);
+        lineWidth += gap + word.w;
+      }
+    }
+
+    for (const [n, line] of lines.entries()) {
+      const { extraTop, height } = mathLineMetrics(line.filter((w) => w.svg).map((w) => w.svg), lineStep);
+      ensureSpace(extraTop + height);
+      y += extraTop;
+      if (quote) drawQuoteLine(doc, branding, { x: marginX, top: y - size * 0.3528 * 0.78 - extraTop, height: height + extraTop, width: maxWidth });
+      if (bullet && n === 0) {
+        setStyle(false);
+        doc.setTextColor(...color);
+        doc.text("•", marginX + indent, y);
+      }
+      let x = x0;
+      let i = 0;
+      while (i < line.length) {
+        if (line[i].svg) {
+          await drawMathSvg(line[i].svg, x, y - line[i].svg.ascentMM);
+          x += line[i].w + (line[i].space ? spaceW : 0);
+          i++;
+          continue;
+        }
+        // Consecutive same-style words, drawn as one string.
+        let j = i;
+        let segment = line[i].text;
+        while (line[j].space && line[j + 1] && !line[j + 1].svg && line[j + 1].bold === line[i].bold) {
+          j++;
+          segment += " " + line[j].text;
+        }
+        setStyle(line[i].bold);
+        doc.setTextColor(...color);
+        doc.text(segment, x, y);
+        const w = doc.getTextWidth(segment);
+        x += w + (line[j].space ? gapAfterWord(w) : 0);
+        i = j + 1;
+      }
+      y += height;
+    }
+    y += gapAfter * lineSpacing;
+  }
+
+  async function addWrappedLine(text, opts = {}) {
     const { bold = false, size = baseFontSize, indent = 0, gapAfter = 1.6, color = branding.textColor, font, quote = false } = opts;
+    const parts = mathParts(text, mathStore);
+    if (parts.length === 1 && parts[0].entry?.display && parts[0].entry.svg) {
+      await addDisplayMath(parts[0].entry);
+      return;
+    }
+    if (hasTypesetMath(text)) {
+      await addMathRuns([{ text }], opts);
+      return;
+    }
     const texte = clean(text);
     if (!texte) {
       y += 2 * lineSpacing;
@@ -131,12 +295,16 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     y += gapAfter * lineSpacing;
   }
 
-  function addPrefixedLine(prefix, rest, opts = {}) {
+  async function addPrefixedLine(prefix, rest, opts = {}) {
     const { indent = 0, bullet = false, size = baseFontSize, gapAfter = 1.8 } = opts;
     // Ligne en arabe : préfixe (numéro de question, lettre du choix) et texte
     // d'un seul tenant, calés à droite, le préfixe en tête de lecture.
-    if (isRtlLine(`${prefix} ${rest}`)) {
-      addWrappedLine(`${bullet ? "• " : ""}${prefix} ${rest}`, { bold: !clean(rest), size, indent, gapAfter });
+    if (isRtlLine(clean(`${prefix} ${rest}`))) {
+      await addWrappedLine(`${bullet ? "• " : ""}${prefix} ${rest}`, { bold: !clean(rest), size, indent, gapAfter });
+      return;
+    }
+    if (hasTypesetMath(`${prefix} ${rest}`)) {
+      await addMathRuns([{ text: `${prefix} `, bold: true }, { text: rest }], { size, indent, gapAfter, bullet });
       return;
     }
     const lineStep = size * 0.42 * lineSpacing;
@@ -210,8 +378,8 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     y = doc.lastAutoTable.finalY + 4;
   }
 
-  addWrappedLine(`${c.etablissement} — ${c.annee}`, { bold: true, size: 15 * fontScale, gapAfter: 2 });
-  addWrappedLine([c.master_reel || c.filiere, c.ville, c.difficulte && `Difficulté : ${c.difficulte}`].filter(Boolean).join(" · "), {
+  await addWrappedLine(`${c.etablissement} — ${c.annee}`, { bold: true, size: 15 * fontScale, gapAfter: 2 });
+  await addWrappedLine([c.master_reel || c.filiere, c.ville, c.difficulte && `Difficulté : ${c.difficulte}`].filter(Boolean).join(" · "), {
     size: baseFontSize,
     color: [90, 90, 100],
     gapAfter: 3,
@@ -220,8 +388,11 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   doc.line(marginX, y, pageW - marginX, y);
   y += 7;
 
-  function renderMarkdown(md) {
-    const src = (md || "").split("\n");
+  async function renderMarkdown(md) {
+    const { text, store } = stashMath(md);
+    mathStore = store;
+    await prerenderMathSvgs(store);
+    const src = text.split("\n");
     let i = 0;
     while (i < src.length) {
       const line = src[i];
@@ -234,7 +405,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
 
       if (/^>/.test(line.trim())) {
         const quoted = branding.quoteStyle !== "plain";
-        addWrappedLine(line.trim().replace(/^>\s*/, ""), {
+        await addWrappedLine(line.trim().replace(/^>\s*/, ""), {
           size: 9.5 * fontScale,
           color: [150, 110, 30],
           gapAfter: quoted ? 0 : 2.5,
@@ -271,7 +442,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
         // (depth 4) has no configured level and just uses the plain default.
         const headingStyle = branding.headings[`h${headingM[1].length}`];
         const size = (headingStyle ? 12 * headingStyle.sizeScale : 12) * fontScale;
-        addWrappedLine(headingM[2], {
+        await addWrappedLine(headingM[2], {
           bold: true,
           size,
           color: headingStyle ? headingStyle.color : branding.textColor,
@@ -284,13 +455,13 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
 
       const bulletM = line.match(/^\s*-\s+\*\*([^*]+)\*\*\s*(.*)$/);
       if (bulletM) {
-        addPrefixedLine(bulletM[1], bulletM[2], { indent: 4, bullet: true });
+        await addPrefixedLine(bulletM[1], bulletM[2], { indent: 4, bullet: true });
         i++;
         continue;
       }
       const bulletPlainM = line.match(/^\s*-\s+(.*)$/);
       if (bulletPlainM) {
-        addPrefixedLine("•", bulletPlainM[1], { indent: 4 });
+        await addPrefixedLine("•", bulletPlainM[1], { indent: 4 });
         i++;
         continue;
       }
@@ -298,12 +469,12 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
       const stemM = line.match(/^\*\*([^*]+)\*\*\s*(.*)$/);
       if (stemM) {
         y += 1.5;
-        addPrefixedLine(stemM[1], stemM[2], { size: baseFontSize, gapAfter: 2 });
+        await addPrefixedLine(stemM[1], stemM[2], { size: baseFontSize, gapAfter: 2 });
         i++;
         continue;
       }
 
-      addWrappedLine(line);
+      await addWrappedLine(line);
       i++;
     }
   }
@@ -312,26 +483,11 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
   // the source crams answer choices onto one line, and renderMarkdown would
   // wrap that into a paragraph. It emits "- " bullets, which the bulletPlainM
   // branch above already lays out one per line.
-  renderMarkdown(formatQCM(c.enonce_md || "Énoncé non disponible."));
+  await renderMarkdown(formatQCM(c.enonce_md || "Énoncé non disponible."));
 
   // Plus de ligne « Source » depuis le 2026-09-26 : la source d'un sujet reste
   // dans concours.json pour la console, elle n'est plus publiée (voir
   // app/concours/[id]/page.js).
-
-  // c.corrige_md is empty when the corrigé exists only as a raw file in the
-  // repo's data/corriges/ folder (see lib/store.js getCorrigeFile) — fetch
-  // it on demand rather than silently leaving it out of the PDF. Read from
-  // the static copy deployed with the site, never /api/concours/[id]/corrige:
-  // that route runs on the Worker (free plan quota, 2026-10-28).
-  let corrigeMd = c.corrige_md;
-  if (!corrigeMd && c.id) {
-    try {
-      const res = await fetch(`/data/corriges/${encodeURIComponent(c.id)}.md`);
-      if (res.ok) corrigeMd = (await res.text()).trim() || null;
-    } catch {
-      // best-effort: PDF is still useful without the corrigé
-    }
-  }
 
   if (corrigeMd) {
     doc.addPage();
@@ -341,7 +497,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     doc.setTextColor(...branding.textColor);
     doc.text("Corrigé", marginX, y);
     y += 6;
-    addWrappedLine(`Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t'y fier.`, {
+    await addWrappedLine(`Corrigé proposé par SaadConcours, pas une correction officielle de la faculté — vérifie les calculs avant de t'y fier.`, {
       size: 8.5 * fontScale,
       color: [180, 120, 20],
       gapAfter: 3,
@@ -349,7 +505,7 @@ export async function buildConcoursPdf(c, brandingOverride, { images = true } = 
     doc.setDrawColor(200, 200, 210);
     doc.line(marginX, y, pageW - marginX, y);
     y += 6;
-    renderMarkdown(formatQCM(corrigeMd));
+    await renderMarkdown(formatQCM(corrigeMd));
   }
 
   // Scanned pages sit inside the same content area as the text: the label
