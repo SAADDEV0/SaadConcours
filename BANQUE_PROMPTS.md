@@ -1283,6 +1283,7 @@ Commande : « fais un cahier de préparation de <module> », « cahier à vendre
     - `intro.mjs` est commun : le plan de révision se calcule depuis les chapitres (`court` = nom court du chapitre) et le texte vient de `config.mjs`. `contenu/outils.mjs` porte les calculs propres au module : `ECD` et `ECI` recalculent les écarts et arrêtent le build si la somme est fausse.
     - **Les textes d'interprétation ne sont pas vérifiés par le script** : ils se relisent à l'image. Erreur trouvée ainsi : « perd −3 200 DH » sur un écart favorable, et une synthèse qui nommait le mauvais poste.
     - Un `QCM` ne prend pas les lettres A, B, C, D comme noms de produits : les propositions sont mélangées.
+    - Fiscalité S5 (`docs/cahier-fiscalite/`) : vérifié sur le CGI 2026 complet. Le cours gratuit `fiscalite_cours` s'en écarte sur trois points, et le cahier suit le CGI : voiture de tourisme plafonnée à **400 000 DH** TTC depuis la LF 2025 (art. 10-I-F-1°-b), prorata en montants **taxe comprise** (art. 104-I), reversement en **1/60 par mois** pour un meuble et **1/10 par an** pour un immeuble (art. 102 et 104-II-2°). Ne pas reprendre ces trois points du cours sans revérifier.
 
 ### V3 — Posters d’un cahier
 Commande : « fais le poster du cahier X », « change le poster ». Fichier : `docs/cahier-<module>/marketing/poster.html` ; aperçus des pages : `node snap.mjs cahier.pdf marketing/_pages 1,31,55` (couverture + deux pages parlantes) ; export : `node marketing/render.mjs` (+ chemin `.webp` pour la couverture boutique, bloc `#couv`).

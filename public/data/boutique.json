@@ -337,5 +337,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-10-30"
+  },
+  {
+    "id": "cahier-fiscalite-des-entreprises-s5",
+    "titre": "Cahier de préparation — Fiscalité des Entreprises (S5)",
+    "sousTitre": "Le module expliqué en français simple, 160 QCM corrigés, 16 exercices et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Fiscalité des Entreprises",
+    "description": "Ce cahier prépare l'examen de **Fiscalité des Entreprises**, un module du semestre 5 en Licence FSJES (parcours Gestion financière et comptable). Il est écrit en **français simple** : des phrases courtes, chaque mot expliqué et des exemples tirés de la vie au Maroc. Les taux et les articles viennent du **Code général des impôts, édition 2026**.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les règles à citer, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à calculer la TVA due, à passer du résultat comptable au résultat fiscal, à liquider l'IS et à établir un bulletin de paie.\n\nÀ la fin : la méthodologie de l'épreuve, **trois examens blancs** avec barème et corrigé et un **mémo de la veille** avec tous les taux. Un plan de révision en 14 jours ou en 7 jours t'aide à t'organiser.\n\nLe cours complet reste gratuit sur le site : [Fiscalité des Entreprises (S5)](/cours/fiscalite_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 74 mots de la fiscalité (français-arabe)",
+      "Chapitre 1 · Le système fiscal marocain",
+      "Chapitre 2 · La TVA : champ d'application et taux",
+      "Chapitre 3 · La TVA : déductions et déclaration",
+      "Chapitre 4 · L'impôt sur les sociétés : champ d'application",
+      "Chapitre 5 · L'IS : du résultat comptable au résultat fiscal",
+      "Chapitre 6 · L'IS : liquidation et paiement",
+      "Chapitre 7 · L'impôt sur le revenu : les salaires",
+      "Chapitre 8 · Droits d'enregistrement, taxes locales et contrôle fiscal",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "160 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : TVA, prorata, tableau de passage, liquidation de l'IS, bulletin de paie, contrôle fiscal",
+      "Taux et articles vérifiés sur le Code général des impôts, édition 2026",
+      "Lexique de 74 mots en français-arabe"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 86,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-fiscalite-des-entreprises-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-10-30"
   }
 ]
