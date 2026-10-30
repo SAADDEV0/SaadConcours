@@ -97,7 +97,10 @@
 # ses chapitres de probabilités ont changé de module.
 /cours/stats_cours/les-fondements-du-calcul-des-probabilites /cours/probas_cours/les-fondements-du-calcul-des-probabilites 301
 /cours/stats_cours/variables-aleatoires-et-lois-usuelles /cours/probas_cours/variables-aleatoires-et-lois-usuelles 301
-/cours/stats_cours/echantillonnage-et-estimation /cours/probas_cours/echantillonnage-et-estimation 301
+/cours/stats_cours/echantillonnage-et-estimation /cours/echantillonnage_cours/l-estimation-par-intervalle-de-confiance 301
+# Échantillonnage et Estimation (S4, echantillonnage_cours) : chapitres sortis de Probabilités.
+/cours/probas_cours/echantillonnage-et-estimation /cours/echantillonnage_cours/l-estimation-par-intervalle-de-confiance 301
+/cours/probas_cours/les-tests-d-hypotheses /cours/echantillonnage_cours/les-tests-d-hypotheses 301
 
 # Le module « Macroéconomie » (S2) a été séparé le 2026-10-28 en Macroéconomie 1
 # (S1 Gestion, macro1_cours) et Macroéconomie 2 (S2, macro_cours), comme dans le
