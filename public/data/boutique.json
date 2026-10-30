@@ -421,5 +421,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-10-30"
+  },
+  {
+    "id": "cahier-droit-des-societes-s3",
+    "titre": "Cahier de préparation — Droit des Sociétés (S3)",
+    "sousTitre": "Le module expliqué en français simple, 160 QCM corrigés, 16 cas pratiques et 3 examens blancs pour réussir l'examen du S3.",
+    "niveau": "licence",
+    "matiere": "Droit des Sociétés",
+    "description": "Ce cahier prépare l'examen de **Droit des Sociétés**, un module du semestre 3 en Licence FSJES (parcours Gestion). Il est écrit en **français simple** : des phrases courtes, chaque mot juridique expliqué et des exemples tirés de la vie au Maroc. Les articles viennent des textes consolidés de la **loi 17-95** et de la **loi 5-96**.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les textes à citer, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des cas pratiques corrigés en syllogisme. Tu apprends à reconnaître la forme d'une société, à calculer une majorité et à répondre à un cas.\n\nÀ la fin : la méthodologie de l'épreuve, **trois examens blancs** avec barème et corrigé et un **mémo de la veille** avec le tableau SNC, SARL, SA, SAS. Un plan de révision en 14 jours ou en 7 jours t'aide à t'organiser.\n\nLe cours complet reste gratuit sur le site : [Droit des Sociétés (S3)](/cours/droitsocietes_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 64 mots du droit des sociétés (français-arabe)",
+      "Chapitre 1 · La notion de société et le contrat de société",
+      "Chapitre 2 · La personnalité morale et la constitution",
+      "Chapitre 3 · La classification des sociétés",
+      "Chapitre 4 · Les sociétés de personnes",
+      "Chapitre 5 · La société à responsabilité limitée",
+      "Chapitre 6 · La société anonyme",
+      "Chapitre 7 · Le contrôle des sociétés et la responsabilité",
+      "Chapitre 8 · Dissolution, liquidation et restructurations",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "160 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des cas pratiques corrigés en syllogisme : constitution, SNC, SARL, SA, conventions, responsabilité, dissolution",
+      "Quorums, majorités et articles vérifiés sur les lois 17-95 et 5-96",
+      "Lexique de 64 mots en français-arabe"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 78,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-droit-des-societes-s3/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-10-31"
   }
 ]
