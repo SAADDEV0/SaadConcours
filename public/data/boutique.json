@@ -463,5 +463,46 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-10-31"
+  },
+  {
+    "id": "cahier-theories-commerce-international-s5",
+    "titre": "Cahier de préparation — Théories du Commerce International (S5)",
+    "sousTitre": "Le module expliqué en français simple, 145 QCM corrigés, 14 exercices et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Théories du Commerce International",
+    "description": "Ce cahier prépare l'examen de **Théories du Commerce International**, un module du semestre 5 en Licence FSJES (parcours Économie). Il est écrit en **français simple** : des phrases courtes, chaque mot expliqué et des exemples tirés de l'économie du Maroc.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les auteurs et les formules, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à résoudre un exercice ricardien, à analyser un droit de douane et à relier les théories de Smith à Melitz.\n\nÀ la fin : la méthodologie de l'épreuve, **trois examens blancs** avec barème et corrigé, dont une dissertation avec une copie modèle, et un **mémo de la veille** avec les auteurs et les dates. Un plan de révision en 14 jours ou en 7 jours t'aide à t'organiser.\n\nLe cours complet reste gratuit sur le site : [Théories du Commerce International (S5)](/cours/theoriescomint_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 55 mots du commerce international (français-arabe)",
+      "Chapitre 1 · Du mercantilisme à l'avantage absolu",
+      "Chapitre 2 · L'avantage comparatif de David Ricardo",
+      "Chapitre 3 · Le modèle Heckscher-Ohlin-Samuelson",
+      "Chapitre 4 · Le paradoxe de Leontief et les théories technologiques",
+      "Chapitre 5 · Les nouvelles théories du commerce international",
+      "Chapitre 6 · Les instruments de la politique commerciale",
+      "Chapitre 7 · Libre-échange ou protectionnisme ?",
+      "Partie 8 · La méthodologie des épreuves",
+      "Partie 9 · Trois examens blancs corrigés",
+      "Partie 10 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "145 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "35 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : avantage comparatif, HOS, Grubel-Lloyd, droit de douane, protection effective",
+      "Les auteurs et les dates réunis dans le mémo de la veille, avec une dissertation et sa copie modèle",
+      "Lexique de 55 mots en français-arabe"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 70,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-theories-commerce-international-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-10-31"
   }
 ]
