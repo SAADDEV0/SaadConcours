@@ -587,5 +587,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-10-31"
+  },
+  {
+    "id": "cahier-mathematiques-s1",
+    "titre": "Cahier de préparation — Mathématiques (S1)",
+    "sousTitre": "Le module expliqué en français simple, 160 QCM corrigés, 28 exercices et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Mathématiques",
+    "description": "Ce cahier prépare l'examen de **Mathématiques**, un module du semestre 1 en Licence FSJES, commun à l'**Économie** et à la **Gestion**. Il est écrit en **français simple** : des phrases courtes, chaque mot expliqué et des exemples tirés de la vie au Maroc.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à rédiger une démonstration, à étudier une fonction, à trouver un profit maximal et à résoudre un système.\n\nÀ la fin : la méthodologie de l'épreuve, **trois examens blancs** avec barème et corrigé et un **mémo de la veille** avec toutes les formules. Un plan de révision en 14 jours ou en 7 jours t'aide à t'organiser.\n\nLe cours complet reste gratuit sur le site : [Mathématiques (S1)](/cours/maths_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 80 mots des mathématiques (français-arabe)",
+      "Chapitre 1 · Logique et raisonnement mathématique",
+      "Chapitre 2 · Ensembles, relations et applications",
+      "Chapitre 3 · Les suites numériques",
+      "Chapitre 4 · Limites et continuité",
+      "Chapitre 5 · La dérivation et ses applications économiques",
+      "Chapitre 6 · Étude de fonctions et optimisation",
+      "Chapitre 7 · Matrices et calcul matriciel",
+      "Chapitre 8 · Les systèmes d'équations linéaires",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "160 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : récurrence, suites, limites, élasticité, profit maximal, déterminants, Gauss, Leontief",
+      "Chaque résultat vérifié, et les applications à l'économie et à la gestion",
+      "Lexique de 80 mots en français-arabe"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 99,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-mathematiques-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-10-31"
   }
 ]
