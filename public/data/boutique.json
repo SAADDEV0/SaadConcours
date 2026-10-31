@@ -545,5 +545,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-10-31"
+  },
+  {
+    "id": "cahier-comptabilite-nationale-s5",
+    "titre": "Cahier de préparation — Comptabilité Nationale (S5)",
+    "sousTitre": "Le module expliqué en français simple, 160 QCM corrigés, 17 exercices et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Comptabilité Nationale",
+    "description": "Ce cahier prépare l'examen de **Comptabilité Nationale**, un module du semestre 5 en Licence FSJES (parcours Économie). Il est écrit en **français simple** : des phrases courtes, chaque mot expliqué et des exemples tirés de l'économie du Maroc.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à calculer le PIB par trois optiques, à bâtir la séquence des comptes et à utiliser la matrice de Leontief.\n\nÀ la fin : la méthodologie de l'épreuve, **trois examens blancs** avec barème et corrigé et un **mémo de la veille** avec toutes les formules. Un plan de révision en 14 jours ou en 7 jours t'aide à t'organiser.\n\nLe cours complet reste gratuit sur le site : [Comptabilité Nationale (S5)](/cours/comptanat_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 80 mots de la comptabilité nationale (français-arabe)",
+      "Chapitre 1 · Objet, cadre et unités de la comptabilité nationale",
+      "Chapitre 2 · Les opérations de la comptabilité nationale",
+      "Chapitre 3 · Les agrégats : du PIB au revenu national disponible",
+      "Chapitre 4 · Valeur, volume et prix : mesurer la croissance",
+      "Chapitre 5 · La séquence des comptes des secteurs institutionnels",
+      "Chapitre 6 · Le TRE et le tableau économique d'ensemble",
+      "Chapitre 7 · Le tableau entrées-sorties et le modèle de Leontief",
+      "Chapitre 8 · Comptes financiers, balance des paiements et limites du PIB",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "160 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : PIB, RNDB, séquence des comptes, indices, TES, matrice de Leontief",
+      "Chaque résultat vérifié par une seconde voie",
+      "Lexique de 80 mots en français-arabe"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 79,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-comptabilite-nationale-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-10-31"
   }
 ]
