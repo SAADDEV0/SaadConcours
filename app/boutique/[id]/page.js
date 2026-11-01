@@ -1,19 +1,43 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllBoutique } from "@/lib/store";
+import { getAllBoutique, getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import MathScripts from "../../_shared/MathScripts";
 import { boutiqueCardHtml } from "../../_shared/boutiqueCard";
-import { boutiqueNiveau, commandeHref, formatPrix, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
+import { fitTitle, clampDescription } from "../../_shared/seoText";
+import { accrocheCourte, boutiqueNiveau, commandeHref, formatPrix, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
+import { fsjesModule } from "../../../lib/fsjesChapitres";
 import ProduitClient, { ShareButton } from "./ProduitClient";
 import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
 async function findProduit(id) {
-  const list = (await getAllBoutique()).filter(isProduitVisible);
-  return { p: list.find((x) => x.id === id) || null, list };
+  const [boutique, coursList] = await Promise.all([getAllBoutique(), getAllCours().catch(() => [])]);
+  const list = boutique.filter(isProduitVisible);
+  const p = list.find((x) => x.id === id) || null;
+  return { p, list, coursList, cours: coursDe(p, coursList) };
+}
+
+// Le cours gratuit du même module, s'il est publié.
+function coursDe(p, coursList) {
+  return coursList.find((c) => c.id === p?.cours && c.available) || null;
+}
+
+// La requête des étudiants d'abord : « cahier de préparation » + module +
+// semestre. Sans le suffixe du modèle de app/layout.js, pour garder ces 65
+// caractères au nom du module (seoText.js).
+function titreSeo(p, cours) {
+  if (!cours) return p.titre;
+  const nom = `Cahier de préparation ${p.matiere} ${cours.semestre}`;
+  return fitTitle([`${nom} FSJES`, nom, p.titre]);
+}
+
+function descriptionSeo(p, cours) {
+  const accroche = accrocheCourte(p);
+  if (!cours || !accroche) return clampDescription(p.sousTitre || `Cahier de préparation ${boutiqueNiveau(p.niveau)?.long || ""} en PDF.`);
+  return clampDescription(`${p.matiere} (Licence FSJES ${cours.semestre}) : cahier de préparation en PDF à ${formatPrix(p.prix, p.devise)}, ${accroche}. En français simple, commande sur WhatsApp.`);
 }
 
 export const dynamic = "force-static";
@@ -29,23 +53,24 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props) {
   const { id } = await props.params;
-  const { p } = await findProduit(id);
+  const { p, cours } = await findProduit(id);
   if (!p) return {};
   const url = `${SITE_URL}/boutique/${p.id}`;
-  const description = p.sousTitre || `Cahier de préparation ${boutiqueNiveau(p.niveau)?.long || ""} en PDF.`;
+  const title = titreSeo(p, cours);
+  const description = descriptionSeo(p, cours);
   const image = p.couverture ? `${SITE_URL}${produitImage(p.couverture)}` : undefined;
   return {
-    title: p.titre,
+    title: { absolute: title },
     description,
     alternates: { canonical: url },
-    openGraph: { type: "website", title: p.titre, description, url, ...(image ? { images: [image] } : {}) },
-    twitter: { card: "summary_large_image", title: p.titre, description },
+    openGraph: { type: "website", title, description, url, images: [image || "/opengraph-image"] },
+    twitter: { card: "summary_large_image", title, description, ...(image ? { images: [image] } : {}) },
   };
 }
 
 export default async function ProduitPage(props) {
   const { id } = await props.params;
-  const { p, list } = await findProduit(id);
+  const { p, list, coursList, cours } = await findProduit(id);
   if (!p) notFound();
 
   const niv = boutiqueNiveau(p.niveau);
@@ -55,8 +80,10 @@ export default async function ProduitPage(props) {
   const remise = remisePct(p);
   const cover = produitImage(p.couverture);
   const descriptionHtml = renderMarkdownWithMath(marked, p.description || "");
+  // Même semestre d'abord : ceux que l'étudiant passe en même temps.
+  const proche = (x) => Number(x.niveau === p.niveau) + Number(Boolean(cours) && coursDe(x, coursList)?.semestre === cours.semestre);
   const autres = trierProduits(list.filter((x) => x.id !== p.id))
-    .sort((a, b) => Number(b.niveau === p.niveau) - Number(a.niveau === p.niveau))
+    .sort((a, b) => proche(b) - proche(a))
     .slice(0, 3);
 
   const productJsonLd = {
@@ -247,6 +274,25 @@ export default async function ProduitPage(props) {
                 Commander sur WhatsApp
               </a>
             </div>
+          )}
+
+          {cours && (
+            <section className="bac-group">
+              <h2 className="bac-section-title">Le cours gratuit de ce module</h2>
+              <a className="bac-mat-card" href={`/cours/${encodeURIComponent(cours.id)}`}>
+                <span className="bac-mat-body">
+                  <span className="bac-mat-name">
+                    {cours.module} ({cours.semestre})
+                  </span>
+                  <span className="bac-mat-desc sp-desc-clamp">{cours.description}</span>
+                  <span className="bac-mat-meta">
+                    <span>{fsjesModule(cours).chapitres.length} chapitres</span>
+                    <span className="bac-dot">·</span>
+                    <span>Cours, exercices corrigés, résumé et QCM</span>
+                  </span>
+                </span>
+              </a>
+            </section>
           )}
 
           {autres.length > 0 && (

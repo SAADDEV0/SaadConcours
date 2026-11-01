@@ -603,6 +603,26 @@
 .shop-cta-bottom{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; padding:18px 20px; margin-bottom:28px; border-radius:var(--radius-lg); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent);}
 .shop-cta-bottom strong{display:block;}
 .shop-cta-bottom span{font-size:.86rem; color:var(--text-dim);}
+/* Annonce du cahier sur les pages de cours (CahierCours.js). */
+.sp-cahier{display:flex; align-items:flex-start; gap:18px; padding:18px 20px; margin-bottom:28px; scroll-margin-top:calc(var(--header-h) + 20px); border-radius:var(--radius-lg); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent);}
+.sp-cahier.compact{margin-top:24px; padding:14px 16px; gap:14px;}
+.sp-cahier-cover{flex:none; display:block; width:96px; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border);}
+.sp-cahier.compact .sp-cahier-cover{width:72px;}
+.sp-cahier-cover img{display:block; width:100%; height:auto;}
+.sp-cahier-body{min-width:0; flex:1;}
+.sp-cahier-kicker{display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
+.sp-cahier-title{display:block; margin:2px 0 6px; font-size:1.05rem; line-height:1.3; font-weight:700; color:var(--text);}
+.sp-cahier p{margin:0 0 6px; font-size:.9rem; line-height:1.5; color:var(--text-dim);}
+.sp-cahier-note{font-size:.84rem !important;}
+.sp-cahier-foot{display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; margin-top:10px;}
+.sp-cahier-prix{font-size:.84rem; color:var(--text-dim);}
+.sp-cahier-prix strong{color:var(--text);}
+@media (max-width:560px){
+  .sp-cahier{gap:12px; padding:14px;}
+  .sp-cahier-cover, .sp-cahier.compact .sp-cahier-cover{width:64px;}
+  .sp-cahier-foot .sp-btn{width:100%; justify-content:center;}
+}
+.shop-card[hidden]{display:none;}
 .shop-faq{margin-top:28px;}
 .shop-faq details{border-top:1px solid var(--border); padding:10px 0;}
 .shop-faq details:first-of-type{border-top:none;}

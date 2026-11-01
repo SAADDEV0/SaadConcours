@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllCours, getSettings } from "@/lib/store";
+import { getAllBoutique, getAllCours, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../../_shared/mathMarkdown";
 import { breadcrumbJsonLd } from "../../../_shared/listingSchema";
@@ -11,7 +11,9 @@ import BacChapitreClient from "../../../bac/BacChapitreClient";
 import { coursCategoryInfo, licenceSemestreLabel } from "../../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref, slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursParModule";
+import { cahierDuCours, formatPrix } from "../../../../lib/boutique";
 import ConcoursLies from "../../../_shared/ConcoursLies";
+import CahierCours from "../../../_shared/CahierCours";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { Icon } from "../../../_shared/icons";
@@ -139,6 +141,7 @@ export default async function CoursChapitrePage(props) {
   const cat = coursCategoryInfo(c.category);
   const nbSujets = concoursDuModule(c.id).length;
   const sujets = concoursDuChapitre(c.id, i);
+  const cahier = cahierDuCours(await getAllBoutique(), c.id);
   const url = `${SITE_URL}${fsjesChapitreHref(c, ch)}`;
   const coursRendu = ch.cours ? avecAncres(md(ch.cours)) : null;
   const settings = await getSettings().catch(() => null);
@@ -202,6 +205,14 @@ export default async function CoursChapitrePage(props) {
                   ))}
                 </ol>
               </div>
+              {cahier && (
+                <div className="bac-side-card">
+                  <div className="bac-side-title">Préparer l&apos;examen</div>
+                  <a href={`/boutique/${encodeURIComponent(cahier.id)}`} className="bac-side-link">
+                    Cahier de préparation <span>{formatPrix(cahier.prix, cahier.devise)}</span>
+                  </a>
+                </div>
+              )}
             </aside>
 
             <main className="bac-main">
@@ -272,6 +283,8 @@ export default async function CoursChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <CahierCours cahier={cahier} module={c.module} compact />
 
               <AdSlot settings={settings} placement="cours_chapitre" />
 

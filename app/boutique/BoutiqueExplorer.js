@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { boutiqueCardHtml } from "../_shared/boutiqueCard";
 
 function norm(s) {
   return String(s || "")
@@ -10,41 +9,60 @@ function norm(s) {
     .toLowerCase();
 }
 
-// Filtre la grille prérendue de /boutique (niveau + recherche), sans
-// rechargement. La grille initiale reste celle du serveur tant que le
-// visiteur ne filtre pas.
+// Filtre les sections prérendues de /boutique (niveau, semestre, recherche)
+// sans rechargement : comme sur /cours, toutes les cartes restent dans le HTML
+// servi et le filtre ne fait que les masquer.
 export default function BoutiqueExplorer({ initialData }) {
   useEffect(() => {
     const ALL = initialData || [];
     let niveau = new URLSearchParams(location.search).get("niveau") || "";
-    const grid = document.getElementById("shopGrid");
+    let semestre = "";
+    const groupes = [...document.querySelectorAll(".bac-group[data-groupe]")];
     const search = document.getElementById("shopSearch");
     const count = document.getElementById("shopCount");
-    const chips = [...document.querySelectorAll("#shopNiveaux [data-niveau]")];
-    if (!grid) return undefined;
+    const empty = document.getElementById("shopEmpty");
+    const chipsNiveau = [...document.querySelectorAll("#shopNiveaux [data-niveau]")];
+    const chipsSemestre = [...document.querySelectorAll("#shopSemestres [data-semestre]")];
+    if (!groupes.length) return undefined;
 
     function apply() {
       const terms = norm(search?.value).split(/\s+/).filter(Boolean);
       const list = ALL.filter((p) => {
         if (niveau && p.niveau !== niveau) return false;
+        if (semestre && p.semestre !== semestre) return false;
         if (!terms.length) return true;
         const hay = norm([p.titre, p.sousTitre, p.matiere, (p.sommaire || []).join(" "), (p.pointsForts || []).join(" ")].join(" "));
         return terms.every((t) => hay.includes(t));
       });
-      grid.innerHTML = list.length ? list.map(boutiqueCardHtml).join("") : `<div class="sp-empty">Aucun cahier ne correspond à ta recherche.</div>`;
+      const ids = new Set(list.map((p) => p.id));
+      groupes.forEach((g) => {
+        const cartes = [...g.querySelectorAll(".shop-card")];
+        cartes.forEach((c) => {
+          c.hidden = !ids.has(c.dataset.id);
+        });
+        g.hidden = cartes.every((c) => c.hidden);
+      });
+      if (empty) empty.hidden = list.length > 0;
       if (count) count.textContent = `${list.length} cahier${list.length > 1 ? "s" : ""}`;
-      chips.forEach((c) => c.classList.toggle("active", c.dataset.niveau === niveau));
+      chipsNiveau.forEach((c) => c.classList.toggle("active", c.dataset.niveau === niveau));
+      chipsSemestre.forEach((c) => c.classList.toggle("active", c.dataset.semestre === semestre));
     }
 
-    const onChip = (e) => {
+    const onNiveau = (e) => {
       niveau = e.currentTarget.dataset.niveau;
       apply();
     };
-    chips.forEach((c) => c.addEventListener("click", onChip));
+    const onSemestre = (e) => {
+      semestre = e.currentTarget.dataset.semestre;
+      apply();
+    };
+    chipsNiveau.forEach((c) => c.addEventListener("click", onNiveau));
+    chipsSemestre.forEach((c) => c.addEventListener("click", onSemestre));
     search?.addEventListener("input", apply);
     if (niveau) apply();
     return () => {
-      chips.forEach((c) => c.removeEventListener("click", onChip));
+      chipsNiveau.forEach((c) => c.removeEventListener("click", onNiveau));
+      chipsSemestre.forEach((c) => c.removeEventListener("click", onSemestre));
       search?.removeEventListener("input", apply);
     };
   }, [initialData]);

@@ -1,7 +1,8 @@
-import { getAllCours } from "@/lib/store";
+import { getAllBoutique, getAllCours } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { COURS_CATEGORIES, LICENCE_PARCOURS, LICENCE_SEMESTRES, LICENCE_FILIERES, coursSortComparator, licenceParcoursLabel, licenceFiliereLabel } from "../../lib/coursTaxonomy";
 import { fsjesModule } from "../../lib/fsjesChapitres";
+import { cahierDuCours } from "../../lib/boutique";
 import { droitOuvert } from "../../lib/droit";
 import { contenuOuvert } from "../../lib/espaces";
 import { breadcrumbJsonLd, collectionJsonLd } from "../_shared/listingSchema";
@@ -27,9 +28,10 @@ export const revalidate = false;
 // masquer selon les filtres.
 // Seuls les champs affichés sont passés à la carte : le Markdown complet du
 // module n'a rien à faire dans les props sérialisées de la page.
-function carteModule(c) {
+function carteModule(c, boutique) {
   const { chapitres } = fsjesModule(c);
   return {
+    cahier: Boolean(cahierDuCours(boutique, c.id)),
     id: c.id,
     module: c.module,
     description: c.description,
@@ -56,6 +58,12 @@ function ModuleCard({ c }) {
           {c.available ? <span>{c.nbChapitres} chapitres</span> : <span>Bientôt disponible</span>}
           <span className="bac-dot">·</span>
           <span>{tag}</span>
+          {c.cahier && (
+            <>
+              <span className="bac-dot">·</span>
+              <span>Cahier de préparation</span>
+            </>
+          )}
         </span>
       </span>
     </>
@@ -82,6 +90,8 @@ function ModuleCard({ c }) {
 export default async function CoursPage() {
   const cours = (await getAllCours().catch(() => [])).sort(coursSortComparator);
   const publies = cours.filter((c) => c.available);
+  const boutique = await getAllBoutique();
+  const nbCahiers = publies.filter((c) => cahierDuCours(boutique, c.id)).length;
   const totalChapitres = publies.reduce((n, c) => n + fsjesModule(c).chapitres.length, 0);
   // Modules du S1-S2 communs aux deux parcours, cités dans le texte du bas.
   const basesS1S2 = publies
@@ -196,7 +206,7 @@ export default async function CoursPage() {
               <h2 className="bac-section-title">{g.label}</h2>
               <div className="bac-mat-grid">
                 {g.list.map((c) => (
-                  <ModuleCard key={c.id} c={carteModule(c)} />
+                  <ModuleCard key={c.id} c={carteModule(c, boutique)} />
                 ))}
               </div>
             </section>
@@ -230,6 +240,12 @@ export default async function CoursPage() {
               <a href="/concours/licence-excellence">sujets des concours de licence d&apos;excellence</a> montrent ce qui est
               demandé pour l&apos;accès en S5.
             </p>
+            {nbCahiers > 0 && (
+              <p>
+                Pour préparer l&apos;examen, {nbCahiers} modules ont aussi un <a href="/boutique">cahier de préparation en PDF</a> : QCM corrigés, exercices et trois examens
+                blancs. Le cours reste gratuit.
+              </p>
+            )}
             {droitOuvert() && (
               <p>
                 La FSJES prépare aussi à la licence de Droit : ses <a href="/droit">cours de Droit</a>, en français et en

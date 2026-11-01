@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllCours, getSettings } from "@/lib/store";
+import { getAllBoutique, getAllCours, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { breadcrumbJsonLd } from "../../_shared/listingSchema";
@@ -8,8 +8,10 @@ import JsonLd from "../../_shared/JsonLd";
 import MathScripts from "../../_shared/MathScripts";
 import CoursDetailClient from "./CoursDetailClient";
 import ConcoursLies from "../../_shared/ConcoursLies";
+import CahierCours from "../../_shared/CahierCours";
 import AdSlot from "../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
+import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
 import { concoursDuModule } from "../../../lib/concoursParModule";
@@ -102,6 +104,7 @@ export default async function CoursModulePage(props) {
   const url = `${SITE_URL}/cours/${c.id}`;
   const related = getRelatedCours(list, c);
   const sujets = concoursDuModule(c.id);
+  const cahier = cahierDuCours(await getAllBoutique(), c.id);
   const nbExercices = chapitres.reduce((n, x) => n + x.nbExercices, 0);
   const nbQcm = chapitres.reduce((n, x) => n + x.qcm.length, 0);
   // Titres de l'annexe décalés d'un niveau quand elle commence en "# " : la
@@ -164,6 +167,12 @@ export default async function CoursModulePage(props) {
                   <Icon name="file-pdf" size={18} />
                   Cours complet en PDF
                 </button>
+                {cahier && (
+                  <a className="sp-btn" href={`/boutique/${encodeURIComponent(cahier.id)}`}>
+                    <Icon name="book-open" size={18} />
+                    Cahier de préparation · {formatPrix(cahier.prix, cahier.devise)}
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -186,6 +195,11 @@ export default async function CoursModulePage(props) {
                 {sujets.length > 0 && (
                   <a href="#concours" className="bac-side-link">
                     Sujets de concours <span>{sujets.length}</span>
+                  </a>
+                )}
+                {cahier && (
+                  <a href="#cahier" className="bac-side-link">
+                    Cahier de préparation <span>{formatPrix(cahier.prix, cahier.devise)}</span>
                   </a>
                 )}
               </div>
@@ -257,6 +271,8 @@ export default async function CoursModulePage(props) {
                   </div>
                 ))}
               </section>
+
+              <CahierCours cahier={cahier} module={c.module} />
 
               <AdSlot settings={settings} placement="cours_module" />
 
