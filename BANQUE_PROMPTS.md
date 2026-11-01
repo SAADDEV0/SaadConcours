@@ -1339,6 +1339,7 @@ Format validé le 2026-10-04 : **l'extrait est donné dans le post, le corrigé 
   empaqueter avec esbuild comme dans le workflow, puis `node .social/publier.mjs render <id>`.
 - ZIP (publication à la main via Meta Business Suite) : toujours possible, un dossier par
   concours : `01.png…`, `instagram.txt`, `facebook.txt`, `facebook-premier-commentaire.txt`.
+- **Limite de la file (constatée le 2026-11-01)** : `MAX_ENTRIES = 400` dans `lib/socialPlan.js`, historique compris, et un concours compte pour 2 entrées. Au-delà, les entrées les plus anciennes sont effacées : des concours déjà publiés repassent en « À publier ». Regarder le total avant un gros lot. Une réponse 503 de `/api/admin/social/publish` peut quand même avoir écrit : relire la file avant de renvoyer, sinon doublons. Le robot ne publie que `kind: "concours"`.
 - Les nouveaux concours n'exigent rien de plus : ils entrent dans le prochain lot programmé.
 
 ---
