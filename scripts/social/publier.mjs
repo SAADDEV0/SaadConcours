@@ -1,4 +1,5 @@
-// Publication automatique des carrousels « extrait » sur Instagram et Facebook.
+// Publication automatique sur Instagram et Facebook : carrousels « extrait »
+// des concours, et posts à une image pour les cahiers, les cours et les articles.
 //
 // Lancé par .github/workflows/social-publish.yml, en deux temps :
 //   node publier.mjs prepare   lit la file (KV), dessine les images en JPEG
@@ -29,8 +30,9 @@ import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html.js";
 import { AllPackages } from "mathjax-full/js/input/tex/AllPackages.js";
 import { buildCarousel, mathSpans, mathSvgEntry, scanPaths, sourceFor } from "@/app/admin/_features/social/carousel";
 import { wrapAccentedMathWords } from "@/app/_shared/latexPlainText";
-import { carouselCaption, factsFor, trackedUrl } from "@/app/admin/_features/social/captions";
-import { resolveTheme } from "@/app/admin/_features/social/visual";
+import { carouselCaption, factsFor, linkCaption, trackedUrl } from "@/app/admin/_features/social/captions";
+import { FORMATS, drawVisual, resolveTheme } from "@/app/admin/_features/social/visual";
+import { DESIGNS_KEY, DONE_KEY, HORIZON_MS, KEEP_PUBLISHED_MS, LIGHT_AFTER_MS, RESERVE_KEY, ROBOT_KINDS, contentKey, designKey, parseMember, reserveMember } from "@/lib/socialReserve.mjs";
 
 const KEY = "admin:social:plan";
 const ROOT = ".social";
@@ -73,8 +75,96 @@ async function patchQueue(id, patch) {
   await kv("SET", KEY, JSON.stringify(next));
 }
 
-const isDue = (e, now) =>
-  e.auto === true && e.status === "planned" && e.kind === "concours" && (e.platform === "instagram" || e.platform === "facebook") && Date.parse(e.date) <= now + 2 * 60000;
+const PLATFORMS = ["instagram", "facebook"];
+const isDue = (e, now) => e.auto === true && e.status === "planned" && ROBOT_KINDS.includes(e.kind) && PLATFORMS.includes(e.platform) && Date.parse(e.date) <= now + 2 * 60000;
+
+/* ------------------------------ Rangement ------------------------------ */
+
+const titleOf = (kind, c) => {
+  if (kind === "boutique") return c.titre;
+  if (kind === "cours") return c.module;
+  if (kind === "blog") return c.title;
+  const mark = c.niveau === "master_droit" ? "⚖️ · " : c.niveau === "licence_excellence" ? "⭐ · " : "";
+  return `${mark}${c.etablissement} · ${c.annee}`;
+};
+
+// Garde la file du Studio légère (voir lib/socialReserve.mjs) : ce qui est
+// loin va dans la réserve, ce qui est vieux dans DONE_KEY, et ce qui approche
+// revient de la réserve. Les écritures vont de la copie vers l'effacement :
+// un passage coupé en route laisse un doublon évité au suivant, jamais un trou.
+async function ranger(content, now = Date.now()) {
+  const all = await readQueue();
+  const keep = [];
+  const far = new Map();
+  const old = [];
+  let changed = false;
+  for (const e of all) {
+    const t = Date.parse(e.date);
+    if (e.auto === true && e.status === "planned" && !e.caption && ROBOT_KINDS.includes(e.kind) && t > now + HORIZON_MS) {
+      far.set(reserveMember(e), { score: t, design: e.design });
+    } else if (e.status === "published" && PLATFORMS.includes(e.platform) && t < now - KEEP_PUBLISHED_MS) {
+      old.push(e);
+    } else if (e.status === "published" && e.caption && t < now - LIGHT_AFTER_MS) {
+      keep.push({ ...e, caption: "" });
+      changed = true;
+    } else keep.push(e);
+  }
+
+  if (far.size) {
+    const designs = [...far.values()].flatMap((r) => [designKey(r.design), JSON.stringify(r.design || {})]);
+    await kv("HSET", DESIGNS_KEY, ...designs);
+    await kv("ZADD", RESERVE_KEY, ...[...far].flatMap(([member, r]) => [r.score, member]));
+  }
+  if (old.length) {
+    const done = {};
+    const seen = await kv("HGETALL", DONE_KEY);
+    for (let i = 0; i < (seen || []).length; i += 2) done[seen[i]] = seen[i + 1];
+    const fields = new Set();
+    for (const e of old) {
+      const key = contentKey(e.kind, e.itemId);
+      const [date = "", nets = ""] = String(done[key] || "").split("|");
+      const net = e.platform === "instagram" ? "I" : "F";
+      done[key] = `${e.date > date ? e.date : date}|${nets.includes(net) ? nets : nets + net}`;
+      fields.add(key);
+    }
+    await kv("HSET", DONE_KEY, ...[...fields].flatMap((k) => [k, done[k]]));
+  }
+
+  const raw = await kv("ZRANGEBYSCORE", RESERVE_KEY, "-inf", String(now + HORIZON_MS), "WITHSCORES");
+  const back = [];
+  for (let i = 0; i < (raw || []).length; i += 2) back.push({ member: raw[i], date: new Date(Number(raw[i + 1])).toISOString(), ...parseMember(raw[i]) });
+  const designs = new Map();
+  for (const [k, row] of back.entries()) {
+    if (!designs.has(row.design)) {
+      const json = await kv("HGET", DESIGNS_KEY, row.design);
+      designs.set(row.design, json ? JSON.parse(json) : {});
+    }
+    const item = content[row.kind]?.find((c) => c.id === row.itemId);
+    for (const platform of PLATFORMS) {
+      if (keep.some((e) => e.status === "planned" && e.kind === row.kind && e.itemId === row.itemId && e.platform === platform)) continue;
+      keep.push({
+        id: `r${now.toString(36)}${k.toString(36)}${platform[0]}`,
+        kind: row.kind,
+        itemId: row.itemId,
+        title: item ? titleOf(row.kind, item) : row.itemId,
+        platform,
+        status: "planned",
+        date: row.date,
+        caption: "",
+        url: `https://www.saadconcours.space/${row.kind}/${encodeURIComponent(row.itemId)}?utm_source=${platform}&utm_medium=social&utm_campaign=${row.kind}`,
+        note: "Publication automatique",
+        auto: true,
+        theme: row.theme,
+        result: "",
+        design: designs.get(row.design),
+      });
+    }
+  }
+
+  if (far.size || old.length || back.length || changed) await kv("SET", KEY, JSON.stringify(keep));
+  if (back.length) await kv("ZREM", RESERVE_KEY, ...back.map((r) => r.member));
+  if (far.size || old.length || back.length) log(`Rangement : ${far.size} vers la réserve, ${back.length} depuis la réserve, ${old.length} archivées.`);
+}
 
 /* ------------------------------ Dessin ------------------------------ */
 
@@ -82,11 +172,19 @@ function loadFonts() {
   for (const dir of ["/usr/share/fonts", "C:\\Windows\\Fonts"]) if (fs.existsSync(dir)) GlobalFonts.loadFontsFromDir(dir);
 }
 
+const readJson = (name) => JSON.parse(fs.readFileSync(`public/data/${name}.json`, "utf8"));
+
 function loadContent() {
-  const list = JSON.parse(fs.readFileSync("public/data/concours.json", "utf8"));
   const dir = "public/data/corriges";
   const corrigeFiles = new Set(fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((f) => f.slice(0, -3)) : []);
-  return { list, corrigeFiles };
+  return { concours: readJson("concours"), boutique: readJson("boutique"), cours: readJson("cours"), blog: readJson("blog"), corrigeFiles };
+}
+
+// Contenu encore en ligne : un article fusionné n'a plus de page.
+function findItem(content, kind, id) {
+  const item = content[kind]?.find((c) => c.id === id);
+  if (!item || item.statut === "brouillon" || item.available === false || item.fusion) return null;
+  return kind !== "concours" || sourceFor(item) ? item : null;
 }
 
 // Pages scannées du sujet. Le workflow n'extrait pas public/images (trop
@@ -178,19 +276,53 @@ async function renderItem(item, { themeKey, design = {}, corrigeFiles }, dir) {
   return { files, truncated: built.truncated, scan: built.source === "scan" };
 }
 
+// Post à une image. Cahier : l'affiche validée de la boutique (1080 × 1440),
+// ramenée au 4:5 qu'exige Instagram, sur la couleur de son propre fond, sans
+// rien couper. Cours et article : le visuel du Studio.
+async function renderSingle(kind, item, { themeKey, design = {} }, dir) {
+  const { w, h } = FORMATS.find((f) => f.key === "portrait");
+  const canvas = createCanvas(w, h);
+  if (kind === "boutique") {
+    const cover = await loadImage(await scanBytes(item.couverture));
+    const ctx = canvas.getContext("2d");
+    const sample = createCanvas(1, 1).getContext("2d");
+    sample.drawImage(cover, 0, 0, 1, 1, 0, 0, 1, 1);
+    const [r, g, b] = sample.getImageData(0, 0, 1, 1).data;
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(0, 0, w, h);
+    const scale = Math.min(w / cover.width, h / cover.height);
+    const dw = cover.width * scale;
+    ctx.drawImage(cover, (w - dw) / 2, 0, dw, cover.height * scale);
+  } else {
+    drawVisual(canvas, { format: { w, h }, theme: resolveTheme(themeKey, design.style), facts: factsFor(kind, item), style: design.style });
+  }
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "01.jpg"), await canvas.encode("jpeg", 92));
+  return { files: ["01.jpg"] };
+}
+
+const COMMENTS = {
+  concours: "Le corrigé détaillé ici 👉",
+  boutique: "Le cahier est ici 👉",
+  cours: "Le cours complet et gratuit ici 👉",
+  blog: "L'article complet ici 👉",
+};
+
 const safe = (id) => String(id).replace(/[^A-Za-z0-9_-]/g, "_").slice(0, 100);
 
 async function prepare() {
   fs.rmSync(ROOT + "/out", { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   const now = Date.now();
+  const content = loadContent();
+  await ranger(content, now);
   const due = (await readQueue()).filter((e) => isDue(e, now)).sort((a, b) => String(a.date).localeCompare(String(b.date)));
   const groups = [];
   for (const e of due) {
-    let g = groups.find((x) => x.itemId === e.itemId);
+    let g = groups.find((x) => x.kind === e.kind && x.itemId === e.itemId);
     if (!g) {
       if (groups.length >= MAX_ITEMS) continue;
-      groups.push((g = { itemId: e.itemId, theme: e.theme, design: e.design || {}, entries: [] }));
+      groups.push((g = { kind: e.kind, itemId: e.itemId, theme: e.theme, design: e.design || {}, entries: [] }));
     }
     g.entries.push(e);
   }
@@ -202,23 +334,32 @@ async function prepare() {
   }
 
   loadFonts();
-  const { list, corrigeFiles } = loadContent();
+  const { corrigeFiles } = content;
   for (const g of groups) {
-    const item = list.find((c) => c.id === g.itemId);
-    if (!item || !sourceFor(item, g.design.style)) {
-      for (const e of g.entries) await patchQueue(e.id, { status: "failed", result: "Concours introuvable, ou sans énoncé ni scan." });
+    const item = findItem(content, g.kind, g.itemId);
+    if (!item || (g.kind === "concours" && !sourceFor(item, g.design.style))) {
+      for (const e of g.entries) await patchQueue(e.id, { status: "failed", result: "Contenu introuvable, retiré du site, ou sans énoncé ni scan." });
       continue;
     }
-    const dir = `${plan.run}/${safe(item.id)}`;
-    const { files, truncated, scan } = await renderItem(item, { themeKey: g.theme, design: g.design, corrigeFiles }, path.join(OUT, dir));
-    plan.items.push({
-      itemId: item.id,
-      dir,
-      files,
-      comment: `Le corrigé détaillé ici 👉 ${trackedUrl("concours", item, "facebook")}`,
-      entries: g.entries.map((e) => ({ id: e.id, platform: e.platform, caption: e.caption || carouselCaption(e.platform, item, { truncated, scan, tone: g.design.tone, tags: g.design.tags, outro: g.design.outro, ctx: { corrigeFiles } }) })),
-    });
-    log(`Prêt : ${item.id} (${files.length} images, ${scan ? "scans" : "énoncé"}${truncated ? ", sujet coupé" : ""})`);
+    const dir = `${plan.run}/${g.kind}-${safe(item.id)}`;
+    const opts = { tone: g.design.tone, tags: g.design.tags, outro: g.design.outro, ctx: { corrigeFiles } };
+    try {
+      const single = g.kind !== "concours";
+      const { files, truncated, scan } = single
+        ? await renderSingle(g.kind, item, { themeKey: g.theme, design: g.design }, path.join(OUT, dir))
+        : await renderItem(item, { themeKey: g.theme, design: g.design, corrigeFiles }, path.join(OUT, dir));
+      plan.items.push({
+        itemId: item.id,
+        dir,
+        files,
+        comment: `${COMMENTS[g.kind]} ${trackedUrl(g.kind, item, "facebook")}`,
+        entries: g.entries.map((e) => ({ id: e.id, platform: e.platform, caption: e.caption || (single ? linkCaption(e.platform, g.kind, item, opts) : carouselCaption(e.platform, item, { ...opts, truncated, scan })) })),
+      });
+      log(`Prêt : ${g.kind} ${item.id} (${files.length} image${files.length > 1 ? "s" : ""})`);
+    } catch (err) {
+      for (const e of g.entries) await patchQueue(e.id, { status: "failed", result: `Dessin impossible : ${err.message}`.slice(0, 300) });
+      log(`ÉCHEC du dessin : ${item.id} : ${err.message}`);
+    }
   }
   fs.writeFileSync(PLAN, JSON.stringify(plan, null, 2));
 }
@@ -262,6 +403,13 @@ async function waitReady(containerId) {
 }
 
 async function publishInstagram(igId, item, caption, rawBase) {
+  // Instagram refuse un carrousel d'une seule image.
+  if (item.files.length === 1) {
+    const media = await graph(`/${igId}/media`, { image_url: `${rawBase}/${item.dir}/${item.files[0]}`, caption });
+    await waitReady(media.id);
+    const post = await graph(`/${igId}/media_publish`, { creation_id: media.id });
+    return `instagram:${post.id}`;
+  }
   const children = [];
   for (const f of item.files) {
     const c = await graph(`/${igId}/media`, { image_url: `${rawBase}/${item.dir}/${f}`, is_carousel_item: "true" });
@@ -327,14 +475,22 @@ async function publish() {
 
 /* ------------------------------ Entrée ------------------------------ */
 
-async function renderOnly(id, arg2) {
+// render <id> [scan|enonce], ou render boutique:<id> (cours:<id>, blog:<id>).
+async function renderOnly(ref, arg2) {
   loadFonts();
-  const { list, corrigeFiles } = loadContent();
-  const item = list.find((c) => c.id === id);
-  if (!item) throw new Error(`Concours introuvable : ${id}`);
+  const content = loadContent();
+  const [kind, id] = ref.includes(":") ? ref.split(":") : ["concours", ref];
+  const item = findItem(content, kind, id);
+  if (!item) throw new Error(`Contenu introuvable : ${ref}`);
   const dir = path.join(OUT, "local", safe(id));
+  if (kind !== "concours") {
+    const design = { style: { pattern: "vagues", titleSize: "l" } };
+    await renderSingle(kind, item, { themeKey: "brand", design }, dir);
+    log(`Image dans ${dir}\n\n${linkCaption("instagram", kind, item, { tone: "question" })}`);
+    return;
+  }
   const design = arg2 ? { style: { source: arg2 } } : {};
-  const { files, truncated, scan } = await renderItem(item, { themeKey: "brand", design, corrigeFiles }, dir);
+  const { files, truncated, scan } = await renderItem(item, { themeKey: "brand", design, corrigeFiles: content.corrigeFiles }, dir);
   log(`${files.length} images dans ${dir} (${scan ? "scans" : "énoncé"}${truncated ? ", sujet coupé" : ""})`);
 }
 
@@ -346,7 +502,7 @@ try {
     const need = cmd === "prepare" ? ["KV_REST_API_URL", "KV_REST_API_TOKEN"] : ["KV_REST_API_URL", "KV_REST_API_TOKEN", "META_PAGE_ID", "META_PAGE_TOKEN"];
     if (missing(need).length) throw new Error(`Secrets GitHub manquants : ${missing(need).join(", ")}`);
     await (cmd === "prepare" ? prepare() : publish());
-  } else throw new Error("Usage : publier.mjs prepare | publish | render <id> [scan|enonce]");
+  } else throw new Error("Usage : publier.mjs prepare | publish | render <id> [scan|enonce] | render <kind>:<id>");
 } catch (err) {
   console.error(err.message);
   process.exitCode = 1;

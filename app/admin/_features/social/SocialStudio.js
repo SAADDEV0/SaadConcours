@@ -11,7 +11,8 @@ import { COLLECTIONS } from "../../_lib/collections";
 import { assetUrl } from "../../_lib/repo";
 import { api } from "../../_lib/api";
 import { dateTimeFr, daysUntil, matchQuery, timeAgo } from "../../_lib/format";
-import { CONTENT_KINDS, PLATFORMS, TONES, captionFor, carouselCaption, countFor, factsFor, googleQuery, hashtagsFor, intentUrl, trackedUrl } from "./captions";
+import { CONTENT_KINDS, PLATFORMS, TONES, captionFor, carouselCaption, countFor, factsFor, googleQuery, hashtagsFor, intentUrl, linkCaption, trackedUrl } from "./captions";
+import { ROBOT_KINDS, contentKey } from "@/lib/socialReserve.mjs";
 import { CUSTOM_THEME, DEFAULT_STYLE, FORMATS, PATTERNS, THEMES, TITLE_SIZES, canvasBlob, customTheme, drawVisual, loadImage, normalizeStyle, resolveTheme, styleDiff } from "./visual";
 import { buildCarousel, carouselBullets, carouselPlan, mathSpans, mathSvgEntry, scanPaths, sourceFor } from "./carousel";
 import { ensureMathScripts } from "@/app/_shared/pdfScripts";
@@ -149,11 +150,18 @@ function PlatformLogo({ p }) {
 
 function useSocialLog() {
   const [entries, setEntries] = useState(null);
-  const load = () => api("/api/admin/social").then((d) => setEntries(d.entries || [])).catch(() => setEntries([]));
+  const [archive, setArchive] = useState({ reserve: null, done: {} });
+  const load = () =>
+    api("/api/admin/social")
+      .then((d) => {
+        setEntries(d.entries || []);
+        setArchive({ reserve: d.reserve || null, done: d.done || {} });
+      })
+      .catch(() => setEntries([]));
   useEffect(() => {
     load();
   }, []);
-  return { entries, reload: load, setEntries };
+  return { entries, ...archive, reload: load, setEntries };
 }
 
 function useSavedStyles() {
@@ -452,11 +460,27 @@ function NameDialog({ onClose, onSave, initial = "" }) {
 
 // Suivi des concours sur Instagram et Facebook, d'après l'historique (KV) :
 // date de publication par réseau, publication en cours, dernier échec.
-function trackConcours(entries) {
+// La réserve et les publications archivées comptent aussi (lib/socialReserve.mjs).
+function trackConcours(entries, reserve, done) {
   const m = new Map();
+  const at = (id) => m.get(id) || { published: {}, pending: false, failed: "" };
+  for (const key of reserve?.ids || []) {
+    if (!key.startsWith("concours|")) continue;
+    const id = key.slice(9);
+    m.set(id, { ...at(id), pending: true });
+  }
+  for (const [key, value] of Object.entries(done || {})) {
+    if (!key.startsWith("concours|")) continue;
+    const id = key.slice(9);
+    const [date, nets = ""] = String(value).split("|");
+    const t = at(id);
+    if (nets.includes("I")) t.published.instagram = date;
+    if (nets.includes("F")) t.published.facebook = date;
+    m.set(id, t);
+  }
   for (const e of entries || []) {
     if (e.kind !== "concours" || (e.platform !== "instagram" && e.platform !== "facebook")) continue;
-    const t = m.get(e.itemId) || { published: {}, pending: false, failed: "" };
+    const t = at(e.itemId);
     if (e.status === "published") {
       if (!t.published[e.platform] || e.date > t.published[e.platform]) t.published[e.platform] = e.date;
     } else if (e.status === "planned" && e.auto) t.pending = true;
@@ -759,7 +783,7 @@ function Composer({ log }) {
   }, [themeKey, style, tone, outro, mode, format]);
 
   const isCarousel = kind === "concours" && mode === "carrousel";
-  const track = useMemo(() => trackConcours(log.entries), [log.entries]);
+  const track = useMemo(() => trackConcours(log.entries, log.reserve, log.done), [log.entries, log.reserve, log.done]);
   const candidates = useMemo(() => {
     if (!Array.isArray(list)) return [];
     const pub = list.filter((x) => col.isPublished(x));
@@ -862,7 +886,12 @@ function Composer({ log }) {
   const captions = useMemo(() => {
     if (!item) return {};
     const opts = { tone, outro, tags: tags ?? undefined, ctx: { corrigeFiles } };
-    const auto = (p) => (isCarousel && (p === "instagram" || p === "facebook") ? carouselCaption(p, item, { ...opts, truncated, scan: scanShown }) : captionFor(p, kind, item, opts));
+    const auto = (p) =>
+      isCarousel && (p === "instagram" || p === "facebook")
+        ? carouselCaption(p, item, { ...opts, truncated, scan: scanShown })
+        : ROBOT_KINDS.includes(kind) && kind !== "concours" && (p === "instagram" || p === "facebook")
+          ? linkCaption(p, kind, item, opts)
+          : captionFor(p, kind, item, opts);
     return Object.fromEntries(PLATFORMS.map((p) => [p.key, texts[p.key] ?? auto(p.key)]));
   }, [item, kind, tone, outro, tags, texts, corrigeFiles, isCarousel, truncated, scanShown]);
 
@@ -896,9 +925,10 @@ function Composer({ log }) {
     try {
       const res = await api("/api/admin/social/publish", {
         method: "POST",
-        body: { theme: themeKey, design: designFor({ withItem: false }), items: [{ id: item.id, title: col.title(item), date, captions: edited, design: designFor({ withItem: true }) }] },
+        body: { kind, theme: themeKey, design: designFor({ withItem: false }), items: [{ id: item.id, title: col.title(item), date, captions: edited, design: designFor({ withItem: true }) }] },
       });
       log.setEntries((e) => [...res.entries, ...(e || [])]);
+      if (res.reserved) log.reload();
       if (date) toast.success("Publication programmée", `${dateTimeFr(date)} sur Instagram et Facebook, automatiquement.`);
       else toast.success("Publication lancée", res.woken ? "En ligne dans 2 à 3 minutes. Résultat dans « Planning & historique »." : "Elle part au prochain passage du robot (15 minutes au plus).");
     } catch (err) {
@@ -930,6 +960,7 @@ function Composer({ log }) {
         },
       });
       log.setEntries((e) => [...res.entries, ...(e || [])]);
+      if (res.reserved) log.reload();
       const n = selectedItems.length;
       setSelected([]);
       setBulk(false);
@@ -949,7 +980,7 @@ function Composer({ log }) {
     downloadBlob(makeZip(files), `saadconcours-carrousels-${localDay(new Date())}.zip`);
   }
   async function publishNow() {
-    if (!(await confirm({ title: "Publier maintenant ?", body: `Le carrousel « ${col.title(item)} » sera publié sur Instagram et Facebook, avec le lien en premier commentaire sur Facebook.`, confirmLabel: "Publier" }))) return;
+    if (!(await confirm({ title: "Publier maintenant ?", body: `${isCarousel ? "Le carrousel" : "Le post"} « ${col.title(item)} » sera publié sur Instagram et Facebook, avec le lien en premier commentaire sur Facebook.`, confirmLabel: "Publier" }))) return;
     queueAuto();
   }
   async function copyComment() {
@@ -1127,7 +1158,7 @@ function Composer({ log }) {
             candidates.map((x) => {
               const on = item?.id === x.id;
               const concours = kind === "concours";
-              const done = (log.entries || []).some((e) => e.kind === kind && e.itemId === x.id && e.status === "published");
+              const done = Boolean(log.done?.[contentKey(kind, x.id)]) || (log.entries || []).some((e) => e.kind === kind && e.itemId === x.id && e.status === "published");
               const src = isCarousel ? sourceFor(x, style) : null;
               return (
                 <div key={x.id} className={`ax-ss-row${on ? " on" : ""}`}>
@@ -1534,9 +1565,23 @@ function Composer({ log }) {
                         { label: "Copier l'image", icon: "copy", onClick: copyImage },
                       ]}
                     />
-                    <button type="button" className="ax-btn primary" onClick={download}>
-                      <Icon name="download" size="sm" /> Télécharger l&apos;image
-                    </button>
+                    {ROBOT_KINDS.includes(kind) ? (
+                      <>
+                        <button type="button" className="ax-btn" onClick={download}>
+                          <Icon name="download" size="sm" /> Télécharger
+                        </button>
+                        <button type="button" className="ax-btn" onClick={() => setAutoPlan(true)}>
+                          <Icon name="calendar" size="sm" /> Programmer
+                        </button>
+                        <button type="button" className="ax-btn primary" onClick={publishNow}>
+                          <Icon name="send" size="sm" /> Publier sur Instagram + Facebook
+                        </button>
+                      </>
+                    ) : (
+                      <button type="button" className="ax-btn primary" onClick={download}>
+                        <Icon name="download" size="sm" /> Télécharger l&apos;image
+                      </button>
+                    )}
                   </div>
                 </>
               )}
@@ -1628,6 +1673,7 @@ function Planning({ log }) {
   }, [all]);
 
   const planned = entries.filter((e) => e.status === "planned").sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const reserved = log.reserve?.count || 0;
   const failed = entries.filter((e) => e.status === "failed");
   const closing = (news.data || []).filter((n) => {
     const d = daysUntil(n.date_limite);
@@ -1662,8 +1708,12 @@ function Planning({ log }) {
   // Annule tout ce qui est programmé et pas encore parti.
   async function clearQueue() {
     const list = planned;
-    if (!list.length || !(await confirm({ title: `Annuler ${list.length} publication${list.length > 1 ? "s" : ""} programmée${list.length > 1 ? "s" : ""} ?`, body: net === "all" ? "Tous réseaux confondus." : `Seulement ${PLATFORMS.find((p) => p.key === net)?.label}.`, confirmLabel: "Tout annuler", tone: "danger" }))) return;
+    const dropReserve = net === "all" && reserved > 0;
+    const total = list.length + (dropReserve ? reserved : 0);
+    if (!total || !(await confirm({ title: `Annuler ${total} publication${total > 1 ? "s" : ""} programmée${total > 1 ? "s" : ""} ?`, body: net === "all" ? "Tous réseaux confondus." : `Seulement ${PLATFORMS.find((p) => p.key === net)?.label}.`, confirmLabel: "Tout annuler", tone: "danger" }))) return;
+    if (dropReserve) await api("/api/admin/social?reserve=all", { method: "DELETE" });
     for (const e of list) await api(`/api/admin/social?id=${encodeURIComponent(e.id)}`, { method: "DELETE" });
+    if (dropReserve) log.reload();
     const ids = new Set(list.map((e) => e.id));
     log.setEntries((cur) => cur.filter((x) => !ids.has(x.id)));
     toast.success("File vidée");
@@ -1792,7 +1842,7 @@ function Planning({ log }) {
         <section className="ax-card">
           <SectionTitle
             aside={
-              planned.length > 1 ? (
+              planned.length + reserved > 1 ? (
                 <button type="button" className="ax-btn ghost xs" onClick={clearQueue}>
                   Tout annuler
                 </button>
@@ -1801,6 +1851,11 @@ function Planning({ log }) {
           >
             À venir
           </SectionTitle>
+          {reserved > 0 && (
+            <p className="ax-muted" style={{ margin: "0 0 8px" }}>
+              + {reserved} publication{reserved > 1 ? "s" : ""} en réserve, jusqu&apos;au {dateTimeFr(new Date(log.reserve.last).toISOString())}. Le robot les fait entrer ici trois jours avant.
+            </p>
+          )}
           {!planned.length ? (
             <p className="ax-muted" style={{ margin: 0 }}>
               Rien de planifié. Depuis le composer : « Programmer » un post, ou « Relire et publier » une sélection en série.

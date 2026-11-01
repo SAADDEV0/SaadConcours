@@ -118,7 +118,7 @@ export function factsFor(kind, item, ctx = {}) {
       };
     }
     case "cours": {
-      const n = (String(item.content || "").match(/^## /gm) || []).length;
+      const n = (String(item.content || "").match(/^# CHAPITRE/gm) || []).length;
       return {
         emoji: "📚",
         kicker: `Cours Licence FSJES${item.semestre ? ` · ${item.semestre}` : ""}`,
@@ -146,7 +146,7 @@ export function factsFor(kind, item, ctx = {}) {
         title: item.titre,
         subtitle: item.sousTitre,
         bullets: [...(item.pointsForts || []).slice(0, 3), item.pages ? `${item.pages} pages en PDF` : null].filter(Boolean),
-        cta: `${formatPrix(item.prix, item.devise)} · téléchargement immédiat`,
+        cta: `${formatPrix(item.prix, item.devise)} · commande sur WhatsApp`,
         price: formatPrix(item.prix, item.devise),
       };
     default:
@@ -258,6 +258,22 @@ export function carouselCaption(platform, item, { tone = "info", truncated = fal
     `✅ ${what} : gratuit sur notre site.\n🔎 Cherche sur Google : ${googleQuery(item)}\n${platform === "facebook" ? "🔗 Ou le lien en commentaire 👇" : "🔗 Ou le lien dans la bio"}`,
     outro,
     tagsOf("concours", item, tags).join(" "),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+// Texte d'un post à une image (cahier, cours, article) publié par le robot.
+// Même règle que le carrousel : pas de lien dans le texte.
+export function linkCaption(platform, kind, item, { tone = "info", ctx, tags, outro = "" } = {}) {
+  const f = factsFor(kind, item, ctx);
+  return [
+    INTROS[tone]?.[kind] || INTROS.info[kind] || "",
+    `${f.emoji} ${f.title}${f.subtitle ? `\n${f.subtitle}` : ""}`,
+    f.bullets.map((b) => `✅ ${b}`).join("\n"),
+    `👉 ${f.cta} : ${platform === "facebook" ? "lien en commentaire 👇" : "lien dans la bio"}`,
+    outro,
+    tagsOf(kind, item, tags).join(" "),
   ]
     .filter(Boolean)
     .join("\n\n");

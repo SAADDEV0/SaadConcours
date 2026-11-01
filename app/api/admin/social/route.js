@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { listSocial, upsertSocial, removeSocial } from "@/lib/socialPlan";
+import { clearSocialReserve, listSocial, readSocialArchive, upsertSocial, removeSocial } from "@/lib/socialPlan";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    return NextResponse.json({ entries: await listSocial() }, { headers: { "Cache-Control": "private, no-store" } });
+    const [entries, archive] = await Promise.all([listSocial(), readSocialArchive()]);
+    return NextResponse.json({ entries, ...archive }, { headers: { "Cache-Control": "private, no-store" } });
   } catch (err) {
     console.error("social GET", err);
     return NextResponse.json({ error: "Historique indisponible." }, { status: 500 });
@@ -25,6 +26,10 @@ export async function POST(req) {
 }
 
 export async function DELETE(req) {
+  if (req.nextUrl.searchParams.get("reserve") === "all") {
+    await clearSocialReserve();
+    return NextResponse.json({ ok: true });
+  }
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id requis" }, { status: 400 });
   return NextResponse.json({ ok: await removeSocial(id) });

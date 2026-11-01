@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { upsertManySocial } from "@/lib/socialPlan";
+import { reserveSocial, upsertManySocial } from "@/lib/socialPlan";
+import { HORIZON_MS, ROBOT_KINDS } from "@/lib/socialReserve.mjs";
 
 export const dynamic = "force-dynamic";
 
@@ -8,10 +9,13 @@ export const dynamic = "force-dynamic";
 // dans GitHub Actions (.github/workflows/social-publish.yml), qui lit cette
 // file dans KV : un clic = une seule requête Worker, quel que soit le lot.
 //
-// Corps : { theme, design?, items: [{ id, title, date?, design?, captions?: { instagram, facebook } }] }
+// Corps : { kind?, theme, design?, items: [{ id, title, date?, design?, captions?: { instagram, facebook } }] }
+// kind : concours par défaut, ou boutique, cours, blog (voir ROBOT_KINDS).
 // design : réglages du Studio (style, ton, hashtags, fin de texte) communs au
 // lot ; celui d'un concours (textes de l'affiche retouchés) s'y ajoute.
 // Sans date : publication immédiate, on réveille le workflow tout de suite.
+// Une date lointaine sans texte retouché part dans la réserve (voir
+// lib/socialReserve.mjs) : la file du Studio n'est ni relue ni réécrite.
 
 const OWNER = "SAADDEV0";
 const REPO = "SaadConcours";
@@ -43,35 +47,43 @@ async function wakeWorkflow() {
 export async function POST(req) {
   const body = await req.json().catch(() => null);
   const items = Array.isArray(body?.items) ? body.items.filter((it) => it?.id).slice(0, 60) : [];
-  if (!items.length) return NextResponse.json({ error: "Aucun concours à publier." }, { status: 400 });
+  if (!items.length) return NextResponse.json({ error: "Aucun contenu à publier." }, { status: 400 });
+  const kind = ROBOT_KINDS.includes(body.kind) ? body.kind : "concours";
 
   const now = Date.now();
   const entries = [];
+  const far = [];
   for (const it of items) {
     const at = it.date && !Number.isNaN(Date.parse(it.date)) ? new Date(it.date).toISOString() : new Date(now).toISOString();
+    const design = { ...(body.design || {}), ...(it.design || {}) };
+    if (Date.parse(at) > now + HORIZON_MS && !it.captions?.instagram && !it.captions?.facebook) {
+      far.push({ kind, itemId: String(it.id), theme: body.theme, design, date: at });
+      continue;
+    }
     for (const platform of PLATFORMS) {
       entries.push({
-        kind: "concours",
+        kind,
         itemId: String(it.id),
         title: String(it.title || it.id),
         platform,
         status: "planned",
         auto: true,
         theme: body.theme,
-        design: { ...(body.design || {}), ...(it.design || {}) },
+        design,
         date: at,
         caption: it.captions?.[platform] || "",
-        url: `${SITE}/concours/${encodeURIComponent(it.id)}?utm_source=${platform}&utm_medium=social&utm_campaign=concours`,
+        url: `${SITE}/${kind}/${encodeURIComponent(it.id)}?utm_source=${platform}&utm_medium=social&utm_campaign=${kind}`,
         note: it.date ? "Publication automatique" : "Publication immédiate",
       });
     }
   }
 
   try {
-    const saved = await upsertManySocial(entries);
+    await reserveSocial(far);
+    const saved = entries.length ? await upsertManySocial(entries) : [];
     const dueNow = saved.some((e) => Date.parse(e.date) <= now + 5 * 60000);
     const woken = dueNow ? await wakeWorkflow() : false;
-    return NextResponse.json({ entries: saved, woken }, { status: 201 });
+    return NextResponse.json({ entries: saved, reserved: far.length, woken }, { status: 201 });
   } catch (err) {
     console.error("social publish", err);
     return NextResponse.json({ error: "Mise en file impossible." }, { status: 500 });

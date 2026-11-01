@@ -1,14 +1,15 @@
 name: Publication Instagram + Facebook
 
-# Publie les carrousels « extrait » que l'admin a cochés puis validés dans
-# /admin/social (bouton « Publier », ou « Programmer » pour une date). Le
-# robot ne choisit jamais rien lui-même : sans clic de l'admin, la file est
-# vide et il ne publie rien. Tout se passe ici et chez Meta :
+# Publie ce que l'admin a coché puis validé dans /admin/social (bouton
+# « Publier », ou « Programmer » pour une date) : carrousels « extrait » des
+# concours, posts à une image pour les cahiers, cours et articles. Le robot
+# ne choisit jamais rien lui-même : sans clic de l'admin, la file est vide et
+# il ne publie rien. Tout se passe ici et chez Meta :
 # rien ne passe par le Worker Cloudflare, donc aucun effet sur son quota.
 #
 # Toutes les 15 minutes, une première étape (quelques secondes, sans
-# checkout) regarde dans KV s'il y a quelque chose à publier ; sinon le
-# passage s'arrête là. Dépôt public : les minutes Actions sont gratuites.
+# checkout) regarde dans KV s'il y a quelque chose à publier ou à ranger
+# (lib/socialReserve.mjs) ; sinon le passage s'arrête là. Dépôt public : les minutes Actions sont gratuites.
 #
 # Secrets à créer (Settings > Secrets and variables > Actions) :
 #   META_PAGE_ID        identifiant de la Page Facebook
@@ -50,15 +51,22 @@ jobs:
           fi
           due=$(node -e '
             (async () => {
-              const r = await fetch(process.env.KV_REST_API_URL, { method: "POST", headers: { Authorization: "Bearer " + process.env.KV_REST_API_TOKEN }, body: JSON.stringify(["GET", "admin:social:plan"]) });
-              let v = (await r.json()).result;
+              const kv = async (...cmd) => (await (await fetch(process.env.KV_REST_API_URL, { method: "POST", headers: { Authorization: "Bearer " + process.env.KV_REST_API_TOKEN }, body: JSON.stringify(cmd) })).json()).result;
+              let v = await kv("GET", "admin:social:plan");
               for (let i = 0; i < 2 && typeof v === "string"; i++) v = JSON.parse(v);
-              const now = Date.now() + 120000;
-              const due = (Array.isArray(v) ? v : []).filter((e) => e.auto === true && e.status === "planned" && e.kind === "concours" && ["instagram", "facebook"].includes(e.platform) && Date.parse(e.date) <= now);
-              console.log(due.length);
+              const t = Date.now();
+              const day = 86400000;
+              const nets = ["instagram", "facebook"];
+              const kinds = ["concours", "boutique", "cours", "blog"];
+              const robot = (Array.isArray(v) ? v : []).filter((e) => nets.includes(e.platform));
+              const due = robot.filter((e) => e.auto === true && e.status === "planned" && kinds.includes(e.kind) && Date.parse(e.date) <= t + 120000);
+              const far = robot.filter((e) => e.auto === true && e.status === "planned" && !e.caption && Date.parse(e.date) > t + 3 * day);
+              const old = robot.filter((e) => e.status === "published" && Date.parse(e.date) < t - 30 * day);
+              const back = await kv("ZCOUNT", "admin:social:reserve", "-inf", String(t + 3 * day));
+              console.log(due.length + far.length + old.length + Number(back || 0));
             })().catch((e) => { console.error(e.message); console.log(0); });
           ')
-          echo "Publications dues : $due"
+          echo "Publications dues ou à ranger : $due"
           echo "due=$due" >> "$GITHUB_OUTPUT"
 
       - name: Checkout (sans les scans)
