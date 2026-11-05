@@ -8,7 +8,7 @@ import { useJson, useCorrigeFiles } from "../_lib/content";
 import { COLLECTIONS } from "../_lib/collections";
 import { api } from "../_lib/api";
 import { useLocalStorage } from "../_lib/hooks";
-import { daysUntil, num, plural, timeAgo } from "../_lib/format";
+import { dateFr, daysUntil, num, plural, timeAgo } from "../_lib/format";
 import { useDeployState } from "../_ui/DeployStatus";
 import { labelForPath } from "../_lib/labels";
 
@@ -104,7 +104,9 @@ export default function Dashboard() {
 
   const series = m?.metrics
     ? [
-        { name: "Visites", color: "var(--accent-fill)", area: true, points: m.metrics.visits.points },
+        { name: "Visites", color: "var(--accent-fill)", area: true, points: m.metrics.sessions.points },
+        // Seul compteur avec tout l'historique (les visites sont mesurées depuis la v2).
+        { name: "Nouveaux visiteurs", color: "#f59e0b", points: m.metrics.newVisitors.points },
         { name: "PDF téléchargés", color: "#0d9488", area: true, points: m.metrics.pdf.points },
       ]
     : null;
@@ -163,21 +165,30 @@ export default function Dashboard() {
         <Stat
           icon="users"
           label="Visites"
-          value={m ? num(m.metrics?.visits.total) : "…"}
-          foot={m?.metrics && (<><Delta value={m.metrics.visits.deltaPct} /> vs période précédente</>)}
-          spark={m?.metrics?.visits.points.map((p) => p.value)}
+          value={m ? num(m.metrics?.sessions.total) : "…"}
+          foot={
+            m?.metrics &&
+            (m.metrics.coverage.full ? (
+              <>
+                <Delta value={m.metrics.sessions.deltaPct} /> vs période précédente
+              </>
+            ) : (
+              `mesurées depuis le ${dateFr(m.metrics.coverage.since)} · ${num(m.metrics.newVisitors.total)} nouveaux visiteurs`
+            ))
+          }
+          spark={m?.metrics?.sessions.points.map((p) => p.value)}
           href="/admin/statistiques"
         />
         <Stat
           icon="download"
           label="PDF téléchargés"
           value={m ? num(m.metrics?.pdf.total) : "…"}
-          foot={m?.metrics && (<><Delta value={m.metrics.pdf.deltaPct} /> · {String(m.metrics.conversionPct).replace(".", ",")} % des visites</>)}
+          foot={m?.metrics && (<><Delta value={m.metrics.pdf.deltaPct} />{m.metrics.conversionPct !== null && ` · ${String(m.metrics.conversionPct).replace(".", ",")} % des visites`}</>)}
           spark={m?.metrics?.pdf.points.map((p) => p.value)}
           color="#0d9488"
           href="/admin/statistiques?onglet=pdf"
         />
-        <Stat icon="zap" label="Aujourd'hui" value={m?.totals ? num(m.totals.visitsToday) : "…"} foot={m?.totals && `visites · ${num(m.totals.pdfToday)} PDF`} />
+        <Stat icon="zap" label="Aujourd'hui" value={m?.totals ? num(m.totals.sessionsToday) : "…"} foot={m?.totals && `visites · ${num(m.totals.pageviewsToday)} pages vues · ${num(m.totals.pdfToday)} PDF`} href="/admin/statistiques" />
         <Stat
           icon="mail"
           label="Abonnés"

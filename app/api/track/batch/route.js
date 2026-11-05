@@ -31,6 +31,8 @@ const SOURCE_RE = /^[a-z0-9._-]{1,32}$/;
 const PATH_RE = /^\/[a-zA-Z0-9\-_/]{0,180}$/;
 const AD_TYPES = ["view", "click"];
 const PDF_KINDS = ["concours", "cours", "evaluation"];
+// Appareil de la première page de session : m = mobile, t = tablette, d = ordinateur.
+const DEVICES = ["m", "t", "d"];
 
 function sanitizeSource(raw) {
   if (typeof raw !== "string") return null;
@@ -59,7 +61,8 @@ const HANDLERS = {
       // first === false : page suivante de la même session → vue comptée,
       // mais pas de nouvelle entrée ville / journal des visiteurs.
       const first = e.first !== false;
-      return path ? trackPathView(path, ctx, { first, source: first && e.source ? sanitizeSource(e.source) : null }) : null;
+      const device = first && DEVICES.includes(e.dv) ? e.dv : null;
+      return path ? trackPathView(path, ctx, { first, source: first && e.source ? sanitizeSource(e.source) : null, device }) : null;
     },
   },
   ad: {

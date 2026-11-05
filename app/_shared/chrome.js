@@ -693,8 +693,21 @@ export const chromeScript = function initChrome() {
       first = seen.length === 0;
       sessionStorage.setItem("sc_paths", JSON.stringify([...seen, location.pathname].slice(-200)));
     } catch {}
-    queueTrackEvent(first ? { t: "page-path", path: location.pathname, first, source: detectSource() } : { t: "page-path", path: location.pathname, first });
+    queueTrackEvent(first ? { t: "page-path", path: location.pathname, first, source: detectSource(), dv: detectDevice() } : { t: "page-path", path: location.pathname, first });
   })();
+
+  // Type d'appareil de la visite (statistiques « Appareils ») : une lettre,
+  // rien d'identifiant. Les iPad récents se présentent comme un Mac tactile.
+  function detectDevice() {
+    try {
+      const ua = navigator.userAgent || "";
+      if (/iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua)) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return "t";
+      if (/Mobi|iPhone|iPod|Android/i.test(ua)) return "m";
+      return "d";
+    } catch {
+      return null;
+    }
+  }
 
   (function initTheme() {
     const saved = localStorage.getItem("theme");

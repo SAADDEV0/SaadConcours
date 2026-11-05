@@ -8,6 +8,10 @@ const STATIC = {
   "/": "Accueil",
   "/concours": "Concours (liste)",
   "/cours": "Cours Licence (liste)",
+  "/droit": "Cours Droit (liste)",
+  "/boutique": "Boutique",
+  "/recherche": "Recherche",
+  "/mentions-legales": "Mentions légales",
   "/evaluation": "Évaluations (liste)",
   "/news": "Concours ouverts",
   "/blog": "Blog (liste)",
@@ -80,6 +84,9 @@ function describeCours(espace, id, content, sub) {
   };
 }
 
+// [icône, rubrique] des pages de liste.
+const LISTINGS = { concours: ["concours", "concours"], cours: ["cours", "cours"], droit: ["cours", "droit"], evaluation: ["quiz", "quiz"], blog: ["blog", "blog"] };
+
 export function describePath(path, content = {}) {
   const [, section, id, sub] = String(path || "").split("/");
   const decoded = id ? decodeURIComponent(id) : "";
@@ -90,6 +97,10 @@ export function describePath(path, content = {}) {
   if (section === "evaluation" && decoded) return { ...base, kind: "quiz", section: "quiz", title: find(content.quiz, decoded)?.title || decoded, tags: ["Évaluation"] };
   if (section === "blog" && decoded) return { ...base, kind: "blog", section: "blog", title: find(content.blog, decoded)?.title || decoded, tags: ["Article"] };
   if (section === "bac") return { ...base, kind: "bac", section: "bac", title: labelForPath(path, content), tags: ["Bac"] };
+  // Pages de liste (/concours, /blog…) : rangées dans leur rubrique, pas dans
+  // « Autres pages ».
+  const listing = LISTINGS[section];
+  if (listing && !decoded) return { ...base, kind: listing[0], section: listing[1], title: labelForPath(path, content), tags: ["Liste"] };
   return { ...base, kind: "page", section: "page", title: labelForPath(path, content), tags: [] };
 }
 

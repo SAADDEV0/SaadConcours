@@ -12,7 +12,7 @@ import { num } from "../_lib/format";
 export default function BoutiquePage() {
   const [shop, setShop] = useState(null);
   useEffect(() => {
-    api("/api/admin/metrics?preset=30d")
+    api("/api/admin/metrics?scope=shop")
       .then((d) => setShop(d.shop || { views: {}, clicks: {} }))
       .catch(() => setShop({ views: {}, clicks: {} }));
   }, []);

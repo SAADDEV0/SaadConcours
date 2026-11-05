@@ -48,13 +48,16 @@ export function SectionTitle({ children, aside }) {
 
 /* ------------------------------ Onglets synchronisés avec l'URL ------------------------------ */
 
-export function useTab(tabs, param = "onglet") {
+// `clear` : paramètres propres à un onglet, retirés quand on en change (sinon
+// une fiche ouverte dans un onglet réapparaît en y revenant plus tard).
+export function useTab(tabs, param = "onglet", clear = []) {
   const sp = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const current = tabs.find((t) => t.key === sp.get(param))?.key || tabs[0].key;
   function set(key) {
     const next = new URLSearchParams(sp.toString());
+    if (key !== current) for (const k of clear) next.delete(k);
     if (key === tabs[0].key) next.delete(param);
     else next.set(param, key);
     const qs = next.toString();
@@ -149,6 +152,9 @@ export function ErrorState({ error, onRetry }) {
 /* ------------------------------ Indicateurs ------------------------------ */
 
 export function Delta({ curr, prev, value }) {
+  // null explicite : rien de comparable (période précédente vide ou pas encore
+  // mesurée). Un « ▲ 100 % » laissait croire à un doublement.
+  if (value === null) return <span className="ax-delta" title="Pas de période précédente comparable">—</span>;
   const d = value ?? pctDelta(curr, prev);
   if (!Number.isFinite(d) || d === 0) return <span className="ax-delta">= 0 %</span>;
   return (
@@ -270,7 +276,7 @@ export function LineChart({ series, height = 220 }) {
       <div className="ax-chart-legend">
         {series.map((s) => (
           <span key={s.name}>
-            <i style={{ background: s.color }} />
+            <i style={s.dashed ? { background: `repeating-linear-gradient(90deg, ${s.color} 0 4px, transparent 4px 7px)` } : { background: s.color }} />
             {s.name}
           </span>
         ))}
@@ -292,11 +298,15 @@ export function LineChart({ series, height = 220 }) {
           ) : null
         )}
         {series.map((s) => {
-          const d = s.points.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join("");
+          // Une série de comparaison peut avoir un point de plus ou de moins
+          // (semaines à cheval) : elle est coupée à la longueur de l'axe.
+          const pts = s.points.slice(0, n);
+          if (!pts.length) return null;
+          const d = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join("");
           return (
             <g key={s.name}>
-              {s.area && <path className="area" d={`${d}L${x(n - 1)},${y(0)}L${x(0)},${y(0)}Z`} fill={s.color} />}
-              <path className="line" d={d} stroke={s.color} vectorEffect="non-scaling-stroke" />
+              {s.area && <path className="area" d={`${d}L${x(pts.length - 1)},${y(0)}L${x(0)},${y(0)}Z`} fill={s.color} />}
+              <path className="line" d={d} stroke={s.color} vectorEffect="non-scaling-stroke" strokeDasharray={s.dashed ? "5 4" : undefined} opacity={s.dashed ? 0.75 : undefined} />
             </g>
           );
         })}
@@ -307,7 +317,8 @@ export function LineChart({ series, height = 220 }) {
           <strong>{points[hover.i].full || points[hover.i].label}</strong>
           {series.map((s) => (
             <div key={s.name}>
-              <span style={{ color: s.color }}>●</span> {s.name} : <strong>{num(s.points[hover.i]?.value)}</strong>
+              <span style={{ color: s.color }}>{s.dashed ? "┅" : "●"}</span> {s.name}
+              {s.dashed && s.points[hover.i]?.full ? ` (${s.points[hover.i].full})` : ""} : <strong>{num(s.points[hover.i]?.value)}</strong>
             </div>
           ))}
         </div>
