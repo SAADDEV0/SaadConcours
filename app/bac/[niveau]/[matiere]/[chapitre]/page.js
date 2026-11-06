@@ -3,7 +3,8 @@ import { marked } from "marked";
 import { chromeHtml, footerHtml } from "../../../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../../../_shared/mathMarkdown";
 import MathScripts from "../../../../_shared/MathScripts";
-import { fitTitle, clampDescription } from "../../../../_shared/seoText";
+import { fitTitle } from "../../../../_shared/seoText";
+import { descriptionChapitreBac } from "../../../../_shared/bacSeo";
 import { breadcrumbJsonLd } from "../../../../_shared/listingSchema";
 import JsonLd from "../../../../_shared/JsonLd";
 import BacQcm from "../../../BacQcm";
@@ -26,10 +27,6 @@ const ONGLETS = [
 ];
 
 const rempli = (v) => Boolean(v) && (!Array.isArray(v) || v.length > 0);
-
-function descriptionDe(m, niv, titre) {
-  return clampDescription(`${m.nom} ${niv.label} : ${titre}. Cours, exercices corrigés, résumé et QCM.`);
-}
 
 // Titres de sections du cours (## et ###), pour `teaches` : ce que le chapitre
 // enseigne vraiment, comme le sommaire des chapitres FSJES.
@@ -59,9 +56,10 @@ export async function generateMetadata(props) {
   const niv = bacNiveauInfo(niveau);
   const t = found.chapitre.titre;
   const title = fitTitle([`${t} — ${m.court} ${niv.label}`, `${t} — ${niv.label}`, t]);
+  const contenu = await getBacChapitreEffectif(niveau, matiere, chapitre);
   return {
     title,
-    description: descriptionDe(m, niv, t),
+    description: descriptionChapitreBac(m, niv, t, contenu?.cours),
     alternates: { canonical: `/bac/${niveau}/${matiere}/${chapitre}` },
   };
 }
@@ -95,7 +93,7 @@ export default async function BacChapitrePage(props) {
     "@type": "LearningResource",
     name: c.titre,
     headline: c.titre,
-    description: descriptionDe(m, niv, c.titre),
+    description: descriptionChapitreBac(m, niv, c.titre, contenu.cours),
     url: `${SITE_URL}${bacChapitreHref(m, c)}`,
     // L'anglais est rédigé en anglais mais n'a pas de `lang` (réservé à l'arabe, qui change le sens d'écriture).
     inLanguage: m.lang || (m.slug === "anglais" ? "en" : "fr"),

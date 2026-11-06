@@ -185,15 +185,30 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   passage à Next 16. Toujours écrire `images: ["/opengraph-image"]` (ou l'image propre à la page).
 - Pages de confiance : `/a-propos` (éditeur : Saad), `/contact`, `/confidentialite`,
   `/mentions-legales`, toutes liées depuis le pied de page. Les tenir exactes quand le site change.
+- Pas de meta description gabarit identique d'une page à l'autre (audit Search Console du 2026-11-06) :
+  une description dit ce que la page enseigne. Chapitres Bac : `app/_shared/bacSeo.js` les tire des
+  titres `##`/`###` du cours ; un chapitre Bac doit donc avoir des titres de sections parlants.
+- Maillage : un bloc « À lire aussi » ou « sujets proches » ne propose pas les mêmes N premiers
+  éléments partout — il prend les voisins de la page (`getRelatedPosts`, `app/blog/[id]/page.js`).
+  Sinon les éléments suivants ne sont liés que depuis la liste et restent « détectés, non indexés ».
+- Une adresse retirée que Googlebot redemande (404 dans Search Console, servie par le Worker) reçoit
+  une règle dans `public/_redirects` vers la page qui la remplace (ex. anciennes images de partage
+  `/blog/:id/opengraph-image/og`, 2026-11-06).
 
 ### 1.8 GEO (moteurs de réponse IA) : règles fixées par l'audit du 2026-10-02
 - Chaque type de fiche publique a son JSON-LD + `BreadcrumbList` (concours, chapitres FSJES et Bac,
   matières, blog, QCM). Un nouveau type de page en reçoit un sur le même modèle.
 - `public/llms.txt` est écrit à la main : ses chiffres sont des planchers (« plus de 270 sujets »).
   Le mettre à jour quand un module ou une matière s'ajoute, ou quand un plancher est largement dépassé.
+  Ne jamais y écrire « chaque sujet a un corrigé » : vérifier la part réelle (`corrige_md`) ; dire
+  que la boutique est payante (le reste est gratuit).
 - IndexNow part tout seul à chaque déploiement (`scripts/indexnow.mjs`, étape du workflow de
   déploiement) : ne pas supprimer la clé `public/e657fda819c595e0829622889594962d.txt`.
-- `robots.txt` autorise les crawlers IA : ne jamais les bloquer.
+- `robots.txt` autorise les crawlers IA : ne jamais les bloquer. Les nommer explicitement quand un
+  nouveau apparaît (ajoutés le 2026-11-06 : Claude-SearchBot, Claude-User, Perplexity-User,
+  Applebot-Extended).
+- Le JSON-LD `WebSite` (`app/layout.js`) porte `alternateName` (« Saad Concours », 2e requête de
+  marque) et renvoie à l'organisation par `publisher.@id` : ne pas les retirer.
 
 ---
 

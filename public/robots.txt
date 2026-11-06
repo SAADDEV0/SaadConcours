@@ -42,6 +42,16 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
+User-Agent: Claude-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: Claude-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
 User-Agent: Claude-Web
 Allow: /
 Disallow: /admin
@@ -53,6 +63,16 @@ Disallow: /admin
 Disallow: /api/
 
 User-Agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: Perplexity-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-Agent: Applebot-Extended
 Allow: /
 Disallow: /admin
 Disallow: /api/

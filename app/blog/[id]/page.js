@@ -20,13 +20,25 @@ async function findPost(id) {
   return { p: list.find((x) => x.id === id) || null, list };
 }
 
-// Same category first (most relevant to keep reading), then the rest,
-// most recent first — better internal linking than an arbitrary slice.
+// Même catégorie d'abord (le plus utile pour continuer la lecture), puis le
+// reste. Dans la catégorie, les voisins de l'article en tournant autour de lui
+// (suivant, précédent, puis les suivants) : chaque article reçoit ainsi des
+// liens de ses voisins. Jusqu'en novembre 2026, les 4 premiers articles de la
+// catégorie étaient proposés partout : 12 des 28 articles « méthode » n'étaient
+// liés que depuis /blog, et Google les laissait « détectés, non indexés ».
 function getRelatedPosts(list, current, limit = 4) {
-  const others = list.filter((x) => x.id !== current.id && x.available);
-  const sameCategory = others.filter((x) => x.category === current.category);
-  const rest = others.filter((x) => x.category !== current.category);
-  return [...sameCategory, ...rest].slice(0, limit);
+  const visibles = list.filter((x) => x.available);
+  const cercle = visibles.filter((x) => x.category === current.category);
+  const i = cercle.findIndex((x) => x.id === current.id);
+  const voisins = [];
+  for (let d = 1; i >= 0 && d < cercle.length && voisins.length < limit; d++) {
+    for (const j of [i + d, i - d]) {
+      const x = cercle[((j % cercle.length) + cercle.length) % cercle.length];
+      if (x.id !== current.id && !voisins.includes(x) && voisins.length < limit) voisins.push(x);
+    }
+  }
+  const rest = visibles.filter((x) => x.category !== current.category);
+  return [...voisins, ...rest].slice(0, limit);
 }
 
 export async function generateMetadata(props) {

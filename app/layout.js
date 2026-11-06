@@ -151,11 +151,20 @@ function orgJsonLd(settings) {
 // potentialAction/SearchAction : Google a retiré la « sitelinks search box »
 // en novembre 2024 et n'en lit plus le balisage. Le ?q= de /concours
 // (ConcoursExplorer.js) reste utilisable dans un lien.
+// alternateName : « saad concours » est, avec « saadconcours », la requête qui
+// amène le plus de clics (Search Console, novembre 2026) ; Google s'en sert
+// pour reconnaître le nom du site sous ses deux graphies. publisher renvoie à
+// l'organisation ci-dessus (même @id) pour que Google et les moteurs de réponse
+// IA relient le site à son éditeur.
 const WEBSITE_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
   name: SITE_NAME,
+  alternateName: ["Saad Concours", "saadconcours.space"],
   url: SITE_URL,
+  inLanguage: ["fr", "ar"],
+  publisher: { "@id": `${SITE_URL}/#organization` },
 };
 
 // Réglages des liens du pied de page (SOCIAL_NETWORKS, app/_shared/chrome.js).

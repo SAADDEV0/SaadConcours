@@ -243,3 +243,10 @@
 /encg/* /cours 301
 /taalim/* /concours 301
 /images/Taalim/* /concours 301
+
+# Images de partage des articles : jusqu'à Next 15, generateImageMetadata leur
+# donnait l'adresse /blog/<id>/opengraph-image/og ; depuis Next 16 elles sont à
+# /blog/<id>/opengraph-image (voir app/blog/[id]/opengraph-image.js). Googlebot
+# redemandait encore les anciennes : 404 dans Search Console (novembre 2026),
+# servies par le Worker.
+/blog/:id/opengraph-image/og /blog/:id/opengraph-image 301
