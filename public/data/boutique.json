@@ -858,5 +858,48 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-06"
+  },
+  {
+    "id": "cahier-comptabilite-approfondie-s5",
+    "titre": "Cahier de préparation — Comptabilité Approfondie (S5)",
+    "sousTitre": "Le module expliqué en français simple, les écritures du CGNC pas à pas, 170 QCM corrigés, 20 exercices et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Comptabilité Approfondie",
+    "cours": "comptaapprof_cours",
+    "description": "Ce cahier prépare l'examen de **Comptabilité Approfondie**, un module du semestre 5 en Licence FSJES (parcours Gestion financière et comptable). Il prolonge la comptabilité générale du S1 et du S2 : les opérations qui durent plusieurs exercices et les grandes opérations de la vie d'une société. Il est écrit en **français simple** : des phrases courtes, chaque mot expliqué avec sa traduction arabe, et chaque écriture donnée avec le **numéro et l'intitulé du compte** du plan comptable marocain (CGNC).\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les comptes et les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés au journal, pas à pas. Toutes les écritures sont équilibrées et tous les comptes ont été contrôlés sur la liste officielle du CGNC.\n\nAu programme : les travaux d'inventaire (stocks, régularisations, créances douteuses, écarts de conversion, extournes), les amortissements dégressifs et dérogatoires, les provisions et les cessions, les immobilisations complexes (avances, production immobilisée, réévaluation), le crédit-bail chez le preneur et son retraitement, les titres, les contrats à long terme, les subventions, l'escompte, les engagements hors bilan, les événements postérieurs à la clôture, les fusions et une introduction à la consolidation. À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, et un **mémo de la veille** avec toutes les écritures types.\n\nLe cours complet reste gratuit sur le site : [Comptabilité Approfondie (S5)](/cours/comptaapprof_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 88 mots de la comptabilité (français-arabe)",
+      "Chapitre 1 · Les travaux d'inventaire et les régularisations",
+      "Chapitre 2 · Amortissements, provisions et cessions",
+      "Chapitre 3 · Les immobilisations : opérations complexes",
+      "Chapitre 4 · Le crédit-bail chez le preneur",
+      "Chapitre 5 · Les titres",
+      "Chapitre 6 · Les contrats à long terme",
+      "Chapitre 7 · Subventions, engagements hors bilan et événements postérieurs",
+      "Chapitre 8 · Fusions et introduction à la consolidation",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "170 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés au journal : inventaire, devises, dérogatoires, cessions, crédit-bail, titres, contrats à long terme, subventions, fusion, consolidation",
+      "Numéros et intitulés des comptes contrôlés sur la liste officielle du CGNC",
+      "Lexique de 88 mots en français-arabe et un mémo de toutes les écritures types"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 108,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-comptabilite-approfondie-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-06"
   }
 ]
