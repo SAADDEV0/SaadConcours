@@ -901,5 +901,48 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-06"
+  },
+  {
+    "id": "cahier-droit-des-affaires-s5",
+    "titre": "Cahier de préparation — Droit des Affaires (S5)",
+    "sousTitre": "Le module expliqué en français simple, les articles du Code de commerce à citer, 170 QCM corrigés, 11 cas pratiques et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Droit des Affaires",
+    "cours": "droitaffaires_cours",
+    "description": "Ce cahier prépare l'examen de **Droit des Affaires**, un module du semestre 5 en Licence FSJES (Gestion). C'est le droit de la vie des entreprises : qui est commerçant, ce qu'est un fonds de commerce, comment on paie avec une lettre de change ou un chèque, et ce qui arrive à une entreprise qui ne peut plus payer. Il est écrit en **français simple** : des phrases courtes, chaque mot juridique expliqué avec sa traduction arabe, et des exemples tirés de la vie marocaine.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, **les articles à citer**, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des **cas pratiques corrigés en syllogisme** (faits, problème de droit, règle, solution). Les articles cités ont été vérifiés sur les textes officiels publiés par le ministère de la Justice : Code de commerce, loi 49-16 sur les baux commerciaux, loi 53-95 sur les tribunaux de commerce, loi 114-13 sur l'auto-entrepreneur.\n\nAu programme : les sources et les tribunaux de commerce, les actes de commerce, le commerçant et l'auto-entrepreneur, le fonds de commerce et le bail commercial, la vente, le nantissement et la location-gérance du fonds, la lettre de change, le billet à ordre et le chèque (avec la réforme de 2026 du chèque sans provision), les contrats commerciaux et bancaires, les sûretés, et les entreprises en difficulté (loi 73-17). À la fin : la méthodologie du cas pratique et de la dissertation, **trois examens blancs** avec barème et corrigé, dont une dissertation avec copie modèle, et un **mémo de la veille** avec tous les délais.\n\nLe cours complet reste gratuit sur le site : [Droit des Affaires (S5)](/cours/droitaffaires_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 89 mots du droit des affaires (français-arabe)",
+      "Chapitre 1 · Le droit des affaires : notion, sources et juridictions",
+      "Chapitre 2 · Les actes de commerce",
+      "Chapitre 3 · Le commerçant",
+      "Chapitre 4 · Le fonds de commerce et le bail commercial",
+      "Chapitre 5 · Vente, apport, nantissement et location-gérance du fonds",
+      "Chapitre 6 · Les effets de commerce : lettre de change, billet à ordre, chèque",
+      "Chapitre 7 · Contrats commerciaux, contrats bancaires et sûretés",
+      "Chapitre 8 · Les entreprises en difficulté",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot juridique expliqué",
+      "170 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des cas pratiques corrigés en syllogisme : commerçant, bail commercial, vente du fonds, lettre de change, chèque, garanties, procédures collectives",
+      "Articles vérifiés sur les textes officiels ; mémo de tous les délais à connaître",
+      "Lexique de 89 mots en français-arabe et une dissertation avec copie modèle"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 100,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-droit-des-affaires-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-06"
   }
 ]
