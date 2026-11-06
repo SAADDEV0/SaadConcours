@@ -772,5 +772,48 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-05"
+  },
+  {
+    "id": "cahier-introduction-sciences-economiques-s1",
+    "titre": "Cahier de préparation — Introduction aux Sciences Économiques (S1)",
+    "sousTitre": "Le module expliqué en français simple, les auteurs et les dates à citer, 170 QCM corrigés, 17 exercices et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Introduction aux Sciences Économiques",
+    "cours": "introeco_cours",
+    "description": "Ce cahier prépare l'examen d'**Introduction aux Sciences Économiques**, un module du semestre 1 en Licence FSJES (Économie). C'est souvent ton premier cours d'économie : il pose les bases de la micro, de la macro, de la monnaie et de l'histoire de la pensée. Le cahier est écrit en **français simple** : des phrases courtes, chaque mot expliqué avec sa traduction arabe, et des exemples tirés du Maroc (HCP, Bank Al-Maghrib, marché de gros, sécheresse).\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les auteurs, les dates et les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à lire une FPP, à équilibrer un circuit, à calculer une valeur ajoutée, une inflation, un prix d'équilibre, un avantage comparatif, un multiplicateur et un IDH.\n\nAu programme : l'objet de l'économie et la rareté, les agents et le circuit, la production et les revenus, la monnaie, le marché et l'État, les systèmes économiques, les grands auteurs d'Ibn Khaldoun à Keynes et Friedman, la croissance et les crises. À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, dont une dissertation avec copie modèle, et un **mémo de la veille** avec les auteurs, les dates et les formules.\n\nLe cours complet reste gratuit sur le site : [Introduction aux Sciences Économiques (S1)](/cours/introeco_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 83 mots de l'économie (français-arabe)",
+      "Chapitre 1 · L'économie : objet, méthodes et rareté",
+      "Chapitre 2 · Les agents économiques et le circuit",
+      "Chapitre 3 · Production, revenus, consommation et épargne",
+      "Chapitre 4 · La monnaie et le financement de l'économie",
+      "Chapitre 5 · Marché, prix et intervention de l'État",
+      "Chapitre 6 · Les systèmes économiques",
+      "Chapitre 7 · La pensée économique, d'Aristote à nos jours",
+      "Chapitre 8 · Croissance, développement et fluctuations",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "170 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : FPP, circuit, valeur ajoutée, inflation, équilibre de marché, avantage comparatif, multiplicateur, IDH",
+      "Tous les grands auteurs avec leur date, d'Ibn Khaldoun à Keynes et Friedman",
+      "Lexique de 83 mots en français-arabe et une dissertation avec copie modèle"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 98,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-introduction-sciences-economiques-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-06"
   }
 ]
