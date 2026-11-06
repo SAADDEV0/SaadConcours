@@ -815,5 +815,48 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-06"
+  },
+  {
+    "id": "cahier-choix-investissement-et-financement-s5",
+    "titre": "Cahier de préparation — Choix d'Investissement et Modes de Financement (S5)",
+    "sousTitre": "Le module expliqué en français simple, les formules à retenir, 170 QCM corrigés, 20 exercices et 3 examens blancs pour réussir l'examen du S5.",
+    "niveau": "licence",
+    "matiere": "Choix d'Investissement et Modes de Financement",
+    "cours": "choixinvest_cours",
+    "description": "Ce cahier prépare l'examen de **Choix d'Investissement et Modes de Financement**, un module du semestre 5 en Licence FSJES (parcours Gestion financière et comptable). C'est un module de calcul : on te donne un projet, tu dis s'il faut le faire et comment le payer. Le cahier est écrit en **français simple** : des phrases courtes, chaque mot expliqué avec sa traduction arabe, et des exemples tirés du Maroc (Bourse de Casablanca, AMMC, banques participatives, IS à 20 %).\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des exercices corrigés pas à pas. Tu apprends à bâtir l'échéancier des flux d'un projet, à calculer une VAN, un indice de profitabilité, un TRI par interpolation et un délai de récupération, à trancher un conflit de critères (taux de Fisher, annuité équivalente), à raisonner en avenir risqué et incertain.\n\nLa deuxième moitié traite du financement : autofinancement et augmentation de capital (DPS), emprunt et tableau d'amortissement, coût actuariel, obligations, crédit-bail et finance participative, coût du capital (Gordon-Shapiro, MEDAF, CMPC), effet de levier, choix entre emprunt et crédit-bail et **plan de financement**. À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, et un **mémo de la veille** avec toutes les formules.\n\nLe cours complet reste gratuit sur le site : [Choix d'Investissement et Modes de Financement (S5)](/cours/choixinvest_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 88 mots de la finance (français-arabe)",
+      "Chapitre 1 · Le projet d'investissement et ses flux de trésorerie",
+      "Chapitre 2 · VAN, indice de profitabilité, TRI et délai de récupération",
+      "Chapitre 3 · Comparer et classer des projets",
+      "Chapitre 4 · Le choix en avenir risqué et incertain",
+      "Chapitre 5 · Le financement par fonds propres",
+      "Chapitre 6 · L'endettement, le crédit-bail et la finance participative",
+      "Chapitre 7 · Le coût du capital et la structure financière",
+      "Chapitre 8 · Choisir un financement et bâtir le plan de financement",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "170 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : flux de trésorerie, VAN, TRI, taux de Fisher, risque, DPS, emprunt, CMPC, crédit-bail, plan de financement",
+      "Tous les chiffres recalculés, avec un impôt sur les sociétés de 20 % (taux de 2026)",
+      "Lexique de 88 mots en français-arabe et un mémo de toutes les formules"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 102,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-choix-investissement-et-financement-s5/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-06"
   }
 ]
