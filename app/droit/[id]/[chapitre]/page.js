@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllDroit, getSettings } from "@/lib/store";
+import { getAllBoutique, getAllDroit, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../../_shared/mathMarkdown";
 import { breadcrumbJsonLd } from "../../../_shared/listingSchema";
@@ -14,6 +14,8 @@ import { droitLangueInfo, droitRangLabel } from "../../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droitOuvert, isDroitPublie, droitEquivalent } from "../../../../lib/droit";
 import { slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { Icon } from "../../../_shared/icons";
+import CahierCours from "../../../_shared/CahierCours";
+import { cahierDuCours, formatPrix } from "../../../../lib/boutique";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -163,6 +165,7 @@ export default async function DroitChapitrePage(props) {
   const onglets = ONGLETS.filter((o) => aDuContenu(ch[o.code]));
   const settings = await getSettings().catch(() => null);
   const { annexe } = droitModule(c);
+  const cahier = cahierDuCours(await getAllBoutique().catch(() => []), c.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -228,6 +231,14 @@ export default async function DroitChapitrePage(props) {
                   </a>
                 )}
               </div>
+              {cahier && (
+                <div className="bac-side-card">
+                  <div className="bac-side-title">Préparer l&apos;examen</div>
+                  <a href={`/boutique/${encodeURIComponent(cahier.id)}`} className="bac-side-link">
+                    Cahier de préparation <span>{formatPrix(cahier.prix, cahier.devise)}</span>
+                  </a>
+                </div>
+              )}
             </aside>
 
             <main className="bac-main">
@@ -292,6 +303,8 @@ export default async function DroitChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <CahierCours cahier={cahier} module={c.module} compact />
 
               <AdSlot settings={settings} placement="cours_chapitre" />
 

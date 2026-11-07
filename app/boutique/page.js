@@ -1,4 +1,4 @@
-import { getAllBoutique, getAllCours } from "@/lib/store";
+import { getAllBoutique, getAllCours, getAllDroit } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
 import { boutiqueCardHtml } from "../_shared/boutiqueCard";
@@ -35,7 +35,9 @@ export async function generateMetadata() {
 // Une section par semestre, comme /cours : le semestre vient du cours lié au
 // cahier. Un cahier sans cours (concours, Bac) va dans « Autres cahiers ».
 async function donnees() {
-  const [boutique, cours] = await Promise.all([getAllBoutique(), getAllCours().catch(() => [])]);
+  // Cours FSJES et modules de Droit (un cahier de Droit, en français ou en arabe, est lié à droit.json).
+  const [boutique, coursFsjes, droit] = await Promise.all([getAllBoutique(), getAllCours().catch(() => []), getAllDroit().catch(() => [])]);
+  const cours = [...coursFsjes, ...droit];
   const semestreDe = (p) => cours.find((c) => c.id === p.cours)?.semestre || "";
   const produits = trierProduits(boutique.filter(isProduitVisible)).map((p) => ({ ...p, semestre: semestreDe(p) }));
   const groupes = [

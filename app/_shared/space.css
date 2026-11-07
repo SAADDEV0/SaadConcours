@@ -639,3 +639,5 @@
 }
 .sr-help{margin:0; font-size:.92rem; line-height:1.65; color:var(--text-dim); max-width:72ch;}
 
+/* Cahier en arabe (قانون الأسرة) : pas d'espacement entre lettres, il casse les liaisons. */
+.sp-cahier:lang(ar) .sp-cahier-kicker{letter-spacing:0; text-transform:none; font-size:.8rem;}

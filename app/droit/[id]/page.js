@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllDroit, getSettings } from "@/lib/store";
+import { getAllBoutique, getAllDroit, getSettings } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import { breadcrumbJsonLd } from "../../_shared/listingSchema";
@@ -12,6 +12,8 @@ import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { droitLangueInfo, droitRangLabel } from "../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie, droitEquivalent } from "../../../lib/droit";
 import { Icon } from "../../_shared/icons";
+import CahierCours from "../../_shared/CahierCours";
+import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 
 const SITE_URL = "https://www.saadconcours.space";
 const RESSOURCES = [
@@ -134,6 +136,8 @@ export default async function DroitModulePage(props) {
   const annexeMd = annexe.startsWith("# ") ? annexe.replace(/^## /gm, "### ").replace(/^# /gm, "## ") : annexe;
   const annexeHtml = annexe ? renderMarkdownWithMath(marked, annexeMd) : "";
   const settings = await getSettings().catch(() => null);
+  // Cahier de préparation lié à ce module (champ `cours` de la fiche boutique), comme pour les cours FSJES.
+  const cahier = cahierDuCours(await getAllBoutique().catch(() => []), c.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -193,6 +197,19 @@ export default async function DroitModulePage(props) {
                   <Icon name="file-pdf" size={18} />
                   Cours complet en PDF
                 </button>
+                {cahier && (
+                  <a className="sp-btn" href={`/boutique/${encodeURIComponent(cahier.id)}`}>
+                    <Icon name="book-open" size={18} />
+                    {cahier.langue === "ar" ? (
+                      <span dir="rtl" lang="ar">
+                        دفتر التحضير
+                      </span>
+                    ) : (
+                      "Cahier de préparation"
+                    )}{" "}
+                    · {formatPrix(cahier.prix, cahier.devise)}
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -210,6 +227,11 @@ export default async function DroitModulePage(props) {
                     <span>
                       <Icon name="ruler" size={16} />
                     </span>
+                  </a>
+                )}
+                {cahier && (
+                  <a href="#cahier" className="bac-side-link">
+                    Cahier de préparation <span>{formatPrix(cahier.prix, cahier.devise)}</span>
                   </a>
                 )}
               </div>
@@ -279,6 +301,8 @@ export default async function DroitModulePage(props) {
                   </div>
                 ))}
               </section>
+
+              <CahierCours cahier={cahier} module={c.module} />
 
               <AdSlot settings={settings} placement="cours_module" />
 

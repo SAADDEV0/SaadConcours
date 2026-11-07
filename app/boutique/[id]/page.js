@@ -1,20 +1,27 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllBoutique, getAllCours } from "@/lib/store";
+import { getAllBoutique, getAllCours, getAllDroit } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import MathScripts from "../../_shared/MathScripts";
 import { boutiqueCardHtml } from "../../_shared/boutiqueCard";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
-import { accrocheCourte, boutiqueNiveau, commandeHref, formatPrix, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
+import { accrocheCourte, boutiqueNiveau, commandeHref, coursLieHref, formatPrix, isProduitAchetable, isProduitVisible, produitImage, remisePct, trierProduits } from "../../../lib/boutique";
 import { fsjesModule } from "../../../lib/fsjesChapitres";
+import { droitModule, droitOuvert, isDroitPublie } from "../../../lib/droit";
 import ProduitClient, { ShareButton } from "./ProduitClient";
 import { Icon } from "../../_shared/icons";
 
 const SITE_URL = "https://www.saadconcours.space";
 
+// Cours FSJES et modules de Droit publiés : un cahier peut être lié à l'un ou à l'autre.
+async function coursLies() {
+  const [cours, droit] = await Promise.all([getAllCours().catch(() => []), droitOuvert() ? getAllDroit().catch(() => []) : []]);
+  return [...cours, ...droit.filter(isDroitPublie).map((c) => ({ ...c, espace: "droit" }))];
+}
+
 async function findProduit(id) {
-  const [boutique, coursList] = await Promise.all([getAllBoutique(), getAllCours().catch(() => [])]);
+  const [boutique, coursList] = await Promise.all([getAllBoutique(), coursLies()]);
   const list = boutique.filter(isProduitVisible);
   const p = list.find((x) => x.id === id) || null;
   return { p, list, coursList, cours: coursDe(p, coursList) };
@@ -30,6 +37,10 @@ function coursDe(p, coursList) {
 // caractères au nom du module (seoText.js).
 function titreSeo(p, cours) {
   if (!cours) return p.titre;
+  if (p.langue === "ar") {
+    const nom = `دفتر التحضير ${p.matiere} ${cours.semestre}`;
+    return fitTitle([`${nom} PDF`, nom, p.titre]);
+  }
   const nom = `Cahier de préparation ${p.matiere} ${cours.semestre}`;
   return fitTitle([`${nom} FSJES`, nom, p.titre]);
 }
@@ -37,6 +48,7 @@ function titreSeo(p, cours) {
 function descriptionSeo(p, cours) {
   const accroche = accrocheCourte(p);
   if (!cours || !accroche) return clampDescription(p.sousTitre || `Cahier de préparation ${boutiqueNiveau(p.niveau)?.long || ""} en PDF.`);
+  if (p.langue === "ar") return clampDescription(`دفتر التحضير لامتحان ${p.matiere} (${cours.semestre}) بصيغة PDF بثمن ${formatPrix(p.prix, p.devise)}: ${p.sousTitre} يطلب عبر واتساب.`);
   return clampDescription(`${p.matiere} (Licence FSJES ${cours.semestre}) : cahier de préparation en PDF à ${formatPrix(p.prix, p.devise)}, ${accroche}. En français simple, commande sur WhatsApp.`);
 }
 
@@ -72,6 +84,8 @@ export default async function ProduitPage(props) {
   const { id } = await props.params;
   const { p, list, coursList, cours } = await findProduit(id);
   if (!p) notFound();
+  // Cahier en arabe : titre, accroche, points forts, présentation et sommaire de droite à gauche.
+  const rtl = p.langue === "ar" ? { dir: "rtl", lang: "ar" } : {};
 
   const niv = boutiqueNiveau(p.niveau);
   const url = `${SITE_URL}/boutique/${p.id}`;
@@ -163,8 +177,12 @@ export default async function ProduitPage(props) {
                 )}
                 {p.matiere ? ` · ${p.matiere}` : ""}
               </div>
-              <h1>{p.titre}</h1>
-              {p.sousTitre && <p className="shop-detail-sub">{p.sousTitre}</p>}
+              <h1 {...rtl}>{p.titre}</h1>
+              {p.sousTitre && (
+                <p className="shop-detail-sub" {...rtl}>
+                  {p.sousTitre}
+                </p>
+              )}
 
               <div className="shop-buybox">
                 <div className="shop-buybox-price">
@@ -232,7 +250,7 @@ export default async function ProduitPage(props) {
           {(p.pointsForts || []).length > 0 && (
             <section className="bac-group">
               <h2 className="bac-section-title">Ce que tu trouveras dedans</h2>
-              <ul className="shop-points">
+              <ul className="shop-points" {...rtl}>
                 {p.pointsForts.map((pt) => (
                   <li key={pt}>
                     <Icon name="check-circle" size={17} />
@@ -247,7 +265,7 @@ export default async function ProduitPage(props) {
             <section className="bac-group">
               <h2 className="bac-section-title">Présentation</h2>
               <div className="cd-card">
-                <div className="enonce-content" dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
+                <div className="enonce-content" {...rtl} dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
               </div>
             </section>
           )}
@@ -255,7 +273,7 @@ export default async function ProduitPage(props) {
           {(p.sommaire || []).length > 0 && (
             <section className="bac-group">
               <h2 className="bac-section-title">Sommaire</h2>
-              <ol className="shop-sommaire">
+              <ol className="shop-sommaire" {...rtl}>
                 {p.sommaire.map((s, i) => (
                   <li key={i}>{s}</li>
                 ))}
@@ -266,7 +284,7 @@ export default async function ProduitPage(props) {
           {achetable && (
             <div className="shop-cta-bottom">
               <div>
-                <strong>{p.titre}</strong>
+                <strong {...rtl}>{p.titre}</strong>
                 <span>{formatPrix(p.prix, p.devise)} · PDF envoyé sur WhatsApp</span>
               </div>
               <a className="sp-btn primary shop-buy" href={href} target="_blank" rel="noopener" data-shop-buy={p.id}>
@@ -279,14 +297,16 @@ export default async function ProduitPage(props) {
           {cours && (
             <section className="bac-group">
               <h2 className="bac-section-title">Le cours gratuit de ce module</h2>
-              <a className="bac-mat-card" href={`/cours/${encodeURIComponent(cours.id)}`}>
+              <a className="bac-mat-card" href={coursLieHref(cours)}>
                 <span className="bac-mat-body">
-                  <span className="bac-mat-name">
+                  <span className="bac-mat-name" dir={cours.langue === "ar" ? "rtl" : undefined}>
                     {cours.module} ({cours.semestre})
                   </span>
-                  <span className="bac-mat-desc sp-desc-clamp">{cours.description}</span>
+                  <span className="bac-mat-desc sp-desc-clamp" dir={cours.langue === "ar" ? "rtl" : undefined}>
+                    {cours.description}
+                  </span>
                   <span className="bac-mat-meta">
-                    <span>{fsjesModule(cours).chapitres.length} chapitres</span>
+                    <span>{(cours.espace === "droit" ? droitModule(cours) : fsjesModule(cours)).chapitres.length} chapitres</span>
                     <span className="bac-dot">·</span>
                     <span>Cours, exercices corrigés, résumé et QCM</span>
                   </span>

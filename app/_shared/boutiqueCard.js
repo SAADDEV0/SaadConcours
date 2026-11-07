@@ -20,8 +20,8 @@ export function boutiqueCardHtml(p) {
     </span>
     <span class="shop-body">
       <span class="sp-card-kicker">${niv ? `${iconHtml(niv.icon, { size: 14 })} ${escapeHtml(niv.label)}` : "Cahier"}${p.matiere ? ` · ${escapeHtml(p.matiere)}` : ""}</span>
-      <span class="shop-title">${escapeHtml(p.titre)}</span>
-      ${p.sousTitre ? `<span class="shop-sub">${escapeHtml(p.sousTitre)}</span>` : ""}
+      <span class="shop-title"${p.langue === "ar" ? ' dir="rtl" lang="ar"' : ""}>${escapeHtml(p.titre)}</span>
+      ${p.sousTitre ? `<span class="shop-sub"${p.langue === "ar" ? ' dir="rtl" lang="ar"' : ""}>${escapeHtml(p.sousTitre)}</span>` : ""}
       <span class="shop-foot">
         <span class="shop-price">
           ${achetable ? `<strong>${escapeHtml(formatPrix(p.prix, p.devise))}</strong>` : `<strong class="shop-soon">Bientôt disponible</strong>`}
