@@ -8,7 +8,7 @@
 // mais ne l'évalue qu'à la première requête qui le vise (le contenu du Bac de
 // /api/admin/bac-content ne coûte rien aux autres routes).
 
-import { readdir, mkdir, writeFile } from "node:fs/promises";
+import { readdir, readFile, mkdir, writeFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 
 const ROOT = process.cwd();
@@ -72,6 +72,9 @@ const body =
     .join("\n") +
   "\n];\n";
 
+// N'écrit que si la table a changé : `wrangler dev` surveille worker/, et une
+// réécriture à l'identique relancerait le build en boucle.
 await mkdir(OUT_DIR, { recursive: true });
-await writeFile(OUT, body);
-console.log(`  worker/.generated/api-routes.js : ${routes.length} routes /api`);
+const previous = await readFile(OUT, "utf8").catch(() => null);
+if (previous !== body) await writeFile(OUT, body);
+console.log(`  worker/.generated/api-routes.js : ${routes.length} routes /api${previous === body ? " (inchangée)" : ""}`);
