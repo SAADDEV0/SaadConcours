@@ -32,12 +32,16 @@
 //   revalidate, elle reste servie par le Worker plutôt que d'être gelée en
 //   douce dans les assets.
 //
-// SÉCURITÉ
-//   Les assets sont servis AVANT le Worker, donc avant middleware.js. Un HTML
-//   d'admin copié ici serait accessible sans authentification. Aujourd'hui
-//   aucune page /admin n'est prérendue (elles sont rendues côté client), mais
-//   on ne s'en remet pas à ça : /admin et /api sont exclus explicitement, et
-//   le script échoue si une telle route se présente.
+// SÉCURITÉ : LA CONSOLE
+//   Les assets sont servis AVANT le Worker. Depuis le 2026-11-07, les pages
+//   /admin sont prérendues elles aussi (coquilles client, aucune donnée : tout
+//   passe par /api/admin/*, protégé) et publiées ici avec leurs charges RSC,
+//   pour que la console ne démarre plus le Worker Next.js de 19 Mo. Elles ne
+//   sont pas publiques pour autant : `run_worker_first` (wrangler.jsonc) fait
+//   passer ces chemins par le Worker d'entrée (worker/index.js), qui vérifie
+//   la session avant de servir l'asset. Le script relit wrangler.jsonc et
+//   échoue si un seul fichier publié sous /admin n'est plus couvert par ces
+//   motifs. Une route /api prérendue reste refusée.
 
 // LE SITEMAP, AVEC UN GARDE-FOU
 //   next build produit aussi le corps des route handlers (sitemap.xml.body,
@@ -60,17 +64,51 @@
 //   perdraient leur Content-Type image/png et les crawlers sociaux les
 //   rejetteraient.
 
-import { readFile, writeFile, readdir, rm, mkdir, copyFile, access } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { readFile, writeFile, readdir, rm, mkdir, copyFile, access, cp } from "node:fs/promises";
+import { dirname, join, relative, sep } from "node:path";
 
 const APP_DIR = ".next/server/app";
 const ASSETS_DIR = ".open-next/assets";
 const MANIFEST = ".next/prerender-manifest.json";
 
-// Servies avant le middleware : jamais en statique, quoi qu'il arrive.
-const NEVER_STATIC = [/^\/admin(\/|$)/, /^\/api(\/|$)/];
+// Jamais en statique, quoi qu'il arrive.
+const NEVER_STATIC = [/^\/api(\/|$)/];
+// Publiées, mais derrière la vérification de session du Worker d'entrée.
+const GATED = /^\/admin(\/|$)/;
 
 const exists = async (p) => access(p).then(() => true, () => false);
+
+// wrangler.jsonc est du JSON avec commentaires ; les chaînes contiennent des
+// « /* » ("/admin/*"), d'où un vrai parcours plutôt qu'une regex.
+function parseJsonc(text) {
+  let out = "";
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === '"') {
+      let j = i + 1;
+      while (j < text.length && text[j] !== '"') j += text[j] === "\\" ? 2 : 1;
+      out += text.slice(i, j + 1);
+      i = j;
+    } else if (c === "/" && text[i + 1] === "/") {
+      while (i < text.length && text[i] !== "\n") i++;
+      out += "\n";
+    } else if (c === "/" && text[i + 1] === "*") {
+      i = text.indexOf("*/", i + 2) + 1;
+    } else out += c;
+  }
+  return JSON.parse(out.replace(/,(\s*[}\]])/g, "$1"));
+}
+
+const wrangler = parseJsonc(await readFile("wrangler.jsonc", "utf8"));
+const workerFirst = (wrangler.assets?.run_worker_first || []).map(
+  (p) => new RegExp("^" + p.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$"),
+);
+const gatedFiles = [];
+// Chemin d'URL d'un fichier publié, tel que Cloudflare le servirait.
+const urlPathsFor = (rel) => {
+  const p = "/" + rel.split(sep).join("/");
+  return p.endsWith(".html") ? [p, p.slice(0, -5)] : [p];
+};
 
 // "/" -> "index.html" ; "/concours" -> "concours.html".
 // Cloudflare sert /foo.html pour /foo et /index.html pour / (html_handling
@@ -88,9 +126,30 @@ const missing = [];
 for (const [route, meta] of routes) {
   if (NEVER_STATIC.some((re) => re.test(route))) {
     throw new Error(
-      `Route protégée prérendue en HTML : ${route}\n` +
-        `Les assets court-circuitent middleware.js, la copier la rendrait publique.`,
+      `Route d'API prérendue : ${route}\n` +
+        `Les assets court-circuitent le Worker, la copier la rendrait publique.`,
     );
+  }
+
+  // Console : HTML + charge RSC + segments de préchargement (navigation
+  // côté client), servis par worker/index.js après vérification de session.
+  if (GATED.test(route)) {
+    if (meta.initialRevalidateSeconds) {
+      throw new Error(`Page de console revalidable : ${route}. Elle doit être statique (voir app/admin/layout.js).`);
+    }
+    const base = route.replace(/^\//, "");
+    for (const rel of [`${base}.html`, `${base}.rsc`, `${base}.segments`]) {
+      const src = join(APP_DIR, rel);
+      if (!(await exists(src))) {
+        if (rel.endsWith(".html")) throw new Error(`Page de console sans HTML prérendu : ${src}`);
+        continue;
+      }
+      const dest = join(ASSETS_DIR, rel);
+      await mkdir(dirname(dest), { recursive: true });
+      await cp(src, dest, { recursive: true });
+    }
+    gatedFiles.push(route);
+    continue;
   }
 
   // false | null | 0 => pas d'ISR. Tout le reste doit rester dynamique.
@@ -116,6 +175,42 @@ for (const [route, meta] of routes) {
 }
 
 console.log(`  ${copied} pages prérendues publiées en assets statiques`);
+
+// Chaque fichier publié sous /admin doit passer par le Worker d'entrée. On
+// parcourt ce qui est réellement dans les assets (pas seulement ce que ce
+// script vient d'y mettre) : un fichier admin venu d'ailleurs, de public/
+// par exemple, serait public lui aussi.
+async function* walk(dir) {
+  for (const entry of await readdir(dir, { withFileTypes: true }).catch(() => [])) {
+    const p = join(dir, entry.name);
+    if (entry.isDirectory()) yield* walk(p);
+    else yield p;
+  }
+}
+const exposed = [];
+let gatedCount = 0;
+for (const top of ["admin", "admin.html", "admin.rsc", "admin.segments"]) {
+  const start = join(ASSETS_DIR, top);
+  if (!(await exists(start))) continue;
+  const files = top.includes(".") && !top.endsWith(".segments") ? [start] : [];
+  if (!files.length) for await (const f of walk(start)) files.push(f);
+  for (const f of files) {
+    gatedCount += 1;
+    for (const urlPath of urlPathsFor(relative(ASSETS_DIR, f))) {
+      if (!workerFirst.some((re) => re.test(urlPath))) exposed.push(urlPath);
+    }
+  }
+}
+if (exposed.length) {
+  throw new Error(
+    `Fichiers de console servis sans vérification de session : ${exposed.slice(0, 5).join(", ")}` +
+      (exposed.length > 5 ? ` (+${exposed.length - 5})` : "") +
+      `\nAjouter leur chemin à assets.run_worker_first dans wrangler.jsonc.`,
+  );
+}
+if (gatedFiles.length) {
+  console.log(`  ${gatedFiles.length} pages de console publiées derrière la session (${gatedCount} fichiers, run_worker_first)`);
+}
 if (skippedRevalidate.length) {
   console.log(`  ${skippedRevalidate.length} laissées au Worker (revalidate défini) :`);
   for (const r of skippedRevalidate.slice(0, 10)) console.log(`      ${r}`);

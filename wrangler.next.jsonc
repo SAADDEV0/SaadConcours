@@ -1,0 +1,59 @@
+// WORKER NEXT.JS « saad-concours-next » : le bundle OpenNext.
+//
+// Il n'a pas de route : il ne reçoit que ce que le Worker d'entrée
+// « saad-concours » (wrangler.jsonc, worker/index.js) lui transmet par la
+// liaison de service NEXT — en pratique les 404 et les images de partage
+// (opengraph-image). /admin et /api ne passent plus par lui depuis le
+// 2026-11-07 : démarrer ces 19 Mo à froid dépassait les limites du plan
+// gratuit (Error 1102).
+//
+// Les commandes OpenNext le visent explicitement :
+//   npx opennextjs-cloudflare build -c wrangler.next.jsonc
+//   npx opennextjs-cloudflare populateCache remote -c wrangler.next.jsonc
+//   npx wrangler deploy -c wrangler.next.jsonc
+//
+// Secret : GITHUB_TOKEN seulement (lecture des données pour rendre une page
+// à la demande), poussé à chaque déploiement par le workflow depuis le
+// secret Actions GH_CONTENT_TOKEN. Les autres secrets restent sur
+// « saad-concours ».
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "saad-concours-next",
+
+	"account_id": "e38ffe4a64fbc0fd8f29348d0719ba71",
+	"compatibility_date": "2026-09-01",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+	// Les mêmes assets que le Worker d'entrée : OpenNext y lit son cache
+	// incrémental (open-next.config.ts, cdn-cgi/_next_cache). Envoyés une
+	// seconde fois au déploiement, mais seuls les fichiers modifiés partent.
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+
+	// Joignable seulement par la liaison de service du Worker d'entrée.
+	"workers_dev": false,
+	"preview_urls": false,
+
+	// Required by the cache layer to revalidate itself; the service name
+	// must match "name" above.
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "saad-concours-next"
+		}
+	],
+
+	// ISR cache lives in Workers KV rather than R2, deliberately: R2 demands
+	// a payment method on file even for its free tier, and the whole point of
+	// this move is to stay at zero cost. KV's free allowance (100k reads and
+	// 1k writes a day) is far above this site's ISR usage.
+	"kv_namespaces": [
+		{
+			"binding": "NEXT_INC_CACHE_KV",
+			"id": "1886be2a51204085a314198293cf13f6"
+		}
+	]
+}

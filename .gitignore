@@ -47,3 +47,7 @@ graphify-out/
 # Données de l'application mobile, régénérées à chaque build
 # (scripts/build-app-data.mjs, « prebuild »).
 public/app-data/
+
+# Table des routes /api du Worker d'entrée, régénérée par
+# scripts/build-worker-routes.mjs à chaque wrangler dev / deploy.
+worker/.generated/

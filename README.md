@@ -86,7 +86,8 @@ construction de rendre une 1102. Le sitemap y est publié aussi (le script refus
 un sitemap tronqué), et les redirections vivent dans `public/_redirects`, lu par
 Cloudflare avant le Worker — jamais un `redirect()` Next sur une URL publique.
 Le Worker ne garde que `/admin`, `/api/*`, les images de partage
-(`opengraph-image`) et les 404. Les icônes et le manifeste sont des fichiers de
+(`opengraph-image`) et les 404 — et ce n'est plus le bundle Next.js qui sert
+`/admin` et `/api` (voir « Deux Workers » ci-dessous). Les icônes et le manifeste sont des fichiers de
 `public/` (plus des routes Next) et les en-têtes de cache des assets vivent dans
 `public/_headers`. Le même script réduit la copie déployée de `public/data/` à ce
 que le site lit : sans le champ `source`, sans brouillons ni sujets d'espaces
@@ -119,6 +120,41 @@ En pratique, quand tu touches à une page publique :
   n'a aucune limite CPU — et ne frappe en production qu'une fraction des
   requêtes.
 
+### Deux Workers : la console et l'API ne démarrent plus Next.js
+
+Le 2026-11-07, `/admin` rendait une `Error 1102` : un tiers des requêtes vers
+`/admin` ou `/api` restaient sans réponse plus de trois minutes, y compris
+`/api/admin/health` sans cookie, qui n'exécute presque rien. En cause, le
+démarrage du bundle Next.js (19 Mo, dont 12 de contenu de cours que le Worker
+ne sert jamais), pas le code des routes. Depuis :
+
+| Worker | Config | Sert |
+|---|---|---|
+| `saad-concours` (route `www.saadconcours.space/*`, secrets) | `wrangler.jsonc`, code `worker/index.js` | les assets (avant tout), `/api/*` sans Next.js, `/admin*` après vérification de session |
+| `saad-concours-next` (sans route) | `wrangler.next.jsonc`, bundle OpenNext | ce que le premier lui transmet (liaison `NEXT`) : 404, images de partage |
+
+- **`/api/*`** : `worker/index.js` importe `app/api/**/route.js` tels quels ;
+  `next/server` y est remplacé par `worker/next-server.js` (clé `alias`) et la
+  table des routes est régénérée à chaque `wrangler dev`/`deploy`
+  (`scripts/build-worker-routes.mjs`). Une route ajoutée dans `app/api` est donc
+  servie sans rien d'autre à faire — tant qu'elle n'utilise de `next/server`
+  que `NextResponse`, `NextRequest`, `cookies` et `nextUrl` (sinon le build de
+  wrangler échoue sur l'export manquant).
+- **`/admin*`** : les pages de la console sont prérendues (coquilles client) et
+  publiées dans les assets par `scripts/prerender-to-assets.mjs`, avec leurs
+  charges RSC pour la navigation. `run_worker_first` les fait passer d'abord
+  par le Worker d'entrée, qui vérifie la session (`lib/adminAuth.js`, la même
+  règle que `middleware.js`). Le script échoue si un fichier publié sous
+  `/admin` n'est plus couvert par ces motifs. Ne rien lire côté serveur dans
+  une page de console (`cookies()`, `headers()`...) : elle redeviendrait
+  dynamique.
+- **Le CI le vérifie** (étape *Admin and API must not start Next.js*) : 36
+  requêtes console/API à la suite, chacune en moins de 15 s, sans `x-opennext`.
+- Pour tester en local le montage de production :
+  `npx opennextjs-cloudflare build -c wrangler.next.jsonc`, puis
+  `node scripts/prerender-to-assets.mjs`, puis
+  `npx wrangler dev -c wrangler.jsonc -c wrangler.next.jsonc`.
+
 Le diagnostic quand une 1102 apparaît quand même :
 
 ```bash
@@ -133,8 +169,10 @@ invalide, qui est systématique et non intermittente.
 
 Le site a quitté Vercel pour Cloudflare Workers le 21/09/2026. Le déploiement est fait par
 GitHub Actions (`.github/workflows/deploy-cloudflare.yml`) à chaque push sur `main` :
-`opennextjs-cloudflare build`, publication des pages prérendues en assets
-(`scripts/prerender-to-assets.mjs`), `wrangler deploy`, puis vérifications en production
+`opennextjs-cloudflare build -c wrangler.next.jsonc`, publication des pages prérendues en assets
+(`scripts/prerender-to-assets.mjs`), `wrangler deploy` du Worker Next.js
+(`-c wrangler.next.jsonc`, qui reçoit `GITHUB_TOKEN` depuis `GH_CONTENT_TOKEN`) puis du
+Worker d'entrée (`wrangler.jsonc`), puis vérifications en production
 (pages en 200, sitemap complet, aucune page publique servie par le Worker) et envoi IndexNow.
 L'en-tête du workflow détaille chaque étape.
 

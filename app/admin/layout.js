@@ -2,12 +2,15 @@ import "./admin.css";
 import MathScripts from "../_shared/MathScripts";
 import { getSettings } from "@/lib/store";
 
-// Jamais prérendue : scripts/prerender-to-assets.mjs refuse toute page /admin
-// en HTML statique (les assets passent avant middleware.js). Jusqu'ici, la
-// lecture de getSettings() par l'API GitHub rendait la console dynamique par
-// effet de bord ; depuis qu'elle lit le checkout pendant le build, il faut le
-// dire explicitement.
-export const dynamic = "force-dynamic";
+// Prérendue au build depuis le 2026-11-07, comme les pages publiques : la
+// console est une coquille client (toutes ses données passent par
+// /api/admin/*), et la rendre à la demande obligeait à démarrer le Worker
+// Next.js de 19 Mo, ce qui finissait en Error 1102 sur un isolate froid.
+// scripts/prerender-to-assets.mjs publie ces pages dans les assets, et le
+// Worker d'entrée (worker/index.js) ne les sert qu'après avoir vérifié la
+// session (`run_worker_first` de wrangler.jsonc). Ne pas y lire cookies(),
+// headers() ni searchParams côté serveur : la page redeviendrait dynamique et
+// le build la refuserait.
 
 export const metadata = {
   title: { template: "%s · Console SaadConcours", absolute: "Console SaadConcours" },

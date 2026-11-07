@@ -55,10 +55,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Deux Workers depuis le 2026-11-07 (en-tête de worker/index.js) :
+      #   saad-concours-next  le bundle Next.js (wrangler.next.jsonc), sans route ;
+      #   saad-concours       le Worker d'entrée (wrangler.jsonc) : /api, /admin,
+      #                       les assets, et le reste transmis au premier.
       - name: Build for Cloudflare
         env:
           GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
-        run: npx opennextjs-cloudflare build
+        run: npx opennextjs-cloudflare build -c wrangler.next.jsonc
 
       # Sort les pages publiques du chemin du Worker. Sans cette étape,
       # OpenNext les sert depuis le cache incrémental, donc via le Worker,
@@ -72,9 +76,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx opennextjs-cloudflare populateCache remote
+        run: npx opennextjs-cloudflare populateCache remote -c wrangler.next.jsonc
 
-      - name: Deploy
+      # En premier : le Worker d'entrée s'y relie par une liaison de service,
+      # qui exige que la cible existe. Il reçoit GITHUB_TOKEN (le même jeton
+      # que GH_CONTENT_TOKEN) pour rendre une page à la demande avec les
+      # données à jour ; les autres secrets restent sur saad-concours.
+      - name: Deploy the Next.js Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_CONTENT_TOKEN: ${{ secrets.GH_CONTENT_TOKEN }}
+        run: |
+          set -e
+          secrets="$RUNNER_TEMP/next-secrets.env"
+          umask 077
+          printf 'GITHUB_TOKEN=%s\n' "$GH_CONTENT_TOKEN" > "$secrets"
+          npx wrangler deploy -c wrangler.next.jsonc --secrets-file "$secrets"
+          rm -f "$secrets"
+
+      - name: Deploy the entry Worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
@@ -172,6 +192,43 @@ jobs:
             echo "scripts/prerender-to-assets.mjs n'avait rien à publier."
             exit 1
           fi
+
+      # LE MÊME GARDE-FOU POUR LA CONSOLE
+      #
+      # /admin et /api sont servis par le Worker d'entrée, sans Next.js. Le
+      # 2026-11-07, servis par le bundle Next.js, un tiers des requêtes y
+      # restaient sans réponse plusieurs minutes puis finissaient en Error
+      # 1102. Ici : douze appels de suite à /api/admin/health (401 attendu,
+      # sans cookie), /admin (redirection vers la connexion) et /admin/login
+      # (200), chacun en moins de 15 s et sans l'en-tête x-opennext.
+      - name: Admin and API must not start Next.js
+        run: |
+          set -e
+          fail=0
+          check() {
+            path="$1"; want="$2"
+            out=$(curl -s -o /dev/null -D - -w 'HTTP_CODE=%{http_code}' --max-time 15 \
+              "https://www.saadconcours.space$path" | tr -d '\r' || true)
+            code=$(printf '%s' "$out" | sed -n 's/.*HTTP_CODE=//p')
+            if printf '%s' "$out" | grep -qi '^x-opennext:'; then
+              echo "  $path -> $code, SERVI PAR NEXT.JS"; fail=1
+            elif [ "$code" != "$want" ]; then
+              echo "  $path -> ${code:-pas de réponse en 15 s} (attendu $want)"; fail=1
+            fi
+          }
+          for i in $(seq 1 12); do
+            check "/api/admin/health" 401
+            check "/admin" 307
+            check "/admin/login" 200
+          done
+          if [ "$fail" = "1" ]; then
+            echo ""
+            echo "FAILED: la console ou l'API ne passe plus par le Worker d'entrée"
+            echo "(worker/index.js), ou ne répond pas. Vérifier wrangler.jsonc"
+            echo "(main, run_worker_first) et la sortie de prerender-to-assets."
+            exit 1
+          fi
+          echo "  36 requêtes console/API servies sans Next.js"
 
       # INDEXNOW : PRÉVENIR BING DES PAGES CHANGÉES
       #
