@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Oujda.
+
 ## Dissertation — Monnaie, régimes de change et cryptomonnaies
 
 ### Introduction

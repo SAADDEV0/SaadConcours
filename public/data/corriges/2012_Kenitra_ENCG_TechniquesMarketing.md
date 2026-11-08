@@ -1,4 +1,4 @@
-> Corrigé indicatif.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Kénitra.
 
 **1. Choix de positionnement pour Ambre Solaire**
 

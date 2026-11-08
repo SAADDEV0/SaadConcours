@@ -314,4 +314,3 @@ a) En
 b) Où
 c) Y
 d) Est
-

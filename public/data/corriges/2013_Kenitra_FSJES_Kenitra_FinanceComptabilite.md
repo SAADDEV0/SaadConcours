@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Kénitra.
+
 ## I.1 — Résultat analytique (comptabilité des coûts)
 
 **Coûts d'achat des matières** (frais d'approvisionnement répartis au prorata des quantités achetées : 1 000/1 400 pour le plastique, 400/1 400 pour le verre) :

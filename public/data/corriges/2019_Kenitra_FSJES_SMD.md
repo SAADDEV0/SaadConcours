@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du vocabulaire standard du marketing digital et de la distribution — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Kénitra. Il est rédigé à partir du vocabulaire standard du marketing digital et de la distribution — aucune grille de correction officielle disponible pour ce sujet.
 
 1. **b** — L'affiliation rémunère un site tiers pour diffuser les publicités d'un annonceur.
 2. **d** — L'annonceur est celui qui investit dans la publicité/communication pour promouvoir son offre.

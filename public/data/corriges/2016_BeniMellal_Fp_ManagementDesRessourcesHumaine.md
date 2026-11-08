@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane), avec calculs détaillés.
 
 **Q1. c)** — Un comité de pilotage doit rassembler les responsables des différentes activités concernées par le projet, afin de coordonner les décisions à un niveau représentatif, sous la conduite d'un seul pilote.
 

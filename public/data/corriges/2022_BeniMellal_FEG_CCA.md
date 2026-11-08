@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Béni Mellal.
+
 ## Q.C.M. — Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Les questions 13, 14, 17 et 18 n'ont, après calcul détaillé, **aucune réponse correspondant exactement parmi les propositions** (voir détail) — à vérifier avec ton corrigé de cours si disponible. À vérifier, en particulier Q32.

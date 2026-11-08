@@ -1,4 +1,4 @@
-> Corrigé avec justifications.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr), avec justifications.
 
 Q1. **C, D** — les conditions de travail concrètes recouvrent le temps/horaires de travail et la pénibilité (le profil de poste et les facteurs psychologiques relèvent d'autres notions : poste de travail, climat social).
 Q2. **D** — la décision stratégique se caractérise par la multiplicité et l'interdépendance des variables en jeu, l'incertitude et la difficulté à cerner les relations de cause à effet (à l'inverse de A et B).

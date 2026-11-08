@@ -1,4 +1,4 @@
-> Corrigé indicatif rédigé à partir du programme standard de macro/microéconomie, statistique et mathématiques — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi. Il est rédigé à partir du programme standard de macro/microéconomie, statistique et mathématiques — aucune grille de correction officielle disponible pour ce sujet.
 
 **Partie 1 — Macroéconomie**
 

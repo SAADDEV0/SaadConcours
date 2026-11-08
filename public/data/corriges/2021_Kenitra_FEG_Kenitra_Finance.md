@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Kénitra (FSJES).
+
 ## Questions diverses
 
 1. **MASI vs MADEX** : le MASI (Moroccan All Shares Index) couvre toutes les actions cotées à la Bourse de Casablanca ; le MADEX ne retient que les valeurs les plus liquides en flottant (~20 titres). Le MASI est aujourd'hui l'indice de référence national.

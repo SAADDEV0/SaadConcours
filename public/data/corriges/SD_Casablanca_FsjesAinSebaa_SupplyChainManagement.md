@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ, avec calculs détaillés.
 
 **I. Impact du système d'information sur la performance de l'activité logistique (plan de réponse)**
 

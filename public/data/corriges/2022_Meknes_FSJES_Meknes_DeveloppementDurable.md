@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (économie territoriale, gouvernance climatique) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Les annotations manuscrites visibles sur le scan, au-dessus de l'énoncé, restent illisibles et ne sont pas reconstituées.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Il est rédigé à partir du programme standard du module (économie territoriale, gouvernance climatique) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Les annotations manuscrites visibles sur le scan, au-dessus de l'énoncé, restent illisibles et ne sont pas reconstituées.
 
 ### Sujet de spécialité — Plan de réponse
 

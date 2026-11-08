@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia.
+
 ## Exercice 1 — Coûts complets (entreprise GUITT)
 
 ### 1. Tableau de répartition des charges indirectes

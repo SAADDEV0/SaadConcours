@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard de GRH, théorie des organisations et méthodologie de recherche. Le scan original porte une annotation manuscrite (Q1 : « b » entouré), reprise et complétée ci-dessous par un corrigé raisonné sur l'ensemble des 30 questions.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat. Il est rédigé à partir du programme standard de GRH, théorie des organisations et méthodologie de recherche. Le scan original porte une annotation manuscrite (Q1 : « b » entouré), reprise et complétée ci-dessous par un corrigé raisonné sur l'ensemble des 30 questions.
 
 **1. b)** — La GRH vise la performance individuelle et collective des salariés, moyen (et non fin en soi) au service de la performance globale de l'entreprise ; le profit et la performance commerciale sont des finalités trop restrictives.
 

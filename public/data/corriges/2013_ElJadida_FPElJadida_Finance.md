@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FP El Jadida.
+
 ## I) Q.C.M. (12 points)
 
 *(Barème : +1 bonne réponse, −1 mauvaise, 0 sans réponse.)*

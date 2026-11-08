@@ -1,4 +1,4 @@
-> Corrigé avec plan structuré détaillé.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès, avec plan structuré détaillé.
 
 **Sujet 1 — La transformation digitale, levier de performance pour les entreprises marocaines**
 

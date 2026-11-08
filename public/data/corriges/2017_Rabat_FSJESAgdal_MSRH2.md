@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal. Sujet de dissertation, sans grille de notation officielle publiée.
 
 **Plan indicatif — L'évaluation du rendement comme outil de promotion et d'amélioration des performances**
 

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia.
+
 ## Exercice 1 — Comptabilité générale (bilan d'ouverture, M. YAHYA)
 
 **1. Détermination du capital**

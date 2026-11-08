@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Guelmim.
+
 ## Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée pour cette session. Épreuve de dissertation/questions de cours : ce corrigé propose une trame de réponse structurée, pas une réponse unique figée. À vérifier avant de t'y fier pour réviser.

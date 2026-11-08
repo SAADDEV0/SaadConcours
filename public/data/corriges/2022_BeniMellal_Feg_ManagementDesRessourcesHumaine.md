@@ -1,4 +1,4 @@
-> Corrigé avec réponses justifiées (concours MRH FEG Béni Mellal 2022-2023 ; NB : la question 7 est absente du document source, la numérotation reprend telle quelle celle de l'énoncé original).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Béni Mellal, avec réponses justifiées (concours MRH FEG Béni Mellal 2022-2023 ; NB : la question 7 est absente du document source, la numérotation reprend telle quelle celle de l'énoncé original).
 
 1. B — accord grammatical au masculin pluriel : « tous les stades ».
 2. A — le terme « management » vient de l'anglo-américain (lui-même dérivé de l'italien maneggiare).

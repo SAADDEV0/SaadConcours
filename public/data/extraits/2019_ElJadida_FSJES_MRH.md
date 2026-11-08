@@ -69,4 +69,3 @@ a) Compter toutes les données  b) Calculer des probabilités  c) Compter une oc
 
 **20.** Cocher les cardinalités possibles rencontrées lors de la conception d'un MCD :
 0,1 — 1,1 — 0,n — 1,n — 2,n — n,2
-

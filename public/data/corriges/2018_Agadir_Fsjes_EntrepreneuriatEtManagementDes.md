@@ -1,4 +1,4 @@
-> Corrigé officiel — réponses correctes (indiquées sur le document original par un surlignage).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr). Les bonnes réponses reprennent celles surlignées sur le document d'origine ; les justifications sont de SaadConcours.
 
 Question 1. **B, C** — le courant des relations humaines (Mayo, Maslow) insiste sur la dimension psychosociale du travail : intérêt porté au salarié en tant que personne, et étude des relations homme/travail comme levier de performance.
 Question 2. **B** — on distingue le recrutement interne (mobilité, promotion) et le recrutement externe (marché du travail).

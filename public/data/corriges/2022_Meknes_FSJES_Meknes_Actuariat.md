@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (statistique inférentielle, probabilités et économétrie de base) et d'un raisonnement/calcul vérifié — aucune source officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Il est rédigé à partir du programme standard du module (statistique inférentielle, probabilités et économétrie de base) et d'un raisonnement/calcul vérifié — aucune source officielle disponible pour ce sujet.
 
 ### Sujet d'ordre général
 

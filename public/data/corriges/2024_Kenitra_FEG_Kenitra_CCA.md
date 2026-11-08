@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Kénitra (FSJES).
+
 ## Dossier 1 — Mathématiques Financières
 
 **Données.** Loyer mensuel 2 850 DH, impayé les 1/01, 1/02, 1/03 et 1/04/2002. Remplacement par des semestrialités constantes payées le 1/01 et le 1/07 de chaque année, de 2004 (1ère le 1/01/2004) à 2006 (dernière le 1/07/2006), soit **6 semestrialités**. Taux 9 %/an.

@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (macroéconomie, théorie monétaire et financière, microéconomie) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet (barème / corrigé-type non publié). Les questions 9) et 10), absentes du scan fourni, sont indiquées comme illisibles ci-dessous et ne font l'objet d'aucune réponse inventée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock. Il est rédigé à partir du programme standard des modules (macroéconomie, théorie monétaire et financière, microéconomie) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet (barème / corrigé-type non publié). Les questions 9) et 10), absentes du scan fourni, sont indiquées comme illisibles ci-dessous et ne font l'objet d'aucune réponse inventée.
 
 ### QCM — Corrigé
 

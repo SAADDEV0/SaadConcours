@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tanger, avec calculs détaillés.
 
 *Ce sujet n'ayant été retrouvé que par sa page de garde, l'énoncé ci-dessus est une reconstitution fidèle des thématiques habituelles de ce concours ; le corrigé ci-dessous répond à ces questions reconstituées.*
 

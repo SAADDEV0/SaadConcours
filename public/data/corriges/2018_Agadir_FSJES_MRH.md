@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (théorie des organisations, GRH, stratégie d'entreprise, droit social) — aucune grille de correction officielle disponible pour ce sujet ; ce QCM autorise plusieurs réponses par question.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr). Il est rédigé à partir du programme standard des modules concernés (théorie des organisations, GRH, stratégie d'entreprise, droit social) — aucune grille de correction officielle disponible pour ce sujet ; ce QCM autorise plusieurs réponses par question.
 
 **Q1. A, B, C, D** — Les quatre propositions correspondent effectivement à des principes reconnus de Fayol (unité de commandement, discipline, hiérarchie/voie hiérarchique, esprit de corps).
 

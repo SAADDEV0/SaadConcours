@@ -1,4 +1,4 @@
-> Corrigé avec réponses justifiées (concours QCM Master MRH 2013-2014, FP Béni Mellal).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane), avec réponses justifiées (concours QCM Master MRH 2013-2014, FP Béni Mellal).
 
 1. A, B, C, D — les 4 grandes activités classiques de la fonction RH (Sekiou) : acquisition, développement, mobilisation, conservation.
 2. B — la communication interne vise avant tout à sensibiliser le personnel aux enjeux de l'entreprise.

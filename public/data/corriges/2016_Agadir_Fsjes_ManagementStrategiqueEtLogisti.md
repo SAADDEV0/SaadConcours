@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr), avec calculs détaillés.
 
 **Q1. a** — L'équilibre de marché est le prix pour lequel quantité offerte = quantité demandée (ni pénurie ni excédent).
 **Q2. a** — Le mécanisme de marché est l'ajustement des prix et quantités jusqu'à l'égalité offre = demande.

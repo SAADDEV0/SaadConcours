@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr).
+
 ## Q.C.M. — Corrigé
 
 | Q | Réponse(s) | Justification |

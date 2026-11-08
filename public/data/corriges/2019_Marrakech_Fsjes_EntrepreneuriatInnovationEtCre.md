@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech, avec calculs détaillés.
 
 **Question n°1 — Définitions (6 points, 1,5 point par terme)**
 

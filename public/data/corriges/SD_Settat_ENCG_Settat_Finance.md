@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Settat.
+
 ## Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Le QCM (partie III) est incomplet dans la source disponible (seules 2 questions visibles, la suite manque) — voir note dédiée. À vérifier sur les hypothèses de calendrier des flux du projet d'investissement (partie II).

@@ -141,4 +141,3 @@ Total du passif hors capital :
 **Résultat fiscal = − 116 743 + 93 250 − 288 500 = − 311 993 DH (déficit fiscal reportable)**
 
 Le résultat étant déficitaire, l'IS n'est pas dû sur le résultat ; seule la **Cotisation Minimale** est due. Le chiffre d'affaires export (1 500 000 DH, 3ᵉ année d'exportation) est encore dans sa période d'exonération totale (5 premiers exercices) et n'entre donc pas dans la base de la CM. Base CM ≈ CA intérieur (6 500 000) + intérêts bancaires bruts (125 000) + quote-part d'intérêts courus du prêt (8 000) ≈ 6 633 000 ; CM (0,25 %) ≈ **16 583 DH**, imputable sur l'IS des 3 exercices suivants.
-

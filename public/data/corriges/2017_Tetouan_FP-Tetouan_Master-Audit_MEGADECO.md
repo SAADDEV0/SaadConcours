@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FP Tétouan.
+
 ## SUJET 1 — Entreprise MEGA-DECO
 
 ### I.1 — Les 7 principes comptables fondamentaux

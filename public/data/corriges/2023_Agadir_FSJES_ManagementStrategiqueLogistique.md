@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (management stratégique, marketing, contrôle de gestion, microéconomie, statistique, gestion des stocks) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr). Il est rédigé à partir du programme standard des modules (management stratégique, marketing, contrôle de gestion, microéconomie, statistique, gestion des stocks) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet.
 
 ### I. Cochez la ou les bonnes réponses
 

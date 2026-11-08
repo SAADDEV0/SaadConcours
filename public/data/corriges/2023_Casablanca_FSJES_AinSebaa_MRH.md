@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard de GRH, management des organisations, communication et droit social — aucune grille de correction officielle disponible pour ce QCM ; plusieurs questions autorisent plus d'une réponse ou une combinaison « a et b ».
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ. Il est rédigé à partir du programme standard de GRH, management des organisations, communication et droit social — aucune grille de correction officielle disponible pour ce QCM ; plusieurs questions autorisent plus d'une réponse ou une combinaison « a et b ».
 
 **1. a)** — Le concept de la « main invisible » régulant le marché par la somme des intérêts individuels est dû à Adam Smith (« Richesse des Nations », 1776).
 

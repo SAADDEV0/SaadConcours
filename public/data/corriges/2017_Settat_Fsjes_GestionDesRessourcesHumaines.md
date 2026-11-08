@@ -1,4 +1,4 @@
-> Corrigé avec justifications (réponses cochées sur la copie originale en gras).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat, avec justifications (réponses cochées sur la copie originale en gras).
 
 1. **c** — le behaviorisme (théorie de l'apprentissage/du renforcement) postule que les individus reproduisent les comportements ayant été suivis de résultats favorables et évitent ceux suivis de résultats défavorables (school of B.F. Skinner) — attention, l'énoncé b décrit exactement le behaviorisme, c'est donc **b** la réponse correcte (le choix rationnel en c relève plutôt de la théorie de la rationalité limitée/Simon).
 2. **a** — un manager n'est pas qu'un simple exécutant : il occupe un rôle décisionnel et stratégique (Mintzberg).

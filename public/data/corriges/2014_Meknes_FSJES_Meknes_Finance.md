@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès.
+
 ## Dissertation — La PME marocaine peut-elle concilier performance financière et développement durable ?
 
 ### Introduction

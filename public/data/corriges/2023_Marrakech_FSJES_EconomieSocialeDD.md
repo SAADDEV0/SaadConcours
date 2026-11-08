@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (économie sociale et solidaire, développement territorial) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech. Il est rédigé à partir du programme standard du module (économie sociale et solidaire, développement territorial) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet.
 
 ### Sujet — Plan de réponse
 

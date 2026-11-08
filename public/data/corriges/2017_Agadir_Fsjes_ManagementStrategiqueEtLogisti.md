@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés. (Ce document est la correction officielle du concours ; les réponses ci-dessous reprennent les bonnes réponses telles que fournies dans le corrigé original, avec justification.)
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr), avec calculs détaillés. Les bonnes réponses reprennent celles du corrigé d'origine ; les justifications sont de SaadConcours.
 
 **1. d)** — Le TMS (taux marginal de substitution) pour U(x,y)=x^α.y^β vaut TMS = Um_x/Um_y = (α/β)(y/x), ce qui ne correspond exactement à aucune des formules proposées : réponse « Aucune des réponses ».
 **2. c)** — À l'optimum du consommateur, l'utilité marginale par dirham dépensé doit être égalisée entre tous les biens : Um_CD/P_CD = Um_DVD/P_DVD.

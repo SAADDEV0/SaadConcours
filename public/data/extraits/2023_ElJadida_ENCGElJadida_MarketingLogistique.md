@@ -67,4 +67,3 @@ d) Cherche à vendre des produits spécifiques par une communication personnalis
 a) Se limite aux interactions en-ligne
 b) Se limite aux interactions hors-ligne
 c) Combine les deux
-

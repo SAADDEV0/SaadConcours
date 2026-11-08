@@ -1,4 +1,4 @@
-> Corrigé indicatif — dissertation sur un texte de Philippe d'Iribarne, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Salé. Dissertation sur un texte de Philippe d'Iribarne, sans grille de notation officielle publiée.
 
 **Plan indicatif**
 

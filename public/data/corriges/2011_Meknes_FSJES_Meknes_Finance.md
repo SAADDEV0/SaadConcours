@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès.
+
 ## Dissertation — Développement durable et stratégie d'entreprise
 
 ### Introduction

@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Kénitra (FSJES). Sujet de dissertation, sans grille de notation officielle publiée.
 
 **Plan indicatif — Le processus d'achat en B2B**
 

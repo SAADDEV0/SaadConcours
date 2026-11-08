@@ -258,7 +258,7 @@
     "ville": "Fès",
     "filiere": null,
     "date_limite": "2026-10-03",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": "https://fsjes.usmba.ac.ma/fsjp/master/",
     "source": "https://www.almaster-maroc.com/2026/09/master-fsjp-fes-2026-2027.html",
     "date_publication": "2026-10-02"
@@ -870,7 +870,7 @@
     "ville": "Taza",
     "filiere": null,
     "date_limite": "2026-10-08",
-    "cloture": false,
+    "cloture": true,
     "lien_inscription": null,
     "source": "https://www.almaster-maroc.com/2026/09/master-fsjp-taza-2026-2027.html",
     "date_publication": "2026-09-29"

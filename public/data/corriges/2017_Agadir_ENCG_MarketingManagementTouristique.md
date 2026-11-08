@@ -1,4 +1,4 @@
-> Corrigé indicatif — sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Agadir. Aucune grille de notation officielle n'a été publiée.
 
 **Sujet 1** *(anglais)* — Impact du tourisme rural sur le développement régional au Maroc.
 Éléments attendus : diversification des revenus des populations rurales (au-delà de l'agriculture), valorisation du patrimoine culturel et naturel local, création d'emplois directs et indirects (hébergement, artisanat, restauration), frein à l'exode rural, mais nécessité d'infrastructures (accès, formation) et de préservation des ressources pour éviter les effets négatifs du surtourisme.

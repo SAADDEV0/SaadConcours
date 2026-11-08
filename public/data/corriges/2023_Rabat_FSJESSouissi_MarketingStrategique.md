@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (marketing, GRH, stratégie, théorie des organisations, culture générale, statistique, gestion de projets, gestion commerciale) et d'un raisonnement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet. Pour les QCM à réponses multiples, seules les propositions jugées correctes sont retenues ci-dessous.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi. Il est rédigé à partir du programme standard des modules concernés (marketing, GRH, stratégie, théorie des organisations, culture générale, statistique, gestion de projets, gestion commerciale) et d'un raisonnement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet. Pour les QCM à réponses multiples, seules les propositions jugées correctes sont retenues ci-dessous.
 
 ### DOSSIER 1 : MARKETING
 

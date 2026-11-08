@@ -1,4 +1,4 @@
-> Corrigé indicatif — un sujet au choix parmi cinq, sans grille de notation officielle publiée. Plan indicatif pour le Sujet 5 (chômage au Maroc), le plus fréquemment demandé dans ce type de concours.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSE Rabat (Université Mohammed V). Un sujet au choix parmi cinq, sans grille de notation officielle publiée. Plan indicatif pour le Sujet 5 (chômage au Maroc), le plus fréquemment demandé dans ce type de concours.
 
 **Sujet 5 — Comment expliquer le chômage au Maroc ?**
 

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+>
 > QCM de 90 questions, une seule réponse correcte par question, barème +1/-1/0. Seules les 20 premières questions (page 1-2) portent des réponses cerclées sur le scan source (`public/images/Rabat/2024_Rabat_FSJESAgdal_GFCF/`) ; au-delà, tout est raisonné (finance, comptabilité CGNC, contrôle de gestion, économie, statistiques, culture générale, management), sans clé externe à vérifier — logique déjà annoncée en début de session pour les sujets sans annotations. Justifications volontairement courtes vu le volume.
 
 1. **b.** Maximiser la richesse des actionnaires (objectif de la politique de dividende).

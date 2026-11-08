@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech.
+
 ## Problème 1 — Rentabilité et risque des titres A et B
 
 ### a) Espérances mathématiques

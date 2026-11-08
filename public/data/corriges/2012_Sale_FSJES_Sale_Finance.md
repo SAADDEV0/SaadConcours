@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Salé.
+
 ## Dissertation — Répercussions du « printemps arabe » sur l'économie marocaine
 
 ### Introduction

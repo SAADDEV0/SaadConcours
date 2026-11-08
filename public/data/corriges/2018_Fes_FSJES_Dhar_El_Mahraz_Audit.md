@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Dhar El Mahraz.
+
 ## DOSSIER 1
 
 ### 1. Comptabilité générale

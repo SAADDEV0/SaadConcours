@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech.
+
 ## Sujet 1 — Analyse financière (entreprise XYZ)
 
 **Reconstitution du bilan.** Avec les éléments donnés, le bilan s'équilibre si la « Trésorerie : 50 000 MAD » est une **trésorerie passive** (concours bancaires/découvert) :

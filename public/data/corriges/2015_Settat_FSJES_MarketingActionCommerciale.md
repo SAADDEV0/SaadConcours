@@ -1,4 +1,4 @@
-> Corrigé indicatif.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat.
 
 1. **Le packaging** : ensemble des éléments matériels (contenant, étiquetage, design) qui habillent et protègent un produit. Deux fonctions principales : (a) fonction technique — protection, conservation et facilité de manipulation/transport du produit ; (b) fonction de communication/marketing — attractivité en linéaire, différenciation de la marque, transmission d'informations (usage, composition) et aide à la décision d'achat au point de vente.
 

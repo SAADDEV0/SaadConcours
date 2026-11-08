@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (GRH, théorie des organisations, management stratégique, droit des sociétés) — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat. Il est rédigé à partir du programme standard des modules concernés (GRH, théorie des organisations, management stratégique, droit des sociétés) — aucune grille de correction officielle disponible pour ce sujet.
 
 1. **c** — La fonction désigne l'ensemble des activités attribuées à une personne/un groupe dans une structure (à distinguer du métier ou de la profession).
 2. **b** — L'analyse sociologique des organisations (Crozier) souligne la logique de coopération-compétition entre acteurs.

@@ -1,4 +1,4 @@
-> Corrigé indicatif — épreuve de réflexion/analyse sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock. Épreuve de réflexion/analyse sans grille de notation officielle publiée.
 
 **Exercice 1**
 

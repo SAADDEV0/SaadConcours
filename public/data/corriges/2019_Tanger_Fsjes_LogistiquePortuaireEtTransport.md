@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tanger, avec calculs détaillés.
 
 **Missions 1 — Communication d'entreprise**
 

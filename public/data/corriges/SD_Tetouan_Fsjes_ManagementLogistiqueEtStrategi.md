@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tétouan, avec calculs détaillés.
 
 **Sujet 1 — La stratégie logistique nationale du Maroc**
 

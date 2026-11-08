@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+>
 > QCM de 100 questions à cocher (l'énoncé autorise explicitement de cocher une ou plusieurs cases). Le scan source porte des réponses cochées (cases noircies) pour la quasi-totalité des questions 1 à 86, mais **aucune coche** n'est visible pour les questions 87 à 100 (calculs sur bilan fonctionnel/financier et sur les données de l'entreprise SAD) — ces dernières sont donc recalculées ici quand les données le permettent. Quelques questions portent deux cases cochées à la fois (contradictoires) : signalées au cas par cas. Quelques réponses cochées semblent en désaccord avec la théorie standard (Q4, Q51, Q60, Q61) : la case cochée est donnée **et** l'alternative théorique est signalée — vérifie ces cas précis avec ton cours.
 
 ## Fiscalité (Q1 à Q25)

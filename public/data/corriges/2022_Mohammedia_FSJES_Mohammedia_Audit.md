@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia.
+
 ## Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. À vérifier, notamment sur le Cas N°3 (actualisation).

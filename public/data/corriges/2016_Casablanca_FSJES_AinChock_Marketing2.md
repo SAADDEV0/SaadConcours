@@ -1,4 +1,4 @@
-> Corrigé indicatif.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock.
 
 **Question I** — Le marché comme lieu de rencontre offre/demande, dans un environnement donné.
 - Acteurs industriels intéressés : entreprises du secteur concerné par le produit du « marché de l'espoir » (loteries, jeux, assurances, produits de développement personnel selon le contexte du cours), fournisseurs de services associés.

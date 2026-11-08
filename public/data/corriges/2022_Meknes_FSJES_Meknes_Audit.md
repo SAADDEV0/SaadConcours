@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès.
+
 ## Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée pour cette session. Certains points de l'exercice comptable ne peuvent pas être chiffrés faute de données complètes dans l'énoncé (voir note au point 5). À vérifier avant de t'y fier pour réviser.

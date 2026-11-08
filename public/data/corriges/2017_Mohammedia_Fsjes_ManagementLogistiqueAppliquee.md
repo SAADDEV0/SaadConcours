@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia, avec calculs détaillés.
 
 **I. Sujets de culture générale (plans de réponse)**
 

@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi. Sujet de dissertation, sans grille de notation officielle publiée.
 
 **Plan indicatif — Inculquer l'esprit entrepreneurial aux étudiants marocains**
 

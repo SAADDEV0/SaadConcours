@@ -35,4 +35,3 @@ Au cours de l'exercice N, le taux de marge sur coût variable d'une entreprise e
 **Travail à faire :**
 1. Calculer le seuil de rentabilité (SR) avant investissement.
 2. Calculer le nouveau SR et en déduire l'écart de chiffre d'affaires nécessaire pour l'atteindre.
-

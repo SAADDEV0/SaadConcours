@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi.
+
 ## Q.C.M. — Corrigé (49 questions)
 
 | Q | Réponse(s) | Justification |

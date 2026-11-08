@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FP El Jadida, avec calculs détaillés.
 
 **Partie 1 — QCM**
 

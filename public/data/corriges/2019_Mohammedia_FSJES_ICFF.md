@@ -82,4 +82,3 @@ Dans le prolongement des 3èmes Assises Nationales sur la Fiscalité (2019), les
 - **La digitalisation des procédures** (télédéclaration, télépaiement généralisés) pour réduire les coûts de conformité et le contentieux.
 
 Ces orientations ont été en grande partie traduites dans la loi-cadre n° 69-19 portant réforme fiscale, adoptée peu après ces Assises.
-

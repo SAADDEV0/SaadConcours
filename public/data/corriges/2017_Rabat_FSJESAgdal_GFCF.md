@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+>
 > QCM de 100 questions, une seule réponse juste par question (barème +1/-1/0). Le scan source porte des réponses **entourées d'un cercle** pour une partie des questions (marque forte et non ambiguë) et de simples **traits sur la case** pour beaucoup d'autres (marque plus faible, parfois ambiguë entre deux options adjacentes). Les questions 90 à 100 se réfèrent au Bilan/CPC/annexes fournis en tête d'énoncé ; plusieurs de ces réponses ont été **recalculées et vérifiées** ici à partir de ces données (la méthode est détaillée), ce qui a permis de corriger la lecture de quelques marques ambiguës du scan (Q95, Q98, Q99, Q100). Les cas encore incertains sont signalés explicitement.
 
 ## Comptabilité générale et immobilisations (Q1 à Q20)

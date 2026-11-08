@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr).
+>
 > QCM de 60 questions. Le scan source (`public/images/Agadir/2024_Agadir_FSJES_CCA/`) porte des réponses cochées (trait avant la lettre) pour une partie des questions — utilisées comme base ici, complétées par le raisonnement théorique/calcul pour les questions non cochées sur le scan disponible. Certaines coches semblent en désaccord avec la théorie standard (ex. Q22, Q34, Q41, Q47, Q53) : je donne la réponse cochée **et** signale l'alternative théorique quand il y a doute — vérifie ces cas précis avec ton cours.
 
 ## Section 1 — Comptabilité générale

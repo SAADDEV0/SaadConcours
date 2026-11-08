@@ -1,4 +1,4 @@
-> Corrigé avec plan structuré détaillé.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock, avec plan structuré détaillé.
 
 **Q1 — Le positionnement haut de gamme de Nespresso et le rôle de la communication**
 

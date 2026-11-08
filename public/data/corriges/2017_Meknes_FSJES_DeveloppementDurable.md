@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation ouverte, sans grille de notation officielle publiée. Plan de réponse structuré proposé ci-dessous.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Sujet de dissertation ouverte, sans grille de notation officielle publiée. Plan de réponse structuré proposé ci-dessous.
 
 *Introduction :* l'université est traditionnellement pensée comme un lieu de production et de transmission du savoir ; elle est de plus en plus perçue comme un acteur du développement territorial à part entière, au même titre que les collectivités locales ou les entreprises.
 

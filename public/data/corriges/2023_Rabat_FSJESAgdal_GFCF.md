@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+
 ## Q.C.M. — Corrigé indicatif (80 questions, une seule réponse par question)
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Quelques questions de culture générale/actualité (27, 28, 30, 61, 62, 64, 69) sont datées ou sujettes à évolution ; quelques questions théoriques (49, 51, 52, 80) sont ambiguës ou semblent comporter une erreur d'énoncé — signalées explicitement. À vérifier avant de t'y fier pour réviser.

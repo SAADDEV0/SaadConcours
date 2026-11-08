@@ -1,4 +1,4 @@
-> Corrigé avec éléments de réponse.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock, avec éléments de réponse.
 
 **Question 1** — Produits complémentaires : consommés ensemble, une hausse du prix de l'un réduit la demande de l'autre (ex. essence et voitures). Produits substituables : peuvent se remplacer l'un l'autre, une hausse du prix de l'un augmente la demande de l'autre (ex. beurre et margarine).
 

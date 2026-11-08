@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tétouan.
+
 ## SUJET 1
 
 ### Cas n°1 — Entreprise G (coûts variables)

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Salé.
+
 ## Corrigé indicatif — Dissertation
 
 > Épreuve de dissertation (1h) : il n'existe pas de « bonne réponse » unique. Ce corrigé propose une trame structurée reprenant les idées attendues, à adapter/enrichir avec tes propres exemples. Pas de correction officielle publiée trouvée pour cette session.

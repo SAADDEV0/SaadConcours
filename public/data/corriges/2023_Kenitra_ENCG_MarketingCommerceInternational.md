@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (marketing digital et communication) — question de réflexion ouverte, aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Kénitra. Il est rédigé à partir du programme standard du module (marketing digital et communication) — question de réflexion ouverte, aucune grille de correction officielle disponible pour ce sujet.
 
 ### Le concept de marketing d'influence
 

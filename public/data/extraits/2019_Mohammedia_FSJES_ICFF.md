@@ -38,4 +38,3 @@ L'entreprise « COVAR » met à votre disposition les informations suivantes (ex
 Suite aux 3èmes Assises Nationales sur la Fiscalité, de nombreuses recommandations ont été proposées et discutées afin de dresser la feuille de route pour une réforme fiscale qui réponde aux attentes du développement économique souhaité.
 
 Quelles sont, d'après vous, les meilleures pistes d'amélioration de notre Code Général des Impôts ?
-

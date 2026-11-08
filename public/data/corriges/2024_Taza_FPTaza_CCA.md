@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FP Taza.
+
 ## Sujet général — Le rôle du contrôle interne dans l'amélioration de la performance de l'entreprise
 
 **Définition.** Le contrôle interne est l'ensemble des dispositifs mis en place par une entreprise (organisation, procédures, méthodes) pour maîtriser ses activités, sécuriser ses actifs, fiabiliser l'information financière et assurer la conformité aux lois et règlements.

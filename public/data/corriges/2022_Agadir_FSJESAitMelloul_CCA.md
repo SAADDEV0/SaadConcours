@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ait Melloul (Ibn Zohr).
+
 ## Q.C.M. — Corrigé
 
 > Corrigé indicatif rédigé à partir de l'énoncé transcrit (pas de correction officielle publiée trouvée pour cette session) — vérifie les calculs avant de t'y fier pour réviser.

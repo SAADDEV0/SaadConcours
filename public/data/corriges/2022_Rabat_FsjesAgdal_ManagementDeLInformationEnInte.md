@@ -1,4 +1,4 @@
-> Corrigé avec réponses justifiées (QCM de 100 questions couvrant statistiques, algèbre, comptabilité analytique/contrôle de gestion, stratégie, RH, bureautique Excel et un bloc en anglais).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal, avec réponses justifiées (QCM de 100 questions couvrant statistiques, algèbre, comptabilité analytique/contrôle de gestion, stratégie, RH, bureautique Excel et un bloc en anglais).
 
 **Mathématiques / Statistiques (Q1-10)**
 1. B — l'espérance de la loi normale s'estime par la moyenne arithmétique de l'échantillon.

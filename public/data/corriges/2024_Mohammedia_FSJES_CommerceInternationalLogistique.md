@@ -1,4 +1,4 @@
-> Corrigé indicatif avec calculs détaillés pour l'exercice chiffré.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia, avec calculs détaillés pour l'exercice chiffré.
 
 **I.1 — Le marché russe est-il rentable ?**
 

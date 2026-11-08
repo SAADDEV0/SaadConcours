@@ -1,4 +1,4 @@
-> Corrigé indicatif — questions ouvertes sur le texte de Gabilliet, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech. Questions ouvertes sur le texte de Gabilliet, sans grille de notation officielle publiée.
 
 **Question 1 — Nouveaux enjeux du leadership moderne et positionnement du genre**
 

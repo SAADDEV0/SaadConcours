@@ -52,4 +52,3 @@ La société « MASTER CCA », dont l'exercice comptable coïncide avec l'année
 Résultat comptable avant impôt de l'exercice 2022 : − 116 743 DH. Chiffre d'affaires réalisé à l'intérieur du Maroc : 6 500 000 DH.
 
 **Travail à faire :** Déterminer le résultat fiscal imposable et l'IS de la société MASTER CCA au titre de 2022.
-

@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (gestion des stocks et logistique, statistique descriptive et probabilités, entrepreneuriat, anglais général, recherche opérationnelle/programmation linéaire) et d'un raisonnement/calcul entièrement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet. La question 43 (options coupées en bas de page) et les questions 45 à 50 (page 5/5 non numérisée) ne sont pas corrigées, faute d'énoncé lisible.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Béni Mellal. Il est rédigé à partir du programme standard des modules concernés (gestion des stocks et logistique, statistique descriptive et probabilités, entrepreneuriat, anglais général, recherche opérationnelle/programmation linéaire) et d'un raisonnement/calcul entièrement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet. La question 43 (options coupées en bas de page) et les questions 45 à 50 (page 5/5 non numérisée) ne sont pas corrigées, faute d'énoncé lisible.
 
 ### LOGISTIQUE
 

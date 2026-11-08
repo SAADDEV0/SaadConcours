@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech.
+
 ## Cas SGRM — Budget du 1ᵉʳ trimestre N+1
 
 ⚠️ **Source tronquée** : seuls les éléments de pages 1 sont disponibles (l'énoncé s'arrête aux « autres frais d'exploitation » et le TAF complet manque). Le corrigé reconstitue la démarche budgétaire avec toutes les données exploitables.

@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard de marketing stratégique et opérationnel (segmentation-ciblage-positionnement, typologie de Kotler des positions concurrentielles, cycle de vie/matrice BCG, politique de prix, de communication et marketing direct/digital) et d'un raisonnement vérifié — aucune grille officielle n'est disponible pour ce sujet. Les questions 1 à 8, absentes du scan disponible, ne peuvent pas être corrigées ici — [illisible sur le scan] : se référer si possible à une version complète du sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG El Jadida. Il est rédigé à partir du programme standard de marketing stratégique et opérationnel (segmentation-ciblage-positionnement, typologie de Kotler des positions concurrentielles, cycle de vie/matrice BCG, politique de prix, de communication et marketing direct/digital) et d'un raisonnement vérifié — aucune grille officielle n'est disponible pour ce sujet. Les questions 1 à 8, absentes du scan disponible, ne peuvent pas être corrigées ici — [illisible sur le scan] : se référer si possible à une version complète du sujet.
 
 ### QCM (questions 9 à 20)
 

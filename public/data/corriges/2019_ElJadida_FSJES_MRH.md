@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir des définitions standards de statistique descriptive, de gestion financière et de modélisation de données (MCD/Merise) — aucune grille de correction officielle disponible pour ce QCM.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES El Jadida. Il est rédigé à partir des définitions standards de statistique descriptive, de gestion financière et de modélisation de données (MCD/Merise) — aucune grille de correction officielle disponible pour ce QCM.
 
 **1. c)** — Le taux de variation relatif d'une valeur A vers une valeur B est (valeur d'arrivée − valeur de départ) / valeur de départ = (B − A) / A ; l'option (c) reprend cette formule à l'identique de la (b) selon l'énoncé, mais la formule correcte est bien (B−A)/A — l'option (b) est donc la bonne réponse.
 

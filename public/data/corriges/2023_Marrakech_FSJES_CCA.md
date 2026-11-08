@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech.
+
 ## Corrigé indicatif — Cas MIC Consulting (coûts variables / coûts complets)
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Calculs multi-étapes (répartition des matières, des sous-produits, puis des produits finis) : vérifie les totaux avec ta propre calculatrice, de petits écarts d'arrondi sont possibles à chaque étape de répartition.

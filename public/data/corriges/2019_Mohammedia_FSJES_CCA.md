@@ -156,4 +156,3 @@ La réforme fiscale marocaine, engagée notamment via la loi-cadre n° 69-19 iss
 - **Digitalisation et sécurité juridique** : renforcement des télédéclarations/télépaiements et clarification de la doctrine fiscale pour réduire le contentieux.
 
 Ces axes visent, in fine, à financer la protection sociale généralisée tout en préservant la compétitivité et l'attractivité du Maroc pour l'investissement.
-

@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès, avec calculs détaillés.
 
 **Sujet général — L'entreprise marocaine face au conflit russo-ukrainien après la crise Covid-19**
 

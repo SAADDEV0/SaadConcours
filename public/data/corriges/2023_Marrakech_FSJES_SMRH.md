@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (stratégie d'entreprise, gestion des ressources humaines) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. L'énoncé propose de traiter un seul dossier au choix ; les deux sont corrigés ci-dessous par souci d'exhaustivité.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech. Il est rédigé à partir du programme standard des modules (stratégie d'entreprise, gestion des ressources humaines) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. L'énoncé propose de traiter un seul dossier au choix ; les deux sont corrigés ci-dessous par souci d'exhaustivité.
 
 ### Dossier N°1 : Stratégie et croissance — Plan de réponse
 

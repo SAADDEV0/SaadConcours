@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ. Sujet de dissertation, sans grille de notation officielle publiée.
 
 **Plan indicatif — Régionalisation avancée et développement économique et socio-spatial du Maroc**
 

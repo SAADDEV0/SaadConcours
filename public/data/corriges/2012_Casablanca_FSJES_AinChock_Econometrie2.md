@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock, avec calculs détaillés.
 
 **Question 1** — Fonctions de la monnaie : unité de compte, intermédiaire des échanges, réserve de valeur. La moins bien remplie en période d'inflation est la réserve de valeur (perte de pouvoir d'achat de la monnaie détenue dans le temps).
 

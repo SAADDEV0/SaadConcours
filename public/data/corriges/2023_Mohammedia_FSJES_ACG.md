@@ -94,4 +94,3 @@ Point mort : 7 407 407 / 1 000 000 ≈ 7,4 mois (atteint courant du 8ᵉ mois).
 Nouveau point mort : 6 521 739 / 1 000 000 ≈ 6,5 mois — le seuil est donc atteint **plus tôt** qu'avant l'investissement.
 
 **Écart de CA** = 7 407 407 − 6 521 739 ≈ **885 668 DH** : grâce à l'amélioration du taux de marge, l'entreprise a besoin d'environ 885 668 DH de CA en moins pour couvrir ses charges fixes — l'investissement accélère donc la rentabilité de l'exploitation.
-

@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr). Sujet de dissertation, sans grille de notation officielle publiée.
 
 **Plan indicatif — La PME : modèle d'entreprise dépassé ou d'avenir ?**
 

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+
 ## DOSSIER I — Comptabilité de gestion (meubles TV)
 
 ### 1. Meubles commencés et finis en janvier

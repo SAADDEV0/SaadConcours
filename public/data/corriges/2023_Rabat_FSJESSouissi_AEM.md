@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (économie publique/microéconomie, statistique descriptive bivariée, économétrie de base, analyse mathématique) et d'un raisonnement/calcul vérifié — aucune grille de correction officielle n'est disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi. Il est rédigé à partir du programme standard des modules concernés (économie publique/microéconomie, statistique descriptive bivariée, économétrie de base, analyse mathématique) et d'un raisonnement/calcul vérifié — aucune grille de correction officielle n'est disponible pour ce sujet.
 
 ### Partie 1 : Analyse économique — Plan de réponse
 

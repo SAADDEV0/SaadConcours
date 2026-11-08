@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tanger, avec calculs détaillés.
 
 **Partie 1 — Motivations pour le choix du Master LPTI**
 

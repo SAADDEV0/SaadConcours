@@ -1,4 +1,4 @@
-> Corrigé indicatif avec calculs pour la partie chiffrée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia, avec calculs pour la partie chiffrée.
 
 **I. Questions générales**
 1. Économie de la logistique : discipline qui étudie l'organisation optimale des flux physiques et d'information (approvisionnement, production, distribution) afin de minimiser les coûts globaux tout en respectant le niveau de service attendu.

@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Tanger, avec calculs détaillés.
 
 **Sujet 1 — La logistique, outil de compétitivité de l'entreprise marocaine ?**
 

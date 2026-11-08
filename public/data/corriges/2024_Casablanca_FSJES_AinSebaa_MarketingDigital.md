@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (systèmes d'information et aide à la décision, marketing digital, big data et business intelligence, management, statistique, gestion de projets et finance d'entreprise) et d'un raisonnement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet. Le QCM étant à réponse unique par question (barème canadien +1 ; 0 ; -1), une seule lettre est retenue par question ci-dessous.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ. Il est rédigé à partir du programme standard des modules concernés (systèmes d'information et aide à la décision, marketing digital, big data et business intelligence, management, statistique, gestion de projets et finance d'entreprise) et d'un raisonnement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet. Le QCM étant à réponse unique par question (barème canadien +1 ; 0 ; -1), une seule lettre est retenue par question ci-dessous.
 
 ### QCM
 

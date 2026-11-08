@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tétouan.
+
 ## Exercice I — Société S (produits T¹ et T²)
 
 ### 1. Processus de production

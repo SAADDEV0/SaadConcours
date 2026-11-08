@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès, avec calculs détaillés.
 
 **Question préliminaire — Intérêt de l'actuariat pour l'entreprise**
 

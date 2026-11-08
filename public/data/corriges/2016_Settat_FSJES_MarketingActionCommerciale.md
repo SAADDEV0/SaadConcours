@@ -1,4 +1,4 @@
-> Corrigé indicatif.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat.
 
 **I. Marketing général**
 

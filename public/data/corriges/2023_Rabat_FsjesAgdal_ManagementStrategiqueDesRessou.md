@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal, avec calculs détaillés.
 
 **Corrigé du QCM (80 questions) — réponse correcte et brève justification :**
 

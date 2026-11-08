@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+>
 > Contrairement aux autres millésimes de ce concours, cette édition 2021-2022 a été retrouvée sous forme d'un formulaire Google Forms **vierge** (aucune réponse cochée, aucune correction manuscrite sur le scan source — chaque question n'est qu'une liste déroulante « Sélectionner »). Les 129 réponses ci-dessous sont donc **entièrement raisonnées/recalculées** à partir du cours standard, sans aucune coche à reproduire. Les questions pour lesquelles je n'ai pas une certitude suffisante (formulation ambiguë, connaissance factuelle pointue, ou question mal posée) sont explicitement signalées plutôt que de trancher au hasard — vérifie ces cas précis avec ton professeur.
 
 1. **b.** D'une création de valeur du même montant (comptablement, la mise en réserve d'un bénéfice augmente les capitaux propres à due proportion — la création de valeur économique nette dépend, elle, de la rentabilité des emplois futurs, non garantie ici).

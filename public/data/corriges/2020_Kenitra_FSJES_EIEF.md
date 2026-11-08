@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (microéconomie du consommateur, probabilités, statistique descriptive) et d'un calcul vérifié — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Kénitra. Il est rédigé à partir du programme standard des modules (microéconomie du consommateur, probabilités, statistique descriptive) et d'un calcul vérifié — aucune grille de correction officielle disponible pour ce sujet.
 
 ### Exercice 1
 

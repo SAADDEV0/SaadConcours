@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (statistique/probabilités et recherche opérationnelle) et d'un calcul vérifié — aucune source officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Guelmim. Il est rédigé à partir du programme standard du module (statistique/probabilités et recherche opérationnelle) et d'un calcul vérifié — aucune source officielle disponible pour ce sujet.
 
 ### Question 1
 

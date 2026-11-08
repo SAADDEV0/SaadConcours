@@ -1,4 +1,4 @@
-> Corrigé indicatif — sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ. Aucune grille de notation officielle n'a été publiée.
 
 **I. Débat sur le pouvoir du consommateur digitalisé**
 

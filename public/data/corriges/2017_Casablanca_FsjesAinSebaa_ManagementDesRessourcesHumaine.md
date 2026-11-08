@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ, avec calculs détaillés.
 
 **Corrigé du QCM (40 questions) — réponse correcte et brève justification :**
 

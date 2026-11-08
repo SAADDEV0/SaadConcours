@@ -179,4 +179,3 @@ Réduire le Contrôle de Gestion et l'Audit à de simples « centres de coût »
 - **Positionnement stratégique** : loin d'être de simples fonctions support, elles accompagnent la définition et le déploiement de la stratégie (aide à la décision, suivi des plans d'action, sécurisation des grands projets de transformation).
 
 **Conclusion** : Contrôle de Gestion et Audit ne sont pas des freins mais des conditions de la performance durable — leur restriction perçue (discipline, rigueur) est en réalité l'instrument qui rend possible une croissance maîtrisée et pérenne.
-

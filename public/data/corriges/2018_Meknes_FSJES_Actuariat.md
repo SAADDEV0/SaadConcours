@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (mathématiques financières, statistique inférentielle et économétrie) et d'un calcul vérifié — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Il est rédigé à partir du programme standard du module (mathématiques financières, statistique inférentielle et économétrie) et d'un calcul vérifié — aucune grille de correction officielle disponible pour ce sujet.
 
 ### 1er Exercice
 

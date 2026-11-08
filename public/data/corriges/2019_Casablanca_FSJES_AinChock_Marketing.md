@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (marketing, langues, statistique) — question de résumé, de réflexion, de traduction et de compréhension statistique, sans grille de correction officielle disponible.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock. Il est rédigé à partir du programme standard des modules concernés (marketing, langues, statistique) — question de résumé, de réflexion, de traduction et de compréhension statistique, sans grille de correction officielle disponible.
 
 ### Épreuve 1
 

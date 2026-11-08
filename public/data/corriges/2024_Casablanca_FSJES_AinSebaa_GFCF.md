@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ.
+>
 > QCM de 70 questions, réponses multiples possibles, avec pénalité de -1 point par mauvaise réponse. Le scan source (`public/images/Casablanca/2024_Casablanca_FSJES_AinSebaa_GFCF/`) porte des réponses cerclées pour la majorité des questions — base de ce corrigé, complétée par le raisonnement pour les questions non cerclées. Quelques réponses cerclées semblent en désaccord avec la règle fiscale/théorique standard (Q4, Q10, Q14, Q29, Q30, Q33, Q64, Q68) : signalées explicitement.
 
 1. TVA récupérable = 20 000 × 20 % × 60 % (prorata) = **A. 2 400** *(calcul vérifié).*

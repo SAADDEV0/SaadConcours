@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (analyse économique, économie du développement et management public) et d'un raisonnement structuré — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia. Il est rédigé à partir du programme standard du module (analyse économique, économie du développement et management public) et d'un raisonnement structuré — aucune grille de correction officielle disponible pour ce sujet.
 
 **1.a. Les deux limites de la relance budgétaire**
 

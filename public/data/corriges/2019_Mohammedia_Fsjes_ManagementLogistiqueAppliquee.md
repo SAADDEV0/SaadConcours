@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia, avec calculs détaillés.
 
 ## Partie 1 — Sujets de réflexion (plans structurés)
 

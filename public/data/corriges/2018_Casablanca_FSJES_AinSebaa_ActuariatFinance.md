@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (mathématiques financières, analyse, statistique, probabilités, échantillonnage, recherche opérationnelle) et d'un calcul vérifié — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ. Il est rédigé à partir du programme standard des modules (mathématiques financières, analyse, statistique, probabilités, échantillonnage, recherche opérationnelle) et d'un calcul vérifié — aucune grille de correction officielle disponible pour ce sujet.
 
 **Q1. D** — Escompte = $14000\times0{,}12\times90/360=420$ ; valeur nette = $14000-420=\mathbf{13580}$ Dh.
 

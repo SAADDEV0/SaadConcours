@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet au choix, sans grille de notation officielle publiée. Plan indicatif pour le sujet 2, le plus directement lié à l'actualité RH marocaine.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane). Sujet au choix, sans grille de notation officielle publiée. Plan indicatif pour le sujet 2, le plus directement lié à l'actualité RH marocaine.
 
 **Sujet 2 — Réformes de la retraite et crise du salariat au Maroc**
 

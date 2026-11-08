@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock, avec calculs détaillés.
 
 **Question 1** — Positionnement Oasis Café : positionnement de proximité/praticité pour les voyageurs sur autoroute (pause, réconfort, rapidité) ; publics cibles multiples selon le set de table (familles en trajet, professionnels, touristes) — l'aire de repos Casablanca-Marrakech dessert une clientèle variée en termes d'âge et de motif de déplacement, ce qui justifie une communication multi-cibles sur un même support.
 

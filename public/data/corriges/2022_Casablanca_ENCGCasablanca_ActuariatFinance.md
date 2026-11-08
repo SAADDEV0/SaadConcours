@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (mathématiques financières, analyse mathématique, probabilités et statistique descriptive, techniques d'échantillonnage) et d'un raisonnement/calcul vérifié — aucune grille de correction officielle n'est disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Casablanca. Il est rédigé à partir du programme standard des modules concernés (mathématiques financières, analyse mathématique, probabilités et statistique descriptive, techniques d'échantillonnage) et d'un raisonnement/calcul vérifié — aucune grille de correction officielle n'est disponible pour ce sujet.
 
 ### Mathématiques Financières
 

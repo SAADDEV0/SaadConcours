@@ -123,4 +123,3 @@ La gestion financière occupe une place centrale et transversale dans l'entrepri
 - **Fonction de création de valeur** : par l'arbitrage entre rentabilité et risque, elle vise à maximiser la valeur de l'entreprise pour ses actionnaires tout en préservant sa pérennité.
 
 En ce sens, la gestion financière n'est pas une fonction cloisonnée mais irrigue l'ensemble des décisions opérationnelles et stratégiques de l'entreprise.
-

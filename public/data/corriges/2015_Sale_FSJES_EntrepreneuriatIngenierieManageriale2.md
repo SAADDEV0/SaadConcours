@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Salé. Sujet de dissertation, sans grille de notation officielle publiée.
 
 **Plan indicatif — Le capital humain, moteur de la croissance dans une économie fondée sur le savoir**
 

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat.
+
 ## Q.C.M. — Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. QCM à réponses multiples (plusieurs lettres correctes possibles par question). À vérifier avant de t'y fier pour réviser.

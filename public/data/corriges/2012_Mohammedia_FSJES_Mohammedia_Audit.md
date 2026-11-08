@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia.
+
 ## I.1 — Date de création de l'entreprise
 
 Constructions acquises à la création, amorties sur 20 ans : annuité = 600 000 / 20 = **30 000 DH**.

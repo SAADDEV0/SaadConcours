@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr).
+>
 > QCM à réponses multiples possibles (l'énoncé le précise : « cochez la ou les bonne(s) réponse(s) »). **Aucune réponse n'est cochée sur le scan source** — contrairement à d'autres corrigés de ce site, tout ce qui suit est un raisonnement (économie, gestion financière, comptabilité, fiscalité) sans clé externe à vérifier. Justifications volontairement courtes vu le volume ; les calculs sont détaillés quand la question en comporte.
 
 1. **C.** TMS décroissant de gauche à droite (convexité des courbes d'indifférence).

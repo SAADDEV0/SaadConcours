@@ -1,4 +1,4 @@
-> Corrigé indicatif — deux sujets à traiter, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock. Deux sujets à traiter, sans grille de notation officielle publiée.
 
 **Sujet 1 — « Quand on gère du personnel, on se situe nécessairement dans le temps »**
 

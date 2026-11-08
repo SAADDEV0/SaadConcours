@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+
 ## Épreuve de comptabilité — SA KOGIMA
 
 ⚠️ **Source incomplète (signalée)** : l'énoncé disponible s'interrompt après l'opération du 16-12 et la balance contient de nombreux montants non chiffrés (« ? »). Le corrigé traite tout ce qui est calculable et donne les formules pour le reste.

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech.
+
 ## Question 1 — Synthèse : contrôle de gestion et performance (plan)
 
 Le contrôle de gestion est le processus par lequel les managers influencent les membres de l'organisation pour mettre en œuvre les stratégies (Anthony). Il entretient avec la performance une relation d'instrumentation et de régulation :

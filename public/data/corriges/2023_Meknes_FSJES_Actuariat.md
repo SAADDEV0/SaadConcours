@@ -1,4 +1,4 @@
-> Corrigé indicatif rédigé à partir du programme standard de probabilités, statistiques et économétrie — aucune grille de correction officielle disponible.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Il est rédigé à partir du programme standard de probabilités, statistiques et économétrie — aucune grille de correction officielle disponible.
 
 **Sujet d'ordre général**
 

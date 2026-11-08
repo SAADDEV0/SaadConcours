@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (microéconomie, économétrie, analyse économique générale, probabilités) et d'un raisonnement/calcul entièrement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock. Il est rédigé à partir du programme standard des modules concernés (microéconomie, économétrie, analyse économique générale, probabilités) et d'un raisonnement/calcul entièrement vérifié — aucune grille de correction officielle n'est disponible pour ce sujet.
 
 ### I — Questions de Microéconomie et d'économétrie
 

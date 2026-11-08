@@ -1,4 +1,4 @@
-> Corrigé avec justifications.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat, avec justifications.
 
 **I - Management**
 

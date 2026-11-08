@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (marketing, contrôle de gestion, stratégie, statistique, analyse mathématique, systèmes d'information) et d'un calcul vérifié pour les questions quantitatives — aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal. Il est rédigé à partir du programme standard des modules concernés (marketing, contrôle de gestion, stratégie, statistique, analyse mathématique, systèmes d'information) et d'un calcul vérifié pour les questions quantitatives — aucune grille de correction officielle disponible pour ce sujet.
 
 1. **c** — Gérer positivement la perception des consommateurs envers une marque définit la gestion de la réputation de marque.
 2. **a** — Analyser les besoins et décider comment les satisfaire relève de la planification marketing.

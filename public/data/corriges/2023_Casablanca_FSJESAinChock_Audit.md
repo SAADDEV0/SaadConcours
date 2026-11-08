@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock.
+
 ## Q.C.M. — Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Barème IS/CM supposés en vigueur au moment de la session (2023). Certains points (Q17 techniques fiscales, Q2 taxes) comportent une incertitude signalée explicitement. À vérifier avec soin avant usage — barème fiscal sensible aux réformes annuelles.

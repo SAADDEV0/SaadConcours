@@ -1,4 +1,4 @@
-> Corrigé — plan marketing type (proposition de correction).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Kénitra. Plan marketing type (proposition de correction).
 
 **Établissement retenu (exemple) : un hôtel 4 étoiles indépendant situé à Marrakech, « Riad Atlas Marrakech » (nom fictif à des fins d'illustration).**
 

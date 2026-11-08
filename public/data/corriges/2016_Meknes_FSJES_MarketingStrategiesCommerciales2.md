@@ -1,4 +1,4 @@
-> Corrigé indicatif.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès.
 
 1. **Rôle de la fonction marketing pour l'entreprise** : comprendre et anticiper les besoins du marché, orienter les décisions de l'entreprise (produit, prix, distribution, communication) en fonction de la demande, créer de la valeur pour le client et un avantage concurrentiel durable, assurer l'interface entre l'entreprise et son environnement (clients, concurrents, distributeurs).
 

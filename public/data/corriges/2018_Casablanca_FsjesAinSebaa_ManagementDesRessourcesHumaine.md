@@ -1,4 +1,4 @@
-> Corrigé avec réponses justifiées (test écrit de présélection Master MRH, FSJES Ain Sebaa, 2018-2019 ; NB : les questions 16 et 29 sont tronquées dans le document source collecté et ne peuvent être corrigées).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ, avec réponses justifiées (test écrit de présélection Master MRH, FSJES Ain Sebaa, 2018-2019 ; NB : les questions 16 et 29 sont tronquées dans le document source collecté et ne peuvent être corrigées).
 
 1. c — la culture organisationnelle regroupe à la fois les normes/valeurs/règles et les mythes/histoires/personnalités marquantes de l'entreprise.
 2. d — la RSE n'est ni un simple effet de mode, ni réservée aux grandes entreprises, ni nécessairement un investissement sans retour : aucune des trois affirmations n'est juste en soi.

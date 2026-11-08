@@ -1,4 +1,4 @@
-> Corrigé indicatif — dissertation au choix entre deux sujets, sans grille de notation officielle publiée. Plan indicatif pour le Sujet I.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Kénitra. Dissertation au choix entre deux sujets, sans grille de notation officielle publiée. Plan indicatif pour le Sujet I.
 
 **Sujet I — La servuction et ses implications marketing**
 

@@ -1,4 +1,4 @@
-> Corrigé avec éléments de réponse et calculs.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Chock, avec éléments de réponse et calculs.
 
 **Question 1** — Hausse du prix du gasoil : (1) demande à l'ONCF **augmente** (effet de substitution, le train devenant relativement moins cher que le transport routier) ; (2) prix des tickets de cars entre villes **augmente** (répercussion du coût du carburant sur le prix du transport routier) ; (3) prix des pommes de terre **augmente** légèrement (hausse du coût de transport/production agricole, le gasoil étant un intrant de la mécanisation et du transport).
 

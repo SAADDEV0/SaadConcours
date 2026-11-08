@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FP Tétouan.
+
 ## I — Travaux de fin d'exercice 2016
 
 ### 1. La partie double (question de cours)

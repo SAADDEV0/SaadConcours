@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Fès.
+
 ## Énoncé 1 — Produits joints (coûts complets)
 
 **Charges communes** : MP 1 000 t × 4,50 = 4 500 + fabrication 20 000 = **24 500 DH**, répartis au prorata des quantités produites (960 t : X 300, Y 380, Z 280).

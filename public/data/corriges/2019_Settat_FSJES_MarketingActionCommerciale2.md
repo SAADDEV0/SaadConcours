@@ -1,4 +1,4 @@
-> Corrigé indicatif — sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat. Aucune grille de notation officielle n'a été publiée.
 
 1. **Planification stratégique fondée sur le système d'information** : le SI fournit la donnée (études de marché, CRM, veille concurrentielle) nécessaire à un diagnostic fiable ; il permet le pilotage en temps réel des indicateurs stratégiques (tableaux de bord), l'anticipation des évolutions du marché (data analytics) et la coordination entre les fonctions de l'entreprise autour d'objectifs communs — sans SI performant, la planification stratégique repose sur des données incomplètes ou obsolètes et perd en pertinence.
 

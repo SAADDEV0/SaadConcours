@@ -1,4 +1,4 @@
-> Corrigé indicatif — épreuve de dissertation d'économie du développement, sans grille de notation officielle publiée. Éléments de réponse structurés pour chacune des cinq questions (le candidat devait en traiter quatre).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Mohammedia. Épreuve de dissertation d'économie du développement, sans grille de notation officielle publiée. Éléments de réponse structurés pour chacune des cinq questions (le candidat devait en traiter quatre).
 
 **Question 1 — Dilemme État/Marché dans les stratégies de développement**
 

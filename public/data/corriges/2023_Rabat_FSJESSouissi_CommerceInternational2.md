@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet au choix entre deux thèmes, sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi. Sujet au choix entre deux thèmes, sans grille de notation officielle publiée.
 
 **Sujet 1 — Le commerce extérieur crée des emplois, réduit la pauvreté et ouvre des perspectives économiques**
 

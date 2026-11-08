@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet d'actualité économique, sans grille de notation officielle publiée. Plan de réponse structuré ci-dessous pour le Sujet 1.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ. Sujet d'actualité économique, sans grille de notation officielle publiée. Plan de réponse structuré ci-dessous pour le Sujet 1.
 
 **Sujet 1 — Conséquences de la guerre en Ukraine sur l'économie marocaine**
 

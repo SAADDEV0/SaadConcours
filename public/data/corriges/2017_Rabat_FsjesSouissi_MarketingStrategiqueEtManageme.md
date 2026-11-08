@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi, avec calculs détaillés.
 
 **Corrigé du QCM (questions 12 à 100) — réponse correcte et brève justification :**
 

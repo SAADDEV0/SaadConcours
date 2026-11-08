@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés (concours QCM Master Management Stratégique et Logistique 2013-2014, transversal audit / finance / macroéconomie / statistiques / gestion des stocks).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr), avec calculs détaillés (concours QCM Master Management Stratégique et Logistique 2013-2014, transversal audit / finance / macroéconomie / statistiques / gestion des stocks).
 
 **Audit (Q1-15)**
 1. B, C, D — un auditeur peut être commissaire aux comptes, expert-comptable, ou toute personne formée à la démarche d'audit.

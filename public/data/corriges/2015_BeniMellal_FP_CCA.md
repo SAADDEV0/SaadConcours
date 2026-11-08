@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la Faculté Polydisciplinaire Béni Mellal (Sultan Moulay Slimane).
+
 ## Q.C.M. — Corrigé (52 questions)
 
 ### Dossier : Audit et contrôle interne

@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agadir (Ibn Zohr).
+
 ## Q.C.M. — Corrigé indicatif (60 questions, une ou plusieurs réponses possibles)
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Les questions 11, 13 et 28 comportent des propositions qui ne correspondent pas clairement aux définitions théoriques attendues (deux caractéristiques demandées, une seule identifiable, ou définitions inversées) — signalées explicitement. À vérifier avant de t'y fier pour réviser.

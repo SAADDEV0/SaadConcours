@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi.
+
 ## Épreuve de droit fiscal et des affaires (30 min)
 
 ### I. Fiscalité — Traitement fiscal des redevances de crédit-bail

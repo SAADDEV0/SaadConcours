@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal.
+>
 > Exercice à réponses ouvertes (pas de QCM) : les 4 dossiers sont recalculés intégralement ci-dessous. Le dossier 1 (fiscalité des personnes physiques) comporte plusieurs points d'interprétation légale non explicités dans l'énoncé (statut du conjoint, régime des terres agricoles à la date de l'exercice, traitement de la location de terrain nu) — les hypothèses retenues sont indiquées à chaque étape ; vérifie-les avec ton cours si ton professeur retient une convention différente. Le dossier 3 comporte un point de lecture ambigu sur le scan source (la remarque de provision visée pour PILARI vs PAGANI) — également signalé.
 
 ## Dossier 1 — Impôt sur le revenu (M. Alami, 2014)

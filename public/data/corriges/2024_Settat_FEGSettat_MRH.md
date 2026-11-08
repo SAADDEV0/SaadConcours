@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (économie et gestion d'entreprise, stratégie, GRH, communication) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Le scan disponible s'arrêtant à la question 37, seules les questions 1 à 37 sont corrigées ici.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FEG Settat. Il est rédigé à partir du programme standard des modules (économie et gestion d'entreprise, stratégie, GRH, communication) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Le scan disponible s'arrêtant à la question 37, seules les questions 1 à 37 sont corrigées ici.
 
 ### Questions
 

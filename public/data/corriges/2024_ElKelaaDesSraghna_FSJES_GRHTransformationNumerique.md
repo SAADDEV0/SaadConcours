@@ -1,4 +1,4 @@
-> Corrigé indicatif — sujet de dissertation au choix (Sujet 1 ou 2), sans grille de notation officielle publiée. Plan de réponse structuré ci-dessous pour le Sujet 1.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES El Kelâa des Sraghna (Cadi Ayyad). Sujet de dissertation au choix (Sujet 1 ou 2), sans grille de notation officielle publiée. Plan de réponse structuré ci-dessous pour le Sujet 1.
 
 **Introduction :** la digitalisation (ERP RH, SIRH, plateformes collaboratives) et l'essor de l'IA générative transforment en profondeur les pratiques de gestion des ressources humaines dans les organisations marocaines, publiques comme privées.
 

@@ -57,4 +57,3 @@ Pour le mois de septembre N, les services techniques relèvent : coût total du 
 ### Sujet de réflexion
 
 La réforme fiscale au Maroc.
-

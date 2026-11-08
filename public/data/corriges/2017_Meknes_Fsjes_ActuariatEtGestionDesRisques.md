@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés (reconstitution : le document source ne fournissait que la page de garde de la correction, sans énoncé exploitable).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès, avec calculs détaillés (reconstitution : le document source ne fournissait que la page de garde de la correction, sans énoncé exploitable).
 
 **Partie 1 — Mathématiques financières**
 

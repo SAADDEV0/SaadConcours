@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Kénitra, avec calculs détaillés.
 
 **Dossier 1 — Le marketing sensoriel**
 

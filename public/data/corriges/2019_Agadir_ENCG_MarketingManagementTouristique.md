@@ -1,4 +1,4 @@
-> Corrigé indicatif — sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Agadir. Aucune grille de notation officielle n'a été publiée.
 
 **Sujet 1** — Limites des stratégies marketing traditionnelles des destinations touristiques et pistes d'action.
 - Limites : approche standardisée peu différenciante, communication descendante peu adaptée à des touristes en quête d'expériences personnalisées, faible intégration du digital et des avis clients (UGC), vision produit plutôt qu'expérience.

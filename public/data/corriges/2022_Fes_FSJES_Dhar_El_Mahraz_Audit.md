@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Dhar El Mahraz.
+
 ## Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Le détail chiffré de l'exercice de comptabilité analytique (Dossier N°2) n'a pas pu être retranscrit depuis la source (seule sa description figure dans l'énoncé) — voir note dédiée. À vérifier, notamment sur le barème IS/TPA supposés.

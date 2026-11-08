@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard du module (économie internationale et du développement) — question de réflexion ouverte, aucune grille de correction officielle disponible pour ce sujet.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech. Il est rédigé à partir du programme standard du module (économie internationale et du développement) — question de réflexion ouverte, aucune grille de correction officielle disponible pour ce sujet.
 
 ### Question de réflexion
 

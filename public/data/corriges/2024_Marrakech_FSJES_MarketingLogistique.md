@@ -1,4 +1,4 @@
-> Corrigé indicatif — Sujet 1 obligatoire + un sujet au choix parmi les deux parcours. Plan de réponse structuré ci-dessous.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech. Sujet 1 obligatoire + un sujet au choix parmi les deux parcours. Plan de réponse structuré ci-dessous.
 
 **Sujet 1 — Défis de l'environnement économique globalisé**
 

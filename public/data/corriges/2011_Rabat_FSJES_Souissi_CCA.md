@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Souissi.
+
 ## 1ère partie — Comptabilité
 
 **Hypothèses de travail signalées.** Le sujet, tel que transcrit, ne fournit pas les taux d'amortissement du matériel de bureau, du matériel de transport ni de la machine A. Le corrigé adopte les taux usuels : **matériel de bureau 10 %**, **matériel de transport 20 %**, **machine A 10 %** (linéaire). Conventions : amortissement linéaire au prorata des mois à compter du mois d'utilisation ; dégressif à compter du premier jour du mois d'acquisition ; soldes d'amortissements de la balance arrêtés au 31/12/2008.

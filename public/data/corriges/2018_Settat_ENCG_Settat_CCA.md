@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Settat.
+
 ## Q.C.M. — Corrigé (50 questions)
 
 | Q | Réponse | Justification |

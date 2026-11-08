@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Casablanca (Université Hassan II).
+
 ## Corrigé indicatif
 
 > Corrigé rédigé à partir de l'énoncé transcrit — pas de correction officielle publiée trouvée. Barème IS supposé (le document ne précise pas l'année exacte de la session) : tranches 10 % (≤300 000), 20 % (300 001–1 000 000), 31 % (>1 000 000) ; taux de cotisation minimale 0,25 %. À vérifier si un barème différent s'applique à ta session.

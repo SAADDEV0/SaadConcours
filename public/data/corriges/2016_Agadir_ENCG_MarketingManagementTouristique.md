@@ -1,4 +1,4 @@
-> Corrigé indicatif — sans grille de notation officielle publiée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Agadir. Aucune grille de notation officielle n'a été publiée.
 
 **Partie I**
 

@@ -84,4 +84,3 @@ Les données extraites de la comptabilité financière sont fournies ci-dessous 
 ### Question de synthèse
 
 « Le Contrôle de Gestion et l'Audit Interne (ou Externe) sont souvent perçus comme des fonctions de "coût" et de "restriction". Démontrez en quoi cette vision est erronée en expliquant comment ces deux fonctions, par leur complémentarité, se positionnent comme des leviers stratégiques essentiels pour la création de valeur durable et la prévention des risques majeurs au sein de l'entreprise. »
-

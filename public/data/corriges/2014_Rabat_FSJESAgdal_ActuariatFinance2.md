@@ -1,4 +1,4 @@
-> Corrigé avec calculs détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal, avec calculs détaillés.
 
 **Partie I — Analyse mathématique et mathématiques financières**
 

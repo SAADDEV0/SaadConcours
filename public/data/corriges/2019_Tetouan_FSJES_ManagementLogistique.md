@@ -1,4 +1,4 @@
-> Corrigé indicatif structuré par sujet — épreuve de type étude de cas/synthèse, sans barème détaillé officiellement publié.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tétouan. Il est structuré par sujet — épreuve de type étude de cas/synthèse, sans barème détaillé officiellement publié.
 
 **Sujet 1 — Tableau d'analyse OMEGA**
 

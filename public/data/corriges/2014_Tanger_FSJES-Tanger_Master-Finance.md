@@ -1,3 +1,5 @@
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Tanger.
+
 ## Commentaire de citation — F. Bourguignon, *La mondialisation de l'inégalité* (2012)
 
 ### Introduction

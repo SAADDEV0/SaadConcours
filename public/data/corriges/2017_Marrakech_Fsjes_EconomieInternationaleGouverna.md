@@ -1,4 +1,4 @@
-> Corrigé avec plan structuré détaillé.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Marrakech, avec plan structuré détaillé.
 
 **Analyse du sujet :** la question invite à discuter, de façon nuancée, si l'insertion des pays en voie de développement (PVD) dans les échanges internationaux (commerce, IDE, finance) constitue un moteur de développement (croissance, réduction de la pauvreté, transformation structurelle) ou si elle comporte des risques et des limites.
 

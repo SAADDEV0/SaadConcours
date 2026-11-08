@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules concernés (marketing, management des organisations, droit des sociétés) — aucune grille de correction officielle disponible pour ce sujet ; ce QCM autorise plusieurs réponses par question.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Settat. Il est rédigé à partir du programme standard des modules concernés (marketing, management des organisations, droit des sociétés) — aucune grille de correction officielle disponible pour ce sujet ; ce QCM autorise plusieurs réponses par question.
 
 5. **b, c, d** — Maslow, Herzberg et Mayo appartiennent à l'école des relations humaines ; Fayol relève de l'école classique et Smith de l'économie classique.
 6. **a, b, c, d** — Décomposition des tâches, chronométrage, spécialisation et salaire au rendement sont les 4 piliers de l'OST ; l'autonomie des salariés est à l'opposé de sa logique.

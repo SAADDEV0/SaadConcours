@@ -1,4 +1,4 @@
-> Corrigé avec plans de réponse détaillés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FP Tétouan, avec plans de réponse détaillés.
 
 **Sujet 1 — Analyse de la citation**
 

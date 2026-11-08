@@ -55,4 +55,3 @@ MAROMEUBLE SARL fabrique des produits d'ameublement qu'elle écoule sur le march
 ### IV. Question de réflexion
 
 Discuter la place de la gestion financière dans l'entreprise.
-

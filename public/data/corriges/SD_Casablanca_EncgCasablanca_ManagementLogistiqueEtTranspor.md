@@ -1,4 +1,4 @@
-> Corrigé — éléments de réponse structurés.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de l'ENCG Casablanca. Éléments de réponse structurés.
 
 **Epreuve n°1 — Economie et Management**
 

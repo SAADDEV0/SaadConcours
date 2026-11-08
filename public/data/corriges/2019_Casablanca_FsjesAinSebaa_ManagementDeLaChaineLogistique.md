@@ -1,4 +1,4 @@
-> Corrigé avec plan structuré détaillé (reconstitution : le document source ne fournissait que la page de garde, sans énoncé exploitable).
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Ain Sebaâ, avec plan structuré détaillé (reconstitution : le document source ne fournissait que la page de garde, sans énoncé exploitable).
 
 **Sujet 1 — Résilience des chaînes d'approvisionnement face aux crises**
 

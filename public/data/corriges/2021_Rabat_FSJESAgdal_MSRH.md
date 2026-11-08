@@ -1,4 +1,4 @@
-> Corrigé rédigé à partir du programme standard des modules (gestion des ressources humaines, management stratégique, droit du travail, dialogue social) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Les questions 21, 22, 29, 30, 34, 35 et 36, absentes du scan disponible, ne sont pas traitées.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Agdal. Il est rédigé à partir du programme standard des modules (gestion des ressources humaines, management stratégique, droit du travail, dialogue social) et d'un raisonnement vérifié — aucune source officielle disponible pour ce sujet. Les questions 21, 22, 29, 30, 34, 35 et 36, absentes du scan disponible, ne sont pas traitées.
 
 ### Répondre aux questions suivantes en cochant la ou les bonnes réponses
 

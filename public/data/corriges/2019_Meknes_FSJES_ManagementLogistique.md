@@ -1,4 +1,4 @@
-> Corrigé indicatif : ce concours propose deux dissertations ouvertes (culture générale + spécialité logistique) sans grille de notation officielle publiée. Les éléments ci-dessous constituent un plan de réponse structuré, pas une correction chiffrée.
+> Corrigé indicatif rédigé par SaadConcours, pas une correction officielle de la FSJES Meknès. Ce concours propose deux dissertations ouvertes (culture générale + spécialité logistique) sans grille de notation officielle publiée. Les éléments ci-dessous constituent un plan de réponse structuré, pas une correction chiffrée.
 
 **Sujet d'ordre général — « L'entreprise marocaine arrive-t-elle à développer son capital humain face à la mondialisation ? »**
 
