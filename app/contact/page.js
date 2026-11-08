@@ -1,5 +1,7 @@
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
+import ChaineWhatsapp from "../_shared/ChaineWhatsapp";
+import { getSettings } from "@/lib/store";
 
 // Static copy, prerendered — same reasoning as /faq and /confidentialite.
 export const dynamic = "force-static";
@@ -23,7 +25,8 @@ function mailto(subject) {
   return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSettings().catch(() => null);
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: chromeHtml({ active: "" }) }} />
@@ -79,6 +82,8 @@ export default function ContactPage() {
           résultats, convocation), seul l&apos;établissement peut te répondre. Beaucoup de questions courantes sont
           déjà traitées dans la <a href="/faq">FAQ</a>.
         </p>
+
+        <ChaineWhatsapp settings={settings} />
       </div>
 
       <div dangerouslySetInnerHTML={{ __html: footerHtml() }} />

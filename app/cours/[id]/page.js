@@ -10,6 +10,7 @@ import CoursDetailClient from "./CoursDetailClient";
 import ConcoursLies from "../../_shared/ConcoursLies";
 import CahierCours from "../../_shared/CahierCours";
 import AdSlot from "../../_shared/AdSlot";
+import ChaineWhatsapp from "../../_shared/ChaineWhatsapp";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
@@ -315,6 +316,8 @@ export default async function CoursModulePage(props) {
                   </div>
                 </section>
               )}
+
+              <ChaineWhatsapp settings={settings} />
             </main>
           </div>
         </div>

@@ -8,6 +8,8 @@ import { getBacMatiereEffectif } from "../../../../lib/bacContenuEffectif";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../lib/bacProgramme";
 import { NATIONAL_SOURCES, bacNationauxSeries, bacNationalPdf, bacNationalDocLabel } from "../../../../lib/bacNationaux";
 import { Icon } from "../../../_shared/icons";
+import ChaineWhatsapp from "../../../_shared/ChaineWhatsapp";
+import { getSettings } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -47,6 +49,7 @@ export default async function BacMatierePage(props) {
   const niv = bacNiveauInfo(niveau);
   if (!m || !niv?.available) notFound();
   const contenu = await getBacMatiereEffectif(niveau, matiere);
+  const settings = await getSettings().catch(() => null);
   // Les examens nationaux sont listés ici, en liens directs vers les PDF.
   // Jusqu'au 2026-09-24, chaque session avait sa propre page
   // (/bac/.../examens/<id>) : 289 pages de ~90 mots autour d'un seul PDF,
@@ -263,6 +266,8 @@ export default async function BacMatierePage(props) {
                   </p>
                 </section>
               )}
+
+              <ChaineWhatsapp settings={settings} ar={m.lang === "ar"} />
             </main>
           </div>
         </div>

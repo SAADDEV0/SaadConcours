@@ -18,16 +18,17 @@ export const ICONE_WHATSAPP = (
   </svg>
 );
 
-export default function ChaineWhatsapp({ settings, ar = false }) {
+export default function ChaineWhatsapp({ settings, ar = false, texte = "" }) {
   const href = lienChaine(settings);
   if (!href) return null;
   return (
     <p className="chaine-wa" dir={ar ? "rtl" : undefined} lang={ar ? "ar" : undefined}>
       {ICONE_WHATSAPP}
       <span>
-        {ar
-          ? "الدروس الجديدة والدفاتر والمباريات: تابع قناة SaadConcours على واتساب."
-          : "Nouveaux cours, cahiers et sujets corrigés : suis la chaîne WhatsApp SaadConcours."}
+        {texte ||
+          (ar
+            ? "الدروس الجديدة والدفاتر والمباريات: تابع قناة SaadConcours على واتساب."
+            : "Nouveaux cours, cahiers et sujets corrigés : suis la chaîne WhatsApp SaadConcours.")}
       </span>
       <a href={href} target="_blank" rel="noopener">
         {ar ? "متابعة القناة" : "Suivre la chaîne"}

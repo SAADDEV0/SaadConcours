@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllBoutique, getAllCours, getAllDroit } from "@/lib/store";
+import { getAllBoutique, getAllCours, getAllDroit, getSettings } from "@/lib/store";
+import ChaineWhatsapp from "../../_shared/ChaineWhatsapp";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { renderMarkdownWithMath } from "../../_shared/mathMarkdown";
 import MathScripts from "../../_shared/MathScripts";
@@ -84,6 +85,7 @@ export default async function ProduitPage(props) {
   const { id } = await props.params;
   const { p, list, coursList, cours } = await findProduit(id);
   if (!p) notFound();
+  const settings = await getSettings().catch(() => null);
   // Cahier en arabe : titre, accroche, points forts, présentation et sommaire de droite à gauche.
   const rtl = p.langue === "ar" ? { dir: "rtl", lang: "ar" } : {};
 
@@ -321,6 +323,8 @@ export default async function ProduitPage(props) {
               <div className="shop-grid" dangerouslySetInnerHTML={{ __html: autres.map(boutiqueCardHtml).join("") }} />
             </section>
           )}
+
+          <ChaineWhatsapp settings={settings} texte="Les nouveaux cahiers et leurs prix sont annoncés en premier sur la chaîne WhatsApp SaadConcours." />
         </div>
       </div>
 

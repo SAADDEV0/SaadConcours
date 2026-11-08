@@ -1,4 +1,5 @@
-import { getAllBoutique, getAllCours, getAllDroit } from "@/lib/store";
+import { getAllBoutique, getAllCours, getAllDroit, getSettings } from "@/lib/store";
+import ChaineWhatsapp from "../_shared/ChaineWhatsapp";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import ChromeInit from "../_shared/ChromeInit";
 import { boutiqueCardHtml } from "../_shared/boutiqueCard";
@@ -54,7 +55,7 @@ const ETAPES = [
 ];
 
 export default async function BoutiquePage() {
-  const { produits, groupes } = await donnees();
+  const [{ produits, groupes }, settings] = await Promise.all([donnees(), getSettings().catch(() => null)]);
   const niveaux = BOUTIQUE_NIVEAUX.map((n) => ({ ...n, count: produits.filter((p) => p.niveau === n.code).length })).filter((n) => n.count);
   const semestres = groupes.filter((g) => g.code);
   // Le filtre n'a besoin que du texte cherché : pas la description entière de
@@ -194,6 +195,8 @@ export default async function BoutiquePage() {
               </p>
             </details>
           </section>
+
+          <ChaineWhatsapp settings={settings} texte="Les nouveaux cahiers et leurs prix sont annoncés en premier sur la chaîne WhatsApp SaadConcours." />
         </div>
       </div>
 

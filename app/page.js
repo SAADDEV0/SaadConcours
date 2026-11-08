@@ -13,6 +13,7 @@ import { ESPACES_ACTIFS, espaceClass } from "../lib/espaces";
 import HomeClient from "./HomeClient";
 import AdSlot from "./_shared/AdSlot";
 import { Icon } from "./_shared/icons";
+import { ICONE_WHATSAPP, lienChaine } from "./_shared/ChaineWhatsapp";
 
 // Served as prerendered HTML instead of rendered per request. lib/github.js
 // reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
@@ -56,6 +57,7 @@ export default async function HomePage() {
     getAllBlog().catch(() => []),
   ]);
   const corrigeIds = getCorrigeIdsLocal();
+  const chaine = lienChaine(settings);
   const aCorrige = (c) => Boolean(c.corrige_md) || corrigeIds.has(c.id);
 
   const coursPublies = cours.filter((c) => c.available);
@@ -300,6 +302,16 @@ export default async function HomePage() {
                   </li>
                 ))}
               </ul>
+              {chaine && (
+                <a className="home-chooser-wa" href={chaine} target="_blank" rel="noopener">
+                  {ICONE_WHATSAPP}
+                  <span className="home-chooser-text">
+                    <span className="home-chooser-name">Chaîne WhatsApp SaadConcours</span>
+                    <span className="home-chooser-desc">Nouveaux cours, cahiers et sujets corrigés, annoncés sur ton téléphone</span>
+                  </span>
+                  <Icon name="arrow-right" size={18} />
+                </a>
+              )}
             </nav>
           </div>
 

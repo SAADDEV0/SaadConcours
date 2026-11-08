@@ -1454,8 +1454,11 @@ annonce **tout le site** (nouveaux cours, cahiers et leurs prix, sujets corrigé
 les concours : les textes restent généraux.
 - **Ne pas gêner les élèves** (demande de Saad, 2026-11-08) : une seule ligne discrète tout en bas
   (`app/_shared/ChaineWhatsapp.js`, sous la navigation des chapitres Bac, FSJES et Droit, en arabe
-  sur les cours en arabe ; sous les articles), le bloc « Rejoindre la chaîne » de `CommunauteCta`
-  sous les concours et l'icône du pied de page. Jamais de pop-up, de bandeau en haut de page, de
+  sur les cours en arabe ; en bas des pages de module Bac, FSJES et Droit, des articles, de
+  `/contact` ; sur `/boutique` et les fiches avec un texte sur les cahiers et leurs prix, prop
+  `texte`), le bloc « Rejoindre la chaîne » de `CommunauteCta` sous les concours, l'icône du pied
+  de page, et sur l'accueil une dernière ligne verte « Chaîne WhatsApp SaadConcours » dans
+  « Je prépare… », sous Concours Master (demande de Saad, `home-chooser-wa` dans `app/page.js`). Jamais de pop-up, de bandeau en haut de page, de
   bouton flottant de plus ni de rappel répété ; le bouton flottant vert reste celui des cahiers.
 - Rien ne s'affiche si le réglage est vide ou n'est pas un lien `whatsapp.com/channel/`.
 

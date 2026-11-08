@@ -12,6 +12,7 @@ import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { droitLangueInfo, droitRangLabel } from "../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie, droitEquivalent } from "../../../lib/droit";
 import { Icon } from "../../_shared/icons";
+import ChaineWhatsapp from "../../_shared/ChaineWhatsapp";
 import CahierCours from "../../_shared/CahierCours";
 import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 
@@ -340,6 +341,8 @@ export default async function DroitModulePage(props) {
                   </div>
                 </section>
               )}
+
+              <ChaineWhatsapp settings={settings} ar={c.langue === "ar"} />
             </main>
           </div>
         </div>
