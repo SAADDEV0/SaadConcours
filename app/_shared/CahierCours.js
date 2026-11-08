@@ -6,37 +6,24 @@
 import { accrocheCourte, deModule, formatPrix, produitImage } from "../../lib/boutique";
 import { Icon } from "./icons";
 
-// Bandeau d'une ligne, sous le titre d'un chapitre et en tête de la page du
-// module : sur téléphone la colonne latérale passe sous tout le contenu et
-// l'annonce de fin de chapitre n'est vue que par ceux qui lisent jusqu'au
-// bout. Le bandeau entier est un seul lien (grande cible au doigt).
-export function CahierBandeau({ cahier, module }) {
+// Une seule ligne de texte sous le titre d'un chapitre : sur téléphone la
+// colonne latérale passe sous tout le contenu, et l'encadré de fin de
+// chapitre n'est vu que par ceux qui lisent jusqu'au bout. Volontairement
+// discret (pas de bandeau ni de bouton, demande de Saad du 2026-11-08 : « trop
+// de boutons »).
+export function CahierLien({ cahier }) {
   if (!cahier) return null;
-  const href = `/boutique/${encodeURIComponent(cahier.id)}`;
-  const cover = produitImage(cahier.couverture);
   const ar = cahier.langue === "ar";
-  const prix = formatPrix(cahier.prix, cahier.devise);
   return (
-    <a className="sp-cahier-bandeau" href={href} dir={ar ? "rtl" : undefined} lang={ar ? "ar" : undefined}>
-      {cover && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={cover} alt="" width={40} height={53} loading="lazy" decoding="async" />
-      )}
-      <span className="sp-cahier-bandeau-body">
-        <strong>
-          {ar ? "دفتر التحضير" : `Cahier de préparation ${deModule(module)}`} · <span className="sp-nowrap">{prix}</span>
-        </strong>
-        <span>{ar ? cahier.sousTitre : accrocheCourte(cahier)}</span>
-      </span>
-      <span className="sp-cahier-bandeau-cta">
-        {ar ? "اطلع عليه" : "Voir"} <Icon name={ar ? "arrow-left" : "arrow-right"} size={16} />
-      </span>
+    <a className="sp-cahier-lien" href={`/boutique/${encodeURIComponent(cahier.id)}`} dir={ar ? "rtl" : undefined} lang={ar ? "ar" : undefined}>
+      <Icon name="book-open" size={15} />
+      {ar ? "دفتر التحضير" : "Cahier de préparation"} · {formatPrix(cahier.prix, cahier.devise)}
     </a>
   );
 }
 
-// Carte de la colonne latérale (sticky sur ordinateur) : couverture, titre,
-// prix et bouton, au lieu d'un simple lien texte.
+// Carte de la colonne latérale (sticky sur ordinateur) : couverture, titre et
+// prix, un seul lien, sans bouton.
 export function CahierSide({ cahier }) {
   if (!cahier) return null;
   const href = `/boutique/${encodeURIComponent(cahier.id)}`;
@@ -54,9 +41,6 @@ export function CahierSide({ cahier }) {
           <strong>{cahier.titre}</strong>
           <em>{formatPrix(cahier.prix, cahier.devise)} · PDF</em>
         </span>
-      </a>
-      <a className="sp-btn primary sp-cahier-side-btn" href={href}>
-        {ar ? "اطلع على الدفتر" : "Voir le cahier"} <Icon name={ar ? "arrow-left" : "arrow-right"} size={16} />
       </a>
     </div>
   );

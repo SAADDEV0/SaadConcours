@@ -8,7 +8,7 @@ import JsonLd from "../../_shared/JsonLd";
 import MathScripts from "../../_shared/MathScripts";
 import CoursDetailClient from "./CoursDetailClient";
 import ConcoursLies from "../../_shared/ConcoursLies";
-import CahierCours, { CahierBandeau } from "../../_shared/CahierCours";
+import CahierCours from "../../_shared/CahierCours";
 import AdSlot from "../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { cahierDuCours, formatPrix } from "../../../lib/boutique";
@@ -227,8 +227,6 @@ export default async function CoursModulePage(props) {
             </aside>
 
             <main className="bac-main">
-              <CahierBandeau cahier={cahier} module={c.module} />
-
               <section id="chapitres" className="bac-semestre">
                 <h2 className="bac-semestre-title">
                   <span className="bac-semestre-code">{c.semestre || <Icon name="book-open" size={16} />}</span>

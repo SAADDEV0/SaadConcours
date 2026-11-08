@@ -13,7 +13,7 @@ import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref, slugifyTitre } from ".
 import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursParModule";
 import { cahierDuCours } from "../../../../lib/boutique";
 import ConcoursLies from "../../../_shared/ConcoursLies";
-import CahierCours, { CahierBandeau, CahierSide } from "../../../_shared/CahierCours";
+import CahierCours, { CahierLien, CahierSide } from "../../../_shared/CahierCours";
 import ChaineWhatsapp from "../../../_shared/ChaineWhatsapp";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
@@ -223,7 +223,7 @@ export default async function CoursChapitrePage(props) {
                 </div>
               </div>
 
-              <CahierBandeau cahier={cahier} module={c.module} />
+              <CahierLien cahier={cahier} />
 
               <div className="bac-tabs">
                 {ONGLETS.map((o, i) => (

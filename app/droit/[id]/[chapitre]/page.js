@@ -14,7 +14,7 @@ import { droitLangueInfo, droitRangLabel } from "../../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droitOuvert, isDroitPublie, droitEquivalent } from "../../../../lib/droit";
 import { slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { Icon } from "../../../_shared/icons";
-import CahierCours, { CahierBandeau, CahierSide } from "../../../_shared/CahierCours";
+import CahierCours, { CahierLien, CahierSide } from "../../../_shared/CahierCours";
 import ChaineWhatsapp from "../../../_shared/ChaineWhatsapp";
 import { cahierDuCours } from "../../../../lib/boutique";
 
@@ -251,7 +251,7 @@ export default async function DroitChapitrePage(props) {
                 </div>
               </div>
 
-              <CahierBandeau cahier={cahier} module={c.module} />
+              <CahierLien cahier={cahier} />
 
               <div className="bac-tabs">
                 {onglets.map((o, i) => (

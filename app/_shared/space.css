@@ -617,25 +617,16 @@
 .sp-cahier-foot{display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; margin-top:10px;}
 .sp-cahier-prix{font-size:.84rem; color:var(--text-dim);}
 .sp-cahier-prix strong{color:var(--text);}
-/* Bandeau sous le titre du chapitre / en tête du module (CahierBandeau). */
-.sp-cahier-bandeau{display:flex; align-items:center; gap:12px; margin:0 0 20px; padding:10px 14px; border-radius:var(--radius-lg); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 30%, transparent); color:var(--text); text-decoration:none; transition:border-color .15s;}
-.sp-cahier-bandeau:hover{border-color:var(--accent);}
-.sp-cahier-bandeau img{flex:none; width:40px; height:auto; border-radius:4px; border:1px solid var(--border);}
-.sp-cahier-bandeau-body{min-width:0; flex:1; display:flex; flex-direction:column; gap:2px;}
-.sp-cahier-bandeau-body strong{font-size:.9rem; line-height:1.3; font-weight:700;}
-.sp-cahier-bandeau-body strong .sp-nowrap{white-space:nowrap;}
-.sp-cahier-bandeau-body > span{font-size:.82rem; line-height:1.4; color:var(--text-dim); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-.sp-cahier-bandeau-cta{flex:none; display:inline-flex; align-items:center; gap:4px; padding:7px 12px; border-radius:999px; background:var(--accent-fill); color:var(--on-accent, #fff); font-size:.84rem; font-weight:700;}
+/* Ligne discrète sous le titre du chapitre (CahierLien). */
+.sp-cahier-lien{display:inline-flex; align-items:center; gap:6px; margin:-8px 0 18px; font-size:.86rem; font-weight:600; color:var(--accent); text-decoration:none;}
+.sp-cahier-lien:hover{text-decoration:underline;}
 /* Carte de la colonne latérale (CahierSide). */
-.sp-cahier-side-row{display:flex; align-items:center; gap:10px; padding:4px 2px 10px; color:var(--text); text-decoration:none;}
+.sp-cahier-side-row{display:flex; align-items:center; gap:10px; padding:4px 2px; color:var(--text); text-decoration:none;}
 .sp-cahier-side-row img{flex:none; width:52px; height:auto; border-radius:4px; border:1px solid var(--border);}
 .sp-cahier-side-row strong{display:block; font-size:.86rem; line-height:1.3;}
 .sp-cahier-side-row em{display:block; margin-top:3px; font-style:normal; font-size:.8rem; color:var(--text-faint);}
 .sp-cahier-side-row:hover strong{color:var(--accent);}
-.sp-cahier-side-btn{width:100%; justify-content:center;}
 @media (max-width:560px){
-  .sp-cahier-bandeau{padding:9px 10px; gap:10px;}
-  .sp-cahier-bandeau-cta{padding:6px 10px;}
   .sp-cahier{gap:12px; padding:14px;}
   .sp-cahier-cover, .sp-cahier.compact .sp-cahier-cover{width:64px;}
   .sp-cahier-foot .sp-btn{width:100%; justify-content:center;}
