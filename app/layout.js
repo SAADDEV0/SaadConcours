@@ -8,6 +8,7 @@ import "./_shared/space.css";
 import Script from "next/script";
 import { IBM_Plex_Sans_Arabic, Literata, Noto_Naskh_Arabic, Plus_Jakarta_Sans } from "next/font/google";
 import DuaToast from "./_shared/DuaToast";
+import { fabHtml } from "./_shared/boutonFlottant";
 import { getSettings } from "@/lib/store";
 import { adsForPlacement, partnerAdsOptions, publicPartnerAdsConfig, reservationCss } from "./_shared/partnerAds";
 
@@ -186,8 +187,10 @@ export default async function RootLayout({ children }) {
   // balise du tout quand les réglages n'ont pas pu être lus au build — le
   // navigateur se rabat alors sur /data/settings.json. « < » échappé : le JSON
   // ne doit jamais pouvoir fermer la balise <script>.
-  // Bouton WhatsApp flottant (posé par footerHtml) masqué depuis les réglages.
-  const hideWhatsappFab = settings?.whatsappFabEnabled === false;
+  // Bouton flottant (réseau, lien, texte, couleur réglés dans la console).
+  // Rendu au build depuis les réglages ; globals.css le masque sur les pages
+  // sans pied de page (console admin comprise).
+  const boutonFlottant = fabHtml(settings);
   const partnerAdsJson = settings
     ? JSON.stringify(publicPartnerAdsConfig(settings) || { partnerAdsEnabled: false }).replace(/</g, "\\u003c")
     : null;
@@ -229,7 +232,6 @@ export default async function RootLayout({ children }) {
         {/* katex.min.css is injected client-side by chromeScript() instead of
            linked here — a render-blocking stylesheet on every single page
            (most of which show no math at all) was hurting LCP site-wide. */}
-        {hideWhatsappFab && <style>{".wa-fab{display:none!important}"}</style>}
         {partnerAdReservation && (
           <style
             // eslint-disable-next-line react/no-danger
@@ -278,6 +280,10 @@ export default async function RootLayout({ children }) {
           />
         )}
         {children}
+        {boutonFlottant && (
+          // eslint-disable-next-line react/no-danger
+          <div className="fab-slot" dangerouslySetInnerHTML={{ __html: boutonFlottant }} />
+        )}
         <DuaToast />
         {/* <EmailGateModal /> (app/_shared/EmailGateModal.js) retirée le
            2026-09-24 pour la demande AdSense : une modale qui recouvre la

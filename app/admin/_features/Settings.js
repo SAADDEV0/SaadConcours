@@ -10,6 +10,7 @@ import { COLLECTION_LIST } from "../_lib/collections";
 import { loadJson } from "../_lib/repo";
 import { api, downloadText } from "../_lib/api";
 import { dateTimeFr, num, todayIso } from "../_lib/format";
+import { FAB_RESEAUX, FAB_TEXTE_DEFAUT, fabHtml } from "../../_shared/boutonFlottant";
 
 const TABS = [
   { key: "general", label: "Général", icon: "settings" },
@@ -92,20 +93,65 @@ function General() {
   );
 }
 
-// Bouton WhatsApp flottant « Cahiers de préparation » (chrome.js → whatsappFabHtml).
-// Affiché tant que le réglage n'est pas explicitement à false ; lu au build
-// par app/layout.js, qui le masque sur tout le site.
-const WA_KEYS = ["whatsappFabEnabled"];
+// Bouton flottant en bas à droite du site (app/_shared/boutonFlottant.js) :
+// réseau (logo + couleur), lien, texte, couleur. Lu au build par app/layout.js.
+// Affiché tant que whatsappFabEnabled n'est pas explicitement à false.
+const WA_KEYS = ["whatsappFabEnabled", "fabNetwork", "fabLink", "fabLabel", "fabColor"];
 
 function WhatsappFab() {
   const s = useSettingsForm(WA_KEYS);
   if (!s.form) return null;
+  const f = s.form;
+  const reseau = FAB_RESEAUX.find((r) => r.key === f.fabNetwork) || FAB_RESEAUX[0];
+  // Aperçu avec les liens « Réseaux sociaux » enregistrés (ceux de cette carte
+  // ne sont pas modifiés ici : seuls les 5 réglages du bouton sont enregistrés).
+  const apercu = fabHtml({ ...s.settings, ...f, whatsappFabEnabled: true }, { apercu: true });
+  const lienSocial = reseau.social ? s.settings?.[reseau.social] : "";
+  const defautLien =
+    reseau.key === "whatsapp"
+      ? "Vide : numéro des cahiers (+212 7 13 87 53 27) avec le message « je souhaite acheter le cahier… »."
+      : reseau.social
+        ? `Vide : lien ${reseau.label} saisi dans « Réseaux sociaux »${lienSocial ? ` (${lienSocial})` : " (aucun pour l'instant)"}.`
+        : "";
+  const couleurDefaut = reseau.color;
   return (
     <section className="ax-card">
-      <SectionTitle>Bouton WhatsApp flottant</SectionTitle>
-      <p className="ax-sub">Le bouton vert « Cahiers de préparation » (achat sur WhatsApp) en bas à droite de toutes les pages publiques.</p>
-      <Switch checked={s.form.whatsappFabEnabled !== false} onChange={(v) => s.set("whatsappFabEnabled", v)} label="Afficher le bouton sur le site" />
-      <SaveBar s={s} label="bouton WhatsApp" />
+      <SectionTitle>Bouton flottant</SectionTitle>
+      <p className="ax-sub">Le bouton rond en bas à droite de toutes les pages publiques. Change le réseau (logo et couleur), le lien et le texte.</p>
+      <Switch checked={f.whatsappFabEnabled !== false} onChange={(v) => s.set("whatsappFabEnabled", v)} label="Afficher le bouton sur le site" />
+      <Field label="Réseau (logo et couleur)">
+        <select className="ax-select" value={reseau.key} onChange={(e) => s.set("fabNetwork", e.target.value)} style={{ marginTop: 10 }}>
+          {FAB_RESEAUX.map((r) => (
+            <option key={r.key} value={r.key}>
+              {r.label}
+            </option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Lien" hint={defautLien || "Obligatoire pour ce réseau."}>
+        <input className="ax-input" value={f.fabLink || ""} placeholder={reseau.ph} onChange={(e) => s.set("fabLink", e.target.value.trim())} />
+      </Field>
+      <Field label="Texte à côté du logo" hint="Visible sur ordinateur ; sur téléphone, le logo seul. Vide = logo seul partout.">
+        <input className="ax-input" value={f.fabLabel ?? FAB_TEXTE_DEFAUT} maxLength={40} onChange={(e) => s.set("fabLabel", e.target.value)} />
+      </Field>
+      <Field label="Couleur" hint={f.fabColor ? "Couleur personnalisée." : `Couleur de ${reseau.label} par défaut.`}>
+        <div className="ax-btn-row">
+          <input type="color" value={f.fabColor || couleurDefaut} onChange={(e) => s.set("fabColor", e.target.value)} style={{ width: 44, height: 34, padding: 0, border: "none", background: "none", cursor: "pointer" }} aria-label="Couleur du bouton" />
+          {f.fabColor && (
+            <button type="button" className="ax-btn ghost" onClick={() => s.set("fabColor", null)}>
+              Couleur du réseau
+            </button>
+          )}
+        </div>
+      </Field>
+      <Field label="Aperçu">
+        {apercu ? (
+          <div style={{ padding: "14px 0" }} dangerouslySetInnerHTML={{ __html: apercu }} />
+        ) : (
+          <Alert tone="warn">Aucun lien utilisable : le bouton ne s&apos;affichera pas sur le site.</Alert>
+        )}
+      </Field>
+      <SaveBar s={s} label="bouton flottant" />
     </section>
   );
 }

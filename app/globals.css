@@ -906,32 +906,36 @@ footer.site-footer{
 .egm-skip:hover{color:var(--text-dim);}
 
 
-/* ---------- Bouton WhatsApp flottant (chrome.js → whatsappFabHtml) ---------- */
-/* Vert WhatsApp (couleur de la marque tierce, reconnue d'un coup d'oeil) en
- * bas à droite ; libellé « Cahiers de préparation » sur ordinateur, rond seul sur
- * téléphone. Caché quand une barre collante occupe déjà le bas (QCM) et
- * remonté au-dessus du bouton d'édition admin. */
+/* ---------- Bouton flottant (app/_shared/boutonFlottant.js, posé par layout.js) ---------- */
+/* Couleur du réseau choisi (vert WhatsApp par défaut, reconnu d'un coup d'oeil)
+ * en bas à droite ; libellé sur ordinateur, rond seul sur téléphone. Seulement
+ * sur les pages qui ont le pied de page (jamais dans la console). Caché quand
+ * une barre collante occupe déjà le bas (QCM) et remonté au-dessus du bouton
+ * d'édition admin. */
 .wa-fab{
   position:fixed; right:16px; bottom:calc(16px + var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); z-index:50;
   display:inline-flex; align-items:center; gap:8px; height:52px; min-width:52px; padding:0 14px; border-radius:999px;
-  background:#25d366; color:#fff !important; font-weight:700; font-size:.92rem; text-decoration:none !important;
-  box-shadow:0 6px 18px -6px rgba(0,0,0,.45); transition:transform .15s, background .15s;
+  background:var(--fab-bg, #25d366); color:#fff !important; font-weight:700; font-size:.92rem; text-decoration:none !important;
+  box-shadow:0 6px 18px -6px rgba(0,0,0,.45); transition:transform .15s, filter .15s;
 }
 .wa-fab svg{width:26px; height:26px; flex-shrink:0;}
+.wa-fab-rond{width:52px; padding:0; justify-content:center;}
+body:not(:has(.site-footer)) .wa-fab:not(.wa-fab-apercu){display:none;}
+.wa-fab.wa-fab-apercu{position:static; opacity:1 !important; visibility:visible !important; transform:none;}
 /* Ligne « Suivre la chaîne WhatsApp » en bas des chapitres et articles (ChaineWhatsapp.js). */
 .chaine-wa{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; margin:28px 0 0; padding-top:14px; border-top:1px solid var(--border); color:var(--text-dim); font-size:var(--fs-sm); line-height:1.5;}
 .chaine-wa svg{width:18px; height:18px; flex:none; color:#25d366;}
 .chaine-wa a{font-weight:600; color:var(--accent);}
-.wa-fab:hover{background:#1ebe5b; transform:translateY(-2px);}
-.wa-fab:focus-visible{outline:none; box-shadow:0 0 0 3px #fff, 0 0 0 6px #25d366;}
+.wa-fab:hover{filter:brightness(.92); transform:translateY(-2px);}
+.wa-fab:focus-visible{outline:none; box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--fab-ring, #25d366);}
 @media (max-width:640px){
-  .wa-fab{width:52px; padding:0; justify-content:center;}
-  .wa-fab-label{display:none;}
+  .wa-fab:not(.wa-fab-apercu){width:52px; padding:0; justify-content:center;}
+  .wa-fab:not(.wa-fab-apercu) .wa-fab-label{display:none;}
   /* Premier écran : le rond masquait l'action principale (PDF d'une fiche,
      flèches de « Je prépare… »). chrome.js pose .fab-ready après un
      demi-écran de défilement. */
   .wa-fab{transition:transform .2s ease, opacity .2s ease, visibility .2s;}
-  html:not(.fab-ready) .wa-fab{opacity:0; visibility:hidden; transform:translateY(12px) scale(.9);}
+  html:not(.fab-ready) .wa-fab:not(.wa-fab-apercu){opacity:0; visibility:hidden; transform:translateY(12px) scale(.9);}
 }
 @media (max-width:640px) and (prefers-reduced-motion:reduce){ .wa-fab{transition:none;} }
 body:has(.eval-submit-bar) .wa-fab, body:has(.sheet-m.is-open) .wa-fab{display:none;}
