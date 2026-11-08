@@ -14,6 +14,7 @@ import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursPa
 import { cahierDuCours } from "../../../../lib/boutique";
 import ConcoursLies from "../../../_shared/ConcoursLies";
 import CahierCours, { CahierBandeau, CahierSide } from "../../../_shared/CahierCours";
+import ChaineWhatsapp from "../../../_shared/ChaineWhatsapp";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { Icon } from "../../../_shared/icons";
@@ -318,6 +319,8 @@ export default async function CoursChapitrePage(props) {
                   </a>
                 )}
               </nav>
+
+              <ChaineWhatsapp settings={settings} />
             </main>
           </div>
         </div>

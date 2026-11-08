@@ -1,4 +1,5 @@
 import { WHATSAPP_NUMERO } from "./chrome";
+import { lienChaine } from "./ChaineWhatsapp";
 
 // Deux appels sous les sujets (fiche concours, hubs) : envoyer le sujet qu'on
 // vient de passer, et suivre la chaîne WhatsApp. Le premier fait grandir la
@@ -10,7 +11,7 @@ import { WHATSAPP_NUMERO } from "./chrome";
 // (Réglages › Réseaux sociaux › WhatsApp : le lien de la chaîne,
 // https://whatsapp.com/channel/…).
 export default function CommunauteCta({ settings, sujet = "" }) {
-  const chaine = /^https:\/\/(www\.)?whatsapp\.com\/channel\//.test(String(settings?.whatsapp || "")) ? settings.whatsapp : null;
+  const chaine = lienChaine(settings);
   const message = `Bonjour, je vous envoie le sujet du concours${sujet ? ` ${sujet}` : ""} : `;
   const envoi = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(message)}`;
   return (
@@ -28,7 +29,7 @@ export default function CommunauteCta({ settings, sujet = "" }) {
       {chaine && (
         <div>
           <strong>La chaîne WhatsApp SaadConcours</strong>
-          <span>Les nouveaux sujets corrigés et les dates des concours, directement sur ton téléphone.</span>
+          <span>Les nouveaux cours, les cahiers de préparation et les sujets corrigés, annoncés sur ton téléphone.</span>
           <a className="sp-btn" href={chaine} target="_blank" rel="noopener">
             Rejoindre la chaîne
           </a>

@@ -41,6 +41,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
 | `ajoute un emplacement de pub` · `déplace la pub de X` | [X3](#x3--emplacements-publicitaires-adsense) |
+| `mets la chaîne WhatsApp sur X` · `change le lien de la chaîne` | [X4](#x4--chaîne-whatsapp-sur-le-site) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
 | `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
 | `vérifie` · `publie` · `push` · `déploie` | [P1](#p1--vérifier-committer-publier) |
@@ -1445,6 +1446,18 @@ console (Monétisation › Google AdSense) construit son formulaire depuis la m�
 - **Règles** : jamais au-dessus du H1 ; entre deux parties naturelles, jamais au milieu d'un QCM ;
   au plus 3 blocs par page (colonne latérale comprise) ; colonne latérale = grand écran seulement.
 - Un bloc réserve sa hauteur (pas de saut de page) et se replie si Google n'a rien à servir.
+
+### X4 — Chaîne WhatsApp sur le site
+Lien de la chaîne : `whatsapp` dans `settings.json` (console : Réglages › Réseaux sociaux ›
+WhatsApp), `https://whatsapp.com/channel/0029Vb9DOwa77qVLZXHeCO1j` depuis le 2026-11-08. La chaîne
+annonce **tout le site** (nouveaux cours, cahiers et leurs prix, sujets corrigés), pas seulement
+les concours : les textes restent généraux.
+- **Ne pas gêner les élèves** (demande de Saad, 2026-11-08) : une seule ligne discrète tout en bas
+  (`app/_shared/ChaineWhatsapp.js`, sous la navigation des chapitres Bac, FSJES et Droit, en arabe
+  sur les cours en arabe ; sous les articles), le bloc « Rejoindre la chaîne » de `CommunauteCta`
+  sous les concours et l'icône du pied de page. Jamais de pop-up, de bandeau en haut de page, de
+  bouton flottant de plus ni de rappel répété ; le bouton flottant vert reste celui des cahiers.
+- Rien ne s'affiche si le réglage est vide ou n'est pas un lien `whatsapp.com/channel/`.
 
 ## M. MAINTENANCE
 

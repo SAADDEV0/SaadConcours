@@ -12,6 +12,8 @@ import BacChapitreClient from "../../../BacChapitreClient";
 import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, findBacChapitre, bacMatiereHref, bacChapitreHref, bacTextDir } from "../../../../../lib/bacProgramme";
 import { getBacChapitreEffectif, getBacMatiereEffectif } from "../../../../../lib/bacContenuEffectif";
 import { Icon } from "../../../../_shared/icons";
+import ChaineWhatsapp from "../../../../_shared/ChaineWhatsapp";
+import { getSettings } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -75,6 +77,7 @@ export default async function BacChapitrePage(props) {
   const niv = bacNiveauInfo(niveau);
   const contenu = found && niv?.available ? await getBacChapitreEffectif(niveau, matiere, chapitre) : null;
   if (!contenu) notFound();
+  const settings = await getSettings().catch(() => null);
   const c = found.chapitre;
   // Sommaire et navigation limités aux chapitres rédigés : les autres n'ont
   // pas de page.
@@ -209,6 +212,8 @@ export default async function BacChapitrePage(props) {
                   <span />
                 )}
               </nav>
+
+              <ChaineWhatsapp settings={settings} ar={m.lang === "ar"} />
             </main>
           </div>
         </div>

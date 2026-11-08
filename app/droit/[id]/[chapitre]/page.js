@@ -15,6 +15,7 @@ import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droit
 import { slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { Icon } from "../../../_shared/icons";
 import CahierCours, { CahierBandeau, CahierSide } from "../../../_shared/CahierCours";
+import ChaineWhatsapp from "../../../_shared/ChaineWhatsapp";
 import { cahierDuCours } from "../../../../lib/boutique";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -327,6 +328,8 @@ export default async function DroitChapitrePage(props) {
                   </a>
                 )}
               </nav>
+
+              <ChaineWhatsapp settings={settings} ar={ar} />
             </main>
           </div>
         </div>

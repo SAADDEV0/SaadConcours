@@ -918,6 +918,10 @@ footer.site-footer{
   box-shadow:0 6px 18px -6px rgba(0,0,0,.45); transition:transform .15s, background .15s;
 }
 .wa-fab svg{width:26px; height:26px; flex-shrink:0;}
+/* Ligne « Suivre la chaîne WhatsApp » en bas des chapitres et articles (ChaineWhatsapp.js). */
+.chaine-wa{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; margin:28px 0 0; padding-top:14px; border-top:1px solid var(--border); color:var(--text-dim); font-size:var(--fs-sm); line-height:1.5;}
+.chaine-wa svg{width:18px; height:18px; flex:none; color:#25d366;}
+.chaine-wa a{font-weight:600; color:var(--accent);}
 .wa-fab:hover{background:#1ebe5b; transform:translateY(-2px);}
 .wa-fab:focus-visible{outline:none; box-shadow:0 0 0 3px #fff, 0 0 0 6px #25d366;}
 @media (max-width:640px){

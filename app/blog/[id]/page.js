@@ -12,6 +12,7 @@ import { formatDateFr } from "../../_shared/format";
 import { ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 import BlogDetailClient, { ShareButton } from "./BlogDetailClient";
 import MathScripts from "../../_shared/MathScripts";
+import ChaineWhatsapp from "../../_shared/ChaineWhatsapp";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -185,6 +186,8 @@ export default async function BlogDetailPage(props) {
         <article className="sp-article">
           <div className="enonce-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </article>
+
+        <ChaineWhatsapp settings={settings} />
 
         <AdSlot settings={settings} placement="article_bottom" />
 
