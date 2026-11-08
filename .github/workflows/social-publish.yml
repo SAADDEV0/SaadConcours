@@ -90,7 +90,9 @@ jobs:
         if: steps.gate.outputs.due != '0'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-roboto fonts-noto-color-emoji > /dev/null
+          # fonts-noto-core : Noto Sans Arabic (masters de droit) ;
+          # fonts-dejavu-core : flèches et puces absentes de Roboto.
+          sudo apt-get install -y -qq fonts-roboto fonts-noto-core fonts-dejavu-core fonts-noto-color-emoji > /dev/null
           npm i --no-save --no-package-lock --prefix .social @napi-rs/canvas@0 mathjax-full@3 esbuild@0.25 react@19 > /dev/null
           NODE_PATH=.social/node_modules .social/node_modules/.bin/esbuild scripts/social/publier.mjs \
             --bundle --platform=node --format=esm --target=node22 \

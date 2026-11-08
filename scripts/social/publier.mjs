@@ -168,8 +168,11 @@ async function ranger(content, now = Date.now()) {
 
 /* ------------------------------ Dessin ------------------------------ */
 
+// SOCIAL_FONTS_DIR : seulement pour les tests, un dossier qui ne contient que
+// les polices du runner (sinon Windows prête Segoe UI et cache les manques).
 function loadFonts() {
-  for (const dir of ["/usr/share/fonts", "C:\\Windows\\Fonts"]) if (fs.existsSync(dir)) GlobalFonts.loadFontsFromDir(dir);
+  const dirs = env("SOCIAL_FONTS_DIR") ? [env("SOCIAL_FONTS_DIR")] : ["/usr/share/fonts", "C:\\Windows\\Fonts"];
+  for (const dir of dirs) if (fs.existsSync(dir)) GlobalFonts.loadFontsFromDir(dir);
 }
 
 const readJson = (name) => JSON.parse(fs.readFileSync(`public/data/${name}.json`, "utf8"));

@@ -15,7 +15,7 @@
 
 import { formatQCM } from "@/app/_shared/concoursFormat";
 import { convertMathSpansToPlainText, latexToPlainText } from "@/app/_shared/latexPlainText";
-import { FONT, FORMATS, drawLogo, drawVisual, fitTitle, normalizeStyle, paintBackground, roundRect, wrap } from "./visual";
+import { FONT, FORMATS, drawLogo, drawVisual, fitTitle, isRtl, normalizeStyle, paintBackground, roundRect, wrap } from "./visual";
 import { googleQuery } from "./captions";
 
 export const CAROUSEL_FORMAT = FORMATS.find((f) => f.key === "portrait");
@@ -258,18 +258,22 @@ function lineMetrics(ctx, line, size, opts) {
 }
 
 // y : haut du texte (textBaseline « top ») ; les formules suivent sa ligne de base.
-function drawLine(ctx, line, x, y, size, color, opts) {
+// `rtl` : texte arabe, posé de droite à gauche à partir du bord droit `x + width`.
+function drawLine(ctx, line, x, y, size, color, opts, { rtl = false, width = TEXT_W } = {}) {
   const base = y + ascentOf(ctx, size, opts);
   ctx.textBaseline = "top";
+  ctx.textAlign = "left";
   ctx.fillStyle = color;
+  let cx = rtl ? x + width : x;
   for (const w of line) {
+    if (rtl) cx -= w.w;
     if (w.m) {
-      if (w.m.img) ctx.drawImage(w.m.img, x, base - w.m.asc * w.k, w.w, w.m.h * w.k);
+      if (w.m.img) ctx.drawImage(w.m.img, cx, base - w.m.asc * w.k, w.w, w.m.h * w.k);
     } else {
       ctx.font = fontFor(w, size, opts);
-      ctx.fillText(w.t, x, y);
+      ctx.fillText(w.t, cx, y);
     }
-    x += w.w;
+    if (!rtl) cx += w.w;
   }
 }
 
@@ -308,9 +312,12 @@ function tableUnits(ctx, rows) {
         ? natural.map((n) => (n * TEXT_W) / natSum)
         : minW.map((m, c) => m + ((natural[c] - m) * (TEXT_W - minSum)) / (natSum - minSum));
 
+  // Tableau en arabe : la première colonne est à droite.
+  const rtl = isRtl(rows.flat().join(" "));
   const table = {};
   const units = cells.map((r, i) => {
     const wrapped = r.map((runs, c) => wrapRuns(ctx, runs, widths[c] - 2 * cellPad, size, { bold: i === 0, maxH: lh }));
+    const cellRtl = r.map((runs) => isRtl(plain(runs)));
     const h = Math.max(...wrapped.map((l) => l.length)) * lh + 2 * cellPad - 4;
     return {
       kind: "row",
@@ -325,14 +332,17 @@ function tableUnits(ctx, rows) {
         ctx.lineWidth = 1.5;
         ctx.strokeRect(x, y, TEXT_W, h);
         let cx = x;
-        wrapped.forEach((lines, c) => {
-          if (c) {
+        const order = wrapped.map((_, c) => c);
+        if (rtl) order.reverse();
+        order.forEach((c, j) => {
+          if (j) {
             ctx.beginPath();
             ctx.moveTo(cx, y);
             ctx.lineTo(cx, y + h);
             ctx.stroke();
           }
-          lines.forEach((l, k) => drawLine(ctx, l, cx + cellPad, y + cellPad + k * lh, size, i === 0 ? HEAD_INK : INK, { bold: i === 0 }));
+          const inner = widths[c] - 2 * cellPad;
+          wrapped[c].forEach((l, k) => drawLine(ctx, l, cx + cellPad, y + cellPad + k * lh, size, i === 0 ? HEAD_INK : INK, { bold: i === 0 }, { rtl: cellRtl[c], width: inner }));
           cx += widths[c];
         });
       },
@@ -344,6 +354,7 @@ function tableUnits(ctx, rows) {
 
 function textUnits(ctx, runs, { indent = 0, marker, size = BODY, lh = LH, color = INK, bold = false, mono = false, quote = false, section = false }) {
   const opts = { bold, mono };
+  const rtl = !mono && isRtl(plain(runs));
   const lines = wrapRuns(ctx, runs, TEXT_W - indent, size, opts);
   const tAsc = ascentOf(ctx, size, opts);
   return lines.map((line, k) => {
@@ -356,19 +367,20 @@ function textUnits(ctx, runs, { indent = 0, marker, size = BODY, lh = LH, color 
       sectionStart: section && k === 0,
       h,
       draw(ctx, x, y) {
+        // En arabe, le retrait, la puce et le filet de citation passent à droite.
         if (quote) {
           ctx.fillStyle = "#e3c27a";
-          ctx.fillRect(x + 2, y + 2, 5, h - 4);
+          ctx.fillRect(rtl ? x + TEXT_W - 7 : x + 2, y + 2, 5, h - 4);
         }
         if (marker && k === 0) {
           ctx.font = `700 ${size}px ${FONT}`;
           ctx.fillStyle = HEAD_INK;
           ctx.textBaseline = "top";
-          ctx.textAlign = "right";
-          ctx.fillText(marker, x + indent - 12, y + top);
+          ctx.textAlign = rtl ? "left" : "right";
+          ctx.fillText(marker, rtl ? x + TEXT_W - indent + 12 : x + indent - 12, y + top);
           ctx.textAlign = "left";
         }
-        drawLine(ctx, line, x + indent, y + top, size, color, opts);
+        drawLine(ctx, line, rtl ? x : x + indent, y + top, size, color, opts, { rtl, width: TEXT_W - indent });
       },
     };
   });
@@ -452,14 +464,16 @@ function unitsOf(ctx, lines) {
       const depth = h[1].length;
       const size = depth <= 2 ? 28 : depth === 3 ? 26 : 24;
       const lh = Math.round(size * 1.25);
-      const wrapped = wrapRuns(ctx, runsOf(h[2]), TEXT_W, size, { bold: true });
+      const hRuns = runsOf(h[2]);
+      const wrapped = wrapRuns(ctx, hRuns, TEXT_W, size, { bold: true });
+      const rtl = isRtl(plain(hRuns));
       gap(12);
       units.push({
         kind: "heading",
         sectionStart: true,
         h: wrapped.length * lh + 4,
         draw(ctx, x, y) {
-          wrapped.forEach((l, k) => drawLine(ctx, l, x, y + k * lh, size, HEAD_INK, { bold: true }));
+          wrapped.forEach((l, k) => drawLine(ctx, l, x, y + k * lh, size, HEAD_INK, { bold: true }, { rtl }));
         },
       });
       continue;

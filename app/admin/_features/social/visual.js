@@ -132,7 +132,20 @@ export function resolveTheme(key, style) {
   return THEMES.find((t) => t.key === key) || THEMES[0];
 }
 
-export const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Noto Color Emoji"`;
+// Le robot (GitHub Actions, Linux) n'a que les polices installées par le
+// workflow : Roboto n'a ni l'arabe ni les flèches. Sans « Noto Sans Arabic »
+// et « DejaVu Sans » nommées ici, les titres des masters de droit et les
+// « → » sortaient en carrés vides sur les posts publiés.
+export const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans Arabic", "DejaVu Sans", sans-serif, "Segoe UI Emoji", "Noto Color Emoji"`;
+
+// Texte surtout en arabe (ou en hébreu) : il se lit de droite à gauche.
+const RTL_CHARS = /[֐-ࣿיִ-﷿ﹰ-﻿]/g;
+export function isRtl(text) {
+  const s = String(text || "");
+  const rtl = (s.match(RTL_CHARS) || []).length;
+  const ltr = (s.match(/[A-Za-zÀ-ÿ]/g) || []).length;
+  return rtl > 0 && rtl >= ltr;
+}
 
 export function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
@@ -400,11 +413,15 @@ export function drawVisual(canvas, { format, theme, facts, cover, style, photo }
   ctx.fillStyle = t.text;
   ctx.textBaseline = "top";
   ctx.textAlign = "left";
+  // L'arabe descend plus bas sous la ligne : interligne plus grand, sinon le
+  // titre mord sur le sous-titre.
+  const titleRtl = isRtl(facts.title);
   for (const l of lines) {
     ctx.font = `800 ${size}px ${FONT}`;
     ctx.fillText(l, xFor(ctx.measureText(l).width), y);
-    y += size * 1.14;
+    y += size * (titleRtl ? 1.5 : 1.14);
   }
+  if (titleRtl) y += size * 0.1;
 
   // Sous-titre.
   if (facts.subtitle) {
