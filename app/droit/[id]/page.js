@@ -12,7 +12,7 @@ import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { droitLangueInfo, droitRangLabel } from "../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, isDroitPublie, droitEquivalent } from "../../../lib/droit";
 import { Icon } from "../../_shared/icons";
-import CahierCours from "../../_shared/CahierCours";
+import CahierCours, { CahierBandeau } from "../../_shared/CahierCours";
 import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -257,6 +257,8 @@ export default async function DroitModulePage(props) {
             </aside>
 
             <main className="bac-main">
+              <CahierBandeau cahier={cahier} module={c.module} />
+
               <section id="chapitres" className="bac-semestre">
                 <h2 className="bac-semestre-title">
                   <span className="bac-semestre-code">{c.semestre || <Icon name="book-open" size={16} />}</span>

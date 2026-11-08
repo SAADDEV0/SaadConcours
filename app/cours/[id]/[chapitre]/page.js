@@ -11,9 +11,9 @@ import BacChapitreClient from "../../../bac/BacChapitreClient";
 import { coursCategoryInfo, licenceSemestreLabel } from "../../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesModuleIcon, fsjesChapitreHref, slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { concoursDuModule, concoursDuChapitre } from "../../../../lib/concoursParModule";
-import { cahierDuCours, formatPrix } from "../../../../lib/boutique";
+import { cahierDuCours } from "../../../../lib/boutique";
 import ConcoursLies from "../../../_shared/ConcoursLies";
-import CahierCours from "../../../_shared/CahierCours";
+import CahierCours, { CahierBandeau, CahierSide } from "../../../_shared/CahierCours";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { Icon } from "../../../_shared/icons";
@@ -205,14 +205,7 @@ export default async function CoursChapitrePage(props) {
                   ))}
                 </ol>
               </div>
-              {cahier && (
-                <div className="bac-side-card">
-                  <div className="bac-side-title">Préparer l&apos;examen</div>
-                  <a href={`/boutique/${encodeURIComponent(cahier.id)}`} className="bac-side-link">
-                    Cahier de préparation <span>{formatPrix(cahier.prix, cahier.devise)}</span>
-                  </a>
-                </div>
-              )}
+              <CahierSide cahier={cahier} />
             </aside>
 
             <main className="bac-main">
@@ -228,6 +221,8 @@ export default async function CoursChapitrePage(props) {
                   {ch.partie ? ` — ${ch.partie.titre}` : ""}
                 </div>
               </div>
+
+              <CahierBandeau cahier={cahier} module={c.module} />
 
               <div className="bac-tabs">
                 {ONGLETS.map((o, i) => (

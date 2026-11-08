@@ -6,6 +6,62 @@
 import { accrocheCourte, deModule, formatPrix, produitImage } from "../../lib/boutique";
 import { Icon } from "./icons";
 
+// Bandeau d'une ligne, sous le titre d'un chapitre et en tête de la page du
+// module : sur téléphone la colonne latérale passe sous tout le contenu et
+// l'annonce de fin de chapitre n'est vue que par ceux qui lisent jusqu'au
+// bout. Le bandeau entier est un seul lien (grande cible au doigt).
+export function CahierBandeau({ cahier, module }) {
+  if (!cahier) return null;
+  const href = `/boutique/${encodeURIComponent(cahier.id)}`;
+  const cover = produitImage(cahier.couverture);
+  const ar = cahier.langue === "ar";
+  const prix = formatPrix(cahier.prix, cahier.devise);
+  return (
+    <a className="sp-cahier-bandeau" href={href} dir={ar ? "rtl" : undefined} lang={ar ? "ar" : undefined}>
+      {cover && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={cover} alt="" width={40} height={53} loading="lazy" decoding="async" />
+      )}
+      <span className="sp-cahier-bandeau-body">
+        <strong>
+          {ar ? "دفتر التحضير" : `Cahier de préparation ${deModule(module)}`} · <span className="sp-nowrap">{prix}</span>
+        </strong>
+        <span>{ar ? cahier.sousTitre : accrocheCourte(cahier)}</span>
+      </span>
+      <span className="sp-cahier-bandeau-cta">
+        {ar ? "اطلع عليه" : "Voir"} <Icon name={ar ? "arrow-left" : "arrow-right"} size={16} />
+      </span>
+    </a>
+  );
+}
+
+// Carte de la colonne latérale (sticky sur ordinateur) : couverture, titre,
+// prix et bouton, au lieu d'un simple lien texte.
+export function CahierSide({ cahier }) {
+  if (!cahier) return null;
+  const href = `/boutique/${encodeURIComponent(cahier.id)}`;
+  const cover = produitImage(cahier.couverture);
+  const ar = cahier.langue === "ar";
+  return (
+    <div className="bac-side-card sp-cahier-side" dir={ar ? "rtl" : undefined} lang={ar ? "ar" : undefined}>
+      <div className="bac-side-title">{ar ? "حضّر امتحانك" : "Préparer l'examen"}</div>
+      <a className="sp-cahier-side-row" href={href}>
+        {cover && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={cover} alt="" width={52} height={69} loading="lazy" decoding="async" />
+        )}
+        <span>
+          <strong>{cahier.titre}</strong>
+          <em>{formatPrix(cahier.prix, cahier.devise)} · PDF</em>
+        </span>
+      </a>
+      <a className="sp-btn primary sp-cahier-side-btn" href={href}>
+        {ar ? "اطلع على الدفتر" : "Voir le cahier"} <Icon name={ar ? "arrow-left" : "arrow-right"} size={16} />
+      </a>
+    </div>
+  );
+}
+
 export default function CahierCours({ cahier, module, compact = false }) {
   if (!cahier) return null;
   const href = `/boutique/${encodeURIComponent(cahier.id)}`;

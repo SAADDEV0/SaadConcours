@@ -14,8 +14,8 @@ import { droitLangueInfo, droitRangLabel } from "../../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droitOuvert, isDroitPublie, droitEquivalent } from "../../../../lib/droit";
 import { slugifyTitre } from "../../../../lib/fsjesChapitres";
 import { Icon } from "../../../_shared/icons";
-import CahierCours from "../../../_shared/CahierCours";
-import { cahierDuCours, formatPrix } from "../../../../lib/boutique";
+import CahierCours, { CahierBandeau, CahierSide } from "../../../_shared/CahierCours";
+import { cahierDuCours } from "../../../../lib/boutique";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -231,14 +231,7 @@ export default async function DroitChapitrePage(props) {
                   </a>
                 )}
               </div>
-              {cahier && (
-                <div className="bac-side-card">
-                  <div className="bac-side-title">Préparer l&apos;examen</div>
-                  <a href={`/boutique/${encodeURIComponent(cahier.id)}`} className="bac-side-link">
-                    Cahier de préparation <span>{formatPrix(cahier.prix, cahier.devise)}</span>
-                  </a>
-                </div>
-              )}
+              <CahierSide cahier={cahier} />
             </aside>
 
             <main className="bac-main">
@@ -256,6 +249,8 @@ export default async function DroitChapitrePage(props) {
                   {ch.partie ? ` — ${ch.partie.titre}` : ""}
                 </div>
               </div>
+
+              <CahierBandeau cahier={cahier} module={c.module} />
 
               <div className="bac-tabs">
                 {onglets.map((o, i) => (
