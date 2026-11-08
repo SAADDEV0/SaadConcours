@@ -199,5 +199,9 @@
   "pdfVerseSize": "normal",
   "pdfVerseBoxed": true,
   "scansMasques": false,
-  "whatsappFabEnabled": true
+  "whatsappFabEnabled": true,
+  "fabNetwork": null,
+  "fabLink": "https://whatsapp.com/channel/0029Vb9DOwa77qVLZXHeCO1j13:04",
+  "fabLabel": null,
+  "fabColor": null
 }
