@@ -1032,5 +1032,48 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-08"
+  },
+  {
+    "id": "cahier-economie-entreprise-s1",
+    "titre": "Cahier de préparation — Économie d'Entreprise (S1)",
+    "sousTitre": "Le module expliqué en français simple, les auteurs et les formules à retenir, 170 QCM corrigés, 17 exercices et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Économie d'Entreprise",
+    "cours": "ecoentreprise_cours",
+    "description": "Ce cahier prépare l'examen d'**Économie d'Entreprise**, un module du semestre 1 de la Licence en Économie dans les FSJES. Ici, on regarde l'entreprise avec les yeux de l'économiste : pourquoi elle existe à côté du marché, qui la dirige et pour quoi faire, comment elle crée et partage la richesse. Le cahier est écrit en **français simple** : des phrases courtes, chaque mot expliqué avec sa traduction arabe, et des exemples tirés du Maroc (une coopérative de dattes d'Erfoud, un sous-traitant de Kénitra, une biscuiterie de Béni Mellal, la Bourse de Casablanca, le Conseil de la concurrence).\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les auteurs et les formules à retenir, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des **exercices corrigés pas à pas**. Tu apprends à choisir entre faire et acheter avec Coase et Williamson, à résoudre un modèle de Baumol, à repérer une relation d'agence, à construire un tableau de formation des résultats (VA, EBE, résultat net), à calculer une VAN, une CAF et un effet de levier, puis un indice HHI.\n\nLe programme complet : l'entreprise et l'entrepreneur (Cantillon, Say, Schumpeter, Knight), les théories de la firme, propriété et pouvoir (Berle et Means, Galbraith, Jensen et Meckling, Cyert et March, gouvernance), la valeur ajoutée et son partage, l'investissement (accélérateur, VAN, charte de 2022), le financement (BFR, CAF, Hicks, levier), la croissance et la concentration (groupes, fusions, Conseil de la concurrence), l'innovation et l'internationalisation (Vernon, Dunning). À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, dont une dissertation avec copie modèle, et un **mémo de la veille**.\n\nLe cours complet reste gratuit sur le site : [Économie d'Entreprise (S1)](/cours/ecoentreprise_cours). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 105 mots de l'économie d'entreprise (français-arabe)",
+      "Chapitre 1 · L'entreprise, agent économique",
+      "Chapitre 2 · Les théories de la firme : de la boîte noire aux coûts de transaction",
+      "Chapitre 3 · Propriété, pouvoir et objectifs de l'entreprise",
+      "Chapitre 4 · Mesurer l'activité : valeur ajoutée et partage",
+      "Chapitre 5 · L'investissement de l'entreprise",
+      "Chapitre 6 · Le financement de l'entreprise",
+      "Chapitre 7 · La croissance de l'entreprise et la concentration",
+      "Chapitre 8 · Innovation et internationalisation",
+      "Partie 9 · La méthodologie des épreuves",
+      "Partie 10 · Trois examens blancs corrigés",
+      "Partie 11 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué",
+      "170 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "40 questions de cours avec une réponse modèle",
+      "Des exercices corrigés pas à pas : faire ou acheter, hold-up, Baumol, coûts d'agence, TFR, VAN, accélérateur, CAF, effet de levier, HHI, OLI",
+      "Tous les résultats recalculés, avec des graphiques clairs (Baumol, effet de levier)",
+      "Lexique de 105 mots en français-arabe et un mémo des auteurs et des formules"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 85,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-economie-entreprise-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-09"
   }
 ]
