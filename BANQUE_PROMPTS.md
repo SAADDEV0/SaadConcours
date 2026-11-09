@@ -788,6 +788,16 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    Une matière déjà traitée comme chapitre d'un autre module : créer le module et y **déplacer** ces
    chapitres (K3, « Séparer un module »), jamais une deuxième version. Le programme national en ligne
    (`tcn_*.pdf` de l'UMI) peut être injoignable : les descriptifs des facultés donnent alors le plan.
+   Le tableau de correspondance ancienne / nouvelle licence de la FEG Settat
+   (`feg.uh1.ac.ma/wp-content/uploads/2025/10/Tableaux_Correspondance_Modules_Licence-S1-a-S6.pdf`)
+   liste les modules de la nouvelle licence Économie du S1 au S6 (sans leur contenu).
+   Module voisin de cours existants : n'écrire que l'angle propre au module et renvoyer aux autres.
+   Précédent : `ajoute le cours economie d'entreprise s1 economie` (2026-11-09) → `ecoentreprise_cours`
+   (S1, parcours économie, 8 chapitres) : angle économique (théories de la firme, gouvernance, VA et
+   partage, investissement, financement, croissance et concentration, innovation et
+   internationalisation) ; formes juridiques, fonctions et environnement renvoient à
+   `introgestion_cours`, production et coûts à `micro_cours`. Dans un `$$…$$`, pas de « ✔ » :
+   écrire `\checkmark`.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
