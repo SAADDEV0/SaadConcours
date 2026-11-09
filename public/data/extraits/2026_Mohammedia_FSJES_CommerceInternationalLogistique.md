@@ -83,6 +83,4 @@ La valeur en douane sera assimilée à la valeur CIF/CIP convertie en MAD.
 
 **Question 3 : stratégie logistique internationale**
 
-[L'entr]eprise doit choisir entre transport maritime et transport aérien pour ses importations. Présentez les principaux critères qu'elle doit prendre en considération avant de prendre sa décision.
-
-*[Le début de cette ligne est masqué sur la photo du sujet.]*
+Une entreprise doit choisir entre transport maritime et transport aérien pour ses importations. Présentez les principaux critères qu'elle doit prendre en considération avant de prendre sa décision.
