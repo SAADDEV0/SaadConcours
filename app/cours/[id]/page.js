@@ -10,7 +10,7 @@ import CoursDetailClient from "./CoursDetailClient";
 import ConcoursLies from "../../_shared/ConcoursLies";
 import CahierCours from "../../_shared/CahierCours";
 import AdSlot from "../../_shared/AdSlot";
-import ChaineWhatsapp from "../../_shared/ChaineWhatsapp";
+import ChaineWhatsapp, { ICONE_WHATSAPP, lienChaine } from "../../_shared/ChaineWhatsapp";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
 import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
@@ -172,6 +172,12 @@ export default async function CoursModulePage(props) {
                   <a className="sp-btn" href={`/boutique/${encodeURIComponent(cahier.id)}`}>
                     <Icon name="book-open" size={18} />
                     Cahier de préparation · {formatPrix(cahier.prix, cahier.devise)}
+                  </a>
+                )}
+                {lienChaine(settings) && (
+                  <a className="sp-btn sp-btn-wa" href={lienChaine(settings)} target="_blank" rel="noopener">
+                    {ICONE_WHATSAPP}
+                    Chaîne WhatsApp
                   </a>
                 )}
               </div>

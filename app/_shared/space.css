@@ -26,6 +26,7 @@
 .sp-btn.primary{background:var(--accent-fill); color:#fff !important; border-color:var(--accent-fill);}
 .sp-btn.primary:hover{background:color-mix(in srgb, var(--accent-fill) 86%, #000);}
 .sp-hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+.sp-btn-wa > svg{width:18px; height:18px; flex-shrink:0; color:#25d366;}
 .sp-btn{max-width:100%;}
 /* Libellés longs (« Reprendre : <titre du chapitre> ») : retour à la ligne
    sur téléphone plutôt qu'un bouton plus large que l'écran. */
