@@ -201,7 +201,7 @@
   "scansMasques": false,
   "whatsappFabEnabled": true,
   "fabNetwork": null,
-  "fabLink": "https://whatsapp.com/channel/0029Vb9DOwa77qVLZXHeCO1j",
-  "fabLabel": "Contactez-nous",
+  "fabLink": "https://api.whatsapp.com/send/?phone=212713875327&text=Bonjour%2C+je+veux+le+cahier+de+pr%C3%A9paration+pour+%3A+&type=phone_number&app_absent=0",
+  "fabLabel": "Cahier de préparation",
   "fabColor": null
 }
