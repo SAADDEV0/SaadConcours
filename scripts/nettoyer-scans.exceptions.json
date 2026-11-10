@@ -413,5 +413,18 @@
         0.8053
       ]
     ]
+  },
+  "2026_Casablanca_FSJES_AinSebaa_MarketingDigital_p1.webp": {
+    "seuil": 185,
+    "noir": 145,
+    "bande": false,
+    "effacer": [
+      [
+        0.2,
+        0.875,
+        0.86,
+        0.945
+      ]
+    ]
   }
 }
