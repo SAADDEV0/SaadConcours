@@ -26,6 +26,7 @@ export default async function Image(props) {
     return buildOgImage({ eyebrow: "SaadConcours", title: "Fiche introuvable" });
   }
   return buildOgImage({
+    kind: "cours",
     eyebrow: c.module,
     title: c.title,
   });

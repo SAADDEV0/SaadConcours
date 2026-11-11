@@ -8,6 +8,6 @@ export default async function Image() {
   return buildOgImage({
     eyebrow: "Économie, gestion et droit · Maroc",
     title: "Cours Bac, Licence FSJES et concours Master",
-    subtitle: "Du Bac SEG à la Licence FSJES (économie, gestion et droit), jusqu’aux sujets réels des concours d’accès au Master",
+    subtitle: "Du Bac SEG à la Licence FSJES, jusqu’aux sujets réels des concours d’accès au Master",
   });
 }

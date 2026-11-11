@@ -37,13 +37,15 @@ export default async function Image(props) {
   // substFormat: 3 is not yet supported », 2026-10-17). Carte en français.
   if (c.langue === "ar") {
     return buildOgImage({
-      eyebrow: `Cours de Droit${c.semestre ? ` · ${c.semestre}` : ""} · en arabe`,
+      kind: "droit",
+      eyebrow: [c.semestre, "en arabe"].filter(Boolean).join(" · "),
       title: `Cours de droit en arabe — ${droitRangLabelFr(c)}`,
       subtitle: "Licence de Droit (FSJES) : cours, exercices corrigés, résumé et QCM",
     });
   }
   return buildOgImage({
-    eyebrow: `Cours de Droit${c.semestre ? ` · ${c.semestre}` : ""}`,
+    kind: "droit",
+    eyebrow: c.semestre,
     title: c.title || c.module,
   });
 }

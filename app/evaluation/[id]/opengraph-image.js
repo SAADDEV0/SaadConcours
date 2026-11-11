@@ -27,6 +27,7 @@ export default async function Image(props) {
   }
   const nb = (q.questions || []).length;
   return buildOgImage({
+    kind: "qcm",
     eyebrow: q.module,
     title: q.title,
     subtitle: `${nb} questions corrigées`,

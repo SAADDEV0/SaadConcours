@@ -4,20 +4,42 @@ import { join } from "node:path";
 import { logoSvg } from "./appIcon";
 
 // Shared by every route's opengraph-image.js (root site default + one per
-// concours/cours/quiz/blog detail page): the card WhatsApp/Facebook/Telegram
-// show when a link is shared.
+// concours/cours/quiz/blog/droit detail page): the card WhatsApp/Facebook/
+// Telegram show when a link is shared.
 //
-// Charte « stylo bleu » (voir app/globals.css) : une feuille blanche, le
-// titre à l'encre en Literata, l'interface en Plus Jakarta Sans, le bleu
-// --accent comme seule couleur de marque. Pas de dégradé ni de halo.
+// Carte « affiche » : fond d'encre indigo (le dégradé du logo), titre blanc
+// en Literata, et une pastille de couleur par type de page (`kind` :
+// concours, cours, qcm, blog, droit) pour qu'on reconnaisse d'un coup d'œil,
+// dans un fil WhatsApp ou Facebook, ce que contient le lien.
 export const ogImageSize = { width: 1200, height: 630 };
 export const ogImageContentType = "image/png";
 
-const INK = "#4f46e5";
-const TEXT = "#16181d";
-const TEXT_DIM = "#4a5160";
-const PAPER = "#ffffff";
-const RULE = "#e3e6ec";
+const BG = "linear-gradient(135deg, #1e1b4b 0%, #312e81 58%, #5b21b6 100%)";
+const WHITE = "#ffffff";
+const TEXT_SOFT = "#c7d2fe";
+const NIGHT = "#1e1b4b";
+const GOLD = "#fbbf24";
+
+const KINDS = {
+  concours: { label: "Concours Master", color: GOLD },
+  cours: { label: "Cours", color: "#5eead4" },
+  qcm: { label: "QCM corrigé", color: "#f9a8d4" },
+  blog: { label: "Article", color: "#7dd3fc" },
+  droit: { label: "Cours de droit", color: "#d8b4fe" },
+};
+
+// Le chapeau du logo, seul et en grand, en filigrane à droite de la carte.
+function capWatermark(px) {
+  return (
+    <svg width={px} height={px} viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="32,13 49,21 32,29 15,21" fill="white" />
+      <line x1="49" y1="21" x2="51" y2="31" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="51" cy="32.5" r="2" fill="white" />
+      <polygon points="32,42 13,37 13,48 32,54" fill="white" />
+      <polygon points="32,42 51,37 51,48 32,54" fill="white" />
+    </svg>
+  );
+}
 
 // Les images sont prérendues au build (force-static), où les .ttf du dépôt
 // sont lisibles. Si une image venait à être dessinée par le Worker (id
@@ -50,61 +72,96 @@ function clip(text, max) {
 // Taille du titre selon sa longueur : un nom de master court s'affiche en
 // grand, un titre d'article long tient sur trois lignes.
 function titleSize(len) {
-  if (len <= 34) return 78;
-  if (len <= 50) return 70;
+  if (len <= 34) return 80;
+  if (len <= 50) return 72;
   if (len <= 60) return 64;
   if (len <= 90) return 54;
   return 46;
 }
 
-export async function buildOgImage({ eyebrow, title, subtitle }) {
+export async function buildOgImage({ kind, eyebrow, title, subtitle }) {
   const fonts = await loadFonts();
   const t = clip(title, 120);
-  const sub = clip(subtitle, 120);
+  const sub = clip(subtitle, 110);
+  const k = KINDS[kind];
+  const eb = clip(eyebrow, k ? 44 : 60);
   return new ImageResponse(
     (
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
+          position: "relative",
           width: "100%",
           height: "100%",
-          background: PAPER,
+          backgroundImage: BG,
           fontFamily: "Jakarta",
+          color: WHITE,
         }}
       >
-        {/* Bandeau d'encre en tête, comme l'en-tête d'une copie. */}
-        <div style={{ display: "flex", height: 14, background: INK }} />
+        <div
+          style={{
+            display: "flex",
+            position: "absolute",
+            right: -70,
+            top: 70,
+            opacity: 0.09,
+            transform: "rotate(-14deg)",
+          }}
+        >
+          {capWatermark(560)}
+        </div>
+
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            flex: 1,
-            padding: "56px 80px 52px",
+            width: "100%",
+            height: "100%",
+            padding: "52px 72px 48px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-            {logoSvg(64)}
-            <div style={{ display: "flex", fontSize: 36, fontWeight: 700, color: TEXT, letterSpacing: -0.5 }}>
-              Saad<span style={{ color: INK }}>Concours</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            {logoSvg(60)}
+            <div style={{ display: "flex", fontSize: 34, fontWeight: 700, letterSpacing: -0.5 }}>
+              Saad<span style={{ color: GOLD }}>Concours</span>
             </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column" }}>
-            {eyebrow && (
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 26,
-                  fontWeight: 700,
-                  color: INK,
-                  textTransform: "uppercase",
-                  letterSpacing: 2,
-                  marginBottom: 18,
-                }}
-              >
-                {clip(eyebrow, 60)}
+            {(k || eb) && (
+              <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 24 }}>
+                {k && (
+                  <div
+                    style={{
+                      display: "flex",
+                      padding: "9px 20px",
+                      borderRadius: 999,
+                      background: k.color,
+                      color: NIGHT,
+                      fontSize: 24,
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: 1.5,
+                    }}
+                  >
+                    {k.label}
+                  </div>
+                )}
+                {eb && (
+                  <div
+                    style={{
+                      display: "flex",
+                      fontSize: 26,
+                      fontWeight: 700,
+                      color: k ? TEXT_SOFT : GOLD,
+                      textTransform: "uppercase",
+                      letterSpacing: 2,
+                    }}
+                  >
+                    {eb}
+                  </div>
+                )}
               </div>
             )}
             <div
@@ -113,10 +170,9 @@ export async function buildOgImage({ eyebrow, title, subtitle }) {
                 fontFamily: "Literata",
                 fontSize: titleSize(t.length),
                 fontWeight: 700,
-                lineHeight: 1.12,
+                lineHeight: 1.1,
                 letterSpacing: -1,
-                color: TEXT,
-                maxWidth: 1040,
+                maxWidth: 1000,
               }}
             >
               {t}
@@ -125,12 +181,12 @@ export async function buildOgImage({ eyebrow, title, subtitle }) {
               <div
                 style={{
                   display: "flex",
-                  marginTop: 22,
+                  marginTop: 20,
                   fontSize: 30,
                   fontWeight: 600,
                   lineHeight: 1.35,
-                  color: TEXT_DIM,
-                  maxWidth: 1000,
+                  color: TEXT_SOFT,
+                  maxWidth: 960,
                 }}
               >
                 {sub}
@@ -138,20 +194,28 @@ export async function buildOgImage({ eyebrow, title, subtitle }) {
             )}
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingTop: 22,
-              borderTop: `2px solid ${RULE}`,
-              fontSize: 24,
-              fontWeight: 600,
-              color: TEXT_DIM,
-            }}
-          >
-            <span>Cours · Exercices corrigés · QCM · Concours Master</span>
-            <span style={{ color: INK, fontWeight: 700 }}>saadconcours.space</span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 22, fontSize: 24, fontWeight: 600, color: TEXT_SOFT }}>
+              {["Sujets réels", "Corrigés", "QCM", "Gratuit"].map((w) => (
+                <div key={w} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ display: "flex", width: 10, height: 10, borderRadius: 5, background: GOLD }} />
+                  {w}
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                padding: "12px 26px",
+                borderRadius: 999,
+                background: WHITE,
+                color: NIGHT,
+                fontSize: 26,
+                fontWeight: 700,
+              }}
+            >
+              saadconcours.space
+            </div>
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ export default async function Image(props) {
     return buildOgImage({ eyebrow: "SaadConcours", title: "Article introuvable" });
   }
   return buildOgImage({
-    eyebrow: "Blog",
+    kind: "blog",
     title: p.title,
     subtitle: p.excerpt,
   });

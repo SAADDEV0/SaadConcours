@@ -31,6 +31,7 @@ export default async function Image(props) {
     return buildOgImage({ eyebrow: "SaadConcours", title: "Concours introuvable" });
   }
   return buildOgImage({
+    kind: "concours",
     // « Fès · Non précisée » sur la carte quand l'année est inconnue : on
     // n'affiche l'année que si c'en est une.
     eyebrow: [c.ville, /\d{4}/.test(String(c.annee || "")) ? c.annee : null].filter(Boolean).join(" · "),
