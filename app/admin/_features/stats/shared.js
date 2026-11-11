@@ -234,3 +234,27 @@ export function peakSlot(heat) {
   heat?.forEach((row, d) => row.forEach((v, h) => v > 0 && (!best || v > best.v) && (best = { d, h, v })));
   return best;
 }
+
+/* ------------------------------ Temps passé ------------------------------ */
+
+// 45 s · 3 min 20 s · 1 h 05 min
+export function duration(s) {
+  if (s === null || s === undefined || !Number.isFinite(Number(s))) return "—";
+  const t = Math.max(0, Math.round(Number(s)));
+  if (t < 60) return `${t} s`;
+  const h = Math.floor(t / 3600);
+  const m = Math.floor((t % 3600) / 60);
+  const sec = t % 60;
+  if (h) return `${h} h ${String(m).padStart(2, "0")} min`;
+  return sec && m < 10 ? `${m} min ${sec} s` : `${m} min`;
+}
+
+// Le temps passé n'est mesuré que depuis `time.since`.
+export function TimeNote({ time }) {
+  if (!time || time.full) return null;
+  return (
+    <p className="ax-muted ax-small" style={{ margin: "6px 0 0" }}>
+      Temps passé mesuré depuis le {dateFr(time.since)} : les visites d&apos;avant n&apos;ont pas de durée.
+    </p>
+  );
+}

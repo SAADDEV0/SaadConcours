@@ -8,7 +8,7 @@ import { api, downloadText } from "../../_lib/api";
 import { useLocalStorage } from "../../_lib/hooks";
 import { dateFr, dateTimeFr, matchQuery, num } from "../../_lib/format";
 import { adminHrefForPath, describePath, labelForPath } from "../../_lib/labels";
-import { DEVICE_LABELS, SITE, deltaOf, pct, share, sourceLabel, toCsv } from "./shared";
+import { DEVICE_LABELS, SITE, TimeNote, deltaOf, duration, pct, share, sourceLabel, toCsv } from "./shared";
 
 const PAGE = 20;
 
@@ -26,11 +26,12 @@ const SECTION_COLORS = { concours: "#4f8cff", cours: "#0d9488", droit: "#f59e0b"
 const VIEWS = [
   { value: "period", label: "Sur la période" },
   { value: "all", label: "Depuis le lancement" },
+  { value: "time", label: "Temps passé" },
   { value: "entries", label: "Pages d'entrée" },
   { value: "trends", label: "Hausses et baisses" },
 ];
 
-const TITLES = { period: "Pages les plus vues sur la période", all: "Pages les plus vues depuis le lancement", entries: "Pages d'entrée", trends: "Hausses et baisses" };
+const TITLES = { period: "Pages les plus vues sur la période", all: "Pages les plus vues depuis le lancement", time: "Pages où les visiteurs passent le plus de temps", entries: "Pages d'entrée", trends: "Hausses et baisses" };
 
 // Classement des pages. « Sur la période » et « Pages d'entrée » viennent des
 // compteurs v2 ; « Depuis le lancement » du total historique. Le rang reste
@@ -44,14 +45,18 @@ export function PagesTab({ data, content, onOpen }) {
   const [section, setSection] = useState("");
   const [limit, setLimit] = useState(PAGE);
 
-  const source = useMemo(() => (view === "all" ? data.topPaths || [] : view === "entries" ? b?.entries || [] : b?.pages || []), [view, data.topPaths, b]);
+  const timePages = data.time?.pages;
+  const source = useMemo(() => {
+    if (view === "time") return Object.entries(timePages || {}).map(([member, t]) => ({ member, score: t.s }));
+    return view === "all" ? data.topPaths || [] : view === "entries" ? b?.entries || [] : b?.pages || [];
+  }, [view, data.topPaths, b, timePages]);
   const rows = useMemo(
     () =>
       source.map((p, i) => {
         const d = describePath(p.member, content);
-        return { ...p, rank: i + 1, label: labelForPath(p.member, content), section: d.section };
+        return { ...p, rank: i + 1, label: labelForPath(p.member, content), section: d.section, time: timePages?.[p.member] || null };
       }),
-    [source, content]
+    [source, content, timePages]
   );
   const bySection = useMemo(() => {
     const acc = new Map();
@@ -64,13 +69,16 @@ export function PagesTab({ data, content, onOpen }) {
   const showDelta = view === "period" && b?.prevComparable;
 
   function exportCsv() {
-    const head = ["rang", "page", "adresse", "rubrique", view === "entries" ? "visites entrées" : "vues", ...(showDelta ? ["vues période précédente"] : [])];
-    const lines = list.map((p) => [p.rank, p.label, `${SITE}${p.member}`, SECTIONS.find((s) => s.value === p.section)?.label || "", p.score, ...(showDelta ? [p.prev] : [])]);
+    const isTime = view === "time";
+    const head = ["rang", "page", "adresse", "rubrique", isTime ? "secondes au total" : view === "entries" ? "visites entrées" : "vues", ...(showDelta ? ["vues période précédente"] : []), "vues mesurées (temps)", "temps moyen (s)"];
+    const lines = list.map((p) => [p.rank, p.label, `${SITE}${p.member}`, SECTIONS.find((s) => s.value === p.section)?.label || "", p.score, ...(showDelta ? [p.prev] : []), p.time?.n ?? "", p.time?.avg ?? ""]);
     downloadText(`pages-${view}-${data.range.from}-${data.range.to}.csv`, toCsv(head, lines), "text/csv");
   }
 
   const aside =
-    view === "all"
+    view === "time"
+      ? `temps moyen par vue · ${data.range.label}`
+      : view === "all"
       ? `vues cumulées · ${num(rows.length)} pages`
       : view === "entries"
         ? `visites commencées sur chaque page · ${data.range.label}`
@@ -85,6 +93,8 @@ export function PagesTab({ data, content, onOpen }) {
         </div>
         {view === "trends" ? (
           <Trends data={data} content={content} onOpen={onOpen} />
+        ) : view === "time" && !data.time?.started ? (
+          <p className="ax-muted">Le temps passé est mesuré depuis le {dateFr(data.time?.since || "2026-11-11")}.</p>
         ) : (
           <>
             <div className="ax-toolbar">
@@ -108,11 +118,16 @@ export function PagesTab({ data, content, onOpen }) {
               <p className="ax-muted">{q || section ? "Aucune page ne correspond." : view === "all" ? "Aucune page vue pour l'instant." : "Aucune page vue sur la période."}</p>
             ) : (
               <ul className="ax-list">
-                {list.slice(0, limit).map((p) => (
-                  <PageRow key={p.member} p={p} total={total} onOpen={onOpen} delta={showDelta ? deltaOf(p.score, p.prev) : undefined} />
-                ))}
+                {list.slice(0, limit).map((p) =>
+                  view === "time" ? (
+                    <PageRow key={p.member} p={p} onOpen={onOpen} value={duration(p.time?.avg)} valueTitle="Temps moyen par vue" extra={`${duration(p.score)} au total sur ${num(p.time?.n || 0)} vue${p.time?.n > 1 ? "s" : ""}`} />
+                  ) : (
+                    <PageRow key={p.member} p={p} total={total} onOpen={onOpen} delta={showDelta ? deltaOf(p.score, p.prev) : undefined} extra={p.time ? `${duration(p.time.avg)} en moyenne` : undefined} />
+                  )
+                )}
               </ul>
             )}
+            {view === "time" && <TimeNote time={data.time} />}
             {list.length > limit && (
               <div className="ax-more">
                 <button type="button" className="ax-btn" onClick={() => setLimit((l) => l + PAGE)}>
@@ -140,7 +155,7 @@ export function PagesTab({ data, content, onOpen }) {
   );
 }
 
-function PageRow({ p, total, onOpen, delta, extra }) {
+function PageRow({ p, total, onOpen, delta, extra, value, valueTitle }) {
   const edit = adminHrefForPath(p.member);
   return (
     <li>
@@ -156,7 +171,9 @@ function PageRow({ p, total, onOpen, delta, extra }) {
         </span>
       </button>
       {delta !== undefined && <Delta value={delta} />}
-      <span className="ax-num">{num(p.score)}</span>
+      <span className="ax-num" title={valueTitle}>
+        {value ?? num(p.score)}
+      </span>
       <a className="ax-btn ghost icon sm" href={`${SITE}${p.member}`} target="_blank" rel="noopener noreferrer" aria-label="Ouvrir">
         <Icon name="external" size="sm" />
       </a>

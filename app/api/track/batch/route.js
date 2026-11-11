@@ -7,6 +7,7 @@ import {
   trackPathView,
   trackPdfDownload,
   trackSearchMiss,
+  trackEngagement,
   checkRateLimitBulk,
   getClientIp,
   getClientGeo,
@@ -45,6 +46,39 @@ function sanitizePath(raw) {
   let p = raw.split("?")[0].split("#")[0];
   if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
   return PATH_RE.test(p) ? p : null;
+}
+
+// Temps passé (initEngagement dans _shared/chrome.js) : bornes identiques à
+// celles du navigateur — 30 min par page vue, 60 pages par visite.
+const SID_RE = /^[a-z0-9]{6,32}$/;
+const PAGE_MAX_S = 30 * 60;
+const MAX_PAGES = 60;
+
+function sanitizeSeconds(raw) {
+  const n = Math.round(Number(raw));
+  return Number.isFinite(n) && n > 0 ? Math.min(PAGE_MAX_S, n) : 0;
+}
+
+function sanitizeEngage(e) {
+  if (typeof e.sid !== "string" || !SID_RE.test(e.sid)) return null;
+  const path = sanitizePath(e.path);
+  if (!path || !Array.isArray(e.pages)) return null;
+  const pages = [];
+  for (const p of e.pages.slice(0, MAX_PAGES)) {
+    const pp = Array.isArray(p) ? sanitizePath(p[0]) : null;
+    if (pp) pages.push([pp, sanitizeSeconds(p[1])]);
+  }
+  if (!pages.length) return null;
+  return {
+    sid: e.sid,
+    start: Number(e.start) || 0,
+    path,
+    s: sanitizeSeconds(e.s),
+    n: e.n === 1 ? 1 : 0,
+    src: e.src ? sanitizeSource(e.src) : null,
+    dv: DEVICES.includes(e.dv) ? e.dv : null,
+    pages,
+  };
 }
 
 // limit: [limiter key prefix, max per window, window seconds] — same triples
@@ -88,6 +122,13 @@ const HANDLERS = {
   "pdf-download": {
     limit: ["pdf", 30, 60],
     run: (e, ctx) => (PDF_KINDS.includes(e.kind) ? trackPdfDownload(e.kind, e.id, ctx) : null),
+  },
+  engage: {
+    limit: ["engage", 60, 60],
+    run: (e, ctx) => {
+      const clean = sanitizeEngage(e);
+      return clean ? trackEngagement(clean, ctx) : null;
+    },
   },
   "search-miss": {
     limit: ["search-miss", 20, 60],

@@ -16,6 +16,7 @@ import { AcquisitionTab, HoursTab } from "./stats/Acquisition";
 import { PdfTab } from "./stats/Pdf";
 import { SearchesTab } from "./stats/Searches";
 import { JournalTab } from "./stats/Journal";
+import { VisitorsTab } from "./stats/Visitors";
 
 // Statistiques v2. Audit du 2026-11-05 : « Visites » comptait en réalité les
 // nouveaux navigateurs (une seule fois, pour toujours), le taux de
@@ -27,6 +28,7 @@ import { JournalTab } from "./stats/Journal";
 const TABS = [
   { key: "audience", label: "Vue d'ensemble", icon: "chart" },
   { key: "pages", label: "Pages", icon: "file" },
+  { key: "visiteurs", label: "Visiteurs", icon: "clock" },
   { key: "acquisition", label: "Acquisition", icon: "globe" },
   { key: "horaires", label: "Horaires", icon: "clock" },
   { key: "pdf", label: "PDF", icon: "download" },
@@ -129,6 +131,7 @@ export default function Statistics() {
           {pagePath && <PageDetail key={pagePath} path={pagePath} query={query} content={content} onBack={() => openPage(null)} />}
         </>
       )}
+      {data && tab === "visiteurs" && <VisitorsTab content={content} />}
       {data && tab === "acquisition" && <AcquisitionTab data={data} />}
       {data && tab === "horaires" && <HoursTab data={data} />}
       {data && tab === "pdf" && <PdfTab data={data} content={content} />}

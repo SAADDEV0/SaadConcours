@@ -8,7 +8,7 @@ import { useLocalStorage } from "../../_lib/hooks";
 import { dateFr, num } from "../../_lib/format";
 import { labelForPath, labelForPdfItem } from "../../_lib/labels";
 import { formatDayFr } from "@/lib/dateRange";
-import { Columns, CoverageNote, WEEKDAYS, countryName, deltaOf, groupChannels, pct, peakSlot, share, sourceLabel, sumScores, toCsv, DEVICE_LABELS } from "./shared";
+import { Columns, CoverageNote, TimeNote, duration, WEEKDAYS, countryName, deltaOf, groupChannels, pct, peakSlot, share, sourceLabel, sumScores, toCsv, DEVICE_LABELS } from "./shared";
 
 const METRICS = [
   { value: "sessions", label: "Visites", color: "#4f8cff" },
@@ -114,6 +114,8 @@ export default function Audience({ data, content, onTab, onOpenPage }) {
         />
       </div>
 
+      <TimeStats time={data.time} onTab={onTab} />
+
       <section className="ax-card ax-section">
         <SectionTitle aside={`${data.range.label}${compare && def.value !== "all" ? ` · comparé au ${formatDayFr(data.range.prevFrom)} → ${formatDayFr(data.range.prevTo)}` : ""}`}>Évolution</SectionTitle>
         <div className="ax-toolbar">
@@ -169,6 +171,47 @@ export default function Audience({ data, content, onTab, onOpenPage }) {
         </div>
       </div>
     </>
+  );
+}
+
+// Durée moyenne d'une visite, temps moyen sur une page, temps total passé.
+function TimeStats({ time, onTab }) {
+  if (!time || !time.started) return null;
+  const delta = (curr, prev) => (prev ? <Delta value={deltaOf(curr, prev)} /> : null);
+  const open = (
+    <button type="button" className="ax-link" onClick={() => onTab("visiteurs")}>
+      Voir chaque visiteur
+    </button>
+  );
+  return (
+    <div className="ax-section">
+      <div className="ax-grid c3">
+        <Stat
+          icon="clock"
+          label="Durée moyenne d'une visite"
+          value={duration(time.avgVisitS)}
+          foot={
+            <>
+              {delta(time.avgVisitS, time.prevAvgVisitS)} {num(time.visits)} visite{time.visits > 1 ? "s" : ""} mesurée{time.visits > 1 ? "s" : ""} · {open}
+            </>
+          }
+          color="#0d9488"
+        />
+        <Stat
+          icon="file"
+          label="Temps moyen sur une page"
+          value={duration(time.avgPageS)}
+          foot={
+            <>
+              {delta(time.avgPageS, time.prevAvgPageS)} sur {num(time.views)} page{time.views > 1 ? "s" : ""} vue{time.views > 1 ? "s" : ""}
+            </>
+          }
+          color="#0ea5e9"
+        />
+        <Stat icon="activity" label="Temps total passé sur le site" value={duration(time.totalS)} foot="temps actif : onglet visible, visiteur présent" color="#f59e0b" />
+      </div>
+      <TimeNote time={time} />
+    </div>
   );
 }
 

@@ -17,6 +17,8 @@ import {
   getAdStats,
   getShopStats,
   getPageStats,
+  getRangeTime,
+  getVisitorLog,
   dismissSearchMiss,
 } from "@/lib/analytics";
 import { getSubscriberHistory } from "@/lib/subscribers";
@@ -73,6 +75,15 @@ export async function GET(req) {
     return NextResponse.json({ live }, { headers: NO_CACHE });
   }
 
+  // Visiteurs d'un jour : durée de chaque visite et pages parcourues.
+  if (scope === "visitors") {
+    const day = sp.get("day") || new Date().toISOString().slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return NextResponse.json({ error: "Jour invalide." }, { status: 400 });
+    const visitors = await safe(getVisitorLog(day), null);
+    if (!visitors) return NextResponse.json({ error: "Statistiques indisponibles." }, { status: 500 });
+    return NextResponse.json({ day, visitors }, { headers: CACHE });
+  }
+
   // Fiche d'une page (onglet Pages).
   if (scope === "page") {
     const path = sp.get("path") || "";
@@ -88,19 +99,20 @@ export async function GET(req) {
 
   const full = scope !== "summary";
   try {
-    const [metrics, totals, subscribers, topPaths, sources, searchMisses] = await Promise.all([
+    const [metrics, totals, subscribers, topPaths, sources, searchMisses, time] = await Promise.all([
       safe(getRangeMetrics(range), null),
       safe(getTotals(), null),
       safe(getSubscriberHistory(30), []),
       safe(getTopPaths(full ? 500 : 12), []),
       safe(getVisitSources(20), []),
       safe(getTopSearchMisses(full ? 50 : 8), []),
+      safe(getRangeTime(range, { limit: full ? 600 : 0 }), null),
     ]);
     // Sans les compteurs principaux, la page n'a rien d'utile à montrer :
     // une erreur franche (avec « Réessayer ») vaut mieux que des zéros.
     if (!metrics) return NextResponse.json({ error: "Statistiques indisponibles (base KV injoignable)." }, { status: 503 });
 
-    const payload = { range, metrics, totals, subscribers, topPaths, sources, searchMisses };
+    const payload = { range, metrics, totals, subscribers, topPaths, sources, searchMisses, time };
 
     if (full) {
       const [breakdown, live, cities, pdfCities, pdfItems, concoursViews, searchLog, recentVisits, recentPdf] = await Promise.all([

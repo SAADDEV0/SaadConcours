@@ -686,6 +686,9 @@ export const chromeScript = function initChrome() {
     queueTrackEvent(first ? { t: "page-path", path: location.pathname, first, source: detectSource(), dv: detectDevice() } : { t: "page-path", path: location.pathname, first });
   })();
 
+  // Temps passé sur chaque page et parcours de la visite (voir initEngagement).
+  initEngagement(detectSource, detectDevice);
+
   // Type d'appareil de la visite (statistiques « Appareils ») : une lettre,
   // rien d'identifiant. Les iPad récents se présentent comme un Mac tactile.
   function detectDevice() {
@@ -1118,4 +1121,121 @@ export function trackConcoursView(id) {
     sessionStorage.setItem(key, "1");
   } catch {}
   queueTrackEvent({ t: "concours-view", id });
+}
+
+/* ----------------------------- Temps passé --------------------------------
+ * Combien de temps chaque visiteur reste, et sur quelles pages. Seul le temps
+ * « actif » compte : onglet visible, et un geste (défilement, toucher, souris,
+ * clavier) depuis moins de ENGAGE_IDLE_MS — un onglet oublié ouvert toute la
+ * nuit ne doit pas compter pour 8 heures de lecture.
+ *
+ * La visite (même onglet, comme sc_paths) est gardée en sessionStorage :
+ * identifiant tiré au hasard, heure de début, source, appareil et la liste
+ * des pages avec le temps passé sur chacune. À chaque fois que la page est
+ * quittée ou masquée, un évènement « engage » part par sendBeacon avec le
+ * temps gagné depuis le dernier envoi (pour les moyennes par page) et le
+ * parcours complet (pour la liste des visiteurs de la console).
+ * ------------------------------------------------------------------------ */
+
+const ENGAGE_IDLE_MS = 5 * 60e3;
+const ENGAGE_PAGE_MAX_S = 30 * 60;
+const ENGAGE_MAX_PAGES = 60;
+const ENGAGE_KEY = "sc_sess";
+
+let engage = null;
+
+function engageSession(meta) {
+  try {
+    const s = JSON.parse(sessionStorage.getItem(ENGAGE_KEY) || "null");
+    if (s && typeof s.sid === "string" && Array.isArray(s.pages)) return s;
+  } catch {}
+  const sid = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  return { sid, start: Date.now(), src: meta.src, dv: meta.dv, pages: [] };
+}
+
+function engageAccrue(now) {
+  if (!engage || engage.since === null) return;
+  const end = Math.min(now, engage.lastInput + ENGAGE_IDLE_MS);
+  if (end > engage.since) engage.activeMs += end - engage.since;
+  // Inactif depuis trop longtemps : le compteur s'arrête jusqu'au prochain geste.
+  engage.since = now < engage.lastInput + ENGAGE_IDLE_MS ? now : null;
+}
+
+function engageSend() {
+  if (!engage) return;
+  engageAccrue(Date.now());
+  const totalS = Math.min(ENGAGE_PAGE_MAX_S, Math.round(engage.activeMs / 1000));
+  const delta = totalS - engage.sentS;
+  // Moins d'une seconde : onglet ouvert en arrière-plan puis refermé, rien à dire.
+  if (totalS < 1 || (delta <= 0 && engage.counted)) return;
+  const sess = engageSession(engage.meta);
+  if (engage.idx === null && sess.pages.length < ENGAGE_MAX_PAGES) {
+    sess.pages.push([engage.path, 0]);
+    engage.idx = sess.pages.length - 1;
+  }
+  if (engage.idx !== null && sess.pages[engage.idx]) sess.pages[engage.idx][1] = totalS;
+  try {
+    sessionStorage.setItem(ENGAGE_KEY, JSON.stringify(sess));
+  } catch {}
+  queueTrackEvent({ t: "engage", sid: sess.sid, start: sess.start, src: sess.src, dv: sess.dv, path: engage.path, s: Math.max(0, delta), n: engage.counted ? 0 : 1, pages: sess.pages });
+  engage.sentS = totalS;
+  engage.counted = true;
+  flushTrackQueue(true);
+}
+
+function initEngagement(detectSource, detectDevice) {
+  try {
+    if (typeof window === "undefined" || localStorage.getItem("sc_no_track") === "1") return;
+  } catch {
+    return;
+  }
+  const path = location.pathname;
+  // chromeScript() peut être rappelé (nouveau rendu, navigation côté client) :
+  // même page, rien à faire ; autre page, on clôt la précédente.
+  if (engage && engage.path === path) return;
+  if (engage) engageSend();
+  const now = Date.now();
+  engage = {
+    path,
+    meta: engage?.meta || { src: detectSource(), dv: detectDevice() },
+    activeMs: 0,
+    since: document.hidden ? null : now,
+    lastInput: now,
+    sentS: 0,
+    counted: false,
+    idx: null,
+  };
+  if (window.__scEngageBound) return;
+  window.__scEngageBound = true;
+
+  const onInput = () => {
+    if (!engage || document.hidden) return;
+    const t = Date.now();
+    engageAccrue(t);
+    engage.lastInput = t;
+    if (engage.since === null) engage.since = t;
+  };
+  for (const ev of ["scroll", "pointerdown", "pointermove", "keydown", "touchstart", "wheel"]) {
+    window.addEventListener(ev, onInput, { passive: true, capture: true });
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (!engage) return;
+    if (document.hidden) {
+      engageSend();
+      engage.since = null;
+    } else {
+      engage.lastInput = Date.now();
+      engage.since = engage.lastInput;
+    }
+  });
+  window.addEventListener("pagehide", () => {
+    engageSend();
+    if (engage) engage.since = null;
+  });
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted && engage && !document.hidden) {
+      engage.lastInput = Date.now();
+      engage.since = engage.lastInput;
+    }
+  });
 }
