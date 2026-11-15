@@ -15,6 +15,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `ajoute ce concours` + photo / PDF / lien | [C2](#c2--ajouter-un-concours-fourni-photo-pdf-lien) |
 | `ajoute 10 concours licence d'excellence` · `ajoute des LE CCA` | [C9](#c9--concours-de-licence-dexcellence) |
 | `ajoute 10 concours de droit` · `ajoute des concours master droit` · `ajoute ce sujet de droit` | [C11](#c11--concours-de-master-en-droit) |
+| `ajoute 10 sujets CNAEM` · `ajoute les sujets ECT` · `ajoute le CNAEM ECS 2019` · `continue la prépa` | [C13](#c13--sujets-du-cnaem-classes-prépa-ect--ecs) |
 | `corrige le concours X` · `ajoute les corrigés manquants` · `ajoute 10 corrigés` | [C3](#c3--rédiger-ou-refaire-un-corrigé) |
 | `corrige l'énoncé de X` · `vérifie l'extrait de X` · `retranscris X` | [C4](#c4--corriger-un-énoncé--un-extrait) |
 | `modifie le concours X : …` | [C5](#c5--modifier-un-concours) |
@@ -734,6 +735,53 @@ keep Droit — la FSJES, c'est l'économie-gestion et le droit »). Pages, conso
 301 (`public/_redirects`). Les sujets de **Master** passés dans une ENCG restent des concours de Master (C1).
 Une demande « ajoute un cours ENCG », « ajoute un concours TAFEM » ou « ajoute un sujet Taalim » : **ne pas
 recréer l'espace**, le signaler et demander. Un sujet de Master d'une ENCG suit C1/C2.
+
+### C13 — Sujets du CNAEM (classes prépa ECT / ECS)
+Espace **« Prépa ECT / ECS »** (`lib/espaces.js`, clé `prepa`, couleur sky), créé le 2026-11-15 (« on va
+commencer à travailler sur classe prépa ECS et ECT », ECT d'abord). Niveau de concours `cnaem`
+(`lib/concoursNiveaux.js`, `isCnaem`, `optionCnaem`), liste `/concours/cnaem` (`app/concours/cnaem/page.js`,
+avec le tableau des épreuves et coefficients de la notice CNAEM 2024), onglet ouvert au premier sujet publié
+(`concours-cnaem`, `lib/contenusPublies.mjs`). Le CNAEM ouvre les 12 ENCG, l'ESCA et Rabat Business School
+(1 240 places en 2024) ; l'ISCAE n'y est plus. Précédent : 10 sujets ECT (2026-11-15) — économie-droit 2017
+à 2020, maths 2014, 2015, 2017 et 2019, gestion-management-informatique 2019 et 2020.
+1. **Fiche** (`concours.json`, schéma de la section C avec ces valeurs) : `id` `<annee>_CNAEM_<ECT|ECS>_<EcoDroit|Maths|Gestion>`,
+   `ville: ""` (concours national : aucun hub de ville), `etablissement: "CNAEM"`, `filiere`
+   `"Option technologique (ECT)"` ou `"Option scientifique (ECS)"`, `categorie: "CPGE"` (`lib/taxonomy.js`),
+   `niveau: "cnaem"`, champ propre **`epreuve`** (« Économie-droit », « Mathématiques », « Gestion, management et
+   informatique », pour l'ECS « Mathématiques et informatique », « L'entreprise et son environnement », « Histoire,
+   géographie et géopolitique du monde contemporain »), `master_reel` = `<épreuve> — option ECT` (c'est le H1).
+   Titres SEO calculés par la branche CNAEM de `app/_shared/concoursSeo.js` (« CNAEM 2019 ECT Économie-droit :
+   sujet et corrigé »). `modules` : libellés reconnus par `MOTIFS` (`lib/concoursParModule.js`) pour lier
+   les cours FSJES (« Économie générale », « Économie du Maroc », « Commerce international », « Droit du travail »,
+   « Droit des affaires », « Algèbre linéaire », « Analyse mathématique », « Probabilités », « Analyse financière »,
+   « Comptabilité analytique »…). Pas de cours prépa réécrit : l'éco, le droit et la gestion renvoient aux cours
+   FSJES (un seul cours par matière, §1.6).
+2. **Source** : groupe-reussite.fr, page « annales concours Maroc CNAEM »
+   (`/ressources/annales-concours-maroc-cnaem/`, PDF `…/Annales/concours-maroc/cnaem/cnaem-<epreuve>-ect-<annee>.pdf` ;
+   épreuves `eco-droit`, `gest-mana-info`, `maths`, `entreprise-et-enviro-ecs`…). Des PDF arrivent tronqués :
+   vérifier `%PDF-` et refaire le `curl` avec `--retry 3` si `pdftotext` échoue. `maths-ect-2018` est un scan
+   (pas de texte) ; `maths-ect-2013` est presque vide. Sur ce poste, `pdftotext` (xpdf) n'a ni `-bbox` ni
+   `pdftoppm` : les fractions et matrices se reconstituent avec `pdftotext -raw` (ordre des glyphes) et se
+   vérifient par le calcul (produits de matrices, totaux d'un bilan qui doivent boucler).
+3. **Droits d'auteur** : les articles de presse et extraits d'ouvrages des dossiers documentaires (note de
+   synthèse, annexes de gestion) ne sont **pas recopiés** : référence complète + résumé « ce que dit
+   l'article (résumé SaadConcours) » avec ses idées et chiffres, dans l'ordre du texte. Le cas de droit, les
+   questions et les tableaux de données sont transcrits (reformulés légèrement). Le dire dans `notions_cles`.
+4. **Maths** : écrire les sous-questions `**1.a)**`, `**1.b)**`… et jamais `a)` en début de ligne, sinon
+   `formatQCM` les prend pour des options de QCM (cases) dès 5 séries. Pas de `$` hors formule, même dans du
+   code (`protectMath` le prend pour du LaTeX) : formules de tableur sans références `$A$1`, expliquées en
+   phrase. Chaque résultat recalculé en Node ; signaler toute erreur d'énoncé (précédent : 3ᵉ ligne de $A^k$
+   fausse en maths 2017).
+5. **Corrigés** : note de synthèse = problématique, introduction rédigée, plan à deux parties avec renvois
+   « (doc. N) », conclusion de 2-3 lignes, sans connaissance extérieure ; réflexion argumentée = plan détaillé avec
+   auteurs et exemples marocains ; droit = faits, problème, règles avec articles vérifiés sur le texte officiel
+   (Code du travail, DOC, lois 17-97, 104-12, 15-95…), application, conclusion. Gestion : tableaux de calcul,
+   écritures au CGNC avec les comptes du sujet.
+6. Écriture par script (fiches en fin de tableau + miroirs `extraits/` et `corriges/`), contrôles de C1
+   (rendu `marked`, `$` appariés, `formatQCM` sans `<!--c-->`, `git diff --numstat` = ajouts seuls), puis
+   `npm run check`. Mettre à jour la ligne CNAEM de `public/llms.txt` (sessions et épreuves couvertes).
+   Suite logique : les épreuves de l'option ECS, puis les épreuves communes (dissertation de culture générale,
+   résumé, anglais).
 
 ### Schéma d'une entrée `cours.json`
 ```json

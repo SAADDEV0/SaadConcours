@@ -18,7 +18,7 @@
 // Deux fiches ne partagent jamais un titre ni une description : les
 // collisions sont résolues sur la liste entière (« Formation initiale »,
 // « sujet 2 »). « Formation continue » figure toujours dans le titre.
-import { niveauLabel, niveauOf } from "../../lib/concoursNiveaux";
+import { isCnaem, niveauLabel, niveauOf, optionCnaem } from "../../lib/concoursNiveaux";
 import { DESCRIPTION_MAX, fitTitle, clampDescription } from "./seoText";
 
 const propre = (s) => String(s || "").replace(/\s+/g, " ").trim();
@@ -92,6 +92,24 @@ function formes(c, hasCorrige, precision = "") {
   const [lieuLong, lieuCourt = lieuLong] = lieux(c);
   const annee = /^\d{4}$/.test(String(c.annee)) ? ` ${c.annee}` : "";
   const p = precision ? ` (${precision})` : "";
+
+  // CNAEM : pas de faculté ni de master, une épreuve d'une option. Les élèves
+  // cherchent « cnaem 2019 ect économie droit corrigé ».
+  if (isCnaem(c)) {
+    const opt = optionCnaem(c).court;
+    const ep = propre(c.epreuve || c.master_reel || "");
+    return {
+      titres: [
+        `CNAEM${annee} ${opt} ${ep}${p} : ${hasCorrige ? "sujet et corrigé" : "sujet"}`,
+        `CNAEM${annee} ${opt} ${ep}${p}`,
+      ],
+      sujet: `CNAEM${annee} ${opt}${p}, épreuve ${ep ? `« ${ep} »` : ""}`.trim(),
+      sujetCourt: `CNAEM${annee} ${opt} ${ep}${p}`,
+      sigle: false,
+      variante: "",
+    };
+  }
+
   const l = libelles(c);
 
   if (l.commune) {

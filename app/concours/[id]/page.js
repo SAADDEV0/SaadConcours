@@ -12,10 +12,10 @@ import ConcoursDetailClient, { ShareButton, DownloadPdfButton } from "./Concours
 import AdSlot from "../../_shared/AdSlot";
 import { ogImageSize, ogImageContentType } from "../../_shared/ogImage";
 import MathScripts from "../../_shared/MathScripts";
-import { isMaster, niveauInfo, niveauOf, LICENCE_EXCELLENCE, MASTER_DROIT } from "@/lib/concoursNiveaux";
+import { isCnaem, isMaster, niveauInfo, niveauOf, optionCnaem, CNAEM, LICENCE_EXCELLENCE, MASTER_DROIT } from "@/lib/concoursNiveaux";
 
 // Onglet du header et de la barre d'espace (lib/espaces.js) selon le niveau.
-const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [MASTER_DROIT]: "concours-droit" };
+const ACTIVE_DU_NIVEAU = { [LICENCE_EXCELLENCE]: "concours-le", [MASTER_DROIT]: "concours-droit", [CNAEM]: "concours-cnaem" };
 import { Icon } from "../../_shared/icons";
 import { modulesDuConcours } from "@/lib/concoursParModule";
 
@@ -73,6 +73,8 @@ function estSujetOfficiel(c) {
 // le nom de l'établissement ne la contient pas déjà (comme les pastilles), la
 // session seulement si l'année est connue (pas « SD » ni « non précisée »).
 function officielDe(c) {
+  // CNAEM : concours national, sans faculté ni ville ; l'option dit à qui il s'adresse.
+  if (isCnaem(c)) return `du Concours national d'accès aux écoles de management (CNAEM), session ${c.annee}, ${optionCnaem(c).long}.`;
   const etab = String(c.etablissement || "").trim();
   const article = /^[aeiouéèêh]/i.test(etab) ? "l'" : "la ";
   const session = /^\d{4}/.test(String(c.annee)) ? `, session ${c.annee}` : "";
@@ -85,6 +87,7 @@ function officielDe(c) {
 // « FSJES Tanger 2024 » dans le fil d'Ariane, sans « non précisée » quand
 // l'année du sujet est inconnue.
 function filAriane(c) {
+  if (isCnaem(c)) return `${c.annee} ${optionCnaem(c).court} · ${c.epreuve || "épreuve"}`;
   return /^\d{4}/.test(String(c.annee)) ? `${c.etablissement} ${c.annee}` : c.etablissement;
 }
 

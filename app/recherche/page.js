@@ -1,6 +1,6 @@
 import { getPublicConcours, getAllCours, getAllDroit, getPublicQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
-import { isLicenceExcellence, isMasterDroit } from "@/lib/concoursNiveaux";
+import { isCnaem, isLicenceExcellence, isMasterDroit, optionCnaem } from "@/lib/concoursNiveaux";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { droitRangLabelFr } from "../../lib/droitTaxonomy";
 import { contenuOuvert } from "../../lib/espaces";
@@ -51,9 +51,9 @@ export default async function RecherchePage() {
       entree(
         "concours",
         c.master_reel || c.filiere || `${c.etablissement} — ${c.ville}`,
-        `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isMasterDroit(c) ? " · Master de droit" : ""}`,
+        isCnaem(c) ? `CNAEM · ${c.annee} · Prépa ${optionCnaem(c).court}` : `${lieu} · ${c.annee}${isLicenceExcellence(c) ? " · Licence d'excellence" : isMasterDroit(c) ? " · Master de droit" : ""}`,
         `/concours/${encodeURIComponent(c.id)}`,
-        [c.master_fr, c.filiere, ...(c.modules || []), isLicenceExcellence(c) ? "licence excellence" : isMasterDroit(c) ? "master droit juridique" : "master"].filter(Boolean).join(" ")
+        [c.master_fr, c.filiere, ...(c.modules || []), isCnaem(c) ? "cnaem prepa cpge classes preparatoires encg" : isLicenceExcellence(c) ? "licence excellence" : isMasterDroit(c) ? "master droit juridique" : "master"].filter(Boolean).join(" ")
       )
     );
   }
@@ -156,6 +156,12 @@ export default async function RecherchePage() {
                   <a className="home-link" href="/concours/droit">
                     <strong>Concours Master Droit</strong>
                     <span>Masters de droit des FSJES, en français et en arabe</span>
+                  </a>
+                )}
+                {contenuOuvert("concours-cnaem") && (
+                  <a className="home-link" href="/concours/cnaem">
+                    <strong>Concours CNAEM</strong>
+                    <span>Prépa ECT et ECS : sujets d&apos;accès aux ENCG</span>
                   </a>
                 )}
                 <a className="home-link" href="/concours/licence-excellence">

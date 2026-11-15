@@ -61,6 +61,7 @@ export const PARTNER_SECTIONS = [
   { key: "concours", label: "Concours Master" },
   { key: "concours-droit", label: "Concours Master Droit" },
   { key: "concours-le", label: "Licence d'excellence" },
+  { key: "concours-cnaem", label: "Concours CNAEM (prépa ECT / ECS)" },
   { key: "cours", label: "Cours Licence FSJES" },
   { key: "droit", label: "Cours de Droit" },
   { key: "bac", label: "Cours Bac" },

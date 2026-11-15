@@ -4,7 +4,7 @@ import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
 import { getBacMatiereEffectif } from "@/lib/bacContenuEffectif";
 import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
-import { isLicenceExcellence, isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
+import { isCnaem, isLicenceExcellence, isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
 import { contenuOuvert } from "@/lib/espaces";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "@/lib/droit";
 import { masterHref, masterHubs, villeHref, villeHubs } from "@/lib/concoursHubs";
@@ -51,12 +51,14 @@ export default async function sitemap() {
   const licenceUpdated = concoursDate(concours.filter(isLicenceExcellence));
   const masterDroit = concours.filter(isMasterDroit);
   const droitConcoursUpdated = concoursDate(masterDroit);
+  const cnaem = concours.filter(isCnaem);
+  const cnaemUpdated = concoursDate(cnaem);
   // Espace Droit : rien avant son lancement (DROIT_LANCE, lib/contenusPublies.mjs).
   const droitPublies = droitOuvert() ? droit.filter(isDroitPublie) : [];
   const blogUpdated = latestDate(blog, "publishedAt");
   // The homepage surfaces the latest concours and the latest blog posts, so it
   // is as fresh as the freshest of them.
-  const homeUpdated = [concoursUpdated, licenceUpdated, droitConcoursUpdated, blogUpdated].filter(Boolean).sort().pop() || null;
+  const homeUpdated = [concoursUpdated, licenceUpdated, droitConcoursUpdated, cnaemUpdated, blogUpdated].filter(Boolean).sort().pop() || null;
   const produits = boutique.filter(isProduitVisible);
 
   // /cours, /evaluation, /faq, /a-propos, /contact and /confidentialite carry no lastModified on
@@ -68,6 +70,8 @@ export default async function sitemap() {
     { path: "/concours/licence-excellence", changeFrequency: "weekly", priority: 0.8, lastModified: licenceUpdated },
     // Masters de droit : la liste seulement avec au moins un sujet publié.
     ...(masterDroit.length ? [{ path: "/concours/droit", changeFrequency: "weekly", priority: 0.8, lastModified: droitConcoursUpdated }] : []),
+    // Sujets du CNAEM (prépa ECT / ECS) : même règle.
+    ...(cnaem.length ? [{ path: "/concours/cnaem", changeFrequency: "weekly", priority: 0.8, lastModified: cnaemUpdated }] : []),
     // Les modules en renvoi n'ont pas de page : seul /droit les liste.
     ...(droitPublies.length || (droitOuvert() && droitRenvois(droit, cours).length) ? [{ path: "/droit", changeFrequency: "weekly", priority: 0.8 }] : []),
     { path: "/blog", changeFrequency: "weekly", priority: 0.8, lastModified: blogUpdated },
