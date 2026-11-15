@@ -217,6 +217,12 @@
 /blog/fsjes_tetouan_concours_master_filieres_et_conseils /concours/ville/tetouan 301
 /blog/fsjes_el_jadida_concours_master_filieres_et_conseils /concours/ville/el-jadida 301
 
+# Le module « Histoire de la pensée économique » (S3, histpensee_cours) a été créé le
+# 2026-11-15 : les chapitres 8 et 9 d'Introduction aux sciences économiques (S1), répartis
+# sur ses 10 chapitres, ont quitté introeco_cours (un seul cours par matière).
+/cours/introeco_cours/la-pensee-economique-des-origines-a-marx /cours/histpensee_cours/adam-smith-et-la-fondation-de-l-economie-politique-classique 301
+/cours/introeco_cours/la-pensee-economique-depuis-1870-neoclassiques-keynes-et-debats-contemporains /cours/histpensee_cours/keynes-et-la-revolution-keynesienne 301
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et
