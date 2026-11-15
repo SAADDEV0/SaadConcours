@@ -60,7 +60,7 @@
 .sp-sheet-btn .ic, .sp-filter-btn .ic{width:17px; height:17px;}
 .sp-filter-badge{
   min-width:20px; padding:0 6px; border-radius:999px; background:var(--accent-fill); color:#fff;
-  font-size:.74rem; font-weight:700; line-height:20px; text-align:center;
+  font-size:.75rem; font-weight:700; line-height:20px; text-align:center;
 }
 .sp-filter-badge[hidden]{display:none;}
 
@@ -222,7 +222,7 @@
 .sp-card.disabled{opacity:.6; cursor:default;}
 .sp-chips{display:flex; flex-wrap:wrap; gap:4px;}
 .sp-desc-clamp{display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden;}
-.sp-card-kicker{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint);}
+.sp-card-kicker{font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint);}
 .sp-card-kicker .ic{width:14px; height:14px;}
 .sp-meta-line{display:flex; flex-wrap:wrap; align-items:center; gap:2px 0;}
 
@@ -241,17 +241,17 @@
   background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent);
 }
 .sp-resume:hover{border-color:var(--accent);}
-.sp-resume-kicker{grid-column:1; font-size:.74rem; font-weight:600; color:var(--accent-ink);}
+.sp-resume-kicker{grid-column:1; font-size:.8rem; font-weight:600; color:var(--accent-ink);}
 .sp-resume-title{grid-column:1; font-weight:700; line-height:1.35;}
 .sp-resume-go{grid-column:2; grid-row:1 / span 2; display:inline-flex; color:var(--accent);}
 [data-resume][hidden]{display:none;}
 
 /* Progression de l'élève sur une carte (évaluation : meilleur score). */
-.sp-best{margin-left:auto; padding:2px 9px; border-radius:999px; font-size:.72rem; font-weight:700; background:var(--bg-inset); border:1px solid var(--border); color:var(--text);}
+.sp-best{margin-left:auto; padding:2px 9px; border-radius:999px; font-size:.8rem; font-weight:700; background:var(--bg-inset); border:1px solid var(--border); color:var(--text);}
 .sp-best.ok{border-color:var(--green); color:var(--green);}
 .sp-best.ko{border-color:var(--amber); color:var(--amber);}
 /* Exceptions signalées (« Sans corrigé », « Sans scan »). */
-.sp-flag{font-size:.74rem; font-weight:600; padding:2px 8px; border-radius:999px; border:1px dashed var(--border-strong); color:var(--text-dim); white-space:nowrap;}
+.sp-flag{font-size:.8rem; font-weight:600; padding:2px 8px; border-radius:999px; border:1px dashed var(--border-strong); color:var(--text-dim); white-space:nowrap;}
 
 /* Jauge de difficulté (app/_shared/format.js) : lignes et fiches. */
 .sp-diff{display:inline-flex; align-items:center; gap:6px; white-space:nowrap; color:var(--text-dim);}
@@ -262,7 +262,7 @@
 .sp-diff-val{font-size:.8rem; font-weight:600; color:var(--text); font-variant-numeric:tabular-nums;}
 
 /* Badge Licence d'excellence (listes mêlant les deux niveaux). */
-.sp-le-badge{display:inline-flex; align-items:center; gap:4px; font-size:.74rem; font-weight:600; color:var(--text-dim); white-space:nowrap;}
+.sp-le-badge{display:inline-flex; align-items:center; gap:4px; font-size:.8rem; font-weight:600; color:var(--text-dim); white-space:nowrap;}
 .sp-le-badge .ic{width:12px; height:12px; color:var(--text-faint);}
 
 /* ---------- À propos (texte de référencement, en bas des pages) ---------- */
@@ -340,7 +340,7 @@
 .home-chooser-text{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
 .home-chooser-name{font-weight:700; font-size:1.07rem; line-height:1.3;}
 .home-chooser-desc{font-size:.86rem; color:var(--text-dim); line-height:1.4;}
-.home-chooser-mine{display:none; flex-shrink:0; padding:2px 9px; border-radius:999px; background:var(--esp-tint, var(--accent-dim)); color:var(--esp, var(--accent-ink)); border:1px solid color-mix(in srgb, var(--esp-fill, var(--accent)) 35%, transparent); font-size:.72rem; font-weight:700; white-space:nowrap;}
+.home-chooser-mine{display:none; flex-shrink:0; padding:2px 9px; border-radius:999px; background:var(--esp-tint, var(--accent-dim)); color:var(--esp, var(--accent-ink)); border:1px solid color-mix(in srgb, var(--esp-fill, var(--accent)) 35%, transparent); font-size:.8rem; font-weight:700; white-space:nowrap;}
 .home-chooser a.is-mine .home-chooser-mine{display:inline-block;}
 /* Dernière ligne : la chaîne WhatsApp (liseré et icône verts). */
 .home-chooser a.home-chooser-wa{--esp:#1da851; --esp-fill:#25d366; --esp-tint:color-mix(in srgb, #25d366 9%, var(--bg-card)); border-top:1px solid var(--border);}
@@ -392,7 +392,7 @@
 .home-link:hover strong{color:var(--esp, var(--accent));}
 .home-link strong{font-size:.95rem; font-weight:650; line-height:1.35;}
 .home-link span{font-size:.8rem; color:var(--text-faint);}
-.home-new{display:inline-block; margin-left:6px; padding:1px 6px; border-radius:4px; background:var(--hl); color:#16181d; font-size:.68rem; font-weight:700; vertical-align:2px; letter-spacing:.02em;}
+.home-new{display:inline-block; margin-left:6px; padding:1px 6px; border-radius:4px; background:var(--hl); color:#16181d; font-size:.75rem; font-weight:700; vertical-align:2px; letter-spacing:.02em;}
 
 /* S'entraîner + blog : bande teintée, deux colonnes. */
 .home-outils{background:var(--bg-elev);}
@@ -465,7 +465,7 @@
 .sp-aside-sticky{position:sticky; top:calc(var(--header-h) + 16px); display:flex; flex-direction:column; gap:16px;}
 .sp-aside-sticky .ad-slot-vertical{position:static;}
 .sp-aside-card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px;}
-.sp-aside-title{margin:0 0 12px; font-size:.74rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint);}
+.sp-aside-title{margin:0 0 12px; font-size:.8rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint);}
 .sp-facts{margin:0 0 16px; display:flex; flex-direction:column;}
 .sp-facts > div{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:8px 0; border-top:1px solid var(--border); font-size:.88rem;}
 .sp-facts > div:first-child{border-top:none; padding-top:0;}
@@ -508,7 +508,7 @@
 .sp-anchor-tabs .sp-tab-pdf .ic{width:17px; height:17px;}
 .sp-anchor-tabs.has-pdf{grid-auto-columns:auto; grid-template-columns:repeat(var(--tabs, 3), minmax(0, 1fr)) auto;}
 @media (max-width:560px){
-  .sp-anchor-tabs .sp-tab-pdf{flex-direction:column; gap:2px; padding:0 10px; font-size:.74rem; min-height:48px;}
+  .sp-anchor-tabs .sp-tab-pdf{flex-direction:column; gap:2px; padding:0 10px; font-size:.75rem; min-height:48px;}
 }
 
 /* Corrigé replié : un vrai bouton, à l'encre du correcteur. */
@@ -573,11 +573,11 @@
 .shop-cover{position:relative; display:block; aspect-ratio:3/4; background:var(--bg-inset); overflow:hidden;}
 .shop-cover img{width:100%; height:100%; object-fit:cover; display:block;}
 .shop-cover-ph{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--text-faint);}
-.shop-badge{position:absolute; top:8px; left:8px; padding:3px 8px; border-radius:999px; font-size:.66rem; font-weight:700; color:#16181d; background:var(--hl);}
-.shop-remise{position:absolute; top:8px; right:8px; padding:3px 8px; border-radius:999px; font-size:.66rem; font-weight:700; color:#fff; background:var(--accent-fill);}
+.shop-badge{position:absolute; top:8px; left:8px; padding:3px 8px; border-radius:999px; font-size:.75rem; font-weight:700; color:#16181d; background:var(--hl);}
+.shop-remise{position:absolute; top:8px; right:8px; padding:3px 8px; border-radius:999px; font-size:.75rem; font-weight:700; color:#fff; background:var(--accent-fill);}
 .shop-remise.static{position:static; margin-left:4px;}
 .shop-body{display:flex; flex-direction:column; gap:4px; padding:10px 12px 12px; flex:1;}
-.shop-body .sp-card-kicker{display:block; font-size:.66rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.shop-body .sp-card-kicker{display:block; font-size:.75rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .shop-title{font-weight:700; font-size:.88rem; line-height:1.3; color:var(--text);}
 .shop-sub{font-size:.75rem; color:var(--text-dim); line-height:1.4; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;}
 .shop-foot{margin-top:auto; padding-top:6px; display:flex; align-items:flex-end; justify-content:space-between; gap:4px 8px; flex-wrap:wrap;}
@@ -585,7 +585,7 @@
 .shop-price strong{font-size:1rem; font-weight:700; color:var(--text);}
 .shop-price s, .shop-buybox-price s{color:var(--text-faint); font-size:.86rem;}
 .shop-soon{font-size:.9rem !important; color:var(--text-dim) !important;}
-.shop-pages{font-size:.7rem; color:var(--text-faint);}
+.shop-pages{font-size:.75rem; color:var(--text-faint);}
 
 .shop-detail{display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:28px; align-items:start; margin-bottom:28px;}
 .shop-detail-cover{position:relative; aspect-ratio:3/4; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border); background:var(--bg-inset);}
@@ -614,7 +614,7 @@
 .sp-cahier.compact .sp-cahier-cover{width:72px;}
 .sp-cahier-cover img{display:block; width:100%; height:auto;}
 .sp-cahier-body{min-width:0; flex:1;}
-.sp-cahier-kicker{display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
+.sp-cahier-kicker{display:block; font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
 .sp-cahier-title{display:block; margin:2px 0 6px; font-size:1.05rem; line-height:1.3; font-weight:700; color:var(--text);}
 .sp-cahier p{margin:0 0 6px; font-size:.9rem; line-height:1.5; color:var(--text-dim);}
 .sp-cahier-note{font-size:.84rem !important;}

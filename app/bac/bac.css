@@ -18,7 +18,7 @@
 
 /* Ligne de contexte au-dessus d'un titre (« Chapitre 2 · Semestre 1 ») :
    du texte, pas une pastille. */
-.bac-eyebrow{display:block; font-size:.74rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; line-height:1.4;}
+.bac-eyebrow{display:block; font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; line-height:1.4;}
 
 /* ---------- En-têtes de page ---------- */
 .bac-hero, .bac-mat-hero, .bac-chap-hero{position:relative; padding:4px 0 20px; margin-bottom:22px; border-bottom:1px solid var(--border);}
@@ -57,7 +57,7 @@
 .bac-year-tab:hover{border-color:var(--border-strong); color:var(--text);}
 .bac-year-tab.active{background:var(--accent-fill); color:#fff !important; border-color:var(--accent-fill);}
 .bac-year-tab.disabled{opacity:.6; cursor:not-allowed;}
-.bac-year-tab em{font-style:normal; font-size:.72rem; font-weight:600; opacity:.75;}
+.bac-year-tab em{font-style:normal; font-size:.8rem; font-weight:600; opacity:.75;}
 .bac-year-tab .ic{width:16px; height:16px;}
 .bac-filieres{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:24px; font-size:.84rem;}
 .bac-filieres-label{color:var(--text-faint);}
@@ -84,16 +84,16 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 .bac-mat-desc{font-size:.88rem; color:var(--text-dim); line-height:1.5;}
 .bac-mat-meta{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; font-size:.8rem; color:var(--text-faint); margin-top:2px;}
 .bac-dot{opacity:.7;}
-.bac-badge{padding:2px 9px; border-radius:999px; font-weight:600; font-size:.74rem; color:var(--text-dim); background:var(--bg-inset); border:1px solid var(--border);}
-.bac-dispo{display:inline-flex; align-items:center; gap:5px; font-size:.74rem; font-weight:600; padding:2px 9px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); white-space:nowrap; align-self:center;}
+.bac-badge{padding:2px 9px; border-radius:999px; font-weight:600; font-size:.8rem; color:var(--text-dim); background:var(--bg-inset); border:1px solid var(--border);}
+.bac-dispo{display:inline-flex; align-items:center; gap:5px; font-size:.8rem; font-weight:600; padding:2px 9px; border-radius:999px; background:var(--accent-dim); color:var(--accent-ink); white-space:nowrap; align-self:center;}
 .bac-dispo .ic{width:14px; height:14px;}
-.bac-soon{font-style:normal; font-size:.72rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg-inset); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
+.bac-soon{font-style:normal; font-size:.8rem; font-weight:600; padding:2px 8px; border-radius:999px; background:var(--bg-inset); border:1px solid var(--border); color:var(--text-faint); white-space:nowrap; align-self:center;}
 
 /* ---------- Page matière / module ---------- */
 .bac-mat-layout{display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; align-items:start;}
 .bac-side{position:sticky; top:calc(var(--header-h) + 20px); display:flex; flex-direction:column; gap:12px;}
 .bac-side-card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px;}
-.bac-side-title{font-size:.72rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+.bac-side-title{font-size:.8rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
 .bac-side-link{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--radius-sm); font-size:.88rem; text-decoration:none; font-weight:600;}
 .bac-side-link span{color:var(--text-faint); font-weight:500; font-size:.8rem;}
 .bac-side-link span .ic{width:16px; height:16px;}
@@ -109,7 +109,7 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 .bac-semestre-code .ic{width:16px; height:16px;}
 .bac-unite{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:14px;}
 .bac-unite-head{padding:12px 18px; background:var(--bg-inset); border-bottom:1px solid var(--border);}
-.bac-unite-num{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
+.bac-unite-num{font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
 .bac-unite-head h3{margin:2px 0 0; font-size:1rem;}
 .bac-chap-list{list-style:none; margin:0; padding:0;}
 .bac-chap-list li + li{border-top:1px solid var(--border);}
@@ -123,7 +123,7 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 }
 .bac-chap-title{flex:1; font-weight:600; font-size:.95rem; min-width:0; line-height:1.4;}
 .bac-chap-res{display:flex; gap:4px;}
-.bac-res-chip{font-size:.72rem; padding:2px 8px; border-radius:var(--radius-sm); color:var(--text-faint); background:var(--bg-inset); border:1px solid var(--border);}
+.bac-res-chip{font-size:.8rem; padding:2px 8px; border-radius:var(--radius-sm); color:var(--text-faint); background:var(--bg-inset); border:1px solid var(--border);}
 .bac-res-chip.on{color:var(--text-dim);}
 
 /* ---------- Examens nationaux ---------- */
@@ -131,18 +131,18 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 .bac-exam{padding:12px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); text-align:center;}
 .bac-exam-year{font-size:1.15rem; font-weight:700; margin-bottom:6px; font-variant-numeric:tabular-nums;}
 .bac-exam-sessions{display:flex; flex-direction:column; gap:4px;}
-.bac-exam-sessions span{font-size:.72rem; padding:3px 6px; border-radius:var(--radius-sm); background:var(--bg-inset); color:var(--text-faint);}
-.bac-exam-sessions a.on{font-size:.72rem; font-weight:700; padding:4px 6px; border-radius:var(--radius-sm); text-decoration:none; background:var(--accent-dim); color:var(--accent-ink);}
+.bac-exam-sessions span{font-size:.8rem; padding:3px 6px; border-radius:var(--radius-sm); background:var(--bg-inset); color:var(--text-faint);}
+.bac-exam-sessions a.on{font-size:.8rem; font-weight:700; padding:4px 6px; border-radius:var(--radius-sm); text-decoration:none; background:var(--accent-dim); color:var(--accent-ink);}
 .bac-exam-sessions a.on:hover{background:var(--accent-fill); color:#fff;}
 /* Grille des examens nationaux : une ligne par session, un lien par PDF. */
 .bac-exam-grid-docs{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
 .bac-exam-ses{display:flex; flex-direction:column; gap:3px;}
-.bac-exam-ses-label{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
+.bac-exam-ses-label{font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim);}
 .bac-exam-ses-links{display:flex; flex-wrap:wrap; gap:4px;}
 .bac-exam-ses-links a.on{flex:1 1 auto;}
 .bac-nat-serie{margin-bottom:20px;}
 .bac-nat-serie-title{display:flex; align-items:center; gap:8px; font-size:1rem; margin:4px 0 10px;}
-.bac-nat-fil{font-size:.72rem; font-weight:700; padding:3px 8px; border-radius:999px; background:var(--bg-inset); border:1px solid var(--border); color:var(--text);}
+.bac-nat-fil{font-size:.8rem; font-weight:700; padding:3px 8px; border-radius:999px; background:var(--bg-inset); border:1px solid var(--border); color:var(--text);}
 .bac-nat-note{font-size:.86rem; color:var(--text-dim); margin:0 0 10px;}
 .bac-nat-legend{font-size:.8rem; color:var(--text-faint); margin:4px 0 0;}
 .bac-chap-hero .bac-nat-note{margin:10px 0 0;}
@@ -195,7 +195,7 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 #tab-qcm:checked ~ .bac-tab-panel-qcm{display:block;}
 .bac-tab-input:focus-visible ~ .bac-tab-labels{outline:2px solid var(--accent); outline-offset:3px;}
 @media (max-width:560px){
-  .bac-tabs > .bac-tab-labels .bac-tab-label, .sp-anchor-tabs .bac-tab-label{flex-direction:column; gap:2px; padding:6px 2px; font-size:.74rem; line-height:1.2; min-height:48px; white-space:normal;}
+  .bac-tabs > .bac-tab-labels .bac-tab-label, .sp-anchor-tabs .bac-tab-label{flex-direction:column; gap:2px; padding:6px 2px; font-size:.75rem; line-height:1.2; min-height:48px; white-space:normal;}
 }
 
 .bac-empty{text-align:center; padding:44px 20px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px dashed var(--border-strong);}
@@ -245,7 +245,7 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
 .bac-qcm-q{margin:0; padding:16px 18px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg-card);}
 .bac-qcm-q legend{display:flex; gap:10px; align-items:flex-start; font-family:var(--font-reading); font-weight:600; font-size:1rem; line-height:1.5; padding:0; margin-bottom:8px; float:left; width:100%;}
 .bac-qcm-q legend + *{clear:both;}
-.bac-qcm-num{flex-shrink:0; min-width:24px; height:24px; padding:0 6px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font); font-size:.74rem; font-weight:700; color:var(--text-dim); background:var(--bg-inset); border:1px solid var(--border); margin-top:1px;}
+.bac-qcm-num{flex-shrink:0; min-width:24px; height:24px; padding:0 6px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font); font-size:.75rem; font-weight:700; color:var(--text-dim); background:var(--bg-inset); border:1px solid var(--border); margin-top:1px;}
 .bac-qcm-choix{display:flex; gap:12px; align-items:flex-start; padding:11px 12px; min-height:48px; margin-top:6px; border-radius:var(--radius); border:1px solid var(--border); cursor:pointer; font-family:var(--font-reading); font-size:.98rem; line-height:1.5;}
 .bac-qcm-choix:hover{border-color:var(--border-strong);}
 .bac-qcm-choix.sel{border-color:var(--accent); background:var(--accent-dim);}
@@ -293,7 +293,7 @@ a.bac-mat-card:hover .bac-mat-name{color:var(--accent);}
    Deux grandes cartes en tête de page : la licence affichée, cochée, et
    l'autre à un clic. Couleur de la page (teal Licence). */
 .lic-switch{margin:0 0 18px;}
-.lic-switch-q{display:block; font-size:.74rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px;}
+.lic-switch-q{display:block; font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px;}
 .lic-switch-cards{display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:760px;}
 .bac-space a.lic-switch-card{
   display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px; text-decoration:none;

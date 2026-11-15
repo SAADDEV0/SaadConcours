@@ -75,7 +75,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
   :root:not([data-theme="dark"]){
     --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#f0f1f5;
     --border:#e3e6ec; --border-strong:#cfd4dd;
-    --text:#14161c; --text-dim:#4a5160; --text-faint:#677083;
+    --text:#14161c; --text-dim:#4a5160; --text-faint:#5f6878;
     --accent:#4338ca; --accent-dim:#e8e9ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
     --red:#c0262d; --red-dim:#fbeaea;
     --green:#17803d; --green-dim:#e0f3e6;
@@ -90,7 +90,7 @@ html{scroll-behavior:smooth; font-size:93.75%;}
 :root[data-theme="light"]{
   --bg:#f6f7f9; --bg-elev:#ffffff; --bg-card:#ffffff; --bg-inset:#f0f1f5;
   --border:#e3e6ec; --border-strong:#cfd4dd;
-  --text:#14161c; --text-dim:#4a5160; --text-faint:#677083;
+  --text:#14161c; --text-dim:#4a5160; --text-faint:#5f6878;
   --accent:#4338ca; --accent-dim:#e8e9ff; --accent-fill:#4338ca; --accent-ink:#3730a3;
   --red:#c0262d; --red-dim:#fbeaea;
   --green:#17803d; --green-dim:#e0f3e6;
@@ -110,7 +110,10 @@ html{scroll-behavior:smooth; font-size:93.75%;}
    prépare… », soulignement dans le header et la barre d'espace. Elle dit où
    l'on est ; elle ne décore pas. Jamais de rouge (réservé aux corrections)
    ni de vert (bonne réponse). Contrastes AA : texte --c-* sur fond clair,
-   texte blanc sur --c-*-fill.
+   sur --esp-tint et sur --accent-dim de la page (mélange à --c-dim-pct,
+   le plus exigeant : en clair, le texte --c-* est donc un cran plus foncé
+   que --c-*-fill — à 13 %, #c2410c n'y faisait que 4:1) ; texte blanc sur
+   --c-*-fill.
    Une classe .esp-c-<couleur> pose --esp (texte), --esp-fill (fond plein)
    et --esp-tint (fond de section). */
 :root{
@@ -125,22 +128,22 @@ html{scroll-behavior:smooth; font-size:93.75%;}
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
-    --c-orange:#c2410c; --c-orange-tint:#fff5ee;
-    --c-teal:#0f766e; --c-teal-tint:#edf8f5;
-    --c-gold:#a16207; --c-gold-tint:#fdf8e7;
-    --c-rose:#be185d; --c-rose-tint:#fdf1f6;
-    --c-sky:#0369a1; --c-sky-tint:#edf6fc;
+    --c-orange:#9a3412; --c-orange-tint:#fff5ee;
+    --c-teal:#115e59; --c-teal-tint:#edf8f5;
+    --c-gold:#854d0e; --c-gold-tint:#fdf8e7;
+    --c-rose:#9d174d; --c-rose-tint:#fdf1f6;
+    --c-sky:#075985; --c-sky-tint:#edf6fc;
     --c-violet:#7e22ce; --c-violet-tint:#f7f0fd;
     --c-indigo-tint:#f0f1fd;
     --c-dim-pct:13%;
   }
 }
 :root[data-theme="light"]{
-  --c-orange:#c2410c; --c-orange-tint:#fff5ee;
-  --c-teal:#0f766e; --c-teal-tint:#edf8f5;
-  --c-gold:#a16207; --c-gold-tint:#fdf8e7;
-  --c-rose:#be185d; --c-rose-tint:#fdf1f6;
-  --c-sky:#0369a1; --c-sky-tint:#edf6fc;
+  --c-orange:#9a3412; --c-orange-tint:#fff5ee;
+  --c-teal:#115e59; --c-teal-tint:#edf8f5;
+  --c-gold:#854d0e; --c-gold-tint:#fdf8e7;
+  --c-rose:#9d174d; --c-rose-tint:#fdf1f6;
+  --c-sky:#075985; --c-sky-tint:#edf6fc;
   --c-violet:#7e22ce; --c-violet-tint:#f7f0fd;
   --c-indigo-tint:#f0f1fd;
   --c-dim-pct:13%;
@@ -251,7 +254,7 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
 .brand-name{font-weight:800; font-size:1.1rem; letter-spacing:-.02em; white-space:nowrap;}
 .brand-saad{color:var(--text);}
 .brand-concours{color:var(--accent);}
-.brand-tagline{font-size:.64rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); white-space:nowrap; margin-top:3px;}
+.brand-tagline{font-size:.75rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-faint); white-space:nowrap; margin-top:3px;}
 
 .site-nav{display:flex; align-items:stretch; gap:2px;}
 .nav-link{
@@ -418,7 +421,7 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
   background:var(--bg-inset); color:var(--text); font:inherit; font-size:1rem;
 }
 .menu-search input::placeholder{color:var(--text-faint);}
-.menu-label{margin:18px 0 6px; padding:0 4px; font-size:.72rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-faint);}
+.menu-label{margin:18px 0 6px; padding:0 4px; font-size:.8rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-faint);}
 .menu-group{padding:0;}
 .menu-group + .menu-group{border-top:1px solid var(--border);}
 .menu-espace{
@@ -530,7 +533,12 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
 .enonce-content :is(h1,h2,h3,h4,h5,h6), .cours-content :is(h1,h2,h3,h4,h5,h6),
 .enonce-content table, .cours-content table, .enonce-content .qcm-letter{font-family:var(--font);}
 
-.enonce-content{font-size:1rem; line-height:1.7; max-width:100%; overflow-wrap:break-word;}
+/* Même confort que les chapitres (.bac-md, bac.css) : ~16 px et des lignes
+   de 70 caractères au plus. Avant, un énoncé ou un corrigé courait sur toute
+   la carte (742 px à 15 px, ~95 caractères par ligne). Tableaux, formules et
+   scans gardent toute la largeur. */
+.enonce-content{font-size:1.07rem; line-height:1.75; max-width:100%; overflow-wrap:break-word;}
+.enonce-content > :is(p, ul, ol, blockquote, h3, h4, h5, h6){max-width:70ch;}
 .enonce-content table{border-collapse:collapse; max-width:100%; margin:14px 0; font-size:.86rem; display:block; overflow-x:auto;}
 .enonce-content th,.enonce-content td{border:1px solid var(--border); padding:6px 10px; text-align:left;}
 .enonce-content th{background:var(--bg-inset); font-weight:600;}
@@ -637,7 +645,7 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
   min-height:calc(var(--ad-reserve-m, 280px) + 22px); border-top:1px solid var(--border);
 }
 .ad-slot-label{
-  position:absolute; top:6px; left:0; right:0; font-size:.68rem; font-weight:600; letter-spacing:.08em;
+  position:absolute; top:6px; left:0; right:0; font-size:.75rem; font-weight:600; letter-spacing:.08em;
   text-transform:uppercase; color:var(--text-faint); line-height:1;
 }
 .ad-slot ins.adsbygoogle{margin:0 auto;}
@@ -674,12 +682,12 @@ html.header-hidden header.site-header{transform:translateY(-100%);}
 .pa-unit{position:relative; max-width:970px; margin:0 auto;}
 .pa-tag{
   display:block; height:16px; line-height:16px; margin:0 0 4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
-  font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; font-weight:600; color:var(--text-faint);
+  font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; font-weight:600; color:var(--text-faint);
 }
 /* Variante « sur le visuel » (réglage de la console) : pastille dans le coin. */
 .pa-label-overlay > .pa-tag{
   position:absolute; top:6px; left:6px; z-index:2; height:auto; line-height:1.4; margin:0; padding:2px 7px;
-  border-radius:20px; font-size:.7rem; letter-spacing:.05em; background:var(--bg); border:1px solid var(--border); opacity:.9;
+  border-radius:20px; font-size:.75rem; letter-spacing:.05em; background:var(--bg); border:1px solid var(--border); opacity:.9;
 }
 /* Préfixées .pa-unit : la zone « dans le contenu » vit dans .bac-space, dont
  * le .bac-space a{color:inherit} (bac.css) écraserait sinon la couleur de
@@ -915,7 +923,7 @@ footer.site-footer{
 .wa-fab{
   position:fixed; right:16px; bottom:calc(16px + var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); z-index:50;
   display:inline-flex; align-items:center; gap:8px; height:52px; min-width:52px; padding:0 14px; border-radius:999px;
-  background:var(--fab-bg, #25d366); color:#fff !important; font-weight:700; font-size:.92rem; text-decoration:none !important;
+  background:var(--fab-bg, #25d366); color:var(--fab-fg, #0b1f14) !important; font-weight:700; font-size:.92rem; text-decoration:none !important;
   box-shadow:0 6px 18px -6px rgba(0,0,0,.45); transition:transform .15s, filter .15s;
 }
 .wa-fab svg{width:26px; height:26px; flex-shrink:0;}
@@ -972,6 +980,14 @@ body:has(.wa-fab) .bac-edit-fab{bottom:calc(80px + var(--tabbar-h) + env(safe-ar
 :is(.enonce-content, .cours-content, .bac-md, .eval-q-text, .bac-qcm-q legend, .bac-qcm-choix):is(:lang(ar), [dir="rtl"]),
 :is(:lang(ar), [dir="rtl"]) :is(.enonce-content, .cours-content, .bac-md, .eval-q-text, .bac-qcm-choix){
   font-family:var(--font-ar-reading); font-size:1.12em; line-height:2; word-spacing:.04em;
+}
+/* Le texte courant d'un bloc de lecture en arabe hérite de ce bloc (Naskh,
+   interligne 2). Sans cette règle, :lang(ar) ci-dessus touchait aussi chaque
+   <p>, <li>, <strong> du bloc et y remettait la police d'interface : Naskh
+   n'était jamais affichée (ni même téléchargée). Pas de <span> : KaTeX en
+   pose partout et a besoin de ses propres polices. */
+:is(.enonce-content, .cours-content, .bac-md, .eval-q-text, .bac-qcm-choix):lang(ar) :is(div, section, details, figure, p, ul, ol, li, dl, dd, dt, blockquote, strong, b, em, i, u, a, mark, figcaption){
+  font-family:inherit; line-height:inherit;
 }
 :is(:lang(ar), [dir="rtl"]) :is(h1, h2, h3, h4){font-family:var(--font-ar); line-height:1.5; letter-spacing:0;}
 :is(:lang(ar), [dir="rtl"]) :is(code, pre){font-family:var(--font-mono);}

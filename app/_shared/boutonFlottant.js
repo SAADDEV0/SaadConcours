@@ -150,6 +150,22 @@ export function fabConfig(settings) {
   };
 }
 
+// Couleur du texte et du logo sur le fond du bouton : blanc quand il atteint
+// 4,5:1 (WCAG AA), sinon encre foncée. Le blanc sur le vert WhatsApp #25d366
+// ne faisait que 2:1. Dégradé (Instagram) : blanc, ses teintes sont foncées.
+const ENCRE_FONCEE = "#0b1f14";
+function luminance(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => {
+    const v = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function encreSur(fond) {
+  if (!COULEUR_RE.test(fond)) return "#fff";
+  return 1.05 / (luminance(fond) + 0.05) >= 4.5 ? "#fff" : ENCRE_FONCEE;
+}
+
 // Le bouton en HTML. `apercu` : version posée dans la page (console), pas fixée.
 export function fabHtml(settings, { apercu = false } = {}) {
   const c = fabConfig(settings);
@@ -157,5 +173,5 @@ export function fabHtml(settings, { apercu = false } = {}) {
   const titre = c.label ? `${c.label} : ${c.reseau.label}` : c.reseau.label;
   const externe = /^https?:/.test(c.href) ? ' target="_blank" rel="noopener"' : "";
   const classes = ["wa-fab", c.label ? "" : "wa-fab-rond", apercu ? "wa-fab-apercu" : ""].filter(Boolean).join(" ");
-  return `<a class="${classes}" href="${esc(c.href)}"${externe} aria-label="${esc(titre)}" title="${esc(titre)}" style="--fab-bg:${esc(c.bg)};--fab-ring:${esc(c.ring)}">${c.reseau.icon}${c.label ? `<span class="wa-fab-label">${esc(c.label)}</span>` : ""}</a>`;
+  return `<a class="${classes}" href="${esc(c.href)}"${externe} aria-label="${esc(titre)}" title="${esc(titre)}" style="--fab-bg:${esc(c.bg)};--fab-ring:${esc(c.ring)};--fab-fg:${encreSur(c.bg)}">${c.reseau.icon}${c.label ? `<span class="wa-fab-label">${esc(c.label)}</span>` : ""}</a>`;
 }
