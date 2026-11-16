@@ -755,7 +755,12 @@ avec le tableau des épreuves et coefficients de la notice CNAEM 2024), onglet o
    les cours FSJES (« Économie générale », « Économie du Maroc », « Commerce international », « Droit du travail »,
    « Droit des affaires », « Algèbre linéaire », « Analyse mathématique », « Probabilités », « Analyse financière »,
    « Comptabilité analytique »…). Pas de cours prépa réécrit : l'éco, le droit et la gestion renvoient aux cours
-   FSJES (un seul cours par matière, §1.6).
+   FSJES (un seul cours par matière, §1.6). Un cours qui manque à la prépa se rédige comme module FSJES
+   quand la licence a ce module (précédent : `algebre_cours`, recette K1), avec des chapitres
+   d'approfondissement prépa à la fin. Restent à faire (état des lieux du 2026-11-16) : informatique de
+   gestion (SGBD, SQL, tableur), analyse niveau prépa (intégrales, séries, deux variables), épreuves
+   communes (culture générale, résumé, anglais, culture arabe et traduction), puis l'ECS (maths et
+   informatique, HGGMC).
 2. **Source** : groupe-reussite.fr, page « annales concours Maroc CNAEM »
    (`/ressources/annales-concours-maroc-cnaem/`, PDF `…/Annales/concours-maroc/cnaem/cnaem-<epreuve>-ect-<annee>.pdf` ;
    épreuves `eco-droit`, `gest-mana-info`, `maths`, `entreprise-et-enviro-ecs`…). Des PDF arrivent tronqués :
@@ -846,6 +851,20 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    internationalisation) ; formes juridiques, fonctions et environnement renvoient à
    `introgestion_cours`, production et coûts à `micro_cours`. Dans un `$$…$$`, pas de « ✔ » :
    écrire `\checkmark`.
+   Précédent : `Algèbre linéaire prépa` (2026-11-16, demande faite pour l'espace Prépa ECT / ECS) →
+   `algebre_cours` « Algèbre Linéaire » (S2, parcours économie, `category: "quant"`, 9 chapitres). Une
+   matière de prépa qui existe aussi en licence s'écrit **une fois, en cours FSJES** : ici le module
+   « Mathématiques 2 » du S2 Économie (`tcn_economie.pdf` : modèles linéaires d'équilibre, espaces
+   vectoriels, applications linéaires, matrices, déterminants, Cramer et Gauss), plus deux chapitres
+   d'approfondissement prépa ECT / CNAEM (valeurs propres et diagonalisation ; puissances $A^n$, binôme,
+   suites $X_{n+1} = AX_n + B$, point fixe). Le calcul matriciel déjà traité dans `maths_cours` (ch. 7-8 :
+   produit, déterminant, comatrice, Cramer, Gauss) est **lié**, pas réécrit. Liens : `MOTIFS` (`algebre_cours`,
+   les 4 sujets de maths CNAEM ECT s'y rattachent), paragraphe `sp-about` de `/concours/cnaem`, `llms.txt`.
+   Pas d'onglet vers un cours dans l'espace Prépa : `espaceOfPath` donnerait l'espace Prépa à la page du
+   cours (href plus long que `/cours`) et changerait l'espace retenu des étudiants de licence.
+   Les matrices à diagonaliser sont construites comme $PDP^{-1}$ avec $P$ entière de déterminant ±1
+   (inverse entière, calculs faisables à la main), et chaque exemple est vérifié en fractions
+   exactes (petit module BigInt dans le scratchpad : produit, inverse, déterminant, rang, puissances).
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).

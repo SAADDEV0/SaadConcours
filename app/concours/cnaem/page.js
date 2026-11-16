@@ -214,7 +214,9 @@ export default async function CnaemPage() {
               {concours.length} sujets du CNAEM ({optionsTexte}), des sessions {anneeMin} à {anneeMax} : énoncés complets
               avec leurs annexes, corrigés indicatifs dossier par dossier et export PDF gratuit, sans inscription. Les
               cours d&apos;économie, de droit et de gestion qui servent à les traiter sont ceux de la Licence FSJES, liés depuis
-              chaque sujet.
+              chaque sujet. Pour l&apos;exercice de matrices de l&apos;épreuve de mathématiques (diagonalisation, puissances
+              d&apos;une matrice, suites récurrentes), le cours d&apos;<a href="/cours/algebre_cours">algèbre linéaire</a> va
+              jusqu&apos;au niveau de la prépa ECT.
             </p>
           </section>
 
