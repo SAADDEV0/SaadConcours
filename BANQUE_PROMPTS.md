@@ -865,6 +865,28 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    Les matrices à diagonaliser sont construites comme $PDP^{-1}$ avec $P$ entière de déterminant ±1
    (inverse entière, calculs faisables à la main), et chaque exemple est vérifié en fractions
    exactes (petit module BigInt dans le scratchpad : produit, inverse, déterminant, rang, puissances).
+   Précédent : capture d'écran de la maquette « Semestre 6 » + `ajoute les 5 modules` (2026-11-17) →
+   filière Économie internationale et logistique (`parcours: "economie"`, `filiere: "eil"`), 5 modules
+   écrits et commités un par un : `logistiqueint_cours` (7 ch. : chaîne logistique, Incoterms 2020,
+   maritime, aérien-routier-multimodal, assurance et responsabilité, documents et crédit documentaire,
+   entrepôts et coût rendu), `marketingint_cours` (7 ch. : Uppsala/EPRG, culture, sélection des pays,
+   modes d'entrée, produit, escalade des prix, distribution-communication), `rologistique_cours` (7 ch.,
+   `quant` : modélisation, Wilson et remises, stock de sécurité, prévision, localisation, tournées,
+   flots et files), `silogistique_cours` (6 ch. : coup de fouet, GS1/RFID, ERP-MRP, WMS-TMS, EDI et
+   PortNet/BADR, tableaux de bord), `entrepreneuriat_cours` (7 ch. en deux `# PARTIE` : entreprendre,
+   gérer un projet). Angle propre à chaque module : simplexe, transport, affectation, PERT et compression
+   restent dans `iaro_cours` (renvois) ; Wilson part de `comptaana_cours` ; les 4P de `marketing_cours` ;
+   statuts et fiscalité de l'auto-entrepreneur alignés sur `droitsocietes_cours` et `fiscalite2_cours`.
+   Chiffres vérifiés en ligne : Tanger Med 10,24 millions d'EVP en 2024 ; Convention de Montréal
+   26 DTS/kg depuis le 28 décembre 2024 ; adhésion du Maroc aux règles de Hambourg (1981). Tous les
+   calculs refaits par script (énumération exhaustive pour sacs à dos, tournées et localisation ;
+   Edmonds-Karp pour le flot ; Erlang pour M/M/s ; clés GTIN/SSCC). Assemblage par script
+   (`k/<id>/head.md`, `cNN.md`, `sNN.js`, `annexe.md`, `meta.json`) + contrôle automatique (3 exercices
+   et 10 QCM par chapitre, descriptions de 100 à 160 caractères, `$` appariés, pas de `*` dans les QCM :
+   écrire « quantité économique » plutôt que « Q* »). Liens ajoutés dans les guides blog des masters
+   Logistique et Commerce international. Le même jour, la maquette « Semestre 4 » Gestion (4 modules) était
+   déjà entièrement couverte : le signaler plutôt que réécrire ; la FSJES Mohammedia y ajoute
+   Informatique de gestion et Analyse et traitement des données (non rédigés, à proposer).
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
