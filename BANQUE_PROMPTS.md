@@ -887,6 +887,22 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    Logistique et Commerce international. Le même jour, la maquette « Semestre 4 » Gestion (4 modules) était
    déjà entièrement couverte : le signaler plutôt que réécrire ; la FSJES Mohammedia y ajoute
    Informatique de gestion et Analyse et traitement des données (non rédigés, à proposer).
+   Précédent : `ajoute cours Controle de gestion social s5` (2026-11-17) → `cgsocial_cours` « Contrôle de
+   Gestion Sociale » (S5, `parcours: "gestion"`, `filiere: "mrh"`, `category: "management"`, 8 chapitres),
+   premier module de la filière MRH. Aucun descriptif détaillé en ligne (la FEG Kénitra, feg.uit.ac.ma, ne
+   donne que l'intitulé dans sa maquette MRH, à côté de « Diagnostic et bilan social ») : plan classique
+   (missions et système d'information social, effectifs et ETP, mouvements et absentéisme, masse salariale
+   et coût employeur, effets niveau, masse, report, GVT et noria, budget et écarts sur effectif, structure
+   et salaire moyen, coûts cachés ISEOR et ROI, tableaux de bord, bilan social et audit social). Angle propre,
+   avec renvois : processus RH dans `grh_cours`, paie et IR dans `fiscalite_cours`, Code du travail dans
+   `droit-social-s3`, budgets et écarts généraux dans `controlegestion_cours`. Charges patronales 2026
+   recoupées sur plusieurs sites de paie (CNSS non lisible en ligne) : CNSS 8,98 % plafonnée à 6 000 DH
+   (1,05 % court terme dont IPE + 7,93 % long terme), allocations familiales 6,40 %, AMO 4,11 %, TFP 1,60 %,
+   soit 21,09 % sous le plafond puis 12,11 % ; SMIG 17,92 DH/h au 1er janvier 2026 (décret 2-25-983). Le
+   plafond CNSS s'apprécie sur le brut du mois : un treizième mois ne supporte pas une seconde fois la part
+   plafonnée. Le Code du travail n'impose pas de bilan social ; rapport ESG des émetteurs : circulaire
+   AMMC 03/19 (publié depuis 2020). `MOTIFS` : gestion sociale, bilan et audit social, masse salariale,
+   ressources humaines, GRH. Lien ajouté dans le guide `les_matieres_a_preparer_pour_le_master_grh`.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
