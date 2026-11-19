@@ -1118,5 +1118,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-17"
+  },
+  {
+    "id": "cahier-introduction-etude-droit-musulman-s1",
+    "titre": "Cahier de préparation — Introduction à l'étude du droit musulman (S1)",
+    "sousTitre": "Le module expliqué en français simple, chaque mot arabe traduit, 155 QCM corrigés, 15 cas pratiques corrigés et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Introduction à l'étude du droit musulman",
+    "cours": "introduction-etude-droit-musulman-s1",
+    "description": "Ce cahier prépare l'examen d'**Introduction à l'étude du droit musulman**, un module du semestre 1 de la Licence de Droit dans les FSJES. Il suit le cours : les notions de base (charia, fiqh, les cinq statuts des actes), les sources (Coran, Sunna, ijmâ', qiyâs), les sources complémentaires et les finalités de la charia, l'ijtihâd et les écoles, surtout le **rite malékite**, puis la place du fiqh dans le **droit marocain**. Le cahier est écrit en **français simple** : des phrases courtes, et chaque mot arabe écrit en lettres latines, en arabe, puis expliqué.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les textes à citer, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des **cas pratiques corrigés pas à pas** : construire un qiyâs, choisir la bonne source pour un cas nouveau, classer un hadith, distinguer fatwâ et jugement, et faire un **partage successoral** complet, calculs vérifiés.\n\nLes articles cités ont été vérifiés sur les textes officiels : **Constitution de 2011**, **Code de la famille** (loi 70-03 : art. 400, successions, legs), **DOC** et **loi 39-08** sur les droits réels. À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, dont une dissertation « Le droit musulman est-il un droit figé ? » avec copie modèle, et un **mémo de la veille** (dates, écoles, parts successorales).\n\nLe cours complet reste gratuit sur le site : [Introduction à l'étude du droit musulman (S1)](/droit/introduction-etude-droit-musulman-s1). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 97 mots du droit musulman (français-arabe)",
+      "Chapitre 1 · Charia, fiqh et droit musulman : les notions de base",
+      "Chapitre 2 · Le Coran, première source",
+      "Chapitre 3 · La Sunna, deuxième source",
+      "Chapitre 4 · Le consensus (ijmâ') et l'analogie (qiyâs)",
+      "Chapitre 5 · Les sources complémentaires et les finalités de la charia",
+      "Chapitre 6 · L'ijtihâd, les écoles et le rite malékite",
+      "Chapitre 7 · Le droit musulman dans le droit marocain",
+      "Partie 8 · La méthodologie des épreuves",
+      "Partie 9 · Trois examens blancs corrigés",
+      "Partie 10 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot arabe traduit et expliqué",
+      "155 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "35 questions de cours avec une réponse modèle",
+      "Des cas pratiques corrigés pas à pas : qiyâs, sources complémentaires, hadiths, fatwâ et jugement, partages successoraux",
+      "Les articles de la Constitution, du Code de la famille, du DOC et de la loi 39-08 vérifiés sur les textes officiels",
+      "Lexique de 97 mots en français-arabe et un mémo des dates, des écoles et des parts successorales"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 97,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-introduction-etude-droit-musulman-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-19"
   }
 ]
