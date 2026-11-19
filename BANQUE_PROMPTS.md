@@ -849,7 +849,7 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    (S1, parcours économie, 8 chapitres) : angle économique (théories de la firme, gouvernance, VA et
    partage, investissement, financement, croissance et concentration, innovation et
    internationalisation) ; formes juridiques, fonctions et environnement renvoient à
-   `introgestion_cours`, production et coûts à `micro_cours`. Dans un `$$…$$`, pas de « ✔ » :
+   `introgestion_cours`, production et coûts à `micro2_cours`. Dans un `$$…$$`, pas de « ✔ » :
    écrire `\checkmark`.
    Précédent : `Algèbre linéaire prépa` (2026-11-16, demande faite pour l'espace Prépa ECT / ECS) →
    `algebre_cours` « Algèbre Linéaire » (S2, parcours économie, `category: "quant"`, 9 chapitres). Une
@@ -903,6 +903,23 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    plafonnée. Le Code du travail n'impose pas de bilan social ; rapport ESG des émetteurs : circulaire
    AMMC 03/19 (publié depuis 2020). `MOTIFS` : gestion sociale, bilan et audit social, masse salariale,
    ressources humaines, GRH. Lien ajouté dans le guide `les_matieres_a_preparer_pour_le_master_grh`.
+   Précédent : capture « Semestre 2 » (Économie) + `ajoute cours pour filiere economie` (2026-11-19). Cinq des six
+   modules existaient (`stats_cours`, `managementfond_cours`, `algebre_cours` = Mathématiques 2, `comptagen2_cours`,
+   `macro1_cours`). Manquait **Microéconomie II** : dans `tcn_economie.pdf`, Micro 1 (S1) = consommateur seul et
+   Micro 2 (S2) = producteur (court terme, long terme), marché, CPP, monopole (naturel, bilatéral) ; dans
+   `tcn_gestion.pdf`, Micro 1 (S1) couvre tout (consommateur, producteur, CPP, oligopole, monopole) et Micro 2 (S2)
+   n'a pas de descriptif. Programme déjà traité aux chapitres 5 à 8 de `micro_cours` : séparation (K3) en
+   `micro_cours` « Microéconomie 1 » (S1, commun, ch. 1-4 : marché, élasticités, consommateur) et `micro2_cours`
+   « Microéconomie 2 » (S2, `parcours: ""`, `category: "economie"`, 6 chapitres en deux `# PARTIE`) : les 4 chapitres
+   déplacés gardent leur titre (301 `/cours/micro_cours/<slug>` → `/cours/micro2_cours/<slug>`, et les 301
+   `/encg/microeconomie-s1/…` repointées directement) + 2 chapitres neufs : équilibre du producteur à long terme
+   (isocoût, lagrangien, demandes conditionnelles, sentier d'expansion, coût de long terme, substitution) et
+   oligopole (HHI, Cournot, Stackelberg, Bertrand, cartel et dilemme du prisonnier, Chamberlin, monopsone et
+   monopole bilatéral, transaction carburants du Conseil de la concurrence : 1,84 milliard de DH, 23 novembre 2023).
+   Le paragraphe Cournot de l'ancien chapitre 8 renvoie au chapitre 6. En-têtes croisés (« Parcours Gestion : le
+   programme du S1 couvre aussi ces chapitres »), renvois mis à jour dans `iaeconum`, `microapprof`, `ecoentreprise`,
+   `histpensee`, le guide du S1 Gestion et le cahier boutique. `micro.js` est lu en CRLF par Node : normaliser les fins de ligne en LF avant de chercher les blocs de chapitre. Limite connue : `macro1_cours` est classé
+   S1 Gestion, donc absent du filtre « S2 Économie » (un cours n'a qu'un semestre).
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).

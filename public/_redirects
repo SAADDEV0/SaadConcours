@@ -150,9 +150,9 @@
 /encg/microeconomie-s1/les-preferences-et-l-utilite-du-consommateur /cours/micro_cours/la-theorie-du-consommateur-utilite-et-preferences 301
 /encg/microeconomie-s1/la-contrainte-budgetaire-et-le-choix-optimal /cours/micro_cours/la-contrainte-budgetaire-et-l-equilibre-du-consommateur 301
 /encg/microeconomie-s1/la-demande-individuelle-et-les-effets-d-un-changement-de-prix /cours/micro_cours/la-contrainte-budgetaire-et-l-equilibre-du-consommateur 301
-/encg/microeconomie-s1/la-production /cours/micro_cours/la-theorie-du-producteur-production-et-productivites 301
-/encg/microeconomie-s1/les-couts-de-production /cours/micro_cours/les-couts-de-production 301
-/encg/microeconomie-s1/l-entreprise-en-concurrence-pure-et-parfaite /cours/micro_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
+/encg/microeconomie-s1/la-production /cours/micro2_cours/la-theorie-du-producteur-production-et-productivites 301
+/encg/microeconomie-s1/les-couts-de-production /cours/micro2_cours/les-couts-de-production 301
+/encg/microeconomie-s1/l-entreprise-en-concurrence-pure-et-parfaite /cours/micro2_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
 
 # Espaces ENCG (cours S1 → S10, concours TAFEM) et Taalim (concours de
 # l'enseignement) supprimés le 2026-10-29, après avoir été cachés (302) depuis
@@ -222,6 +222,14 @@
 # sur ses 10 chapitres, ont quitté introeco_cours (un seul cours par matière).
 /cours/introeco_cours/la-pensee-economique-des-origines-a-marx /cours/histpensee_cours/adam-smith-et-la-fondation-de-l-economie-politique-classique 301
 /cours/introeco_cours/la-pensee-economique-depuis-1870-neoclassiques-keynes-et-debats-contemporains /cours/histpensee_cours/keynes-et-la-revolution-keynesienne 301
+
+# Le module « Microéconomie 2 » (S2, micro2_cours) a été créé le 2026-11-19 : les chapitres 5 à 8
+# de Microéconomie (S1), producteur, coûts, concurrence parfaite et monopole, ont quitté micro_cours
+# (devenu « Microéconomie 1 ») avec leur titre, donc leur slug (un seul cours par matière).
+/cours/micro_cours/la-theorie-du-producteur-production-et-productivites /cours/micro2_cours/la-theorie-du-producteur-production-et-productivites 301
+/cours/micro_cours/les-couts-de-production /cours/micro2_cours/les-couts-de-production 301
+/cours/micro_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite /cours/micro2_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
+/cours/micro_cours/le-monopole-et-les-structures-de-marche /cours/micro2_cours/le-monopole-et-les-structures-de-marche 301
 
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
