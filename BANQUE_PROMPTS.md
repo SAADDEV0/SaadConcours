@@ -1126,12 +1126,21 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   `available: true` et une description qui le dit ; sa carte sur `/droit` (et la recherche) mène au
   cours FSJES, sans page `/droit/<id>` (`droitRenvois`, `lib/droit.js`). En place
   depuis le 2026-10-16 : Introduction à l'étude du droit → `introdroit_cours`, Droit commercial
-  fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`, Introduction à
-  l'économie et à la gestion → `introeco_cours,introgestion_cours` : `renvoi` accepte plusieurs ids séparés
-  par une virgule, et `/droit` affiche alors une carte par partie (« — partie 1 : Introduction aux Sciences
-  Économiques », « — partie 2 : … de Gestion »), une entrée de recherche par partie (2026-11-19, « quand je click je
-  trouve seulement Introduction aux Sciences Économiques »). Une demande « ajoute le cours X » pour une fiche en renvoi :
-  ne pas rédiger de cours, vérifier que la carte mène à **tous** les cours FSJES qui couvrent la matière. Organisation
+  fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`. `renvoi` accepte plusieurs
+  ids séparés par une virgule (`/droit` affiche alors une carte par cours, la recherche une entrée par cours) :
+  une fiche en renvoi doit mener à **tous** les cours FSJES qui couvrent la matière.
+  **Exception décidée par Saad le 2026-11-19** : « Introduction à l'économie et à la gestion » (Droit public S1) est un
+  **module à part**, rédigé (`introduction-economie-gestion-s1`, 7 chapitres) : « pour filière gestion : intro aux
+  sciences de gestion ; pour filière économie : intro aux sciences économiques ; pour droit : intro à l'économie et
+  gestion (1 module qui combine les deux, donc sépare les 3 modules) ». Il était d'abord en renvoi vers `introeco_cours`
+  seul. Angle propre au Droit, pour éviter le doublon : deux parties (économie ch. 1-5, gestion ch. 6-7), une section
+  « Le regard du juriste » par chapitre (Constitution art. 8, 29, 31, 35, 36, 39, 75, 77, 147, 166 vérifiés sur le texte
+  d'adala ; Code de commerce art. 6 et 58 ; DOC art. 982 ; loi 114-13 art. 1-3), exemples et chiffres propres. Suites de
+  10 mots communes avec `introeco`, `introgestion`, `histpensee`, `ecoentreprise`, `droitsocietes` (cours + compléments) :
+  63 au premier jet, 12 après réécriture (définition de Robbins, titres d'ouvrages, intitulés de lois, art. 982 du DOC,
+  seuils de la SA). L'en-tête renvoie aux deux cours FSJES pour approfondir ; `MOTIFS_DROIT` : droit économique,
+  droit de la concurrence, économie générale. Point à corriger dans la version arabe (`introduction-economie-gestion-ar-s1`,
+  ch. 6) : la SAS y est rattachée à la loi 17.95, alors qu'elle est dans la loi 5-96 (loi 19-20). Organisation
   judiciaire (S4) reste à rédiger : `introdroit_cours` n'en a qu'un chapitre. Un cours en arabe
   sur la même matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
