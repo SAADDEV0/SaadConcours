@@ -1202,5 +1202,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-19"
+  },
+  {
+    "id": "cahier-theorie-generale-droit-constitutionnel-s1",
+    "titre": "Cahier de préparation — Théorie générale du droit constitutionnel (S1)",
+    "sousTitre": "Le module expliqué en français simple, la Constitution de 2011 article par article, 155 QCM corrigés, 15 cas pratiques corrigés et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Théorie générale du droit constitutionnel",
+    "cours": "theorie-generale-droit-constitutionnel-s1",
+    "description": "Ce cahier prépare l'examen de **Théorie générale du droit constitutionnel**, un module du semestre 1 de la Licence de Droit dans les FSJES. Il suit le cours : la notion et les sources du droit constitutionnel, l'**État** et ses formes (déconcentration, décentralisation, **régionalisation avancée**, fédéralisme), l'établissement et la **révision** de la Constitution, le **contrôle de constitutionnalité**, la **souveraineté** et le suffrage, puis la **séparation des pouvoirs** et les **régimes politiques**, avec le cas marocain. Le cahier est écrit en **français simple** : des phrases courtes, chaque mot juridique expliqué avec sa traduction arabe.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les articles à citer, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des **cas pratiques corrigés pas à pas** : saisir la Cour constitutionnelle, faire réviser la Constitution, voter une motion de censure, répartir des sièges au **plus fort reste**. Tous les seuils (un cinquième, deux tiers, majorité absolue des membres) sont calculés et vérifiés.\n\nChaque article cité a été vérifié sur le texte officiel de la **Constitution du 29 juillet 2011**, y compris les seuils de saisine propres aux traités (article 55). À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, dont une dissertation « Le régime politique marocain est-il un régime parlementaire ? » avec copie modèle, et un **mémo de la veille** (articles, seuils, auteurs).\n\nLe cours complet reste gratuit sur le site : [Théorie générale du droit constitutionnel (S1)](/droit/theorie-generale-droit-constitutionnel-s1). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 97 mots du droit constitutionnel (français-arabe)",
+      "Chapitre 1 · Le droit constitutionnel : notion, objet et sources",
+      "Chapitre 2 · L'État et ses éléments constitutifs",
+      "Chapitre 3 · Les formes de l'État",
+      "Chapitre 4 · La Constitution : établissement et révision",
+      "Chapitre 5 · Le contrôle de constitutionnalité",
+      "Chapitre 6 · La souveraineté, la démocratie et le suffrage",
+      "Chapitre 7 · La séparation des pouvoirs et les régimes politiques",
+      "Partie 8 · La méthodologie des épreuves",
+      "Partie 9 · Trois examens blancs corrigés",
+      "Partie 10 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué avec sa traduction arabe",
+      "155 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "35 questions de cours avec une réponse modèle",
+      "Des cas pratiques corrigés pas à pas : saisine de la Cour, révision, censure, confiance, dissolution, répartition des sièges",
+      "La Constitution de 2011 article par article, vérifiée sur le texte officiel, avec tous les seuils calculés",
+      "Lexique de 97 mots en français-arabe et un mémo des articles, des seuils et des auteurs"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 94,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-theorie-generale-droit-constitutionnel-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-19"
   }
 ]
