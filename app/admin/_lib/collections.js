@@ -362,7 +362,7 @@ const droit = {
   label: "Cours Droit",
   emoji: "⚖️",
   href: "/admin/droit",
-  publicUrl: (c) => (c.renvoi ? `${SITE}/cours/${encodeURIComponent(c.renvoi)}` : `${SITE}/droit/${encodeURIComponent(c.id)}`),
+  publicUrl: (c) => (c.renvoi ? `${SITE}/cours/${encodeURIComponent(String(c.renvoi).split(",")[0].trim())}` :`${SITE}/droit/${encodeURIComponent(c.id)}`),
   subtitle: (c) => [c.semestre, droitRangLabelFr(c), droitLangueInfo(c.langue).court, c.renvoi && `renvoi → ${c.renvoi}`].filter(Boolean).join(" · "),
   searchText: (c) => [c.id, c.module, c.title, c.description, c.semestre, droitRangLabelFr(c)].join(" "),
   filters: [
@@ -408,7 +408,7 @@ const droit = {
     },
     {
       title: "Module commun avec la Licence",
-      hint: "Si la matière a déjà un cours dans la Licence FSJES (introduction à l'étude du droit, droit des sociétés…), ne pas la réécrire : mettre ici l'id du cours FSJES (ex. introdroit_cours) et laisser le contenu vide. La carte du module mène alors au cours de la Licence : un seul cours par matière sur le site (règle AdSense).",
+      hint: "Si la matière a déjà un cours dans la Licence FSJES (introduction à l'étude du droit, droit des sociétés…), ne pas la réécrire : mettre ici l'id du cours FSJES (ex. introdroit_cours ; deux cours : ids séparés par une virgule, ex. introeco_cours, introgestion_cours) et laisser le contenu vide. La carte du module mène alors au cours de la Licence : un seul cours par matière sur le site (règle AdSense).",
       fields: [{ key: "renvoi", label: "Id du cours FSJES (renvoi)", type: "text", placeholder: "introdroit_cours" }],
     },
     {

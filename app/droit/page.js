@@ -67,8 +67,24 @@ function groupes(modules) {
 // Mêmes attributs data-* que les cartes de /cours : CoursExplorer filtre les
 // deux pages. Ici « parcours » porte la langue et « filiere » la filière
 // (un module du tronc commun, sans filière, reste visible avec chacune).
-// Une carte de renvoi mène au cours d'économie et gestion et le dit.
+// Une carte de renvoi mène au cours d'économie et gestion et le dit. Une
+// matière couverte par deux cours FSJES (économie, puis gestion) a une carte
+// par partie, chacune vers son cours.
 function ModuleCard({ c }) {
+  if (c.cibles?.length > 1) {
+    return c.cibles.map((cible, i) => (
+      <ModuleCard
+        key={cible.id}
+        c={{
+          ...c,
+          cibles: [cible],
+          cible,
+          module: `${c.module} — partie ${i + 1} : ${cible.module}`,
+          description: cible.description || c.description,
+        }}
+      />
+    ));
+  }
   const { chapitres } = c.cible ? fsjesModule(c.cible) : droitModule(c);
   const ar = c.langue === "ar";
   const search = [c.module, c.title, c.description, droitRangLabel(c), c.cible?.module, ...chapitres.map((x) => x.titre)].join(" ").toLowerCase();
@@ -116,8 +132,13 @@ async function sujetsMasterDroit(n = 4) {
 export default async function DroitPage() {
   const { modules } = await donnees();
   const sujets = modules.length ? await sujetsMasterDroit() : { total: 0, recents: [] };
-  const totalChapitres = modules.reduce((n, c) => n + (c.cible ? fsjesModule(c.cible) : droitModule(c)).chapitres.length, 0);
+  const totalChapitres = modules.reduce(
+    (n, c) => n + (c.cibles ? c.cibles.reduce((k, x) => k + fsjesModule(x).chapitres.length, 0) : droitModule(c).chapitres.length),
+    0
+  );
   const communs = modules.filter((c) => c.cible);
+  // Nombre de cartes (une matière en deux parties en a deux), comme le compte CoursExplorer après un filtre.
+  const cartes = modules.reduce((n, c) => n + Math.max(1, c.cibles?.length || 0), 0);
   const semestres = DROIT_SEMESTRES.filter((s) => modules.some((c) => c.semestre === s.code));
   const langues = DROIT_LANGUES.filter((l) => modules.some((c) => (c.langue || "fr") === l.code));
   const filieres = langues.flatMap((l) => droitFilieresFor(l.code)).filter((f) => modules.some((c) => c.filiere === f.code));
@@ -132,7 +153,11 @@ export default async function DroitPage() {
             name: "Cours de la licence de Droit (FSJES)",
             description: "Cours de droit du tronc commun puis des filières droit privé et droit public, découpés en chapitres avec exercices corrigés.",
             path: PATH,
-            items: modules.map((c) => ({ name: c.module, path: moduleHref(c) })),
+            items: modules.flatMap((c) =>
+              c.cibles?.length > 1
+                ? c.cibles.map((x) => ({ name: `${c.module} : ${x.module}`, path: `/cours/${encodeURIComponent(x.id)}` }))
+                : [{ name: c.module, path: moduleHref(c) }]
+            ),
           }),
         ]}
       />
@@ -223,7 +248,7 @@ export default async function DroitPage() {
               )}
               <input type="search" id="coursSearchInput" placeholder="Module, chapitre, notion…" aria-label="Rechercher un module ou un chapitre" />
               <span className="sp-count" id="coursResultsCount" aria-live="polite">
-                {modules.length} module{modules.length > 1 ? "s" : ""}
+                {cartes} module{cartes > 1 ? "s" : ""}
               </span>
             </div>
           )}

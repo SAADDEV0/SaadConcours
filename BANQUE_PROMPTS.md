@@ -1127,7 +1127,11 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   cours FSJES, sans page `/droit/<id>` (`droitRenvois`, `lib/droit.js`). En place
   depuis le 2026-10-16 : Introduction à l'étude du droit → `introdroit_cours`, Droit commercial
   fondamental → `droitaffaires_cours`, Droit des sociétés → `droitsocietes_cours`, Introduction à
-  l'économie et à la gestion → `introeco_cours` (la partie gestion est dans `introgestion_cours`). Organisation
+  l'économie et à la gestion → `introeco_cours,introgestion_cours` : `renvoi` accepte plusieurs ids séparés
+  par une virgule, et `/droit` affiche alors une carte par partie (« — partie 1 : Introduction aux Sciences
+  Économiques », « — partie 2 : … de Gestion »), une entrée de recherche par partie (2026-11-19, « quand je click je
+  trouve seulement Introduction aux Sciences Économiques »). Une demande « ajoute le cours X » pour une fiche en renvoi :
+  ne pas rédiger de cours, vérifier que la carte mène à **tous** les cours FSJES qui couvrent la matière. Organisation
   judiciaire (S4) reste à rédiger : `introdroit_cours` n'en a qu'un chapitre. Un cours en arabe
   sur la même matière n'est pas un doublon de texte.
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code

@@ -73,8 +73,12 @@ export default async function RecherchePage() {
     }
   }
   // Module de Droit commun avec la Licence : une entrée qui mène au cours FSJES.
+  // Une matière couverte par deux cours FSJES : une entrée par partie.
   for (const c of droitRenvois(droit, cours)) {
-    index.push(entree("cours", c.module, ["Droit", c.semestre, "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(c.cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
+    for (const cible of c.cibles) {
+      const titre = c.cibles.length > 1 ? `${c.module} : ${cible.module}` : c.module;
+      index.push(entree("cours", titre, ["Droit", c.semestre, "cours de la Licence FSJES"].filter(Boolean).join(" · "), `/cours/${encodeURIComponent(cible.id)}`, [c.description, "droit"].filter(Boolean).join(" ")));
+    }
   }
   for (const m of BAC_MATIERES.filter((x) => x.niveau === "2bac")) {
     index.push(entree("cours", m.nom, `2ᵉ Bac SEG · ${m.chapitres.length} chapitres`, bacMatiereHref(m), m.description || ""));
