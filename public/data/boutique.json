@@ -1160,5 +1160,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-19"
+  },
+  {
+    "id": "cahier-sociologie-du-droit-s1",
+    "titre": "Cahier de préparation — Sociologie du droit (S1)",
+    "sousTitre": "Le module expliqué en français simple, les auteurs avec leurs dates, 155 QCM corrigés, 15 cas pratiques corrigés et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Sociologie du droit",
+    "cours": "sociologie-droit-s1",
+    "description": "Ce cahier prépare l'examen de **Sociologie du droit** (ou sociologie juridique), un module du semestre 1 de la Licence de Droit dans les FSJES. Il suit le cours : l'objet et les méthodes de la discipline, les fondateurs (Durkheim, Weber, Ehrlich, Marx, Carbonnier, Bourdieu), le **pluralisme juridique**, l'**effectivité** des lois, les liens entre **droit et changement social**, les **professions juridiques** et le **règlement des conflits**. Le cahier est écrit en **français simple** : des phrases courtes, chaque mot expliqué avec sa traduction arabe, et des exemples marocains (Code de la famille, terres collectives, adouls et notaires, médiation).\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les auteurs et les textes à citer, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des **cas pratiques corrigés pas à pas** : construire une enquête, appliquer Durkheim ou Weber, analyser un conflit entre coutume et loi, **calculer et interpréter** des taux et un chiffre noir, évaluer une réforme avec les conditions d'Evan, lire une **pyramide des litiges**.\n\nLes articles cités ont été vérifiés sur les textes officiels : **Constitution de 2011**, **Code de la famille** et **loi 39-08**. À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, dont une dissertation « La loi peut-elle changer la société ? » avec copie modèle, et un **mémo de la veille** (auteurs dans l'ordre des dates, textes marocains, formules).\n\nLe cours complet reste gratuit sur le site : [Sociologie du droit (S1)](/droit/sociologie-droit-s1). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 97 mots de la sociologie du droit (français-arabe)",
+      "Chapitre 1 · La sociologie du droit : objet, naissance et méthodes",
+      "Chapitre 2 · Les fondateurs de la sociologie du droit",
+      "Chapitre 3 · Le pluralisme juridique",
+      "Chapitre 4 · L'effectivité du droit",
+      "Chapitre 5 · Droit et changement social",
+      "Chapitre 6 · Les professions juridiques",
+      "Chapitre 7 · Les conflits et leur règlement",
+      "Partie 8 · La méthodologie des épreuves",
+      "Partie 9 · Trois examens blancs corrigés",
+      "Partie 10 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué avec sa traduction arabe",
+      "155 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "35 questions de cours avec une réponse modèle",
+      "Des cas pratiques corrigés pas à pas : enquête, Durkheim et Weber, terres collectives, effectivité chiffrée, conditions d'Evan, professions, pyramide des litiges",
+      "Les auteurs avec leurs œuvres et leurs dates, et les articles marocains vérifiés sur les textes officiels",
+      "Lexique de 97 mots en français-arabe et un mémo des auteurs, des textes et des formules"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 95,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-sociologie-du-droit-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-19"
   }
 ]
