@@ -934,6 +934,17 @@ body:not(:has(.site-footer)) .wa-fab:not(.wa-fab-apercu){display:none;}
 .chaine-wa{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; margin:28px 0 0; padding-top:14px; border-top:1px solid var(--border); color:var(--text-dim); font-size:var(--fs-sm); line-height:1.5;}
 .chaine-wa svg{width:18px; height:18px; flex:none; color:#25d366;}
 .chaine-wa a{font-weight:600; color:var(--accent);}
+/* « Ce chapitre t'a été utile ? 👍 / 👎 » en bas des chapitres (AvisUtile.js). */
+.avis-utile{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px 16px; margin:28px 0 0; padding:14px 16px; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-card); color:var(--text-dim); font-size:var(--fs-sm); line-height:1.5;}
+.avis-utile-q{font-weight:600; color:var(--text);}
+.avis-utile-btns{display:flex; gap:8px;}
+.avis-utile-btn{display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:0 14px; border:1px solid var(--border-strong); border-radius:999px; background:transparent; color:var(--text-dim); font:inherit; font-weight:600; cursor:pointer; transition:border-color .15s, background .15s, color .15s;}
+.avis-utile-btn svg{width:16px; height:16px; flex:none;}
+.avis-utile-down svg{transform:scaleY(-1);}
+.avis-utile-btn:hover{border-color:var(--accent); color:var(--text);}
+.avis-utile-btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+.avis-utile-up[aria-pressed="true"]{border-color:var(--green); background:var(--green-dim); color:var(--green);}
+.avis-utile-down[aria-pressed="true"]{border-color:var(--amber); background:var(--amber-dim); color:var(--amber);}
 .wa-fab:hover{filter:brightness(.92); transform:translateY(-2px);}
 .wa-fab:focus-visible{outline:none; box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--fab-ring, #25d366);}
 @media (max-width:640px){

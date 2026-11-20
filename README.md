@@ -97,7 +97,9 @@ cachés, sans `extraits/` ni `news.json` (le dépôt, lui, reste complet).
   Chaque appel est une invocation du Worker, décomptée du quota gratuit
   (100 000 requêtes par jour) : réglages, corrigés et données se lisent dans la
   page (inscrits au build) ou dans `/data/*`. Seul `/api/track/batch`
-  (statistiques) reste appelé par les visiteurs.
+  (statistiques) reste appelé par les visiteurs. Les avis 👍/👎 en bas des
+  chapitres (`app/_shared/AvisUtile.js`) voyagent dans ce même lot : un vote
+  = une commande Upstash, résultats dans la console (Statistiques › Avis).
 
 En pratique, quand tu touches à une page publique :
 

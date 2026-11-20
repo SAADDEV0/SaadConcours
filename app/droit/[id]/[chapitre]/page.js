@@ -9,6 +9,7 @@ import MathScripts from "../../../_shared/MathScripts";
 import BacQcm from "../../../bac/BacQcm";
 import BacChapitreClient from "../../../bac/BacChapitreClient";
 import AdSlot from "../../../_shared/AdSlot";
+import AvisUtile from "../../../_shared/AvisUtile";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { droitLangueInfo, droitRangLabel } from "../../../../lib/droitTaxonomy";
 import { droitModule, droitModuleHref, droitChapitreHref, droitModuleIcon, droitOuvert, isDroitPublie, droitEquivalent } from "../../../../lib/droit";
@@ -299,6 +300,8 @@ export default async function DroitChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <AvisUtile lang={ar ? "ar" : "fr"} />
 
               <CahierCours cahier={cahier} module={c.module} compact />
 

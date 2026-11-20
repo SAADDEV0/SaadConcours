@@ -17,6 +17,7 @@ import { PdfTab } from "./stats/Pdf";
 import { SearchesTab } from "./stats/Searches";
 import { JournalTab } from "./stats/Journal";
 import { VisitorsTab } from "./stats/Visitors";
+import { VotesTab } from "./stats/Votes";
 
 // Statistiques v2. Audit du 2026-11-05 : « Visites » comptait en réalité les
 // nouveaux navigateurs (une seule fois, pour toujours), le taux de
@@ -32,6 +33,7 @@ const TABS = [
   { key: "acquisition", label: "Acquisition", icon: "globe" },
   { key: "horaires", label: "Horaires", icon: "clock" },
   { key: "pdf", label: "PDF", icon: "download" },
+  { key: "avis", label: "Avis 👍/👎", icon: "check" },
   { key: "recherches", label: "Recherches sans résultat", icon: "search" },
   { key: "journal", label: "Journal", icon: "activity" },
 ];
@@ -136,6 +138,7 @@ export default function Statistics() {
       {data && tab === "horaires" && <HoursTab data={data} />}
       {data && tab === "pdf" && <PdfTab data={data} content={content} />}
       {data && tab === "recherches" && <SearchesTab data={data} onDismissed={(term) => setData((d) => ({ ...d, searchMisses: d.searchMisses.filter((s) => String(s.member) !== term) }))} />}
+      {data && tab === "avis" && <VotesTab votes={data.votes || []} content={content} />}
       {data && tab === "journal" && <JournalTab visits={data.recentVisits || []} pdfs={data.recentPdf || []} content={content} />}
     </>
   );

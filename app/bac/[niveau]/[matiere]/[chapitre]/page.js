@@ -13,6 +13,7 @@ import { BAC_MATIERES_PUBLIEES, bacNiveauInfo, findBacMatiere, findBacChapitre, 
 import { getBacChapitreEffectif, getBacMatiereEffectif } from "../../../../../lib/bacContenuEffectif";
 import { Icon } from "../../../../_shared/icons";
 import ChaineWhatsapp from "../../../../_shared/ChaineWhatsapp";
+import AvisUtile from "../../../../_shared/AvisUtile";
 import { getSettings } from "@/lib/store";
 
 const SITE_URL = "https://www.saadconcours.space";
@@ -193,6 +194,8 @@ export default async function BacChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <AvisUtile lang={m.lang === "ar" ? "ar" : "fr"} />
 
               <nav className="bac-pager">
                 {prev ? (

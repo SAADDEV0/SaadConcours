@@ -16,6 +16,7 @@ import {
   getRecentPdfDownloads,
   getAdStats,
   getShopStats,
+  getVoteStats,
   getPageStats,
   getRangeTime,
   getVisitorLog,
@@ -115,7 +116,7 @@ export async function GET(req) {
     const payload = { range, metrics, totals, subscribers, topPaths, sources, searchMisses, time };
 
     if (full) {
-      const [breakdown, live, cities, pdfCities, pdfItems, concoursViews, searchLog, recentVisits, recentPdf] = await Promise.all([
+      const [breakdown, live, cities, pdfCities, pdfItems, concoursViews, searchLog, recentVisits, recentPdf, votes] = await Promise.all([
         safe(getRangeBreakdown(range), null),
         safe(getLive(), null),
         safe(getVisitCities(30), []),
@@ -125,8 +126,9 @@ export async function GET(req) {
         safe(getSearchMissLog(200), []),
         safe(getRecentVisits(40), []),
         safe(getRecentPdfDownloads(40), []),
+        safe(getVoteStats(), []),
       ]);
-      Object.assign(payload, { breakdown, live, cities, pdfCities, pdfItems, concoursViews, searchLog, recentVisits, recentPdf });
+      Object.assign(payload, { breakdown, live, cities, pdfCities, pdfItems, concoursViews, searchLog, recentVisits, recentPdf, votes });
     }
 
     return NextResponse.json(payload, { headers: CACHE });

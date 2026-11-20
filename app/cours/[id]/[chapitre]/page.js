@@ -15,6 +15,7 @@ import { cahierDuCours } from "../../../../lib/boutique";
 import ConcoursLies from "../../../_shared/ConcoursLies";
 import CahierCours, { CahierLien, CahierSide } from "../../../_shared/CahierCours";
 import ChaineWhatsapp from "../../../_shared/ChaineWhatsapp";
+import AvisUtile from "../../../_shared/AvisUtile";
 import AdSlot from "../../../_shared/AdSlot";
 import { fitTitle, clampDescription } from "../../../_shared/seoText";
 import { Icon } from "../../../_shared/icons";
@@ -279,6 +280,8 @@ export default async function CoursChapitrePage(props) {
                   );
                 })}
               </div>
+
+              <AvisUtile />
 
               <CahierCours cahier={cahier} module={c.module} compact />
 

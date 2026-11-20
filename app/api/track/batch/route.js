@@ -8,6 +8,7 @@ import {
   trackPdfDownload,
   trackSearchMiss,
   trackEngagement,
+  trackVote,
   checkRateLimitBulk,
   getClientIp,
   getClientGeo,
@@ -128,6 +129,16 @@ const HANDLERS = {
     run: (e, ctx) => {
       const clean = sanitizeEngage(e);
       return clean ? trackEngagement(clean, ctx) : null;
+    },
+  },
+  // 👍 / 👎 en bas d'un chapitre (AvisUtile.js). Un vote par page et par
+  // navigateur côté client ; ici, 30 par heure et par IP au plus, pour qu'un
+  // robot ne puisse ni fausser les avis ni vider le quota KV.
+  vote: {
+    limit: ["vote", 30, 3600],
+    run: (e) => {
+      const path = sanitizePath(e.path);
+      return path ? trackVote(path, e.v, e.prev) : null;
     },
   },
   "search-miss": {
