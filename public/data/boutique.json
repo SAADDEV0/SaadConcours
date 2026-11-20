@@ -1244,5 +1244,47 @@
     "vedette": true,
     "available": true,
     "dateAjout": "2026-11-19"
+  },
+  {
+    "id": "cahier-introduction-economie-gestion-s1",
+    "titre": "Cahier de préparation — Introduction à l'économie et à la gestion (S1)",
+    "sousTitre": "L'économie et la gestion expliquées aux étudiants en droit, en français simple : 155 QCM corrigés, 15 cas pratiques corrigés, des calculs pas à pas et 3 examens blancs pour réussir l'examen du S1.",
+    "niveau": "licence",
+    "matiere": "Introduction à l'économie et à la gestion",
+    "cours": "introduction-economie-gestion-s1",
+    "description": "Ce cahier prépare l'examen d'**Introduction à l'économie et à la gestion**, un module du semestre 1 de la Licence de Droit (filière Droit public) dans les FSJES. Il suit le cours en deux parties. L'**économie** : la rareté et les choix, les grands courants de pensée (Smith, Marx, Keynes…), le **PIB** et la croissance, le **marché** et le **droit de la concurrence**, la **monnaie**, l'inflation et les politiques économiques. La **gestion** : l'**entreprise** et ses **formes juridiques** (auto-entrepreneur, SNC, SARL, SA), puis le **management** et les fonctions de l'entreprise. Le cahier est écrit en **français simple** : des phrases courtes, chaque mot expliqué avec sa traduction arabe.\n\nChaque chapitre suit le même plan : l'essentiel du cours, les définitions à réciter, les textes et les formules à citer, un schéma, les pièges de l'examen, 15 QCM, 5 questions de cours avec une réponse modèle et des **cas pratiques corrigés pas à pas** : calculer une valeur ajoutée, un PIB et une croissance réelle, un prix d'équilibre et une élasticité, l'effet d'un prix plafond, une inflation et un pouvoir d'achat, choisir la forme juridique d'une entreprise. Tous les calculs sont refaits et vérifiés.\n\nChaque chapitre fait le **lien avec le droit marocain** : articles 31, 35, 36, 39, 75, 77 et 166 de la Constitution de 2011, loi 104-12 sur la concurrence, Bank Al-Maghrib, Code de commerce, loi 114-13 sur l'auto-entrepreneur, vérifiés sur les textes officiels. À la fin : la méthodologie, **trois examens blancs** avec barème et corrigé, dont une dissertation « Le marché suffit-il à organiser l'économie ? » avec copie modèle, et un **mémo de la veille** (formules, auteurs, textes, chiffres).\n\nLe cours complet reste gratuit sur le site : [Introduction à l'économie et à la gestion (S1)](/droit/introduction-economie-gestion-s1). Le cahier y ajoute l'entraînement et la méthode, dans un seul PDF à lire sur ton téléphone ou à imprimer.",
+    "sommaire": [
+      "Bienvenue, plan de révision en 14 jours ou en 7 jours",
+      "Partie 0 · Les 100 mots de l'économie et de la gestion (français-arabe)",
+      "Chapitre 1 · L'économie : objet, rareté et choix",
+      "Chapitre 2 · Les grands courants de la pensée économique",
+      "Chapitre 3 · Agents, circuit économique et agrégats nationaux",
+      "Chapitre 4 · Le marché, les prix et le droit de la concurrence",
+      "Chapitre 5 · Monnaie, inflation et politiques économiques",
+      "Chapitre 6 · L'entreprise : notion, classifications et formes juridiques",
+      "Chapitre 7 · La gestion de l'entreprise : management et fonctions",
+      "Partie 8 · La méthodologie des épreuves",
+      "Partie 9 · Trois examens blancs corrigés",
+      "Partie 10 · Le mémo de la veille"
+    ],
+    "pointsForts": [
+      "Tout le module en français simple, chaque mot expliqué avec sa traduction arabe",
+      "155 QCM corrigés et expliqués, dont un examen blanc de 40 QCM",
+      "35 questions de cours avec une réponse modèle",
+      "Des cas pratiques corrigés pas à pas : PIB, croissance réelle, équilibre de marché, élasticité, inflation, choix d'une forme de société",
+      "Le lien avec le droit marocain : Constitution de 2011, loi 104-12, Code de commerce, loi 114-13, vérifiés sur les textes officiels",
+      "Lexique de 100 mots en français-arabe et un mémo des formules, des auteurs et des textes"
+    ],
+    "prix": 50,
+    "prixBarre": null,
+    "devise": "MAD",
+    "pages": 88,
+    "format": "PDF",
+    "couverture": "images/boutique/cahier-introduction-economie-gestion-s1/couverture-v1.webp",
+    "apercu": "",
+    "badge": "Nouveau",
+    "vedette": true,
+    "available": true,
+    "dateAjout": "2026-11-20"
   }
 ]
