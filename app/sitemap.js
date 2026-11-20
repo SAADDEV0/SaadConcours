@@ -8,6 +8,8 @@ import { isCnaem, isLicenceExcellence, isMaster, isMasterDroit } from "@/lib/con
 import { contenuOuvert } from "@/lib/espaces";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "@/lib/droit";
 import { masterHref, masterHubs, villeHref, villeHubs } from "@/lib/concoursHubs";
+import { dateContenu, plusRecente, valeurChapitre, valeurModule, valeurBac } from "@/lib/datesContenu";
+import DATES_CONTENU from "@/lib/datesContenu.json";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -110,17 +112,29 @@ export default async function sitemap() {
   }));
 
   // Un module = sa page sommaire + une page par chapitre (lib/fsjesChapitres.js).
+  // Dates : historique Git rejoué par `npm run dates:contenu`
+  // (lib/datesContenu.js) ; un chapitre modifié depuis n'a pas de lastmod.
+  // Le module prend la plus récente : sa fiche ou l'un de ses chapitres.
+  const route = (path, priority, lastModified) => ({
+    url: `${SITE_URL}${path}`,
+    changeFrequency: "monthly",
+    priority,
+    ...(lastModified ? { lastModified } : {}),
+  });
+  const moduleRoutes = (c, mod, moduleHref, chapitreHref) => {
+    const chapitres = mod.chapitres.map((ch) => {
+      const path = chapitreHref(c, ch);
+      return { path, date: dateContenu(DATES_CONTENU, path, valeurChapitre(ch)) };
+    });
+    const date = plusRecente([dateContenu(DATES_CONTENU, `${moduleHref}#module`, valeurModule(c, mod.annexe)), ...chapitres.map((ch) => ch.date)]);
+    return [route(moduleHref, 0.6, date), ...chapitres.map((ch) => route(ch.path, 0.5, ch.date))];
+  };
+
   const coursRoutes = cours
     .filter((c) => c.available)
-    .flatMap((c) => [
-      { url: `${SITE_URL}/cours/${c.id}`, changeFrequency: "monthly", priority: 0.6 },
-      ...fsjesModule(c).chapitres.map((ch) => ({ url: `${SITE_URL}${fsjesChapitreHref(c, ch)}`, changeFrequency: "monthly", priority: 0.5 })),
-    ]);
+    .flatMap((c) => moduleRoutes(c, fsjesModule(c), `/cours/${c.id}`, fsjesChapitreHref));
 
-  const droitRoutes = droitPublies.flatMap((c) => [
-    { url: `${SITE_URL}${droitModuleHref(c)}`, changeFrequency: "monthly", priority: 0.6 },
-    ...droitModule(c).chapitres.map((ch) => ({ url: `${SITE_URL}${droitChapitreHref(c, ch)}`, changeFrequency: "monthly", priority: 0.5 })),
-  ]);
+  const droitRoutes = droitPublies.flatMap((c) => moduleRoutes(c, droitModule(c), droitModuleHref(c), droitChapitreHref));
 
   const quizRoutes = quiz
     .filter((q) => q.available)
@@ -150,10 +164,15 @@ export default async function sitemap() {
     bacRoutes.push({ url: `${SITE_URL}/bac/${n.code}`, changeFrequency: "monthly", priority: 0.7 });
     for (const m of bacMatieres(n.code)) {
       const contenu = await getBacMatiereEffectif(n.code, m.slug);
-      bacRoutes.push({ url: `${SITE_URL}${bacMatiereHref(m)}`, changeFrequency: "monthly", priority: 0.6 });
-      for (const c of m.chapitres) {
-        if (contenu[c.slug]) bacRoutes.push({ url: `${SITE_URL}${bacChapitreHref(m, c)}`, changeFrequency: "monthly", priority: 0.5 });
-      }
+      const chapitres = m.chapitres
+        .filter((c) => contenu[c.slug])
+        .map((c) => {
+          const path = bacChapitreHref(m, c);
+          return { path, date: dateContenu(DATES_CONTENU, path, valeurBac(contenu[c.slug])) };
+        });
+      // La matière : le plus récent de ses chapitres rédigés.
+      bacRoutes.push(route(bacMatiereHref(m), 0.6, plusRecente(chapitres.map((ch) => ch.date))));
+      for (const ch of chapitres) bacRoutes.push(route(ch.path, 0.5, ch.date));
     }
   }
 
