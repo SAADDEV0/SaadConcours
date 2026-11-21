@@ -231,6 +231,24 @@
 /cours/micro_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite /cours/micro2_cours/l-equilibre-de-l-entreprise-en-concurrence-pure-et-parfaite 301
 /cours/micro_cours/le-monopole-et-les-structures-de-marche /cours/micro2_cours/le-monopole-et-les-structures-de-marche 301
 
+# Cours de prépa séparés des cours de la Licence (2026-11-21) : Informatique de gestion (publié le
+# même jour sous /cours/infogestion_cours) et les chapitres 9 à 12 de maths_cours sont devenus les cours
+# de prépa ECT /prepa/ect/informatique-gestion et /prepa/ect/analyse, avec les mêmes slugs de chapitre.
+/prepa /prepa/ect 301
+/cours/infogestion_cours /prepa/ect/informatique-gestion 301
+/cours/infogestion_cours/systeme-d-information-et-informatique-de-gestion /prepa/ect/informatique-gestion/systeme-d-information-et-informatique-de-gestion 301
+/cours/infogestion_cours/le-modele-conceptuel-des-donnees-merise /prepa/ect/informatique-gestion/le-modele-conceptuel-des-donnees-merise 301
+/cours/infogestion_cours/du-mcd-au-modele-relationnel /prepa/ect/informatique-gestion/du-mcd-au-modele-relationnel 301
+/cours/infogestion_cours/sql-interroger-une-base-de-donnees /prepa/ect/informatique-gestion/sql-interroger-une-base-de-donnees 301
+/cours/infogestion_cours/sql-calculs-regroupements-et-sous-requetes /prepa/ect/informatique-gestion/sql-calculs-regroupements-et-sous-requetes 301
+/cours/infogestion_cours/sql-creer-et-mettre-a-jour-une-base /prepa/ect/informatique-gestion/sql-creer-et-mettre-a-jour-une-base 301
+/cours/infogestion_cours/le-tableur-au-service-de-la-gestion /prepa/ect/informatique-gestion/le-tableur-au-service-de-la-gestion 301
+/cours/infogestion_cours/algorithmique-et-programmation-en-scilab-et-python /prepa/ect/informatique-gestion/algorithmique-et-programmation-en-scilab-et-python 301
+/cours/maths_cours/primitives-et-calcul-integral /prepa/ect/analyse/primitives-et-calcul-integral 301
+/cours/maths_cours/fonctions-de-deux-variables-derivees-partielles-et-optimisation /prepa/ect/analyse/fonctions-de-deux-variables-derivees-partielles-et-optimisation 301
+/cours/maths_cours/integrales-generalisees-et-suites-d-integrales /prepa/ect/analyse/integrales-generalisees-et-suites-d-integrales 301
+/cours/maths_cours/suites-recurrentes-et-series-numeriques /prepa/ect/analyse/suites-recurrentes-et-series-numeriques 301
+
 # ── Règles à motif : TOUJOURS EN DERNIER ─────────────────────────────────────
 # « * » (tout ce qui suit) et « :nom » (un segment, repris dans la destination)
 # font d'une règle une règle dynamique : 100 au plus, contre 2 000 exactes. Et

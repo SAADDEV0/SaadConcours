@@ -1,4 +1,4 @@
-import { getPublicConcours, getAllCours, getAllDroit, getPublicQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllDroit, getAllPrepa, getPublicQuiz, getAllBlog, getAllBoutique } from "@/lib/store";
 import { isProduitVisible } from "@/lib/boutique";
 import { findDuplicateBlogIds } from "@/lib/blogDuplicates";
 import { BAC_NIVEAUX, bacMatieres, bacMatiereHref, bacChapitreHref } from "@/lib/bacProgramme";
@@ -7,6 +7,7 @@ import { fsjesModule, fsjesChapitreHref } from "@/lib/fsjesChapitres";
 import { isCnaem, isLicenceExcellence, isMaster, isMasterDroit } from "@/lib/concoursNiveaux";
 import { contenuOuvert } from "@/lib/espaces";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "@/lib/droit";
+import { PREPA_OPTIONS, prepaModule, prepaModuleHref, prepaChapitreHref, prepaOptionHref, prepaOptionOuverte, isPrepaPublie } from "@/lib/prepa";
 import { masterHref, masterHubs, villeHref, villeHubs } from "@/lib/concoursHubs";
 import { dateContenu, plusRecente, valeurChapitre, valeurModule, valeurBac } from "@/lib/datesContenu";
 import DATES_CONTENU from "@/lib/datesContenu.json";
@@ -37,10 +38,11 @@ export default async function sitemap() {
   // Fetched up front because the listing routes below now carry a real
   // lastModified derived from the freshest item they actually list — same
   // rule as the per-item entries: only emit a date when it's true.
-  const [concours, cours, droit, quiz, blog, boutique] = await Promise.all([
+  const [concours, cours, droit, prepa, quiz, blog, boutique] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     getAllDroit().catch(() => []),
+    getAllPrepa().catch(() => []),
     getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
     getAllBoutique().catch(() => []),
@@ -136,6 +138,13 @@ export default async function sitemap() {
 
   const droitRoutes = droitPublies.flatMap((c) => moduleRoutes(c, droitModule(c), droitModuleHref(c), droitChapitreHref));
 
+  // Cours de la prépa (lib/prepa.js) : la page de chaque option ouverte, puis ses cours.
+  const prepaPublies = prepa.filter((c) => isPrepaPublie(c) && prepaOptionOuverte(c.option));
+  const prepaRoutes = [
+    ...PREPA_OPTIONS.filter((o) => prepaPublies.some((c) => c.option === o.code)).map((o) => ({ url: `${SITE_URL}${prepaOptionHref(o.code)}`, changeFrequency: "weekly", priority: 0.7 })),
+    ...prepaPublies.flatMap((c) => moduleRoutes(c, prepaModule(c), prepaModuleHref(c), prepaChapitreHref)),
+  ];
+
   const quizRoutes = quiz
     .filter((q) => q.available)
     .map((q) => ({
@@ -183,5 +192,5 @@ export default async function sitemap() {
     ...(p.dateAjout ? { lastModified: p.dateAjout } : {}),
   }));
 
-  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...droitRoutes, ...quizRoutes, ...blogRoutes, ...boutiqueRoutes, ...bacRoutes];
+  return [...staticRoutes, ...concoursRoutes, ...coursRoutes, ...droitRoutes, ...prepaRoutes, ...quizRoutes, ...blogRoutes, ...boutiqueRoutes, ...bacRoutes];
 }

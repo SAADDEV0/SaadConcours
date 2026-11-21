@@ -24,6 +24,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { decouperModule, fsjesModule, fsjesChapitreHref } from "../lib/fsjesChapitres.js";
 import { droitModule, droitModuleHref, droitChapitreHref } from "../lib/droit.js";
+import { prepaModule, prepaModuleHref, prepaChapitreHref } from "../lib/prepa.js";
 import { BAC_NIVEAUX, bacMatieres, bacChapitreHref } from "../lib/bacProgramme.js";
 import { bacMatiereContenu } from "../lib/bacContenu/index.js";
 import { empreinte, valeurChapitre, valeurModule, valeurBac } from "../lib/datesContenu.js";
@@ -178,6 +179,7 @@ const lireJson = (f) => {
 for (const [donnees, dossier, decouper, hrefModule, hrefChapitre] of [
   ["public/data/cours.json", "lib/fsjesContenu", fsjesModule, (c) => `/cours/${c.id}`, fsjesChapitreHref],
   ["public/data/droit.json", "lib/droitContenu", droitModule, droitModuleHref, droitChapitreHref],
+  ["public/data/prepa.json", "lib/prepaContenu", prepaModule, prepaModuleHref, prepaChapitreHref],
 ]) {
   const historique = await rejouerCours(donnees, dossier);
   for (const c of lireJson(donnees)) {

@@ -1,8 +1,9 @@
-import { getPublicConcours, getAllCours, getAllDroit, getPublicQuiz, getAllBlog } from "@/lib/store";
+import { getPublicConcours, getAllCours, getAllDroit, getAllPrepa, getPublicQuiz, getAllBlog } from "@/lib/store";
 import { chromeHtml, footerHtml } from "../_shared/chrome";
 import { isCnaem, isLicenceExcellence, isMasterDroit, optionCnaem } from "@/lib/concoursNiveaux";
 import { droitModule, droitModuleHref, droitChapitreHref, droitOuvert, droitRenvois, isDroitPublie } from "../../lib/droit";
 import { droitRangLabelFr } from "../../lib/droitTaxonomy";
+import { isPrepaPublie, prepaChapitreHref, prepaModule, prepaModuleHref, prepaOption, prepaOptionOuverte } from "../../lib/prepa";
 import { contenuOuvert } from "../../lib/espaces";
 import { categoryLabel } from "../../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref, bacChapitreHref } from "../../lib/bacProgramme";
@@ -36,10 +37,11 @@ function entree(k, t, s, u, x = "") {
 }
 
 export default async function RecherchePage() {
-  const [concours, cours, droit, quiz, blog] = await Promise.all([
+  const [concours, cours, droit, prepa, quiz, blog] = await Promise.all([
     getPublicConcours().catch(() => []),
     getAllCours().catch(() => []),
     droitOuvert() ? getAllDroit().catch(() => []) : [],
+    getAllPrepa().catch(() => []),
     getPublicQuiz().catch(() => []),
     getAllBlog().catch(() => []),
   ]);
@@ -70,6 +72,14 @@ export default async function RecherchePage() {
     index.push(entree("cours", c.module, ["Droit", c.semestre, droitRangLabelFr(c), `${chapitres.length} chapitres`].filter(Boolean).join(" · "), droitModuleHref(c), [c.description, "droit"].filter(Boolean).join(" ")));
     for (const ch of chapitres) {
       index.push(entree("chapitre", ch.titre, `${c.module} · Droit · Chapitre ${ch.numero}`, droitChapitreHref(c, ch)));
+    }
+  }
+  for (const c of prepa.filter((x) => isPrepaPublie(x) && prepaOptionOuverte(x.option))) {
+    const { chapitres } = prepaModule(c);
+    const o = prepaOption(c.option);
+    index.push(entree("cours", c.module, [`Prépa ${o.court}`, "CNAEM", `${chapitres.length} chapitres`].join(" · "), prepaModuleHref(c), [c.description, "prepa cpge classes preparatoires cnaem encg", o.court.toLowerCase()].join(" ")));
+    for (const ch of chapitres) {
+      index.push(entree("chapitre", ch.titre, `${c.module} · Prépa ${o.court} · Chapitre ${ch.numero}`, prepaChapitreHref(c, ch)));
     }
   }
   // Module de Droit commun avec la Licence : une entrée qui mène au cours FSJES.

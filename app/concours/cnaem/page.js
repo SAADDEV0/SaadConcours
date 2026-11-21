@@ -1,4 +1,5 @@
-import { getPublicConcours, getCorrigeIdsLocal, getSettings } from "@/lib/store";
+import { getAllPrepa, getPublicConcours, getCorrigeIdsLocal, getSettings } from "@/lib/store";
+import { isPrepaPublie, prepaModuleHref, prepaOptionHref, prepaOptionOuverte } from "@/lib/prepa";
 import AdSlot from "../../_shared/AdSlot";
 import { chromeHtml, footerHtml } from "../../_shared/chrome";
 import { breadcrumbJsonLd, collectionJsonLd } from "../../_shared/listingSchema";
@@ -100,6 +101,8 @@ export default async function CnaemPage() {
   const options = compte(concours, (c) => optionCnaem(c).court);
   const optionsTexte = options.map(([o, n]) => `${n} en option ${o}`).join(" et ");
   const faqs = buildFaq({ total: concours.length, anneeMin, anneeMax, options: optionsTexte });
+  // Cours de la prépa ECT (lib/prepa.js), séparés des cours de la Licence : la page n'envoie pas vers /cours.
+  const coursEct = prepaOptionOuverte("ect") ? (await getAllPrepa()).filter((c) => c.option === "ect" && isPrepaPublie(c)) : [];
 
   return (
     <>
@@ -151,12 +154,7 @@ export default async function CnaemPage() {
           <ConcoursListing
             concours={concours}
             gridTitle="Sujets du CNAEM"
-            sideLinks={[
-              { href: "/cours/introeco_cours", label: "Réviser l'économie générale" },
-              { href: "/cours/droitaffaires_cours", label: "Réviser le droit des affaires" },
-              { href: "/cours/comptaana_cours", label: "Réviser la comptabilité analytique" },
-              { href: "/cours/analysefin_cours", label: "Réviser l'analyse financière" },
-            ]}
+            sideLinks={coursEct.map((c) => ({ href: prepaModuleHref(c), label: `Cours prépa ECT : ${c.module}` }))}
           />
 
           {epreuves.length > 0 && (
@@ -212,14 +210,20 @@ export default async function CnaemPage() {
             <h2>Préparer le CNAEM avec des sujets réels</h2>
             <p>
               {concours.length} sujets du CNAEM ({optionsTexte}), des sessions {anneeMin} à {anneeMax} : énoncés complets
-              avec leurs annexes, corrigés indicatifs dossier par dossier et export PDF gratuit, sans inscription. Les
-              cours d&apos;économie, de droit et de gestion qui servent à les traiter sont ceux de la Licence FSJES, liés depuis
-              chaque sujet. Pour l&apos;exercice de matrices de l&apos;épreuve de mathématiques (diagonalisation, puissances
-              d&apos;une matrice, suites récurrentes), le cours d&apos;<a href="/cours/algebre_cours">algèbre linéaire</a> va
-              jusqu&apos;au niveau de la prépa ECT ; l&apos;exercice d&apos;analyse (intégrales généralisées, suites
-              d&apos;intégrales, séries) est traité dans les derniers chapitres du cours de{" "}
-              <a href="/cours/maths_cours">mathématiques</a>. Les requêtes SQL et la fonction Scilab de l&apos;épreuve de
-              gestion relèvent du cours d&apos;<a href="/cours/infogestion_cours">informatique de gestion</a>.
+              avec leurs annexes, corrigés indicatifs dossier par dossier et export PDF gratuit, sans inscription.
+              {coursEct.length > 0 && (
+                <>
+                  {" "}Pour apprendre les notions qu&apos;ils demandent, les{" "}
+                  <a href={prepaOptionHref("ect")}>cours de la prépa ECT</a> sont écrits pour ces épreuves :{" "}
+                  {coursEct.map((c, i) => (
+                    <span key={c.id}>
+                      {i > 0 ? (i === coursEct.length - 1 ? " et " : ", ") : ""}
+                      <a href={prepaModuleHref(c)}>{c.module.toLowerCase()}</a>
+                    </span>
+                  ))}
+                  , chacun avec ses exercices corrigés dans l&apos;esprit du concours.
+                </>
+              )}
             </p>
           </section>
 
