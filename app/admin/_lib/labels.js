@@ -36,8 +36,9 @@ export function labelForPath(path, content = {}) {
   const [, section, id, sub] = String(path).split("/");
   const decoded = id ? decodeURIComponent(id) : "";
   if (section === "concours") return concoursLabel(find(content.concours, decoded)) || path;
-  if (section === "cours") {
-    const c = find(content.cours, decoded);
+  // Cours Licence et Droit : même forme d'adresse (/<espace>/<module>/<chapitre>).
+  if ((section === "cours" || section === "droit") && decoded) {
+    const c = find(content[section], decoded);
     return c ? `${c.module}${sub ? ` › ${decodeURIComponent(sub).replace(/-/g, " ")}` : ""}` : path;
   }
   if (section === "evaluation") return find(content.quiz, decoded)?.title || path;

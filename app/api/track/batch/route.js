@@ -31,6 +31,8 @@ const MAX_EVENTS = 40;
 
 const SOURCE_RE = /^[a-z0-9._-]{1,32}$/;
 const PATH_RE = /^\/[a-zA-Z0-9\-_/]{0,180}$/;
+// Chapitres : /cours|droit/<module>/<chapitre> et /bac/<niveau>/<matière>/<chapitre>.
+const VOTE_PATH_RE = /^\/(?:(?:cours|droit)\/[^/]+\/[^/]+|bac\/[^/]+\/[^/]+\/[^/]+)$/;
 const AD_TYPES = ["view", "click"];
 const PDF_KINDS = ["concours", "cours", "evaluation"];
 // Appareil de la première page de session : m = mobile, t = tablette, d = ordinateur.
@@ -134,11 +136,13 @@ const HANDLERS = {
   // 👍 / 👎 en bas d'un chapitre (AvisUtile.js). Un vote par page et par
   // navigateur côté client ; ici, 30 par heure et par IP au plus, pour qu'un
   // robot ne puisse ni fausser les avis ni vider le quota KV.
+  // Seules les adresses de chapitre (là où AvisUtile est affiché) sont
+  // acceptées : un script ne peut pas remplir l'onglet Avis de lignes inventées.
   vote: {
     limit: ["vote", 30, 3600],
     run: (e) => {
       const path = sanitizePath(e.path);
-      return path ? trackVote(path, e.v, e.prev) : null;
+      return path && VOTE_PATH_RE.test(path) ? trackVote(path, e.v, e.prev) : null;
     },
   },
   "search-miss": {

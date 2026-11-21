@@ -12,6 +12,20 @@ import { SITE, toCsv } from "./shared";
 // (app/_shared/AvisUtile.js). Compteurs depuis le lancement, sans période :
 // un avis vaut pour le chapitre tel qu'il est, pas pour un jour donné.
 // « À revoir d'abord » met en tête les chapitres où les 👎 pèsent le plus.
+
+// En dessous, trop peu d'avis pour conclure (pastille grise).
+const MIN_AVIS = 3;
+
+// « À revoir d'abord » : chapitres assez notés, du plus faible % utile au plus
+// fort (à égalité, le plus de 👎 d'abord) ; puis les peu notés, par nombre de 👎.
+function pireDabord(a, b) {
+  const sa = a.total >= MIN_AVIS;
+  const sb = b.total >= MIN_AVIS;
+  if (sa !== sb) return sa ? -1 : 1;
+  if (sa && a.rate !== b.rate) return a.rate - b.rate;
+  return b.down - a.down || b.total - a.total;
+}
+
 export function VotesTab({ votes, content }) {
   const [sort, setSort] = useState("worst");
   const [q, setQ] = useState("");
@@ -27,7 +41,7 @@ export function VotesTab({ votes, content }) {
 
   const list = useMemo(() => {
     const out = rows.filter((r) => matchQuery(`${r.label} ${r.path}`, q));
-    if (sort === "worst") return out.sort((a, b) => b.down - a.down || a.rate - b.rate);
+    if (sort === "worst") return out.sort(pireDabord);
     if (sort === "best") return out.sort((a, b) => b.up - a.up || b.rate - a.rate);
     return out.sort((a, b) => b.total - a.total);
   }, [rows, q, sort]);
@@ -69,7 +83,7 @@ export function VotesTab({ votes, content }) {
                 <span className="ax-list-title">{r.label || r.path}</span>
                 <span className="ax-list-meta">{r.path}</span>
               </span>
-              <span className={`ax-pill ${r.total < 3 ? "" : r.rate >= 0.8 ? "green" : r.rate >= 0.5 ? "amber" : "red"}`} title={r.total < 3 ? "Trop peu d'avis pour conclure" : undefined}>
+              <span className={`ax-pill ${r.total < MIN_AVIS ? "" : r.rate >= 0.8 ? "green" : r.rate >= 0.5 ? "amber" : "red"}`} title={r.total < MIN_AVIS ? "Trop peu d'avis pour conclure" : undefined}>
                 {Math.round(r.rate * 100)} % utile
               </span>
               <span className="ax-num">{num(r.up)} 👍</span>
