@@ -216,7 +216,10 @@ export default async function CnaemPage() {
               cours d&apos;économie, de droit et de gestion qui servent à les traiter sont ceux de la Licence FSJES, liés depuis
               chaque sujet. Pour l&apos;exercice de matrices de l&apos;épreuve de mathématiques (diagonalisation, puissances
               d&apos;une matrice, suites récurrentes), le cours d&apos;<a href="/cours/algebre_cours">algèbre linéaire</a> va
-              jusqu&apos;au niveau de la prépa ECT.
+              jusqu&apos;au niveau de la prépa ECT ; l&apos;exercice d&apos;analyse (intégrales généralisées, suites
+              d&apos;intégrales, séries) est traité dans les derniers chapitres du cours de{" "}
+              <a href="/cours/maths_cours">mathématiques</a>. Les requêtes SQL et la fonction Scilab de l&apos;épreuve de
+              gestion relèvent du cours d&apos;<a href="/cours/infogestion_cours">informatique de gestion</a>.
             </p>
           </section>
 

@@ -762,10 +762,18 @@ avec le tableau des épreuves et coefficients de la notice CNAEM 2024), onglet o
    « Comptabilité analytique »…). Pas de cours prépa réécrit : l'éco, le droit et la gestion renvoient aux cours
    FSJES (un seul cours par matière, §1.6). Un cours qui manque à la prépa se rédige comme module FSJES
    quand la licence a ce module (précédent : `algebre_cours`, recette K1), avec des chapitres
-   d'approfondissement prépa à la fin. Restent à faire (état des lieux du 2026-11-16) : informatique de
-   gestion (SGBD, SQL, tableur), analyse niveau prépa (intégrales, séries, deux variables), épreuves
-   communes (culture générale, résumé, anglais, culture arabe et traduction), puis l'ECS (maths et
-   informatique, HGGMC).
+   d'approfondissement prépa à la fin. Fait le 2026-11-21 (`complete prepa ecs ect cours`) : analyse →
+   chapitres 9 à 12 ajoutés à `maths_cours` (intégrales, deux variables, puis intégrales généralisées et
+   suites d'intégrales, suites récurrentes et séries pour la prépa), pas un second cours d'analyse ;
+   informatique → `infogestion_cours` « Informatique de Gestion » (S4, parcours gestion, `category: "quant"`,
+   8 chapitres : SI, Merise, relationnel, 3 chapitres SQL, tableur, Scilab/Python), base fil rouge
+   Atlas Distribution dont chaque requête est exécutée dans `node:sqlite` avant d'afficher un résultat.
+   Dans les gabarits md`…` de compléments, aucun backtick : code en blocs `~~~`, formules de tableur en
+   `<code>` ; références absolues de tableur décrites en phrase (« touche F4 »), jamais avec `$`.
+   Restent à faire : épreuves communes (culture générale, résumé, anglais, culture arabe et traduction)
+   et, pour l'ECS, l'HGGMC (les maths ECS reposent sur `maths_cours`, `algebre_cours`, `probas_cours`,
+   l'informatique sur le chapitre 8 d'`infogestion_cours`) : aucun module de licence ne porte ces
+   matières, la règle « cours FSJES » ne leur donne pas de place — demander où les ranger avant de les écrire.
 2. **Source** : groupe-reussite.fr, page « annales concours Maroc CNAEM »
    (`/ressources/annales-concours-maroc-cnaem/`, PDF `…/Annales/concours-maroc/cnaem/cnaem-<epreuve>-ect-<annee>.pdf` ;
    épreuves `eco-droit`, `gest-mana-info`, `maths`, `entreprise-et-enviro-ecs`…). Des PDF arrivent tronqués :
