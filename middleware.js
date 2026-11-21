@@ -16,7 +16,7 @@ import { isAdminPage, needsAuth, authorize, loginUrl } from "./lib/adminAuth";
 export async function middleware(req) {
   const { pathname } = req.nextUrl;
   const adminPage = isAdminPage(pathname);
-  if (!adminPage && !needsAuth(pathname, req.method)) return NextResponse.next();
+  if (!adminPage && !needsAuth(pathname)) return NextResponse.next();
 
   if (await authorize(req)) return NextResponse.next();
 

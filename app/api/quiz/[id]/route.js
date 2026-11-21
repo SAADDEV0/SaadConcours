@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { updateQuiz, deleteQuiz } from "@/lib/store";
 import { recordAudit, auditLabel } from "@/lib/auditLog";
 
-// Write access is gated by middleware.js (admin cookie required for non-GET).
+// Every method is gated by lib/adminAuth.js (admin session required, GET included).
 export async function PUT(req, props) {
   const params = await props.params;
   const body = await req.json();

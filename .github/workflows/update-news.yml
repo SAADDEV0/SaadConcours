@@ -30,7 +30,9 @@ jobs:
       - name: Vérifier si le scraping est activé (réglage admin)
         id: gate
         run: |
-          enabled=$(curl -fsSL https://saadconcours.space/api/settings | jq -r '.newsScraperEnabled // true' 2>/dev/null || echo true)
+          # Lu sur le checkout : /api/settings exige une session admin depuis le
+          # 2026-11-21. Test explicite de false : avec jq, « false // true » vaut true.
+          enabled=$(jq -r 'if .newsScraperEnabled == false then "false" else "true" end' public/data/settings.json)
           echo "enabled=$enabled" >> "$GITHUB_OUTPUT"
           if [ "$enabled" = "false" ]; then
             echo "Scraping désactivé depuis l'admin (Réglages), on s'arrête ici."

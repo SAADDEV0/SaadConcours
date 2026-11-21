@@ -97,7 +97,7 @@ function trailingSlashRedirect(url) {
 async function handleApi(request, url) {
   const req = new NextRequest(request);
 
-  if (needsAuth(url.pathname, request.method) && !(await authorize(req))) {
+  if (needsAuth(url.pathname) && !(await authorize(req))) {
     return NextResponse.json({ error: "Session expirée : reconnecte-toi." }, { status: 401 });
   }
 

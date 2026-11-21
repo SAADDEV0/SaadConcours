@@ -7,7 +7,7 @@ export async function GET() {
   return NextResponse.json(list);
 }
 
-// Write access is gated by middleware.js (admin cookie required for non-GET).
+// Every method is gated by lib/adminAuth.js (admin session required, GET included).
 export async function POST(req) {
   const body = await req.json();
   if (!body || typeof body !== "object") {

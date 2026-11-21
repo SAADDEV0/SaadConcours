@@ -9,10 +9,10 @@ import { publicAd } from "@/app/_shared/partnerAds";
 export const dynamic = "force-dynamic";
 
 // Partner ads carry the advertiser's private contact details and Saad's own
-// notes about the deal — needed in the admin panel, but this response is
-// world-readable (the site's chrome fetches it on every page), so only the
-// whitelisted public fields go out (publicAd). The admin console reads the
-// full settings.json straight from the repo for an authenticated admin.
+// notes about the deal. This response is admin-only since 2026-11-21
+// (lib/adminAuth.js), but only the whitelisted public fields still go out
+// (publicAd), as a second safeguard. The admin console reads the full
+// settings.json straight from the repo. Public pages read /data/settings.json.
 function publicSettings(settings) {
   if (!Array.isArray(settings?.partnerAds)) return settings;
   return {
@@ -21,7 +21,7 @@ function publicSettings(settings) {
   };
 }
 
-// GET is public — the site's footer reads this to render social links.
+// GET: admin session required (lib/adminAuth.js).
 export async function GET() {
   const settings = await getSettings();
   return NextResponse.json(publicSettings(settings));

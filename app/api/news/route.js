@@ -7,7 +7,7 @@ export async function GET() {
   return NextResponse.json(list);
 }
 
-// Write access is gated by middleware.js (admin cookie required for non-GET).
+// Every method is gated by lib/adminAuth.js (admin session required, GET included).
 // Manually-added news are stored as a KV overlay on top of the file that
 // scripts/fetch_almaster.py keeps updating automatically — see lib/store.js.
 export async function POST(req) {
