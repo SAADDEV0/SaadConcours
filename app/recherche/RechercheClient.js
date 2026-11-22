@@ -8,6 +8,7 @@ const GROUPES = [
   { k: "concours", titre: "Sujets de concours" },
   { k: "cours", titre: "Cours" },
   { k: "chapitre", titre: "Chapitres" },
+  { k: "compte", titre: "Plan comptable" },
   { k: "qcm", titre: "QCM d'entraînement" },
   { k: "article", titre: "Articles" },
 ];

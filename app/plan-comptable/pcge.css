@@ -1,0 +1,105 @@
+/* Plan comptable marocain (/plan-comptable). Jetons de globals.css seulement ;
+   la couleur de page (violet, lib/espaces.js → OUTILS) repeint --accent. */
+
+/* ---------- Recherche ---------- */
+.pcge-search{margin:18px 0 6px; max-width:720px;}
+.pcge-search-box{position:relative; display:flex; align-items:center;}
+.pcge-search-box .ic{position:absolute; left:14px; width:20px; height:20px; color:var(--text-faint); pointer-events:none;}
+.pcge-search-box input{
+  width:100%; font:inherit; font-size:1.05rem; padding:14px 16px 14px 44px; border-radius:var(--radius-lg);
+  border:1.5px solid var(--border-strong); background:var(--bg-card); color:var(--text);
+}
+.pcge-search-box input:focus{outline:none; border-color:var(--accent-fill); box-shadow:var(--focus-ring);}
+.pcge-search-hint{font-size:.85rem; color:var(--text-faint); margin:8px 2px 0;}
+.pcge-results{list-style:none; margin:10px 0 0; padding:0; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg-card); overflow:hidden;}
+.pcge-results li + li{border-top:1px solid var(--border);}
+.pcge-results a{display:flex; gap:12px; align-items:baseline; padding:10px 14px; text-decoration:none; color:var(--text);}
+.pcge-results a:hover{background:var(--bg-inset);}
+.pcge-results .pcge-res-classe{margin-left:auto; font-size:.78rem; color:var(--text-faint); white-space:nowrap;}
+.pcge-results-empty{padding:12px 14px; color:var(--text-dim); font-size:.92rem;}
+
+/* ---------- Numéro de compte ---------- */
+.pcge-code{
+  display:inline-block; min-width:3.6em; font-family:var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-weight:700; font-variant-numeric:tabular-nums; color:var(--accent); flex-shrink:0;
+}
+
+/* ---------- Grille des classes ---------- */
+.pcge-classes{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr)); gap:12px; margin:0 0 8px;}
+.pcge-classe-card{
+  display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border-radius:var(--radius-lg);
+  background:var(--bg-card); border:1px solid var(--border); text-decoration:none; color:var(--text);
+  transition:border-color .15s ease;
+}
+.pcge-classe-card:hover{border-color:var(--accent-fill);}
+.pcge-classe-num{
+  flex-shrink:0; width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+  font-size:1.35rem; font-weight:800; color:#fff; background:var(--accent-fill);
+}
+.pcge-classe-body{display:flex; flex-direction:column; gap:4px; min-width:0;}
+.pcge-classe-titre{font-weight:700; line-height:1.3;}
+.pcge-classe-card:hover .pcge-classe-titre{color:var(--accent);}
+.pcge-classe-resume{font-size:.88rem; color:var(--text-dim); line-height:1.45;}
+.pcge-classe-meta{font-size:.78rem; color:var(--text-faint);}
+
+/* ---------- Blocs de texte ---------- */
+.pcge-section{margin:34px 0 0;}
+.pcge-section > h2{font-size:1.3rem; margin:0 0 10px; letter-spacing:-.01em;}
+.pcge-section > p{color:var(--text-dim); line-height:1.65; max-width:72ch; margin:0 0 12px;}
+.pcge-lecture{display:flex; flex-wrap:wrap; gap:10px; margin:14px 0;}
+.pcge-lecture div{flex:1 1 140px; padding:12px 14px; border-radius:var(--radius-md, 10px); background:var(--bg-card); border:1px solid var(--border);}
+.pcge-lecture strong{display:block; font-size:1.25rem; font-variant-numeric:tabular-nums; color:var(--accent);}
+.pcge-lecture span{font-size:.85rem; color:var(--text-dim);}
+.pcge-essentiels{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)); gap:0 18px; list-style:none; padding:0; margin:0;}
+.pcge-essentiels li{border-bottom:1px solid var(--border);}
+.pcge-essentiels a{display:flex; gap:10px; padding:9px 2px; text-decoration:none; color:var(--text); font-size:.94rem;}
+.pcge-essentiels a:hover{color:var(--accent);}
+
+/* ---------- Page d'une classe ---------- */
+.pcge-fonct{padding:16px 18px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); border-left:4px solid var(--accent-fill); margin:0 0 20px;}
+.pcge-fonct h2{font-size:1rem; margin:0 0 6px;}
+.pcge-fonct p{margin:0; color:var(--text-dim); line-height:1.6;}
+.pcge-sommaire{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 8px; padding:0; list-style:none;}
+.pcge-sommaire a{display:inline-flex; gap:8px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); text-decoration:none; font-size:.86rem; color:var(--text);}
+.pcge-sommaire a:hover{border-color:var(--accent-fill); color:var(--accent);}
+.pcge-sommaire .pcge-code{min-width:0;}
+
+.pcge-rubrique{margin:34px 0 0; scroll-margin-top:calc(var(--header-h) + 12px);}
+.pcge-rubrique > h2{display:flex; gap:12px; align-items:baseline; font-size:1.35rem; margin:0 0 6px; padding-bottom:8px; border-bottom:2px solid var(--accent-fill);}
+.pcge-rubrique > h2 .pcge-code, .pcge-poste > h3 .pcge-code{min-width:0;}
+.pcge-rubrique > p{color:var(--text-dim); margin:0 0 14px; line-height:1.6;}
+.pcge-poste{margin:0 0 16px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg-card); overflow:hidden; scroll-margin-top:calc(var(--header-h) + 12px);}
+.pcge-poste > h3{display:flex; gap:12px; align-items:baseline; font-size:1rem; margin:0; padding:12px 16px; background:var(--bg-inset); border-bottom:1px solid var(--border);}
+.pcge-poste-note{margin:0; padding:10px 16px; font-size:.92rem; color:var(--text-dim); border-bottom:1px solid var(--border); line-height:1.55;}
+.pcge-comptes{list-style:none; margin:0; padding:0;}
+.pcge-compte{padding:10px 16px; scroll-margin-top:calc(var(--header-h) + 12px);}
+.pcge-compte + .pcge-compte{border-top:1px solid var(--border);}
+.pcge-compte-ligne{display:flex; gap:12px; align-items:baseline;}
+.pcge-compte.sous .pcge-compte-ligne{padding-left:18px;}
+.pcge-compte-titre{line-height:1.4;}
+.pcge-compte.note .pcge-compte-titre{font-weight:600;}
+.pcge-compte:target{background:var(--accent-dim); box-shadow:inset 4px 0 0 var(--accent-fill);}
+.pcge-note{margin:6px 0 2px calc(3.6em + 12px); font-size:.92rem; color:var(--text-dim); line-height:1.6;}
+.pcge-note p{margin:0;}
+.pcge-ecriture{margin:10px 0 4px; border:1px solid var(--border); border-radius:var(--radius-sm, 8px); overflow:hidden; max-width:560px;}
+.pcge-ecriture-titre{padding:7px 12px; font-size:.84rem; font-weight:600; color:var(--text); background:var(--bg-inset); border-bottom:1px solid var(--border);}
+.pcge-ecriture table{width:100%; border-collapse:collapse; font-size:.86rem;}
+.pcge-ecriture th, .pcge-ecriture td{padding:6px 12px; text-align:left; border-top:1px solid var(--border);}
+.pcge-ecriture thead th{border-top:none; font-size:.74rem; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); font-weight:700;}
+.pcge-ecriture td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.pcge-ecriture td.cr{padding-left:28px;}
+.pcge-ecriture a{color:var(--accent); text-decoration:none; font-weight:600;}
+
+.pcge-nav{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:40px 0 0;}
+.pcge-nav a{display:flex; flex-direction:column; gap:3px; padding:14px 16px; border-radius:var(--radius-lg); border:1px solid var(--border); background:var(--bg-card); text-decoration:none; color:var(--text);}
+.pcge-nav a:hover{border-color:var(--accent-fill);}
+.pcge-nav a span{font-size:.8rem; color:var(--text-faint);}
+.pcge-nav a strong{font-size:.95rem;}
+.pcge-nav .next{text-align:right; grid-column:2;}
+
+@media (max-width:600px){
+  .pcge-note{margin-left:0;}
+  .pcge-compte.sous .pcge-compte-ligne{padding-left:8px;}
+  .pcge-nav{grid-template-columns:1fr;}
+  .pcge-nav .next{grid-column:1;}
+}

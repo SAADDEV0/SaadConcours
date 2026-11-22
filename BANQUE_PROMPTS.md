@@ -43,6 +43,7 @@ redemander ce qui est déjà défini ici.** Ne pose une question que si la recet
 | `supprime X` (sans préciser le type) | [S1](#s1--suppression-générique) |
 | `ajoute une section <public>` | [X1](#x1--ajouter-une-section-un-espace) |
 | `ajoute un emplacement de pub` · `déplace la pub de X` | [X3](#x3--emplacements-publicitaires-adsense) |
+| `ajoute le compte X au plan comptable` · `explique le compte X` · `corrige l'intitulé du compte X` | [X5](#x5--plan-comptable-marocain-plan-comptable) |
 | `mets la chaîne WhatsApp sur X` · `change le lien de la chaîne` | [X4](#x4--chaîne-whatsapp-sur-le-site) |
 | `état des lieux` · `audit du contenu` · `qu'est-ce qui manque ?` | [M1](#m1--état-des-lieux-du-contenu) |
 | `check GEO` · `audit GEO` · `visibilité IA` | [M2](#m2--audit-geo-moteurs-de-réponse-ia) |
@@ -70,6 +71,7 @@ Un nombre dans la commande (« 10 concours », « 3 articles ») = quantité à 
 | Évaluations (QCM) | `public/data/quiz.json` | — |
 | Blog | `public/data/blog.json` | `lib/blogTaxonomy.js`, anti-doublon : `lib/blogDuplicates.js` |
 | News | `public/data/news.json` (aussi écrit par `scripts/fetch_almaster.py`) | — |
+| Plan comptable marocain (`/plan-comptable`) | `lib/planComptable.js` (classes, rubriques, postes, comptes + `NOTES`) | — |
 | Boutique (cahiers commandés sur WhatsApp) | `public/data/boutique.json` + couvertures `public/images/boutique/<id>/` | `lib/boutique.js` |
 
 ### 1.2 Écrire dans les JSON
@@ -1676,6 +1678,25 @@ les concours : les textes restent généraux.
   « Je prépare… », sous Concours Master (demande de Saad, `home-chooser-wa` dans `app/page.js`). Jamais de pop-up, de bandeau en haut de page, de
   bouton flottant de plus ni de rappel répété ; le bouton flottant vert reste celui des cahiers.
 - Rien ne s'affiche si le réglage est vide ou n'est pas un lien `whatsapp.com/channel/`.
+
+### X5 — Plan comptable marocain (`/plan-comptable`)
+Section lancée le 2026-11-22 (« un peu bien visible ») : outil `pcge` de `OUTILS` (`lib/espaces.js`), donc
+dans le header, le menu et le pied de page de toutes les pages ; bloc dans « Je prépare… » et section violette sur
+l'accueil (`app/page.js`). Une page d'entrée avec recherche (`app/plan-comptable/page.js`, recherche dans le
+navigateur : `PcgeRecherche.js`) et une page par classe 1 à 8 (`app/plan-comptable/[classe]/page.js`), une ancre
+par numéro (`#c6111`). La recherche du site (`app/recherche/page.js`, famille « compte ») et le sitemap suivent.
+- **Données** : tout est dans `lib/planComptable.js`. Postes `[code, intitulé, comptes[]]`, comptes `[code, intitulé]`.
+  Les numéros et intitulés suivent le PCGE officiel (vérifiés le 2026-11-22 sur deux éditions PDF du CGNC : pièges
+  relevés — escomptes accordés **6386** et non 6385, dividendes à payer **4465**, répartition périodique **3495/4495**,
+  comptes transitoires **3497/4497**, liaison **1601/1605**, cotisation minimale **6705**, classe 8 = 81, 83, 84, 85,
+  86, 88 sans 82). Ne jamais ajouter un numéro de mémoire : le vérifier sur une source du CGNC.
+- **Note d'un compte** (`NOTES[code]`, ou `NOTES[poste]` pour un poste entier) : `t` = à quoi sert le compte, rédigé
+  par nous ; `e` = écriture type `{ titre, l: [["D"|"C", compte, montant]] }`, débit = crédit, montants en DH,
+  TVA 20 % sauf cas contraire. Contrôle : chaque code cité dans une note existe, chaque écriture est équilibrée
+  (script de vérification : importer `pcgeListe()` et `NOTES`).
+- Un compte du plan comptable ne remplace pas un cours : règle §1.6 « un seul cours par matière ». Les pages renvoient
+  aux cours de comptabilité (`COURS_LIES`), elles ne les réécrivent pas.
+- Fin : `npm run check`, puis P1.
 
 ## M. MAINTENANCE
 

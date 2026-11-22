@@ -9,6 +9,7 @@ import { categoryLabel } from "../../lib/blogTaxonomy";
 import { BAC_MATIERES, bacMatiereHref, bacChapitreHref } from "../../lib/bacProgramme";
 import { licenceSemestreLabel } from "../../lib/coursTaxonomy";
 import { fsjesModule, fsjesChapitreHref } from "../../lib/fsjesChapitres";
+import { PCGE, pcgeClasseHref, pcgeCompteHref, pcgeListe } from "../../lib/planComptable";
 import RechercheClient from "./RechercheClient";
 import { Icon } from "../_shared/icons";
 
@@ -101,6 +102,13 @@ export default async function RecherchePage() {
   }
   for (const p of blog.filter((x) => x.available)) {
     index.push(entree("article", p.title, categoryLabel(p.category), `/blog/${encodeURIComponent(p.id)}`, p.excerpt || ""));
+  }
+
+  // Plan comptable marocain : les classes, puis chaque compte (numéro + intitulé,
+  // pour qu'une recherche « 6111 » ou « TVA récupérable » le trouve).
+  for (const c of PCGE) index.push(entree("compte", `Classe ${c.num} : ${c.titre}`, `Plan comptable marocain · ${c.etat}`, pcgeClasseHref(c), "pcge plan comptable"));
+  for (const x of pcgeListe().filter((y) => y.niveau === "compte")) {
+    index.push(entree("compte", `${x.code} ${x.titre}`, `Plan comptable · Classe ${x.classe}`, pcgeCompteHref(x.code)));
   }
 
   const nbConcours = index.filter((e) => e.k === "concours").length;

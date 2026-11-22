@@ -345,6 +345,8 @@
 /* Dernière ligne : la chaîne WhatsApp (liseré et icône verts). */
 .home-chooser a.home-chooser-wa{--esp:#1da851; --esp-fill:#25d366; --esp-tint:color-mix(in srgb, #25d366 9%, var(--bg-card)); border-top:1px solid var(--border);}
 .home-chooser-wa > svg{width:26px; height:26px; flex:none; color:#25d366;}
+.home-chooser a.home-chooser-pcge{--esp:var(--c-violet); --esp-fill:var(--c-violet-fill); --esp-tint:var(--c-violet-tint);}
+.home-chooser a.home-chooser-pcge > svg:first-child{color:var(--c-violet);}
 
 /* Chiffres clés : une ligne de grands nombres sous un filet. */
 .home-figures{display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); margin:52px 0 0; padding:0; border-top:1px solid var(--border);}

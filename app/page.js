@@ -14,6 +14,7 @@ import HomeClient from "./HomeClient";
 import AdSlot from "./_shared/AdSlot";
 import { Icon } from "./_shared/icons";
 import { ICONE_WHATSAPP, lienChaine } from "./_shared/ChaineWhatsapp";
+import { PCGE, PCGE_HUB, pcgeClasseHref, pcgeNbComptes } from "../lib/planComptable";
 
 // Served as prerendered HTML instead of rendered per request. lib/github.js
 // reads the data JSON with `cache: "no-store"` (concours.json is 2.59MB, past
@@ -302,6 +303,18 @@ export default async function HomePage() {
                   </li>
                 ))}
               </ul>
+              {/* Plan comptable marocain : outil de référence, mis en avant ici
+                 à la demande de Saad (2026-11-22). */}
+              <a className="home-chooser-wa home-chooser-pcge" href={PCGE_HUB}>
+                <Icon name="book-open" size={26} />
+                <span className="home-chooser-text">
+                  <span className="home-chooser-name">Plan comptable marocain (PCGE)</span>
+                  <span className="home-chooser-desc">
+                    {PCGE.reduce((n, c) => n + pcgeNbComptes(c), 0)} comptes, recherche par numéro ou par nom
+                  </span>
+                </span>
+                <Icon name="arrow-right" size={18} />
+              </a>
               {chaine && (
                 <a className="home-chooser-wa" href={chaine} target="_blank" rel="noopener">
                   {ICONE_WHATSAPP}
@@ -379,6 +392,43 @@ export default async function HomePage() {
             )}
           </div>
         ))}
+
+        <section className="home-espace esp-c-violet" id="plan-comptable" aria-labelledby="home-pcge-title">
+          <div className="home-wrap home-espace-grid">
+            <header className="home-espace-head">
+              <p className="home-kicker">Comptabilité · référence</p>
+              <h2 id="home-pcge-title">Plan comptable marocain</h2>
+              <p className="home-espace-desc">
+                Tous les comptes du PCGE, classe par classe, avec les plus utilisés expliqués et une écriture type. Le compagnon des
+                cours de comptabilité et des sujets de concours.
+              </p>
+              <ul className="home-espace-figures">
+                <li>
+                  <strong>{PCGE.length}</strong> classes
+                </li>
+                <li>
+                  <strong>{PCGE.reduce((n, c) => n + pcgeNbComptes(c), 0)}</strong> comptes
+                </li>
+              </ul>
+              <a className="sp-btn primary" href={PCGE_HUB}>
+                Ouvrir le plan comptable
+                <Icon name="arrow-right" size={18} />
+              </a>
+            </header>
+            <div className="home-espace-body">
+              <div className="home-links">
+                {PCGE.map((c) => (
+                  <a key={c.num} className="home-link" href={pcgeClasseHref(c)}>
+                    <strong>
+                      Classe {c.num} · {c.titre}
+                    </strong>
+                    <span>{c.etat}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
         <section className="home-espace home-outils" aria-labelledby={quizPublies.length ? "home-outils-title" : "home-blog-title"}>
           <div className="home-wrap">
