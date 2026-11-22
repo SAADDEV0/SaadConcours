@@ -11,7 +11,7 @@ import { PREPA_OPTIONS, prepaModule, prepaModuleHref, prepaChapitreHref, prepaOp
 import { masterHref, masterHubs, villeHref, villeHubs } from "@/lib/concoursHubs";
 import { dateContenu, plusRecente, valeurChapitre, valeurModule, valeurBac } from "@/lib/datesContenu";
 import DATES_CONTENU from "@/lib/datesContenu.json";
-import { PCGE, PCGE_HUB, pcgeClasseHref } from "@/lib/planComptable";
+import { PCGE, PCGE_HUB, pcgeClasseHref, pcgeFicheHref, pcgeFiches } from "@/lib/planComptable";
 
 const SITE_URL = "https://www.saadconcours.space";
 
@@ -92,6 +92,7 @@ export default async function sitemap() {
     // Plan comptable marocain (lib/planComptable.js) : la page d'entrée et une page par classe.
     { path: PCGE_HUB, changeFrequency: "monthly", priority: 0.8 },
     ...PCGE.map((c) => ({ path: pcgeClasseHref(c), changeFrequency: "monthly", priority: 0.7 })),
+    ...pcgeFiches().map((code) => ({ path: pcgeFicheHref(code), changeFrequency: "monthly", priority: 0.6 })),
     { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
     { path: "/a-propos", changeFrequency: "monthly", priority: 0.5 },
     { path: "/contact", changeFrequency: "yearly", priority: 0.3 },

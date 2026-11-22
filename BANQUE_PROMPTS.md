@@ -1694,6 +1694,10 @@ par numéro (`#c6111`). La recherche du site (`app/recherche/page.js`, famille �
   par nous ; `e` = écriture type `{ titre, l: [["D"|"C", compte, montant]] }`, débit = crédit, montants en DH,
   TVA 20 % sauf cas contraire. Contrôle : chaque code cité dans une note existe, chaque écriture est équilibrée
   (script de vérification : importer `pcgeListe()` et `NOTES`).
+- **Fiche d'un compte** (`/plan-comptable/compte/<code>`, ajoutée le 2026-11-22) : générée seulement pour un compte
+  qui a une note (`NOTES`) **et** un complément (`NOTES_PLUS` : pièges, confusions, usage en exercice, 40 mots au
+  moins, propre au compte — jamais une phrase gabarit répétée). Les liens vers un compte passent par
+  `pcgeCompteHref` : fiche si elle existe, sinon ancre de la classe. Pour ajouter une fiche, écrire les deux textes.
 - Un compte du plan comptable ne remplace pas un cours : règle §1.6 « un seul cours par matière ». Les pages renvoient
   aux cours de comptabilité (`COURS_LIES`), elles ne les réécrivent pas.
 - Fin : `npm run check`, puis P1.

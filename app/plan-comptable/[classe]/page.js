@@ -4,7 +4,8 @@ import ChromeInit from "../../_shared/ChromeInit";
 import JsonLd from "../../_shared/JsonLd";
 import { breadcrumbJsonLd } from "../../_shared/listingSchema";
 import { fitTitle, clampDescription } from "../../_shared/seoText";
-import { PCGE, PCGE_HUB, NOTES, pcgeAncre, pcgeClasse, pcgeClasseHref, pcgeCompteHref, pcgeNbComptes, pcgeTitre } from "../../../lib/planComptable";
+import { PCGE, PCGE_HUB, NOTES, pcgeAFiche, pcgeAncre, pcgeClasse, pcgeClasseHref, pcgeFicheHref, pcgeNbComptes } from "../../../lib/planComptable";
+import Ecriture from "../Ecriture";
 import "../pcge.css";
 
 // Une page par classe du plan comptable : rubriques, postes et comptes, avec
@@ -37,36 +38,6 @@ export async function generateMetadata(props) {
     openGraph: { title, description, url, images: ["/opengraph-image"] },
     twitter: { card: "summary_large_image", title, description },
   };
-}
-
-const DH = new Intl.NumberFormat("fr-FR");
-
-function Ecriture({ e }) {
-  return (
-    <div className="pcge-ecriture">
-      <div className="pcge-ecriture-titre">{e.titre}</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Compte</th>
-            <th className="num">Débit</th>
-            <th className="num">Crédit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {e.l.map(([sens, compte, montant], i) => (
-            <tr key={i}>
-              <td className={sens === "C" ? "cr" : undefined}>
-                <a href={pcgeCompteHref(compte)}>{compte}</a> {pcgeTitre(compte)}
-              </td>
-              <td className="num">{sens === "D" ? DH.format(montant) : ""}</td>
-              <td className="num">{sens === "C" ? DH.format(montant) : ""}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
 }
 
 export default async function PcgeClassePage(props) {
@@ -188,6 +159,11 @@ export default async function PcgeClassePage(props) {
                               <div className="pcge-note">
                                 <p>{note.t}</p>
                                 {note.e && <Ecriture e={note.e} />}
+                                {pcgeAFiche(code) && (
+                                  <a className="pcge-fiche-link" href={pcgeFicheHref(code)}>
+                                    Fiche du compte {code} : pièges et comptes liés →
+                                  </a>
+                                )}
                               </div>
                             )}
                           </li>
