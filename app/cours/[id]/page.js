@@ -182,7 +182,9 @@ export default async function CoursModulePage(props) {
                 Licence FSJES{c.semestre ? ` · ${licenceSemestreLabel(c.semestre)}` : ""}
                 {c.parcours ? ` · Parcours ${licenceParcoursLabel(c.parcours)}` : " · Tronc commun"}
               </div>
-              <h1>{c.module}</h1>
+              {/* « Microéconomie S1 » : les mots que tapent les étudiants, comme le
+                 titre de la page (nomAvecSemestre, voir generateMetadata). */}
+              <h1>{nomAvecSemestre(c)}</h1>
               <p>{c.description}</p>
               <div className="bac-hero-stats">
                 <span className="bac-stat">
