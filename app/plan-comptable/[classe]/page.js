@@ -28,7 +28,7 @@ export async function generateMetadata(props) {
     `Classe ${c.num} du plan comptable marocain : ${c.titre.toLowerCase()}`,
     `Classe ${c.num} du PCGE : ${c.titre.toLowerCase()}`,
     `Classe ${c.num} du plan comptable marocain`,
-  ]);
+  ], 50); // + « | SaadConcours » = 65 au plus
   const description = clampDescription(`Classe ${c.num} du plan comptable marocain (PCGE), ${c.titre.toLowerCase()} : ${c.resume.charAt(0).toLowerCase()}${c.resume.slice(1, -1)}. ${pcgeNbComptes(c)} comptes, numéros et intitulés.`);
   const url = `${SITE_URL}${pcgeClasseHref(c)}`;
   return {

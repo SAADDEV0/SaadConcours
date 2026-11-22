@@ -64,10 +64,25 @@ function fichierHtml(url) {
   return join(APP_DIR, path === "/" ? "index.html" : `${path.replace(/^\//, "")}.html`);
 }
 
+// Version de l'empreinte, gardée dans le manifeste. v2 (2026-11-22) : le texte
+// ne prend plus le header, le menu ni le pied de page. Avant, ajouter un lien
+// au menu (« Plan comptable ») changeait l'empreinte des 1 600 pages et les
+// renvoyait toutes : Bing a signalé « IndexNow is in batch mode » (29 700 URL
+// envoyées en sept semaines pour un sitemap de 1 600).
+const VERSION_EMPREINTE = 2;
+
+// Contenu propre de la page : ce qui suit <span id="contenu"> (posé par
+// chromeHtml() après le header, la barre d'espace et le menu), sans le pied
+// de page.
+function contenuPropre(html) {
+  const debut = html.indexOf('id="contenu"');
+  return (debut >= 0 ? html.slice(debut) : html).replace(/<footer[\s\S]*?<\/footer>/g, " ");
+}
+
 function empreinte(html) {
   const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
   const jsonLd = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join("\n");
-  const texte = html
+  const texte = contenuPropre(html)
     .replace(/<script[\s\S]*?<\/script>/g, " ")
     .replace(/<style[\s\S]*?<\/style>/g, " ")
     .replace(/<[^>]+>/g, " ")
@@ -93,6 +108,13 @@ let aEnvoyer;
 if (!precedent?.pages) {
   aEnvoyer = urls;
   console.log(`  ${tout ? "--all" : "aucun manifeste précédent"} : les ${urls.length} URL du sitemap`);
+} else if (precedent.version !== VERSION_EMPREINTE) {
+  // Empreintes d'une autre version : incomparables. On n'envoie que les URL
+  // nouvelles ou retirées ; le manifeste écrit plus bas sert de nouvelle base.
+  const nouvelles = urls.filter((u) => !(u in precedent.pages));
+  const retirees = Object.keys(precedent.pages).filter((u) => !(u in pages));
+  aEnvoyer = [...nouvelles, ...retirees];
+  console.log(`  empreintes v${precedent.version || 1} → v${VERSION_EMPREINTE} : ${nouvelles.length} nouvelles, ${retirees.length} retirées (modifiées non comparées)`);
 } else {
   const nouvelles = urls.filter((u) => !(u in precedent.pages));
   const modifiees = urls.filter((u) => u in precedent.pages && precedent.pages[u] !== pages[u]);
@@ -136,5 +158,5 @@ if (aEnvoyer.length) {
 }
 
 await mkdir(dirname(MANIFEST), { recursive: true });
-await writeFile(MANIFEST, JSON.stringify({ generatedAt: new Date().toISOString().slice(0, 16), pages }) + "\n");
+await writeFile(MANIFEST, JSON.stringify({ version: VERSION_EMPREINTE, generatedAt: new Date().toISOString().slice(0, 16), pages }) + "\n");
 console.log(`  manifeste écrit (${urls.length} empreintes) : ${MANIFEST}`);

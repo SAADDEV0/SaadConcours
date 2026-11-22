@@ -43,7 +43,9 @@ export async function generateMetadata(props) {
   const { code } = await props.params;
   if (!pcgeAFiche(code)) return {};
   const titre = pcgeTitre(code);
-  const title = fitTitle([`Compte ${code} : ${minuscule(titre)} (plan comptable marocain)`, `Compte ${code} : ${minuscule(titre)}`, `Compte ${code} du plan comptable marocain`]);
+  // 50 caractères + « | SaadConcours » (app/layout.js) = 65 au plus : Bing
+  // signale tout titre de plus de 70 caractères.
+  const title = fitTitle([`Compte ${code} : ${minuscule(titre)} (plan comptable marocain)`, `Compte ${code} : ${minuscule(titre)}`, `Compte ${code} du plan comptable marocain`], 50);
   const description = clampDescription(`Compte ${code} du plan comptable marocain, ${minuscule(titre)}. ${NOTES[code].t}`);
   const url = `${SITE_URL}${pcgeFicheHref(code)}`;
   return {
