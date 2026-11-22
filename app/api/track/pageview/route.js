@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { trackPageview, checkRateLimit, getClientIp } from "@/lib/analytics";
+import { trackPageview, checkRateLimitLocal, getClientIp } from "@/lib/analytics";
 
 // Only a short, pre-normalized label is accepted (e.g. "google", "direct") —
 // never the raw referrer URL, which could carry a query string or PII and
@@ -18,7 +18,7 @@ function sanitizeSource(raw) {
 // so a generous per-IP limit is just a backstop against a raw script hammering it.
 export async function POST(req) {
   try {
-    const allowed = await checkRateLimit(`pageview:${getClientIp(req)}`, 20, 60);
+    const allowed = checkRateLimitLocal(`pageview:${getClientIp(req)}`, 1, 20, 60) > 0;
     if (!allowed) return NextResponse.json({ ok: true });
     const body = await req.json().catch(() => null);
     const source = sanitizeSource(body?.source);

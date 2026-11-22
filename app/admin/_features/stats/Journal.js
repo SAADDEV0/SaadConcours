@@ -150,7 +150,8 @@ export function JournalTab({ visits, pdfs, content }) {
   }, [n]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!p.auto) return undefined;
-    const t = setInterval(refresh, 60_000);
+    // Pas de lecture KV quand l'onglet de la console est en arrière-plan.
+    const t = setInterval(() => !document.hidden && refresh(), 60_000);
     return () => clearInterval(t);
   }, [p.auto, refresh]);
 

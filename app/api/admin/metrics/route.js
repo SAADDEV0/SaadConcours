@@ -21,6 +21,7 @@ import {
   getRangeTime,
   getVisitorLog,
   dismissSearchMiss,
+  isKvQuotaError,
 } from "@/lib/analytics";
 import { getSubscriberHistory } from "@/lib/subscribers";
 import { resolveRange } from "@/lib/dateRange";
@@ -46,7 +47,19 @@ export async function GET(req) {
   const scope = sp.get("scope") || "full";
   const range = resolveRange({ preset: sp.get("preset"), from: sp.get("from"), to: sp.get("to") });
 
-  const safe = (p, fallback) => p.catch((err) => (console.error("metrics", scope, err), fallback));
+  // Garde la dernière erreur pour dire *pourquoi* l'écran est vide : un quota
+  // Upstash épuisé n'est pas une base injoignable, et ne se règle pas pareil.
+  let lastErr = null;
+  const safe = (p, fallback) => p.catch((err) => (console.error("metrics", scope, err), (lastErr = err), fallback));
+  const unavailable = (status = 500) =>
+    NextResponse.json(
+      {
+        error: isKvQuotaError(lastErr)
+          ? "Quota Upstash du mois épuisé (500 000 commandes) : aucune statistique ne peut être lue ni enregistrée jusqu'au renouvellement du quota, le 1er du mois."
+          : "Statistiques indisponibles (base KV injoignable).",
+      },
+      { status }
+    );
 
   // Bannières partenaires (écran Monétisation).
   if (scope === "ads") {
@@ -72,7 +85,7 @@ export async function GET(req) {
   // Bandeau « En direct » (actualisé chaque minute).
   if (scope === "live") {
     const live = await safe(getLive(), null);
-    if (!live) return NextResponse.json({ error: "Statistiques indisponibles." }, { status: 500 });
+    if (!live) return unavailable();
     return NextResponse.json({ live }, { headers: NO_CACHE });
   }
 
@@ -81,7 +94,7 @@ export async function GET(req) {
     const day = sp.get("day") || new Date().toISOString().slice(0, 10);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return NextResponse.json({ error: "Jour invalide." }, { status: 400 });
     const visitors = await safe(getVisitorLog(day), null);
-    if (!visitors) return NextResponse.json({ error: "Statistiques indisponibles." }, { status: 500 });
+    if (!visitors) return unavailable();
     return NextResponse.json({ day, visitors }, { headers: CACHE });
   }
 
@@ -94,7 +107,8 @@ export async function GET(req) {
       return NextResponse.json({ range, page }, { headers: CACHE });
     } catch (err) {
       console.error("metrics page", err);
-      return NextResponse.json({ error: "Statistiques indisponibles." }, { status: 500 });
+      lastErr = err;
+      return unavailable();
     }
   }
 
@@ -111,7 +125,7 @@ export async function GET(req) {
     ]);
     // Sans les compteurs principaux, la page n'a rien d'utile à montrer :
     // une erreur franche (avec « Réessayer ») vaut mieux que des zéros.
-    if (!metrics) return NextResponse.json({ error: "Statistiques indisponibles (base KV injoignable)." }, { status: 503 });
+    if (!metrics) return unavailable(503);
 
     const payload = { range, metrics, totals, subscribers, topPaths, sources, searchMisses, time };
 

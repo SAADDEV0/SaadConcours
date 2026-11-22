@@ -10,6 +10,7 @@ import {
   trackEngagement,
   trackVote,
   checkRateLimitBulk,
+  checkRateLimitLocal,
   getClientIp,
   getClientGeo,
 } from "@/lib/analytics";
@@ -140,6 +141,7 @@ const HANDLERS = {
   // acceptées : un script ne peut pas remplir l'onglet Avis de lignes inventées.
   vote: {
     limit: ["vote", 30, 3600],
+    sharedLimit: true,
     run: (e) => {
       const path = sanitizePath(e.path);
       return path && VOTE_PATH_RE.test(path) ? trackVote(path, e.v, e.prev) : null;
@@ -147,6 +149,7 @@ const HANDLERS = {
   },
   "search-miss": {
     limit: ["search-miss", 20, 60],
+    sharedLimit: true,
     run: (e) => (typeof e.query === "string" && e.query.trim() ? trackSearchMiss(e.query) : null),
   },
 };
@@ -182,7 +185,12 @@ export async function POST(req) {
       const [prefix, max, windowSeconds] = HANDLERS[kind].limit;
       // Per event, not per request: batching changes how events travel, not
       // how many a single IP is allowed to record.
-      const allowed = await checkRateLimitBulk(`${prefix}:${ip}`, group.length, max, windowSeconds);
+      // Limiteur en mémoire du Worker (aucune commande KV) pour les compteurs
+      // de visite ; dans Upstash seulement pour les votes et les recherches,
+      // rares, qui doivent tenir quelle que soit l'instance (`sharedLimit`).
+      const allowed = HANDLERS[kind].sharedLimit
+        ? await checkRateLimitBulk(`${prefix}:${ip}`, group.length, max, windowSeconds)
+        : checkRateLimitLocal(`${prefix}:${ip}`, group.length, max, windowSeconds);
       for (const event of group.slice(0, allowed)) {
         try {
           await HANDLERS[kind].run(event, ctx);

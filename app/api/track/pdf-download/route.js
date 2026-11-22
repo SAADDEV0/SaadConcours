@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { trackPdfDownload, checkRateLimit, getClientIp, getClientGeo } from "@/lib/analytics";
+import { trackPdfDownload, checkRateLimitLocal, getClientIp, getClientGeo } from "@/lib/analytics";
 
 const ALLOWED_KINDS = ["concours", "cours", "evaluation"];
 
@@ -12,7 +12,7 @@ const ALLOWED_KINDS = ["concours", "cours", "evaluation"];
 export async function POST(req) {
   try {
     const ip = getClientIp(req);
-    const allowed = await checkRateLimit(`pdf:${ip}`, 30, 60);
+    const allowed = checkRateLimitLocal(`pdf:${ip}`, 1, 30, 60) > 0;
     if (!allowed) return NextResponse.json({ ok: true }); // silently drop, don't reveal the limiter to a caller probing it
     const { kind, id } = await req.json().catch(() => ({}));
     if (!ALLOWED_KINDS.includes(kind)) {

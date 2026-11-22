@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { trackAdEvent, checkRateLimit, getClientIp } from "@/lib/analytics";
+import { trackAdEvent, checkRateLimitLocal, getClientIp } from "@/lib/analytics";
 
 const ALLOWED_TYPES = ["view", "click"];
 
@@ -10,7 +10,7 @@ const ALLOWED_TYPES = ["view", "click"];
 // reports back to an advertiser.
 export async function POST(req) {
   try {
-    const allowed = await checkRateLimit(`ad:${getClientIp(req)}`, 60, 60);
+    const allowed = checkRateLimitLocal(`ad:${getClientIp(req)}`, 1, 60, 60) > 0;
     if (!allowed) return NextResponse.json({ ok: true }); // silently drop, don't reveal the limiter
     const { id, type } = await req.json().catch(() => ({}));
     if (!id || typeof id !== "string" || id.length > 100 || !ALLOWED_TYPES.includes(type)) {

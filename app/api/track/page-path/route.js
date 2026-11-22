@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { trackPathView, checkRateLimit, getClientIp, getClientGeo } from "@/lib/analytics";
+import { trackPathView, checkRateLimitLocal, getClientIp, getClientGeo } from "@/lib/analytics";
 
 // Only a bare pathname (no origin, no query/hash, no exotic characters) is
 // accepted — matches the slug shapes lib/store.js actually generates
@@ -21,7 +21,7 @@ function sanitizePath(raw) {
 export async function POST(req) {
   try {
     const ip = getClientIp(req);
-    const allowed = await checkRateLimit(`pagepath:${ip}`, 60, 60);
+    const allowed = checkRateLimitLocal(`pagepath:${ip}`, 1, 60, 60) > 0;
     if (!allowed) return NextResponse.json({ ok: true });
     const body = await req.json().catch(() => null);
     const path = sanitizePath(body?.path);
