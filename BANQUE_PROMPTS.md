@@ -174,6 +174,10 @@ Le site a été refusé par AdSense pour « low value content ». Les causes, co
   « : ») dans la balise `<title>` ; écrire donc les titres longs en « Tête : détails ». Un module FR
   et son équivalent AR se lient l'un à l'autre (`droitEquivalent`, `lib/droit.js`) : si l'id arabe
   n'est pas l'id français avec `-ar-` avant le semestre, l'ajouter à `EQUIVALENT_AR`.
+- Modules de la Licence (`app/cours/[id]/page.js`, 2026-11-22, d'après Search Console et Bing) : titre dans les mots des
+  étudiants, « Microéconomie S1 : cours PDF et exercices corrigés » (numéro du module remplacé par le semestre,
+  55 caractères au plus pour rester sous les 70 avec « | SaadConcours ») ; description propre au module, remplie de
+  ses vrais chapitres jusqu'à 155 caractères, jamais la même phrase gabarit d'un module à l'autre.
 - Pas de balisage `FAQPage` ni `SearchAction` : Google ne les affiche plus pour ce site. Une FAQ
   reste une section visible normale.
 - Une page de liste n'envoie au navigateur que les données de ses cartes (`concoursListItem`,

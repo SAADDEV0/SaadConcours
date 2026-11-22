@@ -11,7 +11,7 @@ import ConcoursLies from "../../_shared/ConcoursLies";
 import CahierCours from "../../_shared/CahierCours";
 import AdSlot from "../../_shared/AdSlot";
 import ChaineWhatsapp, { ICONE_WHATSAPP, lienChaine } from "../../_shared/ChaineWhatsapp";
-import { fitTitle, clampDescription } from "../../_shared/seoText";
+import { fitTitle, clampDescription, DESCRIPTION_MAX } from "../../_shared/seoText";
 import { cahierDuCours, formatPrix } from "../../../lib/boutique";
 import { coursCategoryInfo, licenceParcoursLabel, licenceFiliereLabel, licenceSemestreLabel } from "../../../lib/coursTaxonomy";
 import { fsjesModule, fsjesChapitreHref } from "../../../lib/fsjesChapitres";
@@ -31,6 +31,15 @@ async function findCours(id) {
   return { c: list.find((x) => x.id === id) || null, list };
 }
 
+// « Microéconomie 1 » (S1) → « Microéconomie S1 », « Comptabilité Générale 2 »
+// (S2) → « Comptabilité Générale S2 » : c'est ainsi que les étudiants cherchent.
+// Un module sans numéro garde son nom, suivi du semestre.
+function nomAvecSemestre(c) {
+  const base = String(c.module || "").trim();
+  if (!c.semestre) return base;
+  return `${base.replace(/\s+\d$/, "")} ${c.semestre}`;
+}
+
 // Même semestre d'abord, puis même matière : maillage interne entre modules.
 function getRelatedCours(list, current, limit = 4) {
   const autres = list.filter((x) => x.id !== current.id && x.available);
@@ -46,15 +55,45 @@ export async function generateMetadata(props) {
   const { c } = await findCours(params.id);
   if (!c || !c.available) return {};
 
-  const title = fitTitle([
-    `${c.module} — Cours ${c.semestre ? `${c.semestre} ` : ""}FSJES par chapitre`,
-    `${c.module} — Cours ${c.semestre ? `${c.semestre} ` : ""}FSJES`,
-  ]);
-  // c.description fait jusqu'à 300 caractères : la phrase utile d'abord,
-  // bornée à 155 (seoText.js).
-  const description = clampDescription(
-    `${c.module} (Licence FSJES${c.semestre ? `, ${licenceSemestreLabel(c.semestre)}` : ""}) : cours, exercices corrigés, résumé et QCM par chapitre. ${c.description || ""}`
+  // Titre dans les mots des étudiants (Search Console, 22/11/2026 : « microéconomie
+  // s1 », « … s1 pdf », « cours … s1 fsjes », « … exercices corrigés pdf ») :
+  // « Microéconomie S1 » plutôt que « Microéconomie 1 — Cours S1 », et « PDF »
+  // puisque chaque module a son bouton « Cours complet en PDF ». 55 caractères
+  // au plus : avec « | SaadConcours », le titre reste sous les 70 que Bing tolère.
+  const nom = nomAvecSemestre(c);
+  const title = fitTitle(
+    [
+      `${nom} FSJES : cours PDF, résumé et exercices corrigés`,
+      `${nom} FSJES : cours PDF et exercices corrigés`,
+      `${nom} : cours PDF et exercices corrigés`,
+      `${nom} : cours et exercices corrigés`,
+      `${nom} FSJES : cours PDF`,
+      `${nom} : cours PDF`,
+      `${nom} FSJES`,
+    ],
+    55
   );
+  // Une description propre à chaque module : ses vrais chapitres, pas une
+  // phrase gabarit répétée sur les 52 modules (règle §1.7 de BANQUE_PROMPTS).
+  // Les chapitres entrent un à un tant que la description tient en 155
+  // caractères : jamais de coupure au milieu, et ce que la page offre reste
+  // à la fin de chaque description.
+  // Le titre dit déjà le semestre et « FSJES » : le début reste court pour
+  // laisser la place aux chapitres. Un chapitre trop long est sauté au profit
+  // des suivants.
+  const { chapitres } = fsjesModule(c);
+  const debut = `${nom} (FSJES) en ${chapitres.length} chapitres`;
+  const minuscule = (t) => (/^[A-ZÉÈÀ][a-zà-ÿ']/.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t);
+  const avecFin = (liste) => {
+    const corps = liste.length ? `${debut} : ${liste.join(", ")}` : debut;
+    return /[?!]$/.test(corps) ? `${corps} Cours, résumés, exercices corrigés, QCM et PDF.` : `${corps}. Cours, résumés, exercices corrigés, QCM et PDF.`;
+  };
+  const plan = [];
+  for (const ch of chapitres) {
+    const t = minuscule(ch.titre.replace(/\s*[:—–].*$/, "").trim());
+    if (t && avecFin([...plan, t]).length <= DESCRIPTION_MAX) plan.push(t);
+  }
+  const description = clampDescription(avecFin(plan));
   const url = `${SITE_URL}/cours/${c.id}`;
 
   return {
