@@ -65,8 +65,14 @@ jobs:
           # Les journaux ne se lisent que connecté à GitHub : en cas d'échec,
           # la fin de la sortie est aussi publiée en annotation (visible sans
           # connexion, secrets masqués par GitHub).
-          trap 'rc=$?; sleep 1; if [ $rc -ne 0 ] && [ -f out.txt ]; then echo "::error title=Copie Upstash → D1::$(tail -c 700 out.txt | tr "
-" " ")"; fi' EXIT
+          report() {
+            rc=$?
+            sleep 1
+            if [ $rc -ne 0 ] && [ -f out.txt ]; then
+              echo "::error title=Copie Upstash vers D1::$(tail -c 700 out.txt | tr '\n\r' '  ')"
+            fi
+          }
+          trap report EXIT
           exec > >(tee out.txt) 2>&1
           if [ "${{ github.event_name }}" = "push" ]; then
             node scripts/kv-to-d1.mjs --write --max-rows 40000
