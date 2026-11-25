@@ -976,6 +976,21 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    programme du S1 couvre aussi ces chapitres »), renvois mis à jour dans `iaeconum`, `microapprof`, `ecoentreprise`,
    `histpensee`, le guide du S1 Gestion et le cahier boutique. `micro.js` est lu en CRLF par Node : normaliser les fins de ligne en LF avant de chercher les blocs de chapitre. Limite connue : `macro1_cours` est classé
    S1 Gestion, donc absent du filtre « S2 Économie » (un cours n'a qu'un semestre).
+   Précédent : `Intro au commerce électronique, Étude de marché, CRM, add this` (2026-11-25, modules S5 de la filière
+   Commerce et marketing de la FSJES Mohammedia, fsjesm.ma/12367-2/) → 3 cours `filiere: "mac"`, `category: "marketing"`,
+   6 chapitres chacun : `ecommerce_cours` (formes, modèle d'affaires et contribution par commande, site et tunnel,
+   paiement et paiement à la livraison, e-logistique, droit), `etudemarche_cours` (brief et valeur de l'information,
+   documentaire et ratios en chaîne, qualitatif, questionnaire, échantillonnage, khi-deux et rapport), `crm_cours`
+   « Gestion de la Relation Client (CRM) » (relationnel, données et loi 09-08, Pareto/RFM/CLV actualisée, NPS et
+   attrition, programmes et groupe témoin, outils). Angle propre, avec renvois : le chapitre 2 de `marketing_cours`
+   (étude de marché de base), les chapitres 6 (CLV simple) et 8 (SEO, SEA, ROAS) de `marketingop_cours`, `iaeconum_cours`
+   (plateformes), `echantillonnage_cours` et `stats_cours`. Loi 31-08 vérifiée sur le texte (pdftotext du PDF de
+   mahkamaty.com ; celui d'adala est scanné) : art. 29 (informations de l'offre), 32 (confirmation écrite, au plus tard
+   à la livraison), 36 (rétractation 7 jours, 30 sans confirmation, à compter de la réception), 37 (remboursement sous
+   15 jours), 38 (exclusions), 39 (exécution sous 30 jours). Quand `cours.json` et `lib/fsjesContenu/index.js` portent
+   déjà les changements non commités d'une autre tâche (ici `marchecapitaux_cours`), committer une version construite
+   sur `HEAD` (`git show HEAD:<fichier>` → même script d'injection → `git hash-object -w` + `git update-index --cacheinfo`),
+   puis `git commit` sans chemin : le travail de l'autre tâche reste intact dans la copie de travail.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
