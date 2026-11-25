@@ -1228,6 +1228,15 @@ son titre et sa description en arabe. Relire en `npm run dev` avant de committer
   leurs dépenses de campagne à partir de 2 % des voix. GenZ 212 : manifestations à partir du 27 septembre 2025.
   Un titre de chapitre de plus de 65 caractères sans « : » a été raccourci avant publication (ch. 4).
   `MOTIFS_DROIT` : vie politique, système politique marocain, histoire politique, science politique.
+- **Module arabe sans équivalent français** (2026-11-25, « علم الإجرام » tapé seul après l'état des lieux de la maquette
+  fsjesm.ma/12367-2/) : un intitulé seul = « ajoute ce cours ». `criminologie-ar-s4` (S4, `prive-ar`, `parcours: ""`,
+  7 chapitres + compléments), fiche **nouvelle** en fin de `droit.json` (pas de fiche FR « Criminologie » : à créer à
+  part si demandé). Plan : objet et méthodes, statistiques et chiffre noir, écoles (Beccaria → défense sociale), théories
+  individuelles, théories sociologiques, facteurs, formes modernes et prévention. Pas de LaTeX autour de mots arabes
+  (formules écrites en texte, en citation). Loi 43.22 vérifiée (dahir 1.24.32 du 24 juillet 2024, BO du 22 août 2024,
+  en vigueur le 22 août 2025 ; délits jusqu'à 5 ans ferme, 4 peines, exclusions, pas en récidive). `MOTIFS_DROIT_AR` :
+  criminologie, victimologie, sciences criminelles, politique criminelle. Premier jet du ch. 6 à 907 mots : ajouter une
+  section suffit (facteurs situationnels et rôle de la victime).
 - Droit marocain : textes en vigueur (Constitution 2011, DOC, Code de commerce et réformes, Code
   pénal, procédure civile et pénale, lois organiques) ; vérifier chaque article cité.
 - **Fait au lancement** (2026-10-17) : `RESUME` + `SECTIONS` de l'accueil (un lien par semestre,
