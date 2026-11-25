@@ -1,0 +1,67 @@
+name: Copie Upstash → D1
+
+# Reprend les anciennes données Upstash (statistiques d'avant le 25/11/2026,
+# abonnés, file des réseaux sociaux…) dans la base D1 du Worker, en fusion
+# sans doublon : voir l'en-tête de scripts/kv-to-d1.mjs.
+#
+# Upstash refuse toute lecture tant que son quota gratuit du mois est épuisé
+# (depuis le 22/11/2026) : la copie se lance donc toute seule après le
+# renouvellement, du 1er au 3 décembre 2026 (une partie par jour si le budget
+# de lignes D1 l'exige ; les jours suivants ne recopient rien de déjà copié).
+# À la main : Actions › « Copie Upstash → D1 » › Run workflow (simulation par
+# défaut, cocher « write » pour copier).
+#
+# Secrets : KV_REST_API_URL / KV_REST_API_TOKEN = l'ancienne base Upstash
+# (inchangés). L'écriture dans D1 passe par /api/kv avec le jeton OIDC de ce
+# workflow (id-token: write) : aucun secret de plus.
+
+on:
+  schedule:
+    - cron: "40 1 1-3 12 *"
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Copier pour de vrai (sinon simulation)"
+        type: boolean
+        default: false
+      max_rows:
+        description: "Lignes D1 écrites au plus pendant ce lancement"
+        default: "40000"
+
+concurrency:
+  group: kv-migrate
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      UPSTASH_URL: ${{ secrets.KV_REST_API_URL }}
+      UPSTASH_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      D1_BRIDGE_URL: https://www.saadconcours.space/api/kv
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Copier
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            # Planifié seulement pour décembre 2026 : rien les années suivantes.
+            [ "$(date -u +%Y)" = "2026" ] || { echo "Hors période de copie."; exit 0; }
+            node scripts/kv-to-d1.mjs --write --max-rows 40000
+          elif [ "${{ inputs.write }}" = "true" ]; then
+            node scripts/kv-to-d1.mjs --write --max-rows "${{ inputs.max_rows }}"
+          else
+            node scripts/kv-to-d1.mjs
+          fi

@@ -177,29 +177,35 @@ export async function POST(req) {
       byKind.get(event.t).push(event);
     }
 
-    // Sequential on purpose: these are counter increments whose order does
-    // not matter and whose latency nobody waits on (the client uses
-    // sendBeacon and ignores the response), so there is no reason to fan out
-    // and risk hammering KV with 25 concurrent connections.
-    for (const [kind, group] of byKind) {
-      const [prefix, max, windowSeconds] = HANDLERS[kind].limit;
-      // Per event, not per request: batching changes how events travel, not
-      // how many a single IP is allowed to record.
-      // Limiteur en mémoire du Worker (aucune commande KV) pour les compteurs
-      // de visite ; dans Upstash seulement pour les votes et les recherches,
-      // rares, qui doivent tenir quelle que soit l'instance (`sharedLimit`).
-      const allowed = HANDLERS[kind].sharedLimit
-        ? await checkRateLimitBulk(`${prefix}:${ip}`, group.length, max, windowSeconds)
-        : checkRateLimitLocal(`${prefix}:${ip}`, group.length, max, windowSeconds);
-      for (const event of group.slice(0, allowed)) {
-        try {
-          await HANDLERS[kind].run(event, ctx);
-        } catch (err) {
-          // One bad event must not discard the rest of the batch.
-          console.error(`track batch: ${kind} failed`, err);
-        }
-      }
-    }
+    // All at once, on purpose. These are counter increments whose order does
+    // not matter, and the KV client (lib/kvD1.js) sends every command issued
+    // in the same tick as ONE D1 batch: run one after the other, 25 events
+    // were 25+ round trips, and D1's free plan stops a Worker invocation at
+    // 50 queries. Concurrent, the whole request is a handful of batches.
+    await Promise.all(
+      [...byKind].map(async ([kind, group]) => {
+        const [prefix, max, windowSeconds] = HANDLERS[kind].limit;
+        // Per event, not per request: batching changes how events travel, not
+        // how many a single IP is allowed to record.
+        // Limiteur en mémoire du Worker (aucune commande KV) pour les compteurs
+        // de visite ; dans la base KV seulement pour les votes et les
+        // recherches, rares, qui doivent tenir quelle que soit l'instance
+        // (`sharedLimit`).
+        const allowed = HANDLERS[kind].sharedLimit
+          ? await checkRateLimitBulk(`${prefix}:${ip}`, group.length, max, windowSeconds)
+          : checkRateLimitLocal(`${prefix}:${ip}`, group.length, max, windowSeconds);
+        await Promise.all(
+          group.slice(0, allowed).map(async (event) => {
+            try {
+              await HANDLERS[kind].run(event, ctx);
+            } catch (err) {
+              // One bad event must not discard the rest of the batch.
+              console.error(`track batch: ${kind} failed`, err);
+            }
+          })
+        );
+      })
+    );
   } catch (err) {
     console.error("track batch error", err);
   }

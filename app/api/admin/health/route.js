@@ -36,9 +36,9 @@ export async function GET(req) {
         },
         {
           key: "kv",
-          label: "Base Upstash (statistiques, abonnés, corbeille)",
+          label: "Base KV D1 (statistiques, abonnés, corbeille)",
           ok: kvOk,
-          detail: !kvConfigured() ? "KV_REST_API_URL / KV_REST_API_TOKEN absents : données en mémoire uniquement." : kvOk ? "Connectée." : `Injoignable${kvError ? ` : ${kvError}` : ""}.`,
+          detail: !kvConfigured() ? "Liaison D1 KV_DB absente (wrangler.jsonc) : données en mémoire uniquement." : kvOk ? "Connectée." : `Injoignable${kvError ? ` : ${kvError}` : ""}.`,
         },
         {
           key: "session",

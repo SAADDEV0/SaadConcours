@@ -78,6 +78,18 @@
 		{ "pattern": "www.saadconcours.space/*", "zone_name": "saadconcours.space" }
 	],
 
+	// Base KV (stats, abonnés, corbeille, sessions, file des réseaux sociaux)
+	// depuis le 2026-11-25 : D1, à la place d'Upstash dont le quota gratuit
+	// mensuel était épuisé. lib/kvD1.js crée ses tables tout seul à la
+	// première requête : aucune migration à lancer.
+	"d1_databases": [
+		{
+			"binding": "KV_DB",
+			"database_name": "saad-concours-kv",
+			"database_id": "02a07291-4a0f-4689-b874-e9ca29577501"
+		}
+	],
+
 	// Le Worker Next.js, pour tout ce que ni les assets ni ce Worker ne
 	// servent. Il doit exister avant le premier déploiement de celui-ci : le
 	// workflow le déploie en premier.

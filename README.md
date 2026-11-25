@@ -99,7 +99,7 @@ cachés, sans `extraits/` ni `news.json` (le dépôt, lui, reste complet).
   page (inscrits au build) ou dans `/data/*`. Seul `/api/track/batch`
   (statistiques) reste appelé par les visiteurs. Les avis 👍/👎 en bas des
   chapitres (`app/_shared/AvisUtile.js`) voyagent dans ce même lot : un vote
-  = une commande Upstash, résultats dans la console (Statistiques › Avis).
+  = quelques lignes écrites dans la base KV (D1), résultats dans la console (Statistiques › Avis).
 
 En pratique, quand tu touches à une page publique :
 
@@ -164,8 +164,8 @@ npx wrangler tail saad-concours --format json --status error
 ```
 
 `"outcome": "exceededCpu"` avec `"cpuTime": 10` confirme le plafond CPU. À ne
-pas confondre avec la 1102 de l'espace admin causée par une `KV_REST_API_URL`
-invalide, qui est systématique et non intermittente.
+pas confondre avec une 1102 systématique de l'espace admin, qui vient d'une
+configuration cassée (liaison D1 `KV_DB`, secret manquant), pas du CPU.
 
 ## Déploiement sur Cloudflare Workers
 
@@ -193,9 +193,22 @@ jeton est utilisé à deux endroits :
 | GitHub → Settings → Secrets → Actions | `GH_CONTENT_TOKEN` | jeton GitHub ci-dessus, pour le build |
 | Worker (`npx wrangler secret put …`) | `GITHUB_TOKEN` | écritures de `/admin` dans le dépôt |
 | Worker | `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET` | connexion à `/admin` |
-| Worker | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Redis Upstash (stats, abonnés, corbeille, sessions) |
+| Worker | `KV_BRIDGE_TOKEN` | accès à `/api/kv` (protocole Upstash sur la base D1) pour le robot réseaux sociaux |
+| GitHub → Settings → Secrets → Actions | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | robot réseaux sociaux : `https://www.saadconcours.space/api/kv` et la valeur de `KV_BRIDGE_TOKEN` |
 
-En local, ces valeurs vont dans `.dev.vars` (ignoré par git). Sans `GITHUB_TOKEN`, l'API se
+En local, ces valeurs vont dans `.dev.vars` (ignoré par git).
+
+**Base KV (D1).** Statistiques, abonnés, corbeille, journal, sessions et file des réseaux
+sociaux sont dans la base D1 `saad-concours-kv`, liée au Worker d'entrée sous `KV_DB`
+(`wrangler.jsonc`) depuis le 25/11/2026 — avant, Upstash Redis, dont le quota gratuit mensuel
+(500 000 commandes) était épuisé. `lib/kvD1.js` parle le même Redis que l'ancien client (rien
+n'a changé dans `lib/analytics.js` & co) et crée ses tables tout seul. Plan gratuit : 100 000
+lignes écrites et 5 millions lues **par jour** (remise à zéro à minuit UTC) ; une visite écrit
+~25 lignes. Les commandes d'une même requête partent en un seul lot D1 (le plan gratuit
+plafonne à 50 requêtes D1 par invocation). Reprise des anciennes données Upstash :
+`scripts/kv-to-d1.mjs` (fusion, relançable sans doublon). Lire une clé à la main :
+`curl -H "Authorization: Bearer $KV_BRIDGE_TOKEN" -d '["SCARD","alerts:subscribers"]' https://www.saadconcours.space/api/kv`
+(ou le tableau D1 du dashboard Cloudflare). Sans `GITHUB_TOKEN`, l'API se
 rabat sur les fichiers du build et `/admin` ne peut pas écrire.
 
 ## Relation GitHub / Cloudflare

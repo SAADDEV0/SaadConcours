@@ -41,6 +41,10 @@ const METHODS = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
 // variables et secrets ; on le complète au cas où, sans rien écraser.
 let envReady = false;
 function populateProcessEnv(env) {
+  // La base KV (D1, liaison KV_DB) n'est pas une chaîne : process.env ne peut
+  // pas la porter. lib/redis.js la lit ici. Reposée à chaque requête, au cas
+  // où l'isolate recevrait un autre objet de liaison.
+  if (env.KV_DB) globalThis.__scKvDb = env.KV_DB;
   if (envReady) return;
   envReady = true;
   for (const [key, value] of Object.entries(env)) {

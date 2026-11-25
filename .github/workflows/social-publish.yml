@@ -4,8 +4,9 @@ name: Publication Instagram + Facebook
 # « Publier », ou « Programmer » pour une date) : carrousels « extrait » des
 # concours, posts à une image pour les cahiers, cours et articles. Le robot
 # ne choisit jamais rien lui-même : sans clic de l'admin, la file est vide et
-# il ne publie rien. Tout se passe ici et chez Meta :
-# rien ne passe par le Worker Cloudflare, donc aucun effet sur son quota.
+# il ne publie rien. La publication se passe ici et chez Meta ; seule la
+# file (KV) passe par le Worker, via /api/kv (lib/kvBridge.js) : 2 requêtes
+# par passage, ~200 par jour sur les 100 000 du plan gratuit.
 #
 # Toutes les 15 minutes, une première étape (quelques secondes, sans
 # checkout) regarde dans KV s'il y a quelque chose à publier ou à ranger
@@ -15,8 +16,12 @@ name: Publication Instagram + Facebook
 #   META_PAGE_ID        identifiant de la Page Facebook
 #   META_PAGE_TOKEN     jeton d'accès de la Page (longue durée)
 #   META_IG_USER_ID     (facultatif) compte Instagram pro ; sinon déduit de la Page
-#   KV_REST_API_URL     les deux mêmes valeurs que celles du Worker (Upstash)
-#   KV_REST_API_TOKEN
+# La file (KV) n'a besoin d'aucun secret : /api/kv (base D1 du Worker, même
+# protocole que l'API REST d'Upstash utilisée avant le 25/11/2026) accepte le
+# jeton OIDC que GitHub délivre à CE workflow sur main (id-token: write,
+# lib/githubOidc.js, scripts/kvAuth.mjs). Les secrets KV_REST_API_URL /
+# KV_REST_API_TOKEN restants sont ceux de l'ancienne base Upstash, lus
+# seulement par kv-migrate.yml.
 on:
   schedule:
     - cron: "*/15 * * * *"
@@ -29,14 +34,14 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
-      KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      KV_REST_API_URL: https://www.saadconcours.space/api/kv
       META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
       META_PAGE_TOKEN: ${{ secrets.META_PAGE_TOKEN }}
       META_IG_USER_ID: ${{ secrets.META_IG_USER_ID }}
@@ -44,14 +49,15 @@ jobs:
       - name: Quelque chose à publier ?
         id: gate
         run: |
-          if [ -z "$KV_REST_API_URL" ] || [ -z "$META_PAGE_TOKEN" ] || [ -z "$META_PAGE_ID" ]; then
+          if [ -z "$META_PAGE_TOKEN" ] || [ -z "$META_PAGE_ID" ]; then
             echo "Secrets non configurés : rien à faire."
             echo "due=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          export KV_TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=saadconcours-kv" | jq -r .value)
           due=$(node -e '
             (async () => {
-              const kv = async (...cmd) => (await (await fetch(process.env.KV_REST_API_URL, { method: "POST", headers: { Authorization: "Bearer " + process.env.KV_REST_API_TOKEN }, body: JSON.stringify(cmd) })).json()).result;
+              const kv = async (...cmd) => (await (await fetch(process.env.KV_REST_API_URL, { method: "POST", headers: { Authorization: "Bearer " + process.env.KV_TOKEN }, body: JSON.stringify(cmd) })).json()).result;
               let v = await kv("GET", "admin:social:plan");
               for (let i = 0; i < 2 && typeof v === "string"; i++) v = JSON.parse(v);
               const t = Date.now();

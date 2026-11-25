@@ -48,14 +48,14 @@ export async function GET(req) {
   const range = resolveRange({ preset: sp.get("preset"), from: sp.get("from"), to: sp.get("to") });
 
   // Garde la dernière erreur pour dire *pourquoi* l'écran est vide : un quota
-  // Upstash épuisé n'est pas une base injoignable, et ne se règle pas pareil.
+  // épuisé n'est pas une base injoignable, et ne se règle pas pareil.
   let lastErr = null;
   const safe = (p, fallback) => p.catch((err) => (console.error("metrics", scope, err), (lastErr = err), fallback));
   const unavailable = (status = 500) =>
     NextResponse.json(
       {
         error: isKvQuotaError(lastErr)
-          ? "Quota Upstash du mois épuisé (500 000 commandes) : aucune statistique ne peut être lue ni enregistrée jusqu'au renouvellement du quota, le 1er du mois."
+          ? "Quota gratuit D1 du jour épuisé (100 000 lignes écrites ou 5 millions lues) : aucune statistique ne peut être lue ni enregistrée avant le renouvellement, à minuit UTC (1 h au Maroc)."
           : "Statistiques indisponibles (base KV injoignable).",
       },
       { status }

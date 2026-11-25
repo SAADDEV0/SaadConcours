@@ -33,6 +33,7 @@ import { wrapAccentedMathWords } from "@/app/_shared/latexPlainText";
 import { carouselCaption, factsFor, linkCaption, trackedUrl } from "@/app/admin/_features/social/captions";
 import { FORMATS, drawVisual, resolveTheme } from "@/app/admin/_features/social/visual";
 import { DESIGNS_KEY, DONE_KEY, HORIZON_MS, KEEP_PUBLISHED_MS, LIGHT_AFTER_MS, RESERVE_KEY, ROBOT_KINDS, contentKey, designKey, parseMember, reserveMember } from "@/lib/socialReserve.mjs";
+import { kvBridgeToken } from "../kvAuth.mjs";
 
 const KEY = "admin:social:plan";
 const ROOT = ".social";
@@ -48,16 +49,18 @@ const env = (k) => process.env[k] || "";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => console.log(...a);
 
-/* ------------------------------ File (Upstash) ------------------------------ */
+/* ------------------- File (KV : /api/kv du Worker, protocole Upstash) ------------------- */
 
+// Jeton : OIDC de GitHub Actions (scripts/kvAuth.mjs), ou KV_REST_API_TOKEN
+// pour un lancement local / les tests.
 async function kv(...command) {
   const res = await fetch(env("KV_REST_API_URL"), {
     method: "POST",
-    headers: { Authorization: `Bearer ${env("KV_REST_API_TOKEN")}` },
+    headers: { Authorization: `Bearer ${await kvBridgeToken(env("KV_REST_API_TOKEN"))}` },
     body: JSON.stringify(command),
   });
   const j = await res.json().catch(() => ({}));
-  if (!res.ok || j.error) throw new Error(`Upstash : ${j.error || res.status}`);
+  if (!res.ok || j.error) throw new Error(`KV : ${j.error || res.status}`);
   return j.result;
 }
 
@@ -502,7 +505,9 @@ const missing = (keys) => keys.filter((k) => !env(k));
 try {
   if (cmd === "render") await renderOnly(arg, arg2);
   else if (cmd === "prepare" || cmd === "publish") {
-    const need = cmd === "prepare" ? ["KV_REST_API_URL", "KV_REST_API_TOKEN"] : ["KV_REST_API_URL", "KV_REST_API_TOKEN", "META_PAGE_ID", "META_PAGE_TOKEN"];
+    // Jeton KV : OIDC dans GitHub Actions (ACTIONS_ID_TOKEN_REQUEST_URL), sinon KV_REST_API_TOKEN.
+    const kvToken = process.env.ACTIONS_ID_TOKEN_REQUEST_URL ? [] : ["KV_REST_API_TOKEN"];
+    const need = cmd === "prepare" ? ["KV_REST_API_URL", ...kvToken] : ["KV_REST_API_URL", ...kvToken, "META_PAGE_ID", "META_PAGE_TOKEN"];
     if (missing(need).length) throw new Error(`Secrets GitHub manquants : ${missing(need).join(", ")}`);
     await (cmd === "prepare" ? prepare() : publish());
   } else throw new Error("Usage : publier.mjs prepare | publish | render <id> [scan|enonce] | render <kind>:<id>");
