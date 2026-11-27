@@ -1003,6 +1003,19 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    2,25 % maintenu le 22 septembre 2026 ; amende 69-21 = taux directeur + 0,85 % par mois supplémentaire ; TVA exigible à
    l'encaissement et déduction au paiement (CGI). `lib/datesContenu.json` du commit = version de `HEAD` + les seules clés
    des nouveaux modules (le fichier régénéré contient aussi les dates du travail non commité de l'autre tâche).
+   Précédent : `ajoute 2 cours left` (2026-11-27, même règle) → `analysedonnees_cours` « Analyse et Traitement des
+   Données » (S4, `parcours: "gestion"`, `category: "quant"`, 6 ch. : préparation et valeurs aberrantes, matrices de
+   corrélations et inertie, ACP choix des axes, ACP interprétation, AFC, CAH et k-means) et `creditbancaire_cours`
+   « Crédits Bancaires et Gestion des Risques Crédits » (S6, `filiere: "tba"`, 6 ch. : crédit et risque, demande
+   d'entreprise et DSCR, particuliers, garanties, scoring-EL-RAROC, classement et provisions). « Informatique de gestion »
+   écartée : le cours existe dans l'espace Prépa ECT (règle 1.6), marqué ↔ dans la liste. Classement et provisions
+   vérifiés sur le texte de la circulaire **19/G/2002** (PDF bkam.ma, `pdftotext`) : 90 / 180 / 360 jours, 9 mensualités
+   → compromise, contagion sauf particuliers, 20 / 50 / 100 % nets des agios réservés et des garanties, quotités 100 /
+   80 / 50 %, hypothèque ramenée à 25 % après 5 ans et 0 % après 10 ans. Circulaire **1/W/2025** (créances sensibles)
+   en vigueur le 1er janvier 2027 : seulement présentée, ses taux n'ayant pas été lus sur le texte officiel. Division des
+   risques : seule l'annonce de BAM (janvier 2016, 20 % → 15 %) est citée, sans texte en vigueur vérifié. Fin 2025 :
+   8,26 % de créances en souffrance, 102,3 milliards de DH (rapport DSB). Calculs (valeurs propres par Jacobi, AFC,
+   Ward, k-means, annuités, RAROC) refaits par script.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
