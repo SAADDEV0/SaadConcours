@@ -991,6 +991,18 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    déjà les changements non commités d'une autre tâche (ici `marchecapitaux_cours`), committer une version construite
    sur `HEAD` (`git show HEAD:<fichier>` → même script d'injection → `git hash-object -w` + `git update-index --cacheinfo`),
    puis `git commit` sans chemin : le travail de l'autre tâche reste intact dans la copie de travail.
+   Précédent : `add 2 missing courses` (2026-11-27, sans titre précisé) → deux modules pris dans `courses titles left.md`,
+   en privilégiant le tronc commun puis une filière riche en épreuves de concours : `ecomonetaire_cours` « Économie
+   Monétaire et Financière » (S4, `parcours: "economie"`, 7 ch. : monnaie, agrégats et contreparties, création monétaire
+   et multiplicateur, demande de monnaie, système financier et rationnement, BAM et politique monétaire, crises et
+   régulation bancaire) et `tresorerie_cours` « Gestion de Trésorerie » (S6, `filiere: "gff"`, 6 ch. : délais et loi 69-21,
+   budget de trésorerie et TVA, dates de valeur et échelle d'intérêts, financements à court terme, placements et
+   équilibrage, risques de change et de taux). Le chapitre « change et SMI » prévu pour l'économie monétaire existait déjà
+   (ch. 3 et 4 d'`introecoint_cours`) : remplacé par la régulation bancaire, avec renvoi. Ne pas lier un cours non commité
+   d'une autre tâche (`marchecapitaux_cours`) : le lien serait cassé dans le build. Repères vérifiés : taux directeur
+   2,25 % maintenu le 22 septembre 2026 ; amende 69-21 = taux directeur + 0,85 % par mois supplémentaire ; TVA exigible à
+   l'encaissement et déduction au paiement (CGI). `lib/datesContenu.json` du commit = version de `HEAD` + les seules clés
+   des nouveaux modules (le fichier régénéré contient aussi les dates du travail non commité de l'autre tâche).
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
