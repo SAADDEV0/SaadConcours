@@ -1800,3 +1800,11 @@ Terminer par ce qui va bien, puis ce qu'il faut corriger, le plus important d'ab
 3. `git push origin main` → GitHub Actions déploie sur Cloudflare Workers.
 4. Après déploiement, vérifier qu'une page publique touchée reste statique :
    `curl -sI https://www.saadconcours.space/<page> | grep -i x-opennext` → aucune sortie attendue.
+   Une page nouvelle qui répond avec `x-opennext: 1` (et parfois 500) = le déploiement n'est pas passé : le Worker
+   précédent la rend à la demande depuis les données GitHub. Vérifier le run sans `gh` :
+   `curl -s "https://api.github.com/repos/SAADDEV0/SaadConcours/actions/runs?per_page=4"` (les journaux, eux,
+   demandent une connexion). Précédent (2026-11-27, `c12a577`) : « Build for Cloudflare » en échec alors que la CI
+   « Qualité » passait ; le build lit `public/data/*.json` sur `raw.githubusercontent.com` (cache de 5 minutes) et
+   a démarré dans la minute du push, sans doute sur l'ancien `cours.json`. Un commit vide poussé quelques minutes
+   plus tard (« Relance le déploiement… ») a réussi. Si la relance échoue aussi, la cause est ailleurs : demander
+   à Saad le journal du job sur GitHub.
