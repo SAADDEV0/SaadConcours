@@ -605,10 +605,62 @@
 .shop-points{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr)); gap:8px;}
 .shop-points li{display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:var(--radius); background:var(--bg-card); border:1px solid var(--border); font-size:.9rem; line-height:1.45;}
 .shop-points li .ic-wrap{margin-top:2px; color:var(--green);}
-.shop-sommaire{margin:0; padding:14px 20px 14px 40px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); display:flex; flex-direction:column; gap:6px; font-size:.9rem;}
+.shop-sommaire{padding:14px 18px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border);}
 .shop-cta-bottom{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; padding:18px 20px; margin-bottom:28px; border-radius:var(--radius-lg); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent);}
 .shop-cta-bottom strong{display:block;}
 .shop-cta-bottom span{font-size:.86rem; color:var(--text-dim);}
+/* Fiche d'un cahier : « comment est fait le cahier » (app/boutique/[id]/page.js). */
+.shop-intro{margin:-4px 0 14px; font-size:.92rem; line-height:1.55; color:var(--text-dim); max-width:72ch;}
+.shop-chiffres{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr)); gap:10px;}
+.shop-chiffres li{display:flex; flex-direction:column; gap:2px; padding:14px 16px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border);}
+.shop-chiffres .ic-wrap, .shop-conseils .ic-wrap{align-self:flex-start; color:var(--accent); margin-bottom:4px;}
+.shop-chiffres strong{font-size:1.7rem; line-height:1.1; font-weight:700; letter-spacing:-.02em; color:var(--text);}
+.shop-chiffres span{font-size:.82rem; line-height:1.4; color:var(--text-dim);}
+.shop-parcours{list-style:none; margin:0; padding:0; display:flex; flex-direction:column;}
+.shop-parcours > li{position:relative; display:flex; gap:16px; padding-bottom:18px;}
+.shop-parcours > li:last-child{padding-bottom:0;}
+.shop-parcours > li:not(:last-child)::before{content:""; position:absolute; top:34px; bottom:0; inset-inline-start:16px; width:2px; background:var(--border);}
+.shop-parcours-num{flex:none; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.95rem; color:var(--accent); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);}
+.shop-parcours-body{flex:1; min-width:0; padding:14px 16px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border);}
+.shop-parcours-body h3{margin:0 0 2px; font-size:1rem; line-height:1.35;}
+.shop-parcours-body > p{margin:0 0 10px; font-size:.86rem; line-height:1.5; color:var(--text-dim);}
+.shop-parties, .shop-chapitres{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; font-size:.9rem; line-height:1.45;}
+.shop-chapitres{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)); gap:6px 16px;}
+.shop-parties li, .shop-chapitres li{display:flex; align-items:flex-start; gap:10px;}
+.shop-parties .ic-wrap{flex:none; margin-top:1px; color:var(--accent);}
+.shop-parties em{font-style:normal; color:var(--text-faint);}
+.shop-chap-num{flex:none; min-width:24px; height:24px; padding:0 4px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--text); background:var(--bg-inset); border:1px solid var(--border);}
+.shop-blocs{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr)); gap:10px;}
+.shop-blocs li{display:flex; flex-direction:column; gap:4px; padding:14px 16px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); font-size:.86rem; line-height:1.45; color:var(--text-dim);}
+.shop-bloc-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; color:var(--accent);}
+.shop-bloc-head em{font-style:normal; font-size:.75rem; font-weight:700; color:var(--text-faint);}
+.shop-blocs strong{font-size:.92rem; color:var(--text);}
+.shop-conseils{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); gap:10px;}
+.shop-conseils > div{display:flex; flex-direction:column; gap:4px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--bg-card); border:1px solid var(--border); font-size:.86rem; line-height:1.5; color:var(--text-dim);}
+.shop-conseils strong{font-size:.95rem; color:var(--text);}
+.shop-commande{margin:0 0 28px;}
+.shop-commande h2{margin:0 0 12px; font-size:1.15rem;}
+.shop-commande-etapes{list-style:none; margin:0 0 12px; padding:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px;}
+.shop-commande-etapes li{display:flex; align-items:flex-start; gap:10px; font-size:.84rem; line-height:1.45; color:var(--text-dim);}
+.shop-commande-etapes strong{display:flex; align-items:center; gap:6px; margin-bottom:2px; font-size:.9rem; color:var(--text);}
+.shop-commande-etapes strong .ic-wrap{color:var(--accent);}
+.shop-commande-num{flex:none; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; color:var(--text); background:var(--bg-inset); border:1px solid var(--border);}
+.shop-commande .shop-cta-bottom{margin-bottom:0;}
+@media (max-width:640px){
+  .shop-commande-etapes{grid-template-columns:1fr;}
+  .shop-parcours > li{gap:10px;}
+  .shop-parcours-num{width:28px; height:28px; font-size:.85rem;}
+  .shop-parcours > li:not(:last-child)::before{top:28px; inset-inline-start:13px;}
+  .shop-parcours-body{padding:12px 14px;}
+  .shop-chiffres{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .shop-chiffres strong{font-size:1.45rem;}
+  .shop-blocs{gap:6px;}
+  .shop-blocs li{display:grid; grid-template-columns:auto 1fr; column-gap:12px; row-gap:2px; align-items:start; padding:10px 14px;}
+  .shop-bloc-head{grid-row:span 2; margin:1px 0 0;}
+  .shop-bloc-head em{display:none;}
+  .shop-blocs strong{font-size:.9rem;}
+  .shop-blocs li > span:not(.shop-bloc-head){grid-column:2;}
+}
 /* Annonce du cahier sur les pages de cours (CahierCours.js). */
 .sp-cahier{display:flex; align-items:flex-start; gap:18px; padding:18px 20px; margin-bottom:28px; scroll-margin-top:calc(var(--header-h) + 20px); border-radius:var(--radius-lg); background:var(--accent-dim); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent);}
 .sp-cahier.compact{margin-top:24px; padding:14px 16px; gap:14px;}
@@ -638,7 +690,7 @@
   .sp-cahier-foot .sp-btn{width:100%; justify-content:center;}
 }
 .shop-card[hidden]{display:none;}
-.shop-faq{margin-top:28px;}
+.shop-faq{margin-top:28px; margin-bottom:28px;}
 .shop-faq details{border-top:1px solid var(--border); padding:10px 0;}
 .shop-faq details:first-of-type{border-top:none;}
 .shop-faq summary{cursor:pointer; font-weight:700; font-size:.9rem;}
