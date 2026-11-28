@@ -1016,6 +1016,23 @@ Chaque chapitre = cours → au moins un exercice → correction détaillée.
    risques : seule l'annonce de BAM (janvier 2016, 20 % → 15 %) est citée, sans texte en vigueur vérifié. Fin 2025 :
    8,26 % de créances en souffrance, 102,3 milliards de DH (rapport DSB). Calculs (valeurs propres par Jacobi, AFC,
    Ward, k-means, annuités, RAROC) refaits par script.
+   Précédent : `ajoute 2 cours left` (2026-11-28) → les deux modules du tronc commun restants (Sociologie, Problèmes
+   économiques et sociaux, S4 Économie) ont été écartés car leur programme recoupe largement des cours publiés
+   (`sociologieorg_cours`, `ecomaroc_cours`, `macro_cours`, `introeco_cours`) ; de même « Méthodes de prévision » (`stats_cours`
+   ch. 6, `econometrie_cours` ch. 8, `rologistique_cours` ch. 4). Ces recoupements sont notés ↔ dans la liste. Modules
+   retenus, dans des filières existantes de `LICENCE_FILIERES` (une filière de la maquette absente de la taxonomie, comme
+   Politiques économiques et territoires, demanderait d'abord de l'y ajouter) : `macroapprof_cours` « Macroéconomie
+   Approfondie » (S6, `filiere: "eco_appliquee"`, `category: "economie"`, 6 ch. : comptabilité de la croissance, Solow, règle
+   d'or et convergence, croissance endogène, IS-LM-BP, Barro-Gordon) et `risquebancaire_cours` « Gestion du Risque en Banque
+   et Assurance » (S5, `filiere: "tba"`, `category: "finance"`, 6 ch. : cadre prudentiel, VaR, impasses et duration, LCR et
+   NSFR, risque opérationnel, assureur et réassurance ; le risque de crédit renvoie à `creditbancaire_cours`). Repères
+   vérifiés en ligne : BAM fonds propres de base 9 % et solvabilité 12 % ; LCR par la circulaire 15/G/2013 ; risque
+   opérationnel par la 26/G/2006 (indicateur de base, standard, standard alternative) ; SBR de l'ACAPS au 1er janvier
+   2027 pour 13 des 25 entreprises ; dirham : panier 60/40 depuis avril 2015, bande de ± 5 % depuis le 9 mars 2020. Non
+   vérifié, donc non écrit : un minimum CET1 de 8 % au Maroc, la formule marocaine de la marge de solvabilité des
+   assureurs. Assemblage et contrôles par `assemble.mjs` (≥ 1 000 mots par chapitre, 3 exercices, 10 QCM sans `*` ni `$`,
+   descriptions de 100 à 160 caractères, `$` appariés, liens `/cours/` existants et commités). Liens ajoutés dans les guides
+   blog des masters Économétrie et Banque-assurance.
 2. Plan calqué sur le programme national du module (chapitres réellement enseignés en FSJES).
 3. Rédiger `content` selon la convention ci-dessus (cours complet, pas un résumé).
 4. Si demandé ou si c'est un module prioritaire : faire aussi [K2](#k2--compléter-un-cours-par-chapitres).
